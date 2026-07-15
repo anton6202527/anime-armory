@@ -123,6 +123,62 @@ def test_character_scope_visual_hints_prevent_generic_human_demon(tmp_path: Path
     assert "不要把青面郎君换成普通俊美人类" in cfg["drift"]
 
 
+def test_project_local_numeric_character_id_does_not_leak_another_projects_fallback(tmp_path: Path) -> None:
+    card_dir = tmp_path / "设定库" / "characters"
+    card_dir.mkdir(parents=True)
+    (card_dir / "虎山神.md").write_text(
+        "# 角色卡 — 虎山神（ID: CHAR_04）\n\n"
+        "- 身份：陇右荒野虎妖；百妖谱首次收录对象\n"
+        "- 锚点句：吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血。\n",
+        encoding="utf-8",
+    )
+    story = {"clips": [{"character_ids": ["CHAR_04/复生态"]}]}
+
+    cfg = image_prompt_pack.derive_character_defs(tmp_path, story)["CHAR_04"]
+
+    assert cfg["name"] == "虎山神"
+    assert "吊睛白额" in cfg["face"]
+    assert "非人虎妖真身" in cfg["face"]
+    assert "粗硬灰黄黑纹毛发" in cfg["hair"]
+    assert "完整虎头人身妖物真身" in cfg["outfit"]
+    assert cfg["anchor"].startswith("吊睛白额虎头人身")
+    assert "成年古装角色" not in cfg["anchor"]
+    assert "陈青源" not in json.dumps(cfg, ensure_ascii=False)
+    assert "江湖劲装" not in cfg["outfit"]
+
+
+def test_reference_slot_writer_never_creates_hardcoded_numeric_character_card(tmp_path: Path) -> None:
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    old_assets = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.CHARACTER_DEFS = {
+            "CHAR_04": {
+                "name": "虎山神",
+                "scope": "陇右荒野虎妖",
+                "form": "常态",
+                "tier": "core",
+                "library_tier": "recurring_standard",
+                "planned_episode_count": 3,
+                "asset_key": "CHAR_04__常态",
+                "anchor": "吊睛白额虎头人身",
+                "face": "非人虎妖真身",
+                "hair": "灰黄黑纹毛发",
+                "outfit": "虎头人身妖物真身",
+                "accessories": "粗壮利爪",
+                "relative_scale": "体魄如小山",
+                "performance_signature": "傲慢捕食者",
+                "drift": ["不要画成人类"],
+            }
+        }
+        image_prompt_pack.ASSET_DEFS = {}
+        image_prompt_pack.write_reference_slot_cards(tmp_path, "第1集")
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+        image_prompt_pack.ASSET_DEFS = old_assets
+
+    assert not (tmp_path / "设定库" / "characters" / "陈青源.md").exists()
+
+
 def test_shots_global_contract_is_not_a_shot_heading(tmp_path: Path) -> None:
     text = image_prompt_pack.shots_md(tmp_path, "第1集", {}, [])
 
@@ -230,6 +286,47 @@ def test_named_saber_gets_single_cutting_edge_and_offset_tip_contract(tmp_path: 
     assert "连续厚钝刀背" in topology
     assert "刀尖偏向刃侧" in topology
     assert "对称剑尖" in topology
+
+
+def test_story_prop_sabers_get_weapon_profiles_and_canonical_alias(tmp_path: Path) -> None:
+    story = {"clips": [{"object_ids": ["PROP_横刀", "PROP_断刀"]}], "visual_contract": {}}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+
+    assert defs["PROP_横刀"]["alias_of"] == "WEAPON_01"
+    assert defs["PROP_横刀"]["path_name"] == "定妆_武器_横刀"
+    assert defs["PROP_横刀"]["weapon_like_role"] == "entity_weapon"
+    assert defs["PROP_横刀"]["weapon_profile"]["design_intent"]
+    assert "broken_blade=1" in image_prompt_pack.flatten_contract_value(
+        defs["PROP_断刀"]["weapon_profile"]["blade_topology"]
+    )
+    broken_topology = image_prompt_pack.flatten_contract_value(
+        defs["PROP_断刀"]["constraints"]["blade_topology"]
+    )
+    assert image_prompt_pack.BROKEN_SINGLE_EDGE_BLADE_TOPOLOGY in broken_topology
+    assert image_prompt_pack.SINGLE_EDGE_BLADE_TOPOLOGY not in broken_topology
+    old_defs = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = defs
+        registry = image_prompt_pack.build_asset_registry(tmp_path)
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_defs
+    prop_saber = next(row for row in registry["assets"] if row["id"] == "PROP_横刀")
+    broken_saber = next(row for row in registry["assets"] if row["id"] == "PROP_断刀")
+    assert prop_saber["alias_of"] == "WEAPON_01"
+    assert broken_saber["weapon_profile"]["forbidden_drift"]
+
+
+def test_named_saber_topology_canonicalization_is_idempotent() -> None:
+    base = image_prompt_pack.SINGLE_EDGE_BLADE_TOPOLOGY
+    custom = "weapon_count=1；single_straight_blade=1；副手不得生成第二把刀。"
+
+    once = image_prompt_pack.canonical_single_edge_topology([base, base, custom])
+    twice = image_prompt_pack.canonical_single_edge_topology(once)
+
+    assert once == twice
+    assert image_prompt_pack.flatten_contract_value(twice).count(base) == 1
+    assert custom in image_prompt_pack.flatten_contract_value(twice)
 
 
 def test_material_asset_map_reads_compact_shared_asset_bullets(tmp_path: Path) -> None:
@@ -769,8 +866,29 @@ def test_style_anchor_prompt_and_overview_inherit_story_style_contract(tmp_path:
 
     assert "STYLE_ANCHOR / 国漫写实" in style_prompt
     assert "`出图/共享/图片/风格锚_国漫写实.png`" in style_prompt
-    assert "no room set, no window, no furniture" in style_prompt
+    assert "No person, face, animal, creature, building, weapon, prop, environment" in style_prompt
+    assert "竖屏短剧镜头" not in style_prompt
+    assert "不建立具体地点、前中后景、人物调度或动作叙事" in style_prompt
     assert "style_anchor：`出图/共享/图片/风格锚_国漫写实.png`" in overview
+
+
+def test_style_anchor_does_not_inherit_story_blocking_or_scene_objects() -> None:
+    story = {
+        "style_contract": {
+            "风格名": "水墨志怪",
+            "视觉基调": "粗粝纸墨与冷灰光比",
+            "镜头与构图": "前景断刀和尸骸、中景具名角色、后景虎妖与城寨纵深",
+            "光色策略": "冷灰主光、朱砂与金色点睛",
+        }
+    }
+
+    prompt = image_prompt_pack.shared_style_anchor_prompt(story)
+
+    assert "前景断刀" not in prompt
+    assert "具名角色" not in prompt
+    assert "后景虎妖" not in prompt
+    assert "城寨纵深" not in prompt
+    assert "不要人物、动物/妖物、建筑、兵器、道具、环境景观" in prompt
 
 
 def test_style_anchor_registry_marks_existing_anchor_review_pending(tmp_path: Path) -> None:
@@ -964,6 +1082,44 @@ def test_registry_rebuild_preserves_rejected_status_and_review_for_same_path() -
     assert merged["human_review"]["reason"] == "常驻妖物物种漂移"
 
 
+def test_registry_rebuild_preserves_generated_at_when_semantics_match(tmp_path: Path) -> None:
+    rel = Path("出图/共享/identity_registry.json")
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({
+        "kind": "n2d_identity_registry",
+        "generated_at": "2026-07-14T00:00:00+00:00",
+        "characters": [],
+    }), encoding="utf-8")
+
+    merged = image_prompt_pack.merge_existing_registry_evidence(tmp_path, rel, {
+        "kind": "n2d_identity_registry",
+        "generated_at": "2026-07-15T00:00:00+00:00",
+        "characters": [],
+    })
+
+    assert merged["generated_at"] == "2026-07-14T00:00:00+00:00"
+
+
+def test_registry_rebuild_advances_generated_at_when_semantics_change(tmp_path: Path) -> None:
+    rel = Path("出图/共享/identity_registry.json")
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({
+        "kind": "n2d_identity_registry",
+        "generated_at": "2026-07-14T00:00:00+00:00",
+        "characters": [],
+    }), encoding="utf-8")
+
+    merged = image_prompt_pack.merge_existing_registry_evidence(tmp_path, rel, {
+        "kind": "n2d_identity_registry",
+        "generated_at": "2026-07-15T00:00:00+00:00",
+        "characters": [{"id": "CHAR_01"}],
+    })
+
+    assert merged["generated_at"] == "2026-07-15T00:00:00+00:00"
+
+
 def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Path) -> None:
     old_defs = image_prompt_pack.ASSET_DEFS
     try:
@@ -1087,6 +1243,12 @@ def test_core_reference_group_marks_new_turnaround_as_five_angle_board(tmp_path:
         "front", "three_quarter", "side", "rear_three_quarter", "back",
     ]
     assert "rear_three_quarter" in rg
+    expression = rg["expressions"][0]
+    assert expression["path"].endswith("_表情_六联表.png")
+    assert expression["status"] == "planned"
+    assert expression["layout"] == "two_by_three_expression_sheet_v1"
+    assert expression["derivation"]["method"] == "controlled_multiref_generation"
+    assert expression["path"] != rg["front"]["path"]
 
 
 def test_core_reference_group_marks_unlabelled_existing_turnaround_as_unknown(tmp_path: Path) -> None:
@@ -1644,3 +1806,15 @@ def test_future_asset_guard_inherits_hidden_asset_forbidden_terms() -> None:
     assert "随机改色" in line
     assert "遮挡主体脸" in line
     assert "不要现代科幻UI" in line
+
+
+def test_clip_chars_normalizes_episode_state_to_registry_base_id() -> None:
+    clip = {
+        "character_ids": [
+            "CHAR_01/囚途残损态",
+            "CHAR_02/濒死态",
+            "CHAR_01/囚途染血态",
+        ]
+    }
+
+    assert image_prompt_pack.clip_chars(clip) == ["CHAR_01", "CHAR_02"]

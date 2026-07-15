@@ -68,8 +68,8 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-14T20:23:56+0800",
-  "graph_hash": "19ec5b0cd91386007b919d35fbcb8bd3e2dbb6a17d3b0eac0f3cdf6bfb5b9ed9",
+  "generated_at": "2026-07-15T15:10:59+0800",
+  "graph_hash": "f2c47d6a69c57626f1731542e47b12caed10596fa8ff67e1487fbcbe4c3457a9",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -173,10 +173,10 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "source_files": [
     {
-      "bytes": 80971,
+      "bytes": 88896,
       "path": "脚本/第1集/storyboard.json",
       "role": "storyboard",
-      "sha256": "228df76aee8206f507101eb7bbfe9761bee134c38ae6383e29ffa31e60d01c4f"
+      "sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
     }
   ],
   "status": "pass",

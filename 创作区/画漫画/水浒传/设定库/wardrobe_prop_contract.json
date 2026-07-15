@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "kind": "comic_wardrobe_prop_contract",
+  "status": "confirmed",
+  "default_policy": {
+    "mode": "recommended_unless_user_override",
+    "setting_profile": "historical_traceable",
+    "evidence_hierarchy": ["A_physical_archaeology", "B_contemporary_image", "C_historical_text", "D_museum_academic", "E_production_reference", "F_lead_only"],
+    "decision_axes": ["era", "polity_region", "identity_rank", "occasion_activity", "season_climate", "story_state", "production_variant"],
+    "user_override": {"allowed": true, "requires_scope_and_reason": true}
+  },
+  "world_context": {
+    "era": "北宋仁宗嘉祐年间（故事时空）；可使用两宋材料作分级旁证，但南宋实物不得冒充北宋直接证据",
+    "date_range": "1056–1063（第1话序章核心）",
+    "polity_region": "北宋东京—信州贵溪县龙虎山",
+    "historical_confidence": "medium",
+    "notes": "《水浒传》成书晚于故事时代；小说原文决定剧情物，宋代实物/图像决定可视结构。虚靖牧童显形属于神异叙事，采用北宋平民服饰语法而不宣称史实肖像复原。"
+  },
+  "sources": [
+    {
+      "id": "SRC_CNSM_ZHAO_BOYUN",
+      "title": "打开八百年前的南宋衣橱——赵伯澐墓",
+      "institution": "中国丝绸博物馆",
+      "url": "https://www.chinasilkmuseum.com/jz/info_15.aspx?itemid=27809",
+      "source_type": "museum_collection",
+      "accessed_at": "2026-07-15",
+      "usage": "成套衣物、鞋袜、配饰与原始穿着层次；仅作两宋结构旁证",
+      "rights_boundary": "facts_only"
+    },
+    {
+      "id": "SRC_DPM_QINGMING",
+      "title": "张择端《清明上河图》卷",
+      "institution": "故宫博物院",
+      "url": "https://www.dpm.org.cn/collection/paint/228226.html",
+      "source_type": "contemporary_image",
+      "accessed_at": "2026-07-15",
+      "usage": "北宋城市职业、阶层、服装轮廓与使用动作",
+      "rights_boundary": "facts_only_no_image_attachment"
+    },
+    {
+      "id": "SRC_NMC_COSTUME",
+      "title": "中国古代服饰文化展——宋辽金西夏元服饰",
+      "institution": "中国国家博物馆",
+      "url": "https://www.chnmuseum.cn/portals/0/web/zt/202102gdfsh/",
+      "source_type": "museum_research",
+      "accessed_at": "2026-07-15",
+      "usage": "宋代简朴内敛基线、社会身份与服饰关系、实物/图像入口",
+      "rights_boundary": "facts_only_no_image_attachment"
+    },
+    {
+      "id": "SRC_SHUIHU_SOURCE",
+      "title": "《水浒传》第一回项目源本",
+      "institution": "项目自有公版文本",
+      "url": "创作区/写小说/水浒传/小说/水浒传.docx",
+      "source_type": "historical_text",
+      "accessed_at": "2026-07-15",
+      "usage": "丹诏、御香、银手炉、铁笛、封皮锁与石碑等剧情事实；不把明代成书文本当北宋器物形制证明",
+      "rights_boundary": "public_domain_story_facts"
+    },
+    {
+      "id": "SRC_DPM_FUTOU",
+      "title": "幞头",
+      "institution": "故宫博物院",
+      "url": "https://www.dpm.org.cn/lemmas/240564.html",
+      "source_type": "museum_research",
+      "accessed_at": "2026-07-15",
+      "usage": "宋代展脚、弓脚、卷脚等幞头形制语法；项目只固定同一角色的翼形与比例，不宣称单一实物复原",
+      "rights_boundary": "facts_only_no_image_attachment"
+    },
+    {
+      "id": "SRC_DAO_SONG_VESTMENTS",
+      "title": "略论道教服饰的几点意义——以张万福《三洞法服科戒文》为考察中心",
+      "institution": "道音文化",
+      "url": "https://www.daoisms.com.cn/2017/12/17/8141/",
+      "source_type": "historical_text",
+      "accessed_at": "2026-07-15",
+      "usage": "宋代道士按场合区分法衣、褐帔、常服道袍与大衫的文献线索；项目采保守转译，不直接复制现代道装",
+      "rights_boundary": "facts_only_no_image_attachment"
+    }
+  ],
+  "wardrobe": [
+    {
+      "character_id": "CHAR_HONG_XIN", "outfit_id": "OUTFIT_COURT_ENVOY", "name": "朝廷使臣公服/旅途官装",
+      "identity_rank": "殿前太尉、奉诏使臣；非武将临阵", "occasion_activity": ["入朝受诏", "长途出使", "宫观正式会见"],
+      "layers": ["内层中衣（不外露抢戏）", "绛褐低饱和圆领长袍", "长途可加素色防尘外披"],
+      "silhouette": "直身长袍、肩线克制、下摆便于步行；以官帽和带具读身份，不靠甲胄",
+      "collar_neckline": "圆领，领缘窄而整洁", "closure": "右侧隐蔽系结/结构不外露；不得画成现代正中拉链或盘扣",
+      "sleeves": "常服宽度适中、腕部不作仙侠飘袖", "hem": "近踝，行旅状态仅自然提摆", "waist_belt": "深色革带，饰件从简",
+      "headwear": ["深色幞头；翅形与长度保持同一版本"], "footwear": ["深色靴，旅途允许尘土但不改形"],
+      "materials": ["哑光绢/细织物外观", "皮革带靴"], "palette": ["绛褐", "墨黑", "烟褐"], "patterns": ["主体无大面积团花；细节不抢脸"],
+      "permanent_accessories": ["官带（本套身份锚）"], "removable_accessories": ["旅途外披"],
+      "state_variants": ["court_clean", "travel_dust", "mountain_arrival"], "continuity_keys": ["幞头翅形", "圆领宽度", "革带高度", "靴色", "尘土发生点"],
+      "forbidden": ["武将甲胄", "明清补服/顶戴", "影视版特定整套造型", "大金带与越级华饰", "随机龙纹"],
+      "uncertain": ["北宋嘉祐具体公服色与带饰受官阶、场合影响；未取得更直接制度与图像证据前按低饱和保守设计，不宣称精确复原"],
+      "evidence_refs": ["SRC_CNSM_ZHAO_BOYUN", "SRC_DPM_QINGMING", "SRC_NMC_COSTUME", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_HONG_XIN", "outfit_id": "OUTFIT_MOUNTAIN_PLAIN", "name": "斋戒上山素衣",
+      "identity_rank": "奉天师要求斋戒更衣的官员；以行动便利为主", "occasion_activity": ["独自登山", "雨后林地", "遇虎蛇"],
+      "layers": ["素色内衣", "灰褐交领/斜襟窄袖布衣", "必要时短外层"], "silhouette": "收袖、束腰、下摆利于攀行，仍保留成年官员整洁习惯",
+      "collar_neckline": "克制交领/斜襟，不露现代T恤领", "closure": "布带系结，方向固定", "sleeves": "窄袖", "hem": "膝下至小腿，便于登山", "waist_belt": "素布带",
+      "headwear": ["不戴正式幞头；发式整齐固定"], "footwear": ["麻履/便于山行的布鞋语法"], "materials": ["麻/粗细适中的布质外观"], "palette": ["素灰", "土褐", "旧麻色"], "patterns": ["无显眼纹样"],
+      "permanent_accessories": [], "removable_accessories": [], "state_variants": ["clean_departure", "humid_mountain", "fall_dust"],
+      "continuity_keys": ["交领方向", "布带结位", "袖宽", "跌倒后尘湿范围"],
+      "forbidden": ["官袍幞头残留", "仙侠飘带", "现代汉服影楼层叠", "把诏包/银炉固化为衣饰"],
+      "uncertain": ["小说只明确斋戒更衣，具体素服结构为证据约束下的原创设计"],
+      "evidence_refs": ["SRC_CNSM_ZHAO_BOYUN", "SRC_DPM_QINGMING", "SRC_NMC_COSTUME", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_MASTER_XUJING", "outfit_id": "OUTFIT_HERDBOY", "name": "青衣牧童显形",
+      "identity_rank": "天师神异化身为牧童；视觉先读贫素牧童，细节暗示非凡", "occasion_activity": ["骑牛/牧牛", "山径吹笛", "短暂对话"],
+      "layers": ["素内层", "洗旧青灰交领短衣", "下装便于跨坐行走"], "silhouette": "儿童比例、短衣收袖、轻便，不作华丽法衣",
+      "collar_neckline": "小尺度交领，方向跨图固定", "closure": "侧系布结", "sleeves": "窄袖不过手", "hem": "短衣至髋下", "waist_belt": "草编/旧布绛带",
+      "headwear": ["不戴冠；发髻/总角方案由front采纳后锁定"], "footwear": ["芒鞋/麻履语法，脚趾不作现代凉鞋"],
+      "materials": ["旧布、麻、草编"], "palette": ["低饱和青灰", "旧麻", "少量暗绛"], "patterns": ["无金绣法纹"],
+      "permanent_accessories": [], "removable_accessories": [], "state_variants": ["mountain_clean", "mist_damp"],
+      "continuity_keys": ["交领方向", "腰带色与结位", "发式", "鞋形"],
+      "forbidden": ["金绣法衣", "仙侠飘带", "现代儿童服", "把铁笛固化为身体佩饰", "成人化身材"],
+      "uncertain": ["神异角色无可考真人定妆；服装采用北宋平民/儿童图像语法的原创转译"],
+      "evidence_refs": ["SRC_CNSM_ZHAO_BOYUN", "SRC_DPM_QINGMING", "SRC_NMC_COSTUME", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_ABBOT_SHANGQING", "outfit_id": "OUTFIT_BASE", "name": "上清宫住持常服/宫观主事装",
+      "identity_rank": "年长宫观住持；日常会客、劝阻与主持宫观秩序，非大型斋醮法事", "occasion_activity": ["宫观迎候", "正式会客", "伏魔殿前劝阻"],
+      "layers": ["素色中衣", "青灰交领道袍/大衫语法", "必要时加深色素褐帔式外层"],
+      "silhouette": "高瘦背直，直身长衣、肩线平稳；袖量可读仪法感但不做舞台化拖袖", "collar_neckline": "交领方向固定，领缘窄而整洁", "closure": "右衽内系/布带系结，结位固定",
+      "sleeves": "中等偏宽，腕处不过度堆积", "hem": "近踝，行走时只做自然提摆", "waist_belt": "素布绦或深色细带",
+      "headwear": ["灰黑巾帽/素冠的原创保守方案；由front锁定轮廓，不套现代道教制服"], "footwear": ["深色履，鞋头与底厚固定"],
+      "materials": ["哑光细布/绢质外观", "素布带"], "palette": ["青灰", "烟墨", "少量旧麻"], "patterns": ["无金绣云龙或游戏法阵纹"],
+      "permanent_accessories": ["克制发须与巾帽轮廓"], "removable_accessories": ["素褐帔式外层"], "state_variants": ["palace_formal", "warning_tense", "hall_dust"],
+      "continuity_keys": ["交领方向", "巾帽轮廓", "袖宽", "系带高度", "沾尘发生点"],
+      "forbidden": ["金绣法衣常服化", "现代统一制式道装直接照搬", "仙侠披风飘带", "影视版特定道长造型", "明清宗教礼服混搭"],
+      "uncertain": ["北宋龙虎山住持的日常定装缺直接实物链；以宋代分场合服饰文献与两宋材料语法保守原创"],
+      "evidence_refs": ["SRC_CNSM_ZHAO_BOYUN", "SRC_NMC_COSTUME", "SRC_DAO_SONG_VESTMENTS", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_EMPEROR_RENZONG", "outfit_id": "OUTFIT_BASE", "name": "紫宸殿常朝御服（保守原创转译）",
+      "identity_rank": "北宋皇帝；紫宸殿朝会、问疫与授诏", "occasion_activity": ["朝会", "听奏", "授诏"],
+      "layers": ["素色中衣", "低饱和素红圆领长袍", "领袖内层只保留克制暗金级差"],
+      "silhouette": "宽额圆长脸与端坐体量先读；袍身直顺、袖量稳定，威仪来自材质层级而非堆满龙纹", "collar_neckline": "圆领，领开口尺度由front锁定", "closure": "右侧/内部结构隐藏，不画正中现代扣排",
+      "sleeves": "中宽式长袖，坐姿时袖口叠放关系固定", "hem": "近踝长袍，坐姿不随机短缩", "waist_belt": "深色或暗金低对比带具，不做夸张大金带",
+      "headwear": ["黑色平展脚幞头，脚长、角度、冠体高度全话固定"], "footwear": ["深色靴，多数镜头不抢戏"],
+      "materials": ["哑光细绢/罗的视觉语法", "低反光带具"], "palette": ["素红", "墨黑", "暗金少量"], "patterns": ["主体不以满地龙纹读身份"],
+      "permanent_accessories": ["平展脚幞头", "低对比带具"], "removable_accessories": [], "state_variants": ["court_composed", "plague_fatigue", "edict_decision"],
+      "continuity_keys": ["幞头脚长与角度", "圆领尺度", "素红色值", "带具高度", "袖口叠放"],
+      "forbidden": ["清代龙袍与朝冠", "明代补子", "十二章礼服与常朝场景混用", "随机可读龙纹", "馆藏帝王像脸直接复制"],
+      "uncertain": ["本格是剧情可读的常朝原创转译；服色与带饰不宣称精确对应某日仪制"],
+      "evidence_refs": ["SRC_NMC_COSTUME", "SRC_DPM_FUTOU", "SRC_CNSM_ZHAO_BOYUN", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_FAN_ZHONGYAN", "outfit_id": "OUTFIT_BASE", "name": "朝堂文臣公服·深绛红",
+      "identity_rank": "资深文臣；紫宸殿奏对", "occasion_activity": ["持笏奏对", "侍立听命"], "layers": ["素中衣", "深绛红圆领长袍"],
+      "silhouette": "瘦长体态、肩颈稳定，与仁宗的材质和体量层级分开", "collar_neckline": "窄而整齐的圆领", "closure": "内隐系结，不出现现代扣排", "sleeves": "中等袖量，持笏时袖口稳定", "hem": "近踝", "waist_belt": "深色细带具",
+      "headwear": ["黑色展脚幞头，与其他官员以脚长/冠体细差区分"], "footwear": ["深色靴"], "materials": ["哑光细织物", "皮革带靴"], "palette": ["深绛红", "墨黑", "烟褐"], "patterns": ["无明代补子，主体无大团花"],
+      "permanent_accessories": ["幞头", "细带具"], "removable_accessories": ["笏板（剧情手持，非身体特征）"], "state_variants": ["court_address"], "continuity_keys": ["瘦长体态", "幞头脚形", "绛红色值", "领宽", "带高"],
+      "forbidden": ["明代补服", "清代顶戴", "影视演员脸", "与仁宗使用同等材质层级", "随机官阶纹样"], "uncertain": ["色阶为本话角色区分系统，不宣称精确官品考证"],
+      "evidence_refs": ["SRC_NMC_COSTUME", "SRC_DPM_FUTOU", "SRC_DPM_QINGMING", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_ZHAO_ZHE", "outfit_id": "OUTFIT_BASE", "name": "朝堂宰执公服·紫褐",
+      "identity_rank": "年长宰执；紫宸殿奏对", "occasion_activity": ["持笏奏对", "侍立"], "layers": ["素中衣", "低饱和紫褐圆领长袍"],
+      "silhouette": "端方略厚体态，衣身垂直稳重，与文彦博偏瘦轮廓互斥", "collar_neckline": "圆领", "closure": "内隐系结", "sleeves": "中等偏宽，不堆积", "hem": "近踝", "waist_belt": "深褐细带具",
+      "headwear": ["黑色展脚幞头，冠体稍低稳"], "footwear": ["深色靴"], "materials": ["哑光细织物", "皮革带靴"], "palette": ["紫褐", "墨黑", "暗棕"], "patterns": ["主体无补子或强品阶纹样"],
+      "permanent_accessories": ["幞头", "细带具"], "removable_accessories": ["笏板（剧情手持）"], "state_variants": ["court_concerned"], "continuity_keys": ["花白发须", "稍厚体态", "紫褐色值", "幞头脚形", "带高"],
+      "forbidden": ["明代补服", "清代顶戴", "与文彦博/范仲淹换色换体态", "夸张金玉带", "影视定型造型"], "uncertain": ["紫褐是同框角色区分色，不单独作官品断代证据"],
+      "evidence_refs": ["SRC_NMC_COSTUME", "SRC_DPM_FUTOU", "SRC_DPM_QINGMING", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_WEN_YANBO", "outfit_id": "OUTFIT_BASE", "name": "朝堂文臣公服·深青绿褐",
+      "identity_rank": "中年文臣；紫宸殿奏对", "occasion_activity": ["持笏奏对", "侍立"], "layers": ["素中衣", "深青绿褐圆领长袍"],
+      "silhouette": "偏瘦、窄下颌，肩线较窄，与赵哲的年龄体量互斥", "collar_neckline": "圆领，领宽稍窄", "closure": "内隐系结", "sleeves": "中等偏收，持笏动作利落", "hem": "近踝", "waist_belt": "墨褐细带具",
+      "headwear": ["黑色展脚幞头，冠体比赵哲略挺"], "footwear": ["深色靴"], "materials": ["哑光细织物", "皮革带靴"], "palette": ["深青绿褐", "墨黑", "旧竹灰"], "patterns": ["主体无补子或大团花"],
+      "permanent_accessories": ["幞头", "细带具"], "removable_accessories": ["笏板（剧情手持）"], "state_variants": ["court_steady"], "continuity_keys": ["窄下颌", "黑须", "偏瘦肩线", "青绿褐色值", "幞头脚形"],
+      "forbidden": ["明代补服", "清代顶戴", "与赵哲/范仲淹换脸换色", "高饱和翠绿", "影视定型造型"], "uncertain": ["青绿褐是同框区分色，不宣称精确官品对应"],
+      "evidence_refs": ["SRC_NMC_COSTUME", "SRC_DPM_FUTOU", "SRC_DPM_QINGMING", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "PROP_IMPERIAL_EDICT", "name": "丹诏与御香黄罗包", "function": "证明皇命并携御香请天师", "ownership": "宋仁宗授予洪信；全程由洪信保管",
+      "era_region": "北宋朝廷—龙虎山旅程", "dimensions": "包裹约前臂长，可背负并可双手奉持", "construction": "诏书卷/折件与御香分隔后由黄罗包裹、系带固定", "materials": ["织物包裹", "纸/绢质诏书", "香料"],
+      "moving_parts": ["系带", "包裹开合"], "interaction_grip": "正式场合双手奉持；登山背负，手侧与系带走向连续", "inscription_policy": "正文与印记后期嵌入；锚图不生成随机字",
+      "state_variants": ["sealed_court", "travel_wrapped", "presented_at_palace"], "production_variants": ["hero", "stunt", "duplicate"],
+      "continuity_keys": ["黄罗色", "结位", "尺寸", "背负方向", "是否已开封"], "forbidden": ["清代圣旨卷轴定型", "随机可读字", "无结构发光卷轴"],
+      "uncertain": ["原文合称丹诏御香，包内具体分隔为生产设计"], "evidence_refs": ["SRC_DPM_QINGMING", "SRC_NMC_COSTUME", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "prop_id": "PROP_SILVER_CENSER", "name": "银手炉/提梁香炉", "function": "携龙香登山并在惊险场面跌落拾回", "ownership": "洪信持有",
+      "era_region": "北宋故事时空，具体器形保守原创", "dimensions": "单手可提，炉身约掌幅至两掌幅，不能大成落地香炉", "construction": "稳定炉身、透气炉盖、提梁和内胆；跌落时部件关系仍可读", "materials": ["银色金属", "香灰/香料"],
+      "moving_parts": ["提梁", "炉盖"], "interaction_grip": "手握提梁；登记左右手、跌落格、落点、拾回格与此后持有手", "inscription_policy": "无随机铭文",
+      "state_variants": ["lit", "dropped", "recovered"], "production_variants": ["hero", "stunt", "duplicate"],
+      "continuity_keys": ["炉身比例", "提梁形", "烟量", "跌落/拾回状态", "持有手"], "forbidden": ["现代暖手炉", "大型落地鼎炉", "悬空无握持", "随机铭文"],
+      "uncertain": ["‘银手炉’具体器形需后续器物专题证据；当前以剧情功能优先的可工作结构为准"], "evidence_refs": ["SRC_DPM_QINGMING", "SRC_NMC_COSTUME", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "prop_id": "PROP_FUMO_SEALS", "name": "伏魔殿封皮、朱印与大锁", "function": "显示多代封禁及洪信逐层破封", "ownership": "上清宫/历代天师",
+      "era_region": "北宋龙虎山神异建筑", "dimensions": "锁与封皮在中近景可读，锁不得夸张为门体一半", "construction": "门缝封皮叠贴、朱印、门鼻与灌铸感金属大锁形成逐层障碍", "materials": ["纸/织物封皮", "印泥", "铜色金属", "门体木材"],
+      "moving_parts": ["锁具", "门扇"], "interaction_grip": "按脚本依次揭封/破锁/开门；每阶段保留前一步痕迹", "inscription_policy": "符箓和印文用设计稿后期嵌入，不生成乱码",
+      "state_variants": ["fully_sealed", "seals_removed", "lock_broken", "door_open"], "production_variants": ["hero", "stunt", "background", "duplicate"],
+      "continuity_keys": ["封皮层数", "朱印位置", "锁形", "拆除顺序", "残留痕迹"], "forbidden": ["随机乱码符箓", "现代挂锁", "一步消失全部封禁", "无因果自动开门"],
+      "uncertain": ["神异封禁为小说设计；材料语法参考时代环境，结构服务逐层破封叙事"], "evidence_refs": ["SRC_DPM_QINGMING", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    },
+    {
+      "prop_id": "PROP_STONE_STELE", "name": "遇洪石碑与龟趺", "function": "揭示封印警告并触发百星出世", "ownership": "伏魔殿地下固定物",
+      "era_region": "北宋故事时空的神异碑刻", "dimensions": "依原文五六尺；与洪信站姿保持固定比例", "construction": "碑身、碑额/边缘、龟趺分件逻辑明确，埋藏与显露状态可连续", "materials": ["风化石材", "土尘"],
+      "moving_parts": [], "interaction_grip": "不可手持；人物围绕、清土和阅读，视线落点固定", "inscription_policy": "正面符箓和背面‘遇洪而开’均预留安全区并后期嵌字",
+      "state_variants": ["buried", "excavated", "revealed", "burst_aftermath"], "production_variants": ["hero", "background", "duplicate"],
+      "continuity_keys": ["五六尺比例", "龟趺方向", "正背面", "埋土线", "文字安全区"], "forbidden": ["随机乱码", "正背文字互换", "尺寸跨格缩放", "现代墓碑"],
+      "uncertain": ["碑文与神异功能来自小说；具体纹饰保持原创克制"], "evidence_refs": ["SRC_DPM_QINGMING", "SRC_NMC_COSTUME", "SRC_SHUIHU_SOURCE"], "status": "confirmed"
+    }
+  ],
+  "overrides": []
+}

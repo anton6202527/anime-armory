@@ -9,8 +9,8 @@
       "奇观完成硬切现实人物 | | EP01_CLIP12 升级结算 | 1:45.371–1:57.013 | 回报/",
       "category 残酷生存选择 + 系统首启 + 一刀反杀 why_watch 刚穿越成罪臣之女的姜月初，必须先杀",
       "挥刀斩妖。 audience_payoff 杀人悬念中段兑现，二十年道行一刀斩虎，百妖谱把短期爆发变成长期能力，结尾",
-      "月初架起裴长青，面向画面下方。 rhythm 反转·压迫升级 label 死妖咳嗽站起 audience_effec",
-      "立。 dramatic_function 推翻逃生路径，升级为绝对死局。 scene LOC_01 subtitle"
+      "立。 dramatic_function 推翻逃生路径，升级为绝对死局。 rhythm 反转·压迫升级 contin",
+      "推翻逃生路径，升级为绝对死局。 rhythm 反转·压迫升级 continuity_story start_stat"
     ],
     "questions": [
       {
@@ -183,57 +183,64 @@
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "d_at EP01_CLIP01 promise 姜月初为何把刀对准人而不是妖 payoff_due EP01_CL",
+        "question_context": "dable True content_promise 她为什么必须先杀一个人，才能活着斩妖？ expected_met",
         "question_id": "Q25",
-        "signal": "为何",
+        "signal": "为什么",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "d_at EP01_CLIP05 promise 虎山神为何复生，二人如何活命 payoff_due EP01_CL",
+        "question_context": "d_at EP01_CLIP01 promise 姜月初为何把刀对准人而不是妖 payoff_due EP01_CL",
         "question_id": "Q26",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "pen rhythm 冷开场·CU硬切 label 刀口为何对准人 audience_effect 立刻追问她为何不",
+        "question_context": "d_at EP01_CLIP05 promise 虎山神为何复生，二人如何活命 payoff_due EP01_CL",
         "question_id": "Q27",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "口为何对准人 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 dramatic_function",
+        "question_context": "。 scene LOC_01/未来片段 label 刀口为何对准人 audience_effect 立刻追问她为何不",
         "question_id": "Q28",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "择窗口压到几秒。 dramatic_function 让系统在马上被吃的压力下出现。 scene LOC_01 su",
+        "question_context": "口为何对准人 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 dramatic_function",
         "question_id": "Q29",
-        "signal": "系统",
+        "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "则，把斩杀指向唯一活人。 scene LOC_01/主观系统层 spectacle_story_function 建",
+        "question_context": "择窗口压到几秒。 dramatic_function 让系统在马上被吃的压力下出现。 rhythm 加速·危机逼近",
         "question_id": "Q30",
         "signal": "系统",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "pectacle_story_function 克制完成系统因果，不把杀人拍成爽点。 subtitle_lines",
+        "question_context": "里还活着的，除了虎妖—— scene LOC_01/主观系统层 label 百妖谱给出残酷选择 audience_e",
         "question_id": "Q31",
         "signal": "系统",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "确一次性道行和永久收录区别。 scene LOC_01/系统结算 spectacle_story_function",
+        "question_context": "pectacle_story_function 克制完成系统因果，不把杀人拍成爽点。 subtitle_lines",
         "question_id": "Q32",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "，录进谱里的本事，才留得住。 scene LOC_01/系统结算 label 能力留下而道行用尽 audience_",
+        "question_id": "Q33",
         "signal": "系统",
         "status": "paid_or_progressed"
       }
@@ -249,7 +256,7 @@
   "notes": [
     "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
   ],
-  "pack_hash": "2ecf1ac82d5a319a",
+  "pack_hash": "e5a08c11d5bb2339",
   "performance_prompt_cues": [],
   "summary": {
     "boundary_status": "n/a",

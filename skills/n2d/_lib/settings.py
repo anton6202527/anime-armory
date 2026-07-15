@@ -237,6 +237,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("视频原生音轨", ("n2d",), ("丢弃", "低音量混入环境声", "保留原片音轨")),
     SettingSpec("后期拟音策略", ("n2d",), ("自动", "强制叠加", "关闭")),
     SettingSpec("生成粒度", ("n2d",), ("逐个", "小批", "按场景分批", "整集", "自定义"), parameterized=True, composite=True),
+    SettingSpec("图片验收模式", ("n2d",), ("逐张机器QC+实际目视", "按生成粒度验收")),
     SettingSpec("生成优先序", ("n2d",), ("关键镜优先", "分镜顺序", "先易后难")),
     SettingSpec(
         "一致性增强",

@@ -13,6 +13,7 @@ import re
 import subprocess
 import shutil
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -61,6 +62,7 @@ VIEW_RATIOS = {
 }
 CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
+CODEX_EXECUTION_MODE = "isolated_ephemeral_workdir"
 DREAMINA_MODEL = "Dreamina image2image"
 DREAMINA_CHANNEL = "Dreamina official CLI"
 
@@ -179,8 +181,26 @@ def codex_version() -> str:
     return (proc.stdout or proc.stderr or "codex unknown").strip().splitlines()[0]
 
 
-def image_payload_from_jsonl(text: str) -> str:
-    payload = ""
+def codex_image_feature_status() -> str:
+    proc = subprocess.run(
+        ["codex", "features", "list"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if proc.returncode != 0:
+        return "unknown"
+    for line in proc.stdout.splitlines():
+        fields = line.split()
+        if fields and fields[0] == "image_generation":
+            return fields[1] if len(fields) > 1 else "present"
+    return "missing"
+
+
+def image_generation_records_from_jsonl(text: str) -> list[dict[str, Any]]:
+    """Normalize both rollout events and ``codex exec --json`` item events."""
+    records: list[dict[str, Any]] = []
     for line in text.splitlines():
         line = line.strip()
         if not line.startswith("{"):
@@ -189,13 +209,43 @@ def image_payload_from_jsonl(text: str) -> str:
             event = json.loads(line)
         except json.JSONDecodeError:
             continue
-        data = event.get("payload") if isinstance(event, dict) else None
-        if not isinstance(data, dict) or data.get("type") != "image_generation_end":
+        if not isinstance(event, dict):
             continue
+        candidates = [event.get("payload"), event.get("item"), event]
+        for data in candidates:
+            if not isinstance(data, dict):
+                continue
+            record_type = str(data.get("type") or "")
+            if record_type not in {"image_generation_end", "image_generation"}:
+                continue
+            status = str(data.get("status") or "completed")
+            if status not in {"completed", "succeeded"}:
+                continue
+            records.append(data)
+            break
+    return records
+
+
+def image_payload_from_jsonl(text: str) -> str:
+    payload = ""
+    for data in image_generation_records_from_jsonl(text):
         result = data.get("result")
         if isinstance(result, str) and result.strip():
             payload = result.strip()
     return payload
+
+
+def image_saved_path_from_jsonl(text: str) -> Path | None:
+    saved_path: Path | None = None
+    for data in image_generation_records_from_jsonl(text):
+        value = data.get("saved_path")
+        if isinstance(value, str) and value.strip():
+            saved_path = Path(value).expanduser()
+    return saved_path
+
+
+def codex_generated_images_root() -> Path:
+    return Path.home() / ".codex" / "generated_images"
 
 
 def codex_thread_id(stdout: str) -> str:
@@ -210,6 +260,57 @@ def codex_thread_id(stdout: str) -> str:
         if event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
             return event["thread_id"]
     return ""
+
+
+def codex_event_diagnostics(stdout: str, stderr: str) -> dict[str, Any]:
+    """Summarize JSONL control events without persisting prompts or image payloads."""
+    top_level_type_counts: dict[str, int] = {}
+    payload_type_counts: dict[str, int] = {}
+    item_type_counts: dict[str, int] = {}
+    json_event_count = 0
+    image_generation_begin_seen = False
+    image_generation_end_seen = False
+    for line in stdout.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, dict):
+            continue
+        json_event_count += 1
+        event_type = str(event.get("type") or "unknown")
+        top_level_type_counts[event_type] = top_level_type_counts.get(event_type, 0) + 1
+        payload = event.get("payload")
+        if isinstance(payload, dict):
+            payload_type = str(payload.get("type") or "unknown")
+            payload_type_counts[payload_type] = payload_type_counts.get(payload_type, 0) + 1
+            image_generation_begin_seen = image_generation_begin_seen or payload_type == "image_generation_begin"
+            image_generation_end_seen = image_generation_end_seen or payload_type == "image_generation_end"
+        item = event.get("item")
+        if isinstance(item, dict):
+            item_type = str(item.get("type") or "unknown")
+            key = f"{event_type}:{item_type}"
+            item_type_counts[key] = item_type_counts.get(key, 0) + 1
+            if item_type == "image_generation":
+                image_generation_begin_seen = image_generation_begin_seen or event_type == "item.started"
+                status = str(item.get("status") or "")
+                image_generation_end_seen = image_generation_end_seen or (
+                    event_type == "item.completed" and status in {"completed", "succeeded"}
+                )
+    return {
+        "json_event_count": json_event_count,
+        "stdout_line_count": len(stdout.splitlines()),
+        "stderr_line_count": len(stderr.splitlines()),
+        "top_level_type_counts": top_level_type_counts,
+        "payload_type_counts": payload_type_counts,
+        "item_type_counts": item_type_counts,
+        "image_generation_begin_seen": image_generation_begin_seen,
+        "image_generation_end_seen": image_generation_end_seen,
+        "thread_id": codex_thread_id(stdout),
+    }
 
 
 def codex_session_path(thread_id: str) -> Path | None:
@@ -237,12 +338,28 @@ def write_image_payload(payload: str, out_path: Path) -> bool:
 
 def decode_image_event(stdout: str, out_path: Path) -> bool:
     payload = image_payload_from_jsonl(stdout)
+    saved_path = image_saved_path_from_jsonl(stdout)
     thread_id = codex_thread_id(stdout)
-    if not payload and thread_id:
+    if not payload and not saved_path and thread_id:
         session = codex_session_path(thread_id)
         if session and session.is_file():
-            payload = image_payload_from_jsonl(session.read_text(encoding="utf-8", errors="ignore"))
-    return write_image_payload(payload, out_path) if payload else False
+            session_text = session.read_text(encoding="utf-8", errors="ignore")
+            payload = image_payload_from_jsonl(session_text)
+            saved_path = image_saved_path_from_jsonl(session_text)
+    if payload and write_image_payload(payload, out_path):
+        return True
+    if not saved_path:
+        return False
+    try:
+        source = saved_path.resolve(strict=True)
+        generated_root = codex_generated_images_root().resolve(strict=True)
+    except (FileNotFoundError, OSError):
+        return False
+    if source == generated_root or generated_root not in source.parents or not png_valid(source):
+        return False
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, out_path)
+    return png_valid(out_path)
 
 
 def prompt_snapshot(root: Path, chapter: str, asset_id: str, variant: str, prompt: str) -> tuple[str, str]:
@@ -278,8 +395,63 @@ def adopt_generated_png(
     return archived
 
 
+def normalize_full_body_canvas(path: Path, target: tuple[int, int]) -> bool:
+    """Fit a generated full-body PNG onto the adopted front canvas without cropping."""
+    dims = png_dimensions(path)
+    if not dims or dims == target:
+        return False
+    from PIL import Image, ImageOps
+
+    with Image.open(path) as opened:
+        image = opened.convert("RGB")
+        fitted = ImageOps.contain(image, target, Image.Resampling.LANCZOS)
+        corners = [image.getpixel((0, 0)), image.getpixel((image.width - 1, 0)), image.getpixel((0, image.height - 1)), image.getpixel((image.width - 1, image.height - 1))]
+        fill = tuple(sum(px[channel] for px in corners) // len(corners) for channel in range(3))
+        canvas = Image.new("RGB", target, fill)
+        canvas.paste(fitted, ((target[0] - fitted.width) // 2, (target[1] - fitted.height) // 2))
+        pending = path.with_name(f".{path.stem}__canvas_pending.png")
+        canvas.save(pending, format="PNG")
+    pending.replace(path)
+    return True
+
+
+def target_canvas_for_ratio(current: tuple[int, int], ratio: str) -> tuple[int, int]:
+    match = re.fullmatch(r"\s*(\d+)\s*[:/]\s*(\d+)\s*", str(ratio or ""))
+    if not match:
+        raise ValueError(f"无效画幅比例：{ratio}")
+    rw, rh = int(match.group(1)), int(match.group(2))
+    if rw <= 0 or rh <= 0 or rw > 100 or rh > 100:
+        raise ValueError(f"无效画幅比例：{ratio}")
+    width, height = current
+    if width * rh == height * rw:
+        return current
+    # Expand to the smallest exact-ratio canvas that can contain the source.
+    # This guarantees no crop, no stretch and no subject loss.
+    scale = max((width + rw - 1) // rw, (height + rh - 1) // rh)
+    return rw * scale, rh * scale
+
+
+def normalize_png_to_ratio(path: Path, ratio: str) -> dict[str, Any]:
+    current = png_dimensions(path)
+    if not current:
+        return {}
+    target = target_canvas_for_ratio(current, ratio)
+    if target == current:
+        return {}
+    if not normalize_full_body_canvas(path, target):
+        return {}
+    return {
+        "method": "contain_and_pad_no_crop",
+        "ratio": ratio,
+        "source_width": current[0],
+        "source_height": current[1],
+        "target_width": target[0],
+        "target_height": target[1],
+    }
+
+
 def adopt_anchor_candidate(args: argparse.Namespace) -> int:
-    """Adopt a human-selected candidate while preserving its review evidence."""
+    """Adopt a human-selected shared anchor or character front candidate."""
     root = Path(args.project_root).expanduser().resolve()
     registry = load_registry(root)
     assets = registry.setdefault("assets", {})
@@ -287,7 +459,10 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
     if not ref_id or not isinstance(assets.get(ref_id), dict):
         raise SystemExit(f"unknown registry asset: {ref_id or '<empty>'}")
     candidate = resolve_path(root, str(args.candidate))
-    expected_root = (root / "出图" / "共享" / "candidates" / ref_id / "anchor").resolve()
+    asset = assets[ref_id]
+    is_character_front = str(asset.get("type") or "").strip().lower() == "character"
+    variant = "front" if is_character_front else "anchor"
+    expected_root = (root / "出图" / "共享" / "candidates" / ref_id / variant).resolve()
     try:
         candidate.resolve().relative_to(expected_root)
     except ValueError as exc:
@@ -297,18 +472,18 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
 
     candidate_rel = rel_to_root(root, candidate)
     candidate_sha = file_sha256(candidate)
-    dest = root / "出图" / "共享" / "图片" / f"{ref_id}__anchor.png"
+    dest = root / "出图" / "共享" / "图片" / f"{ref_id}__{variant}.png"
     pending = dest.with_name(f".{dest.stem}__adopt_pending.png")
     pending.parent.mkdir(parents=True, exist_ok=True)
     pending.unlink(missing_ok=True)
     shutil.copy2(candidate, pending)
-    archived = adopt_generated_png(root, pending, dest, asset_id=ref_id, variant="anchor")
+    archived = adopt_generated_png(root, pending, dest, asset_id=ref_id, variant=variant)
     if not png_valid(dest):
         raise SystemExit(f"failed to adopt candidate: {candidate}")
 
     now = dt.datetime.now().isoformat(timespec="seconds")
     source: dict[str, Any] = {
-        "kind": "human_selected_candidate_anchor",
+        "kind": "human_selected_character_front" if is_character_front else "human_selected_candidate_anchor",
         "chapter": args.chapter,
         "candidate_path": candidate_rel,
         "candidate_sha256": candidate_sha,
@@ -322,11 +497,14 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
     }
     if archived:
         source["archived_previous_path"] = archived
-    register_asset_anchor(registry, root, ref_id, dest, source=source)
+    if is_character_front:
+        register_character_view(registry, root, ref_id, "front", dest, source=source)
+    else:
+        register_asset_anchor(registry, root, ref_id, dest, source=source)
     write_json(registry_path(root), registry)
     row = {
         "ts": now,
-        "status": "reference_anchor_adopted",
+        "status": "character_front_adopted" if is_character_front else "reference_anchor_adopted",
         "ref_id": ref_id,
         "path": rel_to_root(root, dest),
         "sha256": file_sha256(dest),
@@ -335,7 +513,7 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
     append_event(root, row)
     receipt = {
         "schema_version": 1,
-        "kind": "comic_reference_anchor_adoption",
+        "kind": "comic_character_front_adoption" if is_character_front else "comic_reference_anchor_adoption",
         "created_at": now,
         "ref_id": ref_id,
         "candidate_path": candidate_rel,
@@ -349,7 +527,8 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
         "backend": CODEX_CHANNEL,
         "model": CODEX_MODEL,
     }
-    out = root / "生产数据" / f"comic_identity_anchor_adoption_{ref_id}.json"
+    receipt_label = "front_adoption" if is_character_front else "anchor_adoption"
+    out = root / "生产数据" / f"comic_identity_{receipt_label}_{ref_id}.json"
     write_json(out, receipt)
     print(f"[ok] adopted {ref_id}: {rel_to_root(root, dest)}", flush=True)
     print(f"[ok] adoption receipt: {out}", flush=True)
@@ -357,36 +536,281 @@ def adopt_anchor_candidate(args: argparse.Namespace) -> int:
 
 
 def run_codex_image(prompt: str, repo: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
-    cmd = ["codex", "exec", "--json", "--enable", "image_generation"]
+    cmd = [
+        "codex",
+        "exec",
+        "--json",
+        "--enable",
+        "image_generation",
+        "--ephemeral",
+        "--skip-git-repo-check",
+    ]
     for path in image_paths:
         cmd.extend(["--image", str(path)])
-    cmd.extend(["-s", "read-only", "-C", str(repo), prompt])
-    try:
-        return subprocess.run(
-            cmd,
-            stdin=subprocess.DEVNULL,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-            timeout=timeout_sec,
-        )
-    except subprocess.TimeoutExpired as exc:
-        stdout = exc.stdout.decode("utf-8", errors="ignore") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
-        stderr = exc.stderr.decode("utf-8", errors="ignore") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
-        stderr = (stderr + f"\ntimeout after {timeout_sec}s").strip()
-        return subprocess.CompletedProcess(cmd, 124, stdout=stdout, stderr=stderr)
+    # 生图 prompt 已携带完整合同；在空目录运行可避免嵌套 Codex 扫描作品仓库、AGENTS.md
+    # 或其它生产线说明。图片输入使用绝对路径，经 --image 显式传入。
+    with tempfile.TemporaryDirectory(prefix="comic-identity-codex-image-") as isolated_workdir:
+        isolated_path = Path(isolated_workdir).resolve()
+        if isolated_path == repo.resolve() or repo.resolve() in isolated_path.parents:
+            raise RuntimeError("isolated Codex image workdir must be outside the repository")
+        isolated_cmd = [*cmd, "-s", "read-only", "-C", str(isolated_path), prompt]
+        try:
+            return subprocess.run(
+                isolated_cmd,
+                stdin=subprocess.DEVNULL,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+                timeout=timeout_sec,
+            )
+        except subprocess.TimeoutExpired as exc:
+            stdout = exc.stdout.decode("utf-8", errors="ignore") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+            stderr = exc.stderr.decode("utf-8", errors="ignore") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+            stderr = (stderr + f"\ntimeout after {timeout_sec}s").strip()
+            return subprocess.CompletedProcess(isolated_cmd, 124, stdout=stdout, stderr=stderr)
 
 
 def format_failure(proc: subprocess.CompletedProcess[str]) -> str:
     stderr = (proc.stderr or "").strip()
     stdout = (proc.stdout or "").strip()
-    parts = []
-    if stderr:
-        parts.append("stderr=" + stderr[-2000:])
-    if stdout:
-        parts.append("stdout=" + stdout[-4000:])
-    return f"codex exit {proc.returncode}: " + (" | ".join(parts) if parts else "no output")
+    combined = "\n".join(part for part in (stderr, stdout) if part)
+    lowered = combined.lower()
+    if proc.returncode == 124 or "timeout after" in stderr.lower():
+        failure_class = "backend_timeout"
+    elif "http 403" in lowered or "forbidden" in lowered:
+        failure_class = "backend_forbidden"
+    elif "http/request failed" in lowered or "transport channel closed" in lowered:
+        failure_class = "backend_transport"
+    elif "no valid image_generation_end" in lowered:
+        failure_class = "backend_no_image"
+    else:
+        failure_class = "backend_error"
+
+    diagnostic_lines: list[str] = []
+    if failure_class == "backend_timeout":
+        diagnostic_lines = [
+            line.strip()
+            for line in stderr.splitlines()
+            if "timeout after" in line.lower()
+        ]
+        if not diagnostic_lines:
+            diagnostic_lines = ["timeout"]
+    for line in combined.splitlines():
+        if diagnostic_lines and failure_class == "backend_timeout":
+            break
+        clean = line.strip()
+        if not clean:
+            continue
+        low = clean.lower()
+        if any(token in low for token in (" error ", "error:", "http 403", "forbidden", "timeout after", "transport channel closed")):
+            diagnostic_lines.append(clean)
+    if not diagnostic_lines and combined:
+        diagnostic_lines = [combined.splitlines()[-1].strip()]
+    detail = " | ".join(diagnostic_lines[-4:])
+    if len(detail) > 400:
+        detail = detail[-400:]
+    return f"codex exit {proc.returncode}; class={failure_class}" + (f"; detail={detail}" if detail else "")
+
+
+def backend_health_manifest_path(root: Path, chapter: str) -> Path:
+    return root / "生产数据" / f"comic_identity_backend_health_{chapter}.json"
+
+
+def backend_probe_prompt(profile: str, *, reference_attached: bool) -> tuple[str, str]:
+    """Return a non-production probe prompt and the production request class it calibrates."""
+    if profile == "simple":
+        request_class = "simple_bitmap"
+        prompt = (
+            "Use case: stylized-concept\n"
+            "Asset type: non-production image-backend health probe\n"
+            "Primary request: Create one simple diagnostic bitmap: a centered matte white circle above a centered dark gray square on a flat light-gray background.\n"
+            "Composition/framing: square canvas, large clean shapes, generous margins.\n"
+            "Constraints: exactly one circle and one square; no people; no scenery; no text; no letters; no numbers; no logo; no watermark."
+        )
+    elif profile == "production-character-front":
+        request_class = "historical_character_front"
+        prompt = (
+            "Use case: historical-scene\n"
+            "Asset type: non-production production-latency calibration for a historical comic character front; this is not a project character and must never be adopted into an identity registry.\n"
+            "Primary request: Create one polished full-body front character design of an anonymous adult male Northern Song court official, suitable for a long-running Chinese historical comic consistency pack.\n"
+            "Subject: fictional and non-identifiable man aged about 45 to 55, composed bearing, balanced realistic anatomy, both hands visible and relaxed, neutral closed-mouth expression, no resemblance to a real actor or public figure.\n"
+            "Wardrobe: historically plausible Northern Song official dress with a black futou, restrained solid-color round-collar robe, period-plausible belt and black boots; layered construction, collar, sleeve, hem, belt and footwear must remain clearly readable.\n"
+            "Scene/backdrop: quiet neutral studio-like light background with only a faint grounding shadow; no architecture, furniture, heraldry or narrative scene.\n"
+            "Style/medium: premium cinematic Chinese comic concept art with controlled ink texture, clean anatomical drawing, restrained mineral colors, believable silk and leather material separation.\n"
+            "Composition/framing: exact front-facing neutral turnaround pose, entire head-to-toe silhouette visible, centered vertical 3:4 portrait, generous margin around hat, sleeves and boots, no crop.\n"
+            "Lighting/mood: soft directional key light with readable three-value structure and restrained historical dignity.\n"
+            "Constraints: one person only; no props; no weapons; no throne; no dragon motifs; no Ming rank badge; no Qing queue, court hat or robe; no fantasy armor; no floating fabric; no text; no letters; no numbers; no logo; no watermark; no border; no character-card labels."
+        )
+    else:
+        raise ValueError(f"unsupported backend probe profile: {profile}")
+    if reference_attached:
+        prompt += (
+            "\nInput images: Image 1 is style-only; inherit only its line, color, light, and material treatment."
+            " Do not copy any person, face, hairstyle, garment combination, object, scene layout, pose, or composition from it."
+        )
+    return prompt, request_class
+
+
+def probe_backend(args: argparse.Namespace) -> int:
+    """执行一次不绑定正式资产的图像通道探针；不消费资产 variant 的尝试总账。"""
+    root = Path(args.project_root).expanduser().resolve()
+    repo = repo_root(root)
+    if not shutil.which("codex"):
+        raise SystemExit("codex not found in PATH")
+    feature_status = codex_image_feature_status()
+    if feature_status in {"missing", "removed"}:
+        raise SystemExit(f"Codex image_generation feature is {feature_status}; 未发起远端探针")
+
+    requested_probe_mode = str(getattr(args, "probe_mode", "auto") or "auto").strip()
+    probe_profile = str(getattr(args, "probe_profile", "simple") or "simple").strip()
+    image_paths: list[Path] = []
+    reference_inputs: list[dict[str, str]] = []
+    if requested_probe_mode != "text-only":
+        style_reference = project_style_anchor(root, load_registry(root))
+        if style_reference and png_valid(style_reference):
+            image_paths.append(style_reference)
+            reference_inputs.append(
+                {
+                    "path": rel_to_root(root, style_reference),
+                    "sha256": file_sha256(style_reference),
+                    "role": "style_only",
+                }
+            )
+        elif requested_probe_mode == "reference-attached":
+            raise SystemExit("reference-attached probe requires a valid adopted STYLE_ anchor; 未发起远端探针")
+    probe_scope = "reference_attached" if image_paths else "text_only"
+
+    manifest_path = backend_health_manifest_path(root, args.chapter)
+    try:
+        manifest = load_json(manifest_path) if manifest_path.is_file() else {}
+    except (OSError, json.JSONDecodeError):
+        manifest = {}
+    if not isinstance(manifest, dict):
+        manifest = {}
+    probes = manifest.setdefault("probes", [])
+    if not isinstance(probes, list):
+        probes = []
+        manifest["probes"] = probes
+
+    started_at = dt.datetime.now().isoformat(timespec="microseconds")
+    probe_id = hashlib.sha256(
+        f"{args.chapter}|codex|{CODEX_MODEL}|{started_at}|{len(probes) + 1}".encode("utf-8")
+    ).hexdigest()[:20]
+    stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+    artifact = (
+        root
+        / "生产数据"
+        / "backend_health"
+        / f"{stamp}__gpt_image_2__codex_cli__{probe_scope}__{probe_profile}_probe.png"
+    )
+    prompt, production_request_class = backend_probe_prompt(
+        probe_profile,
+        reference_attached=bool(image_paths),
+    )
+    prompt_path, prompt_sha256 = prompt_snapshot(
+        root,
+        args.chapter,
+        "BACKEND_HEALTH",
+        f"probe_{probe_profile}_codex",
+        prompt,
+    )
+    row: dict[str, Any] = {
+        "probe_id": probe_id,
+        "started_at": started_at,
+        "status": "started",
+        "reason": str(args.reason).strip(),
+        "model": CODEX_MODEL,
+        "access_path": CODEX_CHANNEL,
+        "cli_version": codex_version(),
+        "image_generation_feature": feature_status,
+        "execution_mode": CODEX_EXECUTION_MODE,
+        "requested_probe_mode": requested_probe_mode,
+        "probe_scope": probe_scope,
+        "probe_profile": probe_profile,
+        "production_request_class": production_request_class,
+        "calibration_only": True,
+        "reference_inputs": reference_inputs,
+        "timeout_sec": int(args.timeout_sec),
+        "prompt_path": prompt_path,
+        "prompt_sha256": prompt_sha256,
+        "external_status": str(args.external_status or "").strip(),
+        "external_status_url": str(args.external_status_url or "").strip(),
+        "external_status_checked_at": str(args.external_status_checked_at or "").strip(),
+        "asset_attempt_ledger_consumed": False,
+    }
+    probes.append(row)
+    manifest.update(
+        {
+            "schema_version": 1,
+            "kind": "comic_identity_backend_health",
+            "chapter": args.chapter,
+            "updated_at": started_at,
+            "latest_status": "started",
+        }
+    )
+    write_json(manifest_path, manifest)
+
+    monotonic_started = time.monotonic()
+    try:
+        proc = run_codex_image(prompt, repo, args.timeout_sec, image_paths)
+    except KeyboardInterrupt:
+        row.update(
+            {
+                "status": "interrupted",
+                "finished_at": dt.datetime.now().isoformat(timespec="microseconds"),
+                "duration_sec": round(time.monotonic() - monotonic_started, 3),
+                "error": "interrupted",
+            }
+        )
+        manifest["updated_at"] = row["finished_at"]
+        manifest["latest_status"] = "interrupted"
+        write_json(manifest_path, manifest)
+        raise
+
+    row["finished_at"] = dt.datetime.now().isoformat(timespec="microseconds")
+    row["duration_sec"] = round(time.monotonic() - monotonic_started, 3)
+    row["codex_event_diagnostics"] = codex_event_diagnostics(proc.stdout or "", proc.stderr or "")
+    if proc.returncode != 0:
+        row.update({"status": "failed", "error": format_failure(proc)})
+        manifest["latest_status"] = "failed"
+        manifest["updated_at"] = row["finished_at"]
+        write_json(manifest_path, manifest)
+        print(f"[fail] backend health probe: {row['error']}", flush=True)
+        print(f"[ok] health manifest: {manifest_path}", flush=True)
+        return 1
+
+    if not decode_image_event(proc.stdout, artifact) or not png_valid(artifact):
+        artifact.unlink(missing_ok=True)
+        row.update(
+            {
+                "status": "failed",
+                "error": "codex completed but no valid image_generation_end PNG was available",
+            }
+        )
+        manifest["latest_status"] = "failed"
+        manifest["updated_at"] = row["finished_at"]
+        write_json(manifest_path, manifest)
+        print(f"[fail] backend health probe: {row['error']}", flush=True)
+        print(f"[ok] health manifest: {manifest_path}", flush=True)
+        return 1
+
+    dimensions = png_dimensions(artifact)
+    row.update(
+        {
+            "status": "succeeded",
+            "artifact_path": rel_to_root(root, artifact),
+            "artifact_sha256": file_sha256(artifact),
+            "width": dimensions[0] if dimensions else 0,
+            "height": dimensions[1] if dimensions else 0,
+        }
+    )
+    manifest["latest_status"] = "succeeded"
+    manifest["updated_at"] = row["finished_at"]
+    write_json(manifest_path, manifest)
+    print(f"[ok] backend health probe -> {artifact}", flush=True)
+    print(f"[ok] health manifest: {manifest_path}", flush=True)
+    return 0
 
 
 def submit_id_from(text: str) -> str:
@@ -523,6 +947,21 @@ def compact_contract(value: Any, *, max_len: int = 640) -> str:
     return text
 
 
+def outfit_contract_text(asset: dict[str, Any], outfit_id: str) -> str:
+    outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
+    outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else {}
+    if not outfit:
+        return ""
+    return compact_contract(
+        outfit.get("wardrobe_standard") or {
+            "name": outfit.get("name"),
+            "description": outfit.get("description"),
+            "forbidden": outfit.get("forbidden"),
+        },
+        max_len=1500,
+    )
+
+
 def character_asset_contract(asset: dict[str, Any]) -> str:
     parts: list[str] = []
     for key, label in (
@@ -542,6 +981,15 @@ def character_asset_contract(asset: dict[str, Any]) -> str:
     age_variants = asset.get("age_variants")
     if isinstance(age_variants, dict) and age_variants:
         parts.append("已登记年龄形态:" + ",".join(map(str, age_variants.keys())))
+    # A wardrobe contract is only useful if the generation prompt actually
+    # consumes it.  Keep the default bound outfit compact and explicit so a
+    # new front view cannot silently fall back to generic costume priors.
+    if str(asset.get("type") or "character").strip().lower() == "character":
+        binding = asset.get("default_binding") if isinstance(asset.get("default_binding"), dict) else {}
+        outfit_id = str(binding.get("outfit_id") or "").strip()
+        outfit_contract = outfit_contract_text(asset, outfit_id)
+        if outfit_contract:
+            parts.append(f"默认服装 {outfit_id}:{outfit_contract}")
     return "\n".join(f"- {item}" for item in parts)
 
 
@@ -555,11 +1003,28 @@ def character_view_prompt(
     backend: str = "codex",
 ) -> str:
     view_label = VIEW_LABELS.get(view, view)
-    opening = "请用内置 image_generation 工具生成漫画角色专门定妆参考图。" if backend == "codex" else "请基于参考图生成漫画角色专门定妆参考图。"
-    if view == "face":
+    is_monster = character_id.startswith("MON_")
+    subject_label = "生物设定" if is_monster else "角色定妆"
+    opening = (
+        f"请用内置 image_generation 工具生成漫画{subject_label}专门参考图。"
+        if backend == "codex"
+        else f"请基于参考图生成漫画{subject_label}专门参考图。"
+    )
+    if view == "face" and is_monster:
+        view_rules = (
+            "本视图必须是生物头部与上段躯干近景：正面或严格对称可读角度，中性警觉状态，"
+            "头骨比例、眼鼻口位置、额纹/鳞片或永久特征清楚；不要全身、捕食、咆哮攻击或强透视。"
+        )
+    elif view == "face":
         view_rules = (
             "本视图必须是头肩近景定妆：正面看镜头，中性表情，五官、发际线、发型轮廓、伤痕/污渍清楚；"
             "不要全身、不要动作戏、不要强透视。"
+        )
+    elif is_monster:
+        view_rules = (
+            f"本视图必须是单体生物的 {view} 结构参考：从头部到尾端、所有肢体或完整盘绕路径入画，"
+            "保持真实物种或项目 DNA 登记的自然姿态；四足兽保持四足承重，蛇类保持连续脊柱与可读盘绕，"
+            "不得人立、穿衣、增加龙角/翼/额外肢体；不得裁掉头、爪足或尾端。"
         )
     else:
         view_rules = (
@@ -571,7 +1036,7 @@ def character_view_prompt(
 角色 ID：{character_id}
 视图：{view} / {view_label}
 
-已附一张当前采纳角色参考图。必须以它为最高优先级，保持同一角色 DNA、脸型、发型、发量、服装主形制和整体画风。
+已附一张当前采纳的主体参考图。必须以它为最高优先级，保持同一主体 DNA、头脸/头骨结构、永久特征、体态比例和整体画风。
 年龄、身高体量、服饰阶层和状态强度必须服从下面的项目定妆契约；如果契约声明本话基准形态是少年/杂役/受伤/觉醒等，不要把附件锚点的成年感或剧情动作原样继承成当前标准视图。
 如果参考图来自剧情动作或受伤场面，只保留身份、服装和伤痕信息，不继承原图的坐姿、跪姿、弯腰、挥砍、镜头裁切或动态构图。
 附件里的临时手持物、剧情道具、画面左右站位、注视目标和同框遮挡不属于身份；除非项目定妆契约明确登记为永久身体特征或永久佩饰，否则必须从中性多视图移除。
@@ -584,8 +1049,8 @@ def character_view_prompt(
 {asset_contract or '- 无登记契约；以附件锚点和角色设定为准。'}
 
 画面要求：
-1. 生成单人角色 reference art，不要场景叙事，不要其他人物、妖物、气泡、文字、logo、水印。
-2. 中性浅灰或低饱和纯色背景，柔和均匀光，同一角色所有视图都要像同一套 turn-around 定妆图，适合后续作为漫画多视图参考图传给生图后端。
+1. 生成单一主体 reference art，不要场景叙事，不要其他人物/生物、气泡、文字、logo、水印。
+2. 中性浅灰或低饱和纯色背景，柔和均匀光，同一主体所有视图都要像同一套 turn-around 设定图，适合后续作为漫画多视图参考图传给生图后端。
 3. {view_rules}
 4. 保持项目基础视觉风格：{visual_style}；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。
 5. 不同年龄、闭关前后、受伤、觉醒、换装或境界变化都必须继承当前角色 DNA；只能改年龄比例、状态、服饰层和特效强度，不得换脸、换发际线、换眼型或丢失标志物。
@@ -604,6 +1069,7 @@ def character_text_anchor_prompt(
     style_reference_attached: bool = False,
     aspect_ratio: str = "",
 ) -> str:
+    is_monster = character_id.startswith("MON_")
     style_reference_note = (
         "已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质和墨晕语言；"
         "不得继承其中人物的脸、发型、服装、体态、姿势、构图或具体场景。"
@@ -616,7 +1082,7 @@ def character_text_anchor_prompt(
 角色 ID：{character_id}
 视图：front / {VIEW_LABELS['front']}
 
-本次没有已采纳角色图片作为附件。必须只依据下面的项目设定生成稳定、可复用的长线 front 定妆图；这张图会成为后续 three_quarter / side / back / face 视图的参考锚点。
+{('本次没有已采纳主体图片作为附件。' if is_monster else '本次没有已采纳角色图片作为附件。')}必须只依据下面的项目设定生成稳定、可复用的长线 front 设定图；这张图会成为后续 three_quarter / side / back / face 视图的参考锚点。
 {style_reference_note}
 
 角色设定摘录：
@@ -626,15 +1092,53 @@ def character_text_anchor_prompt(
 {asset_contract or '- 无登记契约；请生成清楚、克制、可长期继承的角色标准形象。'}
 
 画面要求：
-1. 生成单人角色 reference art，不要场景叙事，不要其他人物、妖物、气泡、文字、logo、水印。
-2. 单人站立全身正面定妆：从头顶到鞋底完整入画，脚/鞋完整可见，人物居中，面向镜头，中性表情，直立或轻微放松站姿。
-3. 中性浅灰或低饱和纯色背景，柔和均匀光，五官、发际线、发型轮廓、服装主形制、标志配饰和体态比例必须清楚。
+1. 生成单一主体 reference art，不要场景叙事，不要其他人物/生物、气泡、文字、logo、水印。
+2. {('单体生物正面全身结构图：完整头部、躯干、四肢/盘绕路径与尾端入画；四足兽保持四足承重，蛇类保持连续脊柱与清晰头颈，不得人立或穿衣。' if is_monster else '单人站立全身正面定妆：从头顶到鞋底完整入画，脚/鞋完整可见，人物居中，面向镜头，中性表情，直立或轻微放松站姿。')}
+3. 中性浅灰或低饱和纯色背景，柔和均匀光，头脸/头骨结构、永久标志、体表材质、{('服装主形制与标志配饰、' if not is_monster else '')}体态比例必须清楚。
 4. 保持项目基础视觉风格：{visual_style}；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。
-5. 不得坐、蹲、跪、弯腰、倒地、挥砍、冲刺、摆战斗 pose；不得裁掉头发、手、脚、鞋或永久身份佩饰。
+5. {('不得捕食、扑击、咆哮攻击或摆戏剧化战斗 pose；不得裁掉头、爪足、躯干或尾端。' if is_monster else '不得坐、蹲、跪、弯腰、倒地、挥砍、冲刺、摆战斗 pose；不得裁掉头发、手、脚、鞋或永久身份佩饰。')}
 6. 不生成临时剧情手持物、画面左右站位或同框调度；只有项目定妆契约明确列为永久佩饰/身体特征的标志物才可出现。
 7. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 front 视图，画面里只能有一个完整角色。
 8. {ratio_rule}
 9. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+"""
+
+
+def outfit_reference_prompt(
+    character_id: str,
+    outfit_id: str,
+    notes: str,
+    *,
+    visual_style: str,
+    identity_contract: str,
+    outfit_contract: str,
+    aspect_ratio: str = "3:4",
+) -> str:
+    return f"""请用内置 image_generation 工具生成漫画角色的专门换装参考图。
+
+用例：historical-scene / identity-preserve
+角色 ID：{character_id}
+服装 ID：{outfit_id}
+
+已附该角色当前采纳的 front 正面定妆图。它是身份参考：脸型、眼型/眼距、发际线、发型、年龄、体态和整体画风不得改变。
+本次只替换为指定服装；原 front 中的旧服装、临时手持物、动作、场景和站位不得混入新服装。
+
+角色设定摘录：
+{notes or '无额外设定。'}
+
+角色身份契约：
+{identity_contract or '- 以附件 front 为身份真值。'}
+
+本套服装契约：
+{outfit_contract or '- 缺服装契约；不得自由生成。'}
+
+画面要求：
+1. 单人站立全身正面参考，从头顶到鞋底完整入画，中性表情和站姿，手脚与鞋履不裁切。
+2. 中性浅灰或低饱和纯色背景，柔和均匀光；不要场景叙事、其他人物、气泡、文字、logo 或水印。
+3. 严格执行服装的层次、轮廓、领襟、开合、袖摆、带具、冠帽、鞋履、材质、色域、佩饰和禁用项；不以泛化“古装/汉服/仙侠”先验替代契约。
+4. 保持项目基础视觉风格：{visual_style}。不复制影视演员脸、剧照构图或某版影视整套造型。
+5. 画幅固定为 {aspect_ratio}，这是可长期复用的服装锚点，不是剧情分镜。
+6. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -902,6 +1406,28 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
     )
     views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
     views[view] = rel
+    # The canonical front is also the default outfit's first real visual
+    # reference.  Register it once so downstream planning does not report a
+    # false clothing gap after a valid front has already been adopted.
+    if view == "front" and str(asset.get("type") or "character").strip().lower() == "character":
+        binding = asset.get("default_binding") if isinstance(asset.get("default_binding"), dict) else {}
+        outfit_id = str(binding.get("outfit_id") or "").strip()
+        outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
+        outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else None
+        if outfit is not None:
+            outfit_refs = [
+                item for item in outfit.get("reference_images", [])
+                if str(item.get("path") if isinstance(item, dict) else item or "").strip() != rel
+            ]
+            outfit_refs.append({
+                "path": rel,
+                "sha256": file_sha256(path),
+                "view": "front",
+                "source": {"kind": "default_outfit_from_character_front", "character_id": character_id},
+                "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
+            })
+            outfit["reference_images"] = outfit_refs
+            outfit["status"] = "ready"
     tier_required = required_views_for(asset)
     ready_views = [
         required_view
@@ -929,6 +1455,44 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
     )
     assets[character_id] = asset
     apply_character_readiness(root, registry, character_id)
+
+
+def register_outfit_reference(
+    registry: dict,
+    root: Path,
+    character_id: str,
+    outfit_id: str,
+    path: Path,
+    *,
+    source: dict[str, Any],
+) -> None:
+    assets = registry.setdefault("assets", {})
+    asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else {}
+    outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
+    outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else None
+    if outfit is None:
+        raise ValueError(f"registry 未登记 {character_id}/{outfit_id}")
+    rel = rel_to_root(root, path)
+    refs = [
+        item for item in outfit.get("reference_images", [])
+        if str(item.get("path") if isinstance(item, dict) else item or "").strip() != rel
+    ]
+    refs.append({
+        "path": rel,
+        "sha256": file_sha256(path),
+        "view": "front",
+        "source": source,
+        "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
+    })
+    outfit.update({
+        "reference_images": refs,
+        "status": "ready",
+        "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
+    })
+    outfits[outfit_id] = outfit
+    asset["outfits"] = outfits
+    asset["updated_at"] = dt.datetime.now().isoformat(timespec="seconds")
+    assets[character_id] = asset
 
 
 def register_asset_anchor(registry: dict, root: Path, ref_id: str, path: Path, *, source: dict[str, Any]) -> None:
@@ -1195,6 +1759,129 @@ def append_event(root: Path, row: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def generation_attempt_ledger_path(root: Path, chapter: str) -> Path:
+    return root / "生产数据" / f"comic_identity_attempt_ledger_{chapter}.json"
+
+
+def load_generation_attempt_ledger(root: Path, chapter: str) -> dict[str, Any]:
+    path = generation_attempt_ledger_path(root, chapter)
+    if path.is_file():
+        try:
+            payload = load_json(path)
+            if isinstance(payload, dict):
+                payload.setdefault("schema_version", 1)
+                payload.setdefault("kind", "comic_identity_generation_attempt_ledger")
+                payload.setdefault("chapter", chapter)
+                payload.setdefault("attempts", [])
+                return payload
+        except (OSError, json.JSONDecodeError):
+            pass
+    return {
+        "schema_version": 1,
+        "kind": "comic_identity_generation_attempt_ledger",
+        "chapter": chapter,
+        "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "attempts": [],
+    }
+
+
+def generation_attempts_used(
+    ledger: dict[str, Any],
+    generation_kind: str,
+    asset_id: str,
+    variant: str,
+) -> int:
+    rows = [
+        row for row in ledger.get("attempts") or []
+        if isinstance(row, dict)
+        and row.get("generation_kind") == generation_kind
+        and row.get("asset_id") == asset_id
+        and row.get("variant") == variant
+    ]
+    return len(rows)
+
+
+def begin_generation_attempt(
+    root: Path,
+    chapter: str,
+    *,
+    generation_kind: str,
+    asset_id: str,
+    variant: str,
+    max_attempts_total: int,
+    backend: str,
+    model: str,
+    prompt_sha256: str,
+) -> tuple[str, int]:
+    """在调用付费/远端后端前持久化一次尝试；中断也会占用额度。"""
+    ledger = load_generation_attempt_ledger(root, chapter)
+    used = generation_attempts_used(ledger, generation_kind, asset_id, variant)
+    if used >= max_attempts_total:
+        return "", used
+    cumulative_attempt = used + 1
+    now = dt.datetime.now().isoformat(timespec="microseconds")
+    attempt_id = hashlib.sha256(
+        f"{chapter}|{generation_kind}|{asset_id}|{variant}|{cumulative_attempt}|{now}".encode("utf-8")
+    ).hexdigest()[:20]
+    row = {
+        "attempt_id": attempt_id,
+        "started_at": now,
+        "status": "started",
+        "generation_kind": generation_kind,
+        "asset_id": asset_id,
+        "variant": variant,
+        "cumulative_attempt": cumulative_attempt,
+        "max_attempts_total": max_attempts_total,
+        "backend": backend,
+        "model": model,
+        "prompt_sha256": prompt_sha256,
+    }
+    ledger.setdefault("attempts", []).append(row)
+    ledger["updated_at"] = now
+    write_json(generation_attempt_ledger_path(root, chapter), ledger)
+    return attempt_id, cumulative_attempt
+
+
+def finish_generation_attempt(
+    root: Path,
+    chapter: str,
+    attempt_id: str,
+    *,
+    status: str,
+    error: str = "",
+    artifact_path: str = "",
+    artifact_sha256: str = "",
+) -> None:
+    if not attempt_id:
+        return
+    ledger = load_generation_attempt_ledger(root, chapter)
+    for row in ledger.get("attempts") or []:
+        if not isinstance(row, dict) or row.get("attempt_id") != attempt_id:
+            continue
+        row["status"] = status
+        row["finished_at"] = dt.datetime.now().isoformat(timespec="microseconds")
+        if error:
+            row["error"] = error
+        if artifact_path:
+            row["artifact_path"] = artifact_path
+        if artifact_sha256:
+            row["artifact_sha256"] = artifact_sha256
+        break
+    ledger["updated_at"] = dt.datetime.now().isoformat(timespec="microseconds")
+    write_json(generation_attempt_ledger_path(root, chapter), ledger)
+
+
+def archive_json_before_replace(root: Path, path: Path) -> tuple[str, str]:
+    if not path.is_file():
+        return "", ""
+    sha256 = file_sha256(path)
+    stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+    archived = root / "生产数据" / "history" / f"{path.stem}__{stamp}.json"
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(path, archived)
+    return rel_to_root(root, archived), sha256
 
 
 def seed(args: argparse.Namespace) -> int:
@@ -1619,6 +2306,14 @@ def generate_anchor_candidates(
                         flush=True,
                     )
                     continue
+                raw_canvas_path = ""
+                canvas_normalization: dict[str, Any] = {}
+                dims = png_dimensions(pending)
+                if dims and target_canvas_for_ratio(dims, ratio) != dims:
+                    raw = out_dir / f"raw_canvas_{candidate_index:02d}.png"
+                    shutil.copy2(pending, raw)
+                    raw_canvas_path = rel_to_root(root, raw)
+                    canvas_normalization = normalize_png_to_ratio(pending, ratio)
                 pending.replace(out_path)
                 row = {
                     "ts": dt.datetime.now().isoformat(timespec="seconds"),
@@ -1637,6 +2332,12 @@ def generate_anchor_candidates(
                     "prompt_sha256": prompt_sha256,
                     "adopted": False,
                 }
+                if raw_canvas_path:
+                    row.update({
+                        "raw_canvas_path": raw_canvas_path,
+                        "raw_canvas_sha256": file_sha256(resolve_path(root, raw_canvas_path)),
+                        "canvas_normalization": canvas_normalization,
+                    })
                 if use_style_reference and style_reference:
                     row.update(
                         {
@@ -1680,6 +2381,7 @@ def generate_anchor_candidates(
         "ratio": ratio,
         "backend": CODEX_CHANNEL,
         "model": CODEX_MODEL,
+        "execution_mode": CODEX_EXECUTION_MODE,
         "generated": ready_count,
         "failed": failed_count,
         "adopted": False,
@@ -1710,6 +2412,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
     shared_dir.mkdir(parents=True, exist_ok=True)
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     codex_backend_version = codex_version()
+    requested_ratio = str(getattr(args, "ratio", "4:5") or "4:5")
     candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
     if candidate_count:
         return generate_anchor_candidates(
@@ -1721,7 +2424,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
             candidate_count=candidate_count,
             max_attempts=args.max_attempts,
             timeout_sec=args.timeout_sec,
-            ratio=str(getattr(args, "ratio", "4:5") or "4:5"),
+            ratio=requested_ratio,
             visual_style=visual_style,
             backend_version=codex_backend_version,
         )
@@ -1741,6 +2444,20 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "backend": CODEX_CHANNEL,
                 "model": CODEX_MODEL,
             }
+            source = dict(source)
+            dims = png_dimensions(dest)
+            if dims and target_canvas_for_ratio(dims, requested_ratio) != dims:
+                pending = dest.with_name(f".{dest.stem}__ratio_pending.png")
+                shutil.copy2(dest, pending)
+                canvas_normalization = normalize_png_to_ratio(pending, requested_ratio)
+                archived = adopt_generated_png(root, pending, dest, asset_id=ref_id, variant="anchor")
+                source.update({
+                    "requested_ratio": requested_ratio,
+                    "canvas_normalization": canvas_normalization,
+                })
+                if archived:
+                    source["raw_canvas_path"] = archived
+                    source["raw_canvas_sha256"] = file_sha256(resolve_path(root, archived))
             register_asset_anchor(registry, root, ref_id, dest, source=source)
             skipped += 1
             manifest_items.append(
@@ -1752,6 +2469,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
                     "sha256": file_sha256(dest),
                     "backend": source.get("backend", ""),
                     "model": source.get("model", ""),
+                    "requested_ratio": source.get("requested_ratio", requested_ratio),
+                    "canvas_normalization": source.get("canvas_normalization", {}),
                 }
             )
             print(f"[skip] {ref_id}: {rel_to_root(root, dest)}", flush=True)
@@ -1768,15 +2487,34 @@ def generate_anchors(args: argparse.Namespace) -> int:
             asset,
             visual_style=visual_style,
             style_reference_attached=use_style_reference,
+            aspect_ratio=requested_ratio,
         )
         prompt_path, prompt_sha256 = prompt_snapshot(root, args.chapter, ref_id, "anchor_codex", prompt)
         ready = False
         last_error = ""
-        for attempt in range(1, max(1, args.max_attempts) + 1):
+        attempts_used = 0
+        while True:
+            attempt_id, attempt = begin_generation_attempt(
+                root,
+                args.chapter,
+                generation_kind="anchor",
+                asset_id=ref_id,
+                variant="anchor",
+                max_attempts_total=args.max_attempts,
+                backend=CODEX_CHANNEL,
+                model=CODEX_MODEL,
+                prompt_sha256=prompt_sha256,
+            )
+            attempts_used = attempt
+            if not attempt_id:
+                last_error = f"累计尝试次数已达授权上限 {attempt}/{args.max_attempts}；未发起新的生图请求"
+                break
             source = {
                 "kind": "generated_text_anchor",
                 "chapter": args.chapter,
                 "attempt": attempt,
+                "attempts_used": attempt,
+                "attempts_authorized": args.max_attempts,
                 "backend": CODEX_CHANNEL,
                 "model": CODEX_MODEL,
                 "backend_version": codex_backend_version,
@@ -1791,17 +2529,35 @@ def generate_anchors(args: argparse.Namespace) -> int:
                         "style_reference_role": "style_only",
                     }
                 )
-            proc = run_codex_image(prompt, repo, args.timeout_sec, [style_reference] if use_style_reference and style_reference else [])
+            try:
+                proc = run_codex_image(prompt, repo, args.timeout_sec, [style_reference] if use_style_reference and style_reference else [])
+            except KeyboardInterrupt:
+                finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                raise
             if proc.returncode != 0:
                 last_error = format_failure(proc)
+                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
                 print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
                 continue
             candidate = dest.with_name(f".{dest.stem}__pending.png")
             candidate.unlink(missing_ok=True)
             if not decode_image_event(proc.stdout, candidate):
                 last_error = "codex completed but no image_generation_end payload was available"
+                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
                 print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
                 continue
+            dims = png_dimensions(candidate)
+            if dims and target_canvas_for_ratio(dims, requested_ratio) != dims:
+                raw_stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+                raw = root / "出图" / "共享" / "candidates" / ref_id / "anchor" / f"{raw_stamp}__raw_canvas.png"
+                raw.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(candidate, raw)
+                source.update({
+                    "raw_canvas_path": rel_to_root(root, raw),
+                    "raw_canvas_sha256": file_sha256(raw),
+                    "requested_ratio": requested_ratio,
+                    "canvas_normalization": normalize_png_to_ratio(candidate, requested_ratio),
+                })
             archived = adopt_generated_png(root, candidate, dest, asset_id=ref_id, variant="anchor")
             if archived:
                 source["archived_previous_path"] = archived
@@ -1826,11 +2582,23 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "style_reference_sha256",
                 "style_reference_role",
                 "archived_previous_path",
+                "raw_canvas_path",
+                "raw_canvas_sha256",
+                "requested_ratio",
+                "canvas_normalization",
             ):
                 if source.get(key):
                     row[key] = source[key]
             manifest_items.append(row)
             append_event(root, row)
+            finish_generation_attempt(
+                root,
+                args.chapter,
+                attempt_id,
+                status="succeeded",
+                artifact_path=rel_to_root(root, dest),
+                artifact_sha256=file_sha256(dest),
+            )
             print(f"[ok] {ref_id} -> {rel_to_root(root, dest)}", flush=True)
             ready = True
             break
@@ -1842,6 +2610,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "ref_id": ref_id,
                 "backend": CODEX_CHANNEL,
                 "model": CODEX_MODEL,
+                "attempts_used": attempts_used,
+                "attempts_authorized": args.max_attempts,
                 "error": last_error,
             }
             manifest_items.append(row)
@@ -1849,20 +2619,26 @@ def generate_anchors(args: argparse.Namespace) -> int:
             print(f"[fail] {ref_id}: {last_error}", flush=True)
 
     write_json(registry_path(root), registry)
+    out = root / "生产数据" / f"comic_identity_anchors_{args.chapter}.json"
+    previous_manifest_archive, previous_manifest_sha256 = archive_json_before_replace(root, out)
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "comic_reference_anchor_generation",
         "chapter": args.chapter,
         "created_at": dt.datetime.now().isoformat(timespec="seconds"),
         "refs": refs,
         "backend": CODEX_CHANNEL,
         "model": CODEX_MODEL,
+        "execution_mode": CODEX_EXECUTION_MODE,
+        "max_attempts_total": args.max_attempts,
+        "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, args.chapter)),
+        "previous_manifest_archive": previous_manifest_archive,
+        "previous_manifest_sha256": previous_manifest_sha256,
         "generated": generated,
         "skipped": skipped,
         "failed": failed,
         "items": manifest_items,
     }
-    out = root / "生产数据" / f"comic_identity_anchors_{args.chapter}.json"
     write_json(out, manifest)
     print(f"[ok] anchor manifest: {out}", flush=True)
     print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
@@ -2050,6 +2826,323 @@ def generate_front_view_candidates(
     write_batch_manifest("complete")
     print(f"[ok] front candidate manifest: {out}", flush=True)
     print(f"[summary] generated={generated} failed={failed} adopted=0", flush=True)
+    return 1 if failed else 0
+
+
+def parse_outfit_bindings(raw: str) -> list[tuple[str, str]]:
+    bindings: list[tuple[str, str]] = []
+    for item in str(raw or "").split(","):
+        item = item.strip()
+        if not item:
+            continue
+        if "=" not in item:
+            raise SystemExit(f"--bindings 必须是 CHAR_ID=OUTFIT_ID，当前为 {item}")
+        character_id, outfit_id = (part.strip() for part in item.split("=", 1))
+        if not character_id.startswith("CHAR_") or not outfit_id.startswith("OUTFIT_"):
+            raise SystemExit(f"--bindings 必须是 CHAR_ID=OUTFIT_ID，当前为 {item}")
+        bindings.append((character_id, outfit_id))
+    if not bindings:
+        raise SystemExit("至少提供一个 --bindings CHAR_ID=OUTFIT_ID")
+    return bindings
+
+
+def outfit_attempts_used(manifest: dict[str, Any], character_id: str, outfit_id: str) -> int:
+    """读取同一换装在旧 manifest 中已实际消耗的累计尝试次数。"""
+    used = 0
+    for row in manifest.get("items") or []:
+        if not isinstance(row, dict):
+            continue
+        if row.get("character_id") != character_id or row.get("outfit_id") != outfit_id:
+            continue
+        values = []
+        for key in ("attempts_used", "cumulative_attempt", "attempt"):
+            try:
+                values.append(int(row.get(key) or 0))
+            except (TypeError, ValueError):
+                pass
+        row_used = max(values, default=0)
+        if row_used == 0 and str(row.get("status") or "") in {
+            "outfit_reference_failed",
+            "outfit_reference_ready",
+        }:
+            # schema v1 没有尝试计数；每条 ready/failed 至少代表真实发起过 1 次。
+            row_used = 1
+        used = max(used, row_used)
+    return used
+
+
+def outfit_remaining_attempts(
+    manifest: dict[str, Any],
+    character_id: str,
+    outfit_id: str,
+    max_attempts_total: int,
+) -> tuple[int, int]:
+    used = outfit_attempts_used(manifest, character_id, outfit_id)
+    return used, max(0, max_attempts_total - used)
+
+
+def migrate_outfit_attempts_from_manifest(
+    root: Path,
+    chapter: str,
+    manifest: dict[str, Any],
+    character_id: str,
+    outfit_id: str,
+) -> int:
+    """把旧版单清单中的已用次数一次性迁入不可被后续批次覆盖的总账。"""
+    ledger = load_generation_attempt_ledger(root, chapter)
+    existing = generation_attempts_used(ledger, "outfit", character_id, outfit_id)
+    if existing:
+        return existing
+    legacy_used = outfit_attempts_used(manifest, character_id, outfit_id)
+    if legacy_used <= 0:
+        return 0
+    migrated_at = dt.datetime.now().isoformat(timespec="microseconds")
+    source_created_at = str(manifest.get("created_at") or migrated_at)
+    for attempt in range(1, legacy_used + 1):
+        ledger.setdefault("attempts", []).append(
+            {
+                "attempt_id": f"migrated-outfit-{character_id}-{outfit_id}-{attempt:02d}",
+                "started_at": source_created_at,
+                "finished_at": source_created_at,
+                "status": "migrated_consumed",
+                "generation_kind": "outfit",
+                "asset_id": character_id,
+                "variant": outfit_id,
+                "cumulative_attempt": attempt,
+                "max_attempts_total": int(manifest.get("max_attempts_total") or legacy_used),
+                "backend": str(manifest.get("backend") or CODEX_CHANNEL),
+                "model": str(manifest.get("model") or CODEX_MODEL),
+                "prompt_sha256": "",
+                "migration_source": "comic_identity_outfits manifest",
+            }
+        )
+    ledger["updated_at"] = migrated_at
+    write_json(generation_attempt_ledger_path(root, chapter), ledger)
+    return legacy_used
+
+
+def generate_outfit_references(args: argparse.Namespace) -> int:
+    root = Path(args.project_root).expanduser().resolve()
+    repo = repo_root(root)
+    if not shutil.which("codex"):
+        raise SystemExit("codex not found in PATH")
+    registry = load_registry(root)
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    bindings = parse_outfit_bindings(args.bindings)
+    shared_dir = root / "出图" / "共享" / "图片"
+    shared_dir.mkdir(parents=True, exist_ok=True)
+    visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
+    backend_version = codex_version()
+    generated = 0
+    skipped = 0
+    failed = 0
+    items: list[dict[str, Any]] = []
+    out = root / "生产数据" / f"comic_identity_outfits_{args.chapter}.json"
+    try:
+        previous_manifest = load_json(out) if out.is_file() else {}
+    except (OSError, json.JSONDecodeError):
+        previous_manifest = {}
+    if not isinstance(previous_manifest, dict):
+        previous_manifest = {}
+    if args.max_attempts < 1:
+        raise SystemExit("--max-attempts 必须 >= 1，且表示跨恢复运行的累计总次数")
+
+    for character_id, outfit_id in bindings:
+        asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else None
+        if asset is None:
+            raise SystemExit(f"identity_registry 未登记 {character_id}")
+        outfit_contract = outfit_contract_text(asset, outfit_id)
+        if not outfit_contract:
+            raise SystemExit(f"identity_registry 未登记可用服装契约 {character_id}/{outfit_id}")
+        front = shared_dir / f"{character_id}__front.png"
+        if not png_valid(front):
+            raise SystemExit(f"{character_id} 缺可用 front 身份锚：{front}")
+        dest = shared_dir / f"{character_id}__{outfit_id}.png"
+        if png_valid(dest) and not args.overwrite:
+            source = {
+                "kind": "existing_outfit_reference",
+                "character_id": character_id,
+                "outfit_id": outfit_id,
+                "identity_anchor_path": rel_to_root(root, front),
+            }
+            register_outfit_reference(registry, root, character_id, outfit_id, dest, source=source)
+            skipped += 1
+            items.append({"status": "outfit_reference_reused", "character_id": character_id,
+                          "outfit_id": outfit_id, "path": rel_to_root(root, dest), "sha256": file_sha256(dest)})
+            print(f"[skip] {character_id}/{outfit_id}: {rel_to_root(root, dest)}", flush=True)
+            continue
+
+        attempts_before = migrate_outfit_attempts_from_manifest(
+            root,
+            args.chapter,
+            previous_manifest,
+            character_id,
+            outfit_id,
+        )
+        if attempts_before >= args.max_attempts:
+            failed += 1
+            row = {
+                "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                "status": "outfit_reference_attempt_budget_exhausted",
+                "character_id": character_id,
+                "outfit_id": outfit_id,
+                "attempts_used": attempts_before,
+                "attempts_authorized": args.max_attempts,
+                "error": "累计尝试次数已达授权上限；未发起新的生图请求",
+            }
+            items.append(row)
+            append_event(root, row)
+            print(
+                f"[block] {character_id}/{outfit_id}: attempts {attempts_before}/{args.max_attempts} exhausted",
+                flush=True,
+            )
+            continue
+
+        identity_contract = character_asset_contract(asset)
+        prompt = outfit_reference_prompt(
+            character_id,
+            outfit_id,
+            story_bible_character_notes(root, character_id),
+            visual_style=visual_style,
+            identity_contract=identity_contract,
+            outfit_contract=outfit_contract,
+            aspect_ratio=args.ratio,
+        )
+        prompt_path, prompt_sha = prompt_snapshot(
+            root,
+            args.chapter,
+            character_id,
+            f"outfit_{outfit_id}_codex",
+            prompt,
+        )
+        ready = False
+        last_error = ""
+        attempts_used = attempts_before
+        while True:
+            attempt_id, attempt = begin_generation_attempt(
+                root,
+                args.chapter,
+                generation_kind="outfit",
+                asset_id=character_id,
+                variant=outfit_id,
+                max_attempts_total=args.max_attempts,
+                backend=CODEX_CHANNEL,
+                model=CODEX_MODEL,
+                prompt_sha256=prompt_sha,
+            )
+            attempts_used = attempt
+            if not attempt_id:
+                last_error = f"累计尝试次数已达授权上限 {attempt}/{args.max_attempts}；未发起新的生图请求"
+                break
+            try:
+                proc = run_codex_image(prompt, repo, args.timeout_sec, [front])
+            except KeyboardInterrupt:
+                finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                raise
+            if proc.returncode != 0:
+                last_error = format_failure(proc)
+                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                continue
+            pending = dest.with_name(f".{dest.stem}__pending.png")
+            pending.unlink(missing_ok=True)
+            if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
+                last_error = "codex completed but no valid image_generation_end PNG was available"
+                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                continue
+            source: dict[str, Any] = {
+                "kind": "generated_outfit_reference",
+                "character_id": character_id,
+                "outfit_id": outfit_id,
+                "chapter": args.chapter,
+                "attempt": attempt,
+                "backend": CODEX_CHANNEL,
+                "model": CODEX_MODEL,
+                "backend_version": backend_version,
+                "identity_anchor_path": rel_to_root(root, front),
+                "identity_anchor_sha256": file_sha256(front),
+                "prompt_path": prompt_path,
+                "prompt_sha256": prompt_sha,
+                "ratio": args.ratio,
+                "attempts_used": attempt,
+                "attempts_authorized": args.max_attempts,
+            }
+            target_canvas = png_dimensions(front)
+            if target_canvas and png_dimensions(pending) != target_canvas:
+                raw_stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+                raw = root / "出图" / "共享" / "candidates" / character_id / "outfit" / outfit_id / f"{raw_stamp}__raw_canvas.png"
+                raw.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(pending, raw)
+                source["raw_canvas_path"] = rel_to_root(root, raw)
+                source["raw_canvas_sha256"] = file_sha256(raw)
+                if normalize_full_body_canvas(pending, target_canvas):
+                    source["canvas_normalization"] = {
+                        "method": "contain_and_pad_no_crop",
+                        "target_width": target_canvas[0],
+                        "target_height": target_canvas[1],
+                    }
+            archived = adopt_generated_png(root, pending, dest, asset_id=character_id, variant=outfit_id)
+            if archived:
+                source["archived_previous_path"] = archived
+            register_outfit_reference(registry, root, character_id, outfit_id, dest, source=source)
+            write_json(registry_path(root), registry)
+            row = {
+                "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                "status": "outfit_reference_ready",
+                "character_id": character_id,
+                "outfit_id": outfit_id,
+                "path": rel_to_root(root, dest),
+                "sha256": file_sha256(dest),
+                **source,
+            }
+            items.append(row)
+            append_event(root, row)
+            generated += 1
+            ready = True
+            finish_generation_attempt(
+                root,
+                args.chapter,
+                attempt_id,
+                status="succeeded",
+                artifact_path=rel_to_root(root, dest),
+                artifact_sha256=file_sha256(dest),
+            )
+            print(f"[ok] {character_id}/{outfit_id} -> {rel_to_root(root, dest)}", flush=True)
+            break
+        if not ready:
+            failed += 1
+            row = {"ts": dt.datetime.now().isoformat(timespec="seconds"),
+                   "status": "outfit_reference_failed", "character_id": character_id,
+                   "outfit_id": outfit_id, "attempts_used": attempts_used,
+                   "attempts_authorized": args.max_attempts, "error": last_error}
+            items.append(row)
+            append_event(root, row)
+            print(f"[fail] {character_id}/{outfit_id}: {last_error}", flush=True)
+
+    write_json(registry_path(root), registry)
+    previous_manifest_archive, previous_manifest_sha256 = archive_json_before_replace(root, out)
+    manifest = {
+        "schema_version": 3,
+        "kind": "comic_outfit_reference_generation",
+        "chapter": args.chapter,
+        "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "bindings": [{"character_id": cid, "outfit_id": oid} for cid, oid in bindings],
+        "backend": CODEX_CHANNEL,
+        "model": CODEX_MODEL,
+        "execution_mode": CODEX_EXECUTION_MODE,
+        "max_attempts_total": args.max_attempts,
+        "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, args.chapter)),
+        "previous_manifest_archive": previous_manifest_archive,
+        "previous_manifest_sha256": previous_manifest_sha256,
+        "generated": generated,
+        "skipped": skipped,
+        "failed": failed,
+        "items": items,
+    }
+    write_json(out, manifest)
+    print(f"[ok] outfit manifest: {out}", flush=True)
+    print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
     return 1 if failed else 0
 
 
@@ -2259,9 +3352,27 @@ def generate_views(args: argparse.Namespace) -> int:
             last_error = ""
             last_backend = ""
             ready = False
-            for attempt in range(1, max(1, args.max_attempts) + 1):
+            attempts_used = 0
+            for _cycle in range(1, max(1, args.max_attempts) + 1):
                 for backend in backend_candidates:
                     last_backend = backend
+                    backend_label = CODEX_CHANNEL if backend == "codex" else DREAMINA_CHANNEL
+                    model_label = CODEX_MODEL if backend == "codex" else DREAMINA_MODEL
+                    attempt_id, attempt = begin_generation_attempt(
+                        root,
+                        args.chapter,
+                        generation_kind="view",
+                        asset_id=character_id,
+                        variant=view,
+                        max_attempts_total=args.max_attempts,
+                        backend=backend_label,
+                        model=model_label,
+                        prompt_sha256=prompt_records[backend][1],
+                    )
+                    attempts_used = max(attempts_used, attempt)
+                    if not attempt_id:
+                        last_error = f"累计尝试次数已达授权上限 {attempt}/{args.max_attempts}；未发起新的生图请求"
+                        continue
                     source: dict[str, Any] = {
                         "kind": "generated_character_view_text_seed" if use_text_anchor else "generated_character_view",
                         "anchor_path": anchor_rel,
@@ -2269,6 +3380,8 @@ def generate_views(args: argparse.Namespace) -> int:
                         "view": view,
                         "chapter": args.chapter,
                         "attempt": attempt,
+                        "attempts_used": attempt,
+                        "attempts_authorized": args.max_attempts,
                         "prompt_path": prompt_records[backend][0],
                         "prompt_sha256": prompt_records[backend][1],
                     }
@@ -2284,14 +3397,19 @@ def generate_views(args: argparse.Namespace) -> int:
                                     "style_reference_role": "style_only",
                                 }
                             )
-                        proc = run_codex_image(
-                            prompt_by_backend["codex"],
-                            repo,
-                            args.timeout_sec,
-                            ([style_reference] if style_reference else []) if use_text_anchor else [anchor],
-                        )
+                        try:
+                            proc = run_codex_image(
+                                prompt_by_backend["codex"],
+                                repo,
+                                args.timeout_sec,
+                                ([style_reference] if style_reference else []) if use_text_anchor else [anchor],
+                            )
+                        except KeyboardInterrupt:
+                            finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                            raise
                         if proc.returncode != 0:
                             last_error = format_failure(proc)
+                            finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
                             print(
                                 f"[retry] {character_id} {view} codex attempt {attempt}/{args.max_attempts}: {last_error}",
                                 flush=True,
@@ -2299,6 +3417,7 @@ def generate_views(args: argparse.Namespace) -> int:
                             continue
                         if not decode_image_event(proc.stdout, candidate):
                             last_error = "codex completed but no image_generation_end payload was available"
+                            finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
                             print(
                                 f"[retry] {character_id} {view} codex attempt {attempt}/{args.max_attempts}: {last_error}",
                                 flush=True,
@@ -2330,11 +3449,30 @@ def generate_views(args: argparse.Namespace) -> int:
                         )
                         if not ok:
                             last_error = error
+                            finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
                             print(
                                 f"[retry] {character_id} {view} dreamina attempt {attempt}/{args.max_attempts}: {last_error}",
                                 flush=True,
                             )
                             continue
+
+                    if view != "face" and view != "front":
+                        front_path = shared_dir / f"{character_id}__front.png"
+                        target_canvas = png_dimensions(front_path)
+                        if target_canvas and png_dimensions(candidate) != target_canvas:
+                            raw_stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+                            raw_path = root / "出图" / "共享" / "candidates" / character_id / view / f"{raw_stamp}__raw_canvas.png"
+                            raw_path.parent.mkdir(parents=True, exist_ok=True)
+                            shutil.copy2(candidate, raw_path)
+                            source["raw_canvas_path"] = rel_to_root(root, raw_path)
+                            source["raw_canvas_sha256"] = file_sha256(raw_path)
+                            source["raw_canvas_dimensions"] = list(png_dimensions(raw_path) or ())
+                            if normalize_full_body_canvas(candidate, target_canvas):
+                                source["canvas_normalization"] = {
+                                    "method": "contain_and_pad_no_crop",
+                                    "target_width": target_canvas[0],
+                                    "target_height": target_canvas[1],
+                                }
 
                     archived = adopt_generated_png(
                         root,
@@ -2373,11 +3511,23 @@ def generate_views(args: argparse.Namespace) -> int:
                         "prompt_path",
                         "prompt_sha256",
                         "archived_previous_path",
+                        "raw_canvas_path",
+                        "raw_canvas_sha256",
+                        "raw_canvas_dimensions",
+                        "canvas_normalization",
                     ):
                         if source.get(key):
                             row[key] = source[key]
                     manifest_items.append(row)
                     append_event(root, row)
+                    finish_generation_attempt(
+                        root,
+                        args.chapter,
+                        attempt_id,
+                        status="succeeded",
+                        artifact_path=rel_to_root(root, dest),
+                        artifact_sha256=file_sha256(dest),
+                    )
                     print(f"[ok] {character_id} {view} -> {rel_to_root(root, dest)}", flush=True)
                     ready = True
                     break
@@ -2393,6 +3543,8 @@ def generate_views(args: argparse.Namespace) -> int:
                     "anchor_path": anchor_rel,
                     "anchor_kind": anchor_kind,
                     "backend": last_backend or args.backend,
+                    "attempts_used": attempts_used,
+                    "attempts_authorized": args.max_attempts,
                     "error": last_error,
                 }
                 manifest_items.append(row)
@@ -2401,8 +3553,10 @@ def generate_views(args: argparse.Namespace) -> int:
 
     write_json(registry_path(root), registry)
     contact_sheet = write_character_view_contact_sheet(root, args.chapter, characters, views)
+    out = root / "生产数据" / f"comic_identity_views_{args.chapter}.json"
+    previous_manifest_archive, previous_manifest_sha256 = archive_json_before_replace(root, out)
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "comic_character_view_generation",
         "chapter": args.chapter,
         "created_at": dt.datetime.now().isoformat(timespec="seconds"),
@@ -2410,13 +3564,17 @@ def generate_views(args: argparse.Namespace) -> int:
         "views": views,
         "backend": args.backend,
         "attempted_backends": available,
+        "codex_execution_mode": CODEX_EXECUTION_MODE if "codex" in available else "",
+        "max_attempts_total": args.max_attempts,
+        "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, args.chapter)),
+        "previous_manifest_archive": previous_manifest_archive,
+        "previous_manifest_sha256": previous_manifest_sha256,
         "contact_sheet": contact_sheet,
         "generated": generated,
         "skipped": skipped,
         "failed": failed,
         "items": manifest_items,
     }
-    out = root / "生产数据" / f"comic_identity_views_{args.chapter}.json"
     write_json(out, manifest)
     print(f"[ok] view manifest: {out}", flush=True)
     print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
@@ -2428,6 +3586,26 @@ def main() -> int:
     parser.add_argument("project_root")
     parser.add_argument("--chapter", default="第1话")
     sub = parser.add_subparsers(dest="command", required=True)
+
+    p_probe = sub.add_parser("probe-backend", help="执行一次不占正式资产额度的图像通道健康探针")
+    p_probe.add_argument("--reason", required=True, help="本次探针原因；探针不会自动循环")
+    p_probe.add_argument("--timeout-sec", type=int, default=180)
+    p_probe.add_argument(
+        "--probe-mode",
+        choices=("auto", "text-only", "reference-attached"),
+        default="auto",
+        help="auto 在项目有正式风格锚时自动测试参考图附件通路",
+    )
+    p_probe.add_argument(
+        "--probe-profile",
+        choices=("simple", "production-character-front"),
+        default="simple",
+        help="simple 仅测轻量链路；production-character-front 校准历史人物 front 的正式复杂度和时延",
+    )
+    p_probe.add_argument("--external-status", default="", help="已核验的官方/外部状态摘要")
+    p_probe.add_argument("--external-status-url", default="", help="外部状态来源 URL")
+    p_probe.add_argument("--external-status-checked-at", default="", help="外部状态核验时间")
+    p_probe.set_defaults(func=probe_backend)
 
     p_seed = sub.add_parser("seed", help="从面板图种共享锚点")
     p_seed.add_argument("--map", action="append", default=[], help="REF_ID=PANEL_ID_OR_PATH，可重复")
@@ -2452,13 +3630,25 @@ def main() -> int:
     p_anchors.add_argument("--timeout-sec", type=int, default=240)
     p_anchors.set_defaults(func=generate_anchors)
 
-    p_adopt_anchor = sub.add_parser("adopt-anchor", help="采纳已人工选中的共享锚候选")
+    p_adopt_anchor = sub.add_parser("adopt-anchor", help="采纳已人工选中的共享锚或角色 front 候选")
     p_adopt_anchor.add_argument("--ref", required=True, help="待采纳的 REF_ID")
     p_adopt_anchor.add_argument("--candidate", required=True, help="候选 PNG 的项目内路径")
     p_adopt_anchor.add_argument("--reviewer", required=True, help="审核人")
     p_adopt_anchor.add_argument("--role", default="", help="审核角色")
     p_adopt_anchor.add_argument("--reason", default="人工选定候选", help="采纳理由")
     p_adopt_anchor.set_defaults(func=adopt_anchor_candidate)
+
+    p_outfits = sub.add_parser("outfits", help="基于已采纳 front 生成专门换装参考")
+    p_outfits.add_argument(
+        "--bindings",
+        required=True,
+        help="逗号分隔 CHAR_ID=OUTFIT_ID，如 CHAR_A=OUTFIT_TRAVEL",
+    )
+    p_outfits.add_argument("--overwrite", action="store_true", help="覆盖已有服装参考")
+    p_outfits.add_argument("--ratio", default="3:4", help="服装全身参考画幅")
+    p_outfits.add_argument("--max-attempts", type=int, default=1)
+    p_outfits.add_argument("--timeout-sec", type=int, default=240)
+    p_outfits.set_defaults(func=generate_outfit_references)
 
     p_views = sub.add_parser("views", help="生成/登记常驻角色专门定妆多视图")
     p_views.add_argument("--characters", default="", help="逗号分隔 CHAR_ID；默认 registry 中全部 CHAR_")

@@ -75,6 +75,43 @@ class _CP:
         self.stderr = stderr
 
 
+def test_preventive_reference_slot_missing_pixels_routes_to_shared_bootstrap(monkeypatch, tmp_path: Path) -> None:
+    report = {
+        "status": "block",
+        "gates": ["reference_slot_gate"],
+        "contract_path": "脚本/第1集/preventive_contracts.json",
+        "outputs": {"json": "生产数据/preventive_contracts_image_第1集.json"},
+        "findings": [{
+            "severity": "block",
+            "gate": "reference_slot_gate",
+            "loc": "CHAR_01",
+            "message": "核心角色 CHAR_01 引用槽位未绑定真实产物：定妆_CHAR_01.png 不存在",
+            "return_to_stage": "image_prompt",
+        }],
+    }
+    monkeypatch.setattr(run, "_run", lambda _cmd: _CP(1, json.dumps(report, ensure_ascii=False), ""))
+    probes = run.Probes()
+
+    run._run_preventive_contract_prework(probes, str(tmp_path), "第1集", "image")
+
+    row = probes.prework[-1]
+    assert row["block_type"] == "shared_asset_bootstrap_required"
+    assert row["requires_payment_confirm"] is True
+    assert "--max-shared-targets 1" in row["bootstrap_command"]
+    assert probes.prework_block and "不是合同文本" in probes.prework_block
+    assert "dry-run" in probes.prework_block
+
+
+def test_no_cost_image_pack_runs_after_its_reference_sidecar_producers() -> None:
+    producers, consumers = run._image_reference_prework_groups("/project", "第1集")
+    producer_steps = {step for step, _script, _args in producers}
+    consumer_steps = {step for step, _script, _args in consumers}
+
+    assert {"reference_plan", "no_cost_reference_pack", "keyshot_candidates"} <= producer_steps
+    assert consumer_steps == {"no_cost_image_pack"}
+    assert "no_cost_image_pack" not in producer_steps
+
+
 def _write_clean_image_qc(root, ep="第1集"):
     out_dir = os.path.join(root, "生产数据", "image_qc", ep)
     os.makedirs(out_dir, exist_ok=True)
@@ -223,6 +260,23 @@ def test_resolve_frontier_image():
     route = run.resolve_frontier(root)
     assert route["col"] == "出图"
     assert run.stage_key_of(route) == "image"
+
+
+def test_next_and_enter_preview_are_project_tree_read_only() -> None:
+    root = make_work(ALL_DONE_TO["image"])
+
+    def snapshot() -> dict:
+        return {
+            path.relative_to(root).as_posix(): path.read_bytes()
+            for path in Path(root).rglob("*")
+            if path.is_file()
+        }
+
+    before = snapshot()
+    run.next_action(root, "第1集", preview=True)
+    run.enter_action(root, "第1集", preview=True)
+
+    assert snapshot() == before
 
 
 def test_resolve_frontier_voice():
@@ -447,6 +501,20 @@ def test_decide_payment_confirm_image_carries_granularity_menu():
     na = run.decide(root, _route("image"), "image", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "生成粒度"
+
+
+def test_decide_payment_confirm_image_honors_persistent_per_image_review_gate():
+    root = make_work(
+        ALL_DONE_TO["image"],
+        settings="- 图片验收模式: 逐张机器QC+实际目视\n",
+    )
+    na = run.decide(root, _route("image"), "image", run.Probes())
+
+    assert na["stop_reason"] == "needs_payment_confirm"
+    assert "menu" not in na["action_card"]
+    assert na["action_card"]["execution_policy"]["generation_granularity"] == "逐个"
+    assert "full机器QC" in na["action_card"]["execution_policy"]["review_gate"]
+    assert "仍需单独确认本次付费生成" in na["action_card"]["to_user"]
 
 
 def test_decide_video_first_voice_uses_rough_timing_without_payment_menu():

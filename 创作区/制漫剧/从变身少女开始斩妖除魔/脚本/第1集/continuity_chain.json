@@ -15,7 +15,7 @@
       "episode_boundary": {},
       "firstframe_png": "",
       "forbidden_presence": [
-        "CHAR_01/虎山神妖化态"
+        "主角妖化附体形态"
       ],
       "label": "刀口为何对准人",
       "location_id": "LOC_01",
@@ -253,7 +253,7 @@
       "episode_boundary": {},
       "firstframe_png": "",
       "forbidden_presence": [
-        "CHAR_01/虎山神妖化态"
+        "主角妖化附体形态"
       ],
       "label": "百妖谱给出残酷选择",
       "location_id": "LOC_01",
@@ -336,7 +336,7 @@
       "episode_boundary": {},
       "firstframe_png": "",
       "forbidden_presence": [
-        "CHAR_01/虎山神妖化态"
+        "主角妖化附体形态"
       ],
       "label": "二十年全押一斩",
       "location_id": "LOC_01",
@@ -469,7 +469,7 @@
       "episode_boundary": {},
       "firstframe_png": "",
       "forbidden_presence": [
-        "CHAR_01/虎山神妖化态"
+        "主角妖化附体形态"
       ],
       "label": "能力留下而道行用尽",
       "location_id": "LOC_01",
@@ -545,7 +545,7 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-14T12:16:29+00:00",
+  "generated_at": "2026-07-15T02:53:37+00:00",
   "inputs": {
     "previous_storyboard": "",
     "storyboard": "脚本/第1集/storyboard.json"
@@ -940,7 +940,7 @@
       "transition": "视线切尸身与横刀。"
     }
   ],
-  "status": "draft",
+  "status": "confirmed",
   "summary": {
     "block": 0,
     "clips": 13,

@@ -1,6 +1,6 @@
 # name_board.json schema v2
 
-`name_board.json` 是 `panel_script.json` 与 `layout.json` 之间的可签收编辑合同。v2 把页流、翻页承接、气泡语义、画面保留区、上游指纹和人工审批放进同一份可复算结构；默认产物是 `draft`，不是完成态。
+`name_board.json` 是 `panel_script.json` 与 `layout.json` 之间的可签收编辑合同。v2 把页流、翻页承接、气泡语义、画面保留区、上游指纹和人工/授权制作代理审批放进同一份可复算结构；默认产物是 `draft`，不是完成态。
 
 最小结构：
 

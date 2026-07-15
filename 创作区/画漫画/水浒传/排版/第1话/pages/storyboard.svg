@@ -1,0 +1,431 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="50396" viewBox="0 0 1440 50396">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="5748" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_001</tspan></text>
+<rect x="72" y="28" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  opening_hook</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">黎明中的北宋宫城沿竖画面层层上升，紫宸殿在雾中显现，一缕偏灰的祥云压过殿脊。</tspan></text>
+<text x="100" y="908" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：嘉祐三年三月初三。五更三点，紫宸殿。</tspan></text>
+<rect x="120" y="76" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="110" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B001N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="1124" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="1172" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P002  ritual_detail</tspan></text>
+<text x="154" y="1222" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">近景露水柳条拂过旌旗，中景戟刃反冷光，后景戴簪着朱履的百官按班位肃立。</tspan></text>
+
+<rect x="72" y="1992" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="2040" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P003  imperial_reveal</tspan></text>
+<text x="100" y="2090" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">珠帘向两侧卷起，凤扇在仁宗身后打开；他居中坐定，净鞭三声让殿内彻底静下来。</tspan></text>
+<text x="100" y="2872" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：啪！ / 啪！ / 啪！</tspan></text>
+<rect x="540" y="2834" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2868" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B003S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="2676" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2710" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B003S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="2518" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2552" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B003S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="180" y="3088" width="1080" height="620" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="208" y="3136" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">P004  court_call</tspan></text>
+<text x="208" y="3186" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">殿头官站在中轴侧翼高声传话，文班中赵哲、文彦博对视一眼，准备出班。</tspan></text>
+<text x="208" y="3548" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">殿头官：有事出班早奏，无事卷帘退朝——</tspan></text>
+<rect x="214" y="3122" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="230" y="3156" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="230" dy="0">B004D1</tspan><tspan x="230" dy="27">dialogue</tspan></text>
+<rect x="72" y="3736" width="1296" height="1080" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3784" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P005  petition</tspan></text>
+<text x="100" y="3834" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">赵哲与文彦博在画左并肩出班持笏，画面右下以淡墨叠化关闭的民宅、药碗与蒙布担架，仁宗在上方倾身听奏。</tspan></text>
+<text x="100" y="4656" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">赵哲：京师瘟疫盛行，军民伤亡甚多！ |</tspan><tspan x="100" dy="32">文彦博：伏望陛下释罪宽恩，省刑薄税，救济万民！</tspan></text>
+<rect x="120" y="3784" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="3818" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B005D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="3784" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="3818" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B005D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="126" y="4844" width="1188" height="876" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="4892" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P006  policy_response</tspan></text>
+<text x="154" y="4942" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">仁宗俯身快速下令，画面下方三名官员同时接过分开的诏文，朱砂红成为唯一鲜色。</tspan></text>
+<text x="154" y="5560" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">仁宗：降赦罪囚，免民间税赋！命京中宫观寺院设醮禳灾！</tspan></text>
+<rect x="174" y="4892" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="4926" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B006D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="0" y="5828" width="1440" height="6416" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="5872" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_002</tspan></text>
+<rect x="72" y="5856" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="5904" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  failure_escalation</tspan></text>
+<text x="100" y="5954" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">上半格是赦免诏书贴上城门，下半格是更多空药碗和一扇接一扇关闭的门；最后只剩送葬小队的剪影。</tspan></text>
+<text x="100" y="6816" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：可瘟疫，转盛了。 | SFX：咳…… / 咳咳……</tspan></text>
+<rect x="120" y="5904" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="5938" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B007N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="6778" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6812" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="6620" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6654" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="7004" width="1188" height="876" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="7052" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P008  proposal</tspan></text>
+<text x="154" y="7102" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">文班重新归位时，范仲淹从画左队列独自越出中轴，持笏仰面奏言；仁宗在画上身体前倾。</tspan></text>
+<text x="154" y="7720" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">范仲淹：可宣嗣汉天师星夜临朝，设三千六百分罗天大醮，禳保民间瘟疫。</tspan></text>
+<rect x="174" y="7052" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="7086" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B008D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="126" y="7908" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="7956" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P009  edict_preparation</tspan></text>
+<text x="154" y="8006" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">仁宗的手握笔写完丹诏最后一笔，画面后方的银香炉内御香微燃，烟气向画右上去。</tspan></text>
+<text x="154" y="8668" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">仁宗：准奏。 | SFX：沙……</tspan></text>
+<rect x="174" y="7956" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="7990" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B009D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="8630" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="8664" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B009S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="8856" width="1296" height="1116" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="8904" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P010  mission_assignment</tspan></text>
+<text x="100" y="8954" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">仁宗在画上将丹诏交下，洪信在画下跪接；银香炉由侍者捧在画右，诏书居两人之间的视觉中心。</tspan></text>
+<text x="100" y="9812" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">仁宗：洪信，持朕丹诏御香，星夜赴龙虎山，请天师入京！ |</tspan><tspan x="100" dy="32">洪信：臣领旨。</tspan></text>
+<rect x="120" y="8904" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="8938" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B010D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="8904" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="8938" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B010D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="72" y="10000" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10048" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  journey_montage</tspan></text>
+<text x="100" y="10098" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">长竖格上段是东京城门与马队出发，中段是马队穿过溪水、花柳、山村，下段由日间沙路溶到暖灯驿馆；洪信的黄罗诏包在每段都可见。</tspan></text>
+<text x="100" y="10960" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：洪信奉诏，离京南下，直奔信州贵溪。 | SFX：得得得……</tspan></text>
+<rect x="120" y="10048" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="10082" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B011N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="10922" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="10956" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B011S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="11176" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11224" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  arrival</tspan></text>
+<text x="100" y="11274" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">上清宫道众从山门台阶向画下展开，幡盖与香花形成两侧弧线；洪信画左下马，住持画右上迎接，丹诏位于两人中间。</tspan></text>
+<text x="100" y="12056" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">仪仗导引：上清宫接诏！ | SFX：钟—— / 咚——</tspan></text>
+<rect x="120" y="11224" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="11258" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B012D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="12018" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="12052" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="11860" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="11894" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="12324" width="1440" height="5852" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="12368" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_003</tspan></text>
+<rect x="72" y="12352" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="12400" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P013  temple_establish</tspan></text>
+<text x="100" y="12450" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">镜头沿青松与翠柏下行，经过御赐金额与门上符篆，再转入有垂柳、花木、老桧和炼药炉的右庭。</tspan></text>
+<text x="100" y="13232" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：潺潺……</tspan></text>
+<rect x="540" y="13194" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="13228" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B013S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="13448" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13496" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  sacred_iconography</tspan></text>
+<text x="100" y="13546" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">左右廊壁画如长卷掠过：太乙、紫微与星宿神众分列，真武龟蛇和南极龙虎位于中段；画下庭中鹤龟、猿鹿与流水只作真实生灵。</tspan></text>
+<text x="100" y="14328" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：潺潺……</tspan></text>
+<rect x="540" y="14290" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="14324" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B014S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="14516" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="14564" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P015  ritual_transition</tspan></text>
+<text x="154" y="14614" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">道士在三清殿击金钟，另一侧在四圣堂敲玉磬；光斑先掠过青琉璃、红玛瑙，再追随一缕云气越过殿脊。</tspan></text>
+<text x="154" y="15276" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">SFX：钟—— / 磬——</tspan></text>
+<rect x="540" y="15238" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="15272" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="15080" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="15114" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="15464" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="15512" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P016  question</tspan></text>
+<text x="154" y="15562" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">丹诏被高置三清殿供案中央，洪信站在画左仰看一眼后转向画右住持发问。</tspan></text>
+<text x="154" y="16144" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：天师今在何处？</tspan></text>
+<rect x="172" y="15510" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="15544" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B016D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="126" y="16332" width="1188" height="876" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="16380" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P017  obstacle_explained</tspan></text>
+<text x="154" y="16430" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">住持向画右后方开放的后山路伸手，山门外只见云中尖峰；洪信画左略皱眉。</tspan></text>
+<text x="154" y="17048" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">住持：祖师性好清高，自在龙虎山顶茅庵修真，踪迹不定。</tspan></text>
+<rect x="174" y="16380" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="16414" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B017D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="126" y="17236" width="1188" height="912" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="17284" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P018  condition_set</tspan></text>
+<text x="154" y="17334" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">住持将布衣、麻履、黄罗诏包和银香炉依次摆在矮案上，指尖按顺序说明；洪信在画左站着，表情尚不以为然。</tspan></text>
+<text x="154" y="17988" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">住持：要救万民，请太尉斋戒沐浴，换布衣麻履，独自背诏持香上山。心须至诚，不可退悔。</tspan></text>
+<rect x="174" y="17284" width="430" height="156" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="17318" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B018D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="0" y="18256" width="1440" height="6272" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="18300" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_004</tspan></text>
+<rect x="126" y="18284" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="18332" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P019  state_change</tspan></text>
+<text x="154" y="18382" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信已换素灰褐布衣与麻履，侧身让道人系紧黄罗诏包，自己右手提银炉，香上刚燃起细烟。</tspan></text>
+<text x="154" y="19044" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：本官自京师一路食素，怎会不诚？ | SFX：嗤……</tspan></text>
+<rect x="174" y="18332" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="18366" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B019D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="19006" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="19040" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B019S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="19232" width="1188" height="956" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="19280" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P020  threshold_warning</tspan></text>
+<text x="154" y="19330" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信背对宫观跨出后山小门，黄罗诏包和银炉都可见；住持在画右门内停步作最后告诫。</tspan></text>
+<text x="154" y="20028" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">住持：太尉要救万民，休生退悔之心。只顾至诚上去。 | SFX：嗒……</tspan></text>
+<rect x="174" y="19280" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="19314" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B020D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="19990" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="20024" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B020S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="20216" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="20264" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P021  mountain_establish</tspan></text>
+<text x="100" y="20314" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">龙虎山的丹霞岩柱从画下盘到画上云端，瀑布和林径在山腰缠绕；洪信背诏持炉，只占画面下中部很小比例。</tspan></text>
+<text x="100" y="21176" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：洪信独自上山。 | SFX：沙…… / 潺潺……</tspan></text>
+<rect x="120" y="20264" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="20298" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B021N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="21138" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="21172" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B021S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="20980" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="21014" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B021S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="21364" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="21412" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P022  terrain_pressure</tspan></text>
+<text x="100" y="21462" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">左右岩壁叠压，瀑布斜飞、藤萝倒挂，雾气从谷中上冲；洪信沿窄径继续向画右上，远处风声在松林后形成似虎啸的低频。</tspan></text>
+<text x="100" y="22244" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：呜—— / 轰隆……（瀑布）</tspan></text>
+<rect x="540" y="22206" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="22240" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B022S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="22048" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="22082" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B022S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="22432" width="1188" height="1000" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="22480" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P023  character_flaw</tspan></text>
+<text x="154" y="22530" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信弯腰扶膝在陡坡上喘息，麻履踩在尖石上，黄罗诏包勒住双肩；他望向仍无尽头的画右上山径。</tspan></text>
+<text x="154" y="23272" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：我是朝廷贵官，在京里锦衣玉食，何曾穿草鞋走这种山路！ |</tspan><tspan x="154" dy="32">SFX：呼……呼……</tspan></text>
+<rect x="174" y="22480" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="22514" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B023N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="540" y="23234" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="23268" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B023S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="23460" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="23508" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P024  threat_reveal</tspan></text>
+<text x="100" y="23558" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">画右后松树被撞开，吊睛白额虎低姿向画左前扑出；洪信后仰跌向画左下树根，银炉尚在右手但即将脱手，诏包在背上。</tspan></text>
+<text x="100" y="24340" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信：啊呀！ | SFX：吼——！ / 扑！</tspan></text>
+<rect x="120" y="23508" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="23542" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B024D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="24302" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="24336" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B024S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="24144" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="24178" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B024S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="24608" width="1440" height="5736" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="24652" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_005</tspan></text>
+<rect x="72" y="24636" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="24684" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P025  tiger_threat_detail</tspan></text>
+<text x="100" y="24734" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">树根旁的洪信占画左下前景，白额虎从画右后压近并伸展肩背；白额黑纹、金黄褐毛、四只正常虎爪、张口牙列和横扫落叶的长尾完整可读，远处狐兔沿涧底退藏。</tspan></text>
+<text x="100" y="25516" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：吼隆——！ / 刷——</tspan></text>
+<rect x="540" y="25478" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="25512" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B025S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="25320" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="25354" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B025S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="25704" width="1188" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="25752" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P026  trial_spares_hong</tspan></text>
+<text x="154" y="25802" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">白虎后肢蹬地，从洪信身前折向画左下山坡跃离；洪信仍蜷在画左前树根下，牙齿发颤，双腿发软，银炉落在右手外一臂处。</tspan></text>
+<text x="154" y="26464" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：苦也…… | SFX：咯咯咯…… / 扑——</tspan></text>
+<rect x="174" y="25752" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="25786" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B026D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="26426" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="26460" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B026S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="26268" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="26302" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B026S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="26652" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="26700" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P027  recommit_for_duty</tspan></text>
+<text x="154" y="26750" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信半跪在山径上，右手重新提起银炉，左手护住微弱复燃的龙香火；背上黄罗诏包完好，泥尘仍留在肩袖和双膝。</tspan></text>
+<text x="154" y="27412" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：为了复命……还得上去。 | SFX：嘶……</tspan></text>
+<rect x="174" y="26700" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="26734" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B027D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="27374" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="27408" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B027S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="180" y="27600" width="1080" height="700" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="208" y="27648" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">P028  failure_to_learn</tspan></text>
+<text x="208" y="27698" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">洪信拖着发软的腿朝画右上再走三五十步，右手提银炉、背上诏包随步颠动；他回头皱脸抱怨，尚未察觉画左后竹藤将起的异动。</tspan></text>
+<text x="208" y="28140" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">洪信：皇帝偏要限我来受这场惊恐！ | SFX：沙……沙……</tspan></text>
+<rect x="218" y="27638" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="234" y="27672" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="234" dy="0">B028D1</tspan><tspan x="234" dy="27">dialogue</tspan></text>
+<rect x="540" y="28112" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="28146" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B028S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="28328" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="28376" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P029  serpent_warning</tspan></text>
+<text x="154" y="28426" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">一股冷雾从画左后竹藤间贴地冲出，掀动洪信衣摆和炉烟；洪信骤然停步扭头，银炉仍握在右手，盘陀石位于他画左前方。</tspan></text>
+<text x="154" y="29088" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">SFX：簌簌簌—— / 呼——</tspan></text>
+<rect x="540" y="29050" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="29084" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B029S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="28892" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="28926" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B029S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="29276" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="29324" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P030  serpent_burst</tspan></text>
+<text x="100" y="29374" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">吊桶粗的乳白冷灰巨蛇从画左后竹藤猛冲至盘陀石边昂首，洪信向后跌在石旁；银炉从他右手脱落，正坠向画面下缘，蛇眼金色反光锁住他。</tspan></text>
+<text x="100" y="30156" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信：我命休矣！ | SFX：哐当！ / 唰——</tspan></text>
+<rect x="120" y="29324" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="29358" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B030D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="30118" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="30152" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B030S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="29960" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="29994" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B030S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="30424" width="1440" height="6344" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="30468" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_006</tspan></text>
+<rect x="72" y="30452" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="30500" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P031  serpent_scale_reveal</tspan></text>
+<text x="100" y="30550" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">巨蛇在盘陀石前抬起头颈，吐息把雾和竹叶向画右推开；乳白、雾灰与冷银鳞片沿体积转折，粗长躯干在石边盘出一圈，尾端仍连回画左后竹藤。</tspan></text>
+<text x="100" y="31332" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：呼—— / 簌簌……</tspan></text>
+<rect x="540" y="31294" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="31328" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B031S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="31136" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="31170" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B031S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="31520" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="31568" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P032  serpent_trial_peak</tspan></text>
+<text x="100" y="31618" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">雪蛇盘在盘陀石外沿，头部压到洪信面前，张口吐信，冷灰气流拂过他的鬓发；洪信贴石后缩，双手撑地，蛇齿和人物皮肤之间仍留清楚空气缝。</tspan></text>
+<text x="100" y="32400" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信：别……别过来…… | SFX：嘶—— / 呼……</tspan></text>
+<rect x="120" y="31568" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="31602" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B032D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="32362" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="32396" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B032S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="32204" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="32238" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B032S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="32616" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="32664" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P033  misread_the_trial</tspan></text>
+<text x="154" y="32714" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">雪蛇尾端沿画左下山坡滑入雾中；洪信在盘陀石边撑起身体，右手重新抓住银炉提梁，左手整平背上诏包带，惊恐尚未退去却朝山下道众方向咒骂。</tspan></text>
+<text x="154" y="33376" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：惊杀本官！那群道士定在戏弄我！ | SFX：沙沙……</tspan></text>
+<rect x="174" y="32664" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="32698" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B033D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="33338" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="33372" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B033S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="33564" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="33612" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P034  sound_before_reveal</tspan></text>
+<text x="100" y="33662" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">大段冷雾留白占据画面上部，三四声铁笛由画右后松树传来；下部洪信回首，松干之后仅露出黄牛头肩和倒骑其上的青衣道童侧影。</tspan></text>
+<text x="100" y="34444" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：呜—呜—— / 呜——</tspan></text>
+<rect x="540" y="34406" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="34440" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B034S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="34248" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="34282" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B034S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="34632" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="34680" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P035  herdboy_identity_reveal</tspan></text>
+<text x="100" y="34730" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">青衣道童倒骑黄牛完整转出松后，身体呈三分之四侧面：双丫髻、自然黑发、草编绦结、麻间芒鞋和横持铁笛全部可读；他明眸微笑，视线越过狼狈的洪信落向山下。</tspan></text>
+<text x="100" y="35512" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：呜——</tspan></text>
+<rect x="540" y="35474" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="35508" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B035S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="35700" width="1188" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="35748" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P036  herdboy_knows_the_mission</tspan></text>
+<text x="154" y="35798" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信在画左前抬手叫住道童，银炉垂在右手；道童仍倒骑黄牛，先吹完一声笛才转过侧脸，以铁笛轻点洪信和他背上的黄罗诏包，笑问是否来见天师。</tspan></text>
+<text x="154" y="36580" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：你从哪里来？认得我么？ | 道童：你可是来见天师？ |</tspan><tspan x="154" dy="32">SFX：呜——</tspan></text>
+<rect x="174" y="35748" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="35782" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B036D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="652" y="35748" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="668" y="35782" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="668" dy="0">B036D2</tspan><tspan x="668" dy="27">dialogue</tspan></text>
+<rect x="540" y="36542" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="36576" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B036S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="36848" width="1440" height="6380" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="36892" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_007</tspan></text>
+<rect x="126" y="36876" width="1188" height="912" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="36924" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P037  mission_revelation</tspan></text>
+<text x="154" y="36974" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">道童仍倒骑黄牛停在画右中，以铁笛轻指洪信背上的黄罗诏包，平静说出皇命与东京醮事；洪信在画左前僵住，右手银炉下垂，目光在铁笛、诏包与道童双眼之间移动。</tspan></text>
+<text x="154" y="37628" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">道童：天师今早已驾鹤乘云，往东京禳疫去了。山中毒虫猛兽甚多，你休再上去。</tspan></text>
+<rect x="174" y="36924" width="430" height="156" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="36958" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B037D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="72" y="37816" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="37864" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P038  fear_driven_retreat</tspan></text>
+<text x="100" y="37914" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">道童倒骑黄牛沿画左下山坡转入薄雾，铁笛声拖在身后；洪信站在岔路中心，先看画右上山顶，再把身体转向画左下旧路，右手仍提银炉，背上诏包随转身偏移。</tspan></text>
+<text x="100" y="38696" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信（心声）：方才险些送命……下山罢。 | SFX：呜——</tspan></text>
+<rect x="120" y="37864" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="37898" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B038D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="38658" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="38692" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B038S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="38884" width="1188" height="956" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="38932" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P039  blame_shift_on_return</tspan></text>
+<text x="154" y="38982" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">方丈内，仍穿沾尘布衣的洪信坐在画左前，右手把银炉重重搁在案边，左手指向画右的住持和道众；住持高瘦背直站在画右，平静迎住他的怒气，后山门在右上背景。</tspan></text>
+<text x="154" y="39680" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：我是朝中贵官，却险些送命！蛇虎尽是你们道众戏弄本官！ |</tspan><tspan x="154" dy="32">SFX：当！</tspan></text>
+<rect x="174" y="38932" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="38966" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B039D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="39642" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="39676" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B039S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="39868" width="1296" height="1116" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="39916" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P040  trial_and_identity_reveal</tspan></text>
+<text x="100" y="39966" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">住持在画右抬起一手，先指向右上后山门解释试心，再把手收回点向洪信背后空出的山径方向，平静说牧童正是天师；洪信在画左僵坐，指责的手垂下，脸从恼怒转为错愕。</tspan></text>
+<text x="100" y="40824" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">住持：蛇虎乃祖师试你之心，并不伤人。方才的牧童，正是天师。 |</tspan><tspan x="100" dy="32">洪信：我有眼不识真师，当面错过！</tspan></text>
+<rect x="120" y="39916" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="39950" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B040D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="39916" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="39950" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B040D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="72" y="41012" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="41060" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P041  false_relief_and_edict_handoff</tspan></text>
+<text x="100" y="41110" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">三清殿供案前，住持在画右双手将黄罗丹诏平稳收入打开的御书匣，匣盖尚未合拢；洪信站在画左目送诏书离手，肩背明显松下，银炉与龙香被安置在供案另一侧持续燃烧。</tspan></text>
+<text x="100" y="41972" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：丹诏留存上清宫，御香供于三清殿。 |</tspan><tspan x="100" dy="32">住持：天师既已去东京，太尉可放心。 | SFX：嗒。</tspan></text>
+<rect x="120" y="41060" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="41094" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B041N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="598" y="41060" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="41094" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B041D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="540" y="41934" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="41968" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B041S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="42160" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="42208" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P042  forbidden_hall_discovery</tspan></text>
+<text x="100" y="42258" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">次日游宫队伍沿上清宫右廊向画右后行进，恢复绛褐官袍与深色幞头的洪信在画左前转过廊角，突然停步望见远处红泥围墙和紧闭朱门；住持在画右侧回身察觉他的视线，门上巨锁与交叉封皮已可辨但不抢先给特写。</tspan></text>
+<text x="100" y="43040" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：次日。</tspan></text>
+<rect x="120" y="42208" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="42242" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B042N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="0" y="43308" width="1440" height="7088" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="43352" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_008</tspan></text>
+<rect x="72" y="43336" width="1296" height="1196" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="43384" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P043  forbidden_hall_reveal</tspan></text>
+<text x="100" y="43434" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">上清宫右廊尽头，一座红泥墙小殿被树影与檐影包围；朱红隔子门中缝是绿锈灌铸大锁，十数道封皮交叉并盖历代朱印，金字牌额‘伏魔之殿’置于门上。洪信在画左仰看牌额，住持在画右侧身指向锁与封条。</tspan></text>
+<text x="100" y="44372" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信：此殿是何去处？ |</tspan><tspan x="100" dy="32">住持：前代天师镇压魔王之所。历代祖师均添一道封皮，誓不敢开。 |</tspan><tspan x="100" dy="32">SFX：沙……（树影与封皮轻动）</tspan></text>
+<rect x="120" y="43384" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="43418" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B043D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="43384" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="43418" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B043D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="540" y="44334" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="44368" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B043S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="44560" width="1188" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="44608" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P044  transgression_demand</tspan></text>
+<text x="154" y="44658" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信从画左向门前迈出一步，右手食指直指门缝的大锁，下颌微抬。住持从画右横移半步到锁前，双手作止势，形成不曾接触但已对抗的两人身位。</tspan></text>
+<text x="154" y="45440" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">洪信：开门。本官倒要看看，魔王是什么模样！ |</tspan><tspan x="154" dy="32">住持：太尉，此殿决不可开！ | SFX：踏！</tspan></text>
+<rect x="174" y="44608" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="44642" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B044D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="652" y="44608" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="668" y="44642" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="668" dy="0">B044D2</tspan><tspan x="668" dy="27">dialogue</tspan></text>
+<rect x="540" y="45402" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="45436" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B044S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="45628" width="1296" height="1232" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="45676" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P045  institutional_coercion</tspan></text>
+<text x="100" y="45726" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信在画左上前倾，官袍袖口将他的身形扩成一个向右的压迫三角，右手收回指向自己腰间官印。住持在画右后退半步，手仍挡在锁前但指尖已松；后方道众低头对视，一名火工道人远处接到召唤。</tspan></text>
+<text x="100" y="46700" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信：胡说！你们不过借鬼神煽惑百姓。若再阻拦，本官回朝便追了你们的度牒，刺配远州！</tspan><tspan x="100" dy="32">| 住持：太尉……恐有大害。 | SFX：嗡……（道众低声骚动）</tspan></text>
+<rect x="120" y="45676" width="430" height="156" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="45710" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B045D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="45676" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="45710" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B045D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="540" y="46662" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="46696" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B045S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="46888" width="1296" height="1196" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="46936" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P046  false_authorization_reveal</tspan></text>
+<text x="100" y="46986" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">长竖格从上向下阅读：最上段，火工道人逐层揭下封皮、铁锤砸开灌铸大锁，朱门向两侧推开，门内只有冷黑。中段，众人进入后轮廓被黑暗吞没，洪信伸手也看不见手掌，口中命‘点火’；十数支火把由门口到殿内依次亮起，摇动暖光照出中央五六尺石碑、半陷泥中的龟趺和厚灰。最下段，碑前龙章凤篆保留无字符号安全区，碑身被转向后，背面四字安全区中后期嵌入‘遇洪而开’；洪信在画左指碑大喜，住持画右向前半步想要阻止。</tspan></text>
+<text x="100" y="47924" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">洪信：点火！ |</tspan><tspan x="100" dy="32">洪信：看见么？数百年前便注定我姓洪！魔王定在碑下。挖！ |</tspan><tspan x="100" dy="32">SFX：嗤啦…… / 锵！锵！ / 砰——！ / 呼——（阴冷气流）</tspan><tspan x="100" dy="32">/ 蓬！蓬！（火把依次点燃）</tspan></text>
+<rect x="120" y="46936" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="46970" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B046D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="46936" width="430" height="122" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="46970" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B046D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="540" y="47886" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="47920" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B046S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="47728" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="47762" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B046S4</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="47570" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="47604" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B046S5</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="47412" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="47446" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B046S6</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="47254" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="47288" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B046S7</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="48112" width="1296" height="1160" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="48160" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P047  action_peak</tspan></text>
+<text x="100" y="48210" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">长竖格自上而下/由封禁深处向高空读取：上段中心，石碑已被绳索与人力向画左放倒，龟趺被从泥中挖出，多名火工道人分立青石板四周同时发力；洪信在画左指挥，住持在画右向青板伸手作最后阻止。青石板离地的接触点露出深不见底的地穴，巨响从中心震开火把、尘土与工具。中段，稠密黑气从地穴垂直滚起，顶开屋顶并掀塌画右上的半个殿角，众人沿中轴向画下门口奔逃，洪信与住持被气流压在左右两侧，未给近景表情。下段/高空，黑气到达殿顶缺口上方后由中心点分解，清晰显示</tspan><tspan x="100" dy="35">108</tspan><tspan x="100" dy="35">条互不融合的暖金光迹向东西南北与斜向八方奔散，不显示人形、星座 UI</tspan><tspan x="100" dy="35">或数字。</tspan></text>
+<text x="100" y="49112" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">住持：太尉，不可挖动！ | 洪信：碑上分明叫我开，你懂什么！ |</tspan><tspan x="100" dy="32">洪信：抬起青石板！ | 众人：快跑！ | SFX：咚——（石碑放倒）</tspan><tspan x="100" dy="32">/ 嘎啦……（龟趺离泥） / 刮喇喇—— / 轰隆隆——！ /</tspan><tspan x="100" dy="32">哗—轰——！ / 喀啦啦！ / 哗喇喇喇——轰！</tspan></text>
+<rect x="120" y="48160" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="48194" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B047D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="48160" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="48194" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B047D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="120" y="48364" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="48398" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B047D3</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="48364" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="48398" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B047D4</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="540" y="49074" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="49108" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S5</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="48916" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="48950" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S6</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="48758" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="48792" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S7</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="48600" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="48634" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S8</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="48442" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="48476" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S9</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="48284" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="48318" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S10</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="48126" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="48160" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B047S11</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="49300" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="49348" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P048  cliffhanger</tspan></text>
+<text x="100" y="49398" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">远景中，伏魔殿右上半角已塌，屋顶缺口上方的 108</tspan><tspan x="100" dy="35">道暖金光迹还在向八方奔离，最远一组已越过山脊；殿内和廊下的人群已退成凌乱小影。前景画左，洪信站在廊柱旁，幞头尚在，绛褐官袍肩、袖和下摆沾满灰尘，脸色失血如土，双手停在不知如何放置的半抬位置，嘴微张却无话。前景画右，住持从殿内奔到廊下，身体仍高瘦却第一次微微佝下，右手抓住廊柱、左手向塌殿和星光伸出，眼神震惊又痛惜，口中只有‘苦也’。丹诏不在洪信身上，已按</tspan><tspan x="100" dy="35">P041 证据留在上清宫御书匣。</tspan></text>
+<text x="100" y="50180" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">住持：苦也——！ | SFX：簌簌……（木屑与灰尘落下） /</tspan><tspan x="100" dy="32">嗡——（远去星光余鸣）</tspan></text>
+<rect x="120" y="49348" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="49382" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B048D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="50142" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="50176" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B048S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="540" y="49984" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="50018" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B048S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+</svg>

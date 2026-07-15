@@ -3,13 +3,13 @@
   "version": 1,
   "episode": "第1集",
   "status": "pass",
-  "generated_at": "2026-07-14T12:09:49+00:00",
+  "generated_at": "2026-07-15T02:47:21+00:00",
   "contract_path": "脚本/第1集/shot_reverse_contract.json",
   "report_path": "生产数据/shot_reverse_contract_第1集.md",
   "summary": {
     "patterns": 7,
     "block": 0,
-    "warn": 8,
+    "warn": 11,
     "info": 0
   },
   "issues": [
@@ -19,6 +19,13 @@
       "code": "closeup_anchor_pending",
       "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
     },
     {
       "clip_id": "EP01_CLIP03",
@@ -35,11 +42,25 @@
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
     },
     {
+      "clip_id": "EP01_CLIP04",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
+    },
+    {
       "clip_id": "EP01_CLIP05",
       "severity": "warn",
       "code": "closeup_anchor_pending",
       "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
     },
     {
       "clip_id": "EP01_CLIP08",
@@ -69,5 +90,6 @@
       "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
     }
-  ]
+  ],
+  "synced_axis_blocking_map": "脚本/第1集/axis_blocking_map.json"
 }

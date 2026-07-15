@@ -4280,7 +4280,10 @@ def _has_standard_character_turnaround(section: str) -> bool:
     has_back = _has_any(section, ("_背", "背面", "背身"))
     has_outfit = _has_any(section, ("_半身", "_全身", "半身服装", "全身服装", "服装参考", "体态参考"))
     has_face_anchor = _has_any(section, ("脸部特写", "面部特写", "face_anchor_refs", "基础脸部参考", "表情参考", "同源表情", "表情_"))
-    has_board = _has_any(section, ("_三视图", "标准三视图", "正/侧/背", "正面 / 侧面 / 背面"))
+    has_board = _has_any(section, (
+        "_三视图", "标准三视图", "正/侧/背", "正面 / 侧面 / 背面",
+        "turnaround", "五角周转", "五角设定表", "周转表",
+    ))
     return (
         has_front
         and has_three_quarter

@@ -2,10 +2,10 @@
   "accepted_story_clip_count": 0,
   "actual_story_clip_count": 0,
   "animatic_snapshot_path": "生产数据/timelines/第1集/animatic_timeline.otio",
-  "animatic_snapshot_sha256": "e80857906150d59eb2100b7b9e2110da47a8fd521e652f5fe60ead0cbe0f6ea9",
+  "animatic_snapshot_sha256": "09cb89409fe97a58c8e3213c37bafd8d277ab066a1bc6ef6a6860b8195716997",
   "duration_sec": 129.846,
   "episode": "第1集",
-  "generated_at": "2026-07-14T12:26:00+00:00",
+  "generated_at": "2026-07-15T02:53:37+00:00",
   "kind": "n2d_editorial_timeline",
   "media": [
     {
@@ -270,7 +270,7 @@
     "Clip_13"
   ],
   "otio_path": "生产数据/timelines/第1集/editorial_timeline.otio",
-  "otio_sha256": "e80857906150d59eb2100b7b9e2110da47a8fd521e652f5fe60ead0cbe0f6ea9",
+  "otio_sha256": "09cb89409fe97a58c8e3213c37bafd8d277ab066a1bc6ef6a6860b8195716997",
   "phase": "animatic",
   "planned_audio_slot_count": 36,
   "rate": 30.0,

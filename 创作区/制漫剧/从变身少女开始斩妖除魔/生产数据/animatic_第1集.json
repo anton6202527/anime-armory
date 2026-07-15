@@ -10,7 +10,7 @@
   },
   "episode": "第1集",
   "findings": [],
-  "generated_at": "2026-07-14T12:26:00+00:00",
+  "generated_at": "2026-07-15T02:53:37+00:00",
   "inputs": {
     "episode_images": "出图/第1集/图片",
     "shot_durations": "脚本/第1集/镜头时长.json",
@@ -19,10 +19,10 @@
   "inputs_fingerprint": {
     "files": {
       "出图/第1集/图片": null,
-      "脚本/第1集/storyboard.json": "228df76aee8206f507101eb7bbfe9761bee134c38ae6383e29ffa31e60d01c4f",
+      "脚本/第1集/storyboard.json": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6",
       "脚本/第1集/镜头时长.json": "e29dc35237353d4e3f6f75c4c0ff44336c049cbaa0e390931533b2dd4cce1f56"
     },
-    "sha": "7c759dd3f15825beb27ac78581457564109b30662a513e5fdc75310da4b4fbdd"
+    "sha": "0d9b01cf2f12487cc63cb68631c927cd015aaf9a17a68c17d749c0214a54a73b"
   },
   "json_path": "生产数据/animatic_第1集.json",
   "kind": "n2d_animatic_preview",

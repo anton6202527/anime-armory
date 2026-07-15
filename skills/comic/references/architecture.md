@@ -6,7 +6,7 @@ comic 以 `chapter → page/scroll_segment → panel` 为生产层级，以 pane
 
 ## 与同仓成熟生产线的参考边界
 
-本线参考同仓成熟视频生产线已验证的**生产模式**：开发包先于单话生产、结构化上游合同、逐镜/逐格参考处方、阶段 gate receipt、内容哈希驱动的最小失效传播。漫画线不 import 别线代码，也不读取别线项目状态；这些模式已经按漫画的 chapter/page-or-scroll/panel、ネーム审批、静态阅读顺序、嵌字与出版导出重新实现。这样能复用成熟经验，同时保持 comic 可单独分发，任何其它作品线缺失时主流程都不降级。
+本线参考同仓成熟视频生产线已验证的**生产模式**：开发包先于单话生产、结构化上游合同、逐镜/逐格参考处方、阶段 gate receipt、内容哈希驱动的最小失效传播。漫画线不 import 别线代码，也不读取别线项目状态；这些模式已经按漫画的 chapter/page-or-scroll/panel、缩略分镜审批、静态阅读顺序、嵌字与出版导出重新实现。这样能复用成熟经验，同时保持 comic 可单独分发，任何其它作品线缺失时主流程都不降级。
 
 “已生成”不是完成判据。每个正式阶段都要同时具备：结构化机器真值、确定性验证、人审责任点、当前输入 SHA 收据和明确的返工入口。
 
@@ -102,8 +102,8 @@ identity + script + layout + finishing ──> reference plan ──> panel jobs
 `comic-name` 和 `comic-layout` 都是显式编辑责任点：
 
 1. build 只生成 `workflow_status=draft`。
-2. 人工审阅后 `--submit-review`。
-3. 真实签收人用 `--approve --reviewed-by ...`。
+2. 人工审阅，或在用户明确授权后由制作代理完成证据化审阅，再 `--submit-review`。
+3. 签收人或授权制作代理用 `--approve --reviewed-by ...`，备注绑定授权文件与审阅证据。
 4. 下游只接受 `--check` 通过的 `approved` 版本。
 
 name 审页流、翻页钩子、格子轻重、气泡语义、视线入口/出口和原稿安全框；layout 审最终阅读顺序、矩形不重叠/不越界、正文和 SFX 槽位覆盖、关键人物/动作避让与形态对应的几何 profile。
@@ -114,7 +114,7 @@ name 审页流、翻页钩子、格子轻重、气泡语义、视线入口/出�
 - 左读/右读页漫：`paged_grid_ltr` / `paged_grid_rtl`。
 - 四格：`yonkoma_four_rows`。
 
-复杂跨页、破格、斜格和特殊装帧仍要人工修改并重新签收；adapter 不能替编辑决定审美。
+复杂跨页、破格、斜格和特殊装帧仍要人工或用户授权的制作代理修改并重新签收；adapter 不能只凭 validator 决定审美。
 
 ## 原稿收尾、参考处方和 job 编译
 

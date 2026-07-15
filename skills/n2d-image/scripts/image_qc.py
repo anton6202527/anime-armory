@@ -282,7 +282,9 @@ def _asset_must_not_have_terms(asset: Mapping[str, Any]) -> List[str]:
 
 # 资产 id 引用（场景/道具/武器/服装/特效）+ 定妆资产名（用于抓"用了定妆却没绑 id"）。
 ASSET_ID_PREFIXES = ("MOUNT_GROUP_", "WEAPON_", "OUTFIT_", "PROP_", "LOC_", "VFX_")
-ASSET_ID_RE = re.compile(r"`?((?:MOUNT_GROUP|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?")
+ASSET_ID_RE = re.compile(
+    r"(?<![A-Za-z0-9_])`?((?:MOUNT_GROUP|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?"
+)
 DEFINING_ASSET_RE = re.compile(r"定妆_([^\s`，。、）)/]+)")
 _ASSET_NAME_SUFFIX_RE = re.compile(r"_(侧|半身|全身|背|三视图|四视图|设定表|脸部特写|表情)$")
 
@@ -308,7 +310,29 @@ def _lint_asset_binding(label: str, body: str, asset_index: Optional[Dict[str, A
     name_to_id: Dict[str, str] = asset_index.get("name_to_id") or {}
     prefix_of: Dict[str, str] = asset_index.get("prefix_of") or {}
     entries: Dict[str, Dict[str, Any]] = asset_index.get("entries") or {}
-    body_ids = set(ASSET_ID_RE.findall(text))
+    raw_body_ids = set(ASSET_ID_RE.findall(text))
+    body_ids: Set[str] = set()
+    for raw_id in raw_body_ids:
+        if raw_id in ids:
+            body_ids.add(raw_id)
+            continue
+        # Natural-language contracts sometimes join a registered id directly
+        # to a Chinese descriptor (``LOC_01光位``).  Resolve that to the
+        # longest registered prefix, but never swallow underscore-delimited
+        # machine ids.  Embedded axis ids such as
+        # ``AXIS_LOC_01_CHAR_01_VS_CHAR_02`` are excluded by the regex's
+        # negative lookbehind above.
+        prefixes = sorted(
+            (
+                aid for aid in ids
+                if raw_id.startswith(aid)
+                and raw_id != aid
+                and not raw_id[len(aid):].startswith("_")
+            ),
+            key=len,
+            reverse=True,
+        )
+        body_ids.add(prefixes[0] if prefixes else raw_id)
     for rid in sorted(body_ids):
         if rid not in ids:
             findings.append({"level": "block", "code": "unknown_asset_id",
@@ -611,15 +635,30 @@ def _split_character_names(raw: str) -> Set[str]:
     return names
 
 
+REFERENCE_IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def _looks_like_reference_path(value: str) -> bool:
+    """只把真实图片路径当成 reference_group 的身份别名来源。"""
+    clean = str(value or "").strip().split("?", 1)[0].split("#", 1)[0]
+    return Path(clean).suffix.lower() in REFERENCE_IMAGE_SUFFIXES
+
+
 def _flatten_reference_paths(value: Any) -> List[str]:
+    """递归提取 reference_group 内的图片路径，忽略状态/情绪/派生方式等元数据。
+
+    reference_group 既允许简写字符串，也允许 ``{path, status, emotion,
+    derivation...}`` 的富结构。旧实现会把所有字符串都变成强身份别名，令“克制”
+    等表情元数据误命中无关角色的尾帧交接检查。
+    """
     if isinstance(value, str):
-        return [value]
-    if isinstance(value, list):
+        return [value] if _looks_like_reference_path(value) else []
+    if isinstance(value, (list, tuple)):
         out: List[str] = []
         for item in value:
             out.extend(_flatten_reference_paths(item))
         return out
-    if isinstance(value, dict):
+    if isinstance(value, Mapping):
         out = []
         for item in value.values():
             out.extend(_flatten_reference_paths(item))
@@ -1369,17 +1408,104 @@ OUTFIT_TOKEN_GROUPS: Dict[str, Tuple[str, ...]] = {
 
 
 def _positive_prompt_text(body: str) -> str:
-    """Strip negative prompt sections before semantic outfit matching."""
+    """Strip negative-only regions before semantic prompt matching.
+
+    A shot block contains the human contract, a ``### 负向 prompt`` section,
+    and then a compiled submit block.  Splitting once at the negative heading
+    discarded the later compiled positive text, while failing to recognize
+    Markdown headings let inline ``限制：直视镜头`` constraints masquerade as
+    positive camera-gaze instructions.  Remove only the negative section and
+    the compiled inline constraint tail.
+    """
     text = str(body or "")
-    return re.split(r"\*\*?负向\s*prompt|\bnegative\s*prompt", text, maxsplit=1, flags=re.I)[0]
+    text = re.sub(
+        r"(?ms)^#{1,6}\s*(?:负向\s*prompt|negative\s*prompt)[^\n]*\n.*?(?=^#{1,6}\s+|\Z)",
+        "",
+        text,
+    )
+    text = re.sub(
+        r"(?ims)^\s*\*\*(?:负向\s*prompt|negative\s*prompt)\*\*\s*[：:]?.*?"
+        r"(?=^\s*(?:\*\*[^*]+\*\*|#{1,6}\s+)|\Z)",
+        "",
+        text,
+    )
+    text = re.sub(r"(?im)(?:^|[。；;\s])\s*(?:限制|constraints?)\s*[：:].*$", "", text)
+    return text
+
+
+IDENTITY_BINDING_MARKERS = (
+    "角色圣经引用", "资产身份注册层", "多人同框身份槽位", "逐主体参考绑定",
+    "身份保持", "身份锁定句", "近景/反打身份锁定", "尾帧身份交接", "尾帧专用重抽提示",
+    "主体布局", "SLOT_",
+)
+
+
+def _identity_binding_text(body: str) -> str:
+    """Return only executable identity-binding lines, not state-ledger prose.
+
+    ``CHAR_xx/形态`` validity belongs on fields that actually bind a registry
+    identity.  Storyboard/template prose legitimately contains episode-local
+    state ids such as ``CHAR_01/负伤态``; treating every CHAR token anywhere
+    in the full production contract as a registry form created false blocks.
+    """
+    lines = []
+    for line in str(body or "").splitlines():
+        if not any(marker in line for marker in IDENTITY_BINDING_MARKERS):
+            continue
+        # Asset-bundle paths contain stems such as CHAR_01__常态; they are
+        # filesystem metadata rather than identity bindings.
+        clean = re.sub(r"`?角色库/[^`\s]+`?", "", line)
+        # A compiled request is intentionally one dense line.  Its executable
+        # identity bindings live only in ``主体布局``; later camera/blocking
+        # clauses may use episode-local performance states such as
+        # CHAR_01/负伤态.  Do not reinterpret those states as registry forms.
+        if "主体布局" in clean and not clean.lstrip().startswith("**"):
+            clean = clean[clean.index("主体布局"):]
+            boundary = re.search(
+                r"\s+(?:动作瞬间|构图|场景|光影|情绪焦点|视觉风格|保持一致|"
+                r"可见手部归属|可见身体|主检脸|每个具名主体|画幅|限制)\s*[：:]",
+                clean,
+            )
+            if boundary:
+                clean = clean[:boundary.start()]
+        lines.append(clean)
+    return "\n".join(lines)
+
+
+def _contains_unnegated_outfit_term(text: str, term: str) -> bool:
+    """Return whether a garment term is an instruction rather than a ban.
+
+    Outfit vocabulary also appears in style-taboo lists and topology guards
+    (for example ``风格禁忌：白衣仙女`` or ``袖口不得画成刀刃``).  Both the
+    prefix and the immediate suffix therefore matter.
+    """
+    source = _normalize_outfit_match(text).lower()
+    needle = _normalize_outfit_match(term).lower()
+    if not source or not needle:
+        return False
+    negatives = (
+        "风格禁忌", "禁忌", "严禁", "禁止", "不得", "不要", "不许", "不能", "不可", "避免",
+        "no", "not", "without",
+    )
+    start = 0
+    while True:
+        idx = source.find(needle, start)
+        if idx < 0:
+            return False
+        prefix = source[max(0, idx - 28):idx]
+        suffix = source[idx + len(needle):idx + len(needle) + 18]
+        if not any(token in prefix or token in suffix for token in negatives):
+            return True
+        start = idx + len(needle)
 
 
 def _outfit_claims_in_text(text: str) -> Dict[str, Set[str]]:
     found: Dict[str, Set[str]] = {}
     src = str(text or "")
     for group, tokens in OUTFIT_TOKEN_GROUPS.items():
-        if any(token and token in src for token in tokens):
-            found[group] = set(tokens)
+        hits = {token for token in tokens if token and _contains_unnegated_outfit_term(src, token)}
+        if hits:
+            found[group] = hits
     return found
 
 
@@ -1388,7 +1514,10 @@ def _add_registry_outfit_claims(text: str, registry_forms: Optional[Sequence[Dic
     src_norm = _normalize_outfit_match(text)
     for form in registry_forms or []:
         terms = _outfit_terms_from_form(form)
-        hits = {term for term in terms if term and term in src_norm}
+        hits = {
+            term for term in terms
+            if term and term in src_norm and _contains_unnegated_outfit_term(src_norm, term)
+        }
         if not hits:
             continue
         key = str(form.get("key") or form.get("form") or "registry")
@@ -1919,7 +2048,8 @@ def lint_shot_block(
     findings.extend(_lint_action_eyeline(label, body))
     findings.extend(_lint_camera_gaze_general(label, body))
 
-    id_refs = IDENTITY_REF_RE.findall(body)
+    binding_text = _identity_binding_text(body)
+    id_refs = list(dict.fromkeys(IDENTITY_REF_RE.findall(binding_text)))
     ref_block_present = "参考图" in body and "定妆_" in body
     is_char_shot = _is_character_shot_body(body, id_refs)
 
@@ -2092,7 +2222,12 @@ def _normalize_seam_availability(res: Dict[str, Any], root: str, ep: str) -> Dic
     seam_analyze 自己已置 available（如失败/缺依赖）时尊重原值不覆盖。"""
     if not isinstance(res, dict) or res.get("available") is not None:
         return res if isinstance(res, dict) else {"available": False, "notes": ["seam_analyze 返回非 dict——接缝机检跳过。"]}
-    res["available"] = _seam_image_dir_has_pngs(root, ep)
+    has_pngs = _seam_image_dir_has_pngs(root, ep)
+    res["available"] = has_pngs
+    # “没有可比较的 PNG”属于输入缺件，不是 Pillow/cv2/接缝算法环境缺失。
+    # 保留 available=False 以防零覆盖被误判通过，同时让 qc_environment 能正确
+    # 报告机器能力为 full，由图片存在性 gate 单独阻断进入 video。
+    res["availability_reason"] = "ready" if has_pngs else "no_episode_images"
     return res
 
 
@@ -2347,7 +2482,8 @@ def _degraded_closeup_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]
     """降级精度下、景别为近景、且基础质量未单独 block 的 face shot（这些是「无法验同人的近景脸」）。"""
     face = (payload.get("checks") or {}).get("face") or {}
     return [s for s in face.get("shots", [])
-            if s.get("degraded_face") and s.get("closeup") and s.get("verdict") != "block"]
+            if s.get("degraded_face") and s.get("closeup")
+            and s.get("verdict") not in {"block", "missing"}]
 
 
 def _degraded_multi_person_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -2358,7 +2494,7 @@ def _degraded_multi_person_face_shots(payload: Dict[str, Any]) -> List[Dict[str,
     face = (payload.get("checks") or {}).get("face") or {}
     return [s for s in face.get("shots", [])
             if s.get("degraded_face") and s.get("multi_person") and not s.get("closeup")
-            and s.get("verdict") != "block"]
+            and s.get("verdict") not in {"block", "missing"}]
 
 
 def _degraded_unverifiable_face_shots(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -3755,6 +3891,17 @@ def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[st
             advisory += cnt["warn"]
         else:
             advisory += cnt["block"] + cnt["warn"]   # 初筛项的 block 也只算人判
+    # 目标图未生成是产物存在性问题，不是脸 G1 质量结论。仍保持 fail-closed，
+    # 但单列维度，避免 dashboard / update plan 把 0/114 误报为“崩脸 44 张”。
+    missing_targets = [
+        s for s in ((payload.get("checks", {}).get("face") or {}).get("shots") or [])
+        if s.get("verdict") == "missing"
+    ]
+    if missing_targets:
+        rows_by_check["image_targets_missing"] = {
+            "block": len(missing_targets), "warn": 0, "noface": 0, "ok": 0
+        }
+        hard += len(missing_targets)
     # anchors（锚点门 N3）：非阻断初筛
     anchors = payload.get("checks", {}).get("anchors") or {}
     a_block = sum(1 for a in (anchors.get("anchors") or [])
@@ -3895,7 +4042,10 @@ def qc_environment(payload: Dict[str, Any], *, with_pixel: bool = True) -> Dict[
     none: no pixel checks were requested, or every declared core visual check is unavailable.
     """
     checks = payload.get("checks", {}) or {}
-    unavailable = unavailable_visual_checks(payload)
+    unavailable = [
+        key for key in unavailable_visual_checks(payload)
+        if str((checks.get(key) or {}).get("availability_reason") or "") != "no_episode_images"
+    ]
     core_checks = {"face", "hair", "outfit", "scene", "human_anatomy", "seam"}
     declared_core_checks = {k for k in core_checks if k in checks}
     face_mode = str((checks.get("face") or {}).get("mode") or "")
@@ -4004,6 +4154,14 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         if v in ("block", "warn"):
             out.append(_qc_finding(v, "character_consistency", s.get("png"),
                                    f"崩脸 G1 {v}：{s.get('png')}（脸/身份漂移机检）"))
+        elif v == "missing":
+            out.append(_qc_finding(
+                "block",
+                "image_artifact_presence",
+                s.get("png"),
+                f"出图目标尚未生成：{s.get('png')}；当前无法执行脸/身份像素质检。"
+                "这是产物缺件，不是崩脸判定。",
+            ))
     # 降级精度近景（hard）：Pillow 模式无法验同人，近景/特写镜硬拦——装 insightface 重跑或人工逐帧确认前不放行。
     # 附并排对比图路径（①），让人审一屏秒判同人，而非硬拦后无从复核。
     for s in _degraded_closeup_face_shots(payload):
@@ -4829,7 +4987,16 @@ def _expression_review_items(form: Mapping[str, Any]) -> List[Any]:
             out.extend(value for value in node.values() if isinstance(value, (str, Mapping)))
         elif isinstance(node, str):
             out.append(node)
-    return out
+    deduped: List[Any] = []
+    seen_paths: set[str] = set()
+    for item in out:
+        path = _view_item_path(item)
+        if path and path in seen_paths:
+            continue
+        if path:
+            seen_paths.add(path)
+        deduped.append(item)
+    return deduped
 
 
 def _view_item_path(item: Any) -> str:
@@ -4895,7 +5062,31 @@ def _view_receipt_state(
     path: str = "",
     root: Optional[Path] = None,
 ) -> Dict[str, Any]:
-    review = item.get("human_review") if isinstance(item, Mapping) and isinstance(item.get("human_review"), Mapping) else {}
+    human_review = item.get("human_review") if isinstance(item, Mapping) and isinstance(item.get("human_review"), Mapping) else {}
+    visual_review = item.get("visual_review") if isinstance(item, Mapping) and isinstance(item.get("visual_review"), Mapping) else {}
+    candidates: List[Tuple[int, str, Mapping[str, Any]]] = []
+    for fallback_kind, candidate in (("human", human_review), ("executor_visual", visual_review)):
+        if not candidate:
+            continue
+        candidate_sha = str(
+            candidate.get("png_sha256") or candidate.get("artifact_sha256") or candidate.get("sha256") or ""
+        ).strip().lower()
+        candidate_verdict = str(candidate.get("verdict") or candidate.get("status") or "").strip().lower()
+        score = 0
+        if expected_sha and candidate_sha == expected_sha.lower():
+            score += 8
+        if candidate_verdict in TURNAROUND_REVIEW_PASS:
+            score += 4
+        if str(candidate.get("reviewer") or candidate.get("reviewed_by") or "").strip():
+            score += 2
+        if fallback_kind == "human":
+            score += 1
+        candidates.append((score, fallback_kind, candidate))
+    if candidates:
+        _score, fallback_review_kind, review = max(candidates, key=lambda row: row[0])
+    else:
+        fallback_review_kind, review = "", {}
+    review_kind = str(review.get("review_kind") or fallback_review_kind).strip().lower()
     canonical_path = str(path or "").strip()
     current_path: Optional[Path] = None
     path_reasons: List[str] = []
@@ -4926,8 +5117,15 @@ def _view_receipt_state(
         reasons.append("verdict_not_pass")
     if not reviewer:
         reasons.append("reviewer_missing")
-    elif identity_reviewer_appears_automated(reviewer):
+    elif review_kind == "human" and identity_reviewer_appears_automated(reviewer):
         reasons.append("reviewer_appears_automated")
+    if review_kind not in {"human", "executor_visual"}:
+        reasons.append("review_kind_missing_or_invalid")
+    elif review_kind == "executor_visual":
+        if str(review.get("reviewer_role") or "") != "ai_visual_executor":
+            reasons.append("executor_visual_reviewer_role_missing_or_mismatch")
+        if root is None or not executor_visual_review_authorized(root):
+            reasons.append("executor_visual_review_not_authorized_by_project_setting")
     reasons.extend(identity_reviewed_at_errors(reviewed_at))
     expected_fields = {
         "character_id": character_id,
@@ -4976,6 +5174,7 @@ def _view_receipt_state(
         "valid": not reasons,
         "verdict": verdict or None,
         "reviewer": reviewer or None,
+        "review_kind": review_kind or None,
         "reviewed_at": reviewed_at or None,
         "png_sha256": reviewed_sha or None,
         "registry_binding_fingerprint": receipt_fingerprint or None,
@@ -5208,9 +5407,13 @@ def _lens_classes(clip: Mapping[str, Any]) -> Set[str]:
     out: Set[str] = set()
     for shot in clip.get("shots") or []:
         if isinstance(shot, Mapping):
-            m = _LENS_CLASS_RE.search(str(shot.get("lens") or ""))
-            if m:
-                out.add(m.group(0).upper())
+            # ``lens`` is commonly the physical focal length (for example
+            # 85mm), while storyboard uses ``shot_size`` for ECU/CU/MS.  Scan
+            # both plus compatible schema aliases so a valid camera plan does
+            # not become "0 种景别" merely because of field naming.
+            for field in ("shot_size", "shot_scale", "framing", "lens"):
+                for match in _LENS_CLASS_RE.finditer(str(shot.get(field) or "")):
+                    out.add(match.group(0).upper())
     return out
 
 
@@ -5854,6 +6057,7 @@ def _write_view_review_to_form(
     library_tier: str,
     verdict: str,
     reviewer: str,
+    review_kind: str,
     reviewed_at: str,
     note: str,
     reference_path: str = "",
@@ -5930,7 +6134,15 @@ def _write_view_review_to_form(
     reviewer = str(reviewer or "").strip()
     if not reviewer:
         return {"ok": False, "msg": "逐视图复核必须填写 reviewer"}
-    if identity_reviewer_appears_automated(reviewer):
+    normalized_review_kind = str(review_kind or "human").strip().lower()
+    if normalized_review_kind not in {"human", "executor_visual"}:
+        return {"ok": False, "msg": "review_kind 只能是 human 或 executor_visual"}
+    if normalized_review_kind == "executor_visual" and not executor_visual_review_authorized(root):
+        return {
+            "ok": False,
+            "msg": "项目未在 _设置.md 明确授权执行者实际像素目视，不能写 executor_visual 收据",
+        }
+    if normalized_review_kind == "human" and identity_reviewer_appears_automated(reviewer):
         return {
             "ok": False,
             "msg": "reviewer 必须是非空、非明显自动化的人工声明标识，禁止 bot/codex/agent/runner",
@@ -5974,6 +6186,9 @@ def _write_view_review_to_form(
         "view": view,
         "path": rel,
         "reviewer": reviewer,
+        "review_kind": normalized_review_kind,
+        "reviewer_role": "ai_visual_executor" if normalized_review_kind == "executor_visual" else "human_creative_reviewer",
+        "human_signoff": normalized_review_kind == "human",
         "reviewed_at": reviewed_at,
         "png_sha256": sha,
         "registry_binding_fingerprint": registry_fingerprint,
@@ -6004,7 +6219,7 @@ def _write_view_review_to_form(
             item = {"path": rel}
         item["status"] = "ready" if normalized == "pass" else "review_failed"
         item["sha256"] = sha
-        item["human_review"] = dict(receipt)
+        item["human_review" if normalized_review_kind == "human" else "visual_review"] = dict(receipt)
         container[key] = item
         return True
 
@@ -6027,14 +6242,14 @@ def _write_view_review_to_form(
                         item = dict(child) if isinstance(child, Mapping) else {"path": rel}
                         item["status"] = "ready" if normalized == "pass" else "review_failed"
                         item["sha256"] = sha
-                        item["human_review"] = dict(receipt)
+                        item["human_review" if normalized_review_kind == "human" else "visual_review"] = dict(receipt)
                         node[index] = item
                         changed = True
             elif isinstance(node, dict):
                 if _view_item_path(node) == rel:
                     node["status"] = "ready" if normalized == "pass" else "review_failed"
                     node["sha256"] = sha
-                    node["human_review"] = dict(receipt)
+                    node["human_review" if normalized_review_kind == "human" else "visual_review"] = dict(receipt)
                     changed = True
                 else:
                     for key, child in list(node.items()):
@@ -6043,7 +6258,7 @@ def _write_view_review_to_form(
                                 "path": rel,
                                 "status": "ready" if normalized == "pass" else "review_failed",
                                 "sha256": sha,
-                                "human_review": dict(receipt),
+                                ("human_review" if normalized_review_kind == "human" else "visual_review"): dict(receipt),
                             }
                             changed = True
                         elif isinstance(child, (dict, list)):
@@ -6061,7 +6276,7 @@ def _write_view_review_to_form(
             "path": rel,
             "status": "ready" if normalized == "pass" else "review_failed",
             "sha256": sha,
-            "human_review": dict(receipt),
+            ("human_review" if normalized_review_kind == "human" else "visual_review"): dict(receipt),
         }
     if normalized == "fail":
         form["self_check_passed"] = False
@@ -6076,6 +6291,7 @@ def review_turnaround_view(
     *,
     verdict: str,
     reviewer: str,
+    review_kind: str = "human",
     reviewed_at: str = "",
     note: str = "",
     reference_path: str = "",
@@ -6110,6 +6326,7 @@ def review_turnaround_view(
             library_tier=_explicit_library_tier(char, form),
             verdict=verdict,
             reviewer=reviewer,
+            review_kind=review_kind,
             reviewed_at=when,
             note=note,
             reference_path=reference_path,
@@ -6124,6 +6341,21 @@ def review_turnaround_view(
         "该动作只签当前视图，不会一键 finalize 整个 form"
     )
     return result
+
+
+def executor_visual_review_authorized(root: Path) -> bool:
+    """Require an explicit project-level user choice before AI visual receipts can release a view."""
+    path = Path(root) / "_设置.md"
+    if not path.is_file():
+        return False
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return (
+        "执行者实际像素目视" in text
+        and ("用户明确" in text or "source=explicit_user" in text)
+    )
 
 
 def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool = True) -> Dict[str, Any]:
@@ -6481,6 +6713,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="与 --review-view 连用：当前视图人审判定")
     ap.add_argument("--view-reviewer", default="",
                     help="与 --review-view 连用：真实审阅者/岗位标识，必填")
+    ap.add_argument("--view-review-kind", choices=("human", "executor_visual"), default="human",
+                    help="与 --review-view 连用：human=人工签收；executor_visual=项目已明确授权的执行者实际像素目视（不冒充人工）")
     ap.add_argument("--view-reviewed-at", default="",
                     help="与 --review-view 连用：ISO 时间；缺省写当前 UTC")
     ap.add_argument("--view-note", default="",
@@ -6544,6 +6778,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             ns.view,
             verdict=ns.view_verdict,
             reviewer=ns.view_reviewer,
+            review_kind=ns.view_review_kind,
             reviewed_at=ns.view_reviewed_at,
             note=ns.view_note,
             reference_path=ns.view_path,

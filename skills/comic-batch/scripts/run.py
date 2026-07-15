@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """漫画线流程推进脚本：推进已签收阶段，出图阶段带 gate 批跑。
 
-- ネーム与 layout 默认只产 draft，批跑必须停下等待人工签收；
+- 缩略分镜/name board 与 layout 默认只产 draft，批跑必须停下等待人工或用户授权制作代理签收；
 - 已签收后才继续原稿收尾/出图包/嵌字合成等确定性阶段；
 - 出图阶段先跑 image_preflight gate，通过才调 runner，之后跑 image gate；
 - 审查阶段只跑 review gate 产报告，不代替人工把 审查 标 ✅；
@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 STAGES = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
-# ネーム现在是 layout 的强制编辑合同，不再随“传统原稿流程”关闭而跳过。
+# 缩略分镜/name board 现在是 layout 的强制编辑合同，不再随“传统原稿流程”关闭而跳过。
 TRADITIONAL_STAGES = {"原稿收尾"}
 TRADITIONAL_OFF_VALUES = {"关闭", "off", "disabled", "false", "False"}
 CREATIVE_STAGES = {"源本/企划", "漫画脚本"}

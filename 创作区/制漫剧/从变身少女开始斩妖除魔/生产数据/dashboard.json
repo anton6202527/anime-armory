@@ -1,50 +1,130 @@
 {
   "alert_counts": {
-    "critical": 0,
-    "warn": 0
+    "critical": 1,
+    "warn": 1
   },
-  "alerts": [],
+  "alerts": [
+    {
+      "kind": "qa_blockers",
+      "level": "critical",
+      "message": "QA 阻断 88 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "scope": "totals",
+      "threshold": 0,
+      "value": 88
+    },
+    {
+      "episode": "第1集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第1集 QA 阻断 88 项",
+      "scope": "第1集",
+      "threshold": 0,
+      "value": 88
+    }
+  ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.0,
+      "blockers_per_attempt": 4.6316,
       "completion_rate": null,
-      "consistency_blockers": 0,
+      "consistency_blockers": 5,
       "consistency_ledger": {},
       "consistency_warnings": 0,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": 1.0,
-      "duration_hms": "2m10s",
-      "duration_sec": 129.846,
-      "elapsed_per_finished_min_sec": null,
+      "deliverable_pass_rate": 0.0,
+      "duration_hms": "1h55m33s",
+      "duration_sec": 6932.86,
+      "elapsed_per_finished_min_sec": 3203.577,
       "episode": "第1集",
-      "event_count": 1,
+      "event_count": 212,
       "false_positive_recoveries": 0,
-      "false_positive_recovery_rate": null,
-      "final_pass_rate": 1.0,
+      "false_positive_recovery_rate": 0.0,
+      "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 1,
-      "generation_fails": 0,
-      "generation_pass_rate": 1.0,
-      "generation_passes": 1,
-      "image_qc_passive": {},
+      "generation_attempts": 19,
+      "generation_fails": 10,
+      "generation_pass_rate": 0.4737,
+      "generation_passes": 9,
+      "image_qc_passive": {
+        "advisory": 0,
+        "freshness": "fresh",
+        "hard_blocks": 5,
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json"
+      },
       "missing_deliverables": [],
-      "one_pass_count": 1,
-      "one_pass_rate": 1.0,
-      "progress_next_skill": "n2d-script",
-      "progress_next_stage": "阶段2·分镜设计",
-      "qa_blockers": 0,
-      "qa_gate_passes": 0,
-      "qa_gate_runs": 0,
-      "qa_infos": 0,
-      "qa_warnings": 0,
-      "recent_blockers": [],
+      "one_pass_count": 5,
+      "one_pass_rate": 0.2632,
+      "progress_next_skill": "n2d-image",
+      "progress_next_stage": "出图",
+      "qa_blockers": 88,
+      "qa_gate_passes": 1,
+      "qa_gate_runs": 2,
+      "qa_infos": 39,
+      "qa_warnings": 73,
+      "recent_blockers": [
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_01",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_01 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_01/反噬跪地态",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_01/反噬跪地态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_01/囚途染血态",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_01/囚途染血态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_01/囚途残损态",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_01/囚途残损态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_01/战后染血反噬态",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_01/战后染血反噬态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_02",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_02 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_02/倒地重伤态",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_02/倒地重伤态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "CHAR_02/半跪重伤态",
+          "msg": "reference_slot_gate: 核心/出场角色 CHAR_02/半跪重伤态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
+          "stage": "image_preflight"
+        }
+      ],
       "recoup_ratio": {},
-      "redraw_categories": {},
-      "redraw_count": 0,
-      "redraw_rate": 0.0,
-      "redraw_reasons": {},
+      "redraw_categories": {
+        "face_consistency": 2,
+        "prompt_conflict": 2
+      },
+      "redraw_count": 4,
+      "redraw_rate": 0.2105,
+      "redraw_reasons": {
+        "full QC 拒收：核心脸锚脸框面积约10%且短边941px，低于≥30%与≥1024px生产门槛；需从同一正面母版更紧方形裁切。": 1,
+        "第二抽实际目视仍为具体城寨工作台场景，含建筑、器皿、箱匣、卷轴与伪文字；编译器对 style_anchor 错加人物/兵器剧情通用约束并截断关键负面词，继续修复后重抽": 1,
+        "第二版已达1024x1024但 full QC 脸框面积仍仅11%，继续拒收；同源裁切需进一步收紧至脸框面积≥30%。": 1,
+        "风格锚生成器误继承剧情构图，成图出现具体城寨、兵器、人物与群妖，违反控制资产隔离；修复 n2d-image 后重抽": 1
+      },
       "release_net_totals": {},
       "release_plays": 0,
       "release_revenue_totals": {},
@@ -52,10 +132,44 @@
       "release_spend_totals": {},
       "retention_15s": null,
       "retention_3s": null,
-      "runtime_hms": "—",
-      "runtime_sec": null,
-      "runtime_source": "",
+      "runtime_hms": "2m10s",
+      "runtime_sec": 129.846,
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
       "stages": {
+        "image": {
+          "consistency_blockers": 5,
+          "duration_sec": 6803.014,
+          "generation_attempts": 18,
+          "generation_fails": 10,
+          "generation_passes": 8,
+          "missing_deliverables": 0,
+          "qa_blockers": 5,
+          "qa_infos": 4,
+          "qa_warnings": 0,
+          "redraw_count": 4
+        },
+        "image_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 83,
+          "qa_infos": 18,
+          "qa_warnings": 70,
+          "redraw_count": 0
+        },
+        "image_prompt_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 17,
+          "qa_warnings": 3,
+          "redraw_count": 0
+        },
         "script_stage1": {
           "duration_sec": 129.846,
           "generation_attempts": 1,
@@ -68,7 +182,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.0
+      "warnings_per_attempt": 3.8421
     },
     {
       "blockers_per_attempt": null,
@@ -548,8 +662,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-14T11:33:02+00:00",
+  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-15T12:11:42+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1025,10 +1139,10 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "totals": {
-    "blockers_per_attempt": 0.0,
-    "consistency_blockers": 0,
+    "blockers_per_attempt": 4.6316,
+    "consistency_blockers": 5,
     "consistency_ledger_counts": {
       "block": 0,
       "high": 0,
@@ -1037,45 +1151,48 @@
     "consistency_warnings": 0,
     "cost_per_finished_min": {},
     "cost_totals": {},
-    "deliverable_pass_rate": 1.0,
-    "duration_hms": "2m10s",
-    "duration_sec": 129.846,
-    "elapsed_per_finished_min_sec": null,
+    "deliverable_pass_rate": 0.0,
+    "duration_hms": "1h55m33s",
+    "duration_sec": 6932.86,
+    "elapsed_per_finished_min_sec": 3203.577,
     "episode_count": 10,
-    "event_count": 1,
+    "event_count": 212,
     "false_positive_recoveries": 0,
-    "false_positive_recovery_rate": null,
-    "final_pass_rate": 1.0,
+    "false_positive_recovery_rate": 0.0,
+    "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
-      "gates_passed": 0,
-      "gates_passed_per_day": 0.0,
+      "gates_passed": 1,
+      "gates_passed_per_day": 0.974,
       "measurement_start": "2026-07-14T11:33:02+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 1,
-    "generation_fails": 0,
-    "generation_pass_rate": 1.0,
-    "generation_passes": 1,
-    "one_pass_count": 1,
-    "one_pass_rate": 1.0,
-    "qa_blockers": 0,
-    "qa_infos": 0,
-    "qa_warnings": 0,
+    "generation_attempts": 19,
+    "generation_fails": 10,
+    "generation_pass_rate": 0.4737,
+    "generation_passes": 9,
+    "one_pass_count": 5,
+    "one_pass_rate": 0.2632,
+    "qa_blockers": 88,
+    "qa_infos": 39,
+    "qa_warnings": 73,
     "recoup_ratio": {},
-    "redraw_categories": {},
-    "redraw_count": 0,
-    "redraw_rate": 0.0,
+    "redraw_categories": {
+      "face_consistency": 2,
+      "prompt_conflict": 2
+    },
+    "redraw_count": 4,
+    "redraw_rate": 0.2105,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
     "release_rows": 0,
     "release_spend_totals": {},
-    "runtime_hms": "—",
-    "runtime_sec": 0.0,
-    "warnings_per_attempt": 0.0
+    "runtime_hms": "2m10s",
+    "runtime_sec": 129.846,
+    "warnings_per_attempt": 3.8421
   },
   "version": 1
 }

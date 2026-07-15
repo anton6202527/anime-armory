@@ -137,7 +137,7 @@ def audit_beats(
             if peak < CLIMAX_BAND[0]:
                 findings.append({"severity": "warn", "confidence": "heuristic", "code": "climax_too_early",
                                  "message": f"最后一个高潮候选在 {peak:.0%}；按格序估算可能偏早，"
-                                            "需在ネーム阶段结合页面/滚动几何复核。"})
+                                            "需在缩略分镜/name board 阶段结合页面/滚动几何复核。"})
             elif peak > CLIMAX_BAND[1]:
                 findings.append({"severity": "info", "confidence": "heuristic", "code": "climax_at_tail",
                                  "message": f"高潮候选在 {peak:.0%}；确认中段是否有足够支撑。"})

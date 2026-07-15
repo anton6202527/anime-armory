@@ -355,7 +355,9 @@ def _split_master(root: Path, manifest: Dict[str, Any]) -> Path:
     return derived_path
 
 
-def accept(root: Path, path: Path, manifest: Dict[str, Any], *, allow_qc_block: bool = False) -> Dict[str, Any]:
+def accept(root: Path, path: Path, manifest: Dict[str, Any], *, allow_qc_block: bool = False,
+           visual_reviewer: str = "", visual_notes: str = "",
+           visual_current_pixels_confirmed: bool = False) -> Dict[str, Any]:
     derived_path = _split_master(root, manifest)
     accepted = []
     for shot in manifest.get("shots") or []:
@@ -363,6 +365,9 @@ def accept(root: Path, path: Path, manifest: Dict[str, Any], *, allow_qc_block: 
         accepted.append(video_runner.accept_clip(
             root, derived_path, clip,
             no_record=False, no_progress=False, allow_qc_block=allow_qc_block,
+            visual_reviewer=visual_reviewer,
+            visual_notes=f"multishot master actual review; {visual_notes}",
+            visual_current_pixels_confirmed=visual_current_pixels_confirmed,
         ))
     manifest["status"] = "accepted"
     manifest["accepted_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
@@ -390,6 +395,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             p.add_argument("--dry-run", action="store_true")
         if name == "accept":
             p.add_argument("--allow-qc-block", action="store_true")
+            p.add_argument("--visual-reviewer", default="")
+            p.add_argument("--visual-notes", default="")
+            p.add_argument("--confirm-current-pixels", action="store_true")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     if ns.cmd == "prepare":
@@ -405,7 +413,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         elif ns.cmd == "cancel":
             payload = _invoke(root, path, payload, "multishot_cancel", dry_run=ns.dry_run)
         elif ns.cmd == "accept":
-            payload = accept(root, path, payload, allow_qc_block=ns.allow_qc_block)
+            payload = accept(
+                root,
+                path,
+                payload,
+                allow_qc_block=ns.allow_qc_block,
+                visual_reviewer=ns.visual_reviewer,
+                visual_notes=ns.visual_notes,
+                visual_current_pixels_confirmed=ns.confirm_current_pixels,
+            )
     print(json.dumps({"manifest": str(path), "payload": payload}, ensure_ascii=False, indent=2, sort_keys=True))
     return 0
 

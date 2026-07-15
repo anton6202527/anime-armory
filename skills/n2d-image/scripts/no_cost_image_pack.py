@@ -66,6 +66,11 @@ def clip_id(clip: Mapping[str, Any], idx: int) -> str:
     return str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}")
 
 
+def entity_base_id(value: Any) -> str:
+    """Return the persistent entity ID while preserving form text elsewhere."""
+    return re.split(r"[/／]", str(value or "").strip(), maxsplit=1)[0]
+
+
 def structured_entities(clip: Mapping[str, Any]) -> Tuple[List[str], List[str]]:
     """Read entity IDs from schema fields without extending IDs into prose."""
     chars: List[str] = []
@@ -76,29 +81,51 @@ def structured_entities(clip: Mapping[str, Any]) -> Tuple[List[str], List[str]]:
         if not text or any(ch.isspace() for ch in text):
             return
         target = chars if text.startswith(("CHAR_", "BEAST_")) else assets if text.startswith(ASSET_PREFIXES) else None
-        if target is not None and text not in target:
-            target.append(text)
+        if target is chars:
+            # entity_schedule commonly carries `CHAR_01/form` while
+            # required_presence carries `CHAR_01`. They are one subject, not
+            # two regional-composite slots. Keep the first (usually the
+            # form-specific value) and deduplicate on the persistent base ID.
+            base = entity_base_id(text)
+            if base and all(entity_base_id(existing) != base for existing in chars):
+                chars.append(text)
+        elif target is assets and text not in assets:
+            assets.append(text)
 
     schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
     offscreen = {str(value).strip() for value in (schedule.get("offscreen_presence") or []) if str(value).strip()}
     forbidden = {str(value).strip() for value in (schedule.get("forbidden_presence") or []) if str(value).strip()}
     nonvisible = offscreen | forbidden
+    nonvisible_character_bases = {
+        entity_base_id(value)
+        for value in nonvisible
+        if str(value).startswith(("CHAR_", "BEAST_"))
+    }
+
+    def visible(value: Any) -> bool:
+        text = str(value).strip()
+        if text in nonvisible:
+            return False
+        if text.startswith(("CHAR_", "BEAST_")) and entity_base_id(text) in nonvisible_character_bases:
+            return False
+        return True
+
     char_values = schedule.get("characters") if isinstance(schedule.get("characters"), list) else clip.get("character_ids") or []
     object_values = schedule.get("objects") if isinstance(schedule.get("objects"), list) else clip.get("object_ids") or []
     location_values = schedule.get("locations") if isinstance(schedule.get("locations"), list) else [clip.get("location_id")]
     for value in char_values:
-        if str(value).strip() not in nonvisible:
+        if visible(value):
             add(value)
     for value in object_values:
-        if str(value).strip() not in nonvisible:
+        if visible(value):
             add(value)
     for value in location_values:
-        if str(value).strip() not in nonvisible:
+        if visible(value):
             add(value)
     for key in ("characters", "objects", "locations", "required_presence", "offscreen_presence", "forbidden_presence"):
         if key in {"required_presence"}:
             for value in schedule.get(key) or []:
-                if str(value).strip() not in nonvisible:
+                if visible(value):
                     add(value)
     return chars, assets
 
@@ -124,7 +151,7 @@ def priority_for_target(target: Mapping[str, Any]) -> str:
     reason = str(target.get("reason") or "")
     if scope == "multi_subject" or slot in {"regional_construct_plate", "region_masks"}:
         return "P0"
-    if slot in {"face_anchor_refs", "expression_bank", "performance_signature", "action_pose_pack"}:
+    if slot in {"turnaround", "face_anchor_refs", "expression_bank", "performance_signature", "action_pose_pack"}:
         return "P0"
     if "核心" in reason or "必用" in reason:
         return "P0"
@@ -135,14 +162,32 @@ def priority_for_target(target: Mapping[str, Any]) -> str:
 
 def reference_generation_queue(root: Path, ep: str, pack: Mapping[str, Any]) -> List[Dict[str, Any]]:
     tasks: List[Dict[str, Any]] = []
+    by_output_path: Dict[str, Dict[str, Any]] = {}
     for idx, target in enumerate(pack.get("targets") or [], 1):
         if not isinstance(target, Mapping) or target.get("status") == "ready":
+            continue
+        output_path = str(target.get("path") or "").strip()
+        requirement = {
+            "scope": target.get("scope"),
+            "owner": target.get("owner"),
+            "slot": target.get("slot"),
+            "reason": target.get("reason"),
+        }
+        if output_path and output_path in by_output_path:
+            task = by_output_path[output_path]
+            if requirement not in task["satisfies"]:
+                task["satisfies"].append(requirement)
+            if priority_for_target(target) < str(task.get("priority") or "P9"):
+                task["priority"] = priority_for_target(target)
+            task["prompt_recipe"]["satisfies"] = task["satisfies"]
+            task["recipe_hash"] = recipe_hash(task["prompt_recipe"])
             continue
         prompt = {
             "owner": target.get("owner"),
             "slot": target.get("slot"),
             "reason": target.get("reason"),
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。",
+            "satisfies": [requirement],
         }
         task = {
             "task_id": f"REF_{idx:03d}",
@@ -150,12 +195,15 @@ def reference_generation_queue(root: Path, ep: str, pack: Mapping[str, Any]) -> 
             "scope": target.get("scope"),
             "owner": target.get("owner"),
             "slot": target.get("slot"),
-            "output_path": target.get("path"),
+            "output_path": output_path,
             "prompt_recipe": prompt,
             "recipe_hash": recipe_hash(prompt),
             "qc_required": ["reference_ready", "no_logo_text", "identity_or_asset_match"],
+            "satisfies": [requirement],
         }
         tasks.append(task)
+        if output_path:
+            by_output_path[output_path] = task
     return sorted(tasks, key=lambda t: (t["priority"], str(t["task_id"])))
 
 
@@ -266,7 +314,13 @@ def shot_packages(root: Path, ep: str, clips: Sequence[Mapping[str, Any]],
                   regional: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     ref_by_owner: Dict[str, List[Mapping[str, Any]]] = {}
     for task in reference_tasks:
-        ref_by_owner.setdefault(str(task.get("owner") or ""), []).append(task)
+        owners = {str(task.get("owner") or "")}
+        for requirement in task.get("satisfies") or []:
+            if isinstance(requirement, Mapping):
+                owners.add(str(requirement.get("owner") or ""))
+        for owner in owners:
+            if owner:
+                ref_by_owner.setdefault(owner, []).append(task)
     key_by_clip = {str(k.get("clip")): k for k in keyshots}
     reg_by_clip = {str(r.get("clip")): r for r in regional}
     packages: List[Dict[str, Any]] = []

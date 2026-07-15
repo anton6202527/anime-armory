@@ -35,6 +35,7 @@ FRONT_CROPS = {
 }
 FACE_ANCHOR_METHOD = "front_crop"
 FACE_ANCHOR_SUFFIX = "脸部特写"
+FACE_ANCHOR_TARGET_SIZE = (1024, 1024)
 HALF_BODY_CROP = (0.08, 0.02, 0.92, 0.68)
 FACE_ANCHOR_CROP = (0.38, 0.11, 0.57, 0.31)
 SUBJECT_MASK_DISTANCE = 70
@@ -212,14 +213,22 @@ def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
     subject_width = max(1, right - left)
     subject_height = max(1, bottom - top)
     if kind == "face_anchor_refs":
+        content_left, content_right = _content_column_bounds(img)
+        content_width = max(1, content_right - content_left + 1)
+        # Front masters are centered production plates.  Build a square around
+        # the head rather than widening from the whole-body bbox: a held sword
+        # or trailing garment can otherwise make the face only ~10% of frame.
+        side = max(96, round(min(content_width * 0.55, subject_height * 0.14)))
+        center_x = (content_left + content_right) / 2
+        crop_top = top + round(subject_height * 0.045)
         return _clamp_box(
             width,
             height,
             (
-                left - round(subject_width * 0.28),
-                top - round(subject_height * 0.04),
-                right + round(subject_width * 0.28),
-                top + round(subject_height * 0.30),
+                round(center_x - side / 2),
+                crop_top,
+                round(center_x + side / 2),
+                crop_top + side,
             ),
         )
     return _clamp_box(
@@ -470,11 +479,15 @@ def derive_project(
     front_from_turnaround: bool = False,
     tighten_expressions: bool = False,
     face_anchor_only: bool = False,
+    views: set[str] | None = None,
 ) -> dict[str, Any]:
     root = root.resolve()
     registry_path = root / "出图" / "共享" / "identity_registry.json"
     data = _load_json(registry_path)
     summary: dict[str, Any] = {"derived": [], "skipped": []}
+    requested_views = set(views or set())
+    if face_anchor_only:
+        requested_views = {"face_anchor_refs"}
 
     for char in data.get("characters", []):
         if not isinstance(char, dict):
@@ -508,11 +521,16 @@ def derive_project(
             front_path = _resolve(root, front_rel) if front_rel else Path()
             turn_path = _resolve(root, turn_rel) if turn_rel else Path()
 
-            if not face_anchor_only and turn_ready and turn_rel and turn_path.exists():
+            turnaround_requested = not requested_views or bool(
+                requested_views.intersection({
+                    "front", "three_quarter", "side", "rear_three_quarter", "back"
+                })
+            )
+            if turnaround_requested and turn_ready and turn_rel and turn_path.exists():
                 target_size = Image.open(turn_path).size
                 source_sha = _sha256(turn_path)
                 split_plan, column_count = _turnaround_split_plan(form)
-                if front_from_turnaround and front_rel:
+                if front_from_turnaround and front_rel and (not requested_views or "front" in requested_views):
                     dst = _resolve(root, front_rel)
                     if dst.exists() and not force:
                         summary["skipped"].append({"form": form_label, "field": "front", "reason": "exists"})
@@ -549,6 +567,8 @@ def derive_project(
                     "back": "背",
                 }
                 for key, (column_index, method) in split_plan.items():
+                    if requested_views and key not in requested_views:
+                        continue
                     rel = _reference_group_path(form, key, suffixes[key])
                     dst = _resolve(root, rel)
                     if dst.exists() and not force:
@@ -572,7 +592,7 @@ def derive_project(
                     base_views[key] = _ready_item(base_views.get(key), rel, deriv, dst if write else None)
                     _update_reference_slots_for_path(form, rel, dst if write else None)
                     summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
-            elif not face_anchor_only:
+            elif turnaround_requested:
                 summary["skipped"].append({"form": form_label, "reason": "turnaround_not_ready_or_missing"})
 
             if front_ready and front_rel and front_path.exists():
@@ -580,6 +600,8 @@ def derive_project(
                 source_sha = _sha256(front_path)
                 if not face_anchor_only:
                     for key, method in FRONT_CROPS.items():
+                        if requested_views and key not in requested_views:
+                            continue
                         rel = _reference_group_path(form, key, "半身")
                         dst = _resolve(root, rel)
                         if dst.exists() and not force:
@@ -597,32 +619,35 @@ def derive_project(
                         _update_reference_slots_for_path(form, rel, dst if write else None)
                         summary["derived"].append({"form": form_label, "field": key, "path": rel, "method": method})
 
-                rel = _face_anchor_path(form)
-                dst = _resolve(root, rel)
-                if dst.exists() and not force:
-                    summary["skipped"].append({"form": form_label, "field": "face_anchor_refs", "reason": "exists"})
-                else:
-                    if write:
-                        crop_box = _save_front_crop(front_path, dst, "face_anchor_refs", target_size)
+                if not requested_views or "face_anchor_refs" in requested_views:
+                    rel = _face_anchor_path(form)
+                    dst = _resolve(root, rel)
+                    if dst.exists() and not force:
+                        summary["skipped"].append({"form": form_label, "field": "face_anchor_refs", "reason": "exists"})
                     else:
-                        with Image.open(front_path) as opened:
-                            im = opened.convert("RGB")
-                            crop_box = list(_front_crop_box(im, "face_anchor_refs"))
-                    deriv = _derivation(FACE_ANCHOR_METHOD, front_rel, source_sha, crop_box)
-                    label = f"{form_label} 同源脸锚"
-                    rg["face_anchor_refs"] = _update_face_anchor_list(
-                        rg.get("face_anchor_refs"), rel, deriv, label, dst if write else None
-                    )
-                    atlas["face_anchor_refs"] = _update_face_anchor_list(
-                        atlas.get("face_anchor_refs"), rel, deriv, label, dst if write else None
-                    )
-                    _update_reference_slots_for_path(form, rel, dst if write else None)
-                    summary["derived"].append({
-                        "form": form_label,
-                        "field": "face_anchor_refs",
-                        "path": rel,
-                        "method": FACE_ANCHOR_METHOD,
-                    })
+                        if write:
+                            crop_box = _save_front_crop(
+                                front_path, dst, "face_anchor_refs", FACE_ANCHOR_TARGET_SIZE
+                            )
+                        else:
+                            with Image.open(front_path) as opened:
+                                im = opened.convert("RGB")
+                                crop_box = list(_front_crop_box(im, "face_anchor_refs"))
+                        deriv = _derivation(FACE_ANCHOR_METHOD, front_rel, source_sha, crop_box)
+                        label = f"{form_label} 同源脸锚"
+                        rg["face_anchor_refs"] = _update_face_anchor_list(
+                            rg.get("face_anchor_refs"), rel, deriv, label, dst if write else None
+                        )
+                        atlas["face_anchor_refs"] = _update_face_anchor_list(
+                            atlas.get("face_anchor_refs"), rel, deriv, label, dst if write else None
+                        )
+                        _update_reference_slots_for_path(form, rel, dst if write else None)
+                        summary["derived"].append({
+                            "form": form_label,
+                            "field": "face_anchor_refs",
+                            "path": rel,
+                            "method": FACE_ANCHOR_METHOD,
+                        })
             else:
                 summary["skipped"].append({"form": form_label, "reason": "front_not_ready_or_missing"})
 
@@ -687,6 +712,13 @@ def main() -> int:
                     help="只从 front 刷新 face_anchor_refs，不派生/覆盖 45度、侧、背、半身视图")
     ap.add_argument("--asset-key", action="append", default=[],
                     help="只派生指定 form.asset_key；可重复传入，避免误处理不兼容三视图布局")
+    ap.add_argument(
+        "--view",
+        action="append",
+        choices=("front", "three_quarter", "side", "rear_three_quarter", "back", "half_body", "face_anchor_refs"),
+        default=[],
+        help="只派生指定视图；可重复传入。用于逐张生成→QC→目视→下一张",
+    )
     args = ap.parse_args()
 
     asset_keys = {str(v).strip() for v in args.asset_key if str(v).strip()} or None
@@ -698,6 +730,7 @@ def main() -> int:
         front_from_turnaround=args.front_from_turnaround,
         tighten_expressions=args.tighten_expressions,
         face_anchor_only=args.face_anchor_only,
+        views={str(v).strip() for v in args.view if str(v).strip()} or None,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0

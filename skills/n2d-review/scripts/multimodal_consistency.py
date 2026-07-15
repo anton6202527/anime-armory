@@ -30,6 +30,7 @@ KIND = "n2d_multimodal_consistency_report"
 VERSION = 1
 DEFAULT_FACTOR = 1.8
 DEFAULT_FLOOR = 0.10
+REFERENCE_IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp")
 
 
 def _probe_pillow() -> bool:
@@ -244,6 +245,24 @@ def asset_label(asset: str, entries: Dict[str, dict]) -> str:
     return f"{asset} {name}".strip() if name and name != asset else asset
 
 
+def _reference_image_paths(value: object) -> List[str]:
+    """Extract image paths from rich reference groups without indexing metadata."""
+    if isinstance(value, str):
+        clean = value.strip().split("?", 1)[0].split("#", 1)[0].lower()
+        return [value] if clean.endswith(REFERENCE_IMAGE_SUFFIXES) else []
+    if isinstance(value, (list, tuple)):
+        out: List[str] = []
+        for item in value:
+            out.extend(_reference_image_paths(item))
+        return out
+    if isinstance(value, dict):
+        out = []
+        for item in value.values():
+            out.extend(_reference_image_paths(item))
+        return out
+    return []
+
+
 def identity_character_assets(root: str) -> List[str]:
     """Return character asset keys from identity_registry.
 
@@ -281,9 +300,8 @@ def identity_character_assets(root: str) -> List[str]:
                 for key in ("asset_key", "name", "character_id", "id"):
                     add(form.get(key))
                 refs = form.get("reference_group")
-                if isinstance(refs, dict):
-                    for rel in refs.values():
-                        add(rel)
+                for rel in _reference_image_paths(refs):
+                    add(rel)
     return names
 
 

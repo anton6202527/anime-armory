@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "comic_wardrobe_prop_apply",
+  "applied_at": "2026-07-15T06:04:12.468459+00:00",
+  "contract_path": "设定库/wardrobe_prop_contract.json",
+  "contract_sha256": "b5ccbc977cd982461d82ea33b213723c04c0813a19596ae3ca8174e673d5da19",
+  "changed_ids": [
+    "CHAR_HONG_XIN/OUTFIT_COURT_ENVOY",
+    "CHAR_HONG_XIN/OUTFIT_MOUNTAIN_PLAIN",
+    "CHAR_MASTER_XUJING/OUTFIT_HERDBOY",
+    "CHAR_ABBOT_SHANGQING/OUTFIT_BASE",
+    "CHAR_EMPEROR_RENZONG/OUTFIT_BASE",
+    "CHAR_FAN_ZHONGYAN/OUTFIT_BASE",
+    "CHAR_ZHAO_ZHE/OUTFIT_BASE",
+    "CHAR_WEN_YANBO/OUTFIT_BASE",
+    "PROP_IMPERIAL_EDICT",
+    "PROP_SILVER_CENSER",
+    "PROP_FUMO_SEALS",
+    "PROP_STONE_STELE"
+  ]
+}

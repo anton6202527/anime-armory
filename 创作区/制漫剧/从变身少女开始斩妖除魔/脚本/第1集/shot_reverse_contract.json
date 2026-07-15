@@ -3,26 +3,26 @@
   "version": 1,
   "episode": "第1集",
   "status": "pass",
-  "generated_at": "2026-07-14T12:09:49+00:00",
+  "generated_at": "2026-07-15T02:47:21+00:00",
   "generated_by": "skills/n2d-script/scripts/shot_reverse_contract.py",
   "sources": [
     {
       "name": "storyboard",
       "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
       "exists": true,
-      "sha256": "b84b4f3a462494f4894a091b7a288ab26205c03c4f3e294ae18f462384d4528e"
+      "sha256": "1a01dd505bad67974004df95dcebd3c2de0c4f2d3dd8cfaf1ce245d6a82855c2"
     },
     {
       "name": "axis_blocking_map",
       "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/axis_blocking_map.json",
       "exists": true,
-      "sha256": "65e411733657e0f578f415037c130b1f1be95be9885305c7d697fe494aeb4847"
+      "sha256": "8181afab08f3b315714fe76356eab3be835a87be821a64c6106298e25dee2f28"
     },
     {
       "name": "continuity_bible",
       "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/continuity_bible.json",
-      "exists": false,
-      "sha256": ""
+      "exists": true,
+      "sha256": "d18b3b85dd0fb9d310c40bcef8c8cc7643cb8a6f6e981739385961de63def251"
     },
     {
       "name": "cinematic_coverage_grammar",
@@ -34,7 +34,7 @@
   "summary": {
     "patterns": 7,
     "block": 0,
-    "warn": 8,
+    "warn": 11,
     "info": 0
   },
   "patterns": [
@@ -42,61 +42,55 @@
       "clip_id": "EP01_CLIP02",
       "pattern_id": "SR_EP01_CLIP02",
       "source_template": "dialogue_shot_reverse",
-      "axis_id": "AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_半跪重伤态",
+      "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_02",
       "axis_line": "LOC_01/十分钟前 左右轴线；反打不越轴",
       "participants": {
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面下方/后景的戏内对象，不看镜头",
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左中景主角",
+          "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
-          "character_id": "CHAR_02/半跪重伤态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面上方/前景的戏内对象，不看镜头",
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右前景半跪",
+          "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
       },
       "screen_sides": {
-        "spatial_mode": "vertical_depth_9x16",
+        "spatial_mode": "left_right",
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左中景主角"
         },
         "B": {
-          "character_id": "CHAR_02/半跪重伤态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右前景半跪"
         },
-        "left": "vertical-depth mode; left/right not primary",
-        "right": "vertical-depth mode; left/right not primary",
-        "upper_foreground": "CHAR_01/囚途残损态",
-        "lower_background": "CHAR_02/半跪重伤态",
-        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+        "left": "CHAR_01",
+        "right": "CHAR_02",
+        "upper_foreground": "CHAR_04",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
       },
       "eyeline_match": "左看右/右看左",
       "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系",
-      "coverage_order": [
-        "建立镜确认 A/B 空间关系和行动轴线",
-        "A 面 clean single/OTS：焦点 CHAR_01/囚途残损态，CHAR_02/半跪重伤态 的前景肩部或侧背只作遮挡层",
-        "B 面 clean single/OTS：焦点 CHAR_02/半跪重伤态，CHAR_01/囚途残损态 的前景肩部或侧背只作遮挡层",
-        "道具/手部/反应插入作为节奏和越轴缓冲",
-        "回到反应近景或重建空间镜落幅"
-      ],
-      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
       "coverage": {
-        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_半跪重伤态、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01/囚途残损态；画面前景/高位/主动压场，按 storyboard 纵深站位锁定；看向画面下方/后景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_02/半跪重伤态；画面后景/低位/受压或压出，按 storyboard 纵深站位锁定；看向画面上方/前景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "a_ots": "焦点 CHAR_01/囚途残损态；CHAR_02/半跪重伤态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
-        "b_ots": "焦点 CHAR_02/半跪重伤态；CHAR_01/囚途残损态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02、A/B 站位和 9:16 纵深层级。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=画左中景主角；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_02；character_id=CHAR_02；screen_position=画右前景半跪；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_ots": "焦点 CHAR_01；CHAR_02 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "b_ots": "焦点 CHAR_02；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
         "reaction_shot": "反应镜只拍正在承受信息的一方，主焦点明确，不挤多张清晰近脸。"
       },
-      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
-      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
       "allow_cross_axis": false,
-      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
       "continuity_must": [
         "起：姜月初刚在尸场醒来，未持刀。",
         "止：断刀封路，姜月初停下。",
@@ -110,8 +104,8 @@
         "face_readability": "关键表情用 clean single/OTS/MCU/CU；群体只做剪影或建立镜层级。"
       },
       "prompt_requirements": [
-        "必须写 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_半跪重伤态，并说明 CHAR_01/囚途残损态 与 CHAR_02/半跪重伤态 的屏幕位置。",
-        "必须写 CHAR_01/囚途残损态 看向哪里、CHAR_02/半跪重伤态 看向哪里；非 POV 镜禁止看镜头。",
+        "必须写 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02，并说明 CHAR_01 与 CHAR_02 的屏幕位置。",
+        "必须写 CHAR_01 看向哪里、CHAR_02 看向哪里；非 POV 镜禁止看镜头。",
         "若写 OTS/过肩，必须说明谁的肩/侧背在前景、谁是焦点。",
         "必须写镜头距离、焦段/景别、镜头高度、光位和背景深度如何匹配。",
         "必须写本镜情绪功能：压迫、求援、试探、拒绝、承诺、揭示或反应。",
@@ -126,6 +120,12 @@
             "code": "closeup_anchor_pending",
             "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
             "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
+          },
+          {
+            "severity": "warn",
+            "code": "vertical_crowd_risk",
+            "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+            "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
           }
         ]
       }
@@ -134,61 +134,55 @@
       "clip_id": "EP01_CLIP03",
       "pattern_id": "SR_EP01_CLIP03",
       "source_template": "dialogue_shot_reverse",
-      "axis_id": "AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_半跪重伤态",
+      "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_02",
       "axis_line": "LOC_01 左右轴线；反打不越轴",
       "participants": {
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面下方/后景的戏内对象，不看镜头",
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左焦点",
+          "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
-          "character_id": "CHAR_02/半跪重伤态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面上方/前景的戏内对象，不看镜头",
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右焦点",
+          "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
       },
       "screen_sides": {
-        "spatial_mode": "vertical_depth_9x16",
+        "spatial_mode": "left_right",
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左焦点"
         },
         "B": {
-          "character_id": "CHAR_02/半跪重伤态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右焦点"
         },
-        "left": "vertical-depth mode; left/right not primary",
-        "right": "vertical-depth mode; left/right not primary",
-        "upper_foreground": "CHAR_01/囚途残损态",
-        "lower_background": "CHAR_02/半跪重伤态",
-        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+        "left": "CHAR_01",
+        "right": "CHAR_02",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
       },
       "eyeline_match": "左看右/右看左",
       "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系",
-      "coverage_order": [
-        "建立镜确认 A/B 空间关系和行动轴线",
-        "A 面 clean single/OTS：焦点 CHAR_01/囚途残损态，CHAR_02/半跪重伤态 的前景肩部或侧背只作遮挡层",
-        "B 面 clean single/OTS：焦点 CHAR_02/半跪重伤态，CHAR_01/囚途残损态 的前景肩部或侧背只作遮挡层",
-        "道具/手部/反应插入作为节奏和越轴缓冲",
-        "回到反应近景或重建空间镜落幅"
-      ],
-      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
       "coverage": {
-        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_半跪重伤态、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01/囚途残损态；画面前景/高位/主动压场，按 storyboard 纵深站位锁定；看向画面下方/后景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_02/半跪重伤态；画面后景/低位/受压或压出，按 storyboard 纵深站位锁定；看向画面上方/前景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "a_ots": "焦点 CHAR_01/囚途残损态；CHAR_02/半跪重伤态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
-        "b_ots": "焦点 CHAR_02/半跪重伤态；CHAR_01/囚途残损态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02、A/B 站位和 9:16 纵深层级。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=画左焦点；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_02；character_id=CHAR_02；screen_position=画右焦点；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_ots": "焦点 CHAR_01；CHAR_02 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "b_ots": "焦点 CHAR_02；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
         "reaction_shot": "反应镜只拍正在承受信息的一方，主焦点明确，不挤多张清晰近脸。"
       },
-      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
-      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
       "allow_cross_axis": false,
-      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
       "continuity_must": [
         "起：断刀封路，二人相距两步。",
         "止：姜月初缩短到一臂半。",
@@ -202,8 +196,8 @@
         "face_readability": "关键表情用 clean single/OTS/MCU/CU；群体只做剪影或建立镜层级。"
       },
       "prompt_requirements": [
-        "必须写 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_半跪重伤态，并说明 CHAR_01/囚途残损态 与 CHAR_02/半跪重伤态 的屏幕位置。",
-        "必须写 CHAR_01/囚途残损态 看向哪里、CHAR_02/半跪重伤态 看向哪里；非 POV 镜禁止看镜头。",
+        "必须写 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02，并说明 CHAR_01 与 CHAR_02 的屏幕位置。",
+        "必须写 CHAR_01 看向哪里、CHAR_02 看向哪里；非 POV 镜禁止看镜头。",
         "若写 OTS/过肩，必须说明谁的肩/侧背在前景、谁是焦点。",
         "必须写镜头距离、焦段/景别、镜头高度、光位和背景深度如何匹配。",
         "必须写本镜情绪功能：压迫、求援、试探、拒绝、承诺、揭示或反应。",
@@ -226,61 +220,55 @@
       "clip_id": "EP01_CLIP04",
       "pattern_id": "SR_EP01_CLIP04",
       "source_template": "dialogue_shot_reverse",
-      "axis_id": "AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_重伤态",
+      "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_02",
       "axis_line": "LOC_01 左右轴线；反打不越轴",
       "participants": {
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面下方/后景的戏内对象，不看镜头",
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左中景",
+          "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
-          "character_id": "CHAR_02/重伤态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面上方/前景的戏内对象，不看镜头",
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右中景",
+          "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
       },
       "screen_sides": {
-        "spatial_mode": "vertical_depth_9x16",
+        "spatial_mode": "left_right",
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左中景"
         },
         "B": {
-          "character_id": "CHAR_02/重伤态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右中景"
         },
-        "left": "vertical-depth mode; left/right not primary",
-        "right": "vertical-depth mode; left/right not primary",
-        "upper_foreground": "CHAR_01/囚途残损态",
-        "lower_background": "CHAR_02/重伤态",
-        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+        "left": "CHAR_01",
+        "right": "CHAR_02",
+        "upper_foreground": "CHAR_04",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
       },
       "eyeline_match": "共同看逃生方向",
       "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系",
-      "coverage_order": [
-        "建立镜确认 A/B 空间关系和行动轴线",
-        "A 面 clean single/OTS：焦点 CHAR_01/囚途残损态，CHAR_02/重伤态 的前景肩部或侧背只作遮挡层",
-        "B 面 clean single/OTS：焦点 CHAR_02/重伤态，CHAR_01/囚途残损态 的前景肩部或侧背只作遮挡层",
-        "道具/手部/反应插入作为节奏和越轴缓冲",
-        "回到反应近景或重建空间镜落幅"
-      ],
-      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
       "coverage": {
-        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_重伤态、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01/囚途残损态；画面前景/高位/主动压场，按 storyboard 纵深站位锁定；看向画面下方/后景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_02/重伤态；画面后景/低位/受压或压出，按 storyboard 纵深站位锁定；看向画面上方/前景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "a_ots": "焦点 CHAR_01/囚途残损态；CHAR_02/重伤态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
-        "b_ots": "焦点 CHAR_02/重伤态；CHAR_01/囚途残损态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02、A/B 站位和 9:16 纵深层级。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=画左中景；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_02；character_id=CHAR_02；screen_position=画右中景；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_ots": "焦点 CHAR_01；CHAR_02 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "b_ots": "焦点 CHAR_02；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
         "reaction_shot": "反应镜只拍正在承受信息的一方，主焦点明确，不挤多张清晰近脸。"
       },
-      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
-      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
       "allow_cross_axis": false,
-      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
       "continuity_must": [
         "起：尚未身体接触。",
         "止：姜月初架起裴长青，面向画面下方。",
@@ -294,8 +282,8 @@
         "face_readability": "关键表情用 clean single/OTS/MCU/CU；群体只做剪影或建立镜层级。"
       },
       "prompt_requirements": [
-        "必须写 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_重伤态，并说明 CHAR_01/囚途残损态 与 CHAR_02/重伤态 的屏幕位置。",
-        "必须写 CHAR_01/囚途残损态 看向哪里、CHAR_02/重伤态 看向哪里；非 POV 镜禁止看镜头。",
+        "必须写 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02，并说明 CHAR_01 与 CHAR_02 的屏幕位置。",
+        "必须写 CHAR_01 看向哪里、CHAR_02 看向哪里；非 POV 镜禁止看镜头。",
         "若写 OTS/过肩，必须说明谁的肩/侧背在前景、谁是焦点。",
         "必须写镜头距离、焦段/景别、镜头高度、光位和背景深度如何匹配。",
         "必须写本镜情绪功能：压迫、求援、试探、拒绝、承诺、揭示或反应。",
@@ -310,6 +298,12 @@
             "code": "closeup_anchor_pending",
             "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
             "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
+          },
+          {
+            "severity": "warn",
+            "code": "vertical_crowd_risk",
+            "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+            "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
           }
         ]
       }
@@ -318,65 +312,65 @@
       "clip_id": "EP01_CLIP05",
       "pattern_id": "SR_EP01_CLIP05",
       "source_template": "reveal_reaction_chain",
-      "axis_id": "AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_重伤搀扶态",
+      "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_02",
       "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
       "participants": {
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面下方/后景的戏内对象，不看镜头",
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左下人物层",
+          "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
-          "character_id": "CHAR_02/重伤搀扶态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面上方/前景的戏内对象，不看镜头",
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右下反应层",
+          "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
       },
       "screen_sides": {
-        "spatial_mode": "vertical_depth_9x16",
+        "spatial_mode": "left_right",
         "A": {
-          "character_id": "CHAR_01/囚途残损态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左下人物层"
         },
         "B": {
-          "character_id": "CHAR_02/重伤搀扶态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_02",
+          "screen_position": "character_id=CHAR_02；screen_position=画右下反应层"
         },
-        "left": "vertical-depth mode; left/right not primary",
-        "right": "vertical-depth mode; left/right not primary",
-        "upper_foreground": "CHAR_01/囚途残损态",
-        "lower_background": "CHAR_02/重伤搀扶态",
-        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+        "left": "CHAR_01",
+        "right": "CHAR_02",
+        "upper_foreground": "CHAR_04",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
       },
-      "eyeline_match": "CHAR_01/囚途残损态: 看向画面下方/后景的戏内对象，不看镜头；CHAR_02/重伤搀扶态: 看向画面上方/前景的戏内对象，不看镜头。",
+      "eyeline_match": "CHAR_01: 看画右的戏内对象，不看镜头；CHAR_02: 看画左的戏内对象，不看镜头。",
       "shot_pairing": [
-        "A 面：CHAR_01/囚途残损态 clean single / OTS，焦点在 CHAR_01/囚途残损态；CHAR_02/重伤搀扶态 的肩或侧背在前景虚化边缘。",
-        "B 面：CHAR_02/重伤搀扶态 reverse clean single / OTS，焦点在 CHAR_02/重伤搀扶态；CHAR_01/囚途残损态 的肩或侧背在前景虚化边缘。",
+        "A 面：CHAR_01 clean single / OTS，焦点在 CHAR_01；CHAR_02 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_02 reverse clean single / OTS，焦点在 CHAR_02；CHAR_01 的肩或侧背在前景虚化边缘。",
         "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
       ],
       "coverage_order": [
         "建立镜确认 A/B 空间关系和行动轴线",
-        "A 面 clean single/OTS：焦点 CHAR_01/囚途残损态，CHAR_02/重伤搀扶态 的前景肩部或侧背只作遮挡层",
-        "B 面 clean single/OTS：焦点 CHAR_02/重伤搀扶态，CHAR_01/囚途残损态 的前景肩部或侧背只作遮挡层",
+        "A 面 clean single/OTS：焦点 CHAR_01，CHAR_02 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_02，CHAR_01 的前景肩部或侧背只作遮挡层",
         "道具/手部/反应插入作为节奏和越轴缓冲",
         "回到反应近景或重建空间镜落幅"
       ],
       "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
       "coverage": {
-        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_重伤搀扶态、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01/囚途残损态；画面前景/高位/主动压场，按 storyboard 纵深站位锁定；看向画面下方/后景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_02/重伤搀扶态；画面后景/低位/受压或压出，按 storyboard 纵深站位锁定；看向画面上方/前景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "a_ots": "焦点 CHAR_01/囚途残损态；CHAR_02/重伤搀扶态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
-        "b_ots": "焦点 CHAR_02/重伤搀扶态；CHAR_01/囚途残损态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02、A/B 站位和 9:16 纵深层级。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=画左下人物层；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_02；character_id=CHAR_02；screen_position=画右下反应层；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_ots": "焦点 CHAR_01；CHAR_02 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "b_ots": "焦点 CHAR_02；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
         "reaction_shot": "反应镜只拍正在承受信息的一方，主焦点明确，不挤多张清晰近脸。"
       },
       "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
       "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
       "allow_cross_axis": false,
-      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "buffer_or_reestablishing": "双人建立镜、道具插入、反应近景或空镜负责重新定向；不得直接跳反轴近景。",
       "continuity_must": [
         "起：二人刚走数步。",
         "止：虎妖站立逼近，裴长青跌回右下。",
@@ -390,8 +384,8 @@
         "face_readability": "关键表情用 clean single/OTS/MCU/CU；群体只做剪影或建立镜层级。"
       },
       "prompt_requirements": [
-        "必须写 axis_id=AXIS_LOC_01_CHAR_01_囚途残损态_VS_CHAR_02_重伤搀扶态，并说明 CHAR_01/囚途残损态 与 CHAR_02/重伤搀扶态 的屏幕位置。",
-        "必须写 CHAR_01/囚途残损态 看向哪里、CHAR_02/重伤搀扶态 看向哪里；非 POV 镜禁止看镜头。",
+        "必须写 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02，并说明 CHAR_01 与 CHAR_02 的屏幕位置。",
+        "必须写 CHAR_01 看向哪里、CHAR_02 看向哪里；非 POV 镜禁止看镜头。",
         "若写 OTS/过肩，必须说明谁的肩/侧背在前景、谁是焦点。",
         "必须写镜头距离、焦段/景别、镜头高度、光位和背景深度如何匹配。",
         "必须写本镜情绪功能：压迫、求援、试探、拒绝、承诺、揭示或反应。",
@@ -406,6 +400,12 @@
             "code": "closeup_anchor_pending",
             "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
             "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
+          },
+          {
+            "severity": "warn",
+            "code": "vertical_crowd_risk",
+            "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+            "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
           }
         ]
       }
@@ -419,13 +419,13 @@
       "participants": {
         "A": {
           "character_id": "CHAR_01",
-          "screen_position": "CHAR_01/囚途残损态 画左/前景/高位",
+          "screen_position": "character_id=CHAR_01；screen_position=CHAR_01/囚途残损态 画左/前景/高位",
           "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
           "character_id": "CHAR_02",
-          "screen_position": "CHAR_02/濒死至死亡态 画右/后景/低位",
+          "screen_position": "character_id=CHAR_02；screen_position=CHAR_02/濒死至死亡态 画右/后景/低位",
           "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
@@ -434,11 +434,11 @@
         "spatial_mode": "left_right",
         "A": {
           "character_id": "CHAR_01",
-          "screen_position": "CHAR_01/囚途残损态 画左/前景/高位"
+          "screen_position": "character_id=CHAR_01；screen_position=CHAR_01/囚途残损态 画左/前景/高位"
         },
         "B": {
           "character_id": "CHAR_02",
-          "screen_position": "CHAR_02/濒死至死亡态 画右/后景/低位"
+          "screen_position": "character_id=CHAR_02；screen_position=CHAR_02/濒死至死亡态 画右/后景/低位"
         },
         "left": "CHAR_01",
         "right": "CHAR_02",
@@ -462,8 +462,8 @@
       "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
       "coverage": {
         "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01；CHAR_01/囚途残损态 画左/前景/高位；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_02；CHAR_02/濒死至死亡态 画右/后景/低位；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=CHAR_01/囚途残损态 画左/前景/高位；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_02；character_id=CHAR_02；screen_position=CHAR_02/濒死至死亡态 画右/后景/低位；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
         "a_ots": "焦点 CHAR_01；CHAR_02 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "b_ots": "焦点 CHAR_02；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
@@ -516,61 +516,55 @@
       "clip_id": "EP01_CLIP09",
       "pattern_id": "SR_EP01_CLIP09",
       "source_template": "dialogue_shot_reverse",
-      "axis_id": "AXIS_LOC_01_CHAR_01_囚途染血态_VS_CHAR_04_复生态",
+      "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_04",
       "axis_line": "LOC_01 左右轴线；反打不越轴",
       "participants": {
         "A": {
-          "character_id": "CHAR_01/囚途染血态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面下方/后景的戏内对象，不看镜头",
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左下行动主体",
+          "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
-          "character_id": "CHAR_04/复生态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面上方/前景的戏内对象，不看镜头",
+          "character_id": "CHAR_04",
+          "screen_position": "character_id=CHAR_04；screen_position=画右上/上方高位对手",
+          "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
       },
       "screen_sides": {
-        "spatial_mode": "vertical_depth_9x16",
+        "spatial_mode": "left_right",
         "A": {
-          "character_id": "CHAR_01/囚途染血态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左下行动主体"
         },
         "B": {
-          "character_id": "CHAR_04/复生态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_04",
+          "screen_position": "character_id=CHAR_04；screen_position=画右上/上方高位对手"
         },
-        "left": "vertical-depth mode; left/right not primary",
-        "right": "vertical-depth mode; left/right not primary",
-        "upper_foreground": "CHAR_01/囚途染血态",
-        "lower_background": "CHAR_04/复生态",
-        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+        "left": "CHAR_01",
+        "right": "CHAR_04",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
       },
       "eyeline_match": "沿官道对视",
       "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系",
-      "coverage_order": [
-        "建立镜确认 A/B 空间关系和行动轴线",
-        "A 面 clean single/OTS：焦点 CHAR_01/囚途染血态，CHAR_04/复生态 的前景肩部或侧背只作遮挡层",
-        "B 面 clean single/OTS：焦点 CHAR_04/复生态，CHAR_01/囚途染血态 的前景肩部或侧背只作遮挡层",
-        "道具/手部/反应插入作为节奏和越轴缓冲",
-        "回到反应近景或重建空间镜落幅"
-      ],
-      "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
+      "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+      "camera_coverage": "clean singles / OTS / insert / reaction",
       "coverage": {
-        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_囚途染血态_VS_CHAR_04_复生态、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01/囚途染血态；画面前景/高位/主动压场，按 storyboard 纵深站位锁定；看向画面下方/后景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_04/复生态；画面后景/低位/受压或压出，按 storyboard 纵深站位锁定；看向画面上方/前景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "a_ots": "焦点 CHAR_01/囚途染血态；CHAR_04/复生态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
-        "b_ots": "焦点 CHAR_04/复生态；CHAR_01/囚途染血态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_04、A/B 站位和 9:16 纵深层级。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=画左下行动主体；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_04；character_id=CHAR_04；screen_position=画右上/上方高位对手；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_ots": "焦点 CHAR_01；CHAR_04 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "b_ots": "焦点 CHAR_04；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
         "reaction_shot": "反应镜只拍正在承受信息的一方，主焦点明确，不挤多张清晰近脸。"
       },
-      "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
-      "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
+      "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+      "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
       "allow_cross_axis": false,
-      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
       "continuity_must": [
         "起：主角持刀面对虎妖。",
         "止：主角起手，虎妖抬爪。",
@@ -584,8 +578,8 @@
         "face_readability": "关键表情用 clean single/OTS/MCU/CU；群体只做剪影或建立镜层级。"
       },
       "prompt_requirements": [
-        "必须写 axis_id=AXIS_LOC_01_CHAR_01_囚途染血态_VS_CHAR_04_复生态，并说明 CHAR_01/囚途染血态 与 CHAR_04/复生态 的屏幕位置。",
-        "必须写 CHAR_01/囚途染血态 看向哪里、CHAR_04/复生态 看向哪里；非 POV 镜禁止看镜头。",
+        "必须写 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_04，并说明 CHAR_01 与 CHAR_04 的屏幕位置。",
+        "必须写 CHAR_01 看向哪里、CHAR_04 看向哪里；非 POV 镜禁止看镜头。",
         "若写 OTS/过肩，必须说明谁的肩/侧背在前景、谁是焦点。",
         "必须写镜头距离、焦段/景别、镜头高度、光位和背景深度如何匹配。",
         "必须写本镜情绪功能：压迫、求援、试探、拒绝、承诺、揭示或反应。",
@@ -608,65 +602,65 @@
       "clip_id": "EP01_CLIP10",
       "pattern_id": "SR_EP01_CLIP10",
       "source_template": "fight_exchange",
-      "axis_id": "AXIS_LOC_01_CHAR_01_囚途染血态_VS_CHAR_04_复生至斩首态",
+      "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_04",
       "axis_line": "按本场 180° 行动轴线；摄影机守同一侧。",
       "participants": {
         "A": {
-          "character_id": "CHAR_01/囚途染血态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面下方/后景的戏内对象，不看镜头",
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左下发力路径",
+          "eyeline_direction": "看画右的戏内对象，不看镜头",
           "focus_role": "A 面焦点"
         },
         "B": {
-          "character_id": "CHAR_04/复生至斩首态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定",
-          "eyeline_direction": "看向画面上方/前景的戏内对象，不看镜头",
+          "character_id": "CHAR_04",
+          "screen_position": "character_id=CHAR_04；screen_position=画右上/上方扑击路径",
+          "eyeline_direction": "看画左的戏内对象，不看镜头",
           "focus_role": "B 面焦点"
         }
       },
       "screen_sides": {
-        "spatial_mode": "vertical_depth_9x16",
+        "spatial_mode": "left_right",
         "A": {
-          "character_id": "CHAR_01/囚途染血态",
-          "screen_position": "画面前景/高位/主动压场，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_01",
+          "screen_position": "character_id=CHAR_01；screen_position=画左下发力路径"
         },
         "B": {
-          "character_id": "CHAR_04/复生至斩首态",
-          "screen_position": "画面后景/低位/受压或压出，按 storyboard 纵深站位锁定"
+          "character_id": "CHAR_04",
+          "screen_position": "character_id=CHAR_04；screen_position=画右上/上方扑击路径"
         },
-        "left": "vertical-depth mode; left/right not primary",
-        "right": "vertical-depth mode; left/right not primary",
-        "upper_foreground": "CHAR_01/囚途染血态",
-        "lower_background": "CHAR_04/复生至斩首态",
-        "locked_rule": "9:16 纵深对压；A/B 高低位、前后景和视线方向不得在反打中互换。"
+        "left": "CHAR_01",
+        "right": "CHAR_04",
+        "upper_foreground": "",
+        "lower_background": "",
+        "locked_rule": "A/B 屏幕关系、纵深和高低位不得在反打中互换。"
       },
-      "eyeline_match": "CHAR_01/囚途染血态: 看向画面下方/后景的戏内对象，不看镜头；CHAR_04/复生至斩首态: 看向画面上方/前景的戏内对象，不看镜头。",
+      "eyeline_match": "CHAR_01: 看画右的戏内对象，不看镜头；CHAR_04: 看画左的戏内对象，不看镜头。",
       "shot_pairing": [
-        "A 面：CHAR_01/囚途染血态 clean single / OTS，焦点在 CHAR_01/囚途染血态；CHAR_04/复生至斩首态 的肩或侧背在前景虚化边缘。",
-        "B 面：CHAR_04/复生至斩首态 reverse clean single / OTS，焦点在 CHAR_04/复生至斩首态；CHAR_01/囚途染血态 的肩或侧背在前景虚化边缘。",
+        "A 面：CHAR_01 clean single / OTS，焦点在 CHAR_01；CHAR_04 的肩或侧背在前景虚化边缘。",
+        "B 面：CHAR_04 reverse clean single / OTS，焦点在 CHAR_04；CHAR_01 的肩或侧背在前景虚化边缘。",
         "插入镜：手部、道具、火把/门框/地面尘土或眼神反应负责缓冲和节奏。"
       ],
       "coverage_order": [
         "建立镜确认 A/B 空间关系和行动轴线",
-        "A 面 clean single/OTS：焦点 CHAR_01/囚途染血态，CHAR_04/复生至斩首态 的前景肩部或侧背只作遮挡层",
-        "B 面 clean single/OTS：焦点 CHAR_04/复生至斩首态，CHAR_01/囚途染血态 的前景肩部或侧背只作遮挡层",
+        "A 面 clean single/OTS：焦点 CHAR_01，CHAR_04 的前景肩部或侧背只作遮挡层",
+        "B 面 clean single/OTS：焦点 CHAR_04，CHAR_01 的前景肩部或侧背只作遮挡层",
         "道具/手部/反应插入作为节奏和越轴缓冲",
         "回到反应近景或重建空间镜落幅"
       ],
       "camera_coverage": "establishing master + paired clean singles + true OTS with foreground shoulder + insert/cutaway + reaction shot",
       "coverage": {
-        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_囚途染血态_VS_CHAR_04_复生至斩首态、A/B 站位和 9:16 纵深层级。",
-        "a_clean_single": "焦点 CHAR_01/囚途染血态；画面前景/高位/主动压场，按 storyboard 纵深站位锁定；看向画面下方/后景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "b_clean_single": "焦点 CHAR_04/复生至斩首态；画面后景/低位/受压或压出，按 storyboard 纵深站位锁定；看向画面上方/前景的戏内对象，不看镜头；非 POV 不看镜头。",
-        "a_ots": "焦点 CHAR_01/囚途染血态；CHAR_04/复生至斩首态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
-        "b_ots": "焦点 CHAR_04/复生至斩首态；CHAR_01/囚途染血态 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "establishing_master": "先确认 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_04、A/B 站位和 9:16 纵深层级。",
+        "a_clean_single": "焦点 CHAR_01；character_id=CHAR_01；screen_position=画左下发力路径；看画右的戏内对象，不看镜头；非 POV 不看镜头。",
+        "b_clean_single": "焦点 CHAR_04；character_id=CHAR_04；screen_position=画右上/上方扑击路径；看画左的戏内对象，不看镜头；非 POV 不看镜头。",
+        "a_ots": "焦点 CHAR_01；CHAR_04 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
+        "b_ots": "焦点 CHAR_04；CHAR_01 的前景肩部/侧背/背头必须在画面边缘虚化遮挡，不能变成第三张清晰脸。",
         "insert_cutaway": "手部/道具/火把/门框/地面尘土/眼神反应，用于节奏、遮挡和越轴缓冲。",
         "reaction_shot": "反应镜只拍正在承受信息的一方，主焦点明确，不挤多张清晰近脸。"
       },
       "lens_height_distance_match": "A/B 反打保持相近焦段、镜头距离、镜头高度、光位和背景深度；权力高低只用轻微机位差表达。",
       "crossing_axis_policy": "默认禁止越轴；如剧情必须越轴，先用建立镜/中线移动/道具插入/空镜缓冲重新定向。",
       "allow_cross_axis": false,
-      "buffer_or_reestablishing": "建立镜/前景肩部/道具插入/反应近景负责重新定向；竖屏优先用纵深和上下高低位，不直接跳反轴。",
+      "buffer_or_reestablishing": "双人建立镜、道具插入、反应近景或空镜负责重新定向；不得直接跳反轴近景。",
       "continuity_must": [
         "起：双方已起手。",
         "止：虎妖斩首；刀脱手；主角跪地。",
@@ -680,8 +674,8 @@
         "face_readability": "关键表情用 clean single/OTS/MCU/CU；群体只做剪影或建立镜层级。"
       },
       "prompt_requirements": [
-        "必须写 axis_id=AXIS_LOC_01_CHAR_01_囚途染血态_VS_CHAR_04_复生至斩首态，并说明 CHAR_01/囚途染血态 与 CHAR_04/复生至斩首态 的屏幕位置。",
-        "必须写 CHAR_01/囚途染血态 看向哪里、CHAR_04/复生至斩首态 看向哪里；非 POV 镜禁止看镜头。",
+        "必须写 axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_04，并说明 CHAR_01 与 CHAR_04 的屏幕位置。",
+        "必须写 CHAR_01 看向哪里、CHAR_04 看向哪里；非 POV 镜禁止看镜头。",
         "若写 OTS/过肩，必须说明谁的肩/侧背在前景、谁是焦点。",
         "必须写镜头距离、焦段/景别、镜头高度、光位和背景深度如何匹配。",
         "必须写本镜情绪功能：压迫、求援、试探、拒绝、承诺、揭示或反应。",
@@ -710,6 +704,13 @@
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
     },
     {
+      "clip_id": "EP01_CLIP02",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
+    },
+    {
       "clip_id": "EP01_CLIP03",
       "severity": "warn",
       "code": "closeup_anchor_pending",
@@ -724,11 +725,25 @@
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
     },
     {
+      "clip_id": "EP01_CLIP04",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
+    },
+    {
       "clip_id": "EP01_CLIP05",
       "severity": "warn",
       "code": "closeup_anchor_pending",
       "message": "近景/反打镜未看到已落档的近景锚定图或脸锚引用。",
       "suggestion": "出图前必须从 identity_registry.face_anchor_refs / 表情库 / 同源首帧补锚。"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
     },
     {
       "clip_id": "EP01_CLIP08",
@@ -800,7 +815,8 @@
         "clean_single",
         "reaction_shot",
         "insert_cutaway",
-        "eyeline_cut"
+        "eyeline_cut",
+        "match_on_action"
       ]
     },
     {

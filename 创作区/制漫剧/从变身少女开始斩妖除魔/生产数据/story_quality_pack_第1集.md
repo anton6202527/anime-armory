@@ -33,14 +33,15 @@
 | Q22 | 系统 | paid_or_progressed | 本集兑现/推进 |
 | Q23 | 系统 | paid_or_progressed | 本集兑现/推进 |
 | Q24 | 为什么 | paid_or_progressed | 本集兑现/推进 |
-| Q25 | 为何 | paid_or_progressed | 本集兑现/推进 |
+| Q25 | 为什么 | paid_or_progressed | 本集兑现/推进 |
 | Q26 | 为何 | paid_or_progressed | 本集兑现/推进 |
 | Q27 | 为何 | paid_or_progressed | 本集兑现/推进 |
 | Q28 | 为何 | paid_or_progressed | 本集兑现/推进 |
-| Q29 | 系统 | paid_or_progressed | 本集兑现/推进 |
+| Q29 | 为何 | paid_or_progressed | 本集兑现/推进 |
 | Q30 | 系统 | paid_or_progressed | 本集兑现/推进 |
 | Q31 | 系统 | paid_or_progressed | 本集兑现/推进 |
 | Q32 | 系统 | paid_or_progressed | 本集兑现/推进 |
+| Q33 | 系统 | paid_or_progressed | 本集兑现/推进 |
 
 ## 集间承接
 

@@ -80,6 +80,16 @@ def _tier_prompt_pack_missing(section: str, tier: str) -> List[str]:
         missing.append("side/rear_three_quarter/back/turnaround")
     return missing
 
+
+def _has_character_reference_group_description(section: str) -> bool:
+    """Accept both legacy and generated machine-readable reference-pack headings."""
+    return _has_any(section, (
+        "角色定妆组",
+        "本档交付",
+        "定妆参考板规格",
+        "character_reference_group",
+    ))
+
 def check_costume_registry_reconcile(root: str) -> None:
     """定妆库 ↔ identity_registry 双向对账。
 
@@ -387,7 +397,7 @@ def check_common_image_prompts(root: str) -> None:
                         add(BLOCK, "角色定妆基础包", loc,
                             "角色定妆 section 缺机器可读 library_tier；审查器无法判断应验核完整主角包还是短线最小包。")
                         library_tier = CHARACTER_LIBRARY_TIER_CORE
-                    if "角色定妆组" not in sec:
+                    if not _has_character_reference_group_description(sec):
                         add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；人物角色不能只靠单张正脸")
                     tier_missing = _tier_prompt_pack_missing(sec, library_tier)
                     if tier_missing:

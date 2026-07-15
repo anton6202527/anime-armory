@@ -9,7 +9,7 @@
           "CHAR_04/复生态焦外"
         ],
         "forbidden_presence": [
-          "CHAR_01/虎山神妖化态"
+          "主角妖化附体形态"
         ],
         "locations": [
           "LOC_01"
@@ -79,14 +79,18 @@
       "screen_direction": "守本场左右轴线；视线接力：左看右/右看左；转场方式：视线切裴长青。。",
       "shot_reverse_continuity": {
         "axis_line": "LOC_01/十分钟前 左右轴线；反打不越轴",
-        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
-        "camera_coverage": "clean singles / OTS / insert / reaction",
-        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
-        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "buffer_or_reestablishing": "用尸场全景、断刀特写或翻覆囚车空镜作换侧缓冲",
+        "camera_coverage": "35mm双人空间建立 + 85mm单人反应 + 断刀插入镜；近景不让三张清晰脸同框",
+        "coverage_order": "尸场双人建立 → 姜月初醒转反应 → 裴长青/断刀反打 → 断刀封路落幅",
+        "crossing_axis_policy": "官道纵深为轴，默认不越轴；换侧前以尸场全景或断刀插入镜重建空间",
         "eyeline_match": "左看右/右看左",
-        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
-        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
-        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+        "lens_height_distance_match": "A/B反打保持同一水平视平线与相近距离；裴长青半跪只通过主体高度体现",
+        "screen_sides": {
+          "background": "CHAR_04/伪死态",
+          "screen_left": "CHAR_01/囚途残损态",
+          "screen_right": "CHAR_02/半跪重伤态"
+        },
+        "shot_pairing": "姜月初反打 ↔ 裴长青反打；虎山神只作上后景空间威胁"
       },
       "state": {
         "end_state": "断刀封路，姜月初停下。",
@@ -139,14 +143,17 @@
       "screen_direction": "守本场左右轴线；视线接力：左看右/右看左；转场方式：裴长青声尾延续。。",
       "shot_reverse_continuity": {
         "axis_line": "LOC_01 左右轴线；反打不越轴",
-        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
-        "camera_coverage": "clean singles / OTS / insert / reaction",
-        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
-        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "buffer_or_reestablishing": "断刀、路引或搀扶手部特写用于换侧前重建",
+        "camera_coverage": "85mm OTS/CU 交替 + 手部/断刀插入；反打只保一张清晰主脸",
+        "coverage_order": "姜月初警惕反应 → 裴长青报身份与条件 → 断刀/手部插入 → 主角盘算落幅",
+        "crossing_axis_policy": "二人连线为轴，默认不越轴；若靠近则用手部插入镜缓冲",
         "eyeline_match": "左看右/右看左",
-        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
-        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
-        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+        "lens_height_distance_match": "A/B保持85mm与相近镜距；姜月初轻俯、裴长青低位的权力差有意保留",
+        "screen_sides": {
+          "screen_left": "CHAR_01/囚途残损态",
+          "screen_right": "CHAR_02/半跪重伤态"
+        },
+        "shot_pairing": "姜月初质疑反打 ↔ 裴长青条件反打"
       },
       "state": {
         "end_state": "姜月初缩短到一臂半。",
@@ -193,14 +200,18 @@
       "screen_direction": "守本场左右轴线；视线接力：共同看逃生方向；转场方式：虎妖咳声先入。。",
       "shot_reverse_continuity": {
         "axis_line": "LOC_01 左右轴线；反打不越轴",
-        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
-        "camera_coverage": "clean singles / OTS / insert / reaction",
-        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
-        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "buffer_or_reestablishing": "搀扶手部特写或双人离开全景用于动作接力与换侧缓冲",
+        "camera_coverage": "50mm双人MS为主 + 单人反应 + 搀扶手部插入；虎山神保持焦外伪死",
+        "coverage_order": "交易条件落定 → 姜月初答应 → 架起裴长青 → 双人向下方离开",
+        "crossing_axis_policy": "二人行动方向为新轴，沿画面下方运动不越轴",
         "eyeline_match": "共同看逃生方向",
-        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
-        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
-        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+        "lens_height_distance_match": "反打保持50mm与相近镜距；架起动作后回双人MS建立新身高关系",
+        "screen_sides": {
+          "background": "CHAR_04/伪死态",
+          "screen_left": "CHAR_01/囚途残损态",
+          "screen_right": "CHAR_02/重伤态"
+        },
+        "shot_pairing": "姜月初答应反打 ↔ 裴长青释然反打"
       },
       "state": {
         "end_state": "姜月初架起裴长青，面向画面下方。",
@@ -323,7 +334,7 @@
           "CHAR_04/复生态"
         ],
         "forbidden_presence": [
-          "CHAR_01/虎山神妖化态"
+          "主角妖化附体形态"
         ],
         "locations": [
           "LOC_01"
@@ -423,7 +434,7 @@
           "CHAR_04/复生态"
         ],
         "forbidden_presence": [
-          "CHAR_01/虎山神妖化态"
+          "主角妖化附体形态"
         ],
         "locations": [
           "LOC_01"
@@ -451,14 +462,17 @@
       "screen_direction": "守本场左右轴线；视线接力：沿官道对视；转场方式：动作相位匹配。。",
       "shot_reverse_continuity": {
         "axis_line": "LOC_01 左右轴线；反打不越轴",
-        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
-        "camera_coverage": "clean singles / OTS / insert / reaction",
-        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
-        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "buffer_or_reestablishing": "道行灌注手臂特写或横刀起手插入镜作为正反打到动作镜的缓冲",
+        "camera_coverage": "50mm关系镜 + 85mm单人反打 + 手臂/横刀插入；动作镜视线锁对手不看镜头",
+        "coverage_order": "虎妖俯视建立压迫 → 姜月初冷冽回应 → 道行灌注插入 → 双方起手落幅",
+        "crossing_axis_policy": "官道中线为战斗轴，开打前不得越轴；起手后由 fight_exchange 接管运动方向",
         "eyeline_match": "沿官道对视",
-        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
-        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
-        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+        "lens_height_distance_match": "A/B反打保持同一轴线和相近距离；虎妖高位、主角低位是有意权力差",
+        "screen_sides": {
+          "screen_left": "CHAR_01/囚途染血态",
+          "screen_right": "CHAR_04/复生态"
+        },
+        "shot_pairing": "虎山神俯视反打 ↔ 姜月初冷冽回应反打"
       },
       "state": {
         "end_state": "主角起手，虎妖抬爪。",
@@ -583,7 +597,7 @@
           "CHAR_01/反噬跪地态"
         ],
         "forbidden_presence": [
-          "CHAR_01/虎山神妖化态"
+          "主角妖化附体形态"
         ],
         "locations": [
           "LOC_01"
@@ -1059,7 +1073,7 @@
         "transition": "视线切尸身与横刀。"
       }
     ],
-    "status": "draft",
+    "status": "confirmed",
     "summary": {
       "block": 0,
       "clips": 13,
@@ -1081,7 +1095,7 @@
     }
   },
   "episode": "第1集",
-  "generated_at": "2026-07-14T12:16:29+00:00",
+  "generated_at": "2026-07-15T02:53:37+00:00",
   "inputs": {
     "continuity_breakdown": "脚本/第1集/continuity_breakdown.json",
     "continuity_chain": "脚本/第1集/continuity_chain.json",
@@ -1189,6 +1203,6 @@
       "SRC_FORESHADOW_004"
     ]
   },
-  "status": "draft",
+  "status": "confirmed",
   "version": 1
 }

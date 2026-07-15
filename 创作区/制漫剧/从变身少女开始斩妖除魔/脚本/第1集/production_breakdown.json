@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-14T12:16:29+00:00",
+  "generated_at": "2026-07-15T02:53:37+00:00",
   "inputs": {
     "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
     "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
@@ -283,7 +283,7 @@
       "clip_id": "EP01_CLIP06",
       "department_notes": {
         "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/倒地重伤态, CHAR_04/复生态；关键物件 PROP_横刀。",
-        "camera": "景别/机位：CU→MS；视线/轴线：上看虎妖再右下看裴；模板：加速·危机逼近。",
+        "camera": "景别/机位：CU→MS；视线/轴线：上看虎妖再右下看裴；模板：ensemble_blocking。",
         "post": "转场 外压硬切内在规则。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
       "image_video_requirements": {
@@ -418,13 +418,19 @@
             "use": "edit_cut"
           },
           {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+            "at_sec": 3.6,
+            "reason": "锁递刀镜与误杀反应镜的硬切边界",
+            "use": "edit_cut"
+          },
+          {
             "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
             "at_sec": 5.6,
             "reason": "锁落刀后的错愕与战损增量",
             "use": "keyframe"
           }
         ],
-        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "end_anchor_required": true,
         "endframe": "",
         "firstframe": "",
@@ -537,6 +543,12 @@
             "use": "edit_cut"
           },
           {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor_cut_0250.png",
+            "at_sec": 2.5,
+            "reason": "锁冲锋镜与斩首撞点镜的硬切边界",
+            "use": "edit_cut"
+          },
+          {
             "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor02.png",
             "at_sec": 4.1,
             "reason": "锁命中撞点",
@@ -549,7 +561,7 @@
             "use": "edit_cut"
           }
         ],
-        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "backend_risk": "多锚帧 4 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "end_anchor_required": true,
         "endframe": "",
         "firstframe": "",
@@ -769,7 +781,7 @@
       "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     }
   ],
-  "status": "draft",
+  "status": "confirmed",
   "summary": {
     "characters": [
       "CHAR_01/反噬跪地态",

@@ -5,7 +5,7 @@
       "evidence": [
         {
           "path": "脚本/第1集/axis_blocking_map.json",
-          "sha256": "65e411733657e0f578f415037c130b1f1be95be9885305c7d697fe494aeb4847"
+          "sha256": "787cdd3e63b18cc1a66f3273f0dc1f2cac7d14064532c5b88e3b6d9779ef9a2e"
         },
         {
           "path": "脚本/第1集/director_beat_sheet.json",
@@ -28,11 +28,11 @@
           "sha256": "82af43d81d7f79447cf12906b253a09871771cb0b5c4014d6bdb58c9d9acb139"
         }
       ],
-      "note": "导演/主创批准第1集P-2导演排戏包及当前分镜输入。",
-      "reviewed_at": "2026-07-14T12:23:55+00:00",
+      "note": "沿用用户已批准的P-2导演排戏授权并结合本次允许分镜设计完成；仅重绑定当前确定性生产合同哈希，不改变13镜、129.846秒、剧情边界或镜头创意。",
+      "reviewed_at": "2026-07-15T02:59:36+00:00",
       "reviewer_id": "user:project-owner-director",
       "reviewer_role": "director",
-      "signed_evidence_fingerprint_sha": "25d0a9b38110d0086f9b165d68ca3d8dbc8876f5ab395d96ebde1951bd777caf",
+      "signed_evidence_fingerprint_sha": "733a807f22a3eca90f2a0657ea4ea8b32e1707cbcf5f02370241ffcac65659b2",
       "signed_input_fingerprint_sha": "fb5594f31cfc558c8c78561c005f6da72d7eb17d430096ed5f65e64950fc9617",
       "unresolved_risks": [],
       "waiver_reason": ""
@@ -42,7 +42,7 @@
       "evidence": [
         {
           "path": "脚本/第1集/axis_blocking_map.json",
-          "sha256": "65e411733657e0f578f415037c130b1f1be95be9885305c7d697fe494aeb4847"
+          "sha256": "787cdd3e63b18cc1a66f3273f0dc1f2cac7d14064532c5b88e3b6d9779ef9a2e"
         },
         {
           "path": "脚本/第1集/director_beat_sheet.json",
@@ -65,11 +65,11 @@
           "sha256": "82af43d81d7f79447cf12906b253a09871771cb0b5c4014d6bdb58c9d9acb139"
         }
       ],
-      "note": "制片人批准第1集P-2生产组执行合同及当前分镜输入。",
-      "reviewed_at": "2026-07-14T12:23:55+00:00",
+      "note": "沿用用户已批准的P-2生产签收；仅重绑定当前确定性生产合同哈希，不改变生产范围。",
+      "reviewed_at": "2026-07-15T02:59:37+00:00",
       "reviewer_id": "user:project-owner-producer",
       "reviewer_role": "producer",
-      "signed_evidence_fingerprint_sha": "25d0a9b38110d0086f9b165d68ca3d8dbc8876f5ab395d96ebde1951bd777caf",
+      "signed_evidence_fingerprint_sha": "733a807f22a3eca90f2a0657ea4ea8b32e1707cbcf5f02370241ffcac65659b2",
       "signed_input_fingerprint_sha": "fb5594f31cfc558c8c78561c005f6da72d7eb17d430096ed5f65e64950fc9617",
       "unresolved_risks": [],
       "waiver_reason": ""
@@ -77,18 +77,18 @@
   ],
   "artifact_scope": "p2_director_blocking",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-14T12:23:55+00:00",
+  "created_at": "2026-07-15T02:59:36+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
-      "脚本/第1集/axis_blocking_map.json": "65e411733657e0f578f415037c130b1f1be95be9885305c7d697fe494aeb4847",
+      "脚本/第1集/axis_blocking_map.json": "787cdd3e63b18cc1a66f3273f0dc1f2cac7d14064532c5b88e3b6d9779ef9a2e",
       "脚本/第1集/director_beat_sheet.json": "5b739995238e69b668d6bd53916404b1c2a2256339516542b5cf381d31ee1a26",
       "脚本/第1集/edit_rhythm_map.json": "67137c71bc6aa92c284cd2dc186396ba23b71e4338affd9288c191d504784468",
       "脚本/第1集/shot_progression_plan.json": "13844fc027830c9933810a48166ef6ecd52713281e60e60a015eb1689e2f69e3",
       "脚本/第1集/transition_map.json": "ef8f198714682e7e2fc8408fd29514818064f03bdb5a2a4d09d0eecc520604b3",
       "脚本/第1集/vertical_composition_plan.json": "82af43d81d7f79447cf12906b253a09871771cb0b5c4014d6bdb58c9d9acb139"
     },
-    "sha": "25d0a9b38110d0086f9b165d68ca3d8dbc8876f5ab395d96ebde1951bd777caf"
+    "sha": "733a807f22a3eca90f2a0657ea4ea8b32e1707cbcf5f02370241ffcac65659b2"
   },
   "input_fingerprint": {
     "files": {
@@ -116,6 +116,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-14T12:23:55+00:00",
+  "updated_at": "2026-07-15T02:59:37+00:00",
   "version": 1
 }

@@ -48,6 +48,24 @@ def test_precision_lines_full_path_clean():
     assert "正式配音" in lines
 
 
+def test_precision_lines_names_ready_styleid_as_active_encoder():
+    probes = {
+        "libs": {"insightface": True, "onnxruntime": True, "PIL": True},
+        "cli": {"ffmpeg": True, "ffprobe": True},
+        "voice": {"say": True, "heavy_env": True},
+        "face_encoder": {
+            "encoder": "styleid",
+            "status": "ready",
+            "style": "国漫写实",
+            "model_status": "ready",
+            "model_path": "kwanY/styleid",
+        },
+    }
+    lines = "\n".join(doctor.precision_lines(probes))
+    assert "StyleID 风格化同人嵌入可用" in lines
+    assert "arcface 同人余弦可用" not in lines.lower()
+
+
 def test_precision_lines_reports_deferred_video_backend():
     probes = {
         "libs": {"insightface": True, "onnxruntime": True, "PIL": True},
@@ -101,6 +119,19 @@ def test_probe_face_encoder_styleid_ready(tmp_path, monkeypatch):
     result = doctor.probe_face_encoder(str(tmp_path))
     assert result and result["status"] == "ready"
     assert result["stylized"] is True
+
+
+def test_probe_face_encoder_reads_styleid_ref_from_project_settings(tmp_path, monkeypatch):
+    monkeypatch.delenv("N2D_STYLEID_MODEL", raising=False)
+    (tmp_path / "_设置.md").write_text(
+        "- 基础视觉风格: 国漫写实\n"
+        "- 脸一致性机检后端: styleid\n"
+        "- N2D_STYLEID_MODEL: kwanY/styleid\n",
+        encoding="utf-8",
+    )
+    result = doctor.probe_face_encoder(str(tmp_path))
+    assert result and result["status"] == "ready"
+    assert result["model_path"] == "kwanY/styleid"
 
 
 def test_probe_video_backend_defers_auto_route(tmp_path):

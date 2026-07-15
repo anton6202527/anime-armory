@@ -1517,9 +1517,23 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
                 # Ensure multiple subjects are defined properly or split_composite is flagged
                 chars = clip.get("character_ids", [])
                 if isinstance(chars, list) and len(chars) > 1:
-                    exec_strategy = clip.get("execution_strategy", "")
+                    # The production schema already carries the same decision in
+                    # `multi_subject_strategy`; some template authors keep the
+                    # detailed recipe inside `template_contract`. Treat these as
+                    # co-equal truth sources instead of emitting a false BLOCK
+                    # merely because the spelling lives in another canonical
+                    # field.
+                    exec_strategy = json.dumps(
+                        [
+                            clip.get("execution_strategy", ""),
+                            clip.get("multi_subject_strategy", ""),
+                            template_contract.get("execution_strategy", ""),
+                        ],
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    )
                     if "regional_construct" not in exec_strategy and "split_composite" not in exec_strategy and "native_subject_slots" not in exec_strategy:
-                        add(BLOCK, "分区合成", loc, f"该 {clip.get('template')} 模板具有 regional_construct_required: true 约束，检测到同框多角色，请在 execution_strategy 中明确保底合成策略以防串脸。")
+                        add(BLOCK, "分区合成", loc, f"该 {clip.get('template')} 模板具有 regional_construct_required: true 约束，检测到同框多角色，请在 execution_strategy / multi_subject_strategy / template_contract.execution_strategy 中明确保底合成策略以防串脸。")
 
             if template_contract.get("impact_frame_sync"):
                 # Only check if midframe is properly prepared as an impact frame anchor
@@ -1689,10 +1703,13 @@ def check_storyboard_style_contract(root: str, ep: str) -> None:
                 add(BLOCK, "基础视觉风格契约", p,
                     f"style_contract.style_anchor 必须是图片路径，当前为 `{anchor}`。", return_to_stage="script_stage2")
         chosen = str(get_setting(root, "基础视觉风格", "")).strip()
-        name = str(sc.get("风格名", "")).strip()
-        if chosen and name and chosen not in name and name not in chosen:
+        # `风格名` may be a project/episode art-direction label (for example
+        # "黑赤镇魔·水墨妖谱"), while the actual settings choice is the base
+        # rendering family. Prefer an explicit base-style field when present.
+        contract_base = str(sc.get("基础视觉风格") or sc.get("风格名", "")).strip()
+        if chosen and contract_base and chosen not in contract_base and contract_base not in chosen:
             add(WARN, "风格一致性", p,
-                f"style_contract.风格名「{name}」与 _设置.md 基础视觉风格「{chosen}」不一致——风格真值应同源；核对是否选错风格或契约写偏")
+                f"style_contract 基础视觉风格「{contract_base}」与 _设置.md 基础视觉风格「{chosen}」不一致——风格真值应同源；核对是否选错风格或契约写偏")
 
 def check_storyboard_possession_gate(root: str, ep: str) -> None:
     """Storyboard 前置 POS：检测到关键道具持有/交接时，要求账本前移到分镜层。"""

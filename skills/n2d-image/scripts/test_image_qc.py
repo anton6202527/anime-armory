@@ -63,6 +63,42 @@ def test_load_registry_ids(tmp_path: Path) -> None:
     assert image_qc.load_registry_ids(tmp_path / "nope") is None
 
 
+def test_load_registry_forms_does_not_turn_reference_metadata_into_aliases(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_04",
+            "name": "姜月初",
+            "forms": [{
+                "form": "常态",
+                "asset_key": "姜月初_常态",
+                "reference_group": {
+                    "expression": {
+                        "path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
+                        "status": "planned",
+                        "emotion": "克制",
+                        "layout": "two_by_three_expression_sheet_v1",
+                        "derivation": {
+                            "method": "controlled_multiref_generation",
+                            "source_path": "出图/共享/图片/定妆_CHAR_04__常态_正面.png",
+                        },
+                    },
+                },
+            }],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    forms = image_qc.load_registry_forms(tmp_path)
+
+    assert forms and len(forms) == 1
+    aliases = forms[0]["strong_aliases"]
+    assert "定妆_CHAR_04__常态_表情_克制" in aliases
+    assert "克制" not in aliases
+    assert "planned" not in aliases
+    assert "controlled_multiref_generation" not in aliases
+
+
 def test_asset_must_not_have_must_be_propagated_to_prompt(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -959,6 +995,64 @@ def test_lint_blocks_action_shot_looking_at_camera() -> None:
     assert "combat_camera_eye_contact" in image_qc.HARD_LINT_CODES
 
 
+def test_lint_does_not_treat_compiled_inline_camera_constraint_as_positive_gaze() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 07 破虚斜劈")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；attack_path=爆冲斜劈。"
+        "\n### 负向 prompt\n不要直视镜头/looking at viewer。"
+        "\n### 后端编译提交 image prompt\n```text\n"
+        "动作瞬间：持刀斜劈；角色视线锁对手；非 POV 镜不看镜头；"
+        "限制：直视镜头/looking at viewer；正面肖像摆拍。\n```"
+    )
+
+    codes = {f["code"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert "combat_camera_eye_contact" not in codes
+    assert "combat_frontal_portrait_bias" not in codes
+
+
+def test_lint_strips_inline_constraint_after_aspect_ratio_space() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 08 斜劈")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；attack_path=持刀斜劈。"
+        "\n### 后端编译提交 image prompt\n```text\n"
+        "动作瞬间：持刀斜劈；角色视线锁对手；非 POV 镜不看镜头；"
+        "画幅：9:16 限制：换脸；直视镜头/looking at viewer；正面肖像摆拍。\n```"
+    )
+
+    codes = {f["code"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert "combat_camera_eye_contact" not in codes
+    assert "combat_frontal_portrait_bias" not in codes
+
+
+def test_lint_validates_identity_bindings_not_episode_state_prose() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 03", char_id="CHAR_01/常态")
+    blk["body"] += (
+        "\n**专项镜头模板**：blocking=CHAR_01/囚途残损态 向画右后撤。"
+        "\n**本镜状态锁**：CHAR_01/囚途残损态 保持面颊无血。"
+    )
+
+    findings = image_qc.lint_shot_block(blk, valid)
+    assert not any(f["code"] == "unknown_char_id" for f in findings)
+
+
+def test_lint_validates_compiled_subject_layout_not_later_camera_state() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态", "CHAR_02", "CHAR_02/常态"}
+    blk = _char_block("Clip 08", char_id="CHAR_01/常态")
+    blk["body"] += (
+        "\n### 后端编译提交 image prompt\n```text\n"
+        "生成剧情关键帧 主体布局：SLOT_1: CHAR_01/常态 -> LEFT_SLOT；"
+        "SLOT_2: CHAR_02/常态 -> RIGHT_SLOT "
+        "动作瞬间：递刀。 构图：screen_position=CHAR_01/囚途残损态 画左；"
+        "CHAR_02/濒死至死亡态 画右。\n```"
+    )
+
+    findings = image_qc.lint_shot_block(blk, valid)
+    assert not any(f["code"] == "unknown_char_id" for f in findings)
+
+
 def test_lint_warns_action_shot_missing_camera_observer_guard() -> None:
     valid = {"CHAR_01", "CHAR_01/常态"}
     blk = _char_block("Clip 08 命中帧", eyeline=False)
@@ -1256,6 +1350,33 @@ def test_lint_blocks_registry_driven_outfit_form_mismatch() -> None:
     )
 
 
+def test_lint_ignores_outfit_terms_inside_taboo_and_topology_bans() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    forms = [
+        {
+            "id": "CHAR_01",
+            "form": "常态",
+            "key": "CHAR_01/常态",
+            "asset_key": "姜月初_常态",
+            "character_dna_text": "玄黑窄袖交领劲装",
+            "wardrobe_profile": {"silhouette": "玄黑窄袖交领劲装", "sleeve": "窄袖"},
+            "display": "姜月初_常态",
+            "reference_stems": {"定妆_姜月初_常态"},
+            "strong_aliases": {"CHAR_01", "CHAR_01/常态", "姜月初_常态"},
+            "weak_aliases": {"姜月初"},
+        }
+    ]
+    blk = _char_block("Clip 12", char_id="CHAR_01/常态")
+    blk["body"] += (
+        "\n**正向 prompt（中文）**：姜月初穿玄黑窄袖交领劲装，MCU 近景。"
+        "\n**画风规格**：风格禁忌：白衣仙女、月白旧宫装。"
+        "\n**资产拓扑锁**：刀鞘/袖口/腰带不得画成刀刃。"
+    )
+
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+    assert not any(f["code"] == "outfit_form_mismatch" for f in findings)
+
+
 def test_lint_allows_registry_driven_outfit_form_match() -> None:
     valid = {"CHAR_01", "CHAR_01/玄青官袍"}
     forms = [
@@ -1490,6 +1611,19 @@ def test_lint_flags_unknown_asset_id() -> None:
     assert codes.get("unknown_asset_id") == "block"
 
 
+def test_lint_ignores_axis_embedded_asset_id_and_resolves_descriptor_suffix() -> None:
+    blk = {
+        "label": "Clip 05 轴线",
+        "body": (
+            "**正反打合同**：axis_id=AXIS_LOC_01_CHAR_01_VS_CHAR_02；"
+            "**光位锚**：LOC_01光位从画左后侧进入。"
+        ),
+    }
+
+    findings = image_qc.lint_shot_block(blk, None, None, _asset_index())
+    assert not any(f["code"] == "unknown_asset_id" for f in findings)
+
+
 def test_lint_warns_asset_ref_without_id() -> None:
     # 用了 定妆_斑驳铜镜（已登记 PROP_01）却没绑 PROP_01 → warn
     blk = {"label": "Clip 06 铜镜", "body": "**参考图**：`出图/共享/图片/定妆_斑驳铜镜.png`（道具定妆）"}
@@ -1631,6 +1765,36 @@ def test_summarize_pillow_fallback_degrades_to_review() -> None:
     assert s["verdict"] == "review"
 
 
+def test_missing_image_target_is_hard_but_not_counted_as_face_failure() -> None:
+    payload = {
+        "checks": {
+            "face": {
+                "available": True,
+                "mode": "pillow_fallback",
+                "shots": [{
+                    "png": "图片/Clip_01.png",
+                    "verdict": "missing",
+                    "degraded_face": True,
+                    "closeup": True,
+                }],
+            }
+        },
+        "lint": {"available": True, "findings": []},
+    }
+    summary = image_qc.summarize(payload)
+    assert summary["hard_blocks"] == 1
+    assert summary["by_check"]["face"]["block"] == 0
+    assert summary["by_check"]["image_targets_missing"]["block"] == 1
+    assert "face_degraded_closeup" not in summary["by_check"]
+
+    findings = image_qc.to_findings(payload)
+    missing = [f for f in findings if f["dim"] == "image_artifact_presence"]
+    assert len(missing) == 1
+    assert missing[0]["sev"] == "block"
+    assert "不是崩脸判定" in missing[0]["msg"]
+    assert not any("崩脸 G1 block" in f["msg"] for f in findings)
+
+
 def test_summarize_unavailable_visual_checks_degrades_to_review() -> None:
     payload = {
         "checks": {
@@ -1722,6 +1886,7 @@ def test_normalize_seam_availability_marks_absent_dir_unverified(tmp_path) -> No
     res = image_qc._normalize_seam_availability(
         {"seams": [], "notes": ["无 …图片——出图后再跑接缝机检。"]}, str(tmp_path), "第1集")
     assert res["available"] is False
+    assert res["availability_reason"] == "no_episode_images"
     # 空目录（存在但无 PNG）同样 available False——这是最隐蔽的零覆盖。
     (tmp_path / "出图" / "第1集" / "图片").mkdir(parents=True)
     res2 = image_qc._normalize_seam_availability({"seams": [], "notes": []}, str(tmp_path), "第1集")
@@ -1730,6 +1895,7 @@ def test_normalize_seam_availability_marks_absent_dir_unverified(tmp_path) -> No
     (tmp_path / "出图" / "第1集" / "图片" / "Clip_01.png").write_bytes(b"x")
     res3 = image_qc._normalize_seam_availability({"seams": [], "notes": []}, str(tmp_path), "第1集")
     assert res3["available"] is True
+    assert res3["availability_reason"] == "ready"
     # seam_analyze 自置 available（失败/缺依赖）时不被覆盖。
     res4 = image_qc._normalize_seam_availability(
         {"available": False, "notes": ["未装 Pillow"]}, str(tmp_path), "第1集")
@@ -1747,6 +1913,27 @@ def test_seam_unverified_degrades_to_review_like_face() -> None:
     assert "seam" in s["unavailable_visual_checks"]
     assert s["degraded"] is True
     assert s["verdict"] == "review"
+
+
+def test_no_episode_images_does_not_downgrade_installed_qc_environment() -> None:
+    payload = {
+        "checks": {
+            "face": {"available": True, "mode": "insightface", "shots": []},
+            "outfit": {"available": True, "shots": []},
+            "scene": {"available": True, "shots": []},
+            "seam": {
+                "available": False,
+                "availability_reason": "no_episode_images",
+                "seams": [],
+                "notes": ["本集尚无 PNG"],
+            },
+        },
+        "summary": {"verdict": "block", "hard_blocks": 1},
+    }
+    env = image_qc.qc_environment(payload)
+    assert env["precision_level"] == "full"
+    assert env["missing_or_degraded"] == []
+    assert env["jump_to_stage"] == "image"
 
 
 def test_summarize_strict_pixel_promotes_outfit_block_to_hard() -> None:
@@ -3302,6 +3489,19 @@ def test_turnaround_alignment_reason_thresholds():
     assert image_qc.turnaround_alignment_reason({}) is None
 
 
+def test_expression_review_items_deduplicate_same_physical_reference_path() -> None:
+    shared = {"path": "出图/共享/图片/expr.png", "status": "planned"}
+    form = {
+        "reference_group": {"expressions": [shared], "face_anchor_refs": [shared]},
+        "reference_atlas": {"expression_refs": [dict(shared)], "face_anchor_refs": [dict(shared)]},
+    }
+
+    items = image_qc._expression_review_items(form)
+
+    assert len(items) == 1
+    assert image_qc._view_item_path(items[0]) == shared["path"]
+
+
 def test_whole_body_geometry_reports_head_feet_center_and_height(tmp_path: Path) -> None:
     from PIL import Image, ImageDraw
     path = tmp_path / "front.png"
@@ -3431,6 +3631,45 @@ def test_core_turnaround_requires_hash_bound_per_view_receipts(tmp_path: Path) -
     stale = image_qc.mark_finalized(root, "CHAR_CORE/常态")
     assert stale["ok"] is False
     assert [row["view"] for row in stale["required_view_receipts"]] == ["side"]
+
+
+def test_executor_visual_receipt_requires_explicit_project_authorization(tmp_path: Path) -> None:
+    root = _core_turnaround_registry(tmp_path)
+    refused = image_qc.review_turnaround_view(
+        root,
+        "CHAR_CORE/常态",
+        "front",
+        verdict="pass",
+        reviewer="Codex视觉执行者",
+        review_kind="executor_visual",
+        accept_current_pixels=True,
+    )
+    assert refused["ok"] is False
+    assert "未在 _设置.md 明确授权" in refused["msg"]
+
+    (root / "_设置.md").write_text(
+        "- 图片验收模式：逐张机器QC+实际目视  # source=explicit_user\n"
+        "- 用户明确要求每张由执行者实际像素目视后才进入下一张\n",
+        encoding="utf-8",
+    )
+    accepted = image_qc.review_turnaround_view(
+        root,
+        "CHAR_CORE/常态",
+        "front",
+        verdict="pass",
+        reviewer="Codex视觉执行者",
+        review_kind="executor_visual",
+        accept_current_pixels=True,
+    )
+    assert accepted["ok"] is True
+    registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    front = registry["characters"][0]["forms"][0]["reference_group"]["front"]
+    assert "human_review" not in front
+    assert front["visual_review"]["review_kind"] == "executor_visual"
+    assert front["visual_review"]["human_signoff"] is False
+    audit = image_qc.audit_turnaround_alignment(root, "第1集")
+    pending_front = [row for row in audit["human_review_required"] if row["view"] == "front"]
+    assert pending_front == []
 
 
 @pytest.mark.parametrize("mode", ["absolute", "path_escape", "symlink", "noncanonical"])
@@ -3583,3 +3822,14 @@ def test_audit_shot_variety_lens_monotony(tmp_path):
         _json.dumps({"clips": clips}, ensure_ascii=False), encoding="utf-8")
     res = image_qc.audit_shot_variety(root, "第1集")
     assert any(f["code"] == "lens_variety_low" for f in res["findings"])
+
+
+def test_lens_classes_reads_storyboard_shot_size_before_physical_lens() -> None:
+    clip = {
+        "shots": [
+            {"shot_size": "ECU→CU", "lens": "85mm"},
+            {"shot_size": "MS", "lens": "50mm"},
+        ]
+    }
+
+    assert image_qc._lens_classes(clip) == {"ECU", "CU", "MS"}

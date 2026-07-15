@@ -60,6 +60,51 @@ def test_run_codex_does_not_retry_non_transient_failure(monkeypatch, tmp_path: P
     assert len(calls) == 1
 
 
+def test_run_codex_retries_transient_failed_image_event(monkeypatch, tmp_path: Path) -> None:
+    calls = []
+    failed = "\n".join([
+        json.dumps({"payload": {"type": "image_generation_end", "status": "failed", "result": ""}}),
+        json.dumps({"payload": {"type": "agent_message", "message": "生成失败：image_gen 请求发生网络错误。"}}, ensure_ascii=False),
+    ])
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+        if len(calls) == 1:
+            return subprocess.CompletedProcess(cmd, 0, stdout=failed, stderr="")
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(codex_image_runner.time, "sleep", lambda _seconds: None)
+
+    proc = codex_image_runner.run_codex(tmp_path, "prompt", 10, [])
+
+    assert proc.returncode == 0
+    assert len(calls) == 2
+    assert calls[0] == calls[1]
+
+
+def test_image_generation_failure_detail_keeps_non_retryable_status() -> None:
+    stdout = json.dumps({
+        "payload": {
+            "type": "image_generation_end",
+            "status": "failed",
+            "result": "",
+        }
+    })
+
+    detail = codex_image_runner.image_generation_failure_detail(stdout)
+
+    assert detail == "image_generation_end status=failed"
+    assert codex_image_runner.transient_codex_image_failure(detail) is False
+
+
+def test_transient_codex_image_failure_recognizes_http_5xx_not_4xx() -> None:
+    assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 520") is True
+    assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 503") is True
+    assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 400") is False
+    assert codex_image_runner.transient_codex_image_failure("内置 image_gen 网络请求失败") is True
+
+
 def test_image_qc_python_prefers_configured_executable(tmp_path: Path, monkeypatch) -> None:
     fake_python = tmp_path / "python"
     fake_python.write_text("#!/bin/sh\n", encoding="utf-8")
@@ -68,6 +113,47 @@ def test_image_qc_python_prefers_configured_executable(tmp_path: Path, monkeypat
     monkeypatch.setenv(codex_image_runner.IMAGE_QC_PYTHON_ENV, str(fake_python))
 
     assert codex_image_runner.image_qc_python() == str(fake_python)
+
+
+def test_strict_single_image_review_reads_project_setting(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式: 逐张机器QC+实际目视\n",
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner.strict_single_image_review_enabled(tmp_path) is True
+
+
+def test_strict_pending_review_requires_later_hash_bound_acceptance(tmp_path: Path) -> None:
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    generated = {
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": "出图/共享/图片/a.png", "status": "pass"},
+        "meta": {"artifact_sha256": "a" * 64},
+    }
+    events.write_text(json.dumps(generated, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/b.png"
+    ) == {"asset": "出图/共享/图片/a.png", "artifact_sha256": "a" * 64}
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/a.png"
+    ) is None
+
+    accepted = {
+        "stage": "image",
+        "event": "qa",
+        "generation": {"asset": "出图/共享/图片/a.png", "status": "accepted"},
+        "meta": {"artifact_sha256": "a" * 64},
+    }
+    with events.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(accepted, ensure_ascii=False) + "\n")
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/b.png"
+    ) is None
 
 
 def test_run_target_image_qc_uses_selected_python(tmp_path: Path, monkeypatch) -> None:
@@ -1570,6 +1656,33 @@ def test_primary_character_makeup_uses_strict_front_guard_not_action_gaze() -> N
     assert "身体、肩线和脸严格正对相机" in guards
     assert "头部偏转不超过 5 度" in guards
     assert "镜头为旁观者视角" not in guards
+
+
+def test_style_anchor_uses_control_board_note_and_skips_story_guards() -> None:
+    section = codex_image_runner.ClipSection(
+        "STYLE_ANCHOR",
+        "## STYLE_ANCHOR",
+        "写实国漫人物、城寨、刀兵与虎妖只描述下游适用语境；不要人物、妖物、建筑、兵器。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "STYLE_ANCHOR::风格锚_黑赤镇魔水墨妖谱",
+        "STYLE_ANCHOR",
+        "shared",
+        "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+        section,
+    )
+    target.aliases = {"STYLE_ANCHOR", "风格锚"}
+
+    note = codex_image_runner.shared_variant_note(target.rel_path)
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "抽象分区式视觉语言控制板" in note
+    assert "人物全身/标准立绘" not in note
+    assert "色卡" in guards
+    assert "工作台" in guards
+    assert "镜头为旁观者视角" not in guards
+    assert "武器入体/接触点铁律" not in guards
 
 
 def test_character_45_degree_reference_does_not_use_primary_front_guard() -> None:
@@ -3254,6 +3367,20 @@ def test_turnaround_guidance_requires_five_angle_alignment() -> None:
 
     assert "正面、前3/4、侧面、后3/4、背面五角" in guidance
     assert "脚底线" in guidance and "身体中心线" in guidance
+
+
+def test_expression_sheet_uses_same_source_and_six_expression_guidance() -> None:
+    rel = "出图/共享/图片/定妆_沈念_常态_表情_六联表.png"
+
+    assert codex_image_runner.requires_controlled_makeup_derivation(rel)
+    assert codex_image_runner.requires_human_review_before_ready(rel)
+    assert codex_image_runner.controlled_makeup_parent_candidates(rel)[0].endswith(
+        "定妆_沈念_常态.png"
+    )
+    guidance = codex_image_runner.shared_variant_note(rel)
+    assert "2×3" in guidance
+    assert all(emotion in guidance for emotion in ("冷静", "警觉", "震惊", "隐忍", "将哭", "决绝"))
+    assert "不烤入文字标签" in guidance
 
 
 def test_back_view_form_turnaround_is_not_misclassified_as_split_ref() -> None:

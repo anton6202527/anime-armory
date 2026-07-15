@@ -75,6 +75,34 @@ def _list_ready_refs(value: Any) -> List[str]:
     return []
 
 
+def _ref_items(value: Any) -> List[Any]:
+    if isinstance(value, list):
+        return [item for item in value if _ref_path(item)]
+    return [value] if _ref_path(value) else []
+
+
+def _preferred_ref(*values: Any) -> Tuple[str, bool, Any]:
+    """Choose a registered ready ref, otherwise preserve its planned path."""
+    items: List[Any] = []
+    for value in values:
+        items.extend(_ref_items(value))
+    if not items:
+        return "", False, None
+    selected = next((item for item in items if _ready(item)), items[0])
+    return _ref_path(selected), _ready(selected), selected
+
+
+def _expression_capacity(item: Any) -> int:
+    if not _ready(item):
+        return 0
+    path = _ref_path(item)
+    layout = str(item.get("layout") or "") if isinstance(item, Mapping) else ""
+    emotion = str(item.get("emotion") or "") if isinstance(item, Mapping) else ""
+    if "two_by_three_expression_sheet" in layout or "六联表" in path or "六联表" in emotion:
+        return 6
+    return 1
+
+
 def _first_ready_base_view(atlas: Mapping[str, Any], key: str) -> str:
     base = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
     item = base.get(key) if isinstance(base, Mapping) else None
@@ -98,6 +126,11 @@ def _forms(root: Path) -> List[Dict[str, Any]]:
                 "name": char.get("name"),
                 "form": form.get("form") or "常态",
                 "core": core,
+                "library_tier": (
+                    form.get("library_tier")
+                    or char.get("library_tier")
+                    or (form.get("reference_atlas") or {}).get("build_tier")
+                ),
                 "reference_group": form.get("reference_group") or {},
                 "reference_atlas": form.get("reference_atlas") or {},
                 "performance_signature": form.get("performance_signature") or char.get("performance_signature"),
@@ -176,25 +209,36 @@ def _expected_character_refs(form: Mapping[str, Any], action_needed: bool) -> Li
         })
 
     for key in BASE_VIEW_KEYS:
-        path = _first_ready_base_view(atlas, key) or _ready_ref_path(rg.get(key))
-        add(key, bool(path), path, "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。")
-    body_path = ""
-    body_ready = False
+        base = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+        path, ready, _item = _preferred_ref(base.get(key), rg.get(key))
+        add(key, ready, path, "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。")
+    turnaround_path, turnaround_ready, _turnaround_item = _preferred_ref(rg.get("turnaround"))
+    if form.get("core") or form.get("library_tier") == "core_full" or turnaround_path:
+        add(
+            "turnaround",
+            turnaround_ready,
+            turnaround_path,
+            "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
+        )
+    body_values: List[Any] = []
+    base = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
     for key in BODY_VIEW_KEYS:
-        path = _first_ready_base_view(atlas, key) or _ready_ref_path(rg.get(key))
-        if path:
-            body_path, body_ready = path, True
-            break
+        body_values.extend((base.get(key), rg.get(key)))
+    body_path, body_ready, _body_item = _preferred_ref(*body_values)
     add("half_body_or_full_body", body_ready, body_path, "服装/体态参考，防止镜头内换身材或换衣。")
-    face_refs = _list_ready_refs(rg.get("face_anchor_refs")) or _list_ready_refs(atlas.get("face_anchor_refs"))
-    add("face_anchor_refs", bool(face_refs), face_refs[0] if face_refs else "", "脸部特写锚，近景/反打/表情镜必用。")
-    expressions = _list_ready_refs(rg.get("expressions")) or _list_ready_refs(atlas.get("expression_refs"))
+    face_path, face_ready, _face_item = _preferred_ref(
+        rg.get("face_anchor_refs"), atlas.get("face_anchor_refs")
+    )
+    add("face_anchor_refs", face_ready, face_path, "脸部特写锚，近景/反打/表情镜必用。")
+    expression_items = _ref_items(rg.get("expressions")) or _ref_items(atlas.get("expression_refs"))
+    expression_path, _expression_ready, _expression_item = _preferred_ref(expression_items)
+    expression_capacity = sum(_expression_capacity(item) for item in expression_items)
     expr_min = EXPRESSION_MIN_CORE if form.get("core") else EXPRESSION_MIN_NORMAL
-    add("expression_bank", len(expressions) >= expr_min, expressions[0] if expressions else "",
+    add("expression_bank", expression_capacity >= expr_min, expression_path,
         f"同源情绪表情库至少 {expr_min} 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。")
     if action_needed:
-        action_refs = _list_ready_refs(rg.get("action_refs")) or _list_ready_refs(atlas.get("action_refs"))
-        add("action_pose_pack", bool(action_refs), action_refs[0] if action_refs else "",
+        action_path, action_ready, _action_item = _preferred_ref(rg.get("action_refs"), atlas.get("action_refs"))
+        add("action_pose_pack", action_ready, action_path,
             "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。")
     if not form.get("performance_signature"):
         add("performance_signature", False, "", "登记微表情/眼神/站姿/惯用手势/说话节奏，防演法漂。")
@@ -220,9 +264,15 @@ def _expected_asset_refs(asset: Mapping[str, Any], used: bool) -> List[Dict[str,
     if not used:
         return targets
     if aid.startswith("LOC_") or typ in {"location", "scene", "场景"}:
-        for slot in ("wide_plate", "reverse_angle", "empty_plate", "lighting_plate"):
-            path = _ready_ref_path(rg.get(slot)) or _ready_ref_path(rg.get("primary"))
-            add(slot, bool(path), path,
+        scene_sources = {
+            "wide_plate": (rg.get("wide_plate"), rg.get("front"), rg.get("primary")),
+            "reverse_angle": (rg.get("reverse_angle"), rg.get("reverse")),
+            "empty_plate": (rg.get("empty_plate"),),
+            "lighting_plate": (rg.get("lighting_plate"),),
+        }
+        for slot, values in scene_sources.items():
+            path, ready, _item = _preferred_ref(*values)
+            add(slot, ready, path,
                 "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。")
         # 布局图 spatial_map + scene_atlas 多视角 base_views（此前声明却喂给零代码的死字段）——纳入参考清单，
         # 锁门窗朝向/floor_plan 几何 + 同一空间换机位一致（生成侧场景锚定·详见 scene_reference_planner.py）。
@@ -236,9 +286,14 @@ def _expected_asset_refs(asset: Mapping[str, Any], used: bool) -> List[Dict[str,
             if bv:
                 add(f"base_view_{bv_key}", True, bv, f"scene_atlas {bv_key} 视角：锁同一空间换机位的一致性。")
     elif aid.startswith(("PROP_", "WEAPON_", "VFX_", "OUTFIT_")):
-        for slot in ("primary", "scale_reference", "detail_closeup"):
-            path = _ready_ref_path(rg.get(slot)) or _ready_ref_path(rg.get("primary"))
-            add(slot, bool(path), path,
+        asset_sources = {
+            "primary": (rg.get("primary"),),
+            "scale_reference": (rg.get("scale_reference"), rg.get("scale_ref")),
+            "detail_closeup": (rg.get("detail_closeup"),),
+        }
+        for slot, values in asset_sources.items():
+            path, ready, _item = _preferred_ref(*values)
+            add(slot, ready, path,
                 "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。")
     return targets
 

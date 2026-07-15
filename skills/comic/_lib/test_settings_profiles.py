@@ -46,3 +46,8 @@ def test_default_profile_is_serial_and_consistency_gate_is_on(tmp_path: Path) ->
     assert get_setting(str(root), "生产档位") == "连载标准"
     assert get_setting(str(root), "年龄形态继承") == "开启"
     assert get_setting(str(root), "角色一致性硬闸") == "开启"
+
+
+def test_builtin_imagegen_channel_is_a_valid_explicit_choice() -> None:
+    assert validate_setting("生图渠道", "内置 imagegen", family="comic")["level"] == "ok"
+    assert validate_setting("生图AI", "Codex内置imagegen", family="comic")["level"] == "ok"

@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">黎明中的北宋宫城沿竖画面层层上升，紫宸殿在雾中显现，一缕偏灰的…</text>
+<rect x="57" y="140" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="155">P002</text>
+<text class="note" x="62" y="170">近景露水柳条拂过旌旗，中景戟刃反冷光，后景戴簪着朱履的百官按班…</text>
+<rect x="46" y="194" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="209">P003</text>
+<text class="note" x="51" y="224">珠帘向两侧卷起，凤扇在仁宗身后打开；他居中坐定，净鞭三声让殿内…</text>
+<rect x="68" y="272" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="287">P004</text>
+<text class="note" x="73" y="291">殿头官站在中轴侧翼高声传话，文班中赵哲、文彦博对视一眼，准备出…</text>
+<rect x="46" y="305" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="320">P005</text>
+<text class="note" x="51" y="335">赵哲与文彦博在画左并肩出班持笏，画面右下以淡墨叠化关闭的民宅、…</text>
+<rect x="57" y="383" width="242" height="46" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="398">P006</text>
+<text class="note" x="62" y="413">仁宗俯身快速下令，画面下方三名官员同时接过分开的诏文，朱砂红成…</text>
+<text class="note" x="38" y="448">hook: P006 policy_response</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="374" y="62" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="77">P007</text>
+<text class="note" x="379" y="92">上半格是赦免诏书贴上城门，下半格是更多空药碗和一扇接一扇关闭的…</text>
+<rect x="385" y="131" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="146">P008</text>
+<text class="note" x="390" y="161">文班重新归位时，范仲淹从画左队列独自越出中轴，持笏仰面奏言；仁…</text>
+<rect x="385" y="179" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="194">P009</text>
+<text class="note" x="390" y="209">仁宗的手握笔写完丹诏最后一笔，画面后方的银香炉内御香微燃，烟气…</text>
+<rect x="374" y="227" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="242">P010</text>
+<text class="note" x="379" y="257">仁宗在画上将丹诏交下，洪信在画下跪接；银香炉由侍者捧在画右，诏…</text>
+<rect x="374" y="297" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="312">P011</text>
+<text class="note" x="379" y="327">长竖格上段是东京城门与马队出发，中段是马队穿过溪水、花柳、山村…</text>
+<rect x="374" y="366" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="381">P012</text>
+<text class="note" x="379" y="396">上清宫道众从山门台阶向画下展开，幡盖与香花形成两侧弧线；洪信画…</text>
+<text class="note" x="366" y="448">hook: P012 arrival</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="702" y="62" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="77">P013</text>
+<text class="note" x="707" y="92">镜头沿青松与翠柏下行，经过御赐金额与门上符篆，再转入有垂柳、花…</text>
+<rect x="702" y="140" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="155">P014</text>
+<text class="note" x="707" y="170">左右廊壁画如长卷掠过：太乙、紫微与星宿神众分列，真武龟蛇和南极…</text>
+<rect x="713" y="218" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="233">P015</text>
+<text class="note" x="718" y="248">道士在三清殿击金钟，另一侧在四圣堂敲玉磬；光斑先掠过青琉璃、红…</text>
+<rect x="713" y="272" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="287">P016</text>
+<text class="note" x="718" y="302">丹诏被高置三清殿供案中央，洪信站在画左仰看一眼后转向画右住持发…</text>
+<rect x="713" y="326" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="341">P017</text>
+<text class="note" x="718" y="356">住持向画右后方开放的后山路伸手，山门外只见云中尖峰；洪信画左略…</text>
+<rect x="713" y="381" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="396">P018</text>
+<text class="note" x="718" y="411">住持将布衣、麻履、黄罗诏包和银香炉依次摆在矮案上，指尖按顺序说…</text>
+<text class="note" x="694" y="448">hook: P018 condition_set</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="57" y="520" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="535">P019</text>
+<text class="note" x="62" y="550">洪信已换素灰褐布衣与麻履，侧身让道人系紧黄罗诏包，自己右手提银…</text>
+<rect x="57" y="570" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="585">P020</text>
+<text class="note" x="62" y="600">洪信背对宫观跨出后山小门，黄罗诏包和银炉都可见；住持在画右门内…</text>
+<rect x="46" y="621" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="636">P021</text>
+<text class="note" x="51" y="651">龙虎山的丹霞岩柱从画下盘到画上云端，瀑布和林径在山腰缠绕；洪信…</text>
+<rect x="46" y="695" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="710">P022</text>
+<text class="note" x="51" y="725">左右岩壁叠压，瀑布斜飞、藤萝倒挂，雾气从谷中上冲；洪信沿窄径继…</text>
+<rect x="57" y="768" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="783">P023</text>
+<text class="note" x="62" y="798">洪信弯腰扶膝在陡坡上喘息，麻履踩在尖石上，黄罗诏包勒住双肩；他…</text>
+<rect x="46" y="819" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="834">P024</text>
+<text class="note" x="51" y="849">画右后松树被撞开，吊睛白额虎低姿向画左前扑出；洪信后仰跌向画左…</text>
+<text class="note" x="38" y="906">hook: P024 threat_reveal</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="374" y="520" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="535">P025</text>
+<text class="note" x="379" y="550">树根旁的洪信占画左下前景，白额虎从画右后压近并伸展肩背；白额黑…</text>
+<rect x="385" y="604" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="619">P026</text>
+<text class="note" x="390" y="634">白虎后肢蹬地，从洪信身前折向画左下山坡跃离；洪信仍蜷在画左前树…</text>
+<rect x="385" y="662" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="677">P027</text>
+<text class="note" x="390" y="692">洪信半跪在山径上，右手重新提起银炉，左手护住微弱复燃的龙香火；…</text>
+<rect x="396" y="720" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="735">P028</text>
+<text class="note" x="401" y="739">洪信拖着发软的腿朝画右上再走三五十步，右手提银炉、背上诏包随步…</text>
+<rect x="385" y="752" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="767">P029</text>
+<text class="note" x="390" y="782">一股冷雾从画左后竹藤间贴地冲出，掀动洪信衣摆和炉烟；洪信骤然停…</text>
+<rect x="374" y="810" width="264" height="77" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="825">P030</text>
+<text class="note" x="379" y="840">吊桶粗的乳白冷灰巨蛇从画左后竹藤猛冲至盘陀石边昂首，洪信向后跌…</text>
+<text class="note" x="366" y="906">hook: P030 serpent_burst</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="702" y="520" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="535">P031</text>
+<text class="note" x="707" y="550">巨蛇在盘陀石前抬起头颈，吐息把雾和竹叶向画右推开；乳白、雾灰与…</text>
+<rect x="702" y="589" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="604">P032</text>
+<text class="note" x="707" y="619">雪蛇盘在盘陀石外沿，头部压到洪信面前，张口吐信，冷灰气流拂过他…</text>
+<rect x="713" y="658" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="673">P033</text>
+<text class="note" x="718" y="688">雪蛇尾端沿画左下山坡滑入雾中；洪信在盘陀石边撑起身体，右手重新…</text>
+<rect x="702" y="706" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="721">P034</text>
+<text class="note" x="707" y="736">大段冷雾留白占据画面上部，三四声铁笛由画右后松树传来；下部洪信…</text>
+<rect x="702" y="776" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="791">P035</text>
+<text class="note" x="707" y="806">青衣道童倒骑黄牛完整转出松后，身体呈三分之四侧面：双丫髻、自然…</text>
+<rect x="713" y="845" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="860">P036</text>
+<text class="note" x="718" y="875">洪信在画左前抬手叫住道童，银炉垂在右手；道童仍倒骑黄牛，先吹完…</text>
+<text class="note" x="694" y="906">hook: P036 herdboy_knows_the_mission</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="57" y="978" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="993">P037</text>
+<text class="note" x="62" y="1008">道童仍倒骑黄牛停在画右中，以铁笛轻指洪信背上的黄罗诏包，平静说…</text>
+<rect x="46" y="1026" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1041">P038</text>
+<text class="note" x="51" y="1056">道童倒骑黄牛沿画左下山坡转入薄雾，铁笛声拖在身后；洪信站在岔路…</text>
+<rect x="57" y="1095" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1110">P039</text>
+<text class="note" x="62" y="1125">方丈内，仍穿沾尘布衣的洪信坐在画左前，右手把银炉重重搁在案边，…</text>
+<rect x="46" y="1143" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1158">P040</text>
+<text class="note" x="51" y="1173">住持在画右抬起一手，先指向右上后山门解释试心，再把手收回点向洪…</text>
+<rect x="46" y="1213" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1228">P041</text>
+<text class="note" x="51" y="1243">三清殿供案前，住持在画右双手将黄罗丹诏平稳收入打开的御书匣，匣…</text>
+<rect x="46" y="1282" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1297">P042</text>
+<text class="note" x="51" y="1312">次日游宫队伍沿上清宫右廊向画右后行进，恢复绛褐官袍与深色幞头的…</text>
+<text class="note" x="38" y="1364">hook: P042 forbidden_hall_discovery</text>
+<rect x="356" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="962">SCROLL_008 scroll</text>
+<rect x="374" y="978" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="993">P043</text>
+<text class="note" x="379" y="1008">上清宫右廊尽头，一座红泥墙小殿被树影与檐影包围；朱红隔子门中缝…</text>
+<rect x="385" y="1043" width="242" height="39" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1058">P044</text>
+<text class="note" x="390" y="1073">洪信从画左向门前迈出一步，右手食指直指门缝的大锁，下颌微抬。住…</text>
+<rect x="374" y="1089" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1104">P045</text>
+<text class="note" x="379" y="1119">洪信在画左上前倾，官袍袖口将他的身形扩成一个向右的压迫三角，右…</text>
+<rect x="374" y="1154" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1169">P046</text>
+<text class="note" x="379" y="1184">长竖格从上向下阅读：最上段，火工道人逐层揭下封皮、铁锤砸开灌铸…</text>
+<rect x="374" y="1220" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1235">P047</text>
+<text class="note" x="379" y="1250">长竖格自上而下/由封禁深处向高空读取：上段中心，石碑已被绳索与…</text>
+<rect x="374" y="1285" width="264" height="60" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1300">P048</text>
+<text class="note" x="379" y="1315">远景中，伏魔殿右上半角已塌，屋顶缺口上方的 108 道暖金光迹…</text>
+<text class="note" x="366" y="1364">hook: P048 cliffhanger</text>
+</svg>

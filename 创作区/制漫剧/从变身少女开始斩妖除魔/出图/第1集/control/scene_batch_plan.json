@@ -1,0 +1,39 @@
+{
+  "batched_clips": 13,
+  "batches": [
+    {
+      "clip_ids": [
+        "Clip_01",
+        "Clip_02",
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08",
+        "Clip_09",
+        "Clip_10",
+        "Clip_11",
+        "Clip_12",
+        "Clip_13"
+      ],
+      "firstframe_pngs": [],
+      "mode": "scene_coherent_batch",
+      "note": "同场景连续 13 镜走时空一致性 batch（共享场景/光位/风格+同源种子，一段连贯场景 pass 出这组首帧再拆镜）；身份仍按 identity_registry 锁，不在此 batch 内处理。",
+      "scene_key": "LOC_01",
+      "scene_name": "荒野押解/虎妖现场",
+      "shared_locks": [
+        "scene_dna",
+        "场景光位锚",
+        "style_contract",
+        "shared_seed"
+      ],
+      "size": 13
+    }
+  ],
+  "episode": "第1集",
+  "kind": "n2d_scene_batch_plan",
+  "min_group": 2,
+  "notes": [],
+  "solo": []
+}

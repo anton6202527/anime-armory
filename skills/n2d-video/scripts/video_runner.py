@@ -22,7 +22,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -1659,6 +1659,130 @@ def _ensure_adapter_command_ready(adapter: Mapping[str, Any], args: Sequence[str
         )
 
 
+GENERATED_NOT_ACCEPTED_STATUSES = {
+    "submitting",
+    "submitted",
+    "queried",
+    "query_failed",
+    "cancel_unknown",
+    "downloaded",
+    "downloaded_existing_target",
+    "qc_blocked",
+}
+
+
+def _resolved_evidence_path(root: Path, raw: Any) -> Optional[Path]:
+    text = str(raw or "").strip()
+    if not text:
+        return None
+    path = Path(text).expanduser()
+    return path if path.is_absolute() else root / path
+
+
+def accepted_video_receipt_issues(root: Path, episode: str, item: Mapping[str, Any]) -> List[str]:
+    """Validate that an accepted physical clip has machine QC and current-pixel visual review."""
+    issues: List[str] = []
+    if str(item.get("status") or "").strip().lower() != "accepted":
+        return ["status_not_accepted"]
+    if not str(item.get("accepted_at") or "").strip():
+        issues.append("accepted_at_missing")
+    target = _item_target_path(root, episode, dict(item))
+    if not target.is_file():
+        issues.append("accepted_target_missing")
+        current_sha = ""
+    else:
+        current_sha = _sha256_file(target)
+    machine = item.get("qc_machine") if isinstance(item.get("qc_machine"), Mapping) else {}
+    if not machine:
+        issues.append("machine_qc_receipt_missing")
+    for key in ("qc_json", "qc_markdown"):
+        evidence = _resolved_evidence_path(root, item.get(key))
+        if evidence is None or not evidence.is_file():
+            issues.append(f"{key}_missing")
+    review = item.get("visual_review") if isinstance(item.get("visual_review"), Mapping) else {}
+    if str(review.get("verdict") or "").strip().lower() != "pass":
+        issues.append("visual_review_not_pass")
+    if not str(review.get("reviewer") or "").strip():
+        issues.append("visual_reviewer_missing")
+    if not str(review.get("reviewed_at") or "").strip():
+        issues.append("visual_reviewed_at_missing")
+    if review.get("explicit_current_pixels_confirmation") is not True:
+        issues.append("current_pixels_confirmation_missing")
+    if len(str(review.get("notes") or "").strip()) < 4:
+        issues.append("visual_review_notes_missing")
+    receipt_sha = str(review.get("artifact_sha256") or "").strip()
+    if not receipt_sha:
+        issues.append("visual_review_sha256_missing")
+    elif current_sha and receipt_sha != current_sha:
+        issues.append("visual_review_sha256_stale")
+    item_sha = str(item.get("artifact_sha256") or "").strip()
+    if item_sha and current_sha and item_sha != current_sha:
+        issues.append("accepted_artifact_sha256_stale")
+    return issues
+
+
+def sequential_qc_blockers(
+    root: Path,
+    manifest_file: Path,
+    manifest: Mapping[str, Any],
+    current_item: Mapping[str, Any],
+) -> List[str]:
+    """Return episode-wide physical clips that forbid another paid submission.
+
+    Prepared/failed/cancelled rows have no delivered video to inspect. Any paid job
+    still in flight, downloaded-but-unaccepted video, or legacy ``accepted`` row
+    without a current-pixel visual receipt blocks the next distinct physical clip.
+    """
+    episode = str(manifest.get("episode") or "")
+    current_clip = str(current_item.get("clip") or "")
+    manifests: List[Tuple[Path, Mapping[str, Any]]] = [(manifest_file, manifest)]
+    seen_paths = {manifest_file.expanduser().resolve()}
+    for path in sorted(production_dir(root).glob(f"video_batch_{episode}_*.json")):
+        resolved = path.resolve()
+        if resolved in seen_paths:
+            continue
+        seen_paths.add(resolved)
+        data = load_json(path)
+        if isinstance(data, Mapping):
+            manifests.append((path, data))
+    blockers: List[str] = []
+    seen_rows: Set[Tuple[str, str, str]] = set()
+    for path, data in manifests:
+        for row in data.get("items") or []:
+            if not isinstance(row, Mapping):
+                continue
+            row_clip = str(row.get("clip") or "")
+            if not row_clip or row_clip == current_clip:
+                continue
+            row_key = (row_clip, str(row.get("target") or ""), str(row.get("submit_id") or ""))
+            if row_key in seen_rows:
+                continue
+            seen_rows.add(row_key)
+            status = str(row.get("status") or "").strip().lower()
+            label = f"{row_clip}@{path.name}"
+            if status in GENERATED_NOT_ACCEPTED_STATUSES:
+                blockers.append(f"{label}: status={status}，上一物理视频尚未严格 QC/实际查看并 accept")
+            elif status == "accepted":
+                issues = accepted_video_receipt_issues(root, episode, row)
+                if issues:
+                    blockers.append(f"{label}: accepted 收据无效（{','.join(issues)}）")
+    return blockers
+
+
+def enforce_sequential_qc_interlock(
+    root: Path,
+    manifest_file: Path,
+    manifest: Mapping[str, Any],
+    current_item: Mapping[str, Any],
+) -> None:
+    blockers = sequential_qc_blockers(root, manifest_file, manifest, current_item)
+    if blockers:
+        raise RuntimeError(
+            "sequential video QC interlock blocked paid submission: 每出一个物理视频，必须先完成机器 QC、"
+            "实际查看并写入当前像素 visual_review=pass，才能生成下一个。\n- " + "\n- ".join(blockers[:12])
+        )
+
+
 def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False,
                 skip_preflight: bool = False) -> Dict[str, Any]:
     manifest = load_json(manifest_file)
@@ -1687,6 +1811,8 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
             "Run n2d-script shot_split_decision/anchor_planner and video_runner prepare again so it expands "
             f"into ~{plan.get('recommended_parts')} explicit physical takes within the backend window, then submit those part clips."
         )
+    if not dry_run:
+        enforce_sequential_qc_interlock(root, manifest_file, manifest, item)
     backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
     item["cost_provider"] = adapter["provider"]
     args, request_path = _adapter_invocation(root, manifest, item, adapter, "submit")
@@ -2668,13 +2794,22 @@ def stamp_acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any],
 
 
 def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool = False, no_progress: bool = False,
-                allow_qc_block: bool = False) -> Dict[str, Any]:
+                allow_qc_block: bool = False, visual_reviewer: str = "", visual_notes: str = "",
+                visual_current_pixels_confirmed: bool = False) -> Dict[str, Any]:
     manifest = load_json(manifest_file)
     episode = manifest["episode"]
     item = find_item(manifest, clip)
     target = _item_target_path(root, episode, item)
     if not target.exists():
         raise FileNotFoundError(target)
+    reviewer = str(visual_reviewer or "").strip()
+    notes = str(visual_notes or "").strip()
+    if not reviewer or len(notes) < 4 or visual_current_pixels_confirmed is not True:
+        raise RuntimeError(
+            f"{item['clip']} accept requires actual visual inspection of the current MP4: "
+            "provide --visual-reviewer, --visual-notes and --confirm-current-pixels. "
+            "Do not claim a human reviewer unless a human actually reviewed it."
+        )
     if _enforce_silent_video_stream(root, episode, target, item, manifest):
         update_manifest(manifest_file, manifest)
     qc_range = f"{item['clip'].split('_')[1]}_{item['clip'].split('_')[1]}"
@@ -2723,6 +2858,24 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     item["qc_markdown"] = qc.get("markdown_path")
     item["accepted_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
     stamp_acceptance_recipe_meta(root, episode, item, manifest)
+    item["visual_review"] = {
+        "kind": "n2d_video_visual_review",
+        "version": 1,
+        "verdict": "pass",
+        "reviewer": reviewer,
+        "reviewed_at": item["accepted_at"],
+        "artifact_path": str(target),
+        "artifact_sha256": _sha256_file(target),
+        "explicit_current_pixels_confirmation": True,
+        "criteria": [
+            "角色身份/五官/发型/服装一致",
+            "人体/手部/持物/接触/穿模",
+            "动作物理/镜头意图/构图",
+            "接缝/时序/闪烁/画面完整性",
+            "音轨策略/字幕安全区（如适用）",
+        ],
+        "notes": notes,
+    }
     try:
         item["native_av_sidecar"] = native_av_sidecar.update_sidecars(root, episode, item, target, qc_clip)
     except Exception as exc:
@@ -2805,6 +2958,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             p.add_argument("--no-progress", action="store_true")
             p.add_argument("--allow-qc-block", action="store_true",
                            help="接缝机检 block 时仍强制验收（确认是误报/有意跳切再用）")
+            p.add_argument("--visual-reviewer", default="",
+                           help="实际查看当前 MP4 的执行者；不要伪造真人身份")
+            p.add_argument("--visual-notes", default="",
+                           help="实际查看结论，至少说明身份/人体/动作/接缝等检查结果")
+            p.add_argument("--confirm-current-pixels", action="store_true",
+                           help="确认查看的是当前磁盘 MP4，而非旧预览/缩略图")
 
     p = sub.add_parser("qc")
     p.add_argument("root")
@@ -2847,7 +3006,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     if ns.cmd == "accept":
         print(json.dumps(accept_clip(root, manifest_file, ns.clip, no_record=ns.no_record, no_progress=ns.no_progress,
-                                     allow_qc_block=ns.allow_qc_block), ensure_ascii=False, indent=2, sort_keys=True))
+                                     allow_qc_block=ns.allow_qc_block,
+                                     visual_reviewer=ns.visual_reviewer,
+                                     visual_notes=ns.visual_notes,
+                                     visual_current_pixels_confirmed=ns.confirm_current_pixels),
+                         ensure_ascii=False, indent=2, sort_keys=True))
         return 0
     if ns.cmd == "qc":
         payload = run_batch_qc(root, manifest_file)

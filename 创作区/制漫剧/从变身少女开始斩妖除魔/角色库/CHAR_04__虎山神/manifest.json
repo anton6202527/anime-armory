@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_04",
+  "name": "虎山神",
+  "scope": "陇右荒野虎妖；百妖谱首次收录对象",
+  "library_tier": "recurring_standard",
+  "planned_episode_count": 3,
+  "directories": {
+    "reference": "角色库/CHAR_04__虎山神/reference",
+    "prompts": "角色库/CHAR_04__虎山神/prompts",
+    "lora": "角色库/CHAR_04__虎山神/lora",
+    "voice": "角色库/CHAR_04__虎山神/voice",
+    "adapters": "角色库/CHAR_04__虎山神/adapters",
+    "qc": "角色库/CHAR_04__虎山神/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/虎山神.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-15T06:37:03+00:00"
+}

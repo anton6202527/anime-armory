@@ -111,6 +111,7 @@
 
 - `production_contract_prompt` / `production_negative_contract`：人和 gate 使用，必须完整；可以含内部 ID、reference 路径、角色 DNA、场景锚、continuity、禁继承、传统稿层和审计说明。
 - `submit_prompt`：`skills/comic/_lib/comic_image_prompt_compiler.py` 的唯一模型输入。静态图比视频 prompt 需要更多构图/画风/稿层信息，但仍不得含内部 ID、路径、registry 全文、精确对白或后期流程说明。
+- 安全呈现改写属于编译步骤：必须先转为非写实、非伤害细节的可画措辞，再落 `submit_prompt_sha256`；runner 只包裹和提交，不得让实际发送内容脱离已记录哈希。
 - `prompt`：为旧 runner/人工流程保留的兼容键，schema v2 中必须与 `submit_prompt` 完全相同；不得重新塞回完整合同。
 - `references` / `reference_budget`：属于请求控制层；runner 真实附图，模型 prompt 只写参考角色作用，不写本地路径。
 - `comic-review gate --stage image_preflight` 会校验 schema、compiler kind/version、backend/profile、合同 hash、提交 hash 和 lint；`codex_panel_runner.py` 在调用前再验一次。

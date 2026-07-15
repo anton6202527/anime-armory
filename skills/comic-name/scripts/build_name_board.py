@@ -437,7 +437,7 @@ def build_name_board(root: Path, chapter: str) -> dict[str, Any]:
     manuscript = manuscript_boxes(width, comic_format, spec)
     panels = [panel for panel in panel_script.get("panels") or [] if isinstance(panel, dict) and panel.get("panel_id")]
     if not panels:
-        raise NameBoardError("panel_script.panels 为空，不能生成ネーム")
+        raise NameBoardError("panel_script.panels 为空，不能生成缩略分镜/name board")
     panel_ids = [str(panel.get("panel_id")) for panel in panels]
     if len(panel_ids) != len(set(panel_ids)):
         raise NameBoardError("panel_script.panel_id 必须唯一")
@@ -465,7 +465,9 @@ def build_name_board(root: Path, chapter: str) -> dict[str, Any]:
                     "panel_shape": shape,
                     "border_style": str(panel.get("border_style") or "standard"),
                     "gutter_intent": gutter,
-                    "camera_hint": compact_text(panel.get("camera_role") or panel.get("art_notes") or panel.get("description")),
+                    # 缩略分镜首先要回答“画面里发生什么”。art_notes 多为禁错/考据约束，
+                    # 不能在缩略格里压过真实画面描述；没有 description 时才降级使用。
+                    "camera_hint": compact_text(panel.get("camera_role") or panel.get("description") or panel.get("art_notes")),
                     "text_load": text_load(panel),
                     "bubble_first": bubble_first(panel, reading_direction),
                     "balloons": balloons,
@@ -571,9 +573,9 @@ def verify_upstream(root: Path, chapter: str, board: dict[str, Any]) -> list[str
     errors: list[str] = []
     panel_path = root / "脚本" / chapter / "panel_script.json"
     if receipt.get("panel_script_sha256") != sha256_file(panel_path):
-        errors.append("panel_script 已变化，当前ネーム已 stale")
+        errors.append("panel_script 已变化，当前缩略分镜/name board 已 stale")
     if receipt.get("settings_sha256") != sha256_file(root / "_设置.md"):
-        errors.append("_设置.md 已变化，当前ネーム已 stale")
+        errors.append("_设置.md 已变化，当前缩略分镜/name board 已 stale")
     return errors
 
 
@@ -587,21 +589,21 @@ def transition_existing(
 ) -> dict[str, Any]:
     path = root / "排版" / chapter / "name_board.json"
     if not path.is_file():
-        raise NameBoardError(f"缺少待签收ネーム：{path}")
+        raise NameBoardError(f"缺少待签收缩略分镜/name board：{path}")
     board = load_json(path)
     panel_script = load_json(root / "脚本" / chapter / "panel_script.json")
     errors = verify_upstream(root, chapter, board) + validate_name_board(board, panel_script)
     if errors:
-        raise NameBoardError("不能变更ネーム状态：" + "；".join(errors))
+        raise NameBoardError("不能变更缩略分镜/name board 状态：" + "；".join(errors))
     current = str(board.get("workflow_status") or "")
     if target == "review":
         if current not in {"draft", "review"}:
-            raise NameBoardError("只有 draft/review ネーム可提交复核；重建后再签收")
+            raise NameBoardError("只有 draft/review 缩略分镜可提交复核；重建后再签收")
         board["workflow_status"] = "review"
         board["approval"] = {}
     elif target == "approved":
         if current != "review":
-            raise NameBoardError("ネーム必须先 --submit-review，再执行 --approve")
+            raise NameBoardError("缩略分镜/name board 必须先 --submit-review，再执行 --approve")
         if not reviewed_by.strip():
             raise NameBoardError("--approve 必须提供 --reviewed-by")
         board["workflow_status"] = "approved"
@@ -711,7 +713,7 @@ def main() -> int:
     action = parser.add_mutually_exclusive_group()
     action.add_argument("--submit-review", action="store_true", help="把现有 draft 提交为 review，不重建")
     action.add_argument("--approve", action="store_true", help="签收现有 review，不重建")
-    action.add_argument("--check", action="store_true", help="只读检查现有ネーム的 schema、上游 SHA 与审批")
+    action.add_argument("--check", action="store_true", help="只读检查现有缩略分镜/name board 的 schema、上游 SHA 与审批")
     parser.add_argument("--reviewed-by", default="", help="--approve 的签收人；必须显式提供")
     parser.add_argument("--approval-note", default="")
     args = parser.parse_args()
@@ -756,7 +758,7 @@ def main() -> int:
             update_progress(root, args.chapter, "缩略分镜", "🟡待签收")
         print(f"[ok] draft {out_path}")
         print(f"[ok] {svg_path}")
-        print("[next] 人工审阅后先 --submit-review，再用 --approve --reviewed-by <签收人> 签收；draft 不会写入 ✅")
+        print("[next] 审阅后先 --submit-review，再用 --approve --reviewed-by <签收人> 签收；可由用户授权制作代理执行，draft 不会写入 ✅")
         return 0
     except (ValueError, OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
         print(f"[block] {exc}")

@@ -22,6 +22,7 @@ python3 skills/comic-settings/scripts/settings_cli.py sync-global <作品根> --
 - `reset`：调用 `reset_project_setting()`，删除指定选择点并记录。
 - `sync-global`：调用 `sync_global_settings()`，把当前项目可同步选择写入私有全局默认；可用 `--all` 或传 `选择点=值`。
 - `基础视觉风格` 的内置候选见 `skills/comic/references/视觉风格候选.md`；可写 `预设(补充词)` 或 `自定义(...)`。
+- `生图渠道=内置 imagegen` 表示使用当前 Codex 会话的内置图像工具；项目资产仍须复制进作品目录并写路径/SHA，不能只留在 `$CODEX_HOME/generated_images/`。
 
 ## 边界
 

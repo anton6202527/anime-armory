@@ -16,29 +16,245 @@
   },
   "block": 0,
   "blocking": false,
-  "characters": [],
+  "characters": [
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_01",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 7/7",
+          "points": 20.0
+        },
+        {
+          "factor": "大表情 1 镜",
+          "points": 8
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "library_tier": "core_full",
+      "name": "姜月初",
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "核心主角/全篇长线；现代人穿入京城高官独女的身体；开局为待押解/逃生者，后借镇魔司制服伪装并入司",
+      "score": 44.0,
+      "signals": {
+        "angle": 0,
+        "appear": 7,
+        "closeup": 0,
+        "emotion": 1,
+        "multi": 7,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "当前角色库档位=core_full 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP01",
+        "EP01_CLIP02",
+        "EP01_CLIP03",
+        "EP01_CLIP04",
+        "EP01_CLIP05",
+        "EP01_CLIP06",
+        "EP01_CLIP07",
+        "EP01_CLIP12",
+        "EP01_CLIP13"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_02",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 7/9",
+          "points": 15.6
+        },
+        {
+          "factor": "大表情 1 镜",
+          "points": 8
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "library_tier": "named_minimal",
+      "name": "裴长青",
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "陇右镇魔都司队正；押解队伍中唯一幸存的镇魔卫",
+      "score": 39.6,
+      "signals": {
+        "angle": 0,
+        "appear": 9,
+        "closeup": 0,
+        "emotion": 1,
+        "multi": 7,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "当前角色库档位=named_minimal 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP01_CLIP11"
+      ],
+      "band": "low",
+      "character_id": "CHAR_04",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "library_tier": "recurring_standard",
+      "name": "虎山神",
+      "reference_gaps": [
+        "missing_3q_baseline"
+      ],
+      "scope": "陇右荒野虎妖；百妖谱首次收录对象",
+      "score": 16.0,
+      "signals": {
+        "angle": 0,
+        "appear": 1,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 0,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "当前角色库档位=recurring_standard 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
   "default_backend": "codex",
   "episode": "第1集",
   "high": 0,
   "kind": "n2d_face_drift_risk",
-  "medium": 0,
-  "missing_3q_baseline": 0,
-  "notes": [
-    "identity_registry.json 缺失/无角色——无法算风险分。",
-    "storyboard.json 缺失/无 clips——先跑 n2d-script 分镜设计再算风险。"
-  ],
+  "medium": 2,
+  "missing_3q_baseline": 3,
+  "notes": [],
   "prior_drift_available": false,
   "recurrence_reentries": 0,
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "shared_asset_face_risk": {
-    "assets": [],
+    "assets": [
+      {
+        "asset_id": "LOC_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "WEAPON_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      },
+      {
+        "asset_id": "PROP_横刀",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_断刀",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_翻覆囚车",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "VFX_百妖谱",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_道行灌注",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "PROP_虎首",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "VFX_黑妖血",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_道行反噬",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      }
+    ],
     "available": true,
     "high": 0,
-    "low": 0,
+    "low": 10,
     "medium": 0,
-    "notes": [
-      "asset_registry.json 缺失/损坏——共享资产脸漂诊断跳过。"
-    ]
+    "notes": []
   },
   "version": 1
 }

@@ -1,6 +1,6 @@
 # layout.json schema v2
 
-`layout.json` 是已签收ネーム的像素几何实现。默认状态为 `draft`；只有结构 validator 通过、上游 SHA 当前且人工签收后才成为页面排版完成态。
+`layout.json` 是已签收缩略分镜/name board 的像素几何实现。默认状态为 `draft`；只有结构 validator 通过、上游 SHA 当前且人工或用户授权制作代理签收后才成为页面排版完成态。
 
 ```json
 {
@@ -88,7 +88,7 @@
 - panel 矩形必须为正、位于 segment 内，同一 segment 不得相互重叠。
 - 每段 narration、每句 dialogue 和每个 SFX 必须恰好得到同类型 bubble slot；slot 必须位于所属 panel 内并继承 `content_ref/speaker/order/tail`。
 - `geometry_profile` 必须与项目漫画形态匹配。
-- validator 只验证可复算结构事实；构图好坏、视觉重心和气泡是否美观仍由人工签收。
+- validator 只验证可复算结构事实；构图好坏、视觉重心和气泡是否美观仍由人工或项目内已授权制作代理签收。
 
 审批与失效：
 

@@ -1,0 +1,22 @@
+{
+  "available": true,
+  "episode": "第1集",
+  "kind": "n2d_memory_anchor_plan",
+  "notes": [
+    "尚无早期集 PNG；本集按空历史建立基线，不要求不存在的跨集漂移量测。",
+    "本集无需重注入记忆锚（无长间隔再登场 / 晚集 / 已测漂移角色）。"
+  ],
+  "rows": [],
+  "source_fingerprint": {
+    "identity_drift_report_sha256": "4c30a6a6fa211ecec10dd3e296f88e5b87d2c89559ac62c277c689698f1710d7",
+    "identity_registry_sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f",
+    "storyboard_sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
+  },
+  "status": "ready",
+  "target_appearances": [
+    "CHAR_01/常态",
+    "CHAR_02/常态",
+    "CHAR_04/常态"
+  ],
+  "version": 3
+}

@@ -288,6 +288,37 @@ ASSET_ID_HINTS.update({
         "profile": "依附百妖谱面板的金色道行计数动效；底图只留空面板，数值文字由 compose overlay 后期叠加。",
     },
 })
+ASSET_ID_HINTS.update({
+    "PROP_横刀": {
+        **ASSET_ID_HINTS["WEAPON_01"],
+        "alias_of": "WEAPON_01",
+        "path_name": "定妆_武器_横刀",
+    },
+    "PROP_断刀": {
+        "name": "断刀",
+        "path_name": "定妆_道具_断刀",
+        "profile": "镇魔司横刀的战损断裂态：保留单一黑柄旧金属护手与半截暗银单刃刀身，断口粗粝清晰；只是一把断刀，不补全、不复制。",
+        "must_not_have": ["完整长刀", "第二把刀", "副刀", "匕首", "双持", "断口长出新刀刃", "刀光变实体"],
+        "constraints": {
+            "blade_topology": "weapon_count=1；single_hilt=1；broken_blade=1；jagged_break=1；仅一把断裂横刀，断口之后不得续出完整刀身或第二把刀。",
+            "vfx_boundary": "断口只允许少量冷光/血尘边缘高光，不得生长实体刀刃。",
+            "must_not_have": ["完整长刀", "第二把刀", "副刀", "匕首", "双持", "断口长出新刀刃", "刀光变实体"],
+        },
+        "weapon_profile": {
+            "design_intent": "同场镇魔司横刀的明确战损态，用断裂形态表现败局与资源匮乏，不是新武器品类。",
+            "silhouette": "单一黑柄旧护手连接半截直身单刃刀，断口粗粝、不规则但可读。",
+            "blade_topology": "weapon_count=1；single_hilt=1；broken_blade=1；jagged_break=1；断口后无续刃、无第二实体刀。",
+            "scale": "完整横刀约一半到三分之二长度，仍按角色手部比例，不缩成匕首。",
+            "material": "暗银旧钢、哑光黑柄、旧金属护手、克制血尘与磨损。",
+            "palette": "暗银、冷灰、黑柄、少量暗红血尘。",
+            "ornament_motif": "镇魔司制式低调纹样，与 WEAPON_01 同源，不新增华丽装饰。",
+            "carry_modes": ["伤员手持", "地面遗落", "断口近景"],
+            "combat_usage": "只能作为残损防身/证据道具，不恢复完整刀路，不与完整横刀混成双持。",
+            "vfx_signature": "断口少量冷色边缘高光或血尘；不发射光刃，不补出实体续刃。",
+            "forbidden_drift": ["不要补全长刀", "不要第二把刀", "不要变匕首", "不要双持", "不要断口长出光刃"],
+        },
+    },
+})
 ASSET_ID_ALIASES: Dict[str, str] = {
     "WEAPON_01 横刀": "WEAPON_01",
     "横刀": "WEAPON_01",
@@ -303,6 +334,7 @@ STYLE_ANCHOR_REGISTRY_REL = "出图/共享/style_anchor_registry.json"
 STYLE_REFERENCE_BOARD_RULES = (
     "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；"
     "不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。"
+    "生成风格锚时不得把 `style_contract.镜头与构图` 的剧情机位、前中后景、人物调度、场景或物件描述注入风格板；"
     "角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
 )
 FULL_CHARACTER_BOARD_RULES = (
@@ -968,6 +1000,12 @@ def md_bold_value(text: str, label: str) -> str:
     return m.group(1).strip() if m else ""
 
 
+def md_labeled_value(text: str, label: str) -> str:
+    """Read a plain or bulleted Markdown label without requiring bold markup."""
+    m = re.search(rf"^\s*(?:-\s*)?{re.escape(label)}\s*[：:]\s*(.+?)\s*$", text, re.M)
+    return m.group(1).strip() if m else ""
+
+
 def md_first_bullet(text: str, labels: Sequence[str]) -> str:
     for label in labels:
         value = md_bullet(text, label) or md_bullet_contains(text, label)
@@ -1483,7 +1521,12 @@ FALLBACK_CHARACTER_VISUALS: Dict[str, Dict[str, str]] = {
         "relative_scale": "成年仙子参考体态，具体身高体量待剧情绑定。",
         "performance_signature": "清冷温润、克制、眼神干净；本集只作风格/脸部母本，不进入分镜画面。",
     },
-    "CHAR_04": {
+    # Numeric CHAR IDs are project-local.  Never bind a global fallback to
+    # ``CHAR_04`` (or any other ordinal ID): another production may legitimately
+    # use that ID for a tiger demon, a child, or a completely different role.
+    # Semantic IDs are safe to reuse across projects; ordinal IDs must derive
+    # their visual truth from the current project's character card/materials.
+    "CHAR_CHEN_QINGYUAN": {
         "name": "陈青源",
         "scope": "第3集飞鹰门门主/求救误认线关键角色",
         "age_context": "四十岁上下的中年江湖门主",
@@ -1527,6 +1570,13 @@ def human_name_from_id(cid: str, fallback: str = "") -> str:
 
 def fallback_character_visual(cid: str, name: str, key: str, default: str = "") -> str:
     cfg = FALLBACK_CHARACTER_VISUALS.get(cid) or {}
+    cfg_name = str(cfg.get("name") or "").strip()
+    actual_name = str(name or "").strip()
+    if cfg_name and actual_name and cfg_name != actual_name:
+        # Defensive boundary for legacy/custom maps: a project-local numeric ID
+        # must never inherit another project's person merely because the ID text
+        # happens to match.
+        cfg = {}
     if cfg.get(key):
         return str(cfg[key])
     display = human_name_from_id(cid, name)
@@ -1669,6 +1719,15 @@ def apply_scope_visual_hints(
         claw = "兽化长指、爪甲、犬齿是身份标记；若本镜另有道具，以分镜 prompt 为准。"
         if "爪甲" not in accessories and "犬齿" not in accessories:
             accessories = f"{claw}；{accessories}".strip("；")
+    if any(token in f"{scope_text} {face}" for token in ("虎妖", "虎头人身", "吊睛白额")):
+        tiger_face = "非人虎妖真身必须清晰：吊睛白额虎首、人形强肩背、粗壮前臂与利爪；不得洗成人类五官或普通四足老虎。"
+        if tiger_face not in face:
+            face = f"{tiger_face}；{face}"
+        hair = "虎首与肩颈为粗硬灰黄黑纹毛发，无人类束发、发冠或现代发型。"
+        outfit = "完整虎头人身妖物真身，以毛发、利爪和胸前贯穿旧伤为主体；不添加无来源人类长袍、西式兽人铠甲或金甲。"
+        tiger_marks = "吊睛白额、粗壮利爪、胸前贯穿旧伤与黑妖血是身份标记；无首饰与人类发冠。"
+        if "吊睛白额" not in accessories:
+            accessories = f"{tiger_marks}；{accessories}".strip("；")
     if "青衫" in scope_text and "青" not in outfit:
         outfit = f"青衫/深青灰古装衣袍按剧情身份保持；{outfit}"
 
@@ -1730,10 +1789,12 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         age_context = extract_age_context(text, roster_text) or fallback_character_visual(cid, name, "age_context")
         visual_identity = extract_visual_identity(text, roster_text)
         dna_lines = md_section_bullets(text, "身份 DNA")
+        card_anchor = md_bold_value(text, "锚点句") or md_labeled_value(text, "锚点句")
         face = (
             md_first_bullet(text, ("固定外貌", "外貌", "形态"))
             or visual_identity
             or "；".join(dna_lines)
+            or card_anchor
             or fallback_character_visual(cid, name, "face")
         )
         if age_context and age_context not in face:
@@ -1753,11 +1814,6 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             outfit = md_first_bullet(text, ("服装", "甲胄")) or "以非人虎头人身、黑黄粗硬毛发和伤势为主体；不添加西式兽人铠甲或无来源古装衣袍。"
             if injury:
                 accessory = f"持续伤势：{injury}；{accessory}".strip("；")
-        anchor = md_bold_value(text, "锚点句") or md_bullet(text, "锚点句")
-        if not anchor:
-            anchors = md_bold_value(text, "识别锚点")
-            anchor = anchors or f"{name}·{face}·{outfit}"
-        anchor = sanitize_static_identity_text(anchor)
         form = str(manifest.get("form") or first_form_from_card(text) or "常态")
         partial_probe = f"{name} {form} {identity} {traits} {material_profile}"
         explicit_partial = any(tok in text for tok in ("不生成清晰正脸", "禁止清晰正脸", "绝不清晰主角脸", "只使用局部", "局部参考"))
@@ -1822,6 +1878,12 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             accessories=accessory,
             drift=drift,
         )
+        anchor = card_anchor or md_bold_value(text, "识别锚点") or md_labeled_value(text, "识别锚点")
+        if not anchor:
+            # Build generic anchors only after scope-derived species/form truth has
+            # replaced human fallbacks; otherwise the registry contradicts its DNA.
+            anchor = f"{name}·{face}·{outfit}"
+        anchor = sanitize_static_identity_text(anchor)
         row: Dict[str, Any] = {
             "name": name or cid,
             "scope": scope,
@@ -2101,6 +2163,39 @@ def merge_unique_terms(*groups: Iterable[str]) -> List[str]:
     return out
 
 
+SINGLE_EDGE_BLADE_TOPOLOGY = (
+    "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；"
+    "一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；"
+    "禁止双面开刃、双刃剑轮廓或第二条锋刃。"
+)
+
+BROKEN_SINGLE_EDGE_BLADE_TOPOLOGY = (
+    "weapon_count=1；single_hilt=1；broken_blade=1；cutting_edge_count=1；"
+    "残存刀身保持单面刃与厚钝刀背，断口粗粝且明确终止；"
+    "断口之后不得补出刀尖、完整刀身、第二把刀刃或实体光刃。"
+)
+
+
+def canonical_single_edge_topology(existing: Any) -> List[str]:
+    """Prepend the named-saber contract exactly once.
+
+    Existing generated asset_registry data is also used as a project hint.
+    Without canonicalization every prompt-pack rebuild wrapped the previous
+    flattened topology as a new list item and appended another copy, so the
+    registry hash could never stabilize.
+    """
+    topology = flatten_contract_value(existing)
+    canonical = (
+        BROKEN_SINGLE_EDGE_BLADE_TOPOLOGY
+        if "broken_blade=1" in topology
+        else SINGLE_EDGE_BLADE_TOPOLOGY
+    )
+    remainder = topology.replace(SINGLE_EDGE_BLADE_TOPOLOGY, "")
+    remainder = remainder.replace(BROKEN_SINGLE_EDGE_BLADE_TOPOLOGY, "")
+    remainder = re.sub(r"[；;]{2,}", "；", remainder).strip("；; ")
+    return [canonical] + ([remainder] if remainder else [])
+
+
 def existing_asset_registry_map(root: Path) -> Dict[str, Mapping[str, Any]]:
     data = load_json(root / "出图" / "共享" / "asset_registry.json")
     if not isinstance(data, Mapping):
@@ -2298,14 +2393,16 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             "face_policy": constraints.get("face_policy") or "faceless",
             "must_not_have": must_not_have,
         })
-        if atype == "weapon" and re.search(r"(?:横刀|腰刀|朴刀|环首刀|短刀|匕首|saber|sabRE|knife|dagger)", f"{name} {profile}", re.I):
-            topology = flatten_contract_value(constraints.get("blade_topology"))
-            single_edge = (
-                "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；"
-                "一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；"
-                "禁止双面开刃、双刃剑轮廓或第二条锋刃。"
+        weapon_like_role = str(hint.get("weapon_like_role") or "").strip()
+        weapon_entity = atype == "weapon" or (
+            atype == "prop"
+            and weapon_like_role != "not_entity_weapon"
+            and bool(re.search(r"(?:横刀|腰刀|朴刀|环首刀|断刀|短刀|匕首|saber|sabRE|knife|dagger)", f"{name} {profile}", re.I))
+        )
+        if weapon_entity and re.search(r"(?:横刀|腰刀|朴刀|环首刀|断刀|短刀|匕首|saber|sabRE|knife|dagger)", f"{name} {profile}", re.I):
+            constraints["blade_topology"] = canonical_single_edge_topology(
+                constraints.get("blade_topology")
             )
-            constraints["blade_topology"] = merge_unique_terms([single_edge], [topology])
         if aid == "VFX_系统面板":
             constraints.update({
                 "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
@@ -2328,6 +2425,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             "drift": drift_terms,
             "owner": req.get("owner") or hint.get("owner") or "剧情资产",
             "current_state": profile,
+            "alias_of": str(hint.get("alias_of") or "").strip(),
             "scene_dna": complete_asset_scene_dna(
                 {
                     "name": name,
@@ -2346,7 +2444,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 "status": "active",
             },
         }
-        if atype == "weapon":
+        if weapon_entity:
             default_weapon_profile = {
                 "design_intent": profile,
                 "silhouette": f"{profile}；单一实体武器轮廓，不复制第二把刀刃。",
@@ -2384,6 +2482,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                     [str(x) for x in negative_items],
                 )
             defs[aid]["weapon_profile"] = default_weapon_profile
+            defs[aid]["weapon_like_role"] = weapon_like_role or "entity_weapon"
         elif isinstance(hint.get("weapon_profile"), Mapping):
             defs[aid]["weapon_profile"] = dict(hint["weapon_profile"])
         if isinstance(hint.get("weapon_like_role"), str) and hint.get("weapon_like_role"):
@@ -2420,7 +2519,7 @@ def prompt_safe_forbidden(value: Any) -> str:
 
 def ref_item(root: Path, path: str, *, key: str = "", source: str = "出图/共享/图片/定妆母本_待生成.png") -> Dict[str, Any]:
     item: Dict[str, Any] = {"path": path, "status": "ready" if (root / path).is_file() else "planned"}
-    if key in {"three_quarter", "side", "rear_three_quarter", "back"}:
+    if key in {"three_quarter", "side", "rear_three_quarter", "back", "expression", "expressions"}:
         method = "controlled_multiref_generation"
     elif key in {"half_body", "full_body", "face_anchor_refs"}:
         method = "front_crop"
@@ -2638,17 +2737,41 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
         rg["back"] = back
     if library_tier == FULL_LIBRARY_TIER or turnaround.get("status") == "ready":
         rg["turnaround"] = turnaround
-    for emotion in ("克制", "疲惫隐忍", "警觉", "震动"):
+    for emotion in ("六联表", "克制", "疲惫隐忍", "警觉", "震动"):
         ref = pick_existing_ref(
             root,
             [shared_rel(ak, f"_表情_{emotion}_脸锚裁切"), shared_rel(ak, f"_表情_{emotion}")],
-            key="face_anchor_refs",
+            key="expression",
             source=source,
         )
         if ref.get("status") == "ready":
             rg["expressions"].append({**ref, "emotion": emotion})
     if not rg["expressions"]:
-        rg["expressions"].append({**ref_item(root, source, key="face_anchor_refs", source=source), "emotion": "基础"})
+        if library_tier == FULL_LIBRARY_TIER:
+            expression = ref_item(
+                root,
+                shared_rel(ak, "_表情_六联表"),
+                key="expression",
+                source=source,
+            )
+            rg["expressions"].append({
+                **expression,
+                "emotion": "六联表（冷静/警觉/震惊/隐忍/将哭/决绝）",
+                "layout": "two_by_three_expression_sheet_v1",
+            })
+        elif library_tier == STANDARD_LIBRARY_TIER:
+            expression = ref_item(
+                root,
+                shared_rel(ak, "_表情_克制"),
+                key="expression",
+                source=source,
+            )
+            rg["expressions"].append({**expression, "emotion": "克制"})
+        else:
+            rg["expressions"].append({
+                **ref_item(root, source, key="face_anchor_refs", source=source),
+                "emotion": "基础",
+            })
     base_views = {
         key: rg[key]
         for key in ("front", "three_quarter", "side", "rear_three_quarter", "back", "half_body")
@@ -2985,6 +3108,8 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
             asset["weapon_profile"] = cfg["weapon_profile"]
             asset["owner"] = cfg.get("owner")
             asset["character_id"] = cfg.get("character_id")
+        if str(cfg.get("alias_of") or "").strip():
+            asset["alias_of"] = str(cfg.get("alias_of"))
         if isinstance(cfg.get("weapon_like_role"), str) and cfg.get("weapon_like_role"):
             asset["weapon_like_role"] = cfg["weapon_like_role"]
         assets.append(asset)
@@ -3080,14 +3205,43 @@ def merge_existing_registry_evidence(root: Path, rel_path: Path, new_data: Dict[
     if not isinstance(existing, Mapping):
         return new_data
     merged = preserve_registry_evidence(new_data, existing)
-    return merged if isinstance(merged, dict) else new_data
+    if not isinstance(merged, dict):
+        return new_data
+    return preserve_generated_at_if_semantically_equal(merged, existing)
+
+
+def preserve_generated_at_if_semantically_equal(
+    new_data: Dict[str, Any], existing: Mapping[str, Any]
+) -> Dict[str, Any]:
+    """Keep artifact SHA stable when only the clock changed.
+
+    Memory-anchor and production-lock contracts fingerprint whole registry
+    files.  Regenerating an otherwise identical prompt pack must therefore not
+    make those contracts stale merely by replacing ``generated_at``.
+    """
+    old_cmp = {k: v for k, v in existing.items() if k != "generated_at"}
+    new_cmp = {k: v for k, v in new_data.items() if k != "generated_at"}
+    old_generated_at = existing.get("generated_at")
+    if old_cmp == new_cmp and old_generated_at:
+        stable = dict(new_data)
+        stable["generated_at"] = old_generated_at
+        return stable
+    return new_data
 
 
 def clip_chars(clip: Mapping[str, Any]) -> List[str]:
     raw = clip.get("character_ids") or []
     out: List[str] = []
     for item in raw:
-        text = str(item)
+        # Storyboard/continuity may append an episode-local visual state after
+        # the durable character id (for example ``CHAR_01/囚途残损态``).  That
+        # suffix is a state-ledger value, not an identity-registry form.  All
+        # registry/reference lookups in this pack must therefore use the
+        # stable base id; ``state_lock_line`` carries the visual state
+        # separately.  Keeping the suffix here used to produce impossible
+        # refs such as ``CHAR_01/囚途残损态/常态`` and made image_qc report
+        # hundreds of false unknown_char_id findings.
+        text = str(item).strip().split("/", 1)[0]
         if text.startswith(("CHAR_", "BEAST_", "CROWD_", "GROUP_")) and text not in out:
             out.append(text)
     return out
@@ -3680,6 +3834,8 @@ def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, 
         registry["source_reference_policy"] = (
             "only_for_clean_style_anchor_synthesis; do_not_attach_raw source references to character/scene/shot generation"
         )
+    if isinstance(previous, Mapping):
+        return preserve_generated_at_if_semantically_equal(registry, previous)
     return registry
 
 
@@ -3935,8 +4091,8 @@ def character_board_spec(library_tier: str, restricted: bool) -> Tuple[str, str,
     if library_tier == FULL_LIBRARY_TIER:
         return (
             FULL_CHARACTER_BOARD_RULES,
-            "正面、前45°、侧面、后45°、背面、半身/全身服装、脸部特写、标准五角 turnaround；表情与动作按剧本扩展。",
-            "正面/前45°/侧面/后45°/背面/半身或全身/脸部特写是否同源，turnaround 仅作人审总览。",
+            "正面、前45°、侧面、后45°、背面、半身/全身服装、脸部特写、标准五角 turnaround、同源六联表情表（冷静/警觉/震惊/隐忍/将哭/决绝）；动作按剧本扩展。",
+            "正面/前45°/侧面/后45°/背面/半身或全身/脸部特写/六联表情表是否同源，turnaround 仅作人审总览。",
         )
     if library_tier == STANDARD_LIBRARY_TIER:
         return (
@@ -4147,7 +4303,14 @@ def shared_style_anchor_prompt(story: Optional[Mapping[str, Any]] = None, root: 
     aspect = project_aspect_ratio(root) if root is not None else "项目已选画幅"
     style_anchor_rel = primary_style_anchor_rel(sc)
     visual_tone = str(sc.get("视觉基调") or "按项目基础视觉风格提炼统一材质、角色比例、皮肤/线条/渲染语言。")
-    composition = str(sc.get("镜头与构图") or "遵守项目已选画幅，镜头语言清楚，角色/材质样本可读。")
+    # A style anchor is a rendering-language control asset, not a storyboard
+    # frame.  `镜头与构图` often contains story-specific foreground/midground/
+    # background blocking; copying it here contaminates every downstream
+    # character/asset reference with one location, costume, prop or action.
+    composition = (
+        "竖幅分区式视觉语言样板；仅展示抽象色卡、光比阶梯、线条笔触与近裁材质样本；"
+        "不建立具体地点、前中后景、人物调度或动作叙事。"
+    )
     lighting = str(sc.get("光色策略") or "统一主色调、低冲突光比，强光必须有来源。")
     taboo = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     return "\n".join([
@@ -4159,11 +4322,11 @@ def shared_style_anchor_prompt(story: Optional[Mapping[str, Any]] = None, root: 
         f"**style_contract.style_anchor**：`{style_anchor_rel}`",
         "",
         "### 正向 prompt（中文）",
-        f"{style_name} 统一风格锚图，{aspect}。做成项目视觉语言设定板，不是剧情剧照。中性灰白/18%灰棚拍背景，柔和均匀棚拍主光，只展示本项目已选风格的线条或材质语言、色彩分级、镜头质感和完成度；不得自行改成写实、3D、赛璐璐、水墨、Q版或其它未选择风格。视觉基调：{visual_tone}；镜头与构图：{composition}；光色策略：{lighting}。画面可放无脸中性人台和与当前风格相符的材质/线条/色卡样本；不要任何具名角色、不要清晰可识别人物脸、不要雨窗/房间/家具场景、不要剧情动作。",
+        f"{style_name} 统一风格锚图，{aspect}。做成项目视觉语言设定板，不是剧情剧照。中性灰白/18%灰棚拍背景，柔和均匀棚拍主光，只展示本项目已选风格的线条或材质语言、色彩分级、镜头质感和完成度；不得自行改成写实、3D、赛璐璐、水墨、Q版或其它未选择风格。视觉基调：{visual_tone}；只把其中的材质、线条、颜色和光比转译为抽象样本，不把名词画成具体对象或场景；镜头与构图：{composition}；光色策略：{lighting}。不要人物、动物/妖物、建筑、兵器、道具、环境景观、可读文字或剧情动作；不要雨窗/房间/家具场景。",
         "### 正向 prompt（英文）",
-        f"Unified style anchor board for the selected project style ({style_name}), {aspect}, not a story still. Neutral light gray / 18% gray studio backdrop and even soft studio lighting. Show only the selected linework or material language, color treatment, lens language and finish level. Anonymous faceless mannequin, linework, palette or material samples only; no named identity or readable face, no room set, no window, no furniture, no story action. Do not substitute a different unselected visual style.",
+        f"Unified abstract style anchor board for the selected project style ({style_name}), {aspect}, not a story still. Neutral light gray / 18% gray studio backdrop and even soft studio lighting. Use separated palette, tonal-ratio, linework and close-cropped material swatches only. Translate the style contract into material, line, color and lighting qualities; do not illustrate its nouns as objects or a scene. No person, face, animal, creature, building, weapon, prop, environment, landscape, readable text or story action. Do not substitute a different unselected visual style.",
         "### 负向 prompt",
-        f"风格禁忌：{taboo}；通用风格锚禁忌：未选择风格、清晰人物脸、具体角色服装、剧情动作、文字、水印、logo。",
+        f"风格禁忌：{taboo}；通用风格锚禁忌：未选择风格、人物、清晰人物脸、具体角色服装、动物、妖物、建筑、兵器、道具、环境景观、剧情动作、文字、水印、logo。",
         "### 检查清单",
         "- 是否能作为全剧角色定妆的统一渲染语言参考。",
         "- 是否没有具体角色身份、清晰脸、剧情动作。",
@@ -4957,23 +5120,6 @@ def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
             path = root / rel
             write_text(path, text)
             written.append(path)
-        if cid == "CHAR_04":
-            card = root / "设定库" / "characters" / "陈青源.md"
-            if not card.is_file():
-                write_text(card, "\n".join([
-                    "# 角色卡 — 陈青源（ID: CHAR_04）",
-                    "",
-                    "- 身份：飞鹰门门主，第3集求救误认线关键角色。",
-                    "- 性格关键词：急迫、恭敬、压住慌乱、有江湖门主硬骨架。",
-                    "- 固定外貌：四十岁上下，中年方阔脸，虬髯短须，眉骨重，火把侧照下眼神急迫。",
-                    "- 固定体态：成年魁梧男体格，比姜月初宽厚一圈；跪地时仍有门主硬骨架。",
-                    "- 固定服装：深灰黑江湖劲装，皮革护腕，短斗篷，风尘与马行泥点。",
-                    "- 发型/发色/发饰：黑发束高髻，鬓角乱发，低调旧金属发冠。",
-                    "- 配饰：旧金属腰牌、皮革护腕；马缰或火把只作剧情道具。",
-                    "- 锚点句：陈青源·虬髯中年门主·深灰黑江湖劲装·火把侧照急迫恭敬·跪地求救。",
-                    "",
-                ]))
-                written.append(card)
     for aid, cfg in ASSET_DEFS.items():
         rel = asset_reference_card_rel(root, aid, cfg)
         if rel.startswith("设定库/locations/"):

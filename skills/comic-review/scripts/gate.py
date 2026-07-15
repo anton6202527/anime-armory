@@ -840,7 +840,7 @@ def check_traditional_manga_contract(
             "warn",
             "name_board_missing",
             rel(root, name_path),
-            "传统原稿流程已启用，但缺少缩略分镜/name_board；页流、翻页钩子和格子轻重缺少ネーム层证据。",
+            "传统原稿流程已启用，但缺少缩略分镜/name_board；页流、翻页钩子和格子轻重缺少 name board 层证据。",
             "name",
             "运行 comic-name 生成 name_board.json，再重建 layout。",
             evidence_family="workflow",
@@ -1280,7 +1280,7 @@ def check_name_stage(root: Path, chapter: str, findings: list[dict[str, Any]], n
         code="name_approval_missing_or_stale",
         artifact=rel(root, path),
         return_to_stage="name",
-        label="ネーム审批合同",
+        label="缩略分镜/name board 审批合同",
     )
 
 

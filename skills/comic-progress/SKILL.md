@@ -53,8 +53,8 @@ python3 skills/comic-progress/scripts/scan.py "创作区/画漫画/作品名" --
 | 缺口 | 返回 skill |
 |---|---|
 | 开发包 strict/signoff、chapter contract、source spans/coverage、source semantics 或 panel script 绑定缺失/过期 | `comic-script` |
-| `name_board` 处于 draft/review、未人审、内容 SHA 或上游 SHA 过期 | `comic-name` |
-| `layout` 未人审或内容/上游 SHA 过期 | `comic-layout` |
+| `name_board` 处于 draft/review、未由人工或授权制作代理签收、内容 SHA 或上游 SHA 过期 | `comic-name` |
+| `layout` 未由人工或授权制作代理签收，或内容/上游 SHA 过期 | `comic-layout` |
 | `finishing_plan` 未 validated/pass 或上游过期 | `comic-finishing` |
 | identity registry 未 v2、model-pack report 不 ready、纳管资产的多视图签收缺失/过期 | `comic-identity` |
 | reference plan / `panel_jobs` 缺失、未完整覆盖或未消费当前 SHA | `comic-image` |
@@ -65,11 +65,11 @@ python3 skills/comic-progress/scripts/scan.py "创作区/画漫画/作品名" --
 
 下游 gate 会重跑全部上游确定性检查，因此扫描器把“最晚已完成阶段的当前 receipt”作为传递证明，同时仍直接核验全部当前 artifacts/contracts。早期 receipt 因 runner 刷新 jobs/report 而 stale 不会单独触发回退。
 
-如果下一步是出图、覆盖导出或正式发布前审查，转述时提醒用户确认模型/渠道、费用、覆盖范围和权利状态。
+如果下一步是出图、覆盖导出或正式发布前审查，先检查项目是否已有当前有效的模型/渠道、费用、覆盖范围和权利授权；同范围授权沉默沿用，缺失或实质扩张时才提醒用户确认。
 
 ## 不做什么
 
 - 不回写 `_进度.md`。
 - 不会为了“显示完成”而自动补签、刷新 gate 或修改任何产物。
-- 不替用户确认付费或覆盖动作。
+- 不替用户创建不存在的付费或覆盖授权，也不把窄范围授权扩张到新模型、新渠道、新预算或已发布成品覆盖。
 - 不扫描其它生产线目录。

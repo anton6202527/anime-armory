@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-15T16:04:43",
+  "characters": [
+    "CHAR_ABBOT_SHANGQING"
+  ],
+  "views": [
+    "front"
+  ],
+  "backend": "codex",
+  "attempted_backends": [
+    "codex"
+  ],
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_views_第1话__20260715T160443075360.json",
+  "previous_manifest_sha256": "8d9243232217543601ab7ed073ee2ff119d6abfcfb0e2db2dd8620f48e4f4773",
+  "contact_sheet": "生产数据/comic_identity_views_第1话_contact_sheet.jpg",
+  "generated": 0,
+  "skipped": 0,
+  "failed": 1,
+  "items": [
+    {
+      "ts": "2026-07-15T16:04:43",
+      "status": "character_view_failed",
+      "ref_id": "CHAR_ABBOT_SHANGQING",
+      "view": "front",
+      "anchor_path": "",
+      "anchor_kind": "text_prompt_seed",
+      "backend": "codex",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "codex exit 124; class=backend_forbidden; detail=n_control` 可登记固定 seed pool；支持 seed 的后端传池内值，不支持/未暴露 seed 的后端记 `seed_effective=false` no-op 降级，不把 Codex 等入口误报成可复现。\\n> **生产数据仪表盘 + ROI（P0）**：每次 n2d 生成、审查或投放回收后，调用 `n2d-dashboard` 记录事件；成本、耗时、生成次数、重抽原因、QA 阻断、最终通过率、每分钟成本、一次通过率、重抽率、投放净回收、回收/生产成本统一落 `创作区/制漫剧/<剧名>/生产数据/`。`_进度.md` 只管阶段状态，`n2d-dashboard` 才是判断“工业级是否成立”的指标真值源。gate 结果用 `python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage image_preflight|video_preflight|image|video|compose|review` 入账，生成事件用 `record` 入账；平台收入/投放成本放 `生产数据/platform_metrics.csv|jsonl|json` 或 `record --event release` 入账。**开跑前成本预检**用 `dashboard.py forecast <作品根> 第N集 [--budget N --unit CNY]`：历史 `cost_per_finished_min` × 本集计划时长给预测成本 + 预算够撑几集 + 重抽漏点 Top（事后记账之外补一个事前估算；无历史/无计划时长则不臆造）。`dashboard.md` 另出**行业基准对照**（默认读 `n2d-dashboard/references/industry_benchmark.json`，一次通过率/重抽率/每分钟成本/跨集一致性 并排行业宣传基准，只读·非闸门，可 `_设置.md` 或项目级 `生产数据/industry_benchmark.json` 覆盖，基准以 `n2d-review` 流程自审复核为准；留存基准刷新后必须跑 `validate_benchmark_schema.py`）。\\n\",\"exit_code\":0,\"status\":\"completed\"}}"
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "kind": "n2d_reference_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "episode": "第1集",
+  "backend": "codex",
+  "backend_label": "GPT Image 2（渠道 Codex CLI）",
+  "backend_strategy": "multi_reference",
+  "clips": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "lens": "85mm 85mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "lens": "35mm 85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "lens": "85mm 50mm 85mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "lens": "50mm 85mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "lens": "35mm 85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "lens": "85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP07",
+      "lens": "85mm 50mm 85mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP08",
+      "lens": "85mm 85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP09",
+      "lens": "50mm 85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP10",
+      "lens": "50mm 85mm 35mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP11",
+      "lens": "50mm 85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP12",
+      "lens": "85mm 50mm",
+      "characters": []
+    },
+    {
+      "clip_id": "EP01_CLIP13",
+      "lens": "50mm 85mm 85mm",
+      "characters": []
+    }
+  ],
+  "shared_assets": {
+    "available": true,
+    "assets": [
+      {
+        "asset_id": "LOC_01",
+        "type": "scene",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "WEAPON_01",
+        "type": "weapon",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "PROP_横刀",
+        "type": "prop",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "PROP_断刀",
+        "type": "prop",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "PROP_翻覆囚车",
+        "type": "prop",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "VFX_百妖谱",
+        "type": "vfx",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "VFX_道行灌注",
+        "type": "vfx",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "PROP_虎首",
+        "type": "prop",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "VFX_黑妖血",
+        "type": "vfx",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "VFX_道行反噬",
+        "type": "vfx",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      }
+    ],
+    "actions": [],
+    "notes": [],
+    "summary": {
+      "person_bearing_assets": 10,
+      "faceless": 10,
+      "face_locked": 0,
+      "actions": 0
+    }
+  },
+  "summary": {
+    "clip_count": 13,
+    "shared_person_bearing_assets": 10,
+    "shared_asset_actions": 0,
+    "weak_backend_large_delta_clips": 0,
+    "chars_need_native_registration": [],
+    "chars_need_lora": [],
+    "multi_subject_actions": [],
+    "action_required": [],
+    "multi_person_clips": 0,
+    "action_eyeline_lock_clips": 0,
+    "memory_anchor_reinjected_clips": 0,
+    "memory_anchor_contract": {
+      "status": "ready",
+      "available": true,
+      "path": "生产数据/memory_anchor_plan_第1集.json",
+      "sha256": "87140f1341b027200e8891eb24f7df30d858a5edf2742fb192afa76b05095451",
+      "required_rows": 0,
+      "required_char_keys": [],
+      "consumed_char_keys": [],
+      "consumed_clip_ids_by_char": {},
+      "missing_reference_rows": [],
+      "missing_reference_files": {},
+      "validated_reference_sha256_by_char": {},
+      "errors": [],
+      "source_fingerprint": {
+        "identity_drift_report_sha256": "4c30a6a6fa211ecec10dd3e296f88e5b87d2c89559ac62c277c689698f1710d7",
+        "identity_registry_sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f",
+        "storyboard_sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
+      },
+      "current_source_fingerprint": {
+        "identity_registry_sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f",
+        "identity_drift_report_sha256": "4c30a6a6fa211ecec10dd3e296f88e5b87d2c89559ac62c277c689698f1710d7",
+        "storyboard_sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
+      },
+      "unconsumed_char_keys": []
+    },
+    "required_char_keys": [],
+    "consumed_char_keys": [],
+    "consumed_clip_ids_by_char": {},
+    "tagged_multi_image_clips": 0,
+    "video_reference_candidate_clips": 0
+  },
+  "notes": []
+}

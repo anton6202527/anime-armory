@@ -1,27 +1,94 @@
 {
-  "approvals": [],
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "9e86f7d2ef5155dd6309268e8d65ed6e0a0a16ab77118c8a0e00a92476e5c709"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "bc8e42d1bf017bc213594c5a3355582bc7571af492af7a15c5cda100529ed0e5"
+        },
+        {
+          "path": "生产数据/timelines/第1集/animatic_timeline.otio",
+          "sha256": "09cb89409fe97a58c8e3213c37bafd8d277ab066a1bc6ef6a6860b8195716997"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "fec3594d691d836cf9accbf0059fca7eb991cc7fc8140295795b84c246fed8ca"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "c1fc35fc884381fb94aa391ffcbc00ede4297e25456e3f50d75195ce48c3213b"
+        }
+      ],
+      "note": "沿用用户明确批准的13个文字板镜位、129.846秒动画预演；本次只补项目级基础视觉风格同源字段，黑赤镇魔·水墨妖谱仍为副风格标签，不改变任何镜位、时长或画面意图。",
+      "reviewed_at": "2026-07-15T02:53:37+00:00",
+      "reviewer_id": "user:project-owner-director",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "85d669a317a07e7170afc16032f0895d9ad0b386f552c31d90cda8364fbadc5c",
+      "signed_input_fingerprint_sha": "2efde44d5d72975447c35d6bd324253612466040c536c7edaf1c1143d51bc6ba",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "9e86f7d2ef5155dd6309268e8d65ed6e0a0a16ab77118c8a0e00a92476e5c709"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "bc8e42d1bf017bc213594c5a3355582bc7571af492af7a15c5cda100529ed0e5"
+        },
+        {
+          "path": "生产数据/timelines/第1集/animatic_timeline.otio",
+          "sha256": "09cb89409fe97a58c8e3213c37bafd8d277ab066a1bc6ef6a6860b8195716997"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "fec3594d691d836cf9accbf0059fca7eb991cc7fc8140295795b84c246fed8ca"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "c1fc35fc884381fb94aa391ffcbc00ede4297e25456e3f50d75195ce48c3213b"
+        }
+      ],
+      "note": "沿用用户以制片人身份对动画预演/editorial的批准；本次只补风格合同同源字段并重绑哈希，仍不授权付费生成。",
+      "reviewed_at": "2026-07-15T02:53:37+00:00",
+      "reviewer_id": "user:project-owner-producer",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "85d669a317a07e7170afc16032f0895d9ad0b386f552c31d90cda8364fbadc5c",
+      "signed_input_fingerprint_sha": "2efde44d5d72975447c35d6bd324253612466040c536c7edaf1c1143d51bc6ba",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
   "artifact_scope": "stage2_animatic",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-14T12:16:29+00:00",
+  "created_at": "2026-07-15T02:53:37+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
       "生产数据/animatic_第1集.html": "9e86f7d2ef5155dd6309268e8d65ed6e0a0a16ab77118c8a0e00a92476e5c709",
-      "生产数据/animatic_第1集.json": "582286f649da1b9e8ec45ce6054861e324bb09212b1378e231fe3882b0db2324",
-      "生产数据/timelines/第1集/animatic_timeline.otio": "10f7a260af8aafc44128c4bd452524eb3ba9236eff1b7b18f776de6c02011545",
-      "脚本/第1集/animatic_packet.json": "98873277ad0b2fdc73f9131dd4ca15e84c8e75fe6e65b9e2393c79c579f4ca6a",
-      "脚本/第1集/animatic_packet.md": "a0ff3e7dd7ffff794ffe4a6c5513ac9abf3357639111080b4d2bdadb9bcb0c52"
+      "生产数据/animatic_第1集.json": "bc8e42d1bf017bc213594c5a3355582bc7571af492af7a15c5cda100529ed0e5",
+      "生产数据/timelines/第1集/animatic_timeline.otio": "09cb89409fe97a58c8e3213c37bafd8d277ab066a1bc6ef6a6860b8195716997",
+      "脚本/第1集/animatic_packet.json": "fec3594d691d836cf9accbf0059fca7eb991cc7fc8140295795b84c246fed8ca",
+      "脚本/第1集/animatic_packet.md": "c1fc35fc884381fb94aa391ffcbc00ede4297e25456e3f50d75195ce48c3213b"
     },
-    "sha": "6de90e1bae0b512730e4258a6fb680d6bd2cecba2d493271f59418322338ccc4"
+    "sha": "85d669a317a07e7170afc16032f0895d9ad0b386f552c31d90cda8364fbadc5c"
   },
   "input_fingerprint": {
     "files": {
       "合成/第1集/配音/voice_zh.wav": null,
-      "脚本/第1集/storyboard.json": "87c28507551b6ce158d28b8ed91a4762b04a00ae960fccbc90196b76b61f5aaa",
+      "脚本/第1集/storyboard.json": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6",
       "脚本/第1集/字幕_中文.srt": "9e8e84cd32eb9505b7d986319cd0901146ebb3799887f43e9fdafedc64eccbf9",
       "脚本/第1集/镜头时长.json": "e29dc35237353d4e3f6f75c4c0ff44336c049cbaa0e390931533b2dd4cce1f56"
     },
-    "sha": "5e8b686637f45b54b0d359c037349111ee3457cf6d23fdfd3c23bfd4cb7ad414"
+    "sha": "2efde44d5d72975447c35d6bd324253612466040c536c7edaf1c1143d51bc6ba"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -39,6 +106,7 @@
       ]
     }
   ],
-  "status": "pending",
+  "status": "approved",
+  "updated_at": "2026-07-15T02:53:37+00:00",
   "version": 1
 }

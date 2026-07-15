@@ -4,28 +4,64 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-14T12:23:55+00:00",
-  "current_stage": "script_stage2",
+  "created_at": "2026-07-15T07:10:57+00:00",
+  "current_stage": "image",
   "current_todo": {
-    "column": "分镜设计",
-    "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集  (配音后定稿)",
-    "label": "阶段2·分镜设计",
-    "note": "",
-    "skill": "n2d-script",
-    "stage_key": "script_stage2",
-    "status": "⬜"
+    "column": "出图",
+    "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集",
+    "label": "出图返修",
+    "note": "image_qc=block，hard_blocks=8；先修复报告阻断并重跑 image_qc：/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "skill": "n2d-image",
+    "stage_key": "image",
+    "status": "0/114"
   },
   "episode": "第1集",
   "execution_steps": [],
   "gate_refresh_needed": false,
   "gate_refresh_stages": [],
-  "image_consistency": null,
-  "image_qc_environment": null,
+  "image_consistency": {
+    "advisory": 0,
+    "consistent": false,
+    "degraded": true,
+    "freshness": "fresh",
+    "hard_blocks": 8,
+    "precision_level": "full",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "samples": [
+      "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/常态 front（出图/共享/图片/定妆_CHAR_01__常态.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。",
+      "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/常态 three_quarter（出图/共享/图片/定妆_CHAR_01__常态_45度.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。",
+      "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/常态 side（出图/共享/图片/定妆_CHAR_01__常态_侧.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+    ],
+    "status": "ok",
+    "verdict": "block"
+  },
+  "image_qc_environment": {
+    "advisory": 0,
+    "degraded": true,
+    "finding_samples": [
+      "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/常态 front（出图/共享/图片/定妆_CHAR_01__常态.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。",
+      "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/常态 three_quarter（出图/共享/图片/定妆_CHAR_01__常态_45度.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。",
+      "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/常态 side（出图/共享/图片/定妆_CHAR_01__常态_侧.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+    ],
+    "freshness": "fresh",
+    "hard_blocks": 8,
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "status": "ok",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "verdict": "block"
+  },
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
   "newly_relevant_skills": [],
   "notes": [
-    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 24 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png"
+    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 24 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png",
+    "图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=8）：见 `/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.md",
@@ -35,6 +71,7 @@
     "n2d",
     "n2d-batch",
     "n2d-dashboard",
+    "n2d-image",
     "n2d-lora",
     "n2d-review",
     "n2d-script",
@@ -42,7 +79,7 @@
     "n2d-voice"
   ],
   "rerun_from": null,
-  "rerun_until": "script_stage2",
+  "rerun_until": "image",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,

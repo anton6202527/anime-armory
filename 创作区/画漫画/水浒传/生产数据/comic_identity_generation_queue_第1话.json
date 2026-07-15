@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_generation_queue",
+  "chapter": "第1话",
+  "created_at": "2026-07-15T16:10:11+08:00",
+  "status": "paused_backend_unhealthy",
+  "backend": "内置 imagegen",
+  "model": "GPT Image 2",
+  "attempt_policy": {
+    "max_attempts_total_per_asset_variant": 2,
+    "started_request_consumes_attempt": true,
+    "timeout_failure_interruption_refund": false,
+    "ledger": "生产数据/comic_identity_attempt_ledger_第1话.json"
+  },
+  "circuit_breaker": {
+    "status": "retriggered",
+    "triggered_at": "2026-07-15T16:04:43+08:00",
+    "reason": "同一图像通道连续两次 240 秒超时，均无有效 image_generation_end 图片事件",
+    "evidence": [
+      {
+        "asset_id": "CHAR_ABBOT_SHANGQING",
+        "variant": "front",
+        "attempt": 1,
+        "status": "failed",
+        "error_class": "backend_timeout"
+      },
+      {
+        "asset_id": "CHAR_ABBOT_SHANGQING",
+        "variant": "front",
+        "attempt": 2,
+        "status": "failed",
+        "error_class": "backend_timeout"
+      }
+    ],
+    "resume_condition": "内置 imagegen 的同模型、同风格锚、同提示词生产级重试仍在图片编辑端点发生网络错误；继续保持 GPT Image 2 / 内置 imagegen，不自动切换后端，须等待该端点出现可验证恢复证据后再做一次受控探针",
+    "action": "暂停全部尚未尝试资产，避免用新资产消耗健康探测成本",
+    "cleared_at": "2026-07-15T17:26:54+08:00",
+    "cleared_by": "生产数据/comic_identity_backend_health_第1话.json",
+    "cleared_by_probe_id": "e670437ff2601eeae2a2",
+    "cleared_reason": "reference_attached 探针实际生成有效 PNG；升级 Codex exec saved_path 解析后完成视觉、尺寸与 SHA 复核",
+    "retriggered_at": "2026-07-15T20:29:19+08:00",
+    "retriggered_reason": "用户要求保持同一 GPT Image 2 / 内置 imagegen 后端、同一风格锚与同一提示词再试；重试仍因图片编辑端点网络错误失败且无成图，宋仁宗正式次数仍未消耗",
+    "latest_evidence": [
+      {
+        "probe_id": "ee5b4ac4fc34f95b6321",
+        "generation_kind": "backend_health",
+        "probe_profile": "production-character-front",
+        "production_request_class": "historical_character_front",
+        "probe_scope": "reference_attached",
+        "access_path": "内置 imagegen",
+        "status": "failed",
+        "error_class": "builtin_network_error",
+        "asset_attempt_ledger_consumed": false,
+        "health_manifest": "生产数据/comic_identity_backend_health_第1话.json"
+      },
+      {
+        "probe_id": "b5fdb6e22bca36bce368",
+        "retry_of_probe_id": "ee5b4ac4fc34f95b6321",
+        "retry_ordinal": 2,
+        "generation_kind": "backend_health",
+        "probe_profile": "production-character-front",
+        "production_request_class": "historical_character_front",
+        "probe_scope": "reference_attached",
+        "access_path": "内置 imagegen",
+        "model": "GPT Image 2",
+        "style_anchor_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+        "prompt_sha256": "cd533a0523c2baab86c9c80b6318e48e78143e3707f3bab1f8d7479db0f5f1d9",
+        "status": "failed",
+        "error_class": "builtin_network_error",
+        "image_generated": false,
+        "asset_attempt_ledger_consumed": false,
+        "health_manifest": "生产数据/comic_identity_backend_health_第1话.json"
+      }
+    ]
+  },
+  "exhausted": [
+    {
+      "priority": 1,
+      "asset_id": "CHAR_HONG_XIN",
+      "variant": "OUTFIT_MOUNTAIN_PLAIN",
+      "kind": "outfit",
+      "panel_occurrences": 36,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "exhausted"
+    },
+    {
+      "priority": 2,
+      "asset_id": "CHAR_ABBOT_SHANGQING",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 16,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "exhausted"
+    },
+    {
+      "priority": 3,
+      "asset_id": "LOC_SHANGQING_PALACE",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 13,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "exhausted"
+    },
+    {
+      "priority": 4,
+      "asset_id": "LOC_ZICHEN_HALL",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 9,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "exhausted"
+    },
+    {
+      "priority": 5,
+      "asset_id": "PROP_IMPERIAL_EDICT",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 30,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "exhausted"
+    },
+    {
+      "priority": 6,
+      "asset_id": "PROP_SILVER_CENSER",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 28,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "exhausted"
+    }
+  ],
+  "pending": [
+    {
+      "priority": 3,
+      "asset_id": "CHAR_EMPEROR_RENZONG",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 7,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy",
+      "followups_after_success": [
+        "face",
+        "model_pack_signoff"
+      ]
+    },
+    {
+      "priority": 4,
+      "asset_id": "PROP_FUMO_SEALS",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 5,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy"
+    },
+    {
+      "priority": 5,
+      "asset_id": "MON_SNOW_SERPENT",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 4,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy",
+      "followups_after_success": [
+        "three_quarter",
+        "face",
+        "model_pack_signoff"
+      ]
+    },
+    {
+      "priority": 6,
+      "asset_id": "MON_WHITE_TIGER",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 3,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy",
+      "followups_after_success": [
+        "three_quarter",
+        "face",
+        "model_pack_signoff"
+      ]
+    },
+    {
+      "priority": 7,
+      "asset_id": "LOC_FUMO_HALL_EXTERIOR",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 3,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy"
+    },
+    {
+      "priority": 8,
+      "asset_id": "LOC_FUMO_HALL_INTERIOR",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 3,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy"
+    },
+    {
+      "priority": 9,
+      "asset_id": "PROP_STONE_STELE",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 3,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy"
+    },
+    {
+      "priority": 10,
+      "asset_id": "CHAR_ZHAO_ZHE",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 2,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy",
+      "followups_after_success": [
+        "face",
+        "model_pack_signoff"
+      ]
+    },
+    {
+      "priority": 11,
+      "asset_id": "CHAR_WEN_YANBO",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 2,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy",
+      "followups_after_success": [
+        "face",
+        "model_pack_signoff"
+      ]
+    },
+    {
+      "priority": 12,
+      "asset_id": "LOC_CAPITAL_PLAGUE_STREET",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 1,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy"
+    },
+    {
+      "priority": 13,
+      "asset_id": "CHAR_FAN_ZHONGYAN",
+      "variant": "front",
+      "kind": "view",
+      "panel_occurrences": 1,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy",
+      "followups_after_success": [
+        "face",
+        "model_pack_signoff"
+      ]
+    },
+    {
+      "priority": 14,
+      "asset_id": "LOC_ROAD_TO_LONGHUSHAN",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 1,
+      "attempts_used": 0,
+      "attempts_remaining": 2,
+      "status": "paused_backend_unhealthy"
+    }
+  ],
+  "source": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "reference_plan": "生产数据/comic_reference_plan_第1话.json",
+    "registry": "出图/共享/identity_registry.json"
+  }
+}

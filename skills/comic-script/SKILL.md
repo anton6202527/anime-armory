@@ -64,13 +64,13 @@ python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫�
 - **开发包（长篇源本改编建议先跑）**：`python3 skills/comic-script/scripts/development_pack.py <作品根> scaffold --write` 生成开发三件套和 v2 `split_blueprint`。每话以真实 `source_spans`、读者承诺、冲突/转折/兑现、精确 `ending_mode`、软 `budget` 和长线状态三段式形成可签收合同。内容填完置 `confirmed` 后，由 reviewer 在 `开发包/signoff.json` 对三件套 SHA 签收；`check --strict` 对缺件、v1 未迁移、缺源、合同字段/话次/coverage 缺口、占位与签收 stale 非零退出。
 - **分话节拍机检**：`chapter_beat_audit.py <作品根> 第N话 --write`。合同/文件缺失是确定性 must；首屏、末格功能、高潮格序、软容量和平台投稿快照都是 `heuristic/platform WARN`。四格不套 20 格与 cliffhanger，`20` 只在目标平台明确为快看时提示，不能作为通用切话标准。
 - **伏笔种下→兑现跨话账本（SP1·report-only 起步·gate image_preflight 自动跑）**：`development_pack.foreshadowing_ledger` 是立项期一次性静态清单，逐话写完分格后无人回头核对「这坑第几话兑现、有没有忘、兑现有没有早于种下」。条漫是长线连载，实证空档正是「后续话次断供」（伏笔埋了不收=追更动力流失）。`setup_payoff_ledger.py <作品根> 第N话 --write` 从故事面文本（台词/旁白/音效·不扫 art_notes craft 术语）按**显式悬念标记**捞 `open` 坑（进 gate）、按**挖坑句式**捞 `candidate` 弱信号（只提示），并把 development_pack 手填坑作**种子**合入 `设定库/setup_payoff_ledger.json`（不覆盖已填 payoff_chapter）。逐话审 `setup_unlogged/payoff_unfilled/payoff_overdue/payoff_before_setup`。`--all` 刷全书账本；`--strict` 本话 must 级 exit 1（想开硬闸时用）。SP1 与 `source_semantics`（语言归一）、`visual_contract`（视觉状态跨格）、`chapter_beat_audit`（单话节拍）正交——它管**叙事坑跨话**。
-- **分话量化原则**：没有跨格式通用格数。快看投稿不少于 20 格仅属于目标平台快照；页漫、条漫、四格、短篇分别用自己的 `format_profile`，周更产能只进 `budget.soft_range`。高潮格序同样只是粗筛，正式节奏在ネーム/页面或滚动几何中复核。
+- **分话量化原则**：没有跨格式通用格数。快看投稿不少于 20 格仅属于目标平台快照；页漫、条漫、四格、短篇分别用自己的 `format_profile`，周更产能只进 `budget.soft_range`。高潮格序同样只是粗筛，正式节奏在缩略分镜/name board、页面或滚动几何中复核。
 
 ## 分格规则
 
 - 每格只承担一个主要阅读动作：揭示、反应、动作、转折、信息或留白。
 - 大格用于情绪峰值、奇观、转折或页末钩子，不用于普通交代。
-- 重要格写 `layout_weight=heavy`，过渡/反应格写 `compact` 或 `medium`；这会影响 `comic-name` 的ネーム和 `comic-layout` 的格子比例。
+- 重要格写 `layout_weight=heavy`，过渡/反应格写 `compact` 或 `medium`；这会影响 `comic-name` 的缩略分镜/name board 和 `comic-layout` 的格子比例。
 - 台词要短；一个气泡尽量不超过两行，长说明拆成旁白或多格。
 - 外语、文言/古汉语、专名密集文本的衡量以“语义动作”和“可嵌字目标文本”为准，不用源文长度直接决定格数。
 - 角色首次出场格要给足识别信息：脸、发型、服装、标志物或动作习惯。

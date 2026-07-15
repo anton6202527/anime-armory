@@ -399,6 +399,18 @@ def _strip_nonvisual_metadata(value: Any) -> str:
     text = re.sub(r"`", "", text)
     text = _RAW_PATH_RE.sub("", text)
     text = re.sub(r"\b(?:sha256|hash|manifest|registry)\s*=\s*[^；;,，。 ]+", "", text, flags=re.I)
+    # Administrative headings may be embedded inside an otherwise visual
+    # director-intent sentence (for example ``必须服务剧本可看性合同：...``).
+    # Keep the pixel-relevant payload after the heading, but never send the
+    # production-contract label itself to the image backend or immediately
+    # fail our own compiled-prompt lint.
+    text = re.sub(
+        r"(?:必须服务|继承|来自)?\s*(?:剧本可看性合同|时长分配合同|重抽预算|检查清单|自检|路由理由|"
+        r"script_quality_contract|director_camera_plan|reference_plan)\s*[：:=]?\s*",
+        "",
+        text,
+        flags=re.I,
+    )
     text = re.sub(r"\s*；\s*；+", "；", text)
     return text.strip(" ；;,，。")
 
@@ -506,6 +518,21 @@ def contract_from_section(
         _prompt_line(makeup, "禁止"),
         _negative_block(section),
     ])
+    if inferred == "style_anchor":
+        # Style boards are control assets.  Project style prose can name the
+        # people, locations and props that will eventually use the style, and
+        # custom taboo lists may already consume the generic exclusion limit.
+        # Put control-asset isolation first so those nouns cannot turn the
+        # anchor itself into a story still or environment plate.
+        exclusions = normalize_exclusions([
+            "人物或清晰人脸",
+            "动物或妖物",
+            "建筑或城寨或具体环境景观",
+            "兵器或道具或器皿或家具或工作台",
+            "卷轴或地图或书页或可读文字或伪造文字",
+            "剧情动作或海报构图或水印或logo",
+            *exclusions,
+        ])
     if makeup:
         identities = "；".join(_dedupe([
             _prompt_line(makeup, "角色身份"),
@@ -540,11 +567,48 @@ def contract_from_section(
         _field(section, "导演意图") or _field(section, "剧本描述") or
         _field(section, "定妆图提交口径") or target_path
     )
+    if inferred == "style_anchor":
+        objective = "抽象分区式视觉语言样板，不是剧情剧照、环境设定图、海报或道具陈列"
+        identities = positive
+        composition = (
+            "中性无叙事背景上的分区样板；只展示色卡、明暗/光比阶梯、线条笔触、"
+            "颜料颗粒与近裁材质样本"
+        )
     subject_slots = _field(section, "多人同框身份槽位")
     refs = normalize_references(reference_inputs)
     params = dict(request_params or {})
     if aspect_ratio:
         params.setdefault("aspect_ratio", aspect_ratio)
+    is_turnaround_catalog = (
+        inferred == "character_catalog"
+        and bool(re.search(r"三视图|五角|turnaround", f"{target_path}\n{section}", re.I))
+    )
+    if is_turnaround_catalog:
+        # Five full-body columns need a wide technical plate.  Inheriting the
+        # episode's portrait aspect makes each body too narrow to inspect and
+        # produces unusable split views.
+        params["aspect_ratio"] = "16:9"
+    raw_policy_guards = [
+        _strip_nonvisual_metadata(item)
+        for item in (
+            policy_guards
+            if isinstance(policy_guards, Sequence) and not isinstance(policy_guards, (str, bytes, bytearray))
+            else [policy_guards]
+        )
+        if _strip_nonvisual_metadata(item)
+    ]
+    if is_turnaround_catalog:
+        story_only_markers = (
+            "镜头为旁观者视角",
+            "武器入体/接触点",
+            "入体点硬锁",
+            "本镜已指定胸口/胸前",
+            "源帧几何连续性",
+        )
+        raw_policy_guards = [
+            item for item in raw_policy_guards
+            if not any(marker in item for marker in story_only_markers)
+        ]
     contract: Dict[str, Any] = {
         "task_type": inferred,
         "backend": _one_line(backend),
@@ -562,15 +626,7 @@ def contract_from_section(
         "mood": _strip_nonvisual_metadata(mood),
         "style": _strip_nonvisual_metadata(style_text),
         "preserve": [_strip_nonvisual_metadata(item) for item in preserve if _strip_nonvisual_metadata(item)],
-        "policy_guards": _dedupe(
-            _strip_nonvisual_metadata(item)
-            for item in (
-                policy_guards
-                if isinstance(policy_guards, Sequence) and not isinstance(policy_guards, (str, bytes, bytearray))
-                else [policy_guards]
-            )
-            if _strip_nonvisual_metadata(item)
-        ),
+        "policy_guards": _dedupe(raw_policy_guards),
         "exclude": exclusions,
         "risk_flags": _dedupe(
             risk_flags

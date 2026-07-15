@@ -1,0 +1,32 @@
+{
+  "schema_version": 3,
+  "kind": "comic_outfit_reference_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-15T16:10:04",
+  "bindings": [
+    {
+      "character_id": "CHAR_HONG_XIN",
+      "outfit_id": "OUTFIT_MOUNTAIN_PLAIN"
+    }
+  ],
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_outfits_第1话__20260715T161004177059.json",
+  "previous_manifest_sha256": "5f1dddd201691621f0430dd54abb5f51893d1f8d8007af8bf469f99440adf87e",
+  "generated": 0,
+  "skipped": 0,
+  "failed": 1,
+  "items": [
+    {
+      "ts": "2026-07-15T16:10:04",
+      "status": "outfit_reference_attempt_budget_exhausted",
+      "character_id": "CHAR_HONG_XIN",
+      "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "累计尝试次数已达授权上限；未发起新的生图请求"
+    }
+  ]
+}

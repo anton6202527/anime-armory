@@ -6,7 +6,19 @@
   "backend": "Codex CLI",
   "model": "GPT Image 2",
   "max_attempts_per_candidate": 2,
-  "status": "awaiting_character_selection",
+  "status": "character_fronts_adopted_model_pack_needs_approval",
+  "wardrobe_prop_recheck": {
+    "contract_path": "设定库/wardrobe_prop_contract.json",
+    "contract_sha256": "fc618c6aea5a8fbf093fca20f8fff3ebf02228dc8c55970c1c387ac1eea3a57f",
+    "reviewed_at": "2026-07-15",
+    "result": "pass_with_selection_notes",
+    "notes": [
+      "6张候选均未出现甲胄、明清补服、金绣法衣、临时剧情道具固化或现代服装等阻断项，无需仅因新合同重抽。",
+      "洪信候选4的圆领、克制袖量、幞头轮廓和带具最贴近当前服装合同；候选2/3仍可选，但采纳后须把各自帽翅与带具形制锁为项目唯一版本。",
+      "虚靖候选3的短衣、儿童比例、青灰/暗绛色域和轻便轮廓最贴近当前合同；候选1外层更长且体量偏成熟，候选2仍可选。",
+      "这是服饰道符合性复核，不替代出品人的角色脸、气质和长线表演选择。"
+    ]
+  },
   "style_anchor": {
     "ref_id": "STYLE_SHUIHU_SONG_CINEMATIC",
     "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
@@ -22,8 +34,8 @@
       "view": "front",
       "ratio": "3:4",
       "technical_status": "pass",
-      "art_review_status": "awaiting_producer_selection",
-      "assistant_recommendation": 2,
+      "art_review_status": "adopted",
+      "assistant_recommendation": 4,
       "candidates": [
         {
           "candidate_index": 2,
@@ -45,7 +57,7 @@
           "path": "出图/共享/candidates/CHAR_HONG_XIN/front/20260714T193946/candidate_04.png",
           "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
           "dimensions": "1086x1448",
-          "adopted": false
+          "adopted": true
         }
       ]
     },
@@ -54,8 +66,8 @@
       "view": "front",
       "ratio": "3:4",
       "technical_status": "pass",
-      "art_review_status": "awaiting_producer_selection",
-      "assistant_recommendation": 1,
+      "art_review_status": "adopted",
+      "assistant_recommendation": 3,
       "candidates": [
         {
           "candidate_index": 1,
@@ -76,7 +88,7 @@
           "path": "出图/共享/candidates/CHAR_MASTER_XUJING/front/20260714T195217/candidate_03.png",
           "sha256": "a265909a8760eb249da01883ebf7cdd8b08cdc471888986b897efd40c769d9c6",
           "dimensions": "1086x1448",
-          "adopted": false
+          "adopted": true
         }
       ]
     }

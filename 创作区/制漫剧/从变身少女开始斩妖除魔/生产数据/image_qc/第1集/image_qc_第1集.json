@@ -1,0 +1,1933 @@
+{
+  "artifact_namespace": {
+    "available": true,
+    "declared_targets": 44,
+    "notes": [
+      "本集图片目录不存在。"
+    ],
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md",
+    "stale": []
+  },
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": [
+      "资产 LOC_01：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 WEAPON_01：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_横刀：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_断刀：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_翻覆囚车：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 VFX_百妖谱：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 VFX_道行灌注：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 PROP_虎首：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 VFX_黑妖血：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
+      "资产 VFX_道行反噬：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
+    ]
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 11,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [
+        {
+          "box_ratio": 0.0081,
+          "char": "CHAR_01__常态",
+          "faces": 1,
+          "verdict": "warn"
+        }
+      ],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {
+        "CHAR_01__常态": {
+          "floor": 0.9773,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 2
+        }
+      },
+      "encoder": "styleid_clip_l",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": []
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "CHAR_01__常态": {
+          "floor": 0.7284,
+          "intra_pairs": 3
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "human_anatomy": {
+      "available": true,
+      "extra_threshold": 6,
+      "notes": [
+        "本集无分镜 PNG。"
+      ],
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_01",
+          "name": "荒野押解/虎妖现场",
+          "type": "scene"
+        },
+        {
+          "id": "PROP_断刀",
+          "name": "断刀",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_横刀",
+          "name": "横刀",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_翻覆囚车",
+          "name": "翻覆囚车",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_虎首",
+          "name": "虎首",
+          "type": "prop"
+        },
+        {
+          "id": "VFX_百妖谱",
+          "name": "百妖谱",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_系统面板",
+          "name": "百妖谱金色古卷面板",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_道行反噬",
+          "name": "道行反噬",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_道行灌注",
+          "name": "道行灌注",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_黑妖血",
+          "name": "黑妖血",
+          "type": "vfx"
+        },
+        {
+          "id": "WEAPON_01",
+          "name": "横刀",
+          "type": "weapon"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "姜月初",
+        "CHAR_01",
+        "CHAR_01__常态",
+        "CHAR_01__常态_脸部特写_脸锚裁切",
+        "CHAR_01__常态_表情_六联表",
+        "CHAR_01__常态_45度",
+        "CHAR_01__常态_后45度",
+        "裴长青",
+        "CHAR_02",
+        "CHAR_02__常态",
+        "CHAR_02__常态_脸部特写_脸锚裁切",
+        "虎山神",
+        "CHAR_04",
+        "CHAR_04__常态",
+        "CHAR_04__常态_脸部特写_脸锚裁切",
+        "CHAR_04__常态_表情_克制",
+        "CHAR_04__常态_45度"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第1集",
+      "groups": {},
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "CHAR_01__常态": {
+          "floor": 0.733,
+          "intra_pairs": 3
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": []
+    },
+    "scene": {
+      "available": true,
+      "groups": {},
+      "impact_physics": [],
+      "notes": [],
+      "shots": []
+    },
+    "seam": {
+      "availability_reason": "no_episode_images",
+      "available": false,
+      "notes": [
+        "无 /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片——出图后再跑接缝机检。"
+      ],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [],
+    "history_chars": 0,
+    "notes": [
+      "无跨集历史（首集或降级精度未累积均值）"
+    ]
+  },
+  "episode": "第1集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 2,
+    "findings": [],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
+    "rows": []
+  },
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 0,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "png": "出图/第1集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "png": "出图/第1集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a3.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
+        "png": "出图/第1集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+        "png": "出图/第1集/图片/Clip13_first.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+        "shot": "Clip_13"
+      }
+    ],
+    "precision_level": "full",
+    "required": 0,
+    "skipped": [
+      {
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_first.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_10"
+      },
+      {
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor01.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_10"
+      },
+      {
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor_cut_0250.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_10"
+      },
+      {
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor02.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_10"
+      },
+      {
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor03.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_10"
+      },
+      {
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_end.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_10"
+      },
+      {
+        "label": "镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+        "png": "出图/第1集/图片/Clip11_first.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_11"
+      },
+      {
+        "label": "镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_11"
+      },
+      {
+        "label": "镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_11"
+      }
+    ],
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/human_image_review.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "429364543fcb5ed59d11c984ec9ac0c51b3e3b64329a24edc5b6879363d51fee",
+      "出图/共享/identity_registry.json": "d80a99d977cd148d026ce4f8e6c4db0edf43d8d1e1c6063d02c8283ca416630a",
+      "出图/共享/style_anchor_registry.json": "cbce0749a034895b26bdeb992f7b74bd3dfe68c01852f510bba3ccbe5338c01c",
+      "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
+      "出图/第1集/prompt/00_总览.md": "a9b61d6f7b1c1aeec31a89fa2413c3065bc5e049f15d903666073bd9aa47588c",
+      "出图/第1集/prompt/01_分镜出图.md": "067376f06c94086b9b94641f7db4a0e1d10296b365cdba50a2a6dccfbec706d2",
+      "生产数据/image_qc/第1集/face_confirmations.json": null,
+      "生产数据/image_qc/第1集/human_image_review.json": null,
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
+    },
+    "sha": "240d5f31895e1f172b253c86c611bc6921dc3ec0b2cc99322027bc634f8e43e2"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "png": "出图/第1集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "png": "出图/第1集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+        "png": "出图/第1集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+        "png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+        "png": "出图/第1集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP07_a3.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+        "png": "出图/第1集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_first.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor01.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor_cut_0250.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor02.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/EP01_CLIP10_anchor03.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip10_end.png",
+        "shot": "Clip_10"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+        "png": "出图/第1集/图片/Clip11_first.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_04/常态"
+        ],
+        "label": "镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+        "shot": "Clip_11"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
+        "png": "出图/第1集/图片/Clip12_first.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态"
+        ],
+        "label": "镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
+        "png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+        "shot": "Clip_12"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+        "png": "出图/第1集/图片/Clip13_first.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+        "shot": "Clip_13"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/常态",
+          "CHAR_02/常态"
+        ],
+        "label": "镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+        "shot": "Clip_13"
+      }
+    ],
+    "findings": [
+      {
+        "code": "turnaround_core_view_review_missing",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 three_quarter（出图/共享/图片/定妆_CHAR_01__常态_45度.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 side（出图/共享/图片/定妆_CHAR_01__常态_侧.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 rear_three_quarter（出图/共享/图片/定妆_CHAR_01__常态_后45度.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 back（出图/共享/图片/定妆_CHAR_01__常态_背.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 turnaround（出图/共享/图片/定妆_CHAR_01__常态_三视图.png）：core_turnaround_board_receipt_missing_or_stale；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 13
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 0,
+    "targets": [],
+    "total": 0
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [],
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "semantic_drift": {
+    "available": true,
+    "compared": 0,
+    "findings": [],
+    "floor": 0.55
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": [],
+    "notes": [
+      "storyboard 无可解析景别（CU/LS…）——跳过。"
+    ]
+  },
+  "shot_variety": {
+    "available": true,
+    "clips_checked": 0,
+    "duplicate_pairs": [],
+    "findings": [],
+    "notes": [],
+    "static_pairs": []
+  },
+  "state_ledger": {
+    "advise": true,
+    "available": true,
+    "ledger_present": false,
+    "markers": [
+      "伤口",
+      "升级",
+      "染血",
+      "消耗",
+      "血污",
+      "觉醒"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_fingerprint": {
+      "contrast": 117.0,
+      "edge": 32.7,
+      "sat": 53.0
+    },
+    "anchor_status": "ok",
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "anchors": [
+        "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png"
+      ],
+      "style_name": "黑赤镇魔·水墨妖谱",
+      "taboos": [
+        "白衣仙女",
+        "正式制服提前出现",
+        "常态红发金瞳虎纹",
+        "巨型毛笔武器",
+        "金甲符牌",
+        "网红脸",
+        "虎妖萌宠化",
+        "猎奇伤口",
+        "烤字",
+        "水印Logo"
+      ]
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——风格归属跳过。"
+    ]
+  },
+  "summary": {
+    "advisory": 0,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "human_anatomy": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 5,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      }
+    },
+    "degraded": true,
+    "hard_blocks": 5,
+    "unavailable_visual_checks": [
+      "seam"
+    ],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": false,
+    "checked": 0,
+    "findings": [],
+    "intent": {
+      "brightness": "dark",
+      "evidence": "冷灰、土褐、墨黑；人血暗红、妖血黑墨；百妖谱只在反馈用朱砂与少量金。",
+      "warmth": "cool"
+    },
+    "notes": [
+      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
+    ]
+  },
+  "turnaround_alignment": {
+    "available": true,
+    "checked_forms": 3,
+    "findings": [
+      {
+        "code": "turnaround_core_view_review_missing",
+        "confidence": "deterministic",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 three_quarter（出图/共享/图片/定妆_CHAR_01__常态_45度.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "confidence": "deterministic",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 side（出图/共享/图片/定妆_CHAR_01__常态_侧.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "confidence": "deterministic",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 rear_three_quarter（出图/共享/图片/定妆_CHAR_01__常态_后45度.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "confidence": "deterministic",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 back（出图/共享/图片/定妆_CHAR_01__常态_背.png）：core_view_png_missing；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      },
+      {
+        "code": "turnaround_core_view_review_missing",
+        "confidence": "deterministic",
+        "level": "block",
+        "msg": "核心档逐视图收据缺失/过期 CHAR_01/常态 turnaround（出图/共享/图片/定妆_CHAR_01__常态_三视图.png）：core_turnaround_board_receipt_missing_or_stale；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+      }
+    ],
+    "forms": [
+      {
+        "character_id": "CHAR_01",
+        "core": true,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": null,
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_not_fully_decodable_or_pillow_missing",
+                  "png_missing_or_unreadable"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+              "png_sha256": null
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "e316209101451a9c310dcae528cd60c814c590c6ff09f739186b8bfa1edbdadd",
+                "png_sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849",
+                "reasons": [],
+                "registry_binding_fingerprint": "e316209101451a9c310dcae528cd60c814c590c6ff09f739186b8bfa1edbdadd",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-07-15T10:38:32+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
+              "png_sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849"
+            }
+          ],
+          "valid": true
+        },
+        "form": "常态",
+        "library_tier": "core_full",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "path_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_not_fully_decodable_or_pillow_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.1379,
+              "confidence": "heuristic",
+              "face_height": 0.0724
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "8220b30d1d7a15367f6cbf50a374d6d81afff9c2d4fb97a6fd7208d3880fc564",
+              "png_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
+              "reasons": [],
+              "registry_binding_fingerprint": "8220b30d1d7a15367f6cbf50a374d6d81afff9c2d4fb97a6fd7208d3880fc564",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-15T10:24:34+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                153,
+                154,
+                159
+              ],
+              "border_delta_p90": 29,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+            "png_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_02",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": null,
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_not_fully_decodable_or_pillow_missing",
+                  "png_missing_or_unreadable"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+              "png_sha256": null
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": null,
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_not_fully_decodable_or_pillow_missing",
+                  "png_missing_or_unreadable"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png",
+              "png_sha256": null
+            }
+          ],
+          "valid": false
+        },
+        "form": "常态",
+        "library_tier": "named_minimal",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "back"
+          },
+          "front": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_04",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": null,
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_not_fully_decodable_or_pillow_missing",
+                  "png_missing_or_unreadable"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
+              "png_sha256": null
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": null,
+                "png_sha256": null,
+                "reasons": [
+                  "verdict_not_pass",
+                  "reviewer_missing",
+                  "review_kind_missing_or_invalid",
+                  "reviewed_at_missing",
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_not_fully_decodable_or_pillow_missing",
+                  "png_missing_or_unreadable"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": null,
+                "reviewed_at": null,
+                "reviewer": null,
+                "valid": false,
+                "verdict": null
+              },
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+              "png_sha256": null
+            }
+          ],
+          "valid": false
+        },
+        "form": "常态",
+        "library_tier": "recurring_standard",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "back"
+          },
+          "front": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "path_missing"
+            },
+            "path": null,
+            "view": "side"
+          },
+          "three_quarter": {
+            "machine_evidence": {
+              "measurable": false,
+              "reason": "png_missing"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+            "view": "three_quarter"
+          }
+        }
+      }
+    ],
+    "human_review_required": [
+      {
+        "character_id": "CHAR_01",
+        "form": "常态",
+        "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
+        "png_sha256": null,
+        "reason": "core_view_png_missing",
+        "required_receipt": [
+          "verdict=pass",
+          "reviewer",
+          "reviewed_at",
+          "png_sha256"
+        ],
+        "view": "three_quarter"
+      },
+      {
+        "character_id": "CHAR_01",
+        "form": "常态",
+        "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
+        "png_sha256": null,
+        "reason": "core_view_png_missing",
+        "required_receipt": [
+          "verdict=pass",
+          "reviewer",
+          "reviewed_at",
+          "png_sha256"
+        ],
+        "view": "side"
+      },
+      {
+        "character_id": "CHAR_01",
+        "form": "常态",
+        "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
+        "png_sha256": null,
+        "reason": "core_view_png_missing",
+        "required_receipt": [
+          "verdict=pass",
+          "reviewer",
+          "reviewed_at",
+          "png_sha256"
+        ],
+        "view": "rear_three_quarter"
+      },
+      {
+        "character_id": "CHAR_01",
+        "form": "常态",
+        "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
+        "png_sha256": null,
+        "reason": "core_view_png_missing",
+        "required_receipt": [
+          "verdict=pass",
+          "reviewer",
+          "reviewed_at",
+          "png_sha256"
+        ],
+        "view": "back"
+      },
+      {
+        "character_id": "CHAR_01",
+        "form": "常态",
+        "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+        "png_sha256": null,
+        "reason": "core_turnaround_board_receipt_missing_or_stale",
+        "receipt_issues": [
+          "verdict_not_pass",
+          "reviewer_missing",
+          "review_kind_missing_or_invalid",
+          "reviewed_at_missing",
+          "character_id_missing_or_mismatch",
+          "form_missing_or_mismatch",
+          "library_tier_missing_or_mismatch",
+          "view_missing_or_mismatch",
+          "path_missing_or_mismatch",
+          "review_contract_missing_or_mismatch",
+          "registry_binding_fingerprint_kind_missing_or_mismatch",
+          "criteria_incomplete",
+          "explicit_current_pixels_confirmation_missing",
+          "png_not_fully_decodable_or_pillow_missing",
+          "png_missing_or_unreadable"
+        ],
+        "required_receipt": [
+          "verdict=pass",
+          "reviewer",
+          "reviewed_at",
+          "png_sha256"
+        ],
+        "view": "turnaround"
+      }
+    ],
+    "notes": [],
+    "version": 2,
+    "view_contract": [
+      "front",
+      "three_quarter",
+      "side",
+      "rear_three_quarter",
+      "back"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

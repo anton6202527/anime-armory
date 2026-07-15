@@ -1,8 +1,8 @@
 ---
 name: comic
-description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, manga name board/ネーム, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, ネーム, 缩略分镜, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
+description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1379 | 目录文本总行数 36930
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1424 | 目录文本总行数 39042
 
 # comic — 画漫画生产线总调度
 
@@ -97,7 +97,7 @@ python3 skills/comic-identity/scripts/model_pack.py "创作区/画漫画/作品�
 - 多视图按 `library_tier` 验收：`core_full` 为 front / three_quarter / side / back / face，`recurring_standard` 为 front / three_quarter / face，`named_minimal` 为 front / face。角色 DNA 和禁漂移项不因档位降低。
 - “文件齐”不等于“可生产”。确定性技术检查通过后，仍要由人并排确认同一角色、视图标签、比例基线、服装标志和中性姿态；签收绑定全部必需视图 SHA，任一视图变化即 stale。
 
-### 5. ネーム与排版的 draft → review → approved
+### 5. 缩略分镜/name board 与排版的 draft → review → approved
 
 ```bash
 python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话
@@ -111,7 +111,7 @@ python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品�
 python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品名" --chapter 第1话 --check
 ```
 
-首次运行只生成 draft。人工审页流、翻页钩子、格子轻重、阅读方向、气泡占位、关键动作和安全框后才能提交并批准；批准收据绑定产物主体及上游 SHA。任何主体或上游变化都会使批准失效，必须重建或重新签收。
+首次运行只生成 draft。由人工或用户明确授权的制作代理审阅页流、翻页钩子、格子轻重、阅读方向、气泡占位、关键动作和安全框后才能提交并批准；批准收据绑定产物主体及上游 SHA。代理审阅必须有项目内授权文件，且不得跳过确定性阻断。任何主体或上游变化都会使批准失效，必须重建或重新签收。
 
 ### 6. 原稿收尾、逐格参考处方和出图 job
 
@@ -141,7 +141,7 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 
 每次 gate 都会写 `生产数据/gate_receipts/<stage>_第N话.json`，其中有 `inputs_fingerprint_sha256`、verdict、报告 SHA 和当前 `panel_jobs` SHA。receipt 只能证明“这次判定对应这些输入”；上游或产物变化后必须重跑，不能复制旧 receipt。
 
-`comic-batch` 可编排可复算步骤，但会在 name/layout draft 或 review 状态正常停下等待人工签收，也不能绕过 stale 合同和 image preflight。
+`comic-batch` 可编排可复算步骤，但会在 name/layout draft 或 review 状态正常停下等人工或用户授权制作代理签收，也不能绕过 stale 合同和 image preflight。
 
 ### 8. 生产完成与发布就绪分离
 
@@ -200,4 +200,4 @@ python3 skills/comic/scripts/release_verdict.py "创作区/画漫画/作品名" 
 - 不用完整小说作为硬前置；原创也必须有开发合同和分格真值。
 - 不让图像模型直接烘焙正文台词、空白气泡或旁白框。
 - 不把像素代理或模型评分包装成确定性事实。
-- 不自动执行付费出图、签署人审批准、发布作品或覆盖已发布导出物。
+- 不在缺少有效项目授权时自动执行付费出图或签署审阅批准；即使存在制作代理授权，也不自动发布作品、覆盖已发布导出物或突破预算/权利/核心方向边界。

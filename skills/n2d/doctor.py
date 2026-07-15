@@ -52,7 +52,16 @@ def precision_lines(probes: Dict[str, Any]) -> List[str]:
     prec = face_qc_precision(libs)
     icon = {"full": "✅", "degraded": "⚠️", "none": "❌"}[prec]
     if prec == "full":
-        lines.append(f"{icon} 脸部一致性机检：full 精度（insightface+onnxruntime 就位）——arcface 同人余弦可用，近景镜不必转人审。")
+        face_encoder = probes.get("face_encoder") or {}
+        active = (
+            "StyleID 风格化同人嵌入"
+            if face_encoder.get("encoder") == "styleid" and face_encoder.get("status") == "ready"
+            else "ArcFace 同人余弦"
+        )
+        lines.append(
+            f"{icon} 脸部一致性机检：full 精度（insightface+onnxruntime 就位）"
+            f"——{active}可用，近景镜不必转人审。"
+        )
     elif prec == "degraded":
         lines.append(f"{icon} 脸部一致性机检：降级（仅 Pillow/cv2）——判不了同人，**近景/特写镜会自动转人审**，并出定妆↔本镜对比图。补 insightface+onnxruntime+buffalo_l 才回 full。")
     else:
@@ -169,7 +178,11 @@ def probe_face_encoder(root: Optional[str]) -> Optional[Dict[str, Any]]:
         return None
     style = get_setting(root, "基础视觉风格", "")
     encoder = get_setting(root, "脸一致性机检后端", "arcface")
-    return face_encoder_policy(style, encoder)
+    model_ref = get_setting(root, "N2D_STYLEID_MODEL", "")
+    policy_env = dict(os.environ)
+    if model_ref:
+        policy_env["N2D_STYLEID_MODEL"] = model_ref
+    return face_encoder_policy(style, encoder, env=policy_env)
 
 
 def collect(root: Optional[str]) -> Dict[str, Any]:

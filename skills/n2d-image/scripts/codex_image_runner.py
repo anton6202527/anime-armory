@@ -42,6 +42,7 @@ if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
 
 from image_backend_adapter import current_image_backend_selection  # noqa: E402
+from settings import get_setting  # noqa: E402
 from image_prompt_compiler import (  # noqa: E402
     compile_image_prompt,
     contract_from_section,
@@ -105,6 +106,7 @@ CROSS_EPISODE_SOURCE_FRAME_LINE_RE = re.compile(
 )
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
 STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
+STRICT_IMAGE_REVIEW_MODE = "逐张机器QC+实际目视"
 CHARACTER_SHARED_CORE_FIELDS = required_character_reference_group_fields(CHARACTER_LIBRARY_TIER_CORE)
 CHARACTER_SHARED_STANDARD_FIELDS = required_character_reference_group_fields(CHARACTER_LIBRARY_TIER_STANDARD)
 CHARACTER_SHARED_MINIMAL_FIELDS = required_character_reference_group_fields(CHARACTER_LIBRARY_TIER_MINIMAL)
@@ -478,6 +480,12 @@ def shared_variant_shot(base: str, rel_path: str) -> str:
 
 def shared_variant_note(rel_path: str) -> str:
     stem = Path(rel_path).stem
+    if "风格锚" in stem or "style_anchor" in stem.lower():
+        return (
+            "本次目标是抽象分区式视觉语言控制板，不是剧情剧照、环境设定图、海报或道具陈列："
+            "只展示色卡、明暗/光比阶梯、线条笔触和近裁材质样本；"
+            "不得出现人物、动物/妖物、建筑/城寨、兵器、道具、器皿、家具、卷轴、地图、可读或伪造文字与剧情动作。"
+        )
     if "布局图" in stem or "空间图" in stem or "平面图" in stem or "spatial_map" in stem:
         return (
             "本次目标是场景空间布局图，不是电影气氛图：必须用俯视或高位等距视角画清平面关系，"
@@ -538,6 +546,13 @@ def shared_variant_note(rel_path: str) -> str:
         return "本次目标是脸部特写参考：肩颈以上近景，眼鼻嘴三角区清晰，五官与主参考同一张脸，服装/发型边缘可见。"
     if "三视图" in stem:
         return "本次目标是人审 turnaround 拼版（旧文件名兼容）：同一角色同一服装，正面、前3/4、侧面、后3/4、背面五角同框排列，同身高、同比例、头顶线/脚底线/身体中心线/水平视平线对齐，每个全身视图都必须从头到鞋靴完整可见。"
+    if "_表情_六联表" in stem:
+        return (
+            "本次目标是同源六联表情表：以已通过的角色正面脸锚为母图，在 2×3 等分网格中依次呈现"
+            "冷静、警觉、震惊、隐忍、将哭、决绝六种肩颈以上表情；六格必须是同一角色、同一年龄、"
+            "同一发型妆造、同一脸型与五官比例，只改变 FACS/AU 肌肉组合。统一中性浅灰背景和均匀棚拍光，"
+            "每格头部尺寸/视平线一致；不烤入文字标签、不画成六个不同人物、不换衣、不改变镜头角度。"
+        )
     if "_表情_" in stem:
         emotion = stem.split("_表情_", 1)[-1]
         return (
@@ -561,6 +576,8 @@ def requires_controlled_makeup_derivation(rel_path: str) -> bool:
         return False
     if stem.endswith("_三视图"):
         return not stem.endswith("_背影_三视图")
+    if "_表情_" in stem:
+        return True
     unsafe_suffixes = (
         "_45度",
         "_后45度",
@@ -619,10 +636,10 @@ def requires_human_review_before_ready(rel_path: str) -> bool:
         return False
     if stem.endswith("_三视图"):
         return True
-    if requires_controlled_makeup_derivation(rel_path):
-        return False
     if "_表情_" in stem:
         return True
+    if requires_controlled_makeup_derivation(rel_path):
+        return False
     return True
 
 
@@ -645,7 +662,7 @@ def controlled_makeup_parent_candidates(rel_path: str) -> List[str]:
     path = Path(rel_path)
     stem = path.stem
     is_turnaround = stem.endswith("_三视图")
-    base = re.sub(r"_(?:后45度|后3／4|后四分之三|45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
+    base = re.sub(r"_(?:表情_.+|后45度|后3／4|后四分之三|45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
     parent = path.parent.as_posix()
     if is_turnaround:
         stems = [
@@ -2862,6 +2879,64 @@ def image_request_params(root: Path) -> Dict[str, Any]:
     return params
 
 
+def strict_single_image_review_enabled(root: Path) -> bool:
+    """Return whether the persistent one-image review gate is enabled.
+
+    This setting controls generation granularity and review ordering only.  It
+    never waives compliance or per-run payment authorization.
+    """
+    return get_setting(str(root), "图片验收模式", "按生成粒度验收") == STRICT_IMAGE_REVIEW_MODE
+
+
+def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict[str, str]]:
+    """Return the latest different image awaiting hash-bound QA acceptance.
+
+    Re-drawing the same target remains allowed so a rejected current unit can
+    be improved.  Moving to a different image requires a later dashboard QA
+    event with ``status=accepted`` and the exact generated pixel hash.
+    """
+    path = root / "生产数据" / "production_events.jsonl"
+    if not path.is_file():
+        return None
+    events: List[Dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        try:
+            event = json.loads(line)
+        except (TypeError, json.JSONDecodeError):
+            continue
+        if isinstance(event, dict):
+            events.append(event)
+    latest: Optional[Tuple[int, str, str]] = None
+    for index, event in enumerate(events):
+        generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+        if (
+            event.get("stage") == "image"
+            and event.get("event") == "generation"
+            and generation.get("status") == "pass"
+            and generation.get("asset")
+        ):
+            meta = event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+            latest = (index, str(generation["asset"]), str(meta.get("artifact_sha256") or ""))
+    if latest is None:
+        return None
+    latest_index, asset, artifact_sha = latest
+    if asset == next_rel_path:
+        return None
+    for event in events[latest_index + 1:]:
+        generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
+        meta = event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+        if (
+            event.get("stage") == "image"
+            and event.get("event") == "qa"
+            and generation.get("status") == "accepted"
+            and str(generation.get("asset") or "") == asset
+            and artifact_sha
+            and str(meta.get("artifact_sha256") or "") == artifact_sha
+        ):
+            return None
+    return {"asset": asset, "artifact_sha256": artifact_sha}
+
+
 def image_prompt_experiment_context() -> Dict[str, str]:
     experiment_id = os.environ.get("N2D_IMAGE_PROMPT_EXPERIMENT_ID", "").strip()
     variant = os.environ.get("N2D_IMAGE_PROMPT_VARIANT", "").strip()
@@ -2887,6 +2962,16 @@ def model_facing_policy_guards(
     guards: List[str] = []
 
     stem = Path(target.rel_path).stem
+    if "风格锚" in stem or "style_anchor" in stem.lower():
+        # STYLE_ANCHOR is a control asset, not a character/prop/scene card.
+        # Its human-readable contract necessarily names downstream subjects
+        # and forbidden story objects; those nouns must never trigger the
+        # generic gaze, anatomy, weapon-contact or scene guards below.
+        return [
+            "风格锚是抽象视觉语言控制板，不是剧情剧照、环境设定图、海报或道具陈列",
+            "使用清晰分区的色卡、明暗与光比阶梯、线条笔触、颜料颗粒和近裁材质样本；保持中性无叙事背景",
+            "画面不出现人物或脸、动物或妖物、建筑或城寨、兵器、道具、器皿、家具、工作台、卷轴、地图、书页、可读或伪造文字、剧情动作、水印或标志",
+        ]
     aliases = {str(item) for item in getattr(target, "aliases", set()) or set()}
     shared_scene_target = target.mode == "shared" and any(
         value.startswith("LOC_")
@@ -3244,12 +3329,28 @@ def run_codex(
             check=False,
             timeout=timeout_sec,
         )
-        if not transient_codex_transport_failure(proc) or attempt >= attempts:
-            return proc
-        print(
-            f"[retry] Codex transport failure on attempt {attempt}/{attempts}; retrying",
-            file=sys.stderr,
+        image_failure = image_generation_failure_detail(proc.stdout or "")
+        retryable_image_failure = (
+            proc.returncode == 0
+            and bool(image_failure)
+            and transient_codex_image_failure(image_failure)
         )
+        if (
+            not transient_codex_transport_failure(proc)
+            and not retryable_image_failure
+        ) or attempt >= attempts:
+            return proc
+        if retryable_image_failure:
+            print(
+                f"[retry] Codex image generation transient failure on attempt {attempt}/{attempts}: "
+                f"{image_failure[:300]}; retrying same target",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                f"[retry] Codex transport failure on attempt {attempt}/{attempts}; retrying",
+                file=sys.stderr,
+            )
         if delay_sec:
             time.sleep(delay_sec * attempt)
     return proc
@@ -3297,6 +3398,106 @@ def decode_image_event(stdout: str, out_path: Path) -> bool:
     if not payload:
         return False
     return _write_image_payload(payload, out_path)
+
+
+TRANSIENT_IMAGE_FAILURE_MARKERS = (
+    "network error",
+    "network failure",
+    "connection reset",
+    "connection refused",
+    "stream disconnected",
+    "timed out",
+    "timeout",
+    "rate limit",
+    "temporarily unavailable",
+    "internal server error",
+    "网络错误",
+    "网络异常",
+    "连接中断",
+    "连接失败",
+    "请求超时",
+    "服务暂时不可用",
+)
+
+
+def transient_codex_image_failure(detail: str) -> bool:
+    text = str(detail or "").lower()
+    return (
+        any(marker in text for marker in TRANSIENT_IMAGE_FAILURE_MARKERS)
+        or ("网络" in text and any(token in text for token in ("失败", "错误", "异常", "超时", "中断")))
+        or re.search(r"\b(?:http\s*)?5\d\d\b", text) is not None
+    )
+
+
+def image_generation_failure_detail(stdout: str) -> str:
+    """Return a concise failed-image event reason from stdout/session JSONL.
+
+    Codex CLI can exit zero even when the nested image tool ends with
+    ``image_generation_end: failed``.  The event itself currently carries no
+    error field, while the final agent message records the useful transport
+    reason.  Inspect the persisted session as well as stdout so the caller can
+    distinguish a retryable backend outage from a missing-result adapter bug.
+    """
+    texts = [stdout]
+    thread_id = _thread_id_from_stdout(stdout)
+    if thread_id:
+        session_path = _codex_session_path(thread_id)
+        if session_path:
+            texts.append(session_path.read_text(encoding="utf-8", errors="ignore"))
+    best = ""
+    for text in texts:
+        detail = _image_failure_from_jsonl(text)
+        if detail and detail != "image_generation_end status=failed":
+            best = detail
+        elif detail and not best:
+            best = detail
+    return best
+
+
+def _thread_id_from_stdout(stdout: str) -> str:
+    for line in stdout.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str):
+            return event["thread_id"]
+    return ""
+
+
+def _image_failure_from_jsonl(text: str) -> str:
+    failed = False
+    messages: List[str] = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line.startswith("{"):
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        payload = event.get("payload") if isinstance(event, dict) else None
+        if not isinstance(payload, dict):
+            continue
+        if payload.get("type") == "image_generation_end" and payload.get("status") == "failed":
+            failed = True
+            error = payload.get("error")
+            if isinstance(error, str) and error.strip():
+                messages.append(error.strip())
+        if payload.get("type") == "agent_message":
+            message = payload.get("message")
+            if isinstance(message, str) and message.strip():
+                messages.append(message.strip())
+    if not failed:
+        return ""
+    for message in reversed(messages):
+        lowered = message.lower()
+        if any(token in lowered for token in ("fail", "error", "失败", "错误", "异常", "超时")):
+            return message
+    return "image_generation_end status=failed"
 
 
 def _image_payload_from_jsonl(text: str) -> str:
@@ -3838,7 +4039,7 @@ def controlled_multiref_derivation(
         return None
     stem = Path(rel_path).stem
     prefer_turnaround = any(token in stem for token in ("45度", "_侧", "_背"))
-    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
+    base = re.sub(r"_(?:表情_.+|45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
     front_stems = {base, f"{base}_front", f"{base}_正面"}
     same_source_parent_stems = {Path(candidate).stem for candidate in controlled_makeup_parent_candidates(rel_path)}
     ordered = sorted(reference_inputs, key=lambda item: int(item.get("priority") or 999))
@@ -4275,7 +4476,11 @@ def process_target(
         if proc.returncode != 0:
             error = format_codex_failure(proc)
         elif not png_valid(temp_path) and not decode_image_event(proc.stdout, temp_path):
-            error = f"codex completed but no valid PNG file or image_generation_end payload was available for {temp_path}"
+            failure_detail = image_generation_failure_detail(proc.stdout or "")
+            if failure_detail:
+                error = f"codex image_generation failed: {failure_detail}"
+            else:
+                error = f"codex completed but no valid PNG file or image_generation_end payload was available for {temp_path}"
         else:
             archive_path = archive_existing(root, target.rel_path, task_id)
             final.parent.mkdir(parents=True, exist_ok=True)
@@ -4624,6 +4829,24 @@ def main(argv: Sequence[str]) -> int:
         targets.extend(build_targets(root, episode, shots))
     if not targets:
         raise SystemExit("no targets resolved")
+    strict_single_review = strict_single_image_review_enabled(root)
+    if strict_single_review and not ns.dry_run and len(targets) != 1:
+        print(
+            "[gate] 图片验收模式=逐张机器QC+实际目视：一次正式调用必须且只能解析 1 张图片；"
+            "请传单一 --shared-targets，或把 --shots 缩到只产生一个实际 PNG 的目标。",
+            file=sys.stderr,
+        )
+        return 1
+    if strict_single_review and not ns.dry_run:
+        pending_review = strict_pending_image_review(root, targets[0].rel_path)
+        if pending_review:
+            print(
+                "[gate] 上一张图片尚无与当前像素 SHA 绑定的 qa/accepted 目视验收："
+                f"{pending_review['asset']} ({pending_review['artifact_sha256'] or 'sha-missing'})；"
+                "只能继续重抽该图，或先完成 full 机器QC、实际像素目视并记录 accepted，再生成下一张。",
+                file=sys.stderr,
+            )
+            return 1
 
     # Shared style/identity assets are paid generations too.  They cannot use
     # the full image_preflight before their own pixels/MVIEW receipts exist, but
@@ -4664,7 +4887,12 @@ def main(argv: Sequence[str]) -> int:
             dry_run=ns.dry_run,
             force=ns.force,
         )
-        if ok and shots and target.mode != "shared" and not ns.dry_run and not ns.skip_image_qc:
+        if (
+            ok
+            and not ns.dry_run
+            and not ns.skip_image_qc
+            and ((shots and target.mode != "shared") or strict_single_review)
+        ):
             ok = run_target_image_qc(root, episode, target)
         ok_all = ok_all and ok
         if ok and not ns.dry_run:

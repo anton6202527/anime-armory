@@ -62,6 +62,40 @@ def test_identity_registry_drives_non_character_asset_classification(tmp_path):
     assert mm.non_character_refs(str(root), refs, mm.identity_character_assets(str(root))) == ["血玉"]
 
 
+def test_identity_registry_ignores_rich_reference_metadata(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_04",
+            "name": "姜月初",
+            "forms": [{
+                "asset_key": "CHAR_04__常态",
+                "reference_group": {
+                    "expression": {
+                        "path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
+                        "status": "planned",
+                        "emotion": "克制",
+                        "derivation": {
+                            "method": "controlled_multiref_generation",
+                            "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                        },
+                    },
+                },
+            }],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    assets = mm.identity_character_assets(str(root))
+
+    assert "姜月初" in assets
+    assert "CHAR_04__常态_表情_克制" in assets
+    assert "克制" not in assets
+    assert "planned" not in assets
+    assert not any("controlled_multiref_generation" in item for item in assets)
+
+
 def test_asset_registry_ids_drive_p2_grouping(tmp_path):
     Image = pytest.importorskip("PIL.Image")
     root = tmp_path / "制漫剧" / "测试剧"

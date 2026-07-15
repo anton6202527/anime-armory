@@ -342,14 +342,14 @@ def _load_arcface():
         return None
 
 
-def _load_styleid_embedder():
+def _load_styleid_embedder(model_ref: Optional[str] = None):
     """StyleID（CLIP-L+LoRA，风格化脸专调）best-effort·opt-in。返回与 insightface 同接口的对象
     （.get(img) → 每脸带 .bbox/.normed_embedding；.prepare(...)），便于 _embed/_embed_all 无差别消费。
 
     需 N2D_STYLEID_MODEL 指向 StyleID checkpoint + torch；同时复用 insightface 的检测器拿 bbox
     （保持与 arcface 同一套脸框，仅替换 embedding）。任一缺失/加载失败 → None（调用方回退 arcface，
     绝不退化成裸 CLIP）。模型加载在 full 精度 conda env（facefusion）内做。"""
-    model_path = os.environ.get("N2D_STYLEID_MODEL", "").strip()
+    model_path = str(model_ref or os.environ.get("N2D_STYLEID_MODEL", "")).strip()
     if not model_path:
         return None
     if is_official_styleid_model_ref(model_path) and not allow_model_download_ok():
@@ -476,11 +476,30 @@ def _encoder_from_settings(root: str) -> Optional[str]:
     return v if v in ("arcface", "styleid") else None
 
 
-def _load_embedder(backend: Optional[str] = None, style_hint: Optional[str] = None):
+def _styleid_model_from_settings(root: str) -> Optional[str]:
+    """读取项目级 StyleID 模型引用，使 `_设置.md` 真正驱动运行期加载。
+
+    环境变量仍由 `_load_styleid_embedder` 作为兼容 fallback 消费；项目设置由
+    `n2d-settings` 管理，避免用户每次新开 shell 都要重新 export。
+    """
+    try:
+        import settings as _settings  # type: ignore  # n2d/_lib via COMMON
+        values = _settings.load_settings(root) or {}
+    except Exception:
+        return None
+    for key in ("N2D_STYLEID_MODEL", "StyleID模型", "StyleID model"):
+        value = str(values.get(key) or "").strip()
+        if value:
+            return value
+    return None
+
+
+def _load_embedder(backend: Optional[str] = None, style_hint: Optional[str] = None,
+                   styleid_model: Optional[str] = None):
     """返回 (app, encoder_name)。app 缺则 (None, None)。styleid 缺权重 → 回退 arcface 标 fallback。"""
     choice = select_face_encoder(backend, style_hint)
     if choice == "styleid":
-        app = _load_styleid_embedder()
+        app = _load_styleid_embedder(styleid_model)
         if app is not None:
             return app, ENCODER_STYLEID
         app = _load_arcface()  # 缺 StyleID 权重：回退 arcface，绝不用裸 CLIP
@@ -1109,6 +1128,7 @@ def pillow_fallback_analyze(root: str, ep: str, image_mod, margin: float = DEFAU
 
     available=True（有真实机检信号，G1 不再整段失明），但 mode=pillow_fallback +
     precision=insufficient_precision——消费端（n2d-score）据此给降权分；绝不输出假相似度。
+    尚未生成的目标图标为 ``missing``，交给产物存在性闸门阻断，不能伪装成 G1 崩脸。
     """
     result: dict = {
         "available": True,
@@ -1128,8 +1148,9 @@ def pillow_fallback_analyze(root: str, ep: str, image_mod, margin: float = DEFAU
         full = os.path.join(root, "出图", ep, png)
         if not os.path.exists(full):
             result["shots"].append({
-                "png": png, "chars": chars, "verdict": "block",
-                "mode": PILLOW_FALLBACK_MODE, "checks": ["分镜 PNG 不存在"],
+                "png": png, "chars": chars, "verdict": "missing",
+                "code": "image_target_missing",
+                "mode": PILLOW_FALLBACK_MODE, "checks": ["分镜 PNG 尚未生成"],
             })
             continue
         probe = _pillow_probe(image_mod, full)
@@ -1178,7 +1199,11 @@ def analyze(root: str, ep: str, margin: float = DEFAULT_MARGIN,
     sets = discover_costume_sets(root)
     if encoder is None:  # 显式 CLI/参数 > _设置.md > env > 默认（选择点解析顺序）
         encoder = _encoder_from_settings(root)
-    app, encoder_name = _load_embedder(encoder, style_hint)
+    app, encoder_name = _load_embedder(
+        encoder,
+        style_hint,
+        styleid_model=_styleid_model_from_settings(root),
+    )
     result: dict = {"available": app is not None, "mode": "insightface", "margin": margin,
                     "encoder": encoder_name, "characters": {}, "shots": [], "notes": []}
     if encoder_name == ENCODER_ARCFACE_FALLBACK:

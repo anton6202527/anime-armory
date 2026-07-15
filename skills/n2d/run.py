@@ -469,6 +469,10 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
     # 6. 花钱/重活生成 —— 停下，附该阶段"放行前必问"菜单
     if stage_key in GENERATION_STAGES:
         cp, _every = STAGE_MENU.get(stage_key, (None, False))
+        strict_image_review = (
+            stage_key == "image"
+            and get_setting(root, "图片验收模式", "按生成粒度验收") == "逐张机器QC+实际目视"
+        )
         card = {
             "headline": f"{ep} {frontier['label']}（花钱·不可逆，需你放行）",
             "to_user": f"确认后再生成；{frontier['label']}是最贵环节之一，放行 ≠ 安全。",
@@ -480,8 +484,15 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             card["to_user"] = (
                 f"确认后再合成；合成前建议先跑审查包，确认视频、接缝、身份和字幕没有把问题带进终片。"
             )
-        if cp:
+        if cp and not strict_image_review:
             card["menu"] = [_menu(root, cp)]
+        elif strict_image_review:
+            card["execution_policy"] = {
+                "generation_granularity": "逐个",
+                "review_gate": "每张生成 → full机器QC → 执行者实际像素目视 → 通过才允许下一张",
+                "persistent_source": "图片验收模式=逐张机器QC+实际目视",
+            }
+            card["to_user"] += " 已启用全局逐图验收闸门，本次不重复询问生成粒度；仍需单独确认本次付费生成。"
         return na("needs_payment_confirm", card)
 
     if stage_key == "review":
@@ -1137,6 +1148,50 @@ def _run_report_only_prework(
             p.prework.append(entry)
 
 
+def _image_reference_prework_groups(root: str, ep: str) -> Tuple[List[tuple], List[tuple]]:
+    """Return producer and consumer batches for image reference sidecars.
+
+    ``no_cost_image_pack`` consumes reference-plan, reference-pack and keyshot
+    files. Running it in the same parallel batch can make it read the previous
+    run's sidecars, so that consumer is deliberately placed in a second batch.
+    """
+    producers = [
+        (
+            "reference_plan",
+            os.path.join(SKILLS_DIR, "n2d-image", "scripts", "reference_planner.py"),
+            [root, ep],
+        ),
+        (
+            "identity_eval_pack",
+            os.path.join(SKILLS_DIR, "n2d-review", "scripts", "identity_eval_pack.py"),
+            [root, "--write", "--json"],
+        ),
+        (
+            "no_cost_reference_pack",
+            os.path.join(SKILLS_DIR, "n2d-image", "scripts", "reference_pack.py"),
+            [root, ep, "--write", "--json"],
+        ),
+        (
+            "scene_reference_plan",
+            os.path.join(SKILLS_DIR, "n2d-image", "scripts", "scene_reference_planner.py"),
+            [root, ep, "--write", "--json"],
+        ),
+        (
+            "keyshot_candidates",
+            os.path.join(SKILLS_DIR, "n2d-image", "scripts", "keyshot_candidates.py"),
+            [root, ep, "--write", "--json"],
+        ),
+    ]
+    consumers = [
+        (
+            "no_cost_image_pack",
+            os.path.join(SKILLS_DIR, "n2d-image", "scripts", "no_cost_image_pack.py"),
+            [root, ep, "--write", "--json"],
+        ),
+    ]
+    return producers, consumers
+
+
 def _script_episode_labels(root: str) -> List[str]:
     sdir = os.path.join(root, "脚本")
     try:
@@ -1351,6 +1406,31 @@ def _run_preventive_contract_prework(p: Probes, root: str, ep: str, stage_name: 
             entry["check_path"] = outputs.get("json")
         p.prework.append(entry)
         if entry["status"] == "block":
+            block_findings = [f for f in findings if isinstance(f, dict) and str(f.get("severity") or "block").lower() == "block"]
+            shared_bootstrap_only = (
+                stage_name in {"image", "image_preflight"}
+                and bool(block_findings)
+                and all(
+                    str(f.get("gate") or "") == "reference_slot_gate"
+                    and "未绑定真实产物" in str(f.get("message") or "")
+                    for f in block_findings
+                )
+            )
+            if shared_bootstrap_only:
+                bootstrap_cmd = (
+                    f"python3 skills/n2d-image/scripts/codex_image_runner.py \"{root}\" {ep} "
+                    "--shared-targets all --max-shared-targets 1"
+                )
+                entry["block_type"] = "shared_asset_bootstrap_required"
+                entry["requires_payment_confirm"] = True
+                entry["bootstrap_command"] = bootstrap_cmd
+                _record_prework_block(p, "preventive_contracts", (
+                    "引用槽位合同结构已确认；当前缺的是共享定妆/场景/道具的真实图片，不是合同文本。"
+                    "保持逐镜付费生图阻断，先完成共享资产自举：风格锚 → 主角正面 → 五角独立图/turnaround/六联表，"
+                    "每张机器 QC + 实际查看通过后才下一张。当前无付费授权时只可 dry-run；获明确授权且确认 "
+                    f"style_identity_lock 后，首张命令：`{bootstrap_cmd}`。"
+                ))
+                return
             return_stage = ""
             for finding in findings:
                 if isinstance(finding, dict) and finding.get("return_to_stage"):
@@ -2252,44 +2332,15 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
         ], cache=_stage_prework_cache, expected_outputs={
             "memory_anchor_plan": [os.path.join("生产数据", f"memory_anchor_plan_{ep}.json")],
         })
-        _run_report_only_prework(p, [
-            (
-                "reference_plan",
-                os.path.join(SKILLS_DIR, "n2d-image", "scripts", "reference_planner.py"),
-                [root, ep],
-            ),
-            (
-                "identity_eval_pack",
-                os.path.join(SKILLS_DIR, "n2d-review", "scripts", "identity_eval_pack.py"),
-                [root, "--write", "--json"],
-            ),
-            (
-                "no_cost_reference_pack",
-                os.path.join(SKILLS_DIR, "n2d-image", "scripts", "reference_pack.py"),
-                [root, ep, "--write", "--json"],
-            ),
-            (
-                "scene_reference_plan",
-                os.path.join(SKILLS_DIR, "n2d-image", "scripts", "scene_reference_planner.py"),
-                [root, ep, "--write", "--json"],
-            ),
-            (
-                "keyshot_candidates",
-                os.path.join(SKILLS_DIR, "n2d-image", "scripts", "keyshot_candidates.py"),
-                [root, ep, "--write", "--json"],
-            ),
-            (
-                "no_cost_image_pack",
-                os.path.join(SKILLS_DIR, "n2d-image", "scripts", "no_cost_image_pack.py"),
-                [root, ep, "--write", "--json"],
-            ),
-        ], cache=_stage_prework_cache, expected_outputs={
+        reference_producers, reference_consumers = _image_reference_prework_groups(root, ep)
+        _run_report_only_prework(p, reference_producers, cache=_stage_prework_cache, expected_outputs={
             "reference_plan": [
                 os.path.join("生产数据", f"reference_plan_{ep}.json"),
                 os.path.join("生产数据", f"reference_plan_{ep}.md"),
             ],
             "identity_eval_pack": [os.path.join("生产数据", "identity_eval_pack.json")],
         })
+        _run_report_only_prework(p, reference_consumers, cache=_stage_prework_cache)
 
     # 多集/发布项目的剧级字幕、人名、语域、响度合同：先建骨架，再由 gate 严格消费。
     if ep and stage_key in ENTRY_GATED_STAGES:

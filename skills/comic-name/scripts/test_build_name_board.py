@@ -36,6 +36,7 @@ def test_build_name_board_records_page_flow_and_finishing_preview(tmp_path: Path
                     "panel_id": "P001",
                     "story_function": "opening_hook",
                     "description": "主角推门。",
+                    "art_notes": "不要画成现代玻璃门。",
                     "dialogue": [{"text": "来了。"}],
                     "layout_weight": "heavy",
                 },
@@ -55,6 +56,7 @@ def test_build_name_board_records_page_flow_and_finishing_preview(tmp_path: Path
     assert board["pages"][0]["page_side"] == "right"
     assert board["pages"][0]["eye_flow_path"] == ["P001", "P002"]
     assert board["pages"][0]["panels"][0]["layout_weight"] == "heavy"
+    assert board["pages"][0]["panels"][0]["camera_hint"] == "主角推门。"
     assert board["pages"][0]["panels"][0]["bubble_first"] == "right_top"
     assert board["pages"][0]["panels"][0]["balloons"][0]["content_ref"] == "panel:P001.dialogue:1"
     assert board["pages"][0]["panels"][0]["balloons"][0]["tail"]["mode"] == "toward_speaker"

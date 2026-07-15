@@ -34,6 +34,16 @@
         "character_id": "CHAR_01",
         "status": "synthetic_character",
         "evidence": "姜月初按原著事实与项目角色卡独立设计；两张外部水印参考仅作本地人工抽象分析，不作为后端图像输入。"
+      },
+      {
+        "character_id": "CHAR_02",
+        "status": "synthetic_character",
+        "evidence": "裴长青为权利人原创小说中的虚构角色，按原著事实与项目角色卡独立设计；不使用真人肖像、第三方角色脸或未授权外部人物图作为生成输入。"
+      },
+      {
+        "character_id": "CHAR_04",
+        "status": "synthetic_character",
+        "evidence": "虎山神为权利人原创小说中的虚构妖物角色，按原著事实与项目角色卡独立设计；不使用真人肖像、第三方角色形象或未授权外部图作为生成输入。"
       }
     ]
   },

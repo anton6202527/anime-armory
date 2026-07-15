@@ -113,7 +113,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 1. 读 `panel_script.json`、`layout.json` 和可选 `finishing_plan.json`，给每格生成 schema v2 job。每个 job 明确分层：
    - `production_contract_prompt` / `production_negative_contract` 是完整生产合同，保留参考 ID、角色 DNA、场景锚、continuity、禁继承、传统稿层和审计信息，供 gate、人工复核与溯源；
-   - `skills/comic/_lib/comic_image_prompt_compiler.py` 把合同编译成 `submit_prompt`：只留可见画面事实、构图/表演、画风稿层、可画的场景连续性、最短身份保持、墨线/黑场/网点/效果、无字策略和人体接触点；内部 ID、路径、registry 元数据、正文台词不得进入；
+   - `skills/comic/_lib/comic_image_prompt_compiler.py` 把合同编译成 `submit_prompt`：只留可见画面事实、构图/表演、画风稿层、可画的场景连续性、最短身份保持、墨线/黑场/网点/效果、无字策略和人体接触点；内部 ID、路径、registry 元数据、正文台词不得进入；非写实安全呈现改写也必须在此编译期完成，再计算 prompt SHA；
    - `prompt` 只是 `submit_prompt` 的兼容别名，runner 只提交编译层，不读取完整生产合同。
    - 正式出图前，`panel_script.json` 顶层 `visual_contract` 和逐格视觉契约必须存在。含角色格必须消费 `gaze_target / eyeline_direction / character_integrity`；含场景格必须消费 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`，眼神目标必须是具体戏内对象，多人同格必须有站位/遮挡/接触点。这些字段完整写入 `continuity_contract`；compiler 只抽取模型能画出来的布局、光位、轴线、站位和眼神目标。
    - 漫画格也要锁脸、眼神和身体完整性：脸型、眼型/眼距、发际线、发型、服装主色、配饰/伤痕/标志物、手脚和关键道具不能跨格漂移；动作格不得为了构图裁掉叙事需要的头发、脸、手脚、武器或接触点。
@@ -126,7 +126,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 6. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
 7. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 8. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
-9. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装。
+9. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装，不能在执行期再次静默改写已哈希的提交词。
 10. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；`block` 先修当前格，不把坏图继续传给排版合成。
 11. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
 12. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。

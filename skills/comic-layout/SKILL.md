@@ -7,7 +7,7 @@ description: 画漫画排版阶段。Use when turning panel_script.json and opti
 
 把 `panel_script.json` 转成可出图、可嵌字、可审查的 `layout.json`。本阶段决定阅读顺序、格子尺寸、留白、节奏和气泡占位，不负责生成最终图像。
 
-deterministic adapter 现支持三个最低可靠几何 profile：条漫 `longstrip_single_column`、页漫 `paged_grid_ltr|paged_grid_rtl`、四格 `yonkoma_four_rows`。它严格消费已签收ネーム的 page grouping、`thumbnail_rect`、格子轻重、gutter、气泡语义和 subject/avoid regions；复杂跨页、破格、斜格或特殊装帧仍需人工调整并重新签收。
+deterministic adapter 现支持三个最低可靠几何 profile：条漫 `longstrip_single_column`、页漫 `paged_grid_ltr|paged_grid_rtl`、四格 `yonkoma_four_rows`。它严格消费已签收缩略分镜/name board 的 page grouping、`thumbnail_rect`、格子轻重、gutter、气泡语义和 subject/avoid regions；复杂跨页、破格、斜格或特殊装帧仍需人工或用户授权的制作代理调整并重新签收。
 
 ## 输入
 
@@ -20,7 +20,7 @@ deterministic adapter 现支持三个最低可靠几何 profile：条漫 `longst
 
 - `排版/第N话/layout.json`：schema 见 `references/layout_schema.md`，会继承 `name_board.json` 的 manuscript、page_side、spread_id、page_turn_hook、bubble_first、effects_hint 等元数据。
 - 可选 `排版/第N话/layout_notes.md`：说明大格、留白、气泡风险、出图注意。
-- `_进度.md`：默认 layout 草案只写 `🟡待签收`；validator 与人工审批均有效后才把 `页面排版` 标为 `✅`。
+- `_进度.md`：默认 layout 草案只写 `🟡待签收`；validator 与人工或已授权制作代理的审批均有效后才把 `页面排版` 标为 `✅`。
 
 ## 怎么跑
 
@@ -51,6 +51,8 @@ python3 skills/comic-layout/scripts/build_layout.py "创作区/画漫画/作品�
 python3 skills/comic-layout/scripts/render_storyboard_svg.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
+条漫应同时按1440px母版、手机可视窗口和目标平台导出规格审阅；平台规格与制作代理的证据化检查见 [条漫排版与代理审阅](references/条漫排版与代理审阅.md)。
+
 ## 工作流
 
 1. 读 `panel_script.json` 与已签收 `name_board.json`；任何一个缺失、SHA 过期或覆盖顺序不同都停止。
@@ -60,7 +62,7 @@ python3 skills/comic-layout/scripts/render_storyboard_svg.py "创作区/画漫�
 5. 给台词、旁白、拟声词预留 `bubble_slots`，避免遮挡脸、手、关键道具和动作接触点。
 6. 运行确定性 validator：panel ID 唯一且同序覆盖，矩形不重叠/不越界，阅读顺序一致，每段正文/SFX 都有界内 bubble slot。
 7. 输出 draft `layout.json`。如果文字过多，回 `comic-script`；如果页流不顺，回 `comic-name`，不要靠缩小字号硬塞。
-8. 人工签收后写 SHA-bound approval receipt，才回写 `_进度.md` 的 `页面排版=✅`。
+8. 人工或项目内已授权制作代理签收后写 SHA-bound approval receipt，才回写 `_进度.md` 的 `页面排版=✅`；代理不得越过确定性阻断或授权边界。
 
 ## 排版原则
 

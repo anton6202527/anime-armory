@@ -2,7 +2,7 @@
 kind: n2d_ai_call_sheet
 version: 1
 episode: 第1集
-status: draft
+status: confirmed
 ---
 # 第1集 — AI 拍摄通告单
 
@@ -27,7 +27,7 @@ status: draft
 | 3 | EP01_CLIP03 | LOC_01 | 10.726 | dialogue_shot_reverse | 按 seam_mode 剪辑；无尾锚要求 |
 | 4 | EP01_CLIP04 | LOC_01 | 7.703 | dialogue_shot_reverse | 按 seam_mode 剪辑；无尾锚要求 |
 | 5 | EP01_CLIP05 | LOC_01 | 11.89 | reveal_reaction_chain | 镜内尾锚（非接力） |
-| 6 | EP01_CLIP06 | LOC_01 | 5.925 | 加速·危机逼近 | 镜内尾锚（非接力） |
+| 6 | EP01_CLIP06 | LOC_01 | 5.925 | ensemble_blocking | 镜内尾锚（非接力） |
 | 7 | EP01_CLIP07 | LOC_01/主观系统层 | 13.101 | system_panel | 镜内尾锚（非接力） |
 | 8 | EP01_CLIP08 | LOC_01 | 8.588 | fight_exchange | 镜内尾锚（非接力） |
 | 9 | EP01_CLIP09 | LOC_01 | 9.76 | dialogue_shot_reverse | 镜内尾锚（非接力） |

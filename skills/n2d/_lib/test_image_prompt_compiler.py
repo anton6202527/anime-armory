@@ -75,6 +75,34 @@ def test_task_inference_keeps_weapon_prop_when_contract_mentions_location_light(
     assert "可见手部归属" not in payload["prompt"]
 
 
+def test_style_anchor_compiler_prioritizes_abstract_control_asset_isolation():
+    section = """## STYLE_ANCHOR / 黑赤镇魔·水墨妖谱
+### 正向 prompt（中文）
+粗粝唐代边塞与写实国漫人物只作为下游适用语境。竖幅分区式视觉语言样板；仅展示抽象色卡、光比阶梯、线条笔触与近裁材质样本；不要人物、动物、妖物、建筑、兵器、道具、环境、文字或剧情动作。
+### 负向 prompt
+白衣仙女、正式制服提前出现、常态红发金瞳虎纹、巨型毛笔武器、金甲符牌、网红脸、虎妖萌宠化、猎奇伤口、烤字、水印Logo；人物、动物、妖物、建筑、兵器、道具、环境景观、剧情动作、文字、水印、logo。
+"""
+
+    payload = compile_image_section(
+        section,
+        backend="codex",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        mode="shared",
+        target_path="出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+        style="黑赤镇魔·水墨妖谱",
+        aspect_ratio="9:16",
+    )
+
+    prompt = payload["prompt"]
+    assert payload["task_type"] == "style_anchor"
+    assert "抽象分区式视觉语言样板" in prompt
+    assert "色卡、明暗/光比阶梯、线条笔触" in prompt
+    assert "人物或清晰人脸" in prompt
+    assert "建筑或城寨或具体环境景观" in prompt
+    assert "卷轴或地图或书页或可读文字或伪造文字" in prompt
+
+
 def _contract(**overrides):
     data = {
         "task_type": "shot_keyframe",
@@ -115,6 +143,38 @@ def test_openai_compiler_keeps_contract_out_of_submit_prompt():
     assert payload["request_params"]["aspect_ratio"] == "16:9"
     assert payload["negative_prompt"] == ""
     assert payload["lint"]["errors"] == []
+
+
+def test_section_compiler_strips_embedded_production_contract_heading() -> None:
+    section = """## 镜头 1
+**目标落档**：`出图/第1集/图片/EP01_CLIP01.png`
+**剧本描述**：少女从尸场抬眼，手握横刀。
+**导演意图**：大表情近景；必须服务剧本可看性合同：先展示不可逆选择，再回到选择前。
+**资产身份注册层**：`CHAR_01/常态`。
+**多人同框身份槽位**：无。
+### 正向 prompt（中文）
+身份保持：CHAR_01/常态。
+镜头构图：低机位中近景。
+动作瞬间：少女抬眼握刀。
+场景光影：冷灰荒野侧逆光。
+情绪张力：痛苦但已决定。
+画风规格：写实国漫。
+### 负向 prompt
+文字、水印。
+"""
+
+    payload = compile_image_section(
+        section,
+        backend="codex",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        mode="firstframe",
+        target_path="出图/第1集/图片/EP01_CLIP01.png",
+        aspect_ratio="9:16",
+    )
+
+    assert "剧本可看性合同" not in payload["prompt"]
+    assert "submit_prompt_leaks_full_production_contract" not in payload["lint"]["errors"]
 
 
 def test_flux_compiler_is_positive_only():
@@ -190,6 +250,39 @@ def test_character_catalog_compiles_makeup_identity_wardrobe_and_reference_bound
     assert "中性灰棚拍背景" in payload["prompt"]
     assert "不继承参考图衣装" in payload["prompt"]
     assert "黑金铠甲" in payload["prompt"]
+
+
+def test_turnaround_catalog_forces_wide_plate_and_drops_story_camera_guards():
+    section = """## 姜月初五角 turnaround（`CHAR_01/常态`）
+### 定妆图提交口径
+```text
+角色身份：CHAR_01/常态；姜月初；
+固定外貌：乌黑高马尾；
+服装妆造：玄黑赤纹窄袖劲装；
+定妆要求：正面、前3/4、侧面、后3/4、背面五角同框，全身头脚完整；
+```
+### 正向 prompt（中文）
+五角技术设定板。
+"""
+    payload = compile_image_section(
+        section,
+        backend="codex",
+        model="GPT Image 2",
+        mode="shared",
+        task_type="character_catalog",
+        target_path="出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+        aspect_ratio="9:16",
+        policy_guards=[
+            "镜头为旁观者视角：角色不看镜头",
+            "武器入体/接触点铁律：只能有一个入体点",
+            "共享角色定妆使用统一规格的定妆参考板",
+        ],
+    )
+
+    assert payload["request_params"]["aspect_ratio"] == "16:9"
+    assert "旁观者视角" not in payload["prompt"]
+    assert "武器入体" not in payload["prompt"]
+    assert "共享角色定妆" in payload["prompt"]
 
 
 def test_scene_asset_keeps_unlabelled_scene_dna_landmarks_axis_and_light():

@@ -92,6 +92,12 @@ def test_outfit_change_missing_reference_flagged():
     assert any("服装参考图" in m for m in plan["missing_references"])
 
 
+def test_monster_placeholder_outfit_does_not_create_clothing_gap():
+    c = _char(cid="MON_TIGER", panel_outfit_id="OUTFIT_BASE", asset_type="monster")
+    plan = rp.plan_character_in_panel(c, [], False, CAPS_WEAK, True)
+    assert not any("服装参考图" in m for m in plan["missing_references"])
+
+
 def test_named_minimal_tier_skips_three_quarter_when_static():
     plan = rp.plan_character_in_panel(_char(tier="named_minimal"), [], False, CAPS_WEAK, False)
     roles = {r["role"] for r in plan["recommended_references"]}

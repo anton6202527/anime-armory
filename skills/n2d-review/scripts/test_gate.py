@@ -4284,6 +4284,42 @@ def test_storyboard_ensemble_template_missing_focus_hierarchy_is_blocked(tmp_pat
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "专项镜头模板" and "focus_hierarchy" in f["msg"] for f in gate.findings)
 
 
+def test_regional_construct_accepts_existing_multi_subject_strategy(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP06",
+            "template": "ensemble_blocking",
+            "character_ids": ["CHAR_01/常态", "CHAR_02/重伤态", "CHAR_04/复生态"],
+            "multi_subject_strategy": "split_composite_required：各主体分层生成后合成",
+            "template_contract": {"regional_construct_required": True},
+        }],
+    )
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+
+    assert not any(f["dim"] == "分区合成" for f in gate.findings)
+
+
+def test_regional_construct_accepts_template_nested_execution_strategy(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP06",
+            "template": "ensemble_blocking",
+            "character_ids": ["CHAR_01", "CHAR_02"],
+            "template_contract": {
+                "regional_construct_required": True,
+                "execution_strategy": {"mode": "regional_construct_required"},
+            },
+        }],
+    )
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+
+    assert not any(f["dim"] == "分区合成" for f in gate.findings)
+
+
 def test_image_overview_requires_style_contract_when_visual_contract_exists(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     prompt_dir = root / "出图" / "第1集" / "prompt"
@@ -5713,6 +5749,17 @@ def test_core_character_prompt_pack_requires_rear_three_quarter() -> None:
     assert "side/rear_three_quarter/back/turnaround" in asset_gate._tier_prompt_pack_missing(
         section, "core_full"
     )
+
+
+def test_generated_core_character_prompt_vocabulary_satisfies_reference_pack_gate() -> None:
+    section = """
+    **角色库档位**：`core_full`
+    **本档交付**：正面、前45°、侧面、后45°、背面、半身/全身服装、脸部特写、标准五角 turnaround、同源六联表情表。
+    **定妆参考板规格**：统一定妆参考板，不是剧情剧照。
+    """
+
+    assert asset_gate._has_character_reference_group_description(section)
+    assert asset_gate._tier_prompt_pack_missing(section, "core_full") == []
 
 
 def test_role_makeup_prompt_allows_restricted_partial_without_three_view(tmp_path):
@@ -7820,6 +7867,28 @@ def test_style_contract_name_mismatch_setting_warns(tmp_path):
                     "style_contract": sc, "clips": []}, ensure_ascii=False), encoding="utf-8")
     gate.check_storyboard_style_contract(str(root), "第1集")
     assert any(f["sev"] == gate.WARN and f["dim"] == "风格一致性" and "不一致" in f["msg"] for f in gate.findings)
+
+
+def test_style_contract_project_label_can_declare_matching_base_style(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 基础视觉风格: 国漫写实角色审美 + 电影级布光与镜头语言\n", encoding="utf-8")
+    sc = {
+        "风格名": "黑赤镇魔·水墨妖谱",
+        "基础视觉风格": "国漫写实角色审美 + 电影级布光与镜头语言",
+        "视觉基调": "粗粝边塞，水墨妖谱只作副风格",
+        "镜头与构图": "x",
+        "光色策略": "x",
+        "运动边界": "x",
+        "风格禁忌": ["x"],
+    }
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(
+        json.dumps({"episode": 1, "policy": {"tailframe_default": True},
+                    "style_contract": sc, "clips": []}, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_storyboard_style_contract(str(root), "第1集")
+
+    assert not any(f["dim"] == "风格一致性" and "不一致" in f["msg"] for f in gate.findings)
 
 
 def test_stylized_face_encoder_policy_warns_without_styleid(tmp_path):

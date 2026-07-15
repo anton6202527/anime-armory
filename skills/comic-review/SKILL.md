@@ -1,6 +1,6 @@
 ---
 name: comic-review
-description: 画漫画审查阶段。Use when reviewing comic scripts, name boards, layouts, traditional ink/tone/effects coverage, panel art, lettering, bilingual lettering, empty bubbles, long-scroll exports, readability, panel order, text overlap, hand/foot anatomy, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 手脚错乱, 空气泡, 双语嵌字, 台词太多, 长图检查, ネーム检查, 网点检查, 效果线检查, 发布前检查, comic-review.
+description: 画漫画审查阶段。Use when reviewing comic scripts, name boards, layouts, traditional ink/tone/effects coverage, panel art, lettering, bilingual lettering, empty bubbles, long-scroll exports, readability, panel order, text overlap, hand/foot anatomy, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 手脚错乱, 空气泡, 双语嵌字, 台词太多, 长图检查, 缩略分镜检查, name board review, 网点检查, 效果线检查, 发布前检查, comic-review.
 ---
 
 # comic-review — 漫画审查、阶段 Gate 与发布裁决

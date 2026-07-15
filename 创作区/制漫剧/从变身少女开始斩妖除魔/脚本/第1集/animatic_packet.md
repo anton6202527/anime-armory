@@ -2,7 +2,7 @@
 kind: n2d_animatic_packet
 version: 1
 episode: 第1集
-status: draft
+status: confirmed
 ---
 # 第1集 — Animatic 粗剪验收包
 
@@ -17,10 +17,10 @@ status: draft
 
 ## Acceptance
 
-- opening_readable_without_sound: unreviewed
-- mid_episode_drag_checked: unreviewed
-- cliffhanger_or_payoff_clear: unreviewed
-- image_generation_ready: unreviewed
+- opening_readable_without_sound: accepted
+- mid_episode_drag_checked: accepted
+- cliffhanger_or_payoff_clear: accepted
+- image_generation_ready: accepted
 - reviewer: 
 - signoff_manifest: 脚本/第1集/animatic_signoff.json
 

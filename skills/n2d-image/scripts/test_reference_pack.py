@@ -109,3 +109,73 @@ def test_reference_pack_does_not_report_planned_registry_paths_as_ready(tmp_path
 
     assert char_targets
     assert all(t["status"] == "planned" for t in char_targets)
+    by_slot = {t["slot"]: t for t in char_targets}
+    assert by_slot["front"]["path"] == "出图/共享/图片/定妆_CHAR_01.png"
+    assert by_slot["half_body_or_full_body"]["path"] == "出图/共享/图片/定妆_CHAR_01_半身.png"
+    assert by_slot["face_anchor_refs"]["path"] == "出图/共享/图片/定妆_CHAR_01_脸部特写.png"
+
+
+def test_reference_pack_includes_registered_core_turnaround_path(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    registry = tmp_path / "出图" / "共享" / "identity_registry.json"
+    data = json.loads(registry.read_text(encoding="utf-8"))
+    form = data["characters"][0]["forms"][0]
+    form["library_tier"] = "core_full"
+    form["reference_group"]["turnaround"] = {
+        "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+        "status": "planned",
+        "layout": "five_angle_v1",
+    }
+    registry.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pack = rp.build_pack(tmp_path, "第1集")
+    turnaround = next(
+        t for t in pack["targets"]
+        if t["owner"] == "CHAR_01/常态" and t["slot"] == "turnaround"
+    )
+
+    assert turnaround["status"] == "planned"
+    assert turnaround["path"] == "出图/共享/图片/定妆_CHAR_01__常态_三视图.png"
+
+
+def test_reference_pack_counts_ready_six_expression_sheet_as_six_slots(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    registry = tmp_path / "出图" / "共享" / "identity_registry.json"
+    data = json.loads(registry.read_text(encoding="utf-8"))
+    expression_path = "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png"
+    data["characters"][0]["forms"][0]["reference_group"]["expressions"] = [{
+        "path": expression_path,
+        "status": "ready",
+        "emotion": "六联表（冷静/警觉/震惊/隐忍/将哭/决绝）",
+        "layout": "two_by_three_expression_sheet_v1",
+    }]
+    registry.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pack = rp.build_pack(tmp_path, "第1集")
+    expression = next(
+        t for t in pack["targets"]
+        if t["owner"] == "CHAR_01/常态" and t["slot"] == "expression_bank"
+    )
+
+    assert expression["status"] == "ready"
+    assert expression["path"] == expression_path
+
+
+def test_reference_pack_does_not_reuse_one_scene_primary_for_all_plates(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(storyboard.read_text(encoding="utf-8"))
+    data["clips"][0]["location_id"] = "LOC_HALL"
+    storyboard.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    pack = rp.build_pack(tmp_path, "第1集")
+    scene = {
+        t["slot"]: t for t in pack["targets"]
+        if t["owner"] == "LOC_HALL"
+    }
+
+    assert scene["wide_plate"]["path"] == "hall.png"
+    assert scene["wide_plate"]["status"] == "ready"
+    assert scene["reverse_angle"]["status"] == "planned"
+    assert scene["empty_plate"]["status"] == "planned"
+    assert scene["lighting_plate"]["status"] == "planned"
+    assert len({scene[key]["path"] for key in scene}) == 4

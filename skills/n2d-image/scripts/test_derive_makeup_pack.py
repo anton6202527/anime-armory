@@ -129,11 +129,11 @@ def test_derive_project_splits_turnaround_and_front_crops(tmp_path: Path) -> Non
         rg["side"]["path"],
         rg["back"]["path"],
         rg["half_body"]["path"],
-        rg["face_anchor_refs"][0]["path"],
     ):
         out = root / rel
         assert out.exists()
         assert Image.open(out).size == (800, 1200)
+    assert Image.open(root / rg["face_anchor_refs"][0]["path"]).size == (1024, 1024)
 
 
 def test_front_crop_uses_subject_bbox_for_padded_split_front(tmp_path: Path) -> None:
@@ -196,13 +196,13 @@ def test_front_crop_uses_subject_bbox_for_padded_split_front(tmp_path: Path) -> 
     assert face_item["derivation"]["method"] == "front_crop"
     crop_box = face_item["derivation"]["crop_box"]
     assert crop_box != [304, 132, 456, 372]
-    assert 220 <= crop_box[1] <= 290
-    assert crop_box[3] <= 500
+    assert 290 <= crop_box[1] <= 330
+    assert crop_box[3] <= 450
     out = root / face_item["path"]
     assert out.exists()
-    assert Image.open(out).size == (800, 1200)
+    assert Image.open(out).size == (1024, 1024)
     assert face_item["sha256"] == derive_makeup_pack._sha256(out)
-    assert face_item["dimensions"] == {"width": 800, "height": 1200}
+    assert face_item["dimensions"] == {"width": 1024, "height": 1024}
 
 
 def test_front_crop_uses_full_width_when_bright_background_touches_edge(tmp_path: Path) -> None:
@@ -219,10 +219,10 @@ def test_front_crop_uses_full_width_when_bright_background_touches_edge(tmp_path
     assert derive_makeup_pack._content_column_bounds(im) == (0, 799)
     crop_box = derive_makeup_pack._front_crop_box(im, "face_anchor_refs")
 
-    assert crop_box[0] < 330
-    assert crop_box[2] > 470
-    assert 110 <= crop_box[1] <= 180
-    assert crop_box[3] <= 420
+    assert 330 <= crop_box[0] <= 360
+    assert 440 <= crop_box[2] <= 470
+    assert 170 <= crop_box[1] <= 210
+    assert crop_box[3] <= 350
 
 
 def test_front_from_turnaround_updates_matching_reference_slot_metadata(tmp_path: Path) -> None:
@@ -319,11 +319,17 @@ def test_derive_project_splits_five_angle_turnaround_with_rear_three_quarter(tmp
         }]
     }, ensure_ascii=False), encoding="utf-8")
 
-    summary = derive_makeup_pack.derive_project(root, write=True, force=True)
+    summary = derive_makeup_pack.derive_project(
+        root, write=True, force=True, views={"rear_three_quarter"}
+    )
 
-    assert {row["field"] for row in summary["derived"]} == {
-        "three_quarter", "side", "rear_three_quarter", "back"
-    }
+    assert [row["field"] for row in summary["derived"]] == ["rear_three_quarter"]
+    assert not (image_dir / "CHAR_CORE_常态_45度.png").exists()
+    summary = derive_makeup_pack.derive_project(
+        root, write=True, force=True, views={"three_quarter", "side", "back"}
+    )
+
+    assert {row["field"] for row in summary["derived"]} == {"three_quarter", "side", "back"}
     form = json.loads(reg_path.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
     rear = form["reference_group"]["rear_three_quarter"]
     back = form["reference_group"]["back"]

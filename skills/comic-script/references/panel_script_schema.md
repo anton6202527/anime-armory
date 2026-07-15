@@ -121,7 +121,7 @@
 - `character_integrity` / `completeness_notes`：含角色格必填。说明本格如何保持脸型、眼型/眼距、发际线、发型轮廓、服装主色、配饰/伤痕/标志物和身体完整性；动作格还要写清手脚归属、接触点和不可裁掉的部位。只写“保持人物完整”不够。
 - `continuity_from` / `spatial_relationships`：推荐必填；多人同格时必须写。前者说明承接哪一格的状态、伤痕、道具或站位；后者锁人物左右、前后景、遮挡和关键接触点，减少跨格空间漂移。
 - `layout_weight` / `visual_weight` / `importance`（可选）：`heavy` / `medium` / `compact` 或 1-3，用于让 `comic-layout` 以数据驱动方式决定大格/中格/小格，避免把具体项目 story_function 写进通用脚本。
-- `panel_shape` / `border_style` / `gutter_intent`（可选）：传统ネーム层使用。`panel_shape` 可写 `wide`、`tall`、`small`、`full_width`、`borderless` 等；`gutter_intent` 写本格前后的停顿、快切、翻页钩子或呼吸。
+- `panel_shape` / `border_style` / `gutter_intent`（可选）：缩略分镜/name board 层使用。`panel_shape` 可写 `wide`、`tall`、`small`、`full_width`、`borderless` 等；`gutter_intent` 写本格前后的停顿、快切、翻页钩子或呼吸。
 - `ink_plan` / `black_fill_plan` / `tone_plan` / `value_plan` / `effects_plan`（可选）：传统原稿收尾计划。`comic-finishing` 会优先继承这些字段，缺失时按风格和叙事功能生成默认计划。黑白页漫和日漫网点风格建议显式写 `tone_plan`；动作、冲击、揭示格建议显式写 `effects_plan`。
 - `style_bucket` / `scene_family` / `visual_context`（可选）：同一场景/光色族群标识，供 `comic-review` 的风格一致性按计划内场景分组，避免把夜景、梦境、蒙太奇、系统光效等合理差异误判成画风漂移。
 

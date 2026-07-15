@@ -5,9 +5,9 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 # comic-batch — 漫画流程推进与批跑
 
-`comic-batch` 是漫画线的流程层：读取 `_进度.md`，自动运行可复算阶段，但把ネーム和 layout 当作显式编辑签收点。首次推进到这两步只生成 `draft` 并正常停止；只有人工执行 `draft → review → approved`、SHA 检查通过且阶段写成 ✅ 后，批跑才继续收尾、出图包、出图与合成。创作阶段（源本/企划、漫画脚本）仍不自动化，审查阶段也不代替人工验收。
+`comic-batch` 是漫画线的流程层：读取 `_进度.md`，自动运行可复算阶段，但把缩略分镜/name board 和 layout 当作显式编辑签收点。首次推进到这两步只生成 `draft` 并正常停止；只有人工或用户授权制作代理执行 `draft → review → approved`、SHA 检查通过且阶段写成 ✅ 后，批跑才继续收尾、出图包、出图与合成。创作阶段（源本/企划、漫画脚本）仍不自动化，审查阶段也不跳过证据化验收。
 
-`传统原稿流程=关闭` 只跳过原稿收尾，不再跳过ネーム；已签收 name 是所有 layout adapter 的强制编辑合同。出图前编排器先运行 layout `--check`，传统收尾开启时再运行 finishing `--check`，然后才进入 `image_preflight`。因此即使手动指定 `--stage image`，也不能绕过 draft、失效审批或 stale 上游。
+`传统原稿流程=关闭` 只跳过原稿收尾，不再跳过缩略分镜/name board；已签收 name board 是所有 layout adapter 的强制编辑合同。出图前编排器先运行 layout `--check`，传统收尾开启时再运行 finishing `--check`，然后才进入 `image_preflight`。因此即使手动指定 `--stage image`，也不能绕过 draft、失效审批或 stale 上游。
 
 ## 适用场景
 
@@ -44,11 +44,11 @@ python3 skills/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chap
 
 ## 费用与覆盖
 
-付费/高成本动作必须由用户在会话中确认模型、渠道、费用策略和覆盖范围。确认后同一批次按参数执行；后续追加重抽仍应明确目标格和是否覆盖正式 `panels/Pxxx.png`。
+付费/高成本动作必须有可追溯授权：首次无项目授权时由用户在会话中确认模型、渠道、费用策略和覆盖范围；若项目已有当前有效的同范围授权/委托文件，则沉默沿用，由制作代理自主选版、质检和在最大尝试次数内重抽。扩大预算或覆盖范围、改变模型/渠道、覆盖已发布正式图仍须升级确认。
 
 ## 完成判定
 
-- `name_board.workflow_status` 或 `layout.workflow_status` 为 `draft/review` 时，批跑返回成功等待人工处理；不会继续下一阶段，也不会写假 `✅`。
+- `name_board.workflow_status` 或 `layout.workflow_status` 为 `draft/review` 时，批跑返回成功等待人工或已授权制作代理处理；不会继续下一阶段，也不会写假 `✅`。
 - `layout --check` 会复核 name/layout schema、validator、approval subject SHA 与当前 panel script/name/settings；失败时连手动 image 模式也停止。
 - `finishing --check` 会复核 plan 覆盖和 panel script/name/layout/settings SHA；缺输入、空计划和 stale 都停止。
 - `comic-batch` 调用出图 runner 前先跑 `skills/comic-review/scripts/gate.py --stage image_preflight`；被 gate block 时不启动付费/批量出图。

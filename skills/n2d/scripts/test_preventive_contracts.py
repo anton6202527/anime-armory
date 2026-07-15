@@ -586,6 +586,18 @@ def test_asset_id_parser_ignores_generic_vfx_only_prose() -> None:
     assert "VFX_only" not in ids
 
 
+def test_asset_id_parser_does_not_extend_structured_id_into_chinese_prose() -> None:
+    ids = preventive_contracts.asset_ids_from_clip({
+        "location_id": "LOC_01",
+        "object_ids": ["PROP_横刀"],
+        "continuity_notes": ["LOC_01光位、尘雾方向与人物屏幕方位不跳"],
+        "entity_schedule": {"required_presence": ["LOC_01", "VFX_黑妖血", "CHAR_01"]},
+    })
+
+    assert ids == ["LOC_01", "PROP_横刀", "VFX_黑妖血"]
+    assert "LOC_01光位" not in ids
+
+
 def test_pilot_release_gate_requires_evidence_manifest(tmp_path: Path) -> None:
     _write_json(tmp_path / "生产数据" / "pilot_acceptance_第1集.json", {
         "status": "accepted",

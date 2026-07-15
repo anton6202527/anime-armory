@@ -267,6 +267,13 @@ def chars_from_clip(clip: Mapping[str, Any]) -> List[str]:
 
 
 def asset_ids_from_clip(clip: Mapping[str, Any]) -> List[str]:
+    """Collect asset IDs only from storyboard entity fields.
+
+    Chinese asset IDs make prose regex scanning unsafe: ``LOC_01光位`` in a
+    continuity note is greedily read as a new asset instead of ``LOC_01`` plus
+    the word “光位”. Stage-2 storyboards already expose structured entity
+    fields, which are the authoritative source for production gates.
+    """
     out: List[str] = []
     loc = clip.get("location_id") or clip.get("loc_id")
     if loc:
@@ -282,7 +289,12 @@ def asset_ids_from_clip(clip: Mapping[str, Any]) -> List[str]:
                 out.extend(ASSET_ID_RE.findall(item_text) or [item_text])
         elif isinstance(val, str):
             out.extend(ASSET_ID_RE.findall(val))
-    out.extend(ASSET_ID_RE.findall(flatten_for_positive_id_scan(clip)))
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    for key in ("objects", "locations", "required_presence", "offscreen_presence"):
+        for value in as_list(schedule.get(key)):
+            text = str(value or "").strip()
+            if text.startswith(("MOUNT_GROUP_", "LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_")):
+                out.extend(ASSET_ID_RE.findall(text) or [text])
     normalized = {x.replace("-", "_") for x in out}
     return sorted(x for x in normalized if x not in GENERIC_ASSET_TOKENS)
 

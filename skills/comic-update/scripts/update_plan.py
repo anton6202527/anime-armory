@@ -84,7 +84,7 @@ LABEL_TO_STAGE = {
     "漫画脚本": "script",
     "脚本": "script",
     "缩略分镜": "name",
-    "ネーム": "name",
+    "\u30cd\u30fc\u30e0": "name",  # 仅兼容旧项目内部阶段名；不用于用户界面。
     "name": "name",
     "页面排版": "layout",
     "排版": "layout",

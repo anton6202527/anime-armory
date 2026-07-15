@@ -366,7 +366,9 @@ def test_pillow_fallback_when_no_insightface(tmp_path):
         "Clip_02" in p for p in shots
     )
     missing = next(s for p, s in shots.items() if "Clip_02" in p)
-    assert missing["verdict"] == "block"
+    assert missing["verdict"] == "missing"
+    assert missing["code"] == "image_target_missing"
+    assert "尚未生成" in "；".join(missing["checks"])
     ok_shot = next(s for p, s in shots.items() if "Clip_01" in p)
     assert ok_shot["verdict"] in {"ok", "warn"}
     # 绝不臆造相似度
@@ -745,6 +747,30 @@ def test_styleid_missing_weights_falls_back_to_arcface(monkeypatch):
     # 诚实铁律：要 styleid 但权重缺 → 回退 arcface 标 fallback，绝不静默用裸 CLIP
     monkeypatch.delenv("N2D_STYLEID_MODEL", raising=False)
     assert fc._load_styleid_embedder() is None
+
+
+def test_styleid_model_ref_reads_project_settings(tmp_path, monkeypatch):
+    monkeypatch.delenv("N2D_STYLEID_MODEL", raising=False)
+    (tmp_path / "_设置.md").write_text(
+        "# 设置\n- 脸一致性机检后端：styleid\n- N2D_STYLEID_MODEL：kwanY/styleid\n",
+        encoding="utf-8",
+    )
+    assert fc._styleid_model_from_settings(str(tmp_path)) == "kwanY/styleid"
+
+
+def test_load_embedder_passes_project_styleid_ref(monkeypatch):
+    sentinel = object()
+    seen = {}
+
+    def fake_styleid(model_ref=None):
+        seen["model_ref"] = model_ref
+        return sentinel
+
+    monkeypatch.setattr(fc, "_load_styleid_embedder", fake_styleid)
+    app, encoder = fc._load_embedder("styleid", styleid_model="kwanY/styleid")
+    assert app is sentinel
+    assert encoder == fc.ENCODER_STYLEID
+    assert seen["model_ref"] == "kwanY/styleid"
 
 
 def test_fidelity_excluded_only_on_explicit_false():

@@ -133,7 +133,7 @@
       "path": "脚本/第1集/axis_blocking_map.json",
       "exists": true,
       "kind": "file",
-      "sha256": "65e411733657e0f578f415037c130b1f1be95be9885305c7d697fe494aeb4847"
+      "sha256": "787cdd3e63b18cc1a66f3273f0dc1f2cac7d14064532c5b88e3b6d9779ef9a2e"
     },
     {
       "stage": "script_stage2",
@@ -189,14 +189,14 @@
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "228df76aee8206f507101eb7bbfe9761bee134c38ae6383e29ffa31e60d01c4f"
+      "sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/素材清单.md",
       "exists": true,
       "kind": "file",
-      "sha256": "acba1dcca1f9b2fe90a87647f9ec50a73dbf7a754b33912a34ca9dd4e54c3b36"
+      "sha256": "e0a8725a91dc85aed5287477ab8d52a5a1b47f6094f71a80701ca0d535c55034"
     },
     {
       "stage": "script_stage2",
@@ -221,26 +221,30 @@
     {
       "stage": "image_prompt",
       "path": "出图/共享/prompt/00_索引.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "6d3fd3ab1210c257b6bea57fa852b4cbccfed97b1c3a5417cda841f20300a3b4"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/00_总览.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "a9b61d6f7b1c1aeec31a89fa2413c3065bc5e049f15d903666073bd9aa47588c"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/01_分镜出图.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "067376f06c94086b9b94641f7db4a0e1d10296b365cdba50a2a6dccfbec706d2"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 2
     },
     {
       "stage": "image",
@@ -315,7 +319,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "素材清单",
-  "last_progress_value": "✅",
-  "last_progress_state": "done"
+  "last_progress_column": "出图",
+  "last_progress_value": "2/75",
+  "last_progress_state": "partial"
 }

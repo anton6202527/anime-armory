@@ -14,17 +14,17 @@
 
 ## Check
 
-- 状态：block
-- 通过：1/9
+- 状态：pass
+- 通过：9/9
 
 | 文件 | 状态 | 问题 |
 |---|---|---|
-| `脚本/第1集/production_breakdown.json` | block | status 不是 confirmed |
-| `脚本/第1集/continuity_breakdown.json` | block | status 不是 confirmed |
-| `脚本/第1集/continuity_chain.json` | block | status 不是 confirmed |
-| `脚本/第1集/continuity_bible.json` | block | status 不是 confirmed |
-| `脚本/第1集/ai_shooting_schedule.json` | block | status 不是 confirmed |
-| `脚本/第1集/ai_call_sheet.md` | block | 缺 status: confirmed / 状态: confirmed |
-| `脚本/第1集/production_handoff_pack.json` | block | status 不是 confirmed |
+| `脚本/第1集/production_breakdown.json` | pass | - |
+| `脚本/第1集/continuity_breakdown.json` | pass | - |
+| `脚本/第1集/continuity_chain.json` | pass | - |
+| `脚本/第1集/continuity_bible.json` | pass | - |
+| `脚本/第1集/ai_shooting_schedule.json` | pass | - |
+| `脚本/第1集/ai_call_sheet.md` | pass | - |
+| `脚本/第1集/production_handoff_pack.json` | pass | - |
 | `生产数据/ai_shooting_schedule_batch_seed_第1集.json` | pass | - |
-| `脚本/第1集/production_handoff_signoff.json` | block | input_fingerprint 缺失或过期；上游输入变化后必须重新签收；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor；signoff 尚未 approved |
+| `脚本/第1集/production_handoff_signoff.json` | pass | - |

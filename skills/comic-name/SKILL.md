@@ -1,11 +1,11 @@
 ---
 name: comic-name
-description: 漫画缩略分镜/ネーム阶段。Use when turning panel_script.json into traditional manga name boards, page-turn rhythm, thumbnail panel plans, rough eye-flow, gutter intent, manuscript-safe roughs, or a storyboard SVG before final layout. Triggers 缩略分镜, ネーム, name, name board, manga thumbnails, 漫画草稿分镜, 页流, 翻页钩子, comic-name.
+description: 漫画缩略分镜/name board 阶段。Use when turning panel_script.json into traditional comic name boards, page-turn rhythm, thumbnail panel plans, rough eye-flow, gutter intent, manuscript-safe roughs, or a storyboard SVG before final layout. Triggers 缩略分镜, name, name board, comic thumbnails, 漫画草稿分镜, 页流, 翻页钩子, comic-name.
 ---
 
-# comic-name — 缩略分镜 / ネーム
+# comic-name — 缩略分镜 / name board
 
-把 `panel_script.json` 转成传统漫画生产里的 `ネーム`：先用小图解决阅读顺序、页流、大小格节奏、翻页钩子、气泡优先级和原稿安全区，再进入 `comic-layout` 精排。它不生成最终图，也不替代角色定妆。
+把 `panel_script.json` 转成缩略分镜/name board：先用小图解决阅读顺序、页流、大小格节奏、翻页钩子、气泡优先级和原稿安全区，再进入 `comic-layout` 精排。它不生成最终图，也不替代角色定妆。
 
 ## 输入
 
@@ -17,7 +17,7 @@ description: 漫画缩略分镜/ネーム阶段。Use when turning panel_script.
 
 - `排版/第N话/name_board.json`：schema 见 `references/name_board_schema.md`。
 - `排版/第N话/name/name_board.svg`：低保真缩略分镜板，便于人工快速看节奏。
-- `_进度.md`：默认草案只写 `🟡待签收`；只有当前上游 SHA、结构校验和人工审批收据同时有效才把 `缩略分镜` 标为 `✅`。
+- `_进度.md`：默认草案只写 `🟡待签收`；只有当前上游 SHA、结构校验和人工或已授权制作代理的审批收据同时有效才把 `缩略分镜` 标为 `✅`。
 
 ## 怎么跑
 
@@ -46,19 +46,19 @@ python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作�
 
 1. 读分格脚本，确认每格 `story_function`、画面事实、对白/旁白/拟声词。
 2. 先做缩略图，不追求美术细节，只决定格子轻重、阅读入口、视线流和页末钩子。
-3. 给每格写 `thumbnail_rect`、`panel_shape`、`border_style`、`gutter_intent`、`bubble_first`、`effects_hint`，并为气泡记录 `content_ref/speaker/order/tail`。
+3. 给每格写 `thumbnail_rect`、`panel_shape`、`border_style`、`gutter_intent`、`bubble_first`、`effects_hint`，并为气泡记录 `content_ref/speaker/order/tail`。缩略格提示优先使用镜头职责或 `description` 的真实画面动作；`art_notes` 只在缺画面描述时降级使用，不能让禁错说明取代“这格画什么”。
 4. 给每格记录 subject/avoid regions、视线入口/出口；这些自动区域是低保真启发式，只服务后续排版，不作为审美硬闸。
 5. 记录原稿口径：`trim_box`、`safe_area`、`bleed`、`inner_frame`。
 6. 每个翻页记录最后一格 setup 与下一页首格 payoff，不能把页中间的重格误记成翻页钩子。
 7. 输出 draft JSON/SVG；若页流或文字密度不顺，回 `comic-script` 改分格。
-8. 人工提交 review 并签收；签收收据绑定 board 内容、`panel_script` 与 `_设置.md` SHA，之后再跑 `comic-layout`。
+8. 由人工或项目内已授权制作代理提交 review 并签收；签收收据绑定 board 内容、`panel_script` 与 `_设置.md` SHA，之后再跑 `comic-layout`。代理不得越过确定性阻断或授权边界。
 
 ## 原则
 
-- ネーム先解决“读得顺不顺”，不是精修画面。
+- 缩略分镜先解决“读得顺不顺”，不是精修画面。
 - 页漫关注翻页钩子、左右页、跨页节奏；条漫关注滚动停顿、屏间呼吸和大格冲击。
 - 大格必须服务钩子、揭示、动作峰值或情绪停顿；不能只是平均堆格。
-- 气泡优先级在ネーム阶段先定，避免成图后发现文字挡脸、手、道具或动作接触点。
+- 气泡优先级在缩略分镜阶段先定，避免成图后发现文字挡脸、手、道具或动作接触点。
 
 ## 不做什么
 

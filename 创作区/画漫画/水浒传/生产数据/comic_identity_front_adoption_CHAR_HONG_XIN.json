@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-15T10:56:24",
+  "ref_id": "CHAR_HONG_XIN",
+  "candidate_path": "出图/共享/candidates/CHAR_HONG_XIN/front/20260714T193946/candidate_04.png",
+  "candidate_sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+  "adopted_path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+  "adopted_sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+  "reviewer": "lalala",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "继续项目；采纳服饰道符合性优先建议候选4",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

@@ -1,0 +1,55 @@
+{
+  "kind": "n2d_setup_payoff_ledger",
+  "version": 1,
+  "pairs": [
+    {
+      "id": "第1集-伏笔1",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "留存曲线：0–3s杀人倒叙钩 → 15s虎妖/镇魔司死局 → 虎妖复生 → 系统生机 → 杀裴反转 → 二十年一刀斩虎 → 摹影升级 → 道德债",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔2",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "活下去，得先杀一个人。|| 可我刀下的——不是妖。",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔3",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "别逃啊。|| 这荒郊野岭的，你们能去哪儿？",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔4",
+      "setup_ep": "第1集",
+      "payoff_ep": "",
+      "desc": "百妖谱开启。斩杀生物，可得道行。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第1集-伏笔5",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "击杀闻弦境生物。获得道行，二十年。",
+      "status": "done"
+    },
+    {
+      "id": "第1集-伏笔6",
+      "setup_ep": "第1集",
+      "payoff_ep": "",
+      "desc": "妖血为墨，百妖入谱。虎山神——摹影完成。",
+      "status": "ongoing"
+    },
+    {
+      "id": "第1集-伏笔7",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "我来到这世上，杀的第一个人，|| 不是妖。",
+      "status": "planned"
+    }
+  ]
+}

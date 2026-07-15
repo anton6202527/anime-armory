@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Mapping, Sequence
 
 KIND = "comic_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-11.1"
+PROFILE_VERSION = "2026-07-15.1"
 _INTERNAL_RE = re.compile(
     r"(?:CHAR_|MON_|LOC_|PROP_|SYS_|FX_|STYLE_|出图/|\.png\b|identity_registry|asset_registry|reference_group)",
     re.I,
@@ -26,6 +26,57 @@ _TOKEN_LABELS = {
     "FX": "已登记效果参考",
     "STYLE": "项目风格锚",
 }
+
+
+_SAFETY_REPLACEMENTS = (
+    (
+        "超近景冲击格：姜月初双手将横刀刺入裴长青胸口，接触点被深红血色与飞散墨点遮挡，不展示露骨伤口",
+        "超近景冲击格：姜月初双手握刀骤然推向裴长青胸前；用暗红布片与飞散墨点完全遮住接触处，只表现双方错愕和冲击，不表现穿刺、伤口或体液",
+    ),
+    ("囚服尸体和黑衣赤云纹的镇魔卫尸体", "倒卧的囚服无面剪影与黑衣赤云纹无面剪影"),
+    ("枯草间尸骸横陈", "枯草间散落着被破布覆盖的静止无面剪影"),
+    ("从尸骸间", "从破布覆盖的静止剪影之间"),
+    ("尸骸缝隙", "破布与枯草缝隙"),
+    ("尸骸", "被破布覆盖的静止无面剪影"),
+    ("尸体", "静止无面剪影"),
+    ("胸口巨大血窟窿", "仅位于前胸的圆形暗黑能量空洞"),
+    ("胸口血窟窿", "仅位于前胸的圆形暗黑能量空洞"),
+    ("巨大窟窿涌出黑血", "圆形暗黑能量空洞逸散黑色墨气"),
+    ("巨大窟窿仍然流黑血", "圆形暗黑能量空洞仍逸散黑色墨气"),
+    ("虎妖黑血", "虎妖周围的黑色墨迹"),
+    ("黑色妖血", "黑色妖墨"),
+    ("以妖血为墨", "以妖墨为媒"),
+    ("黑血", "黑色墨迹"),
+    ("妖血", "妖墨"),
+    ("血色余晖", "暗红余晖"),
+    ("血色轮廓光", "暗红轮廓光"),
+    ("深红血色", "深暗红色"),
+    ("血痕", "暗色尘泥拖痕"),
+    ("血污", "尘泥污迹"),
+    ("重伤濒死", "极度虚弱、近乎失去意识"),
+    ("濒死", "极度虚弱"),
+    ("左臂扭曲", "左臂无力垂落"),
+    ("重伤", "虚弱"),
+    ("伤口仍在", "前胸暗黑标志仍在"),
+    ("伤口", "破损处"),
+    ("死亡假象", "倒地静止状态"),
+    ("死亡", "倒地静止"),
+    ("斩杀生物", "击败妖物"),
+    ("斩杀", "击败"),
+    ("最后气血", "最后力量"),
+    ("斩向虎妖脖颈", "挥向虎妖肩侧"),
+    ("刺入", "推向"),
+    ("刺进", "推向"),
+    ("过度血腥特写", "任何写实伤害细节"),
+)
+
+
+def safety_shape_visual_text(value: Any) -> str:
+    """在编译期把高风险视觉措辞改写为非写实、可执行的等价叙事。"""
+    shaped = str(value or "")
+    for old, new in _SAFETY_REPLACEMENTS:
+        shaped = shaped.replace(old, new)
+    return shaped
 
 
 def one_line(value: Any, limit: int = 520) -> str:
@@ -49,7 +100,7 @@ def public_text(value: Any, limit: int = 520) -> str:
     paths.  They stay in the production contract, while this compiler replaces
     them with semantic labels so internal bookkeeping never reaches the model.
     """
-    text = one_line(value, limit * 2)
+    text = one_line(safety_shape_visual_text(value), limit * 2)
 
     def replace_token(match: re.Match[str]) -> str:
         prefix = match.group(0).split("_", 1)[0].upper()

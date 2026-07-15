@@ -1,0 +1,30 @@
+{
+  "schema_version": 2,
+  "kind": "comic_reference_anchor_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-15T16:58:21",
+  "refs": [
+    "PROP_IMPERIAL_EDICT"
+  ],
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_anchors_第1话__20260715T165821669343.json",
+  "previous_manifest_sha256": "83d33304e39355d834e99710ff3ee9854bf2fc5f30738a0f9307f6a2e12decb4",
+  "generated": 0,
+  "skipped": 0,
+  "failed": 1,
+  "items": [
+    {
+      "ts": "2026-07-15T16:58:21",
+      "status": "reference_anchor_failed",
+      "ref_id": "PROP_IMPERIAL_EDICT",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "累计尝试次数已达授权上限 2/2；未发起新的生图请求"
+    }
+  ]
+}

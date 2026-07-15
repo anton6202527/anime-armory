@@ -72,6 +72,7 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
 - 出图稿层: {args.render_stage}
 - 原稿规格: {args.manuscript_spec}
 - 版式模板策略: {args.name_strategy}
+- 审阅策略: {args.review_strategy}
 - 网点策略: {args.tone_strategy}
 - 效果线策略: {args.effects_strategy}
 - 基础视觉风格: {args.visual_style}
@@ -104,7 +105,7 @@ def progress_markdown(title: str, args: argparse.Namespace, source_ready: bool) 
     source_status = "🟡素材已入库" if source_ready else "⬜"
     stages = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
     if not traditional_enabled(args.traditional_workflow):
-        # ネーム/缩略分镜是所有漫画形态的页流与阅读顺序合同；
+        # 缩略分镜/name board 是所有漫画形态的页流与阅读顺序合同；
         # 关闭“传统原稿流程”只能跳过墨线/网点/效果线收尾。
         stages = [s for s in stages if s != "原稿收尾"]
     header = "| 话 | " + " | ".join(stages) + " |"
@@ -339,7 +340,8 @@ def main() -> int:
     parser.add_argument("--traditional-workflow", default=None)
     parser.add_argument("--render-stage", default=None)
     parser.add_argument("--manuscript-spec", default="数字条漫")
-    parser.add_argument("--name-strategy", default="自动ネーム")
+    parser.add_argument("--name-strategy", default="自动缩略分镜")
+    parser.add_argument("--review-strategy", default="逐阶段用户确认")
     parser.add_argument("--tone-strategy", default="风格驱动")
     parser.add_argument("--effects-strategy", default="剧情驱动")
     parser.add_argument("--visual-style", default="彩色国漫条漫")
@@ -442,7 +444,7 @@ def main() -> int:
     }, ensure_ascii=False, indent=2) + "\n")
 
     print(f"\n[done] 画漫画项目已初始化：{root}")
-    print("下一步：comic-script 补齐开发包、chapter_contract、故事圣经和 panel_script.json；通过后再做ネーム/排版。")
+    print("下一步：comic-script 补齐开发包、chapter_contract、故事圣经和 panel_script.json；通过后再做缩略分镜/name board 与排版。")
     return 0
 
 

@@ -341,9 +341,12 @@ def plan_character_in_panel(
         missing.append("全身/三视图参考（远景/全身动作格·单张头肩定妆不够）")
 
     # 换装格：服装子注册 + 服装参考图（业界失效模式：锁脸锁不住领型/纽扣/花纹）。
+    # MON_ 生物在 registry v2 也有统一状态绑定的 OUTFIT_BASE 占位，它不代表真实服装；
+    # 对四足兽/蛇类要锁的是体表、鳞毛与解剖，不应伪造服装阻断。
     outfit_ids = char.get("outfit_ids") if isinstance(char.get("outfit_ids"), (set, list, tuple)) else set()
     panel_outfit = str(char.get("panel_outfit_id") or "").strip()
-    if panel_outfit:
+    is_wearable_character = str(char.get("asset_type") or "character").strip().lower() == "character" and not cid.startswith("MON_")
+    if panel_outfit and is_wearable_character:
         outfit_ref = str((char.get("outfit_refs") or {}).get(panel_outfit) or "").strip()
         if outfit_ref and outfit_ref not in have_paths:
             refs.append({"role": "outfit", "path": outfit_ref, "strength_hint": STRENGTH["outfit"]})
@@ -539,6 +542,7 @@ def load_characters(registry: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
 
         out[str(cid)] = {
             "id": str(cid),
+            "asset_type": str(asset.get("type") or ("monster" if str(cid).startswith("MON_") else "character")),
             "display_name": str(asset.get("display_name") or cid),
             "tier": str(asset.get("library_tier") or asset.get("tier") or "core_full"),
             "scope": str(asset.get("scope") or ""),
@@ -882,7 +886,7 @@ def build_plan(root: Path, chapter: str) -> Dict[str, Any]:
         "backend": caps,
         "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
         "summary": {
-            "panels_with_characters": len(panel_plans),
+            "panels_with_characters": sum(1 for p in panel_plans if p.get("characters")),
             "panels_needing_action": sum(1 for p in panel_plans if p["needs_action"]),
             "panels_blocked": sum(1 for p in panel_plans if p["blocked"]),
             "block": sum(1 for f in findings if f["severity"] == "block"),

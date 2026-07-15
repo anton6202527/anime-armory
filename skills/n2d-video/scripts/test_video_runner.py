@@ -1165,10 +1165,23 @@ def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> N
     monkeypatch.setattr(video_runner.video_qc, "run_qc", fake_run_qc)
     monkeypatch.setattr(video_runner.native_av_sidecar, "update_sidecars", fake_sidecar)
 
-    item = video_runner.accept_clip(tmp_path, manifest_file, "Clip_01", no_record=True, no_progress=True)
+    (tmp_path / "qc.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "qc.md").write_text("# qc\n", encoding="utf-8")
+    item = video_runner.accept_clip(
+        tmp_path,
+        manifest_file,
+        "Clip_01",
+        no_record=True,
+        no_progress=True,
+        visual_reviewer="codex visual inspection",
+        visual_notes="已实际查看当前 MP4；身份、人体、动作与接缝通过。",
+        visual_current_pixels_confirmed=True,
+    )
 
     assert calls and calls[0][1:4] == ("第1集", "Clip_01", video)
     assert item["native_av_sidecar"]["status"] == "updated"
+    assert item["visual_review"]["verdict"] == "pass"
+    assert video_runner.accepted_video_receipt_issues(tmp_path, "第1集", item) == []
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["native_av_sidecar"]["physics_path"].endswith("native_av_physics_第1集.json")
 
@@ -1212,10 +1225,84 @@ def test_accept_clip_blocks_dense_identity_without_intra_qc(monkeypatch, tmp_pat
     monkeypatch.setattr(video_runner.video_qc, "run_qc", fake_run_qc)
 
     with pytest.raises(RuntimeError, match="dense_face_watch"):
-        video_runner.accept_clip(tmp_path, manifest_file, "Clip_01", no_record=True, no_progress=True)
+        video_runner.accept_clip(
+            tmp_path,
+            manifest_file,
+            "Clip_01",
+            no_record=True,
+            no_progress=True,
+            visual_reviewer="codex visual inspection",
+            visual_notes="已实际查看当前 MP4；等待机器身份回验。",
+            visual_current_pixels_confirmed=True,
+        )
 
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["status"] == "qc_blocked"
+
+
+def test_accept_clip_requires_actual_visual_review_receipt(tmp_path: Path) -> None:
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"mp4")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {"episode": "第1集", "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}]},
+    )
+
+    with pytest.raises(RuntimeError, match="actual visual inspection"):
+        video_runner.accept_clip(tmp_path, manifest_file, "Clip_01", no_record=True, no_progress=True)
+
+
+def test_submit_clip_blocks_next_until_previous_physical_clip_is_accepted(tmp_path: Path) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    manifest = {
+        "episode": "第1集",
+        "items": [
+            {"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"},
+            {"clip": "Clip_02", "target": "Clip_02.mp4", "status": "prepared"},
+        ],
+    }
+    video_runner.atomic_write_json(manifest_file, manifest)
+
+    with pytest.raises(RuntimeError, match="sequential video QC interlock"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_02")
+
+
+def test_sequential_qc_interlock_accepts_current_pixel_machine_and_visual_receipt(tmp_path: Path) -> None:
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"mp4-current")
+    qc_json = tmp_path / "生产数据" / "video_qc_Clip_01.json"
+    qc_json.parent.mkdir(parents=True)
+    qc_json.write_text("{}", encoding="utf-8")
+    qc_md = tmp_path / "生产数据" / "video_qc_Clip_01.md"
+    qc_md.write_text("# qc\n", encoding="utf-8")
+    digest = video_runner._sha256_file(video)
+    accepted = {
+        "clip": "Clip_01",
+        "target": "Clip_01.mp4",
+        "status": "accepted",
+        "accepted_at": "2026-07-15T14:00:00+0800",
+        "artifact_sha256": digest,
+        "qc_machine": {"seam_blocks": 0, "intra_blocks": 0, "anchor_blocks": 0},
+        "qc_json": str(qc_json),
+        "qc_markdown": str(qc_md),
+        "visual_review": {
+            "verdict": "pass",
+            "reviewer": "codex visual inspection",
+            "reviewed_at": "2026-07-15T14:00:00+0800",
+            "artifact_sha256": digest,
+            "explicit_current_pixels_confirmation": True,
+            "notes": "当前 MP4 身份、人体、动作、接缝均通过。",
+        },
+    }
+    current = {"clip": "Clip_02", "target": "Clip_02.mp4", "status": "prepared"}
+    manifest_file = tmp_path / "manifest.json"
+    manifest = {"episode": "第1集", "items": [accepted, current]}
+    video_runner.atomic_write_json(manifest_file, manifest)
+
+    assert video_runner.sequential_qc_blockers(tmp_path, manifest_file, manifest, current) == []
 
 
 def test_query_clip_replaces_stale_existing_target(monkeypatch, tmp_path: Path) -> None:

@@ -121,9 +121,9 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 3. 用户选定 → 按该档执行；可写回 `_设置.md` 作下次默认建议，但**下次仍要再弹一次菜单**。
 4. 按 `生成优先序` 给本集 Clip 排出生成队列；共享视频库（空镜/转场复用）先核对，不重生成。
 
-**逐单位循环**（每个粒度单位）：生成/下载当前物理 Clip → `video_runner accept` 对该 Clip 抽帧并跑 `video_qc` → 执行者实际查看当前 MP4 或本 Clip contact sheet，按 prompt 的「自检（生成后逐条过）」复核人脸时序、人体/动作、运镜、接缝、身份/资产、音轨策略和张力 → 通过才回写 `视频` 列分子（X/Y）→ 下一单位。普通交互模式在每单位通过后停下给用户看并询问；**当前请求已有无停顿授权时，逐个自动自检后继续，不弹确认**。任何 `qc_blocked`、执行者目视硬伤、近脸身份 warn 未查清或正式音轨策略不符，都只允许废料归档、改 prompt/锚帧/拆 Clip 或重跑当前物理段，禁止带病推进到下一段。
+**逐单位循环**（每个粒度单位）：生成/下载当前物理 Clip → 对当前 manifest 跑 `video_runner qc` → 执行者实际查看当前 MP4 或本 Clip contact sheet，按 prompt 的「自检（生成后逐条过）」复核人脸时序、人体/动作、运镜、接缝、身份/资产、音轨策略和张力 → 用带当前像素确认的 `video_runner accept --visual-reviewer ... --visual-notes ... --confirm-current-pixels` 再跑最终 QC 并写视觉收据 → 通过才回写 `视频` 列分子（X/Y）→ 下一单位。`submit` 有 episode-wide 代码互锁：上一物理视频仍在生成/已下载未 accept，或旧 `accepted` 缺机器 QC + 当前 MP4 SHA 绑定的实际查看收据时，下一条付费提交直接失败；不再只靠执行者纪律。普通交互模式在每单位通过后停下给用户看并询问；**当前请求已有无停顿授权时，逐个自动自检后继续，不弹确认**。任何 `qc_blocked`、执行者目视硬伤、近脸身份 warn 未查清或正式音轨策略不符，都只允许废料归档、改 prompt/锚帧/拆 Clip 或重跑当前物理段，禁止带病推进到下一段。
 
-> **无停顿不等于批量后补 QC**：即使用户要求“一直执行到完结”，顺序仍是“一个物理 Clip 生成 → 一个 Clip `accept`/QC → 一个 Clip 实际查看 → 通过后下一个”。不得先生成整集再统一跑 `qc`；不得用 `--allow-qc-block` 代替自检。`--allow-qc-block` 只处理有证据的机检误报且必须留 dashboard 事件，不能放行执行者已看到的脸漂、穿模、动作错、接缝断或音轨错误。批次/整集完成后仍要再跑一次全量 video gate。自动自检不是人工发布签收，不得伪造真人 reviewer、pilot acceptance 或 release signoff。
+> **无停顿不等于批量后补 QC**：即使用户要求“一直执行到完结”，顺序仍是“一个物理 Clip 生成 → 单 Clip 机器 QC → 实际查看当前 MP4 → 带像素哈希收据 accept → 下一个”。不得先生成整集再统一跑 `qc`；不得用 `--allow-qc-block` 代替自检。`--allow-qc-block` 只处理有证据的机检误报且必须留 dashboard 事件，不能放行执行者已看到的脸漂、穿模、动作错、接缝断或音轨错误。批次/整集完成后仍要再跑一次全量 video gate。自动自检不是人工发布签收，不得伪造真人 reviewer、pilot acceptance 或 release signoff；执行者可以如实写 `codex visual inspection`，但不能冒充用户或真人导演。
 
 每个 Clip 的 prompt 块必须同时包含两段检查：
 - `检查清单（视频三件套自查·最易漏 ④人物运动 / ②镜头运动 / ⑦张力）`：提交前看 prompt 是否合格。
@@ -350,8 +350,14 @@ python3 skills/n2d-video/scripts/video_runner.py query <作品根> <manifest.jso
 # adapter 暴露 cancel 时才可取消；不支持时不得伪造取消状态
 python3 skills/n2d-video/scripts/video_runner.py cancel <作品根> <manifest.json> --clip Clip_06
 
-# 4) 验收：抽帧 QC、dashboard 记账、回写 视频 X/Y
-python3 skills/n2d-video/scripts/video_runner.py accept <作品根> <manifest.json> --clip Clip_06
+# 4) 先对当前单条做机器 QC，再实际查看当前 MP4/contact sheet
+python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
+
+# 5) 验收：重跑最终 QC，绑定当前 MP4 SHA 的实际查看收据，dashboard 记账、回写 视频 X/Y
+python3 skills/n2d-video/scripts/video_runner.py accept <作品根> <manifest.json> --clip Clip_06 \
+  --visual-reviewer "codex visual inspection" \
+  --visual-notes "已实际查看当前 MP4；身份、人体、动作、接缝与音轨策略通过。" \
+  --confirm-current-pixels
 # 每次 accepted clip 后会刷新 生产数据/timelines/第N集/editorial_timeline.otio；全集齐时再渲 actual rough cut
 
 # 批次抽帧 QC（无声策略下会先确保正式 MP4 无音轨；显式原生音画/环境声才只读原片）
@@ -362,7 +368,10 @@ python3 skills/n2d-video/scripts/multishot_plan.py <作品根> 第N集 --write -
 python3 skills/n2d-video/scripts/multishot_runner.py prepare <作品根> 第N集 --group MSG_01
 python3 skills/n2d-video/scripts/multishot_runner.py submit <作品根> <multishot-manifest.json>
 python3 skills/n2d-video/scripts/multishot_runner.py query <作品根> <multishot-manifest.json>
-python3 skills/n2d-video/scripts/multishot_runner.py accept <作品根> <multishot-manifest.json>
+python3 skills/n2d-video/scripts/multishot_runner.py accept <作品根> <multishot-manifest.json> \
+  --visual-reviewer "codex visual inspection" \
+  --visual-notes "已实际查看当前 multishot master 及各派生段。" \
+  --confirm-current-pixels
 ```
 
 `video_runner.py submit --dry-run` 可先检查将要调用的后端参数；若一次命令被打断，先跑 `video_runner.py status <manifest.json>`，必要时用平台任务列表核对最近任务，再决定是否重提。`--skip-preflight` 仅供调试完整 dashboard gate；`video_runner.py submit` 仍会强制执行身份同源 guard，不能绕过首/中/尾同源与大表情锁脸规则。

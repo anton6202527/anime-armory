@@ -214,7 +214,7 @@ def verify_name_board(
 ) -> list[str]:
     """Verify the signed name contract before committing layout geometry."""
     if not name_board:
-        return ["缺少 name_board.json；layout 必须消费已签收ネーム"]
+        return ["缺少 name_board.json；layout 必须消费已签收缩略分镜/name board"]
     if name_board.get("schema_version") != 2:
         return [] if allow_legacy_name else ["name_board 必须升级为 schema v2 并签收；迁移时可显式 --allow-legacy-name"]
     errors: list[str] = []
@@ -914,7 +914,7 @@ def main() -> int:
             update_progress(root, args.chapter, "页面排版", "🟡待签收")
         print(f"[ok] draft {out_path}")
         print(f"[ok] adapter={layout.get('geometry_profile')} validator=pass")
-        print("[next] 人工审阅后先 --submit-review，再用 --approve --reviewed-by <签收人>；未签收 layout 不写 ✅")
+        print("[next] 审阅后先 --submit-review，再用 --approve --reviewed-by <签收人>；可由用户授权制作代理执行，未签收 layout 不写 ✅")
         return 0
     except (ValueError, OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
         print(f"[block] {exc}")
