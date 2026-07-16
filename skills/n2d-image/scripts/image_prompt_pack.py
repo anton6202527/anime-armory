@@ -3172,6 +3172,12 @@ PRESERVED_REGISTRY_KEYS = (
     "visual_review",
     "face_consistency",
     "machine_evidence",
+    # A generated split view records the real parent/reference bundle used by
+    # the backend.  Rebuilding prompts must not replace that provenance with a
+    # generic planned-slot derivation; doing so changes identity_registry after
+    # every accepted shared image and creates a freshness cycle with
+    # memory_anchor -> reference_plan -> image_prompt_pack.
+    "derivation",
     "png_sha256",
     "artifact_sha256",
     # Turnaround layout is migration-critical evidence.  A new prompt-pack run

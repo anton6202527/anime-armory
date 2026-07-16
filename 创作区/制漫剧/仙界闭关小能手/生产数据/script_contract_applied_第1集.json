@@ -34,11 +34,11 @@
         "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
         "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
       ],
-      "reviewed_at": "2026-07-16T00:54:22+00:00"
+      "reviewed_at": "2026-07-16T13:37:44+00:00"
     }
   ],
   "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-16T00:54:22+00:00",
+  "reviewed_at": "2026-07-16T13:37:44+00:00",
   "contract_path": "生产数据/script_quality_contract_第1集.json",
   "contract_content_hash": "0ae0dfd5e69f20e5",
   "contract_file_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",

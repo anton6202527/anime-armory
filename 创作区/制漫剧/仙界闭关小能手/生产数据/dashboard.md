@@ -1,14 +1,14 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-16T01:22:00+00:00
-- 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-16T13:41:39+00:00
+- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 122 | — | 2h30m10s | 55 | 0 | 7 | 47 | 92.7% | 0.0% |
+| 2 | 119 | — | 2h30m10s | 55 | 0 | 2 | 36 | 92.7% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.8545 | 0.1273 | 0 | 0.0% |
+| 0.6545 | 0.0364 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,13 +47,10 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图prompt | — | — | 2h30m10s | 74.6% | 0.0% | — | 7 | — | — | — | — | — | — |
+| 第1集 | 出图prompt | — | — | 2h30m10s | 74.6% | 0.0% | — | 2 | — | — | — | — | — | — |
 | 全剧 | — | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 最新阻断
 
 - 第1集 / image / 逐张机器QC+实际目视: EP01_CLIP01 木牌结构 — 执行者实际查看当前像素：两名角色身份、场景、光位、手部与背景群演通过；机器 face warn 经并排定妆核对为侧角度/光照误报；但 PROP_木牌 未继承横向多木条、竖杆和麻绳结构，变成手持断木板，资产连续性失败，当前图拒绝并只重抽本目标。
-- 第1集 / image_preflight / 生产锁版账: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_locks_check_image_preflight_第1集.json — image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集 --stage image_preflight --write-missing`。
-- 第1集 / image_preflight / 跨集记忆锚落实: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/memory_anchor_plan_第1集.json — memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。
-- 第1集 / image_preflight / 核心人物多视图验收: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。
-- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — image_qc standalone 报告有 3 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。
+- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。

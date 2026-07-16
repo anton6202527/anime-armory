@@ -1356,6 +1356,33 @@ def test_registry_rebuild_preserves_explicit_five_angle_turnaround_layout() -> N
     assert merged["view_order"] == old["view_order"]
 
 
+def test_registry_rebuild_preserves_actual_generated_derivation() -> None:
+    new = {
+        "path": "出图/共享/图片/定妆_CHAR_02__常态_后45度.png",
+        "status": "ready",
+        "derivation": {
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+            "crop_box": [0, 0, 1, 1],
+        },
+    }
+    old = {
+        **new,
+        "derivation": {
+            "method": "controlled_multiref_generation",
+            "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02.png",
+            "source_sha256": "abc123",
+            "crop_box": [0, 0, 1024, 1819],
+            "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
+            "reference_inputs": [{"rel_path": "出图/共享/图片/定妆_CHAR_02__常态.png"}],
+        },
+    }
+
+    merged = image_prompt_pack.preserve_registry_evidence(new, old)
+
+    assert merged["derivation"] == old["derivation"]
+
+
 def test_clip_assets_do_not_bind_plain_alias_from_prose() -> None:
     clip = {
         "description": "姜月初想起百妖谱规则，但本镜不出现面板。",

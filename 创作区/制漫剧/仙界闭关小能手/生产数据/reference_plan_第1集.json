@@ -128,7 +128,7 @@
       "status": "ready",
       "available": true,
       "path": "生产数据/memory_anchor_plan_第1集.json",
-      "sha256": "f692613e7068665108e5456a478311452cdfed105849c93948aeeb3cd0ab5ea3",
+      "sha256": "b72b115ed54684f9c87a75190766496ba86878523d20729fa20f40543307e7aa",
       "required_rows": 0,
       "required_char_keys": [],
       "consumed_char_keys": [],
@@ -139,11 +139,11 @@
       "errors": [],
       "source_fingerprint": {
         "identity_drift_report_sha256": "8731a2ebecd5eb4f738772e8e6a1e299814d832d341fb155048fe38554b6af9b",
-        "identity_registry_sha256": "687406bfd65891db812b5786e8f0d220b8cb719264fe053b18d153dafd5b46e2",
+        "identity_registry_sha256": "861e41fea3f0bea74bb708be7c42751f70bb732476408c6454ceeb6f8bc9bb50",
         "storyboard_sha256": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
       },
       "current_source_fingerprint": {
-        "identity_registry_sha256": "687406bfd65891db812b5786e8f0d220b8cb719264fe053b18d153dafd5b46e2",
+        "identity_registry_sha256": "861e41fea3f0bea74bb708be7c42751f70bb732476408c6454ceeb6f8bc9bb50",
         "identity_drift_report_sha256": "8731a2ebecd5eb4f738772e8e6a1e299814d832d341fb155048fe38554b6af9b",
         "storyboard_sha256": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
       },

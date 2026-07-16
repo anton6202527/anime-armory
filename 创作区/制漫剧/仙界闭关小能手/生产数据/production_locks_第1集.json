@@ -2,18 +2,10 @@
   "episode": "第1集",
   "generated_at": "2026-07-14T15:51:44+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-15T17:00:17+00:00",
+  "last_confirmed_at": "2026-07-16T13:39:10+00:00",
   "last_confirmed_by": "executor:codex",
   "last_confirmed_lock_ids": [
-    "source_lock",
-    "script_lock",
-    "storyboard_lock",
-    "style_identity_lock",
-    "voice_timing_lock",
-    "video_material_lock",
-    "rough_cut_lock",
-    "picture_lock",
-    "delivery_lock"
+    "style_identity_lock"
   ],
   "locks": [
     {
@@ -160,7 +152,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approved_at": "2026-07-16T13:39:10+00:00",
       "approver": "executor:codex",
       "artifact_count": 4,
       "artifacts": [
@@ -178,9 +170,9 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-15T17:00:07+00:00",
+          "mtime": "2026-07-16T13:37:43+00:00",
           "path": "出图/共享/identity_registry.json",
-          "sha256": "687406bfd65891db812b5786e8f0d220b8cb719264fe053b18d153dafd5b46e2"
+          "sha256": "861e41fea3f0bea74bb708be7c42751f70bb732476408c6454ceeb6f8bc9bb50"
         },
         {
           "exists": true,
@@ -455,6 +447,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-15T17:00:17+00:00",
+  "updated_at": "2026-07-16T13:39:10+00:00",
   "version": 1
 }
