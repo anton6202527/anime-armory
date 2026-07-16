@@ -57,7 +57,7 @@ python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage re
 | `name` | script 通过；name schema v2、`approved`、审批主体和上游 SHA 当前 | 页流、翻页钩子、格子轻重、气泡优先级 |
 | `layout` | name 通过；layout schema v2、validator、几何 profile、approval SHA 当前 | 破格/跨页/特殊装帧的人工节奏 |
 | `finishing` | 已签收 name/layout；逐格/逐页同序覆盖；上游 SHA 当前 | 黑场、网点、效果线、拟声词的审美作用 |
-| `image_preflight` | registry v2；结构化 bindings；model pack 技术齐套且当前人审签收；reference plan/job 当前；真实引用闭合；后端/profile/compiler 一致 | 节拍、构图重复和像素代理只 warn |
+| `image_preflight` | registry v2；结构化 bindings；model pack 技术齐套且当前人审签收；reference plan/job 当前；真实引用闭合；后端/profile/compiler 一致 | 节拍、话内冗余、追更再入前情、去 AI 味直白率、构图重复和像素代理只 warn |
 | `image` | preflight 通过；必需 panel 文件存在；job `ready`；生成合同 SHA 当前；确定性 post-QC 无 block | 风格/角色/场景/道具/画面相似度告警需看原图 |
 | `compose` | image 通过；lettering/manifest 存在；无 missing panels；有真实渲染物；平台 profile 可验证 | 文字密度、留白与疑似气泡需逐页人审 |
 | `review` | compose 通过；综合报告无确定性 block | 阅读、表演、审美、改编效果和告警处置 |

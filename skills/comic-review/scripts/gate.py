@@ -1446,7 +1446,9 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
     """出图前的编剧层 advisory 机检（2026-07 标准审计·report-only 起步，误报校准后再议升 block）。
 
     - 分话节拍：首格开场钩/末格结尾钩/高潮位/格数带/全书拆分蓝图（chapter_beat_audit·comic-script）。
+    - 追更再入：N≥2 话开场前情锚是否够、中段是否冒出未交代实体（reentry_context_audit·comic-script）。
     - 话内冗余：台词同义反复/事实复现/旁白硬转占比/构图重复计划（redundancy_audit·本目录）。
+    - 去 AI 味：自陈情绪/旁白概括情绪/动机过度解释/信息直给/集级直白率（subtext_audit·本目录）。
     机检产物落 生产数据/，findings 以 warn/info 并入本 gate（must→warn：advisory 期不阻断付费）。
     审计脚本缺失/异常时留 note 不拦——advisory 层绝不制造假 block。"""
     import subprocess
@@ -1454,7 +1456,9 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
     audits = [
         ("chapter_beat_audit", here.parent.parent / "comic-script" / "scripts" / "chapter_beat_audit.py"),
         ("setup_payoff_ledger", here.parent.parent / "comic-script" / "scripts" / "setup_payoff_ledger.py"),
+        ("reentry_context_audit", here.parent.parent / "comic-script" / "scripts" / "reentry_context_audit.py"),
         ("redundancy_audit", here / "redundancy_audit.py"),
+        ("subtext_audit", here / "subtext_audit.py"),
     ]
     for name, script in audits:
         if not script.is_file():
