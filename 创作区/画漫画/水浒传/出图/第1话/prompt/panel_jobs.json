@@ -14706,7 +14706,7 @@
     },
     {
       "panel_id": "P043",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1196
@@ -15024,12 +15024,64 @@
         "style_reference_limit": 1,
         "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第1话/panels/P043.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "generated_at": "2026-07-16T20:26:39",
+      "backend_version": "{",
+      "artifact_sha256": "e8ab4b20b538d16b9971c01c700323779c630b3e965e7d0e870156684499b7b1",
+      "attempt": 1,
+      "submit_id": "80fa03a8-29f1-4f56-b6fc-32dd5f8098dd",
+      "service_ratio": "1:1",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P043.json",
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P043.txt",
+      "prompt_snapshot_sha256": "f07c11924675c59136482daa3fb5e3bdca69e54b66e355b85676ea773bffd838",
+      "raw_candidate_path": "出图/第1话/candidates/P043/20260716T202521_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2048,
+          "height": 2048
+        },
+        "target_size": {
+          "width": 1296,
+          "height": 1196
+        }
+      },
+      "generated_from_contract_sha256": "5bc8ae2b876aa47437bc4f4d232e7799de58c92a4b83b3a52bb718db06b66a51",
+      "generated_from_submit_prompt_sha256": "2fe4484908baa4cd30b1bf20dc6605ea9e1779b46b4b12ecddc1e0d843eb0618",
+      "generated_from_execution_input_sha256": "b6f804c7d84acf66d2589e6509daae7a2960976ad9c71bdb851fc0dc871e2efb",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P043",
+        "created_at": "2026-07-16T20:26:39",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P043.png",
+        "size": {
+          "width": 1296,
+          "height": 1196
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1196
+        },
+        "declared_reference_count": 9,
+        "reference_input_count": 9,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P044",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 1040
@@ -15347,12 +15399,64 @@
         "style_reference_limit": 1,
         "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第1话/panels/P044.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "generated_at": "2026-07-16T20:28:07",
+      "backend_version": "{",
+      "artifact_sha256": "1ed88f199a44990d151fb7ed25c5c6189e104371e8d64e99251a18b82b5070b2",
+      "attempt": 1,
+      "submit_id": "5073d781-6ec8-44f3-b58b-ba2c3f5b7d2f",
+      "service_ratio": "1:1",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P044.json",
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P044.txt",
+      "prompt_snapshot_sha256": "37c75958f7f5f69859a2c68e90478fbf8a5e8bbed00fd528d365c080e17a877f",
+      "raw_candidate_path": "出图/第1话/candidates/P044/20260716T202639_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2048,
+          "height": 2048
+        },
+        "target_size": {
+          "width": 1188,
+          "height": 1040
+        }
+      },
+      "generated_from_contract_sha256": "c8718fc46cbf6ac52ef0d2f6c71bfe7a19dfa05786fbc135de2746b09336d9c0",
+      "generated_from_submit_prompt_sha256": "cf94d3974cf59360ed4fed08650abfbf7d6afff8f1d687f457d4d7eb958ad0a6",
+      "generated_from_execution_input_sha256": "77136a3e3072b406b14898bd4a6848dad069edae75b6e571154335fca09f7e80",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P044",
+        "created_at": "2026-07-16T20:28:07",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P044.png",
+        "size": {
+          "width": 1188,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 1040
+        },
+        "declared_reference_count": 9,
+        "reference_input_count": 9,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P045",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1232
@@ -15670,8 +15774,60 @@
         "style_reference_limit": 1,
         "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第1话/panels/P045.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "generated_at": "2026-07-16T20:29:26",
+      "backend_version": "{",
+      "artifact_sha256": "8f4c1aa380b0179eb552f49ca4a11fb012c196628f4518812ef33f6f111320b3",
+      "attempt": 1,
+      "submit_id": "b26363b7-2de4-4c04-b0fc-5462808887b6",
+      "service_ratio": "1:1",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P045.json",
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P045.txt",
+      "prompt_snapshot_sha256": "d589506c98605a56943936d1a62da1502f3f2dd8bac7ef5cceba9e26a9dcc601",
+      "raw_candidate_path": "出图/第1话/candidates/P045/20260716T202807_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2048,
+          "height": 2048
+        },
+        "target_size": {
+          "width": 1296,
+          "height": 1232
+        }
+      },
+      "generated_from_contract_sha256": "dc7d9b276b4dd60c33c5b411c7c0f6e912700d266d541a4787959efa4a202ce3",
+      "generated_from_submit_prompt_sha256": "d0b9fa5e4d0744a89674259c6943da70a15aba65e3a92255cd9981e860ffdc43",
+      "generated_from_execution_input_sha256": "9d1ab4e8138f37f5bb757dbf46c99ef8172101073038007875dacb3bda6660d3",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P045",
+        "created_at": "2026-07-16T20:29:26",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P045.png",
+        "size": {
+          "width": 1296,
+          "height": 1232
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1232
+        },
+        "declared_reference_count": 9,
+        "reference_input_count": 9,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P046",
