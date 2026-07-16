@@ -223,6 +223,7 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
         entries[aid] = {
             "name": str(a.get("name") or "").strip(),
             "type": str(a.get("type") or "").strip(),
+            "alias_of": str(a.get("alias_of") or "").strip(),
             "reference_group": a.get("reference_group") if isinstance(a.get("reference_group"), Mapping) else {},
             "scale": str((a.get("constraints") or {}).get("scale") if isinstance(a.get("constraints"), Mapping) else a.get("scale") or "").strip(),
             "must_not_have": _asset_must_not_have_terms(a),
@@ -2988,14 +2989,55 @@ def prop_shape_review_targets(root: Path, ep: str,
     if not idx:
         return []
     entries: Dict[str, Dict[str, Any]] = idx.get("entries") or {}
-    try:
-        text = (root / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8")
-    except Exception:
-        return []
     confirmations = load_prop_shape_confirmations(root, ep)
     pm = _asset_primary_map(root)
     out: List[Dict[str, Any]] = []
     seen: Set[Tuple[str, str]] = set()
+
+    # Shared primary references are the source of truth inherited by every shot.
+    # If a weapon/prop/VFX with explicit forbidden topology is accepted here without
+    # current-pixel review, every downstream scale/in-hand/shot image can consistently
+    # reproduce the same wrong shape.  Review the shared source before shot fan-out;
+    # aliases are skipped so one physical PNG needs one canonical confirmation.
+    for aid, entry in sorted(entries.items()):
+        if not isinstance(entry, Mapping) or entry.get("alias_of"):
+            continue
+        asset_type = str(entry.get("type") or "").strip().lower()
+        if asset_type not in ASSET_SHAPE_REVIEW_TYPES:
+            continue
+        must_not = [str(t).strip() for t in (entry.get("must_not_have") or []) if str(t).strip()]
+        if not must_not:
+            continue
+        ref = _resolve_asset_ref(root, pm, aid) or _resolve_asset_ref(
+            root, pm, str(entry.get("name") or "")
+        )
+        if not ref or not _prop_shape_png_path(root, ep, ref).is_file():
+            continue
+        key = (aid, ref)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({
+            "asset": aid,
+            "asset_name": entry.get("name") or aid,
+            "asset_type": asset_type,
+            "shot": "shared_primary",
+            "label": f"共享主参考·{entry.get('name') or aid}",
+            "png": ref,
+            "png_abs": str(_prop_shape_png_path(root, ep, ref)),
+            "ref": ref,
+            "must_not_have": must_not,
+            "scale": entry.get("scale") or "",
+            "confirmed": key in confirmations,
+            "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
+            "reason": "shared_primary_registered_asset_must_not_have",
+            "scope": "shared_primary",
+        })
+
+    try:
+        text = (root / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8")
+    except Exception:
+        text = ""
     for blk in split_shot_blocks(text):
         body = str(blk.get("body") or "")
         label = str(blk.get("label") or "")
@@ -3030,6 +3072,7 @@ def prop_shape_review_targets(root: Path, ep: str,
                     "confirmed": confirmed,
                     "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
                     "reason": "registered_asset_must_not_have",
+                    "scope": "episode_shot",
                 })
     return out
 

@@ -240,6 +240,64 @@ def test_asset_shape_review_covers_weapon_and_clip_without_underscore(tmp_path: 
     assert targets[0]["confirmed"] is False
 
 
+def test_prop_shape_review_requires_shared_high_risk_primary_confirmation(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    img = reg / "图片"
+    img.mkdir(parents=True)
+    primary = img / "定妆_武器_横刀.png"
+    primary.write_bytes(b"single-edge-candidate")
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [
+            {
+                "id": "WEAPON_01",
+                "type": "weapon",
+                "name": "横刀",
+                "reference_group": {
+                    "primary": {"path": "出图/共享/图片/定妆_武器_横刀.png", "status": "ready"},
+                },
+                "constraints": {
+                    "must_not_have": ["双刃", "第二把刀刃"],
+                    "scale": "约成人臂展的三分之二",
+                },
+            },
+            {
+                "id": "PROP_横刀",
+                "type": "prop",
+                "name": "横刀别名",
+                "alias_of": "WEAPON_01",
+                "reference_group": {
+                    "primary": {"path": "出图/共享/图片/定妆_武器_横刀.png", "status": "ready"},
+                },
+                "constraints": {"must_not_have": ["双刃"]},
+            },
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+
+    assert len(targets) == 1
+    assert targets[0]["asset"] == "WEAPON_01"
+    assert targets[0]["png"] == "出图/共享/图片/定妆_武器_横刀.png"
+    assert targets[0]["shot"] == "shared_primary"
+    assert targets[0]["scope"] == "shared_primary"
+    assert targets[0]["confirmed"] is False
+
+    image_qc.confirm_prop_shape_targets(
+        tmp_path,
+        "第1集",
+        "all",
+        reviewer="视觉执行者",
+        reason="原像素确认单刃厚背，无双刃或第二把刀刃",
+        review_kind="executor_visual",
+    )
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets[0]["confirmed"] is True
+
+    primary.write_bytes(b"changed-pixels")
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets[0]["confirmed"] is False
+
+
 def test_prop_shape_review_ignores_future_asset_guard_ids(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
