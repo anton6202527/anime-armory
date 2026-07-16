@@ -1,0 +1,124 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=character_catalog; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/cs/yf7xlngn59d3xtssgdpl0dwm0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_CHAR_02_定妆_CHAR_02__常态_表情_克制_定妆_CHAR_02__常态_表情_克制.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成中性生产级角色参考图：图片/定妆_CHAR_02__常态_表情_克制.png；本次目标是同源表情脸部近景参考：保持同一角色身份和妆造，只改变表情为「克制」；画面必须是肩颈以上到胸口以内的近景，脸部占画面 30%-50%，眼鼻嘴三角区清晰，不得画成全身/远景/多人构图，脸部不可换人 主体：CHAR_02/常态；黝黑宽方脸·小眼短胡茬·赤膊宽肩粗臂·暗红粗布裤·油污大手；35-45岁；上半身赤裸，暗红粗布长裤，黑色旧腰带，草鞋；旧钥匙串可挂腰侧；35-45岁；宽方脸，粗黑短眉，小眼，塌鼻，短硬胡茬；肤色黝黑，脸和手有油污汗渍；黑色短乱发，无发饰 构图：复现角色标准参考板，不是剧情剧照：至少中性正面、45°、半身或全身服装锚、脸部特写；侧面/背面仅在实际分镜需要时补齐；统一中性灰白/18%灰棚拍背景、柔和均匀棚拍光，无剧情动作。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_02::定妆_CHAR_02__常态_表情_克制的source_frame参考 图2作为CHAR_02/常态的character参考 图3作为CHAR_02/常态的character参考 图4作为STYLE_ANCHOR的style参考 保持一致：35-45岁；宽方脸，粗黑短眉，小眼，塌鼻，短硬胡茬；肤色黝黑，脸和手有油污汗渍；黑色短乱发，无发饰；上半身赤裸，暗红粗布长裤，黑色旧腰带，草鞋；旧钥匙串可挂腰侧 镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；禁止同一把武器像插了多刀或出现互相矛盾的伤口位置 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：9:16 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1681,
+  "actual_submit_prompt_sha256": "e4b1d0a99bbc40c17056b54b2f785326dfcefc25571f65594019988baf1338b0",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=character_catalog; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/cs/yf7xlngn59d3xtssgdpl0dwm0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_CHAR_02_定妆_CHAR_02__常态_表情_克制_定妆_CHAR_02__常态_表情_克制.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成中性生产级角色参考图：图片/定妆_CHAR_02__常态_表情_克制.png；本次目标是同源表情脸部近景参考：保持同一角色身份和妆造，只改变表情为「克制」；画面必须是肩颈以上到胸口以内的近景，脸部占画面 30%-50%，眼鼻嘴三角区清晰，不得画成全身/远景/多人构图，脸部不可换人 主体：CHAR_02/常态；黝黑宽方脸·小眼短胡茬·赤膊宽肩粗臂·暗红粗布裤·油污大手；35-45岁；上半身赤裸，暗红粗布长裤，黑色旧腰带，草鞋；旧钥匙串可挂腰侧；35-45岁；宽方脸，粗黑短眉，小眼，塌鼻，短硬胡茬；肤色黝黑，脸和手有油污汗渍；黑色短乱发，无发饰 构图：复现角色标准参考板，不是剧情剧照：至少中性正面、45°、半身或全身服装锚、脸部特写；侧面/背面仅在实际分镜需要时补齐；统一中性灰白/18%灰棚拍背景、柔和均匀棚拍光，无剧情动作。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_02::定妆_CHAR_02__常态_表情_克制的source_frame参考 图2作为CHAR_02/常态的character参考 图3作为CHAR_02/常态的character参考 图4作为STYLE_ANCHOR的style参考 保持一致：35-45岁；宽方脸，粗黑短眉，小眼，塌鼻，短硬胡茬；肤色黝黑，脸和手有油污汗渍；黑色短乱发，无发饰；上半身赤裸，暗红粗布长裤，黑色旧腰带，草鞋；旧钥匙串可挂腰侧 镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；禁止同一把武器像插了多刀或出现互相矛盾的伤口位置 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：9:16 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_02::定妆_CHAR_02__常态_表情_克制",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
+        "role": "source_frame",
+        "sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_02/常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态_45度__a84b4c637010_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "0eedbf9d3bcad3b05a4a744925f13fc06ca21ca672f763fb6af7e46c891a90ba"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_02/常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态_侧__1f9b0d585ba4_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "8e6ce1d8aa869230d50c1f9fc2e3e89a8806cd5c3b92723ff1a2fad56c269e31"
+      },
+      {
+        "index": 4,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_国漫写实__27f55f63c840_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "a64edf8b8b2ce25852dc5d9f82058f4063c745cc64ab487e336da1905d43beb3"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "ba9fb4d948e55373540571cd363a11bc6d78f8d11462992cb40d8f95358c9e4c",
+    "compiler_decisions": [],
+    "execution_context_sha256": "d05b5b01135b8500707c15b210463fd990fdfe1ecf8cb66941f8ad91c9936207",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:40>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 40,
+      "constraint_compression": {
+        "policy_guard_input": 4,
+        "policy_guard_output": 4,
+        "preserve_input": 1,
+        "preserve_output": 1
+      },
+      "estimated_text_tokens": 294,
+      "negative_chars": 0,
+      "prompt_chars": 1174,
+      "reference_count": 4
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-12.1",
+    "prompt": "生成中性生产级角色参考图：图片/定妆_CHAR_02__常态_表情_克制.png；本次目标是同源表情脸部近景参考：保持同一角色身份和妆造，只改变表情为「克制」；画面必须是肩颈以上到胸口以内的近景，脸部占画面 30%-50%，眼鼻嘴三角区清晰，不得画成全身/远景/多人构图，脸部不可换人 主体：CHAR_02/常态；黝黑宽方脸·小眼短胡茬·赤膊宽肩粗臂·暗红粗布裤·油污大手；35-45岁；上半身赤裸，暗红粗布长裤，黑色旧腰带，草鞋；旧钥匙串可挂腰侧；35-45岁；宽方脸，粗黑短眉，小眼，塌鼻，短硬胡茬；肤色黝黑，脸和手有油污汗渍；黑色短乱发，无发饰 构图：复现角色标准参考板，不是剧情剧照：至少中性正面、45°、半身或全身服装锚、脸部特写；侧面/背面仅在实际分镜需要时补齐；统一中性灰白/18%灰棚拍背景、柔和均匀棚拍光，无剧情动作。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_02::定妆_CHAR_02__常态_表情_克制的source_frame参考 图2作为CHAR_02/常态的character参考 图3作为CHAR_02/常态的character参考 图4作为STYLE_ANCHOR的style参考 保持一致：35-45岁；宽方脸，粗黑短眉，小眼，塌鼻，短硬胡茬；肤色黝黑，脸和手有油污汗渍；黑色短乱发，无发饰；上半身赤裸，暗红粗布长裤，黑色旧腰带，草鞋；旧钥匙串可挂腰侧 镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；禁止同一把武器像插了多刀或出现互相矛盾的伤口位置 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：9:16 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_02::定妆_CHAR_02__常态_表情_克制",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
+        "role": "source_frame",
+        "sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_02/常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态_45度__a84b4c637010_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "0eedbf9d3bcad3b05a4a744925f13fc06ca21ca672f763fb6af7e46c891a90ba"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_02/常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态_侧__1f9b0d585ba4_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "8e6ce1d8aa869230d50c1f9fc2e3e89a8806cd5c3b92723ff1a2fad56c269e31"
+      },
+      {
+        "index": 4,
+        "owner": "STYLE_ANCHOR",
+        "path": "生产数据/reference_enhanced/第1集/风格锚_国漫写实__27f55f63c840_941x1672_to_1024x1819.png",
+        "role": "style",
+        "sha256": "a64edf8b8b2ce25852dc5d9f82058f4063c745cc64ab487e336da1905d43beb3"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "0776df14e99ff3d77fd59acb13e63f4e9fb17f286a5078bb3dcede79cb3108b4",
+    "source_contract_text_sha256": "ad83f1994b4c9fad5203554eeab793c5a988f9715a746601c34dd1fd5f20b182",
+    "task_type": "character_catalog",
+    "version": 1
+  },
+  "created_at": "2026-07-15T16:18:08+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "d92fcfecb80034ed68b4f9c5ffb9a5fb844e68f476041c0f8070b46eb5e84b71",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "CHAR_02::定妆_CHAR_02__常态_表情_克制",
+  "target": "出图/共享/图片/定妆_CHAR_02__常态_表情_克制.png",
+  "version": 1
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "comic_raw_bubble_acceptance",
+  "chapter": "第1话",
+  "accepted_by": "Codex代理视觉审查（用户授权连续执行）",
+  "accepted_at": "2026-07-16T01:20:00+08:00",
+  "scope": "内部 demo 制作验收；不代表公开发布的人类最终签收",
+  "accepted_findings": [
+    {
+      "code": "raw_bubble_candidate",
+      "panel_id": "P028",
+      "reason": "误报：几何连通区是黑墨冲击、暗红布带与白色速度线，画面无空白气泡或文字容器。",
+      "evidence": "出图/第1话/panels/P028.png + 生产数据/qa_previews/第1话_panels_contact_sheet.jpg",
+      "artifact_sha256": "6c7b0b713636fbcaa0ccdeefae98dc434a9b2011928d2f4414e37a1eae860daf"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_receipt",
+  "receipt_id": "7427b649215ff9d5e5e0c939c93b083e2e691dea3f768008c513940507ffe0a2",
+  "chapter": "第1话",
+  "stage": "review",
+  "created_at": "2026-07-16T01:33:12",
+  "verdict": "warn",
+  "execution_authorized": true,
+  "inputs_fingerprint_sha256": "ab75cde67f8a170401c7e27eecc4fbc007f67e43c2a437e2a0e4c3cc979b0163",
+  "panel_jobs_sha256": "ccb8a6bddd37548505683a05d74995d2957adc7574d1f6a2c3fa0802b5b43883",
+  "artifacts": {
+    "panel_jobs_path": "出图/第1话/prompt/panel_jobs.json",
+    "panel_jobs_sha256": "ccb8a6bddd37548505683a05d74995d2957adc7574d1f6a2c3fa0802b5b43883"
+  },
+  "report_path": "生产数据/comic_gate_review_第1话.json",
+  "report_sha256": "a305caee4fd18efb02790f05bb664981e404a8a4b2c5b8d5fd4724bce8415557"
+}

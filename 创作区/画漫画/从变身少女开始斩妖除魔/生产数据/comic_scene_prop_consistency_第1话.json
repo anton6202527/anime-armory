@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "kind": "comic_scene_prop_consistency",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
+  "chapter": "第1话",
+  "created_at": "2026-07-16T01:31:56",
+  "available": true,
+  "verdict": "warn",
+  "summary": {
+    "scene_anchor_count": 1,
+    "prop_count": 2,
+    "finding_count": 2,
+    "block_count": 0,
+    "warn_count": 2,
+    "info_count": 0
+  },
+  "scenes": [
+    {
+      "scene_anchor_id": "LOC_DESOLATE_WILDERNESS",
+      "references": [
+        "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第1话/panels/P001.png"
+        },
+        {
+          "panel_id": "P002",
+          "path": "出图/第1话/panels/P002.png"
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第1话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第1话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第1话/panels/P007.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第1话/panels/P013.png"
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第1话/panels/P014.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第1话/panels/P015.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9281,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_DESOLATE_WILDERNESS_sheet.jpg"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "OUTFIT_BASE",
+      "references": [],
+      "panels": [
+        {
+          "panel_id": "P002",
+          "path": "出图/第1话/panels/P002.png"
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第1话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第1话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第1话/panels/P007.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第1话/panels/P013.png"
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第1话/panels/P014.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第1话/panels/P015.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_OUTFIT_BASE_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_HENGDAO_BROKEN",
+      "references": [
+        "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_HENGDAO_BROKEN_sheet.jpg"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "scene_layout_outlier",
+      "subject": "LOC_DESOLATE_WILDERNESS",
+      "panel_id": "P021",
+      "artifact": "出图/第1话/panels/P021.png",
+      "reason": "P021 的布局指纹在场景锚 LOC_DESOLATE_WILDERNESS 组内离群（0.826 < 中位 0.928 - 0.1）。机位变化合法，但整格结构换掉（门窗家具错位/常驻物件消失）需要人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "看该场景锚 contact sheet 并排比对；结构漂移则按 spatial_layout/resident_assets 重抽。",
+      "evidence_family": "layout_geometry"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "prop_reference_missing",
+      "subject": "OUTFIT_BASE",
+      "panel_id": "",
+      "artifact": "出图/共享/identity_registry.json",
+      "reason": "OUTFIT_BASE 在本话出场（P002,P003,P004,P005,P006,P007,P008,P009）但没有参考图，无法并排核对同一物。",
+      "return_to_stage": "image",
+      "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
+      "evidence_family": "reference_presence"
+    }
+  ],
+  "notes": [
+    "VLM 三轴裁决进度：0/93（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
+  ]
+}

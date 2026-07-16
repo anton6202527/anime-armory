@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "kind": "comic_release_verdict",
+  "created_at": "2026-07-15T17:36:02+00:00",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
+  "chapter": "第1话",
+  "profile": "internal",
+  "target_platform": "通用",
+  "platform_profile": {
+    "platform_id": "generic",
+    "display_name": "通用",
+    "verified": true,
+    "collected_at": "2026-07-14",
+    "source_urls": [],
+    "page_width_px": null,
+    "max_image_height_px": null,
+    "max_file_bytes": null,
+    "allowed_formats": [
+      "webp",
+      "png",
+      "jpg"
+    ],
+    "thumbnail": null,
+    "min_panels": null,
+    "recommended_min_pages": null,
+    "max_pages": null,
+    "notes": [
+      "No platform-specific hard limits are applied."
+    ]
+  },
+  "verdict": "pass",
+  "delivery_states": {
+    "technical_complete": true,
+    "production_complete": true,
+    "publish_ready_internal": true,
+    "publish_ready_digital": false,
+    "publish_ready_print": false,
+    "publish_ready_commercial": false
+  },
+  "artifacts": [
+    {
+      "path": "排版/第1话/pages/page_001.webp",
+      "sha256": "ca86759c5b6120096ad0ce938d748f6f498cfea9b6e938646d707965703c812e",
+      "size": 2217512,
+      "dimensions": {
+        "width": 1440,
+        "height": 6424
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第1话/pages/page_002.webp",
+      "sha256": "6d3b430d082ad19137767147813ba41dab294bfe0b45e27ccc4ccc2170161d26",
+      "size": 1767422,
+      "dimensions": {
+        "width": 1440,
+        "height": 5728
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第1话/pages/page_003.webp",
+      "sha256": "5ad6d85aff157a5399efc6251c5a905c317037175736ffce3ef71924e83b255b",
+      "size": 2127560,
+      "dimensions": {
+        "width": 1440,
+        "height": 6512
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第1话/pages/page_004.webp",
+      "sha256": "843dc0a213b472f1bb0f96db91ea9bbe49fadd0a377dd9604496405f3471b3ff",
+      "size": 1744378,
+      "dimensions": {
+        "width": 1440,
+        "height": 6076
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第1话/pages/page_005.webp",
+      "sha256": "abd674e334fe79d12807fadd70e5edc58dbfd211f27ee89ce6fc1df1a602d209",
+      "size": 1151640,
+      "dimensions": {
+        "width": 1440,
+        "height": 4404
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第1话/长图/longstrip.png",
+      "sha256": "498a959275b8db7a3bd675185146dce7b5528189cd44d465ef0d2f3577b82d76",
+      "size": 57031622,
+      "dimensions": {
+        "width": 1440,
+        "height": 29240
+      },
+      "format": "png",
+      "manifest_sections": [
+        "rendered"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "code": "release_acceptance_missing",
+      "reason": "发布候选缺 SHA 绑定的人工签收。",
+      "domain": "release",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    },
+    {
+      "code": "source_status_unverified",
+      "reason": "source_status=original_or_user_provided；公开/印刷/商用交付必须显式声明原创、自有、公版、已授权、开源许可或不适用。",
+      "domain": "rights",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    },
+    {
+      "code": "font_status_unverified",
+      "reason": "font_status=pending_before_publish；公开/印刷/商用交付必须显式声明原创、自有、公版、已授权、开源许可或不适用。",
+      "domain": "rights",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    },
+    {
+      "code": "asset_status_unverified",
+      "reason": "asset_status=pending_before_publish；公开/印刷/商用交付必须显式声明原创、自有、公版、已授权、开源许可或不适用。",
+      "domain": "rights",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    }
+  ]
+}

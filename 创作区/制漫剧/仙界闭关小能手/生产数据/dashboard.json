@@ -7,61 +7,59 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 7 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 2 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 7
+      "value": 2
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 7 项",
+      "message": "第1集 QA 阻断 2 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 7
+      "value": 2
     }
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.1458,
+      "blockers_per_attempt": 0.0408,
       "completion_rate": null,
-      "consistency_blockers": 6,
+      "consistency_blockers": 0,
       "consistency_ledger": {},
-      "consistency_warnings": 8,
+      "consistency_warnings": 0,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "2h06m01s",
-      "duration_sec": 7560.695,
-      "elapsed_per_finished_min_sec": 9031.11,
+      "duration_hms": "2h13m28s",
+      "duration_sec": 8008.406,
+      "elapsed_per_finished_min_sec": 9565.893,
       "episode": "第1集",
-      "event_count": 110,
+      "event_count": 111,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 48,
+      "generation_attempts": 49,
       "generation_fails": 3,
-      "generation_pass_rate": 0.9375,
-      "generation_passes": 45,
+      "generation_pass_rate": 0.9388,
+      "generation_passes": 46,
       "image_qc_passive": {
-        "advisory": 8,
-        "freshness": "fresh",
-        "hard_blocks": 6,
+        "freshness": "stale",
         "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json"
       },
       "missing_deliverables": [],
-      "one_pass_count": 38,
-      "one_pass_rate": 0.7917,
+      "one_pass_count": 39,
+      "one_pass_rate": 0.7959,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图prompt",
-      "qa_blockers": 7,
+      "qa_blockers": 2,
       "qa_gate_passes": 2,
       "qa_gate_runs": 2,
       "qa_infos": 31,
-      "qa_warnings": 44,
+      "qa_warnings": 36,
       "recent_blockers": [
         {
           "dim": "逐张机器QC+实际目视",
@@ -72,7 +70,7 @@
         {
           "dim": "出图落档QC",
           "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
-          "msg": "image_qc standalone 报告有 6 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。",
+          "msg": "发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/第1集/图片/EP01_CLIP01.png(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。",
           "stage": "image"
         }
       ],
@@ -93,16 +91,14 @@
       "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "consistency_blockers": 6,
-          "consistency_warnings": 8,
-          "duration_sec": 7560.695,
-          "generation_attempts": 48,
+          "duration_sec": 8008.406,
+          "generation_attempts": 49,
           "generation_fails": 3,
-          "generation_passes": 45,
+          "generation_passes": 46,
           "missing_deliverables": 0,
-          "qa_blockers": 7,
+          "qa_blockers": 2,
           "qa_infos": 7,
-          "qa_warnings": 8,
+          "qa_warnings": 0,
           "redraw_count": 0
         },
         "image_preflight": {
@@ -128,7 +124,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.9167
+      "warnings_per_attempt": 0.7347
     },
     {
       "blockers_per_attempt": null,
@@ -197,7 +193,7 @@
     }
   ],
   "event_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-15T17:53:20+00:00",
+  "generated_at": "2026-07-16T00:23:33+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -675,43 +671,43 @@
   "retention_trend": {},
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.1458,
-    "consistency_blockers": 6,
+    "blockers_per_attempt": 0.0408,
+    "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
       "high": 0,
       "medium": 0
     },
-    "consistency_warnings": 8,
+    "consistency_warnings": 0,
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "2h06m01s",
-    "duration_sec": 7560.695,
-    "elapsed_per_finished_min_sec": 9031.11,
+    "duration_hms": "2h13m28s",
+    "duration_sec": 8008.406,
+    "elapsed_per_finished_min_sec": 9565.893,
     "episode_count": 2,
-    "event_count": 112,
+    "event_count": 113,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 2,
-      "gates_passed_per_day": 1.526,
+      "gates_passed_per_day": 1.507,
       "measurement_start": "2026-07-14T16:32:29+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 48,
+    "generation_attempts": 49,
     "generation_fails": 3,
-    "generation_pass_rate": 0.9375,
-    "generation_passes": 45,
-    "one_pass_count": 38,
-    "one_pass_rate": 0.7917,
-    "qa_blockers": 7,
+    "generation_pass_rate": 0.9388,
+    "generation_passes": 46,
+    "one_pass_count": 39,
+    "one_pass_rate": 0.7959,
+    "qa_blockers": 2,
     "qa_infos": 33,
-    "qa_warnings": 44,
+    "qa_warnings": 36,
     "recoup_ratio": {},
     "redraw_categories": {},
     "redraw_count": 0,
@@ -723,7 +719,7 @@
     "release_spend_totals": {},
     "runtime_hms": "50s",
     "runtime_sec": 50.231,
-    "warnings_per_attempt": 0.9167
+    "warnings_per_attempt": 0.7347
   },
   "version": 1
 }

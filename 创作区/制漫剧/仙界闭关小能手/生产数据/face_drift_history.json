@@ -1,0 +1,12 @@
+{
+  "characters": {
+    "CHAR_01__本集为14岁杂役常态": {
+      "第1集": 0.548
+    },
+    "CHAR_02__常态": {
+      "第1集": 0.5998
+    }
+  },
+  "kind": "n2d_face_drift_history",
+  "version": 1
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_waiver",
+  "stage": "image_preflight",
+  "chapter": "第1话",
+  "decision": "waive_for_this_runner_invocation",
+  "reason": "adopt visually accepted Codex Image 2 weapon-choice and misdirection panels",
+  "created_at": "2026-07-15T16:13:51+00:00",
+  "panel_jobs_path": "出图/第1话/prompt/panel_jobs.json",
+  "panel_jobs_sha256": "01b4da47edbfd2587672095c0c89e1e6a5f6ac942047582494ca3fc1c66a487c",
+  "targets": [
+    "P023",
+    "P024"
+  ],
+  "prior_gate_receipt": {
+    "status": "stale_or_not_passed",
+    "path": "生产数据/gate_receipts/image_preflight_第1话.json",
+    "receipt_sha256": "d6e6cb359963f9935953add7565f938daba6f608ea20cbcf315eb1aa887b2ba1",
+    "panel_jobs_sha256": "01b4da47edbfd2587672095c0c89e1e6a5f6ac942047582494ca3fc1c66a487c",
+    "recorded_panel_jobs_sha256": "168e80ac948001655162b38846901051c4d381f1d0347530d7e4057899bbd678",
+    "inputs_fingerprint_sha256": "725f83b8adfc0e8f2ca1d92ffcc5b2b577fbbed81f6f17f1a5126570d7aa278a",
+    "recorded_inputs_fingerprint_sha256": "0e4520ca46f573b8401767447e50e6fa2d919bed267d6b3ef8695cb740f21595",
+    "report_path": "生产数据/comic_gate_image_preflight_第1话.json",
+    "verdict": "block",
+    "reason": "receipt/report must be authentic, have no block, explicitly authorize execution, and bind the current full preflight fingerprint plus panel_jobs SHA"
+  },
+  "scope": "current panel_jobs SHA only; any rebuild invalidates this waiver"
+}

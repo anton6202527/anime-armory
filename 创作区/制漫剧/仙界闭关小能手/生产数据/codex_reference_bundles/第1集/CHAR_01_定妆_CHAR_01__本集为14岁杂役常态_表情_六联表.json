@@ -1,0 +1,134 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 3,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+      "bytes": 1910278,
+      "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_表情_六联表",
+      "prepared_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2249732,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
+      "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
+      "source": "same_source_makeup_parent",
+      "source_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png",
+      "bytes": 2210222,
+      "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_表情_六联表",
+      "prepared_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态_三视图__ef5d0fa7a56c_1672x941_to_1819x1024.png",
+      "prepared_bytes": 2693816,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态_三视图__ef5d0fa7a56c_1672x941_to_1819x1024.png",
+      "prepared_sha256": "933a8a4a318b6c60d61f9aeb8074cf97e861f749d81525bc32dbef82f492f556",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 941,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 1672,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1024,
+        "prepared_width": 1819,
+        "status": "enhanced",
+        "target_height": 1024,
+        "target_width": 1819
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "ef5d0fa7a56c6dab52a66c8b45a4196d3c639e70efaea45ba6d00abede839b40",
+      "source": "same_source_makeup_parent",
+      "source_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png"
+    },
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/风格锚_国漫写实.png",
+      "bytes": 2275036,
+      "owner": "STYLE_ANCHOR",
+      "prepared_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/风格锚_国漫写实__27f55f63c840_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2902690,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_国漫写实__27f55f63c840_941x1672_to_1024x1819.png",
+      "prepared_sha256": "a64edf8b8b2ce25852dc5d9f82058f4063c745cc64ab487e336da1905d43beb3",
+      "priority": 60,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/风格锚_国漫写实.png",
+      "role": "style",
+      "sequence": 2,
+      "sha256": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/风格锚_国漫写实.png"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_国漫写实.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "本集为14岁杂役常态",
+      "id": "CHAR_01",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_表情_六联表",
+  "target": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

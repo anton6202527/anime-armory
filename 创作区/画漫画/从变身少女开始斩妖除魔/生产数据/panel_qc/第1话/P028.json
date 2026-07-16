@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第1话",
+  "panel_id": "P028",
+  "created_at": "2026-07-16T00:59:08",
+  "verdict": "warn",
+  "path": "出图/第1话/panels/P028.png",
+  "size": {
+    "width": 1296,
+    "height": 1199
+  },
+  "expected_size": {
+    "width": 1296,
+    "height": 1199
+  },
+  "declared_reference_count": 5,
+  "reference_input_count": 5,
+  "omitted_attachment_count": 0,
+  "omitted_attachment_ids": [],
+  "blank_region_candidates": [
+    {
+      "x": 1184,
+      "y": 438,
+      "w": 111,
+      "h": 111,
+      "area": 4989
+    }
+  ],
+  "issues": [
+    {
+      "severity": "warn",
+      "category": "baked_text_container",
+      "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+    }
+  ],
+  "manual_review_required": true
+}

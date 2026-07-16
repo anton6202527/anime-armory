@@ -1,0 +1,60 @@
+{
+  "kind": "comic_identity_drift_report",
+  "version": 1,
+  "generated_at": "2026-07-15T17:33:12+00:00",
+  "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
+  "summary": {
+    "chapters_scanned": 1,
+    "characters_tracked": 3,
+    "characters_with_drift": 0,
+    "characters_block": 0
+  },
+  "chapters": [
+    "第1话"
+  ],
+  "characters": [
+    {
+      "char_id": "CHAR_JIANG_YUECHU",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_PEI_CHANGQING",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "MON_TIGER_SHANSHEN",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    }
+  ],
+  "notes": []
+}

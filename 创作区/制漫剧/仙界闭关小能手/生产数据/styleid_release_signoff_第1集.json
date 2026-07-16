@@ -1,0 +1,12 @@
+{
+  "kind": "n2d_styleid_release_signoff",
+  "version": 1,
+  "accepted": true,
+  "reviewer": "executor:codex",
+  "review_kind": "executor_visual",
+  "human_signoff": false,
+  "scope": "第1集 internal_only 内部预览",
+  "reason": "当前未配置可用 StyleID 权重；本集不公开投放，并已启用每张图片机器QC加执行者实际像素目视、当前哈希绑定验收。接受本集内部预览使用 ArcFace 降级档，转公开投放前必须补 StyleID 并重跑 full QC。",
+  "expires_at": "2026-08-15",
+  "created_at": "2026-07-16T00:40:00+08:00"
+}
