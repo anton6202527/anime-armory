@@ -89,3 +89,22 @@ def test_scaffold_writes_independent_bootstrap_catalog(tmp_path: Path, monkeypat
     bible = (root / "设定库" / "story_bible.md").read_text(encoding="utf-8")
     assert "### 待定主角 CHAR_TBD_PROTAGONIST" in bible
     assert "### 待定对手 CHAR_TBD_ANTAGONIST" in bible
+    # 作品卡片字段：立项时 synopsis 空、cover 为 null，不硬阻断。
+    assert meta["synopsis"] == ""
+    assert meta["cover"] is None
+    assert "出图/封面/prompt" in init_project.SUBDIRS
+    progress_text = (root / "_进度.md").read_text(encoding="utf-8")
+    assert "## 作品封面" in progress_text
+
+
+def test_extract_synopsis_from_story_bible_core_line() -> None:
+    bible = (
+        "# 故事圣经\n\n## 一句话核心\n- 少女被迫变身，踏上斩妖除魔之路\n\n"
+        "## 角色\n- 不该被采集的正文\n"
+    )
+    assert init_project.extract_synopsis(bible) == "少女被迫变身，踏上斩妖除魔之路"
+
+
+def test_extract_synopsis_empty_when_core_is_placeholder() -> None:
+    bible = "# 故事圣经\n\n## 一句话核心\n- \n\n## 角色\n- x\n"
+    assert init_project.extract_synopsis(bible) == ""

@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-15T09:42:47+00:00",
+  "created_at": "2026-07-16T06:28:23+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -87,47 +87,44 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+          "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "source_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+          "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "source_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "2e18409afc97a9ee2dc8ba65df64903f47e90424cef3a33cbcba7d10473209f8",
+      "model_pack_fingerprint": "3ea4113cf74ac6bd963c102d469674fa364df8067f87da1a1c5dbfe72de9679e",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_EMPEROR_RENZONG.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T06:27:45+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     },
     {
       "kind": "comic_character_model_pack",
@@ -591,8 +588,8 @@
     "assets": 9,
     "characters": 7,
     "monsters": 2,
-    "ready": 2,
+    "ready": 3,
     "needs_approval": 0,
-    "needs_fix": 7
+    "needs_fix": 6
   }
 }

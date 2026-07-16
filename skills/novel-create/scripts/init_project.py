@@ -264,8 +264,10 @@ def main():
     )
     outputs = parse_outputs(args.outputs)
     title = args.title
+    # 作品卡片简介：原创立项直接映射已有 premise（logline），base_meta 内裁剪 ≤240 字。
     meta = base_meta("create", outputs=outputs, rights_status="original",
-                     title=None if title == "待定" else title)
+                     title=None if title == "待定" else title,
+                     synopsis=args.premise)
     meta.update({
         "project_id": f"novel_{uuid.uuid4().hex[:16]}",
         "line": "novel",

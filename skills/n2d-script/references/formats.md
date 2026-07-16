@@ -669,6 +669,12 @@ BGM风格：国风暗黑 / 弦乐渐强 / 低频鼓点
 
 一张高点击率竖版封面，含本集最大爽点或钩子、主角清晰正脸、强情绪、可叠加标题留白。给中文+英文 prompt。
 
+**作品级封面 vs 分集封面**：本节 `脚本/第N集/封面.md` 是**分集首图**。作品列表卡片展示的是**作品级封面**，路径固化在作品根 `_meta.json` 的 `cover` 字段（相对作品根的竖版 PNG，如 `出图/封面/cover.png`），并配 `synopsis`（一句话作品简介，≤240 字）。这两个字段由本线确定性读写：
+
+- 立项（`split_novel.py`）当刻写入 `synopsis:""`（占位）+ `cover:null`（`write_if_absent` 语义，不覆盖用户已填内容）；
+- `series_bible.md`「一句话卖点」/ `adaptation_strategy.json` 核心承诺产出后，`split_novel.py` 与 `work_card_meta.backfill_synopsis` 确定性回填 `synopsis`（空/占位才写）；
+- 作品级封面 prompt/job 包由出图步骤 `cover_pack.py` 产出（复用本节分集封面策略 + identity 同源锚）；真正渲染出竖版 PNG 后用 `cover_pack.py --backfill-cover` 回填 `cover`。字段读写单一真值源在 `../skills/n2d/_lib/work_card_meta.py`。
+
 ---
 
 ## 9. 字幕（脚本/第N集/字幕_中文.srt [+ 字幕_英文.srt]）— 语言看 `字幕语言` 选择点

@@ -852,8 +852,19 @@
           "name": "基础服装",
           "description": "身份场合:北宋皇帝；紫宸殿朝会、问疫与授诏；层次:素色中衣、低饱和素红圆领长袍、领袖内层只保留克制暗金级差；轮廓:宽额圆长脸与端坐体量先读；袍身直顺、袖量稳定，威仪来自材质层级而非堆满龙纹；领襟:圆领，领开口尺度由front锁定；开合:右侧/内部结构隐藏，不画正中现代扣排；袖摆:中宽式长袖，坐姿时袖口叠放关系固定；腰带:深色或暗金低对比带具，不做夸张大金带；冠帽:黑色平展脚幞头，脚长、角度、冠体高度全话固定；鞋履:深色靴，多数镜头不抢戏；材料:哑光细绢/罗的视觉语法、低反光带具；色域:素红、墨黑、暗金少量；佩饰:平展脚幞头、低对比带具；状态:court_composed、plague_fatigue、edict_decision",
           "forbidden": "清代龙袍与朝冠；明代补子；十二章礼服与常朝场景混用；随机可读龙纹；馆藏帝王像脸直接复制",
-          "reference_images": [],
-          "status": "needs_reference",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+              "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_EMPEROR_RENZONG"
+              },
+              "updated_at": "2026-07-16T14:02:00"
+            }
+          ],
+          "status": "ready",
           "wardrobe_standard": {
             "character_id": "CHAR_EMPEROR_RENZONG",
             "outfit_id": "OUTFIT_BASE",
@@ -957,20 +968,109 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+          "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_EMPEROR_RENZONG__front_builtin-imagegen__20260716T111340.md",
+            "prompt_sha256": "294530bee136acd997565a2aafc72fa1e75d9bb1210b6c64900ff137744d6aab",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2",
+            "execution_mode": "builtin_imagegen_tool",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/exec-17305360-62bd-42cc-a769-57038c6f985d.png",
+            "duration_sec_observed": 445.0,
+            "visual_review": "passed_by_authorized_production_agent"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "source_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T14:02:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+          "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_EMPEROR_RENZONG__face_builtin-imagegen__20260716T140435.md",
+            "prompt_sha256": "c611d0c4de650320c88e34b5872bfae9335c05f80580ca378ff2cd9d70387897",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2",
+            "execution_mode": "builtin_imagegen_tool",
+            "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/exec-af40eaf9-e6bb-4220-84ce-a86e4c0bbffe.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "与正式front同一原创面孔；宽额圆长脸、眼鼻口、胡须轮廓和疲惫克制神情一致；黑色平展脚幞头、素红圆领袍、暗金领缘一致；正面头肩特写、无文字水印。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "source_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T14:22:53"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T14:22:53",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "2e18409afc97a9ee2dc8ba65df64903f47e90424cef3a33cbcba7d10473209f8",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "3ea4113cf74ac6bd963c102d469674fa364df8067f87da1a1c5dbfe72de9679e",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "face"
         ],
-        "updated_at": "2026-07-14T04:07:32+00:00"
+        "updated_at": "2026-07-16T06:27:45+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+        "face": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "CHAR_FAN_ZHONGYAN": {
@@ -1789,9 +1889,45 @@
       "display_name": "伏魔殿封皮与锁",
       "description": "多代天师封皮、朱印与铜汁灌铸大锁，拆除顺序必须可读",
       "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:21+00:00",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_FUMO_SEALS__anchor.png",
+          "sha256": "ace7c3338ab22e4d9ead44491548bbd21cd7ff41ff28e50eebe51947483e5170",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2",
+            "execution_mode": "builtin_imagegen_tool",
+            "requested_ratio": "4:5",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_FUMO_SEALS__anchor_builtin-imagegen__20260716T143517104414.md",
+            "prompt_sha256": "2dfc7a1bea8e35d6a366a42d657be5ea816185fb60823f07a16bdf627f8d9ff8",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/exec-e196de9c-a2af-441c-ac6f-ed50ab44ba76.png",
+            "raw_canvas_path": "出图/共享/candidates/PROP_FUMO_SEALS/anchor/raw/20260716T151828__380d8d7f4166.png",
+            "raw_canvas_sha256": "380d8d7f41665bcdaa2841319267c1ba23078b9bc3fa3af7f05e153e892ecc04",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1122,
+              "source_height": 1402,
+              "target_width": 1124,
+              "target_height": 1405
+            },
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "fully_sealed hero锚通过：三层横封皮与一条纵封皮、四处朱印安全区、双门鼻、铜色大锁和闭合门缝关系可读；无人物、乱码、现代挂锁、发光法阵。"
+          },
+          "updated_at": "2026-07-16T15:18:29"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T15:18:29",
       "prop_contract": "功能:显示多代封禁及洪信逐层破封；尺度:锁与封皮在中近景可读，锁不得夸张为门体一半；结构:门缝封皮叠贴、朱印、门鼻与灌铸感金属大锁形成逐层障碍；材料:纸/织物封皮、印泥、铜色金属、门体木材；交互:按脚本依次揭封/破锁/开门；每阶段保留前一步痕迹；题字:符箓和印文用设计稿后期嵌入，不生成乱码；状态:fully_sealed、seals_removed、lock_broken、door_open；版本:hero、stunt、background、duplicate",
       "forbidden_inheritance": "随机乱码符箓；现代挂锁；一步消失全部封禁；无因果自动开门",
       "wardrobe_prop_standard": {
@@ -1847,7 +1983,10 @@
           "SRC_SHUIHU_SOURCE"
         ],
         "status": "confirmed"
-      }
+      },
+      "anchor_path": "出图/共享/图片/PROP_FUMO_SEALS__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_FUMO_SEALS__anchor.png",
+      "sha256": "ace7c3338ab22e4d9ead44491548bbd21cd7ff41ff28e50eebe51947483e5170"
     },
     "PROP_STONE_STELE": {
       "id": "PROP_STONE_STELE",

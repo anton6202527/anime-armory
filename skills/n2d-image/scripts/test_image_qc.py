@@ -2685,7 +2685,8 @@ def test_audit_face_anchor_quality_ignores_base_expression_alias_to_front(tmp_pa
     }, ensure_ascii=False), encoding="utf-8")
     res = image_qc.audit_face_anchor_quality(root, "第1集")
     assert res["available"]
-    assert res["checked"] == 2
+    # reference_group / reference_atlas 对同一紧裁脸锚的重复登记只应检查一次。
+    assert res["checked"] == 1
     assert not [f for f in res["findings"] if "定妆_沈念.png" in f["msg"]]
 
 
@@ -2708,6 +2709,39 @@ def test_audit_face_anchor_quality_flags_low_res(tmp_path):
     codes = {f["code"] for f in res["findings"]}
     assert "weak_face_anchor" in codes
     assert any("裁切短边" in f["msg"] for f in res["findings"])
+
+
+def test_audit_face_anchor_quality_ignores_human_bbox_ratio_for_nonhuman_and_dedupes(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    img_dir = root / "出图" / "共享" / "图片"
+    img_dir.mkdir(parents=True)
+    rel = "出图/共享/图片/定妆_虎妖_脸部特写.png"
+    Image.new("RGB", (1024, 1024), (128, 128, 128)).save(root / rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(_path):
+            return [(0, 0, 160, 160)]  # human detector false positive: 2.4%
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_TIGER", "name": "虎山神", "scope": "复现虎妖",
+            "forms": [{
+                "form": "常态", "anchor_phrase": "非人虎妖真身，吊睛白额虎首",
+                "character_dna": {"face": "虎头人身妖物，不得洗成人脸"},
+                "reference_group": {"face_anchor_refs": [{"path": rel}]},
+                "reference_atlas": {"face_anchor_refs": [{"path": rel}]},
+            }],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert res["checked"] == 1
+    assert res["findings"] == []
 
 
 def test_audit_face_anchor_quality_blocks_core_low_res(tmp_path):
@@ -3476,6 +3510,31 @@ def test_faceless_fresh_record_helper(tmp_path):
     assert image_qc._faceless_fresh_record(asset, "图片/x.png", "STALE") is None      # sha 不匹配→陈旧
     hand = {"face_consistency": {"verdict": "pass_no_clear_face"}}                     # 手写·无 machine 源
     assert image_qc._faceless_fresh_record(hand, "图片/x.png", "abc") is None
+
+
+def test_asset_face_pngs_uses_formal_slots_only_and_dedupes():
+    import image_qc
+    asset = {
+        "reference_group": {
+            "primary": {
+                "path": "出图/共享/图片/场景.png",
+                "derivation": {"source_path": "出图/共享/图片/风格锚.png"},
+            },
+            "front": {"path": "出图/共享/图片/场景.png"},
+            "reverse": {"path": "出图/共享/图片/场景_反打.png"},
+        },
+        "scene_atlas": {
+            "base_views": {
+                "front": {"path": "出图/共享/图片/场景.png"},
+                "back": {"path": "出图/共享/图片/场景_反打.png"},
+            },
+        },
+    }
+
+    assert image_qc._asset_face_pngs(asset) == [
+        "出图/共享/图片/场景.png",
+        "出图/共享/图片/场景_反打.png",
+    ]
 
 
 def test_gate_trusts_fresh_machine_block_record(tmp_path):

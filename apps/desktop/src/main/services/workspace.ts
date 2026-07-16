@@ -13,6 +13,26 @@ interface LineDef {
   view: 'canvas' | 'files' | 'audio'
 }
 
+/** Pull the card cover + synopsis from a work's `_meta.json`, if present.
+ *  Cover is resolved to an absolute path, confined within the work dir and
+ *  required to exist; synopsis is trimmed and length-capped. Missing or
+ *  malformed metadata degrades to nulls. */
+async function readWorkCard(workDir: string): Promise<{ cover: string | null; synopsis: string | null }> {
+  try {
+    const meta = JSON.parse(await fs.readFile(path.join(workDir, '_meta.json'), 'utf8'))
+    let cover: string | null = null
+    const rawCover = typeof meta?.cover === 'string' ? meta.cover.trim() : ''
+    if (rawCover) {
+      const abs = path.resolve(workDir, ...rawCover.split(/[\\/]+/))
+      if ((abs === workDir || abs.startsWith(`${workDir}${path.sep}`)) && existsSync(abs)) cover = abs
+    }
+    const rawSyn = typeof meta?.synopsis === 'string' ? meta.synopsis.trim() : ''
+    return { cover, synopsis: rawSyn ? rawSyn.slice(0, 240) : null }
+  } catch {
+    return { cover: null, synopsis: null }
+  }
+}
+
 /** The six creative lines and their product folders under 创作区/. */
 export const LINES: LineDef[] = [
   { line: 'n2d', dir: '制漫剧', view: 'canvas' },
@@ -80,11 +100,14 @@ export class WorkspaceService {
           continue
         }
         const rel = path.relative(workspaceRoot, p).split(path.sep).join('/')
+        const card = await readWorkCard(p)
         roots.push({
           name,
           path: p,
           has_progress: existsSync(path.join(p, '_进度.md')),
           is_demo: demoOrigins.has(rel),
+          cover: card.cover,
+          synopsis: card.synopsis,
         })
       }
       roots.sort((a, b) => (a.is_demo === b.is_demo ? a.name.localeCompare(b.name, 'zh-Hans-CN') : a.is_demo ? -1 : 1))

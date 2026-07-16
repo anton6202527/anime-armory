@@ -199,7 +199,20 @@ async function readRemoteCatalog(): Promise<CatalogEntry[]> {
 }
 
 async function readCatalog(): Promise<CatalogEntry[]> {
-  const [bundled, remote] = await Promise.all([readBundledCatalog(), readRemoteCatalog()])
+  const bundled = await readBundledCatalog()
+  // Don't block first paint on the network. If a fresh remote catalog is
+  // already cached, merge it; otherwise kick off a background refresh (filling
+  // the cache for next time) and return bundled immediately. Only wait on the
+  // network when there is no bundled catalog to fall back to.
+  const now = Date.now()
+  let remote: CatalogEntry[] = []
+  if (remoteCatalogCache && now - remoteCatalogCache.at < CATALOG_CACHE_TTL) {
+    remote = remoteCatalogCache.entries
+  } else if (bundled.length === 0) {
+    remote = await readRemoteCatalog()
+  } else {
+    void readRemoteCatalog()
+  }
   const merged = new Map<string, CatalogEntry>()
   for (const entry of [...bundled, ...remote]) {
     if (entry.rel) merged.set(entry.rel, entry)

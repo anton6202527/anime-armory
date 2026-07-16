@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "comic_identity_generation_attempt_ledger",
   "chapter": "第1话",
-  "updated_at": "2026-07-15T17:36:37.777193",
+  "updated_at": "2026-07-16T15:41:03.791171",
   "migration": {
     "status": "backfilled_from_existing_evidence",
     "recorded_at": "2026-07-15T15:47:00+08:00",
@@ -210,6 +210,149 @@
       "prompt_sha256": "366efd171dcd2cf6666b143b266d3f668ceae06ee90c5471d580f3973ec9eb43",
       "finished_at": "2026-07-15T17:36:37.777038",
       "error": "codex exit 124; class=backend_timeout; detail=timeout after 240s"
+    },
+    {
+      "attempt_id": "b8f9b58d8f37c999533e",
+      "started_at": "2026-07-16T11:13:40.000000",
+      "status": "succeeded",
+      "generation_kind": "view",
+      "asset_id": "CHAR_EMPEROR_RENZONG",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_EMPEROR_RENZONG__front_builtin-imagegen__20260716T111340.md",
+      "prompt_sha256": "294530bee136acd997565a2aafc72fa1e75d9bb1210b6c64900ff137744d6aab",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T14:02:00.172046",
+      "artifact_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+      "artifact_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02"
+    },
+    {
+      "attempt_id": "1795b59733289c83cafd",
+      "started_at": "2026-07-16T14:07:34.858731",
+      "status": "succeeded",
+      "generation_kind": "view",
+      "asset_id": "CHAR_EMPEROR_RENZONG",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_EMPEROR_RENZONG__face_builtin-imagegen__20260716T140435.md",
+      "prompt_sha256": "c611d0c4de650320c88e34b5872bfae9335c05f80580ca378ff2cd9d70387897",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+          "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+          "role": "identity_anchor"
+        }
+      ],
+      "finished_at": "2026-07-16T14:22:53.211864",
+      "artifact_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+      "artifact_sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898"
+    },
+    {
+      "attempt_id": "0b51d3c925840127f1e8",
+      "started_at": "2026-07-16T14:35:17.106067",
+      "status": "failed",
+      "generation_kind": "anchor",
+      "asset_id": "PROP_FUMO_SEALS",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "2dfc7a1bea8e35d6a366a42d657be5ea816185fb60823f07a16bdf627f8d9ff8",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_FUMO_SEALS__anchor_builtin-imagegen__20260716T143517104414.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T14:43:32.472410",
+      "error": "class=builtin_network_error; detail=network error sending request to built-in image edits endpoint; image_generated=false",
+      "image_generated": false,
+      "error_class": "builtin_network_error"
+    },
+    {
+      "attempt_id": "30e4fd161b341d6826f7",
+      "started_at": "2026-07-16T14:43:32.472899",
+      "status": "succeeded",
+      "generation_kind": "anchor",
+      "asset_id": "PROP_FUMO_SEALS",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "2dfc7a1bea8e35d6a366a42d657be5ea816185fb60823f07a16bdf627f8d9ff8",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_FUMO_SEALS__anchor_builtin-imagegen__20260716T143517104414.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T15:18:29.142464",
+      "artifact_path": "出图/共享/图片/PROP_FUMO_SEALS__anchor.png",
+      "artifact_sha256": "ace7c3338ab22e4d9ead44491548bbd21cd7ff41ff28e50eebe51947483e5170"
+    },
+    {
+      "attempt_id": "9d74eef9d5edc525261e",
+      "started_at": "2026-07-16T15:30:24.259217",
+      "status": "failed",
+      "generation_kind": "view",
+      "asset_id": "MON_SNOW_SERPENT",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "a625db5d2e5e8b7aaaa0ef60de5d1ab2f5193095230a96eb6d93482e7d0e6dda",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__front_builtin-imagegen__20260716T153024257496.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T15:41:03.790472",
+      "error": "class=builtin_network_error; detail=network error sending request to built-in image edits endpoint; image_generated=false",
+      "image_generated": false,
+      "error_class": "builtin_network_error"
+    },
+    {
+      "attempt_id": "9e1f7ec3cdc038a0d419",
+      "started_at": "2026-07-16T15:41:03.791171",
+      "status": "started",
+      "generation_kind": "view",
+      "asset_id": "MON_SNOW_SERPENT",
+      "variant": "front",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "a625db5d2e5e8b7aaaa0ef60de5d1ab2f5193095230a96eb6d93482e7d0e6dda",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__front_builtin-imagegen__20260716T153024257496.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ]
     }
   ]
 }

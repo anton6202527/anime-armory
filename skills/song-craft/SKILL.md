@@ -60,6 +60,7 @@ python3 skills/song-craft/scripts/ai_usage.py "<写歌作品根>" \
 - **选中版不是母版**：select 只产生带 hash 的 `pre_master.wav`；正式交付必须再生成 `导出/master.wav`、跑 BS.1770 检查并重建 release pack。
 - **发布不是只有 wav**：正式交付必须同时有母带检查、权益元数据、AI 使用披露和 release pack；缺任一项都不能声称“发行就绪”。
 - **参考曲只作方向**：reference pack 只能迁移情绪、能量曲线、配器类别和段落功能；不得复刻旋律、歌词、hook/riff、声纹或标志性编曲。
+- **作品卡片字段（synopsis / cover）**：立项脚本在 `_meta.json` 固化 `synopsis`（一句话简介，≤240 字，取自 `创作/song_brief.json` 核心承诺，缺失时用 `theme`+`genre/mood` 组一句，占位后续回填）。song 是纯音频线、无图片产物，故 `cover` 恒为 `null`、不出封面，桌面卡片自动回退产线图标占位。写入用 `write_if_absent` 语义只补缺、不覆盖用户已填内容。
 
 ## 常见错误
 

@@ -1,21 +1,22 @@
 # 出图前·脸漂风险分（事前预测 + 实测漂移回灌）
 
-- episode: 第1集 · 默认后端: codex
+- episode: 第1集 · 默认后端: dreamina
 - ⛔ 阻断 0 · 🔴 预测高危 0 · 🟡 中危 2
 
 | 角色 | 风险 | 分 | 锁脸档 | 主驱动 |
 |---|---|---|---|---|
-| 姜月初（CHAR_01/常态） | 🟡 medium | 44.0 | multi_reference | 锁脸档位=multi_reference(+22)；多人同框 7/7(+20.0)；大表情 1 镜(+8) |
-| 裴长青（CHAR_02/常态） | 🟡 medium | 39.6 | multi_reference | 锁脸档位=multi_reference(+22)；多人同框 7/9(+15.6)；大表情 1 镜(+8) |
-| 虎山神（CHAR_04/常态） | 🟢 low | 16.0 | multi_reference | 锁脸档位=multi_reference(+22)；同源场景 in-context 记功(strong·如 GPT Image 2)(+-6) |
+| 姜月初（CHAR_01/常态） | 🟡 medium | 50.0 | multi_reference | 锁脸档位=multi_reference(+22)；多人同框 7/7(+20.0)；大表情 1 镜(+8) |
+| 裴长青（CHAR_02/常态） | 🟡 medium | 45.6 | multi_reference | 锁脸档位=multi_reference(+22)；多人同框 7/9(+15.6)；大表情 1 镜(+8) |
+| 虎山神（CHAR_04/常态） | 🟢 low | 22.0 | multi_reference | 锁脸档位=multi_reference(+22) |
 
-## 🟡 姜月初（CHAR_01/常态）· 分 44.0
-- GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。
+## 🟡 姜月初（CHAR_01/常态）· 分 50.0
+- 即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。
+- Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。
 - 多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。
-- 当前角色库档位=core_full 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。
 
-## 🟡 裴长青（CHAR_02/常态）· 分 39.6
-- GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。
+## 🟡 裴长青（CHAR_02/常态）· 分 45.6
+- 即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。
+- Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。
 - 多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。
 - 当前角色库档位=named_minimal 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。
 

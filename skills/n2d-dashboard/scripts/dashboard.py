@@ -458,6 +458,8 @@ def blank_episode(ep: str, progress: Optional[Dict[str, Any]] = None) -> Dict[st
         "qa_blockers": 0,
         "qa_warnings": 0,
         "qa_infos": 0,
+        "qa_blockers_historical": 0,
+        "qa_warnings_historical": 0,
         "warnings_per_attempt": None,
         "blockers_per_attempt": None,
         "false_positive_recoveries": 0,
@@ -517,6 +519,40 @@ def add_qa_signal(summary: Dict[str, Any], stage: str, severity: str, dim: str, 
     elif severity == "info":
         summary["qa_infos"] += 1
         sb["qa_infos"] += 1
+
+
+def supersedable_qa_key(event: Dict[str, Any]) -> Optional[Tuple[str, str, str]]:
+    """Return the current-verdict key for manual per-asset QA events.
+
+    A rejected generation remains useful historical evidence, but once the same
+    asset has a later accepted visual verdict it must no longer count as an
+    *active* blocker. The dimension is deliberately not part of the key: each
+    manual QA event carries the generation-level accepted/rejected status, while
+    ``qa.dim`` records why that attempt passed or failed. Gate snapshots are
+    intentionally excluded:
+    dashboard ``gate`` already replaces those events as a stage-level snapshot.
+    """
+    if str(event.get("event") or "") != "qa":
+        return None
+    qa = event.get("qa") if isinstance(event.get("qa"), dict) else {}
+    generation = event.get("generation") if isinstance(event.get("generation"), dict) else {}
+    asset = str(generation.get("asset") or qa.get("loc") or "").strip()
+    if not asset:
+        return None
+    return (
+        normalize_episode(str(event.get("episode") or "未知集")),
+        str(event.get("stage") or "unknown"),
+        os.path.normpath(asset),
+    )
+
+
+def latest_supersedable_qa_indexes(events: List[Dict[str, Any]]) -> Dict[Tuple[str, str, str], int]:
+    latest: Dict[Tuple[str, str, str], int] = {}
+    for index, event in enumerate(events):
+        key = supersedable_qa_key(event)
+        if key is not None:
+            latest[key] = index
+    return latest
 
 
 def add_counter_value(target: Dict[str, float], key: str, amount: float) -> None:
@@ -746,8 +782,9 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         ep: blank_episode(ep, info) for ep, info in progress.items()
     }
     release_metrics_path = default_input(root, PLATFORM_METRICS_STEM)
+    latest_qa_indexes = latest_supersedable_qa_indexes(events)
 
-    for event in events:
+    for event_index, event in enumerate(events):
         ep = normalize_episode(str(event.get("episode") or "未知集"))
         stage = str(event.get("stage") or "unknown")
         if ep not in episodes:
@@ -816,14 +853,20 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         qa = event.get("qa") if isinstance(event.get("qa"), dict) else {}
         if qa:
             severity = str(qa.get("severity") or qa.get("sev") or "").lower()
-            add_qa_signal(
-                summary,
-                stage,
-                severity,
-                str(qa.get("dim") or ""),
-                str(qa.get("loc") or ""),
-                str(qa.get("msg") or ""),
-            )
+            if severity == "block":
+                summary["qa_blockers_historical"] += 1
+            elif severity == "warn":
+                summary["qa_warnings_historical"] += 1
+            qa_key = supersedable_qa_key(event)
+            if qa_key is None or latest_qa_indexes.get(qa_key) == event_index:
+                add_qa_signal(
+                    summary,
+                    stage,
+                    severity,
+                    str(qa.get("dim") or ""),
+                    str(qa.get("loc") or ""),
+                    str(qa.get("msg") or ""),
+                )
 
         # 一致性审查事件：consistency_audit 写 meta.{total_block,total_warn} 但此前无人读 → 统计失真。
         # 接入：单列 consistency_blockers/warnings，并把 block 计入 qa_blockers，让阈值告警看得到审查检出。
@@ -920,6 +963,8 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         "qa_blockers": sum(item["qa_blockers"] for item in ordered),
         "qa_warnings": sum(item["qa_warnings"] for item in ordered),
         "qa_infos": sum(item["qa_infos"] for item in ordered),
+        "qa_blockers_historical": sum(item["qa_blockers_historical"] for item in ordered),
+        "qa_warnings_historical": sum(item["qa_warnings_historical"] for item in ordered),
         "warnings_per_attempt": None,
         "blockers_per_attempt": None,
         "false_positive_recoveries": sum(item["false_positive_recoveries"] for item in ordered),

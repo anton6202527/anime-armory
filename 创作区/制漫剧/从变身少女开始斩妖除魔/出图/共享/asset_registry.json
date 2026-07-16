@@ -1,143 +1,231 @@
 {
-  "kind": "n2d_asset_reference_registry",
-  "version": 1,
-  "generated_at": "2026-07-15T06:35:31+00:00",
   "assets": [
     {
-      "id": "LOC_01",
-      "type": "scene",
-      "name": "荒野押解/虎妖现场",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "status": "planned"
-        },
-        "front": {
-          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "status": "planned"
-        },
-        "reverse": {
-          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "status": "planned"
-        },
-        "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_平面图.png",
-          "status": "planned"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "设定库/locations/LOC_01_荒野押解现场.md",
-          "status": "ready",
-          "sha256": "75be88ef32ac4e5996198746bfb426b4c378ad92588d6f590844ad4e100b8665"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "status": "planned"
-        }
-      ],
+      "artifact_sha256": "da496fbf897a536a127f15053c6e29e41f8e17bf79a9721d41b8aedd1546d549",
+      "axis_rules": "官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。",
       "constraints": {
-        "layout": "保持 storyboard 场景轴线和地标。",
-        "light_anchor": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
         "axis_rules": "官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。",
         "face_policy": "faceless",
+        "layout": "官道由正机位下端向上端纵深延伸并呈轻微S弯；世界西侧为低黄土坡与唯一分叉枯树，世界东侧为浅沟与唯一三角深灰巨石；断木、麻绳、暗血尘集中在道路下半至中段。",
+        "light_anchor": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "key_light_direction": "world_northwest; front_screen_left; reverse_screen_right",
+          "numeric_measurement": "pending_after_landed_frame_qc",
+          "saturation_profile": "controlled",
+          "source_text": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。；阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。"
+        },
         "must_not_have": [
           "现代物件",
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ],
-        "lighting_signature": {
-          "color_temperature": "mixed_cool_warm",
-          "saturation_profile": "controlled",
-          "key_light_direction": "left",
-          "source_text": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。；阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
-          "numeric_measurement": "pending_after_landed_frame_qc"
-        }
+        ]
       },
-      "face_policy": "faceless",
+      "core": true,
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
       "drift_forbidden": [
         "不要丢失本场景地标、空间轴线、光位和常驻物件",
         "不要把本场景随机改成仙宫、现代空间或无关地点"
       ],
-      "scene_dna": {
-        "belonging_anchor": "荒野押解/虎妖现场",
-        "landmarks": [
-          "荒野押解/虎妖现场"
-        ],
-        "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "陇右荒野驿道，碎石、枯草、低土坡与破损押解痕迹；不做仙山云海。 阴冷清晨或曙色前后；低饱和天光，有来源的侧逆光。 冷灰、土褐、暗血色；死局、饥寒、近身危险。",
-        "color_lighting_weather": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
-        "resident_assets": [
-          "荒野押解/虎妖现场"
-        ],
-        "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_平面图.png",
+            "png_sha256": "31a3279731a8bebd4d6db6582588750c0a53e1fab79a86bbdba499e732f9e270",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+            "png_sha256": "da496fbf897a536a127f15053c6e29e41f8e17bf79a9721d41b8aedd1546d549",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          },
+          {
+            "png": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
+            "png_sha256": "1199699fdebb34ed5dbb207e126be83d47a66f32586cd4a44e6331cd7b7fb694",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "core": true,
+      "face_policy": "faceless",
+      "floor_plan": "画面上=世界北/正机位远端，画面下=世界南/正机位近端；西侧分叉枯树、东侧三角巨石；南北两机位沿道路中心轴互为180度；主光来自世界西北。",
       "frequency": 12,
-      "spatial_layout": "保持 storyboard 场景轴线和地标。",
-      "floor_plan": "保持 storyboard 场景轴线和地标。",
-      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。",
-      "screen_direction_rules": "官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。",
-      "scene_atlas": {
-        "base_views": {
-          "front": {
-            "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-            "status": "planned"
-          },
-          "back": {
-            "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-            "status": "planned"
-          }
-        }
-      }
-    },
-    {
-      "id": "WEAPON_01",
-      "type": "weapon",
-      "name": "横刀",
+      "id": "LOC_01",
+      "name": "荒野押解/虎妖现场",
       "reference_group": {
+        "floor_plan": {
+          "derivation": {
+            "generated_by": "Codex / GPT Image 2",
+            "method": "controlled_multiref_floor_plan_generation",
+            "reference_input_mode": "imagegen_reference_edit",
+            "source_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+            "source_sha256": "da496fbf897a536a127f15053c6e29e41f8e17bf79a9721d41b8aedd1546d549"
+          },
+          "human_review": {
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-16T06:00:25.194704+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_平面图.png",
+          "status": "ready"
+        },
+        "front": {
+          "derivation": {
+            "generated_by": "Codex / GPT Image 2",
+            "method": "controlled_style_reference_generation",
+            "reference_input_mode": "imagegen_reference_edit",
+            "source_path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+            "source_sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+          },
+          "human_review": {
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-16T06:00:25.194673+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+          "status": "ready"
+        },
         "primary": {
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "planned"
+          "derivation": {
+            "generated_by": "Codex / GPT Image 2",
+            "method": "controlled_style_reference_generation",
+            "reference_input_mode": "imagegen_reference_edit",
+            "source_path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+            "source_sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+          },
+          "human_review": {
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-16T06:00:25.194534+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+          "status": "ready"
         },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
-          "status": "planned"
+        "reverse": {
+          "derivation": {
+            "generated_by": "Codex / GPT Image 2",
+            "method": "controlled_multiref_generation",
+            "reference_input_mode": "imagegen_reference_edit",
+            "source_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+            "source_sha256": "da496fbf897a536a127f15053c6e29e41f8e17bf79a9721d41b8aedd1546d549"
+          },
+          "human_review": {
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-16T06:00:25.194690+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
         {
+          "path": "设定库/locations/LOC_01_荒野押解现场.md",
+          "sha256": "75be88ef32ac4e5996198746bfb426b4c378ad92588d6f590844ad4e100b8665",
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/WEAPON_01_横刀.md",
-          "status": "ready",
-          "sha256": "251a3738b789e1b60d9380519d0347562c4e5e68234ff51919d3c5d07a9528f5"
+          "status": "ready"
         },
         {
+          "derivation": {
+            "generated_by": "Codex / GPT Image 2",
+            "method": "controlled_style_reference_generation",
+            "reference_input_mode": "imagegen_reference_edit",
+            "source_path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+            "source_sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+          },
+          "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
+      "scene_atlas": {
+        "base_views": {
+          "back": {
+            "derivation": {
+              "generated_by": "Codex / GPT Image 2",
+              "method": "controlled_multiref_generation",
+              "reference_input_mode": "imagegen_reference_edit",
+              "source_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+              "source_sha256": "da496fbf897a536a127f15053c6e29e41f8e17bf79a9721d41b8aedd1546d549"
+            },
+            "human_review": {
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-16T06:00:25.194730+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "status": "accepted"
+            },
+            "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
+            "status": "ready"
+          },
+          "front": {
+            "derivation": {
+              "generated_by": "Codex / GPT Image 2",
+              "method": "controlled_style_reference_generation",
+              "reference_input_mode": "imagegen_reference_edit",
+              "source_path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+              "source_sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+            },
+            "human_review": {
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-16T06:00:25.194719+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "status": "accepted"
+            },
+            "path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
+            "status": "ready"
+          }
+        }
+      },
+      "scene_dna": {
+        "architecture_materials": "陇右荒野驿道，碎石、枯草、低土坡与破损押解痕迹；不做仙山云海。 阴冷清晨或曙色前后；低饱和天光，有来源的侧逆光。 冷灰、土褐、暗血色；死局、饥寒、近身危险。",
+        "belonging_anchor": "荒野押解/虎妖现场",
+        "color_lighting_weather": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ],
+        "landmarks": [
+          "世界西侧中上段低黄土坡顶的唯一分叉枯树",
+          "世界东侧中段浅沟旁的唯一三角形深灰巨石",
+          "中央轻微S弯官道的双车辙与下半至中段断木、麻绳、暗血尘押解残迹"
+        ],
+        "resident_assets": [
+          "唯一分叉枯树",
+          "唯一三角形深灰巨石",
+          "双车辙",
+          "断木、麻绳与暗血尘押解残迹"
+        ],
+        "spatial_layout": "正机位在官道南端向北/画面上方看，反打在北端向南/画面上方看；两镜位共享同一官道中心轴并呈180度。正机位枯树在画左、巨石在画右；反打枯树在画右、巨石在画左。"
+      },
+      "screen_direction_rules": "官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。",
+      "self_check_at": "2026-07-16T06:00:25+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "self_check_note": "正机位、180度反打与正交俯视平面图均已逐张完成 full 机器QC、faceless 像素核验及执行者实际原始像素目视；地标、轴线与世界西北物理光向已锁定。",
+      "self_check_passed": true,
+      "spatial_layout": "官道南北纵深为唯一主轴；世界西侧枯树土坡、世界东侧巨石浅沟固定。正机位南→北，反打北→南，屏幕左右随180度反向正确换边。",
+      "type": "scene"
+    },
+    {
+      "character_id": null,
       "constraints": {
         "blade_topology": [
           "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。",
           "weapon_count=1；single_hilt=1；single_straight_blade=1；主角只持一把实体横刀；副手/后手不得生成短刃、匕首、副刀或第二把刀。"
         ],
-        "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。",
+        "face_policy": "faceless",
         "must_not_have": [
           "变成长剑",
           "华丽仙剑",
@@ -158,9 +246,8 @@
           "光效变成实体刀刃"
         ],
         "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
-        "face_policy": "faceless"
+        "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。"
       },
-      "face_policy": "faceless",
       "drift_forbidden": [
         "不要让横刀结构/颜色/尺寸漂移",
         "不要变成长剑",
@@ -181,41 +268,111 @@
         "不要第二把刀刃",
         "不要光效变成实体刀刃"
       ],
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_武器_横刀.png",
+            "png_sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      },
+      "face_policy": "faceless",
+      "id": "WEAPON_01",
+      "name": "横刀",
+      "owner": "剧情资产",
+      "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
+          "status": "planned"
+        },
+        "primary": {
+          "derivation": {
+            "credit_count": 4,
+            "generated_by": "Dreamina official CLI / Seedream 5.0",
+            "method": "dreamina_image2image_topology_correction",
+            "resolution_type": "4k",
+            "session_id": 16331647232268,
+            "source_path": "废料/出图/共享/图片/weapon_rejected_20260716_1455/定妆_武器_横刀__即梦_seedream5_attempt01__双刃剑化.png",
+            "source_sha256": "a95611d20ce983c08df027692a4c819cb6f2825a9167d731cb721d0061afb2e0",
+            "submit_id": "2519ac79-520b-4b2e-a19b-81303bddb3c8"
+          },
+          "dimensions": {
+            "height": 5404,
+            "width": 3040
+          },
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "生产数据/卡片快照/资产/WEAPON_01_横刀.md",
+          "sha256": "251a3738b789e1b60d9380519d0347562c4e5e68234ff51919d3c5d07a9528f5",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "derivation": {
+            "credit_count": 4,
+            "generated_by": "Dreamina official CLI / Seedream 5.0",
+            "method": "dreamina_image2image_topology_correction",
+            "resolution_type": "4k",
+            "session_id": 16331647232268,
+            "source_path": "废料/出图/共享/图片/weapon_rejected_20260716_1455/定妆_武器_横刀__即梦_seedream5_attempt01__双刃剑化.png",
+            "source_sha256": "a95611d20ce983c08df027692a4c819cb6f2825a9167d731cb721d0061afb2e0",
+            "submit_id": "2519ac79-520b-4b2e-a19b-81303bddb3c8"
+          },
+          "dimensions": {
+            "height": 5404,
+            "width": 3040
+          },
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+          "slot": "primary_reference",
+          "status": "ready"
+        }
+      ],
       "scene_dna": {
-        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "横刀"
-        ],
-        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
+        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "横刀"
-        ],
         "forbidden": [
           "横刀结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
-        ]
+        ],
+        "landmarks": [
+          "横刀"
+        ],
+        "resident_assets": [
+          "横刀"
+        ],
+        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
       },
-      "self_check_passed": false,
       "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "weapon",
+      "weapon_like_role": "entity_weapon",
       "weapon_profile": {
-        "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
-        "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；单一实体武器轮廓，不复制第二把刀刃。",
         "blade_topology": "weapon_count=1；single_hilt=1；single_straight_blade=1；只允许一把实体横刀入画；副手/后手不得出现短刃、匕首、副刀或第二把刀。",
-        "scale": "按角色手部比例，竖屏可读但不夸张。",
-        "material": "暗银金属、低反光、战损血尘克制呈现。",
-        "palette": "暗银、黑柄、冷灰血尘",
-        "ornament_motif": "镇魔司制式，低调克制。",
         "carry_modes": [
           "手持",
           "落地",
           "近景局部"
         ],
         "combat_usage": "单武器动作道具；可双手配合一把横刀或一手持刀一手空手/护身，但不得双持，不得补出副手短刃。",
-        "vfx_signature": "刀光/光轨/残影为半透明运动轨迹，不是实体武器，不可画成第二把刀刃。",
+        "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
         "forbidden_drift": [
           "不要副刀",
           "不要短刃",
@@ -225,49 +382,24 @@
           "不要后手短刀",
           "不要双持",
           "不要刀鞘变成刀刃"
-        ]
-      },
-      "owner": "剧情资产",
-      "character_id": null,
-      "weapon_like_role": "entity_weapon"
+        ],
+        "material": "暗银金属、低反光、战损血尘克制呈现。",
+        "ornament_motif": "镇魔司制式，低调克制。",
+        "palette": "暗银、黑柄、冷灰血尘",
+        "scale": "按角色手部比例，竖屏可读但不夸张。",
+        "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；单一实体武器轮廓，不复制第二把刀刃。",
+        "vfx_signature": "刀光/光轨/残影为半透明运动轨迹，不是实体武器，不可画成第二把刀刃。"
+      }
     },
     {
-      "id": "PROP_横刀",
-      "type": "prop",
-      "name": "横刀",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "planned"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
-          "status": "planned"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_横刀.md",
-          "status": "ready",
-          "sha256": "ce0ad1f0ca2c19b7cc2ce422132cdcb3c8edafb94451b334b79c49b0f4b4b9e2"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "planned"
-        }
-      ],
+      "alias_of": "WEAPON_01",
+      "character_id": null,
       "constraints": {
         "blade_topology": [
           "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。",
           "weapon_count=1；single_hilt=1；single_straight_blade=1；主角只持一把实体横刀；副手/后手不得生成短刃、匕首、副刀或第二把刀。"
         ],
-        "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -275,9 +407,9 @@
           "数量漂移"
         ],
         "structure": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
-        "face_policy": "faceless"
+        "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。"
       },
-      "face_policy": "faceless",
+      "current_state": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
       "drift_forbidden": [
         "不要让横刀结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -285,28 +417,21 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "横刀"
-        ],
-        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "横刀"
-        ],
-        "forbidden": [
-          "横刀结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_武器_横刀.png",
+            "png_sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
+      "face_policy": "faceless",
+      "id": "PROP_横刀",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -315,21 +440,96 @@
         ],
         "status": "active"
       },
+      "name": "横刀",
+      "owner": "剧情资产",
+      "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
+          "status": "planned"
+        },
+        "primary": {
+          "derivation": {
+            "credit_count": 4,
+            "generated_by": "Dreamina official CLI / Seedream 5.0",
+            "method": "dreamina_image2image_topology_correction",
+            "resolution_type": "4k",
+            "session_id": 16331647232268,
+            "source_path": "废料/出图/共享/图片/weapon_rejected_20260716_1455/定妆_武器_横刀__即梦_seedream5_attempt01__双刃剑化.png",
+            "source_sha256": "a95611d20ce983c08df027692a4c819cb6f2825a9167d731cb721d0061afb2e0",
+            "submit_id": "2519ac79-520b-4b2e-a19b-81303bddb3c8"
+          },
+          "dimensions": {
+            "height": 5404,
+            "width": 3040
+          },
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "生产数据/卡片快照/资产/PROP_横刀.md",
+          "sha256": "ce0ad1f0ca2c19b7cc2ce422132cdcb3c8edafb94451b334b79c49b0f4b4b9e2",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "derivation": {
+            "credit_count": 4,
+            "generated_by": "Dreamina official CLI / Seedream 5.0",
+            "method": "dreamina_image2image_topology_correction",
+            "resolution_type": "4k",
+            "session_id": 16331647232268,
+            "source_path": "废料/出图/共享/图片/weapon_rejected_20260716_1455/定妆_武器_横刀__即梦_seedream5_attempt01__双刃剑化.png",
+            "source_sha256": "a95611d20ce983c08df027692a4c819cb6f2825a9167d731cb721d0061afb2e0",
+            "submit_id": "2519ac79-520b-4b2e-a19b-81303bddb3c8"
+          },
+          "dimensions": {
+            "height": 5404,
+            "width": 3040
+          },
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+          "slot": "primary_reference",
+          "status": "ready"
+        }
+      ],
+      "scene_dna": {
+        "architecture_materials": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
+        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "forbidden": [
+          "横刀结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "横刀"
+        ],
+        "resident_assets": [
+          "横刀"
+        ],
+        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "prop",
+      "weapon_like_role": "entity_weapon",
       "weapon_profile": {
-        "design_intent": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
-        "silhouette": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。；单一实体武器轮廓，不复制第二把刀刃。",
         "blade_topology": "weapon_count=1；single_hilt=1；single_straight_blade=1；只允许一把实体横刀入画；副手/后手不得出现短刃、匕首、副刀或第二把刀。",
-        "scale": "按角色手部比例，竖屏可读但不夸张。",
-        "material": "暗银金属、低反光、战损血尘克制呈现。",
-        "palette": "暗银、黑柄、冷灰血尘",
-        "ornament_motif": "镇魔司制式，低调克制。",
         "carry_modes": [
           "手持",
           "落地",
           "近景局部"
         ],
         "combat_usage": "单武器动作道具；可双手配合一把横刀或一手持刀一手空手/护身，但不得双持，不得补出副手短刃。",
-        "vfx_signature": "刀光/光轨/残影为半透明运动轨迹，不是实体武器，不可画成第二把刀刃。",
+        "design_intent": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
         "forbidden_drift": [
           "不要副刀",
           "不要短刃",
@@ -339,49 +539,23 @@
           "不要后手短刀",
           "不要双持",
           "不要刀鞘变成刀刃"
-        ]
-      },
-      "character_id": null,
-      "alias_of": "WEAPON_01",
-      "weapon_like_role": "entity_weapon"
+        ],
+        "material": "暗银金属、低反光、战损血尘克制呈现。",
+        "ornament_motif": "镇魔司制式，低调克制。",
+        "palette": "暗银、黑柄、冷灰血尘",
+        "scale": "按角色手部比例，竖屏可读但不夸张。",
+        "silhouette": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。；单一实体武器轮廓，不复制第二把刀刃。",
+        "vfx_signature": "刀光/光轨/残影为半透明运动轨迹，不是实体武器，不可画成第二把刀刃。"
+      }
     },
     {
-      "id": "PROP_断刀",
-      "type": "prop",
-      "name": "断刀",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_断刀.png",
-          "status": "planned"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_断刀_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_断刀_手持.png",
-          "status": "planned"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_断刀.md",
-          "status": "ready",
-          "sha256": "beb54071bf1fcea8059d25e892b316b0b1db28ec10972702ed6e63b09bad3938"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_断刀.png",
-          "status": "planned"
-        }
-      ],
+      "character_id": null,
       "constraints": {
         "blade_topology": [
           "weapon_count=1；single_hilt=1；broken_blade=1；cutting_edge_count=1；残存刀身保持单面刃与厚钝刀背，断口粗粝且明确终止；断口之后不得补出刀尖、完整刀身、第二把刀刃或实体光刃。",
           "weapon_count=1；single_hilt=1；broken_blade=1；jagged_break=1；仅一把断裂横刀，断口之后不得续出完整刀身或第二把刀。"
         ],
-        "vfx_boundary": "断口只允许少量冷光/血尘边缘高光，不得生长实体刀刃。",
+        "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
@@ -389,9 +563,9 @@
           "数量漂移"
         ],
         "structure": "裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀。",
-        "face_policy": "faceless"
+        "vfx_boundary": "断口只允许少量冷光/血尘边缘高光，不得生长实体刀刃。"
       },
-      "face_policy": "faceless",
+      "current_state": "裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀。",
       "drift_forbidden": [
         "不要让断刀结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -399,28 +573,21 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "断刀 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "断刀"
-        ],
-        "spatial_layout": "断刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "断刀"
-        ],
-        "forbidden": [
-          "断刀结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_断刀.png",
+            "png_sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀。",
+      "face_policy": "faceless",
+      "id": "PROP_断刀",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -429,74 +596,123 @@
         ],
         "status": "active"
       },
+      "name": "断刀",
+      "owner": "剧情资产",
+      "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_断刀_手持.png",
+          "status": "planned"
+        },
+        "primary": {
+          "derivation": {
+            "credit_count": 4,
+            "generation_mode": "image2image",
+            "model": "Seedream 5.0",
+            "provider": "dreamina_official_cli",
+            "qc_precision": "full",
+            "resolution_type": "4k",
+            "review_kind": "executor_visual",
+            "session_id": "16334160880652",
+            "submit_id": "23435837-7655-4c00-9161-534bf9f92ca5",
+            "visual_review": "pass"
+          },
+          "height": 5404,
+          "path": "出图/共享/图片/定妆_道具_断刀.png",
+          "sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff",
+          "status": "ready",
+          "width": 3040
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_断刀_比例.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "生产数据/卡片快照/资产/PROP_断刀.md",
+          "sha256": "beb54071bf1fcea8059d25e892b316b0b1db28ec10972702ed6e63b09bad3938",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "derivation": {
+            "credit_count": 4,
+            "generation_mode": "image2image",
+            "model": "Seedream 5.0",
+            "provider": "dreamina_official_cli",
+            "qc_precision": "full",
+            "resolution_type": "4k",
+            "review_kind": "executor_visual",
+            "session_id": "16334160880652",
+            "submit_id": "23435837-7655-4c00-9161-534bf9f92ca5",
+            "visual_review": "pass"
+          },
+          "height": 5404,
+          "path": "出图/共享/图片/定妆_道具_断刀.png",
+          "sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff",
+          "slot": "primary_reference",
+          "status": "ready",
+          "width": 3040
+        }
+      ],
+      "scene_dna": {
+        "architecture_materials": "裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀。",
+        "belonging_anchor": "断刀 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "forbidden": [
+          "断刀结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "断刀"
+        ],
+        "resident_assets": [
+          "断刀"
+        ],
+        "spatial_layout": "断刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "prop",
+      "weapon_like_role": "entity_weapon",
       "weapon_profile": {
-        "design_intent": "同场镇魔司横刀的明确战损态，用断裂形态表现败局与资源匮乏，不是新武器品类。",
-        "silhouette": "单一黑柄旧护手连接半截直身单刃刀，断口粗粝、不规则但可读。",
         "blade_topology": "weapon_count=1；single_hilt=1；broken_blade=1；jagged_break=1；断口后无续刃、无第二实体刀。",
-        "scale": "完整横刀约一半到三分之二长度，仍按角色手部比例，不缩成匕首。",
-        "material": "暗银旧钢、哑光黑柄、旧金属护手、克制血尘与磨损。",
-        "palette": "暗银、冷灰、黑柄、少量暗红血尘。",
-        "ornament_motif": "镇魔司制式低调纹样，与 WEAPON_01 同源，不新增华丽装饰。",
         "carry_modes": [
           "伤员手持",
           "地面遗落",
           "断口近景"
         ],
         "combat_usage": "只能作为残损防身/证据道具，不恢复完整刀路，不与完整横刀混成双持。",
-        "vfx_signature": "断口少量冷色边缘高光或血尘；不发射光刃，不补出实体续刃。",
+        "design_intent": "同场镇魔司横刀的明确战损态，用断裂形态表现败局与资源匮乏，不是新武器品类。",
         "forbidden_drift": [
           "不要补全长刀",
           "不要第二把刀",
           "不要变匕首",
           "不要双持",
           "不要断口长出光刃"
-        ]
-      },
-      "character_id": null,
-      "weapon_like_role": "entity_weapon"
+        ],
+        "material": "暗银旧钢、哑光黑柄、旧金属护手、克制血尘与磨损。",
+        "ornament_motif": "镇魔司制式低调纹样，与 WEAPON_01 同源，不新增华丽装饰。",
+        "palette": "暗银、冷灰、黑柄、少量暗红血尘。",
+        "scale": "完整横刀约一半到三分之二长度，仍按角色手部比例，不缩成匕首。",
+        "silhouette": "单一黑柄旧护手连接半截直身单刃刀，断口粗粝、不规则但可读。",
+        "vfx_signature": "断口少量冷色边缘高光或血尘；不发射光刃，不补出实体续刃。"
+      }
     },
     {
-      "id": "PROP_翻覆囚车",
-      "type": "prop",
-      "name": "翻覆囚车",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-          "status": "planned"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车_手持.png",
-          "status": "planned"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_翻覆囚车.md",
-          "status": "ready",
-          "sha256": "f02997c03e575ddfbb77701e990da1f0b91ef3d18c73d11f010c1c0be4eab4f7"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-          "status": "planned"
-        }
-      ],
       "constraints": {
-        "structure": "粗木押解车残骸，只作背景空间锚。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "唐代边塞押解用双轮粗木槛车：窄长板舆、两只大型木辐条轮、前伸双辕、低矮木栏与暗铁箍；向右侧翻覆，一轮高悬、一轮受压，右侧轮轴折断、栏杆局部断裂、麻绳散落；始终只有一辆车的单一连续残骸。"
       },
-      "face_policy": "faceless",
+      "current_state": "向右侧翻覆的唐代双轮粗木槛车残骸；一轮高悬、一轮受压，右侧轮轴折断。",
       "drift_forbidden": [
         "不要让翻覆囚车结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -504,28 +720,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "翻覆囚车 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "翻覆囚车"
-        ],
-        "spatial_layout": "翻覆囚车只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "粗木押解车残骸，只作背景空间锚。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "翻覆囚车"
-        ],
-        "forbidden": [
-          "翻覆囚车结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "粗木押解车残骸，只作背景空间锚。",
+      "face_policy": "faceless",
+      "id": "PROP_翻覆囚车",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -533,42 +729,127 @@
           "本集引用"
         ],
         "status": "active"
-      }
-    },
-    {
-      "id": "VFX_系统面板",
-      "type": "vfx",
-      "name": "百妖谱金色古卷面板",
+      },
+      "name": "翻覆囚车",
+      "owner": "剧情资产",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+          "derivation": {
+            "credit_count": 4,
+            "generation_mode": "image2image",
+            "model": "Seedream 5.0",
+            "provider": "dreamina_official_cli",
+            "qc_precision": "full",
+            "resolution_type": "4k",
+            "review_kind": "executor_visual",
+            "session_id": "16345076475148",
+            "submit_id": "4b0d9f1a-5302-40f3-9377-8877fa515da0",
+            "visual_review": "pass"
+          },
+          "height": 5404,
+          "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
+          "sha256": "b3094d28ef7bf5e27f2b8ae6cee3bc647ad6836f2375999ea5dd5e6e9fbff58f",
+          "status": "ready",
+          "width": 3040
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_道具_翻覆囚车_反面.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_翻覆囚车_比例.png",
           "status": "planned"
         }
       },
       "reference_slots": [
         {
+          "path": "生产数据/卡片快照/资产/PROP_翻覆囚车.md",
+          "sha256": "f5cb85fd03fdebae031e9e67a310a52ad6a1e7abccde4cf3ec065fb7849b29f5",
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/VFX_系统面板_百妖谱金色古卷面板.md",
-          "status": "ready",
-          "sha256": "d5dcafbb47da1c7b7e57e58fa096a609a2f9fbd876ca11eff2f0321b1036ecee"
+          "status": "ready"
         },
         {
+          "derivation": {
+            "credit_count": 4,
+            "generation_mode": "image2image",
+            "model": "Seedream 5.0",
+            "provider": "dreamina_official_cli",
+            "qc_precision": "full",
+            "resolution_type": "4k",
+            "review_kind": "executor_visual",
+            "session_id": "16345076475148",
+            "submit_id": "4b0d9f1a-5302-40f3-9377-8877fa515da0",
+            "visual_review": "pass"
+          },
+          "height": 5404,
+          "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
+          "sha256": "b3094d28ef7bf5e27f2b8ae6cee3bc647ad6836f2375999ea5dd5e6e9fbff58f",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "status": "planned"
+          "status": "ready",
+          "width": 3040
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "低饱和灰褐粗木、开裂磨损板舆、木辐条轮、暗铁箍与旧麻绳；无现代金属车架、橡胶轮胎或封闭车厢。",
+        "belonging_anchor": "翻覆囚车 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "forbidden": [
+          "翻覆囚车结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "翻覆囚车"
+        ],
+        "resident_assets": [
+          "翻覆囚车"
+        ],
+        "spatial_layout": "翻覆囚车只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "prop",
+      "vehicle_profile": {
+        "damage_state": "向右侧翻覆，一轮高悬、一轮受压；右侧轮轴折断、栏杆局部断裂、麻绳散落。",
+        "forbidden_drift": [
+          "不要变西式封闭篷车",
+          "不要变四轮马车",
+          "不要变现代囚车",
+          "不要变刑笼高塔",
+          "不要新增马匹、人物或尸体",
+          "不要把单车残骸拆成两辆车"
+        ],
+        "scale": "可容一至两名囚犯的窄长板舆；轮径约成人腰至胸高，双辕长度可接一匹役马。",
+        "silhouette": "低矮窄长、开放木栏，不是高塔刑笼，不是西式封闭篷车。",
+        "vehicle_lock": "一辆唐代双轮粗木槛车；窄长板舆、两只大型木辐条轮、前伸双辕、低矮木栏与暗铁箍。",
+        "wheel_lock": "总轮数恰好两只；木辐条轮同尺寸，不新增小轮、第三轮或四轮底盘。"
+      },
+      "face_consistency": {
+        "source": "machine_pixel",
+        "checker": "face_consistency.verify_faceless",
+        "records": [
+          {
+            "png": "出图/共享/图片/定妆_道具_翻覆囚车.png",
+            "png_sha256": "b3094d28ef7bf5e27f2b8ae6cee3bc647ad6836f2375999ea5dd5e6e9fbff58f",
+            "verdict": "ok",
+            "clear_faces": 0,
+            "max_ratio": 0.0
+          }
+        ]
+      }
+    },
+    {
       "constraints": {
-        "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
         "face_policy": "none",
         "must_not_have": [
           "AI生成可读文字",
           "现代手机UI",
           "随机蓝色科幻屏",
           "乱码文字"
-        ]
+        ],
+        "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。"
       },
-      "face_policy": "none",
       "drift_forbidden": [
         "不要让百妖谱金色古卷面板结构/颜色/尺寸漂移",
         "不要随机改色",
@@ -580,30 +861,70 @@
         "不要随机蓝色科幻屏",
         "不要乱码文字"
       ],
+      "face_policy": "none",
+      "id": "VFX_系统面板",
+      "name": "百妖谱金色古卷面板",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "生产数据/卡片快照/资产/VFX_系统面板_百妖谱金色古卷面板.md",
+          "sha256": "d5dcafbb47da1c7b7e57e58fa096a609a2f9fbd876ca11eff2f0321b1036ecee",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+          "slot": "primary_reference",
+          "status": "planned"
+        }
+      ],
       "scene_dna": {
-        "belonging_anchor": "百妖谱金色古卷面板 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "百妖谱金色古卷面板"
-        ],
-        "spatial_layout": "百妖谱金色古卷面板只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "透明/空白信息区；所有中文由 compose overlay。",
+        "belonging_anchor": "百妖谱金色古卷面板 属于本集剧情资产，不是独立场景。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "百妖谱金色古卷面板"
-        ],
         "forbidden": [
           "百妖谱金色古卷面板结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
-        ]
+        ],
+        "landmarks": [
+          "百妖谱金色古卷面板"
+        ],
+        "resident_assets": [
+          "百妖谱金色古卷面板"
+        ],
+        "spatial_layout": "百妖谱金色古卷面板只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
       },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+      "type": "vfx"
     },
     {
+      "constraints": {
+        "face_policy": "faceless",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ],
+        "structure": "旧纸卷轴、黑墨边缘、朱砂染色、少量金点睛；底图无文字。"
+      },
+      "drift_forbidden": [
+        "不要让百妖谱结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "face_policy": "faceless",
       "id": "VFX_百妖谱",
-      "type": "vfx",
       "name": "百妖谱",
       "reference_group": {
         "primary": {
@@ -613,59 +934,59 @@
       },
       "reference_slots": [
         {
-          "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/VFX_百妖谱.md",
-          "status": "ready",
-          "sha256": "a1fc7e401f5be1443b52c8beaa5a981fcd16fd57b8ac30c9eebee8727d9dffd0"
+          "sha256": "a1fc7e401f5be1443b52c8beaa5a981fcd16fd57b8ac30c9eebee8727d9dffd0",
+          "slot": "asset_card",
+          "status": "ready"
         },
         {
-          "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_百妖谱.png",
+          "slot": "primary_reference",
           "status": "planned"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "旧纸卷轴、黑墨边缘、朱砂染色、少量金点睛；底图无文字。",
+        "belonging_anchor": "百妖谱 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "forbidden": [
+          "百妖谱结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "百妖谱"
+        ],
+        "resident_assets": [
+          "百妖谱"
+        ],
+        "spatial_layout": "百妖谱只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "vfx"
+    },
+    {
       "constraints": {
-        "structure": "旧纸卷轴、黑墨边缘、朱砂染色、少量金点睛；底图无文字。",
         "face_policy": "faceless",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "structure": "以刀身重量、尘土、轻微空气扰动和手臂受力表现；不用满屏金焰。"
       },
-      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让百妖谱结构/颜色/尺寸漂移",
+        "不要让道行灌注结构/颜色/尺寸漂移",
         "不要随机改色",
         "不要遮挡主体脸",
         "不要现代科幻UI",
         "不要过度血腥猎奇"
       ],
-      "scene_dna": {
-        "belonging_anchor": "百妖谱 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "百妖谱"
-        ],
-        "spatial_layout": "百妖谱只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "旧纸卷轴、黑墨边缘、朱砂染色、少量金点睛；底图无文字。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "百妖谱"
-        ],
-        "forbidden": [
-          "百妖谱结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
-    },
-    {
+      "face_policy": "faceless",
       "id": "VFX_道行灌注",
-      "type": "vfx",
       "name": "道行灌注",
       "reference_group": {
         "primary": {
@@ -675,98 +996,51 @@
       },
       "reference_slots": [
         {
-          "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/VFX_道行灌注.md",
-          "status": "ready",
-          "sha256": "8fc5b5b5cc3bbd959866a2648389d4550b946be6daf9af0aebf7411037952fbf"
+          "sha256": "8fc5b5b5cc3bbd959866a2648389d4550b946be6daf9af0aebf7411037952fbf",
+          "slot": "asset_card",
+          "status": "ready"
         },
         {
-          "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_道行灌注.png",
+          "slot": "primary_reference",
           "status": "planned"
         }
       ],
-      "constraints": {
-        "structure": "以刀身重量、尘土、轻微空气扰动和手臂受力表现；不用满屏金焰。",
-        "face_policy": "faceless",
-        "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
-        ]
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要让道行灌注结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
-      ],
       "scene_dna": {
-        "belonging_anchor": "道行灌注 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "道行灌注"
-        ],
-        "spatial_layout": "道行灌注只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "以刀身重量、尘土、轻微空气扰动和手臂受力表现；不用满屏金焰。",
+        "belonging_anchor": "道行灌注 属于本集剧情资产，不是独立场景。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "道行灌注"
-        ],
         "forbidden": [
           "道行灌注结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
-        ]
+        ],
+        "landmarks": [
+          "道行灌注"
+        ],
+        "resident_assets": [
+          "道行灌注"
+        ],
+        "spatial_layout": "道行灌注只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
       },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+      "type": "vfx"
     },
     {
-      "id": "PROP_虎首",
-      "type": "prop",
-      "name": "虎首",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_虎首.png",
-          "status": "planned"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_虎首_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_虎首_手持.png",
-          "status": "planned"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_虎首.md",
-          "status": "ready",
-          "sha256": "ba4374445b7c4bc782d5eefb76dce9fa1f0545261394ad506a8d3da8d969f83f"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_虎首.png",
-          "status": "planned"
-        }
-      ],
       "constraints": {
-        "structure": "由 CHAR_04 派生的结果资产，条纹、白额与头部比例必须继承本体。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "由 CHAR_04 派生的结果资产，条纹、白额与头部比例必须继承本体。"
       },
-      "face_policy": "faceless",
+      "current_state": "由 CHAR_04 派生的结果资产，条纹、白额与头部比例必须继承本体。",
       "drift_forbidden": [
         "不要让虎首结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -774,28 +1048,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "虎首 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "虎首"
-        ],
-        "spatial_layout": "虎首只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "由 CHAR_04 派生的结果资产，条纹、白额与头部比例必须继承本体。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "虎首"
-        ],
-        "forbidden": [
-          "虎首结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "由 CHAR_04 派生的结果资产，条纹、白额与头部比例必须继承本体。",
+      "face_policy": "faceless",
+      "id": "PROP_虎首",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -803,11 +1057,78 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "name": "虎首",
+      "owner": "剧情资产",
+      "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_虎首_手持.png",
+          "status": "planned"
+        },
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_虎首.png",
+          "status": "planned"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_虎首_比例.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "生产数据/卡片快照/资产/PROP_虎首.md",
+          "sha256": "ba4374445b7c4bc782d5eefb76dce9fa1f0545261394ad506a8d3da8d969f83f",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_道具_虎首.png",
+          "slot": "primary_reference",
+          "status": "planned"
+        }
+      ],
+      "scene_dna": {
+        "architecture_materials": "由 CHAR_04 派生的结果资产，条纹、白额与头部比例必须继承本体。",
+        "belonging_anchor": "虎首 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "forbidden": [
+          "虎首结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "虎首"
+        ],
+        "resident_assets": [
+          "虎首"
+        ],
+        "spatial_layout": "虎首只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "prop"
     },
     {
+      "constraints": {
+        "face_policy": "faceless",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ],
+        "structure": "厚重黑墨质感，流向遵循地面→卷轴；不变成随机黑色丝带海啸。"
+      },
+      "drift_forbidden": [
+        "不要让黑妖血结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "face_policy": "faceless",
       "id": "VFX_黑妖血",
-      "type": "vfx",
       "name": "黑妖血",
       "reference_group": {
         "primary": {
@@ -817,59 +1138,59 @@
       },
       "reference_slots": [
         {
-          "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/VFX_黑妖血.md",
-          "status": "ready",
-          "sha256": "149d81eae1467ea22cfa0d4b99e2ab23767d91551084d3db80293dc535eaa816"
+          "sha256": "149d81eae1467ea22cfa0d4b99e2ab23767d91551084d3db80293dc535eaa816",
+          "slot": "asset_card",
+          "status": "ready"
         },
         {
-          "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_黑妖血.png",
+          "slot": "primary_reference",
           "status": "planned"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "厚重黑墨质感，流向遵循地面→卷轴；不变成随机黑色丝带海啸。",
+        "belonging_anchor": "黑妖血 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
+        "forbidden": [
+          "黑妖血结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "黑妖血"
+        ],
+        "resident_assets": [
+          "黑妖血"
+        ],
+        "spatial_layout": "黑妖血只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": false,
+      "type": "vfx"
+    },
+    {
       "constraints": {
-        "structure": "厚重黑墨质感，流向遵循地面→卷轴；不变成随机黑色丝带海啸。",
         "face_policy": "faceless",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "structure": "手臂震颤、呼吸失控、轻微血点/肌肉拉扯；不新增虎纹或兽化。"
       },
-      "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让黑妖血结构/颜色/尺寸漂移",
+        "不要让道行反噬结构/颜色/尺寸漂移",
         "不要随机改色",
         "不要遮挡主体脸",
         "不要现代科幻UI",
         "不要过度血腥猎奇"
       ],
-      "scene_dna": {
-        "belonging_anchor": "黑妖血 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "黑妖血"
-        ],
-        "spatial_layout": "黑妖血只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "厚重黑墨质感，流向遵循地面→卷轴；不变成随机黑色丝带海啸。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "黑妖血"
-        ],
-        "forbidden": [
-          "黑妖血结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
-    },
-    {
+      "face_policy": "faceless",
       "id": "VFX_道行反噬",
-      "type": "vfx",
       "name": "道行反噬",
       "reference_group": {
         "primary": {
@@ -879,56 +1200,42 @@
       },
       "reference_slots": [
         {
-          "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/VFX_道行反噬.md",
-          "status": "ready",
-          "sha256": "f72407773ac139c48cc8b13508a9383b9225f21f652904cf6ad038f341d01872"
+          "sha256": "f72407773ac139c48cc8b13508a9383b9225f21f652904cf6ad038f341d01872",
+          "slot": "asset_card",
+          "status": "ready"
         },
         {
-          "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_道行反噬.png",
+          "slot": "primary_reference",
           "status": "planned"
         }
       ],
-      "constraints": {
-        "structure": "手臂震颤、呼吸失控、轻微血点/肌肉拉扯；不新增虎纹或兽化。",
-        "face_policy": "faceless",
-        "must_not_have": [
-          "随机改色",
-          "遮挡主体脸",
-          "现代科幻UI",
-          "过度血腥猎奇"
-        ]
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要让道行反噬结构/颜色/尺寸漂移",
-        "不要随机改色",
-        "不要遮挡主体脸",
-        "不要现代科幻UI",
-        "不要过度血腥猎奇"
-      ],
       "scene_dna": {
-        "belonging_anchor": "道行反噬 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "道行反噬"
-        ],
-        "spatial_layout": "道行反噬只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "手臂震颤、呼吸失控、轻微血点/肌肉拉扯；不新增虎纹或兽化。",
+        "belonging_anchor": "道行反噬 属于本集剧情资产，不是独立场景。",
         "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "道行反噬"
-        ],
         "forbidden": [
           "道行反噬结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
-        ]
+        ],
+        "landmarks": [
+          "道行反噬"
+        ],
+        "resident_assets": [
+          "道行反噬"
+        ],
+        "spatial_layout": "道行反噬只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
       },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+      "type": "vfx"
     }
   ],
-  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"
+  "generated_at": "2026-07-15T06:35:31+00:00",
+  "kind": "n2d_asset_reference_registry",
+  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。",
+  "version": 1
 }

@@ -54,6 +54,24 @@ def sha256_file(path):
     return digest.hexdigest()
 
 
+def build_synopsis(title, visual_style, use_case):
+    """立项当刻用既有 MV用途/视觉风格 组一句作品卡片简介（≤240 字）。
+
+    只用 mv 本线 _meta 既有字段；缺则占位后续回填。不跨线取数。
+    """
+    style = (visual_style or "").strip()
+    use = (use_case or "").strip()
+    if style and use:
+        text = f"《{title}》——{style}风格的{use} MV。"
+    elif use:
+        text = f"《{title}》——{use} MV。"
+    elif style:
+        text = f"《{title}》——{style}风格 MV。"
+    else:
+        text = f"《{title}》——制MV 作品（简介待补）。"
+    return text[:240]
+
+
 def build_visual_blueprint(title, meta):
     secs = "\n".join(f"- [{s}] → 画面：" for s in meta["structure"])
     rough_status = (
@@ -145,6 +163,10 @@ def build_progress(title, meta):
 |---|---|---|
 {stages}
 
+## 作品封面（卡片竖版 key visual）
+- [ ] 封面 prompt/job 包（`出图/封面/`；纯净机仅产 job 包，`_meta.cover` 保持 null）
+- [ ] 封面已渲染并回填 `_meta.cover`
+
 ## 导出
 - [ ] 成片_MV.mp4
 """
@@ -199,6 +221,7 @@ def main():
     for sub in (
         "歌", "词", "节拍", "字幕", "分镜", "设定", "设定/characters", "设定/locations",
         "出图/共享", "出图/段落/prompt", "出图/段落/图片",
+        "出图/封面/prompt", "出图/封面/图片",
         "出视频/视频", "出视频/prompt", "出视频/takes", "导出", "合规",
     ):
         os.makedirs(os.path.join(out_root, sub), exist_ok=True)
@@ -240,6 +263,8 @@ def main():
         "aspect": args.aspect,
         "structure": structure,
         "use_case": args.use_case,
+        "synopsis": build_synopsis(args.title, args.visual_style, args.use_case),
+        "cover": None,
         "song_timing": song_timing,
         "visual_style": args.visual_style,
         "plan_granularity": args.plan_granularity,

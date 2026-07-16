@@ -1,0 +1,31 @@
+{
+  "schema_version": 2,
+  "kind": "comic_reference_anchor_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-15T17:36:37",
+  "refs": [
+    "PROP_SILVER_CENSER"
+  ],
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "execution_mode": "isolated_ephemeral_workdir",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_anchors_第1话__20260715T173637779433.json",
+  "previous_manifest_sha256": "7a1540c41c3898a71fcc184c21bdc64df2a0755c0e0498f7e4e710e3a138f016",
+  "generated": 0,
+  "skipped": 0,
+  "failed": 1,
+  "items": [
+    {
+      "ts": "2026-07-15T17:36:37",
+      "status": "reference_anchor_failed",
+      "ref_id": "PROP_SILVER_CENSER",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "累计尝试次数已达授权上限 2/2；未发起新的生图请求"
+    }
+  ]
+}

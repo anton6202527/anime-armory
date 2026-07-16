@@ -196,7 +196,7 @@
       "path": "脚本/第1集/素材清单.md",
       "exists": true,
       "kind": "file",
-      "sha256": "e0a8725a91dc85aed5287477ab8d52a5a1b47f6094f71a80701ca0d535c55034"
+      "sha256": "eb2b6c794ab99b1e7a6107a5fd1d36788473641cb13245b261750a8e61824dca"
     },
     {
       "stage": "script_stage2",
@@ -244,7 +244,7 @@
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 2
+      "file_count": 23
     },
     {
       "stage": "image",
@@ -320,6 +320,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "2/75",
+  "last_progress_value": "23/75",
   "last_progress_state": "partial"
 }

@@ -25,6 +25,8 @@ export interface WorkRoot {
   path: string; // absolute
   has_progress: boolean;
   is_demo: boolean;
+  cover?: string | null; // absolute path to a cover image (from _meta.json), or null
+  synopsis?: string | null; // short synopsis text (from _meta.json), or null
 }
 
 export interface DemoDownloadInfo {

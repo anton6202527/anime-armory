@@ -60,6 +60,10 @@ from n2d_visual_styles import (
     style_options_text,
 )
 from source_analyze import render_character_roster, write_analysis
+from work_card_meta import (
+    backfill_synopsis as backfill_work_card_synopsis,
+    ensure_work_card_fields,
+)
 
 try:
     from motif_detector import detect_genre
@@ -1525,10 +1529,14 @@ def main():
     if not os.path.exists(meta_path):
         os.makedirs(root, exist_ok=True)
         project_id = f"n2d_{uuid.uuid4().hex[:16]}"
+        # 作品卡片契约：立项当刻 series_bible 尚未产出，synopsis 先占位空串、
+        # cover 先 null；bible 产出后由 work_card_meta.backfill_synopsis / 封面步骤
+        # 的 backfill_cover 用确定性方式回填，不覆盖用户已填内容。
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump({
                 "schema_version": 1, "kind": "n2d_project", "project_id": project_id,
                 "line": "n2d", "title": title, "created_at": _dt.date.today().isoformat(),
+                "synopsis": "", "cover": None,
             }, f, ensure_ascii=False, indent=2)
             f.write("\n")
         catalog_path = os.path.join(root, "生产数据", "artifact_catalog.json")
@@ -1549,6 +1557,13 @@ def main():
             dev_pack = scaffold_development_pack(Path(root), title=title)
         except Exception as exc:
             print(f"[warn] P-1 开发包 scaffold 失败：{exc}", file=sys.stderr)
+    # 作品卡片字段：补齐旧项目缺失的 synopsis/cover（write_if_absent），并在 bible
+    # 已有一句话卖点时确定性回填 synopsis（占位/空串才写，不覆盖用户内容）。
+    try:
+        ensure_work_card_fields(root)
+        backfill_work_card_synopsis(root)
+    except Exception as exc:
+        print(f"[warn] 作品卡片 synopsis 回填跳过：{exc}", file=sys.stderr)
     paras = normalize_paragraphs(text)
     if not paras:
         sys.exit("未读到正文内容。")

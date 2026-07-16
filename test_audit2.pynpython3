@@ -1,0 +1,22 @@
+import os
+from pathlib import Path
+import json
+import sys
+sys.path.insert(0, str(Path('skills/n2d-review/scripts').resolve()))
+import production_consistency as pc
+import test_identity_eval_pack as tip
+
+tmp = Path(__import__('tempfile').mkdtemp())
+registry = tip._project(tmp)
+node = registry['characters'][0]['forms'][0]['reference_group']['front']
+data = (tmp / node['path']).read_bytes()
+node.pop('human_review')
+node['visual_review'] = tip._executor_review('CHAR_01', '常态', 'front', node['path'], data)
+(tmp / '_设置.md').write_text('- 图片验收模式：逐张机器QC+实际目视  # source=explicit_user\n- 记录：用户明确授权执行者实际像素目视\n', encoding='utf-8')
+tip._write_json(tmp / '出图' / '共享' / 'identity_registry.json', registry)
+
+import identity_eval_pack as iep
+pack = iep.build_pack(str(tmp))
+iep.write_pack(str(tmp), pack)
+audit = pc.check_multiview_identity_pack(str(tmp), '第1集')
+print(json.dumps([row for row in audit['findings'] if row['verdict'] == 'block'], indent=2, ensure_ascii=False))

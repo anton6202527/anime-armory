@@ -35,6 +35,7 @@ SUBDIRS = (
     "排版/第1话/长图",
     "出图/共享/prompt",
     "出图/共享/图片",
+    "出图/封面/prompt",
     "出图/第1话/prompt",
     "出图/第1话/panels",
     "出图/第1话/finishing",
@@ -55,6 +56,34 @@ def write_if_absent(path: Path, text: str) -> None:
 def slug_title(value: str) -> str:
     cleaned = "".join(ch for ch in value.strip() if ch not in "\\/:*?\"<>|")
     return cleaned or "未命名漫画"
+
+
+def extract_synopsis(bible_text: str, *, max_len: int = 240) -> str:
+    """从故事圣经的「一句话核心」小节提取作品简介。
+
+    立项当刻该小节通常仍是空占位（``- ``），此时返回空串；后续创作阶段
+    在圣经里补齐核心后，重跑确定性回填即可把简介写入 ``_meta.json``。
+    只读本线自有产物，不跨线取数（见封面与简介契约 §3）。
+    """
+    lines = bible_text.splitlines()
+    collecting = False
+    picked: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            if collecting:
+                break
+            collecting = stripped.lstrip("#").strip() == "一句话核心"
+            continue
+        if not collecting:
+            continue
+        item = stripped.lstrip("-*").strip()
+        if item:
+            picked.append(item)
+    text = " ".join(picked).strip()
+    if len(text) > max_len:
+        text = text[: max_len - 1].rstrip() + "…"
+    return text
 
 
 def settings_markdown(title: str, args: argparse.Namespace) -> str:
@@ -124,6 +153,10 @@ def progress_markdown(title: str, args: argparse.Namespace, source_ready: bool) 
 - [ ] 第1话 页面图
 - [ ] 第1话 长图
 - [ ] 第1话 export_manifest.json
+
+## 作品封面
+- [ ] 竖版封面 prompt/job 包（出图/封面/prompt/cover_job.json）
+- [ ] 竖版封面 PNG 渲染并回填 _meta.json cover
 """
 
 
@@ -405,6 +438,18 @@ def main() -> int:
         source_record = {"path": str(target.relative_to(root)), "original_name": src.name}
         print(f"[ok] 源本/{src.name}")
 
+    write_if_absent(root / "_设置.md", settings_markdown(title, args))
+    write_if_absent(root / "_进度.md", progress_markdown(title, args, source_ready))
+    write_if_absent(root / "设定库" / "story_bible.md", story_bible(title, args))
+
+    # synopsis 取自本线已有产物 story_bible.md 的「一句话核心」。write_if_absent
+    # 尊重用户既有圣经，因此从磁盘上真正的文件（用户版或刚生成的占位）取数。
+    # 立项当刻该小节多为空，synopsis 先落空串，后续阶段确定性回填。
+    bible_path = root / "设定库" / "story_bible.md"
+    synopsis = ""
+    if bible_path.is_file():
+        synopsis = extract_synopsis(bible_path.read_text(encoding="utf-8"))
+
     meta = {
         "schema_version": 1,
         "kind": "comic_project",
@@ -415,6 +460,11 @@ def main() -> int:
         "mode": args.mode,
         "format": args.format,
         "source": source_record,
+        # 作品卡片字段：synopsis=一句话简介，cover=作品级竖版封面相对路径。
+        # cover 立项恒为 null，只有真正渲染出竖版 PNG 后由 build_cover_job.py
+        # --backfill 确定性回填；纯净机上封面步骤只产 prompt/job 包 + 合规留痕。
+        "synopsis": synopsis,
+        "cover": None,
         "rights": {
             "source_status": "original_or_user_provided",
             "font_status": "pending_before_publish",
@@ -422,9 +472,6 @@ def main() -> int:
         },
     }
 
-    write_if_absent(root / "_设置.md", settings_markdown(title, args))
-    write_if_absent(root / "_进度.md", progress_markdown(title, args, source_ready))
-    write_if_absent(root / "设定库" / "story_bible.md", story_bible(title, args))
     write_if_absent(root / "脚本" / "第1话" / "分话大纲.md", outline(title))
     write_if_absent(root / "脚本" / "第1话" / "panel_script.json", json.dumps(panel_script(title), ensure_ascii=False, indent=2) + "\n")
     write_if_absent(root / "出图" / "共享" / "identity_registry.json", json.dumps(identity_registry(), ensure_ascii=False, indent=2) + "\n")

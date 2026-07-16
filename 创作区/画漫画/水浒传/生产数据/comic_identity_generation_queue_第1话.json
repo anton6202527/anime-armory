@@ -3,9 +3,10 @@
   "kind": "comic_identity_generation_queue",
   "chapter": "第1话",
   "created_at": "2026-07-15T16:10:11+08:00",
-  "status": "paused_backend_unhealthy",
+  "status": "running",
   "backend": "内置 imagegen",
   "model": "GPT Image 2",
+  "backend_policy": "设定库/image_backend_policy.json",
   "attempt_policy": {
     "max_attempts_total_per_asset_variant": 2,
     "started_request_consumes_attempt": true,
@@ -13,7 +14,7 @@
     "ledger": "生产数据/comic_identity_attempt_ledger_第1话.json"
   },
   "circuit_breaker": {
-    "status": "retriggered",
+    "status": "cleared",
     "triggered_at": "2026-07-15T16:04:43+08:00",
     "reason": "同一图像通道连续两次 240 秒超时，均无有效 image_generation_end 图片事件",
     "evidence": [
@@ -32,12 +33,12 @@
         "error_class": "backend_timeout"
       }
     ],
-    "resume_condition": "内置 imagegen 的同模型、同风格锚、同提示词生产级重试仍在图片编辑端点发生网络错误；继续保持 GPT Image 2 / 内置 imagegen，不自动切换后端，须等待该端点出现可验证恢复证据后再做一次受控探针",
-    "action": "暂停全部尚未尝试资产，避免用新资产消耗健康探测成本",
-    "cleared_at": "2026-07-15T17:26:54+08:00",
+    "resume_condition": "已满足：同一 GPT Image 2 / 内置 imagegen、同一风格锚和 production-character-front 请求类别生成有效 3:4 PNG",
+    "action": "按优先级恢复宋仁宗 front 第1次正式尝试；其余资产等待当前项完成",
+    "cleared_at": "2026-07-16T10:36:44+08:00",
     "cleared_by": "生产数据/comic_identity_backend_health_第1话.json",
-    "cleared_by_probe_id": "e670437ff2601eeae2a2",
-    "cleared_reason": "reference_attached 探针实际生成有效 PNG；升级 Codex exec saved_path 解析后完成视觉、尺寸与 SHA 复核",
+    "cleared_by_probe_id": "84ca364005d3ad7585ee",
+    "cleared_reason": "内置 imagegen 生产级 reference-attached 人物 front 探针生成 1086×1448 有效 PNG，项目内路径、SHA、尺寸与视觉复核均已绑定",
     "retriggered_at": "2026-07-15T20:29:19+08:00",
     "retriggered_reason": "用户要求保持同一 GPT Image 2 / 内置 imagegen 后端、同一风格锚与同一提示词再试；重试仍因图片编辑端点网络错误失败且无成图，宋仁宗正式次数仍未消耗",
     "latest_evidence": [
@@ -70,9 +71,77 @@
         "image_generated": false,
         "asset_attempt_ledger_consumed": false,
         "health_manifest": "生产数据/comic_identity_backend_health_第1话.json"
+      },
+      {
+        "probe_id": "84ca364005d3ad7585ee",
+        "retry_of_probe_id": "b5fdb6e22bca36bce368",
+        "retry_ordinal": 3,
+        "generation_kind": "backend_health",
+        "probe_profile": "production-character-front",
+        "production_request_class": "historical_character_front",
+        "probe_scope": "reference_attached",
+        "access_path": "内置 imagegen",
+        "model": "GPT Image 2",
+        "style_anchor_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+        "prompt_sha256": "cd533a0523c2baab86c9c80b6318e48e78143e3707f3bab1f8d7479db0f5f1d9",
+        "status": "succeeded",
+        "image_generated": true,
+        "artifact_path": "生产数据/backend_health/BACKEND_HEALTH__probe_production-character-front_builtin-imagegen-retry3__20260716T103055.png",
+        "artifact_sha256": "10278d86d89101c8c1c835947bd32191dbdc53781e99277b2ec87e56a967a5da",
+        "asset_attempt_ledger_consumed": false,
+        "health_manifest": "生产数据/comic_identity_backend_health_第1话.json"
       }
     ]
   },
+  "completed": [
+    {
+      "priority": 3,
+      "asset_id": "CHAR_EMPEROR_RENZONG",
+      "variant": "front,face",
+      "kind": "model_pack",
+      "panel_occurrences": 7,
+      "attempts_used": {
+        "front": 1,
+        "face": 1
+      },
+      "attempts_remaining": {
+        "front": 1,
+        "face": 1
+      },
+      "status": "ready",
+      "artifacts": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+          "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+          "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898"
+        }
+      ],
+      "model_pack_signoff": "生产数据/comic_model_pack_signoffs/CHAR_EMPEROR_RENZONG.json"
+    },
+    {
+      "priority": 4,
+      "asset_id": "PROP_FUMO_SEALS",
+      "variant": "anchor",
+      "kind": "anchor",
+      "panel_occurrences": 5,
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "ready",
+      "artifact": {
+        "path": "出图/共享/图片/PROP_FUMO_SEALS__anchor.png",
+        "sha256": "ace7c3338ab22e4d9ead44491548bbd21cd7ff41ff28e50eebe51947483e5170",
+        "width": 1124,
+        "height": 1405,
+        "ratio": "4:5"
+      },
+      "successful_attempt_id": "30e4fd161b341d6826f7"
+    }
+  ],
   "exhausted": [
     {
       "priority": 1,
@@ -137,38 +206,30 @@
   ],
   "pending": [
     {
-      "priority": 3,
-      "asset_id": "CHAR_EMPEROR_RENZONG",
-      "variant": "front",
-      "kind": "view",
-      "panel_occurrences": 7,
-      "attempts_used": 0,
-      "attempts_remaining": 2,
-      "status": "paused_backend_unhealthy",
-      "followups_after_success": [
-        "face",
-        "model_pack_signoff"
-      ]
-    },
-    {
-      "priority": 4,
-      "asset_id": "PROP_FUMO_SEALS",
-      "variant": "anchor",
-      "kind": "anchor",
-      "panel_occurrences": 5,
-      "attempts_used": 0,
-      "attempts_remaining": 2,
-      "status": "paused_backend_unhealthy"
-    },
-    {
       "priority": 5,
       "asset_id": "MON_SNOW_SERPENT",
       "variant": "front",
       "kind": "view",
       "panel_occurrences": 4,
-      "attempts_used": 0,
-      "attempts_remaining": 2,
-      "status": "paused_backend_unhealthy",
+      "attempts_used": 2,
+      "attempts_remaining": 0,
+      "status": "running_attempt_2",
+      "current_attempt": {
+        "attempt_id": "9e1f7ec3cdc038a0d419",
+        "attempt": 2,
+        "max_attempts_total": 2,
+        "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__front_builtin-imagegen__20260716T153024257496.md",
+        "prompt_sha256": "a625db5d2e5e8b7aaaa0ef60de5d1ab2f5193095230a96eb6d93482e7d0e6dda",
+        "status": "started",
+        "retry_of_attempt_id": "9d74eef9d5edc525261e"
+      },
+      "previous_attempt": {
+        "attempt_id": "9d74eef9d5edc525261e",
+        "attempt": 1,
+        "status": "failed",
+        "error_class": "builtin_network_error",
+        "image_generated": false
+      },
       "followups_after_success": [
         "three_quarter",
         "face",

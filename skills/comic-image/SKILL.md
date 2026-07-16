@@ -24,6 +24,21 @@ description: 画漫画出图阶段。Builds strict per-panel production contract
 - `生产数据/codex_reference_bundles/第N话/Pxxx.json`：Codex 真实图片参考入参证据。
 - `生产数据/panel_qc/第N话/Pxxx.json`：每格落盘后即时 deterministic QC，记录 PNG/尺寸/参考输入/疑似烘焙气泡问题；人工视觉判断仍需现场复核。
 - `_进度.md`：job 包完成标 `出图包=✅`；面板图齐全标 `出图=✅`。
+- `出图/封面/prompt/cover_job.json`：作品级竖版封面（约 9:16 / 5:7）prompt/job 包，复用项目风格锚 + 角色定妆同源参考。
+- `_meta.json` 的 `cover`：作品卡片封面，作品根相对路径；渲染出竖版 PNG 后才确定性回填，否则恒为 `null`。
+
+## 作品封面（作品卡片）
+
+作品列表卡片要展示封面缩略图 + 简介。简介 `synopsis` 由立项从 `设定库/story_bible.md` 的「一句话核心」写入 `_meta.json`；封面 `cover` 由本步骤产出。
+
+```bash
+# 1) 产出竖版封面 prompt/job 包（纯净机降级：只产包 + 合规留痕，cover 保持 null，不硬阻断主流程）
+python3 skills/comic-image/scripts/build_cover_job.py "创作区/画漫画/作品名"
+# 2) 用本项目生图后端渲染出一张竖版 PNG（放进作品根内，如 出图/封面/cover.png）后确定性回填 cover
+python3 skills/comic-image/scripts/build_cover_job.py "创作区/画漫画/作品名" --backfill 出图/封面/cover.png
+```
+
+封面「由什么生成」以 `_设置.md` 的 `生图模型`（具体模型名，如 `GPT Image 2`）为准，渠道/CLI（`生图渠道`）作为访问入口分列。job 包只声明生成契约、不调用后端；`--backfill` 校验 PNG 合法且为竖版（`height>width`）后回填 `cover` 并回写 `_进度.md` 的作品封面项。
 
 ## 怎么跑
 

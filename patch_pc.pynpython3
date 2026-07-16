@@ -1,0 +1,32 @@
+import sys
+import re
+
+with open(sys.argv[1], 'r') as f:
+    content = f.read()
+
+new_lines = '''    if kind not in {\"structured_human_review\", \"structured_executor_visual_review\"}:
+        errors.append(f\"evidence_kind={kind or 'missing'}\")
+    review_kind = str(value.get(\"review_kind\") or \"\").strip().lower()
+    expected_review_kind = (
+        \"executor_visual\"
+        if kind == \"structured_executor_visual_review\"
+        else \"human\"
+    )
+    if review_kind and review_kind != expected_review_kind:
+        errors.append(\"review_kind_mismatch\")
+    review_kind = review_kind or expected_review_kind
+    if review_kind == \"executor_visual\":
+        if not _executor_visual_review_authorized(root):
+            errors.append(\"executor_visual_review_not_authorized_by_project_setting\")
+        if str(value.get(\"reviewer_role\") or \"\").strip() != \"ai_visual_executor\":
+            errors.append(\"executor_visual_reviewer_role_missing_or_mismatch\")
+        if value.get(\"human_signoff\") is not False:
+            errors.append(\"executor_visual_human_signoff_must_be_false\")
+    elif value.get(\"human_signoff\") is False:
+        errors.append(\"human_review_cannot_disclaim_human_signoff\")'''
+
+content = content.replace('    if kind not in {\"structured_human_review\", \"structured_executor_visual_review\"}:
+        errors.append(f\"evidence_kind={kind or \'missing\\'}\")', new_lines)
+
+with open(sys.argv[1], 'w') as f:
+    f.write(content)

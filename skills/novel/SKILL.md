@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3143 | 目录文本总行数 67543
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3145 | 目录文本总行数 68250
 
 # novel — 小说工坊调度入口
 
@@ -130,6 +130,7 @@ python3 skills/novel/scripts/import_novel.py "<路径或URL>"
 脚本行为：
 - 自动从文件名、URL、HTML title 或正文首行推断书名，落到 `创作区/写小说/<书名>/`。
 - 写入 `原作.txt`、`小说/<书名>.txt`、可用时写 `小说/<书名>.docx`、`小说/source_manifest.json`、`_meta.json`、`_设置.md`、`_进度.md`。
+- `_meta.json` 含作品卡片字段 `synopsis`（导入型作品无 premise，留空待后续回填，不阻断纳管）与 `cover`（纯文本线无图片产物，恒为 `null`，桌面卡片自动用产线图标占位）。
 - `_进度.md` 使用 import 阶段表，`novel-progress` 与 `flow.py` 能直接读出下一步，不再把导入项目误判为普通章节矩阵。
 - 本地 `.txt/.md/.docx` 可直接纳管；通用 URL 必须加 `--i-have-rights`，Project Gutenberg / Wikisource 自动记为 `public-domain`，但只写入来源侧公版依据和辖区提示；跨地区发行或商用前必须补 `--distribution-regions`/权利复核；已知付费墙站拒抓。
 - 如果目标作品已存在，交互环境会提示 `新建版本 / 覆盖 / 使用现有 / 取消`。非交互环境不会自动覆盖，必须显式传：

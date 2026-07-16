@@ -461,20 +461,40 @@ def _resolve_shared_png(root: Path, rel: str) -> Optional[Path]:
 
 
 def _asset_face_pngs(asset: Dict[str, Any]) -> List[str]:
-    """资产 reference_group / scale_reference 里所有 png 相对路径（faceless 像素核验目标）。"""
-    rg = asset.get("reference_group")
+    """Return unique landed PNGs from formal visual-reference slots only.
+
+    Provenance dictionaries can contain ``source_path`` entries (for example a
+    style anchor used to generate a scene).  Recursing through every value
+    incorrectly attributes those source images to the asset and can duplicate
+    evidence when ``primary`` and ``front`` alias the same PNG.  A dict with a
+    ``path`` is therefore a terminal reference item; audit metadata below it is
+    never traversed.
+    """
     out: List[str] = []
+    seen: Set[str] = set()
+
+    def add(value: Any) -> None:
+        rel = str(value or "").strip()
+        if rel.lower().endswith(".png") and rel not in seen:
+            seen.add(rel)
+            out.append(rel)
+
     def walk(node: Any) -> None:
         if isinstance(node, str):
-            if node.lower().endswith(".png"):
-                out.append(node)
+            add(node)
         elif isinstance(node, dict):
-            for v in node.values():
+            if str(node.get("path") or "").strip():
+                add(node.get("path"))
+                return
+            for key, v in node.items():
+                if key in {"derivation", "human_review", "visual_review", "face_consistency", "provenance"}:
+                    continue
                 walk(v)
         elif isinstance(node, list):
             for v in node:
                 walk(v)
-    walk(rg)
+    for key in ("reference_group", "reference_atlas", "scene_atlas", "scale_reference"):
+        walk(asset.get(key))
     return out
 
 
@@ -4767,6 +4787,25 @@ def _png_face_ratio_and_size(face_mod: Any, abspath: str) -> Tuple[Optional[floa
     return ratio, min_dim
 
 
+def _character_form_is_non_human(char: Mapping[str, Any], form: Mapping[str, Any]) -> bool:
+    """Whether human-face bbox ratios are inapplicable to this identity form.
+
+    InsightFace/Haar may return a tiny false-positive box inside a tiger/wolf
+    face.  Resolution is still meaningful for creature anchors, but the human
+    face-area floor is not.  Keep this registry-driven and conservative so a
+    fantasy-flavoured human is not exempted merely because its story mentions
+    a demon.
+    """
+    dna = form.get("character_dna") if isinstance(form.get("character_dna"), Mapping) else {}
+    text = " ".join(str(value or "") for value in (
+        char.get("id"), char.get("name"), char.get("scope"), char.get("face_policy"),
+        form.get("anchor_phrase"), form.get("face_policy"),
+        dna.get("face"), dna.get("hair"), dna.get("texture"),
+    ))
+    explicit_terms = tuple(term for term in NON_HUMAN_FACE_ANCHOR_TERMS if term != "不要把")
+    return any(term in text for term in explicit_terms)
+
+
 def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
     """① 脸部锚信噪比门：对已落档的 face_anchor/表情/脸部特写参考，校验脸占比 + 裁切分辨率。
     核心/长线角色 findings=block，普通角色 warn。缺图不报（那是 gate/coverage 的事，本门只判**已存在图**的质量）。"""
@@ -4787,12 +4826,22 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
             if not isinstance(form, Mapping):
                 continue
             fm = str(form.get("form") or "").strip()
+            non_human = _character_form_is_non_human(ch, form)
+            seen_paths: Set[str] = set()
             for label, rel in _face_anchor_ref_items(form):
+                normalized_rel = rel.replace("\\", "/").lstrip("./")
+                if normalized_rel in seen_paths:
+                    continue
+                seen_paths.add(normalized_rel)
                 abspath = rel if os.path.isabs(rel) else str(root / rel)
                 if not os.path.isfile(abspath):
                     continue  # 缺图非本门职责
                 res["checked"] += 1
                 ratio, min_dim = _png_face_ratio_and_size(face_mod, abspath)
+                if non_human:
+                    # Human detectors are not calibrated for creature heads;
+                    # retain the pixel-size floor but ignore their bbox ratio.
+                    ratio = None
                 reason = weak_face_anchor_reason(ratio, min_dim, core=core)
                 if reason:
                     level = "block" if core else "warn"

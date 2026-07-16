@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-15T16:06:10",
+  "characters": [
+    "CHAR_ABBOT_SHANGQING"
+  ],
+  "views": [
+    "front"
+  ],
+  "backend": "codex",
+  "attempted_backends": [
+    "codex"
+  ],
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_views_第1话__20260715T160610002549.json",
+  "previous_manifest_sha256": "21d3e068bf5774a2b842131bd97875c742b7f3112f66f99f273f4159f454b229",
+  "contact_sheet": "生产数据/comic_identity_views_第1话_contact_sheet.jpg",
+  "generated": 0,
+  "skipped": 0,
+  "failed": 1,
+  "items": [
+    {
+      "ts": "2026-07-15T16:06:09",
+      "status": "character_view_failed",
+      "ref_id": "CHAR_ABBOT_SHANGQING",
+      "view": "front",
+      "anchor_path": "",
+      "anchor_kind": "text_prompt_seed",
+      "backend": "codex",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "累计尝试次数已达授权上限 2/2；未发起新的生图请求"
+    }
+  ]
+}

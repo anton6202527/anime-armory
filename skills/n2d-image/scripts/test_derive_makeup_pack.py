@@ -333,8 +333,10 @@ def test_derive_project_splits_five_angle_turnaround_with_rear_three_quarter(tmp
     form = json.loads(reg_path.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
     rear = form["reference_group"]["rear_three_quarter"]
     back = form["reference_group"]["back"]
+    assert rear["derivation"]["crop_box"] == [600, 0, 800, 1000]
     assert rear["derivation"]["crop_box"][0] < back["derivation"]["crop_box"][0]
     assert rear["status"] == back["status"] == "ready"
+    assert Image.open(root / rear["path"]).size == (562, 1000)
 
 
 def test_turnaround_split_plan_does_not_treat_new_rear_slot_as_five_column_evidence() -> None:
@@ -485,6 +487,57 @@ def test_derive_project_face_anchor_only_does_not_overwrite_views(tmp_path: Path
     item = form["reference_group"]["face_anchor_refs"][0]
     assert item["derivation"]["source_sha256"] == derive_makeup_pack._sha256(front)
     assert form["reference_atlas"]["face_anchor_refs"][0]["derivation"]["source_sha256"] == derive_makeup_pack._sha256(front)
+
+
+def test_derive_project_can_make_independent_base_expression_from_front(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    front = image_dir / "CHAR_TIGER_常态.png"
+    front.parent.mkdir(parents=True, exist_ok=True)
+    plate = Image.new("RGB", (800, 1200), (210, 210, 210))
+    plate.paste(Image.new("RGB", (280, 760), (120, 70, 30)), (260, 80))
+    plate.paste(Image.new("RGB", (160, 180), (245, 230, 210)), (320, 100))
+    plate.save(front)
+    expression_rel = "出图/共享/图片/CHAR_TIGER_常态_表情_克制.png"
+    face_rel = "出图/共享/图片/CHAR_TIGER_常态_脸部特写.png"
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(json.dumps({
+        "characters": [{"id": "CHAR_TIGER", "forms": [{
+            "form": "常态", "asset_key": "CHAR_TIGER__常态",
+            "reference_group": {
+                "front": {"path": "出图/共享/图片/CHAR_TIGER_常态.png", "status": "ready"},
+                "face_anchor_refs": [{"path": face_rel, "status": "planned"}],
+                "expressions": [{"emotion": "克制", "path": expression_rel, "status": "planned"}],
+            },
+            "reference_atlas": {
+                "face_anchor_refs": [{"path": face_rel, "status": "planned"}],
+                "expression_refs": [{"emotion": "克制", "path": expression_rel, "status": "planned"}],
+            },
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    # Build the tight anchor first, then the distinct head-and-shoulders neutral expression.
+    derive_makeup_pack.derive_project(
+        root, write=True, asset_keys={"CHAR_TIGER__常态"}, views={"face_anchor_refs"}
+    )
+    summary = derive_makeup_pack.derive_project(
+        root, write=True, asset_keys={"CHAR_TIGER__常态"}, views={"expression"}
+    )
+
+    assert [item["method"] for item in summary["derived"]] == ["front_expression_crop"]
+    expression = root / expression_rel
+    face_anchor = root / face_rel
+    assert expression.exists() and Image.open(expression).size == (1024, 1024)
+    assert derive_makeup_pack._sha256(expression) != derive_makeup_pack._sha256(face_anchor)
+    data = json.loads(registry_path.read_text(encoding="utf-8"))
+    form = data["characters"][0]["forms"][0]
+    rg_item = form["reference_group"]["expressions"][0]
+    atlas_item = form["reference_atlas"]["expression_refs"][0]
+    assert rg_item["status"] == atlas_item["status"] == "ready"
+    assert rg_item["derivation"]["source_path"].endswith("CHAR_TIGER_常态.png")
+    assert rg_item["derivation"]["crop_box"] != form["reference_group"]["face_anchor_refs"][0]["derivation"]["crop_box"]
 
 
 def test_derive_project_can_tighten_expression_refs_without_overwriting_source(tmp_path: Path) -> None:

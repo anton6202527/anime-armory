@@ -20,6 +20,7 @@ if _CRAFT not in sys.path:
     sys.path.insert(0, _CRAFT)
 import contract  # noqa: E402
 import locale_matrix  # noqa: E402
+import meta_card  # noqa: E402
 
 SUBDIRS = [
     "需求", "创意", "脚本", "设定库", "配音",
@@ -145,6 +146,10 @@ def main():
     meta = {
         "schema_version": 1, "kind": "ad_project", "project_id": f"ad_{uuid.uuid4().hex[:16]}",
         "line": "ad", "title": title, "brand": args.brand,
+        # 作品卡片字段：synopsis 立项先用默认广告目标占位，brief 产出后由
+        # meta_card.backfill_synopsis 确定性回填 key_message；cover 出封面 PNG 前保持 null。
+        "synopsis": meta_card.initial_synopsis(contract.DEFAULT_SETTINGS["广告目标"]),
+        "cover": None,
         "image_model": contract.DEFAULT_SETTINGS["生图模型"],
         "image_channel": contract.DEFAULT_SETTINGS["生图渠道"],
         "video_model": video_model,

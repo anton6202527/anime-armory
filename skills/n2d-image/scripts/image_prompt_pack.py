@@ -2777,8 +2777,14 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
             )
             rg["expressions"].append({**expression, "emotion": "克制"})
         else:
+            # ``named_minimal`` still needs distinct pixels for its neutral
+            # expression/face evidence. Reusing ``front`` here made strict
+            # hash-bound review impossible because one PNG occupied both the
+            # front and expression slots. Bind the fallback to the independently
+            # cropped face anchor that this tier already plans.
+            face_anchor = dict((rg.get("face_anchor_refs") or [{}])[0])
             rg["expressions"].append({
-                **ref_item(root, source, key="face_anchor_refs", source=source),
+                **face_anchor,
                 "emotion": "基础",
             })
     base_views = {
@@ -3039,6 +3045,30 @@ def scene_lighting_signature(cfg: Mapping[str, Any], constraints: Mapping[str, A
     }
 
 
+NON_HANDHELD_PROP_MARKERS = (
+    "囚车", "马车", "车辆", "车厢", "木车", "辇", "轿", "飞舟", "灵舟", "船",
+    "水缸", "床", "桌", "门", "柜", "建筑", "祭坛", "牌坊", "大型",
+)
+
+
+def prop_is_non_handheld(cfg: Mapping[str, Any]) -> bool:
+    """Whether a prop needs structural reverse/scale views instead of an in-hand board."""
+    explicit = str(cfg.get("reference_view_policy") or "").strip().lower()
+    if explicit in {"non_handheld", "large_prop", "vehicle", "structural"}:
+        return True
+    if explicit in {"handheld", "portable", "wielding"}:
+        return False
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    blob = "；".join(
+        str(value or "")
+        for value in (
+            cfg.get("name"), cfg.get("positive"), cfg.get("profile"),
+            cfg.get("current_state"), constraints.get("structure"),
+        )
+    )
+    return any(marker in blob for marker in NON_HANDHELD_PROP_MARKERS)
+
+
 def build_asset_registry(root: Path) -> Dict[str, Any]:
     assets: List[Dict[str, Any]] = []
     for aid, cfg in ASSET_DEFS.items():
@@ -3052,14 +3082,15 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
                 "floor_plan": asset_ref_existing(root, [path_name + "_平面图", path_name]),
             })
         if cfg["type"] in {"prop", "weapon"}:
-            rg.update({
-                # These are distinct production views. A landed clean primary
-                # asset plate cannot stand in for a scale board or an in-hand
-                # contact/ergonomics board; reusing it silently shrinks the
-                # generation plan and leaves downstream contact cues missing.
-                "scale_ref": asset_ref_existing(root, [path_name + "_比例"]),
-                "in_hand": asset_ref_existing(root, [path_name + "_手持"]),
-            })
+            # These are distinct production views. A landed clean primary asset
+            # plate cannot stand in for a scale/contact board. Portable props
+            # and weapons need an in-hand ergonomics board; vehicles, furniture
+            # and architecture-like props instead need a reverse structural view.
+            rg["scale_ref"] = asset_ref_existing(root, [path_name + "_比例"])
+            if cfg["type"] == "prop" and prop_is_non_handheld(cfg):
+                rg["reverse"] = asset_ref_existing(root, [path_name + "_反面", path_name + "_反打"])
+            else:
+                rg["in_hand"] = asset_ref_existing(root, [path_name + "_手持"])
         constraints = dict(cfg.get("constraints") or {}) if isinstance(cfg.get("constraints"), Mapping) else {}
         if cfg["type"] in {"scene", "location"} and not constraints.get("lighting_signature"):
             lighting_signature = scene_lighting_signature(cfg, constraints)

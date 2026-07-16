@@ -159,11 +159,64 @@
       "image_generated": false,
       "error_class": "builtin_network_error",
       "error": "network error while sending request to the built-in image edit endpoint"
+    },
+    {
+      "probe_id": "84ca364005d3ad7585ee",
+      "retry_of_probe_id": "b5fdb6e22bca36bce368",
+      "retry_ordinal": 3,
+      "started_at": "2026-07-16T10:30:55+08:00",
+      "status": "succeeded",
+      "reason": "跨日后用户明确要求继续；保持同一 GPT Image 2、内置 imagegen、风格锚和逐字一致提示词执行一次受控生产级恢复探针",
+      "model": "GPT Image 2",
+      "access_path": "内置 imagegen",
+      "execution_mode": "builtin_imagegen_tool",
+      "requested_probe_mode": "reference-attached",
+      "probe_scope": "reference_attached",
+      "probe_profile": "production-character-front",
+      "production_request_class": "historical_character_front",
+      "calibration_only": true,
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "timeout_policy": "managed_by_builtin_tool",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/BACKEND_HEALTH__probe_production-character-front_builtin-imagegen-retry3__20260716T103055.md",
+      "prompt_sha256": "cd533a0523c2baab86c9c80b6318e48e78143e3707f3bab1f8d7479db0f5f1d9",
+      "external_status": "operational",
+      "external_status_url": "https://status.openai.com/",
+      "external_status_checked_at": "2026-07-16T10:29:45+08:00",
+      "asset_attempt_ledger_consumed": false,
+      "artifact_policy": "success requires copy into project backend_health directory with SHA and dimensions",
+      "finished_at": "2026-07-16T10:36:44+08:00",
+      "duration_sec_observed": 349.0,
+      "image_generated": true,
+      "artifact_path": "生产数据/backend_health/BACKEND_HEALTH__probe_production-character-front_builtin-imagegen-retry3__20260716T103055.png",
+      "artifact_sha256": "10278d86d89101c8c1c835947bd32191dbdc53781e99277b2ec87e56a967a5da",
+      "dimensions": {
+        "width": 1086,
+        "height": 1448,
+        "aspect_ratio": "3:4"
+      },
+      "visual_review": {
+        "status": "passed",
+        "reviewer": "Codex制作代理",
+        "reviewed_at": "2026-07-16T11:09:52+08:00",
+        "checks": [
+          "单一匿名北宋官员",
+          "全身正面中性站姿",
+          "头冠、双手、鞋履完整",
+          "中性背景且无文字水印",
+          "继承风格锚线色材质但未复制其人物与场景"
+        ]
+      }
     }
   ],
   "schema_version": 1,
   "kind": "comic_identity_backend_health",
   "chapter": "第1话",
-  "updated_at": "2026-07-15T20:29:19+08:00",
-  "latest_status": "failed"
+  "updated_at": "2026-07-16T11:09:52+08:00",
+  "latest_status": "succeeded"
 }

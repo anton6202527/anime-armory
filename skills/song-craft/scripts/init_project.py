@@ -45,6 +45,36 @@ def slug(s):
     return s or "新歌待定"
 
 
+def build_synopsis(theme, genre, mood, out_root):
+    """作品卡片一句话简介（≤240 字）。
+
+    song 是纯音频线、无图片产物：卡片只固化 synopsis，不出封面。
+    取数优先级（立项当刻能组一句就组，否则占位后续回填）：
+      1) 创作/song_brief.json 的核心承诺（core_promise，立项后由 song_brief 回填时优先）
+      2) 立项 meta 的 theme + genre/mood 组一句
+    """
+    brief_path = os.path.join(out_root, "创作", "song_brief.json")
+    if os.path.exists(brief_path):
+        try:
+            with open(brief_path, encoding="utf-8") as f:
+                promise = (json.load(f).get("core_promise") or "").strip()
+            if promise and "待填写" not in promise:
+                return promise[:240]
+        except Exception:
+            pass
+    theme = (theme or "").strip()
+    tags = "·".join(x for x in ((genre or "").strip(), (mood or "").strip()) if x)
+    if theme and tags:
+        text = f"{theme}（{tags}）"
+    elif theme:
+        text = theme
+    elif tags:
+        text = tags
+    else:
+        text = "待补：作品简介（可由 song_brief 核心承诺回填）"
+    return text[:240]
+
+
 def build_blueprint(title, meta):
     secs = "\n".join(f"- [{s}]" for s in meta["structure"])
     duration = f"{meta['target_duration_seconds']}s" if meta.get("target_duration_seconds") else "未定"
@@ -208,6 +238,10 @@ def main():
         "ai_audio_usage": args.ai_audio_usage,
         "vocal_source": args.vocal_source or None,
         "rights_status": "original",
+        # 作品卡片字段：synopsis=一句话简介；cover=作品封面。
+        # song 纯音频线无图片产物 → cover 恒为 null，桌面卡片回退产线图标占位。
+        "synopsis": build_synopsis(args.theme, args.genre, args.mood, out_root),
+        "cover": None,
         "created_at": date.today().isoformat(),
     }
     settings = {

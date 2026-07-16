@@ -391,12 +391,35 @@ def wordcount_band_for_words_per_chapter(words_per_chapter):
     return [max(1, int(round(lo * 0.8))), max(1, int(round(hi * 1.2)))]
 
 # ── Metadata Helpers ──────────────────────────────────────────────────────────
-def base_meta(kind, *, outputs, rights_status, title=None):
+SYNOPSIS_MAX_CHARS = 240
+
+
+def clip_synopsis(text, limit=SYNOPSIS_MAX_CHARS):
+    """作品卡片 synopsis：归一为 ≤limit 字的一段简介。
+
+    空值（导入型作品 premise 未定）返回 ""，表示留空待回填——不阻断立项。
+    超长按字符裁剪并补省略号；桌面卡片自身还会做两行截断。
+    """
+    s = " ".join(str(text or "").split()).strip()
+    if len(s) <= limit:
+        return s
+    return s[: limit - 1].rstrip() + "…"
+
+
+def base_meta(kind, *, outputs, rights_status, title=None, synopsis=None):
+    """作品根 `_meta.json` 的基座字段（novel 家族各线立项共用）。
+
+    `synopsis`：作品卡片一句话简介，novel 原创立项映射 premise（logline）传入；
+    导入/未定项目留空（""）待回填。`cover`：novel 是纯文本线、无图片产物，恒为
+    None，桌面卡片自动回退产线图标占位（不新增出图步骤）。
+    """
     from datetime import date
     return {
         "schema_version": 1,
         "kind": kind,
         "title": title,
+        "synopsis": clip_synopsis(synopsis),
+        "cover": None,
         "rights_status": rights_status,
         "outputs": list(outputs),
         "created_at": date.today().isoformat(),

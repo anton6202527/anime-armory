@@ -381,6 +381,31 @@ def test_landed_prop_primary_does_not_impersonate_scale_or_in_hand_views(tmp_pat
     }
 
 
+def test_large_vehicle_prop_uses_reverse_structure_view_not_absurd_in_hand_board(tmp_path: Path) -> None:
+    old_defs = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "PROP_CART": {
+                "type": "prop",
+                "name": "翻覆囚车",
+                "path_name": "定妆_道具_翻覆囚车",
+                "positive": "唐代双轮粗木囚车残骸",
+                "constraints": {"structure": "一辆翻覆木车"},
+                "drift": [],
+            }
+        }
+        cart = image_prompt_pack.build_asset_registry(tmp_path)["assets"][0]
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_defs
+
+    assert "in_hand" not in cart["reference_group"]
+    assert cart["reference_group"]["reverse"] == {
+        "path": "出图/共享/图片/定妆_道具_翻覆囚车_反面.png",
+        "status": "planned",
+    }
+    assert cart["reference_group"]["scale_ref"]["path"].endswith("_比例.png")
+
+
 def test_clip_assets_do_not_promote_offscreen_presence() -> None:
     clip = {
         "object_ids": ["WEAPON_TEST"],
@@ -1231,6 +1256,25 @@ def test_full_reference_group_prefers_tight_expression_refs(tmp_path: Path) -> N
     assert rg["expressions"][0]["path"].endswith("_表情_克制_脸锚裁切.png")
     assert atlas["expression_refs"][0]["path"] == rg["expressions"][0]["path"]
     assert rg["face_anchor_refs"][0]["path"].endswith("_表情_克制_脸锚裁切.png")
+
+
+def test_named_minimal_uses_distinct_face_anchor_for_neutral_expression(tmp_path: Path) -> None:
+    cfg = {
+        "asset_key": "CHAR_MINIMAL__常态",
+        "name": "短线角色",
+        "form": "常态",
+        "library_tier": "named_minimal",
+    }
+
+    rg, atlas = image_prompt_pack.full_reference_group(tmp_path, "CHAR_MINIMAL", cfg)
+
+    face_anchor = rg["face_anchor_refs"][0]
+    expression = rg["expressions"][0]
+    assert expression["emotion"] == "基础"
+    assert expression["path"] == face_anchor["path"]
+    assert expression["path"].endswith("_脸部特写_脸锚裁切.png")
+    assert expression["path"] != rg["front"]["path"]
+    assert atlas["expression_refs"][0]["path"] == expression["path"]
 
 
 def test_core_reference_group_marks_new_turnaround_as_five_angle_board(tmp_path: Path) -> None:

@@ -40,8 +40,11 @@ HALF_BODY_CROP = (0.08, 0.02, 0.92, 0.68)
 FACE_ANCHOR_CROP = (0.38, 0.11, 0.57, 0.31)
 SUBJECT_MASK_DISTANCE = 70
 EXPRESSION_CROP_METHOD = "expression_face_crop"
+BASE_EXPRESSION_CROP_METHOD = "front_expression_crop"
 EXPRESSION_TIGHT_SUFFIX = "脸锚裁切"
 EXPRESSION_TIGHT_TARGET_SIZE = (1024, 1024)
+BASE_EXPRESSION_TARGET_SIZE = (1024, 1024)
+BASE_EXPRESSION_LABELS = {"基础", "克制", "平静", "冷静", "中性", "neutral", "resting"}
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -243,6 +246,44 @@ def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
     )
 
 
+def _base_expression_crop_box(img: Image.Image) -> tuple[int, int, int, int]:
+    """Build an independent head-and-shoulders crop for neutral expressions.
+
+    A neutral/controlled expression is already present in an accepted front
+    plate. Re-generating it needlessly risks identity, stripe, accessory, or
+    costume drift. This crop deliberately has a wider field of view than the
+    canonical tight face anchor, so the two deliverables are independent pixel
+    assets while retaining exact same-source identity.
+    """
+    width, height = img.size
+    left, top, right, bottom = _front_crop_box(img, "face_anchor_refs")
+    side = min(width, height, max(128, round(max(right - left, bottom - top) * 2.0)))
+    center_x = (left + right) / 2
+    center_y = (top + bottom) / 2 + side * 0.08
+    crop_left = round(center_x - side / 2)
+    crop_top = round(center_y - side / 2)
+    crop_left = max(0, min(width - side, crop_left))
+    crop_top = max(0, min(height - side, crop_top))
+    return crop_left, crop_top, crop_left + side, crop_top + side
+
+
+def _save_base_expression_crop(src: Path, dst: Path) -> list[int]:
+    img = Image.open(src).convert("RGB")
+    box = _base_expression_crop_box(img)
+    out = ImageOps.fit(
+        img.crop(box), BASE_EXPRESSION_TARGET_SIZE,
+        method=Image.Resampling.LANCZOS, centering=(0.5, 0.5),
+    )
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    out.save(dst)
+    return list(box)
+
+
+def _is_base_expression(emotion: str) -> bool:
+    value = str(emotion or "").strip().lower()
+    return value in BASE_EXPRESSION_LABELS
+
+
 def _save_turnaround_split(
     src: Path,
     dst: Path,
@@ -254,9 +295,13 @@ def _save_turnaround_split(
     img = Image.open(src).convert("RGB")
     width, height = img.size
     column_width = width / float(column_count)
-    inset = round(column_width * 0.06)
-    left = round(column_width * column_index) + inset
-    right = round(column_width * (column_index + 1)) - inset
+    # Do not inset equal-width board columns. Generated limbs and boots often
+    # extend to the nominal split boundary; trimming 6% from both sides cut off
+    # hands/feet on otherwise valid five-angle sheets. Neighbouring columns are
+    # already separated by the neutral studio gap, so the exact boundary is the
+    # safest deterministic crop before aspect-ratio padding.
+    left = round(column_width * column_index)
+    right = round(column_width * (column_index + 1))
     box = (left, 0, right, height)
     crop = img.crop(box)
     out = ImageOps.pad(crop, target_size, method=Image.Resampling.LANCZOS, color=(18, 22, 26))
@@ -527,7 +572,15 @@ def derive_project(
                 })
             )
             if turnaround_requested and turn_ready and turn_rel and turn_path.exists():
-                target_size = Image.open(turn_path).size
+                with Image.open(turn_path) as opened:
+                    turn_width, turn_height = opened.size
+                if front_rel and front_path.exists():
+                    with Image.open(front_path) as opened:
+                        target_size = opened.size
+                else:
+                    # A wide turnaround board must split into portrait assets,
+                    # not wide canvases with a tiny figure and huge side bars.
+                    target_size = (max(1, round(turn_height * 9 / 16)), turn_height)
                 source_sha = _sha256(turn_path)
                 split_plan, column_count = _turnaround_split_plan(form)
                 if front_from_turnaround and front_rel and (not requested_views or "front" in requested_views):
@@ -540,13 +593,12 @@ def derive_project(
                                 turn_path, dst, 0, target_size, column_count=column_count
                             )
                         else:
-                            column_width = target_size[0] / column_count
-                            inset = round(column_width * 0.06)
+                            column_width = turn_width / column_count
                             crop_box = [
-                                inset,
                                 0,
-                                round(column_width) - inset,
-                                target_size[1],
+                                0,
+                                round(column_width),
+                                turn_height,
                             ]
                         deriv = _derivation(TURNAROUND_FRONT_METHOD, turn_rel, source_sha, crop_box)
                         rg["front"] = _ready_item(rg.get("front"), front_rel, deriv, dst if write else None)
@@ -579,13 +631,12 @@ def derive_project(
                             turn_path, dst, column_index, target_size, column_count=column_count
                         )
                     else:
-                        column_width = target_size[0] / column_count
-                        inset = round(column_width * 0.06)
+                        column_width = turn_width / column_count
                         crop_box = [
-                            round(column_width * column_index) + inset,
+                            round(column_width * column_index),
                             0,
-                            round(column_width * (column_index + 1)) - inset,
-                            target_size[1],
+                            round(column_width * (column_index + 1)),
+                            turn_height,
                             ]
                     deriv = _derivation(method, turn_rel, source_sha, crop_box)
                     rg[key] = _ready_item(rg.get(key), rel, deriv, dst if write else None)
@@ -647,6 +698,49 @@ def derive_project(
                             "field": "face_anchor_refs",
                             "path": rel,
                             "method": FACE_ANCHOR_METHOD,
+                        })
+
+                if "expression" in requested_views:
+                    seen_base_expressions: set[str] = set()
+                    for expr_rel, emotion in _expression_items(form):
+                        if expr_rel in seen_base_expressions:
+                            continue
+                        seen_base_expressions.add(expr_rel)
+                        if not _is_base_expression(emotion):
+                            summary["skipped"].append({
+                                "form": form_label,
+                                "field": "expressions",
+                                "path": expr_rel,
+                                "reason": "non_base_expression_requires_generation",
+                            })
+                            continue
+                        dst = _resolve(root, expr_rel)
+                        if dst.exists() and not force:
+                            summary["skipped"].append({
+                                "form": form_label,
+                                "field": "expressions",
+                                "path": expr_rel,
+                                "reason": "exists",
+                            })
+                            continue
+                        if write:
+                            crop_box = _save_base_expression_crop(front_path, dst)
+                        else:
+                            with Image.open(front_path) as opened:
+                                crop_box = list(_base_expression_crop_box(opened.convert("RGB")))
+                        deriv = _derivation(BASE_EXPRESSION_CROP_METHOD, front_rel, source_sha, crop_box)
+                        rg["expressions"] = _update_expression_list(
+                            rg.get("expressions"), expr_rel, expr_rel, deriv, emotion, dst if write else None
+                        )
+                        atlas["expression_refs"] = _update_expression_list(
+                            atlas.get("expression_refs"), expr_rel, expr_rel, deriv, emotion, dst if write else None
+                        )
+                        _update_reference_slots_for_path(form, expr_rel, dst if write else None)
+                        summary["derived"].append({
+                            "form": form_label,
+                            "field": "expressions",
+                            "path": expr_rel,
+                            "method": BASE_EXPRESSION_CROP_METHOD,
                         })
             else:
                 summary["skipped"].append({"form": form_label, "reason": "front_not_ready_or_missing"})
@@ -715,7 +809,7 @@ def main() -> int:
     ap.add_argument(
         "--view",
         action="append",
-        choices=("front", "three_quarter", "side", "rear_three_quarter", "back", "half_body", "face_anchor_refs"),
+        choices=("front", "three_quarter", "side", "rear_three_quarter", "back", "half_body", "face_anchor_refs", "expression"),
         default=[],
         help="只派生指定视图；可重复传入。用于逐张生成→QC→目视→下一张",
     )

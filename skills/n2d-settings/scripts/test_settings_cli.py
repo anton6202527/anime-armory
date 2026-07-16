@@ -129,6 +129,21 @@ def test_image2image_reference_chain_setting_is_valid(tmp_path: Path, capsys) ->
     assert "unknown setting key" not in "\n".join(row["message"] for row in out["rows"])
 
 
+def test_audit_accepts_user_signed_dreamina_official_image_channel(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    (root / "_设置.md").write_text(
+        "- 生图模型: Seedream 5.0\n- 生图AI: Dreamina/即梦官方 CLI\n",
+        encoding="utf-8",
+    )
+
+    rc = cli.main(["audit", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    channel = [row for row in out["rows"] if row.get("canonical_key") == "生图AI"]
+    assert channel and channel[0]["level"] == "ok"
+
+
 def test_reset_removes_setting(tmp_path: Path, capsys) -> None:
     root = make_project(tmp_path)
 

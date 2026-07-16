@@ -77,6 +77,27 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
 7. **批次/全曲收尾机检**：一批或全曲图出完后再跑一次同命令，确认报告时间晚于所有 PNG，按 `verdict` 决定是否要重抽（见下节）。
 8. 回写 `_进度.md` 出图行。下一步先由 `mv-craft` 渲真实 animatic、导出 V1+A1 OTIO 并完成具名 picture lock，再进入 mv-video。
 
+## 作品封面（竖版 key visual · 作品列表卡片用）
+
+作品列表卡片要一张**竖版封面**（约 9:16 / 5:7）+ 一段简介。简介 `synopsis` 在立项时已写进 `_meta.json`；封面走本线独立步骤，产物落 `出图/封面/`（与段落图同规约：`prompt/` 与 `图片/` 分列）。
+
+- **优雅降级（C4/B4）**：纯净机（断网 / 无重依赖 / 无付费凭证）上，封面步骤**只产出稳定的封面 prompt + job 包 + 合规留痕**，`_meta.cover` 保持 `null`，不硬阻断主流程、不伪装云端自动化。
+- **生成者到具体模型（C5）**：job 包里「由什么生成这张封面」写**具体生图模型（含版本，默认 GPT Image 2）**；访问渠道（默认 Codex）作为 access path 分列，不当生成者。
+- **确定性回填**：真正渲染出竖版 PNG（`出图/封面/图片/cover.png`）并用 `record_generation.py` 留生成收据后，用 `cover_pack.py set-cover` 把 `_meta.cover` 回填为**作品根相对路径**，并回写 `_进度.md` 封面行。`set-cover` 不覆盖用户已设的封面（除非 `--force`）。
+- 封面继承共享定妆同源身份锚点与 global_style，不换脸换画风；它属于 `重抽预算策略` 里的**关键图片（封面候选）**，严格自检到满意再落档。
+
+```bash
+# 1) 产出封面 prompt/job 包（不调用后端；纯净机也能跑）
+python3 skills/mv-image/scripts/cover_pack.py pack <作品根>
+# 2) 渲染竖版 PNG → 出图/封面/图片/cover.png，然后留生成收据
+python3 skills/mv-image/scripts/record_generation.py <作品根> --asset 出图/封面/图片/cover.png \
+  --model "GPT Image 2" --channel "Codex" --prompt 出图/封面/prompt/cover_prompt.md
+# 3) 回填 _meta.cover（作品根相对路径）+ _进度.md
+python3 skills/mv-image/scripts/cover_pack.py set-cover <作品根>
+```
+
+测试：`cd skills/mv-image/scripts && python3 -m pytest test_cover_pack.py`。
+
 ## 出图落档机检（image_qc · MV 版）
 
 单主角跨 16-64 个 clip 是脸一致性重灾区——光靠散文规则不够。`scripts/image_qc.py` 把一致性机检**前移到出图落档**（刚出完一批、还没继续的最便宜的点），省下等 `mv-review` 审片才发现的返工。**mv 线自包含**：脸 embedding QC 使用本线独立实现的 insightface/buffalo_l 自标定余弦 flag-band。

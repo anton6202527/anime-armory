@@ -2,7 +2,7 @@
 name: song
 description: 写歌总调度 — 直接创作或编辑一首带人声的歌（词 + 曲 + 演唱）。支持从主题/几个字/曲风想法从零创作，也支持在已有 `创作区/写歌/<曲名>/`、歌词、曲风、半成品音频基础上改词、改结构、改曲风、重生成、多版挑版、换声、质检、进度查询和 skill 更新影响检查。产物落 创作区/写歌/<曲名>/(词/lyrics.md + 歌/song.wav)。创作过程中可按需调用 song-progress(只读进度) / song-update(更新影响计划) / song-lyrics(作词/改词) / song-score(歌词体检) / song-compose(作曲+演唱与多版挑版) / song-cover(翻唱/换声) / song-review(质检) / song-craft(合约与AI使用披露)。Use when asked to 写首歌 / 做首歌 / 从零写歌 / 创作歌曲 / 改这首歌 / 改词 / 改曲风 / 重生成 / 我有个歌的点子 / 作词作曲. Triggers 写歌, 做歌, 写首歌, 创作曲, 创作歌曲, 改歌, 改词, 改曲风, 重做这首歌, 作词作曲, 原创歌曲, 我想写首歌, song, write a song.
 ---
-> 规模统计：Skill 数 11 | SKILL.md 总行数 659 | 目录文本总行数 9864
+> 规模统计：Skill 数 11 | SKILL.md 总行数 660 | 目录文本总行数 9899
 
 # song — 写歌创作线 · 总调度
 

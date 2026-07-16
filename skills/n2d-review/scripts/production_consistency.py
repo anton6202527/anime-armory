@@ -909,7 +909,7 @@ def _bucket_evidence_errors(
     kind = str(value.get("evidence_kind") or value.get("review_kind") or "").strip()
     # v2 pack currently has one implemented, reproducible evidence route.  Do
     # not let an arbitrary file self-label as calibrated_embedding/geometry.
-    if kind not in {"structured_human_review", "structured_visual_review"}:
+    if kind not in {"structured_human_review", "structured_executor_visual_review"}:
         errors.append(f"evidence_kind={kind or 'missing'}")
     expected_view = "side" if bucket == "profile_or_side" else bucket
     expected_fields = {
@@ -1161,10 +1161,10 @@ def check_multiview_identity_pack(root: str, ep: str) -> dict:
             evidence_family="text_contract",
         ))
         return res
-    if not isinstance(data, Mapping) or data.get("kind") != "n2d_identity_eval_pack" or data.get("version") != 2:
+    if not isinstance(data, Mapping) or data.get("kind") != "n2d_identity_eval_pack" or data.get("version") != 3:
         res["findings"].append(_row(
             "block",
-            "identity_eval_pack 必须是 kind=n2d_identity_eval_pack、version=2；旧版或自定义 JSON 不能作为核心人物多视图放行证据。",
+            "identity_eval_pack 必须是 kind=n2d_identity_eval_pack、version=3；旧版或自定义 JSON 不能作为核心人物多视图放行证据。",
             stage="image",
             artifacts=(rel,),
             evidence_family="artifact_integrity",

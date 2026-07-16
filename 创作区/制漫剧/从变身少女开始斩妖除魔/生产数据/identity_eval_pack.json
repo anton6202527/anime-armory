@@ -1,36 +1,41 @@
 {
-  "generated_at": "2026-07-15T14:15:00.908967+00:00",
+  "generated_at": "2026-07-16T02:31:04.948776+00:00",
   "identity_registry_path": "出图/共享/identity_registry.json",
-  "identity_registry_sha256": "d80a99d977cd148d026ce4f8e6c4db0edf43d8d1e1c6063d02c8283ca416630a",
+  "identity_registry_sha256": "d2fc59229b249797c3e006004e23db82b474c326d763e7c35e5d5add5bc95c20",
   "kind": "n2d_identity_eval_pack",
   "rows": [
     {
       "buckets": {
         "back": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "structured_pixel_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "b9251cedbf719af7ddaf1575ed658cb71d350aea90d2c65a6632b2cc6474f85c",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
-          "human_signoff": true,
+          "human_signoff": false,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "review_kind": "human",
-          "reviewed_at": "",
-          "reviewer": "",
-          "reviewer_role": "",
-          "sha256": "",
-          "status": "fail",
+          "registry_binding_fingerprint": "b31f71543745499e9e0719a551a7b443cd1ba4b700af33ae365a78890b47bb8b",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-16T02:29:57+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "2e379d2ebc3332e68845dfbaac1fae7e4df5ad355ad181e577c65b8e79abce09",
+          "status": "pass",
           "view": "back"
         },
         "expression": {
@@ -98,121 +103,135 @@
         },
         "rear_three_quarter": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "structured_pixel_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "5262dba5c59dfaa3ede471d99300eeb82892681fc07329a7acef924970843bd3",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
-          "human_signoff": true,
+          "human_signoff": false,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "review_kind": "human",
-          "reviewed_at": "",
-          "reviewer": "",
-          "reviewer_role": "",
-          "sha256": "",
-          "status": "fail",
+          "registry_binding_fingerprint": "0f2340e3f16d2b79bf0e1a1947e0331a3c3aa2eb0e7c991d48cf21272a549fb8",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-16T02:25:28+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "17fad145e3565e198c531d5ed351094b78dcb717432259f123359b1b2f07159a",
+          "status": "pass",
           "view": "rear_three_quarter"
         },
         "side": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "structured_pixel_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "c038e9caead7e3f4e8e7682a727318ce5d41157c317d8f899995fe89da8eb623",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
-          "human_signoff": true,
+          "human_signoff": false,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "review_kind": "human",
-          "reviewed_at": "",
-          "reviewer": "",
-          "reviewer_role": "",
-          "sha256": "",
-          "status": "fail",
+          "registry_binding_fingerprint": "33067865a8afd6dc95653b0a8f61c277b754049177718c3a3b764dfb448f248f",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-16T02:18:51+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "8b9b3f4a0de65ea1aafb91a6c2a4c4515949b83ca140be65cf307ce64cc95de7",
+          "status": "pass",
           "view": "side"
         },
         "three_quarter": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "structured_pixel_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "1e791509053e4c32375fa2e6764ab02c2b6dbdd1e16a5e50ce5b5fd433b221b3",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
-          "human_signoff": true,
+          "human_signoff": false,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "review_kind": "human",
-          "reviewed_at": "",
-          "reviewer": "",
-          "reviewer_role": "",
-          "sha256": "",
-          "status": "fail",
+          "registry_binding_fingerprint": "3aaa77664638dfdcf0b552ed5cf741e5ddfc75367f739e78ee005ba75e38af8c",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-16T02:13:37+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "db5ce4cb5d115fbaef26424c45e38e55f51337fb5ebeb715405c56766d599cce",
+          "status": "pass",
           "view": "three_quarter"
         },
         "turnaround": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "structured_pixel_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "dc337998e60de9abef1f4f762ad4d96237d639855c3237feac8700c027a2a7c9",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
-          "human_signoff": true,
+          "human_signoff": false,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "review_kind": "human",
-          "reviewed_at": "",
-          "reviewer": "",
-          "reviewer_role": "",
-          "sha256": "",
-          "status": "fail",
+          "registry_binding_fingerprint": "c597e69472aa77155febdd209b2fa6390723906e8fe2bf58bf1759f0c61d16ec",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-16T02:04:27+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+          "status": "pass",
           "view": "turnaround"
         }
       },
       "character_id": "CHAR_01",
-      "failed_buckets": [
-        "three_quarter",
-        "side",
-        "rear_three_quarter",
-        "back",
-        "turnaround"
-      ],
+      "failed_buckets": [],
       "form": "常态",
       "library_tier": "core_full",
       "required_buckets": [
@@ -224,13 +243,13 @@
         "expression",
         "turnaround"
       ],
-      "verdict": "fail"
+      "verdict": "pass"
     }
   ],
   "summary": {
     "core_forms": 1,
-    "failed": 1,
-    "passed": 0
+    "failed": 0,
+    "passed": 1
   },
   "version": 3
 }

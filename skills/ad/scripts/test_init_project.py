@@ -30,6 +30,9 @@ def test_new_project_starts_with_locale_and_accessibility_release_contracts(tmp_
     meta = json.loads((root / "_meta.json").read_text(encoding="utf-8"))
     catalog = json.loads((root / "生产数据" / "artifact_catalog.json").read_text(encoding="utf-8"))
     assert meta["line"] == "ad" and meta["project_id"].startswith("ad_")
+    # 作品卡片字段：立项写 synopsis 占位（默认广告目标）+ cover=null，待 brief/封面产出后回填。
+    assert meta["cover"] is None
+    assert isinstance(meta["synopsis"], str) and meta["synopsis"]
     assert catalog["status"] == "bootstrap"
     assert catalog["project"]["project_id"] == meta["project_id"]
 

@@ -39,7 +39,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 8. **logo NCC**：只作 WARN 快筛；Logo/包装文字硬签收来自真实参考输入、可控后期层和人工并排复核。
 9. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
 
-报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_plan_prompts.py test_product_qc.py`。
+报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_plan_prompts.py test_product_qc.py test_plan_cover.py`。
 
 ## 生图后端治理
 
@@ -64,6 +64,23 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 4. **逐图落档 QC**：每张定妆/首帧/尾帧 PNG 落档后立即跑上节的 ad-image QC；产品/KV/代言人/品牌镜先过 `product_qc.py`，普通镜至少完成本线落档自检并记录。单张不过先修单张，不继续批量出后续图。只有 prompt 包而无 PNG 时，`product_qc.py` 只能证明 prompt-lint 通过，不能放行出视频。
 5. **批次/全片收尾 QC**：一批或全部分镜出完后再跑一次 `product_qc.py`，确认报告时间晚于所有关键 PNG，`summary.block==0` 且无待确认关键镜后才进入 `ad-video`。
 6. 回写 `_进度.md` 出图 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" image --status ✅ --artifact 出图/分镜`，提示 `ad-video`。
+
+## 作品封面（竖版 key visual / endcard）
+
+作品卡片要一张**竖版 9:16** key visual / endcard 作封面，落 `_meta.json.cover`（作品根相对路径）。这是「一图讲清这条广告在卖什么」的门面，不是分镜首帧；产物与分镜分目录，落 `出图/封面/`。
+
+```bash
+python3 skills/ad-image/scripts/plan_cover.py "<作品根>"      # 出封面 prompt/job 包（不渲染 PNG）
+# 外部渲染竖版 PNG → 出图/封面/cover.png 后，确定性回填：
+python3 skills/ad-craft/scripts/meta_card.py cover "<作品根>" --png 出图/封面/cover.png
+```
+
+- **优雅降级（C4/B4）**：`plan_cover.py` 只产 `出图/封面/封面_prompt.md` + `出图/封面/cover_job.json` + 生产事件留痕；纯净机（断网/无凭证）也能一路产出封面 job 包并讲清缺什么，`_meta.json.cover` 保持 `null`，绝不伪造 PNG。
+- **回填 helper**：`meta_card.py cover` 校验 PNG 在作品根内、存在、`.png`、竖版（Pillow 可用时判 `h≥w`，缺 Pillow 优雅跳过尺寸校验），通过才写 `cover`，并在 `_进度.md` 维护记录留痕（B5）；非竖版/越界/缺文件一律拒写、不阻断其它阶段。作废封面用 `meta_card.py clear-cover`。
+- **具体模型（C5）**：封面「由什么生成」落到 `生图模型`（默认 GPT Image 2），`生图渠道`（默认 Codex CLI）作访问入口**分列**；封面与分镜同走生图后端治理，逆向/未授权路径同禁。
+- **身份零漂移**：封面复用三层定妆库的品牌/hero product 身份锁（品牌色 HEX / logo / 包装文字），有 `PROD_*`/`BRAND_*` 资产时必须 image2image 引用真实定妆图，不纯文生图。
+
+> **简介（synopsis）**：作品卡片的一段简介来自 `_meta.json.synopsis`（≤240 字），由 `ad` 立项写占位、brief 产出后 `python3 skills/ad-craft/scripts/meta_card.py synopsis "<作品根>"` 确定性回填 brief 的 `key_message`（不覆盖用户手写内容）。
 
 ## 广告专有强化
 

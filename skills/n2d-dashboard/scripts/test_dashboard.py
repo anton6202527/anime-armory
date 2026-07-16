@@ -449,6 +449,38 @@ def test_aggregate_generation_cost_redraw_and_qa(tmp_path: Path) -> None:
     assert ep1["progress_next_stage"] == "出图"
 
 
+def test_later_asset_acceptance_supersedes_old_active_qa_block_but_keeps_history(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    asset = "出图/共享/图片/定妆_道具_断刀.png"
+    path = tmp_path / asset
+    path.parent.mkdir(parents=True)
+    path.write_bytes(b"png")
+    events = [
+        dashboard.make_event(
+            "第1集",
+            "image",
+            "qa",
+            generation={"asset": asset, "status": "rejected"},
+            qa={"severity": "block", "dim": "broken_blade_topology", "loc": asset, "msg": "双断片"},
+        ),
+        dashboard.make_event(
+            "第1集",
+            "image",
+            "qa",
+            generation={"asset": asset, "status": "accepted"},
+            qa={"severity": "info", "dim": "broken_blade_topology", "loc": asset, "msg": "重抽通过"},
+        ),
+    ]
+
+    result = dashboard.aggregate_events(str(tmp_path), events)
+    ep1 = next(item for item in result["episodes"] if item["episode"] == "第1集")
+
+    assert ep1["qa_blockers"] == 0
+    assert ep1["qa_blockers_historical"] == 1
+    assert ep1["qa_infos"] == 1
+    assert ep1["recent_blockers"] == []
+
+
 def test_aggregate_blocks_missing_latest_pass_deliverable(tmp_path: Path) -> None:
     write_progress(tmp_path)
     asset = "出图/第1集/图片/Clip_01.png"
