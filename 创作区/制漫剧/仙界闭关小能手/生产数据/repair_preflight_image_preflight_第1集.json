@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-15T16:32:53+00:00",
+  "generated_at": "2026-07-16T01:22:56+00:00",
   "kind": "n2d_repair_preflight",
   "next_when_blocked": [
     "/opt/homebrew/Caskroom/miniconda/base/bin/python3 /Users/lalala/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集 check --write-missing --write-check --stage image_preflight --json"
@@ -11,54 +11,54 @@
   "steps": [
     {
       "command": "/opt/homebrew/Caskroom/miniconda/base/bin/python3 /Users/lalala/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集 --write-plan --json",
-      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [],\n  \"changed_skills\": [],\n  \"commands\": [],\n  \"contract_inheritance\": null,\n  \"created_at\": \"2026-07-15T16:32:52+00:00\",\n  \"current_stage\": \"image\",\n  \"current_todo\": {\n    \"column\": \"出图\",\n    \"command\": \"n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集\",\n    \"label\": \"出图返修\",\n    \"note\": \"image_qc=block，hard_blocks=9；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md\",\n    \"skill\": \"n2d-image\",\n    \"stage_key\": \"image\",\n    \"status\": \"32/49\"\n  },\n  \"episode\": \"第1集\",\n  \"execution_steps\": [],\n  \"gate_refresh_needed\": false,\n  \"gate_refresh_stages\": [],\n  \"image_consistency\": {\n    \"advisory\": 5,\n    \"consistent\": false,\n    \"degraded\": true,\n    \"freshness\": \"stale\",\n   ",
+      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [],\n  \"changed_skills\": [],\n  \"commands\": [],\n  \"contract_inheritance\": null,\n  \"created_at\": \"2026-07-16T01:22:55+00:00\",\n  \"current_stage\": \"image\",\n  \"current_todo\": {\n    \"column\": \"出图\",\n    \"command\": \"n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集\",\n    \"label\": \"出图返修\",\n    \"note\": \"image_qc=block，hard_blocks=3；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md\",\n    \"skill\": \"n2d-image\",\n    \"stage_key\": \"image\",\n    \"status\": \"36/51\"\n  },\n  \"episode\": \"第1集\",\n  \"execution_steps\": [],\n  \"gate_refresh_needed\": false,\n  \"gate_refresh_stages\": [],\n  \"image_consistency\": {\n    \"advisory\": 11,\n    \"consistent\": false,\n    \"degraded\": false,\n    \"freshness\": \"fresh\",\n ",
       "payload": {
         "baseline_bootstrapped": false,
         "changed_files": [],
         "changed_skills": [],
         "commands": [],
         "contract_inheritance": null,
-        "created_at": "2026-07-15T16:32:52+00:00",
+        "created_at": "2026-07-16T01:22:55+00:00",
         "current_stage": "image",
         "current_todo": {
           "column": "出图",
           "command": "n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集",
           "label": "出图返修",
-          "note": "image_qc=block，hard_blocks=9；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
+          "note": "image_qc=block，hard_blocks=3；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
           "skill": "n2d-image",
           "stage_key": "image",
-          "status": "32/49"
+          "status": "36/51"
         },
         "episode": "第1集",
         "execution_steps": [],
         "gate_refresh_needed": false,
         "gate_refresh_stages": [],
         "image_consistency": {
-          "advisory": 5,
+          "advisory": 11,
           "consistent": false,
-          "degraded": true,
-          "freshness": "stale",
-          "hard_blocks": 9,
+          "degraded": false,
+          "freshness": "fresh",
+          "hard_blocks": 3,
           "precision_level": "full",
           "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md",
           "samples": [
-            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png）：脸占画面仅 1%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png）：脸占画面仅 1%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-            "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/本集为14岁杂役常态 front（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png）：core_view_receipt_missing_or_stale；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
           ],
           "status": "ok",
           "verdict": "block"
         },
         "image_qc_environment": {
-          "advisory": 5,
-          "degraded": true,
+          "advisory": 11,
+          "degraded": false,
           "finding_samples": [
-            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png）：脸占画面仅 1%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png）：脸占画面仅 1%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
-            "prompt lint:  核心档逐视图收据缺失/过期 CHAR_01/本集为14岁杂役常态 front（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png）：core_view_receipt_missing_or_stale；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+            "prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
           ],
-          "freshness": "stale",
-          "hard_blocks": 9,
+          "freshness": "fresh",
+          "hard_blocks": 3,
           "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
           "jump_to_stage": "image",
           "precision_level": "full",
@@ -74,9 +74,8 @@
         "needs_record": false,
         "newly_relevant_skills": [],
         "notes": [
-          "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 10 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP02_a2.png, 出图/第1集/图片/EP01_CLIP03_a1.png",
-          "图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=9）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。",
-          "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第1集` 再据此判断。"
+          "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 9 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP02_a2.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png",
+          "图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=3）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。"
         ],
         "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.json",
         "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/skill_update_plan_第1集.md",
@@ -111,11 +110,6 @@
           "exempt_clips": 0,
           "missing_endframe_clips": [],
           "missing_frame_files": [
-            {
-              "clip_id": "EP01_CLIP01",
-              "path": "出图/第1集/图片/EP01_CLIP01_a1.png",
-              "role": "midframe"
-            },
             {
               "clip_id": "EP01_CLIP02",
               "path": "出图/第1集/图片/EP01_CLIP02_a1.png",
@@ -182,7 +176,7 @@
     },
     {
       "command": "/opt/homebrew/Caskroom/miniconda/base/bin/python3 /Users/lalala/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集 check --json --write-missing",
-      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-15T16:32:52+00:00\",\n  \"root\": \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\",\n  \"episode\": \"第1集\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 9,\n    \"block\": 0\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第1集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issues",
+      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-16T01:22:55+00:00\",\n  \"root\": \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\",\n  \"episode\": \"第1集\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 9,\n    \"block\": 0\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第1集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issues",
       "payload": {
         "check_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_breakdown_check_第1集.json",
         "episode": "第1集",
@@ -233,7 +227,7 @@
             "status": "pass"
           }
         ],
-        "generated_at": "2026-07-15T16:32:52+00:00",
+        "generated_at": "2026-07-16T01:22:55+00:00",
         "kind": "n2d_production_handoff_pack_check",
         "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
         "overview_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_handoff_pack_第1集.md",
@@ -253,7 +247,7 @@
     },
     {
       "command": "/opt/homebrew/Caskroom/miniconda/base/bin/python3 /Users/lalala/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集 check --write-missing --write-check --stage image_preflight --json",
-      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第1集\",\n  \"stage\": \"image\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\"\n  ],\n  \"status\": \"block\",\n  \"generated_at\": \"2026-07-15T16:32:52+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第1集.json\",\n  \"summary\": {\n    \"block\": 1,\n    \"locks\": 4,\n    \"required_locks\": 4\n  },\n  \"findings\": [\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_artifact_stale\",\n      \"lock_id\": \"style_identity_lock\",\n      \"message\": \"style_identity_lock 锁定后文件已变化：_设置.md\",\n      \"artifacts\": [\n        \"_设置.md\"\n      ]\n    }\n  ],\n  \"check_path\": \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_locks_check_image_第1集.json\"\n}",
+      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第1集\",\n  \"stage\": \"image\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\"\n  ],\n  \"status\": \"block\",\n  \"generated_at\": \"2026-07-16T01:22:55+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第1集.json\",\n  \"summary\": {\n    \"block\": 1,\n    \"locks\": 4,\n    \"required_locks\": 4\n  },\n  \"findings\": [\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_artifact_stale\",\n      \"lock_id\": \"style_identity_lock\",\n      \"message\": \"style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json\",\n      \"artifacts\": [\n        \"出图/共享/identity_registry.json\"\n      ]\n    }\n  ],\n  \"check_path\": \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_locks_check_image_第1集.json\"\n",
       "payload": {
         "check_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_locks_check_image_第1集.json",
         "checked_lock_ids": [
@@ -266,15 +260,15 @@
         "findings": [
           {
             "artifacts": [
-              "_设置.md"
+              "出图/共享/identity_registry.json"
             ],
             "code": "lock_artifact_stale",
             "lock_id": "style_identity_lock",
-            "message": "style_identity_lock 锁定后文件已变化：_设置.md",
+            "message": "style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json",
             "severity": "block"
           }
         ],
-        "generated_at": "2026-07-15T16:32:52+00:00",
+        "generated_at": "2026-07-16T01:22:55+00:00",
         "kind": "n2d_production_locks_check",
         "lock_path": "生产数据/production_locks_第1集.json",
         "stage": "image",
@@ -292,7 +286,7 @@
     },
     {
       "command": "/opt/homebrew/Caskroom/miniconda/base/bin/python3 /Users/lalala/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集 --stage image_preflight --json --write --write-missing",
-      "detail": "{\n  \"contract_path\": \"脚本/第1集/preventive_contracts.json\",\n  \"episode\": \"第1集\",\n  \"findings\": [],\n  \"gates\": [\n    \"reference_slot_gate\"\n  ],\n  \"generated_at\": \"2026-07-15T16:32:53+00:00\",\n  \"kind\": \"n2d_preventive_contract_report\",\n  \"outputs\": {\n    \"json\": \"生产数据/preventive_contracts_image_preflight_第1集.json\",\n    \"markdown\": \"生产数据/preventive_contracts_image_preflight_第1集.md\"\n  },\n  \"root\": \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\",\n  \"scaffolded\": false,\n  \"stage\": \"image_preflight\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"block\": 0,\n    \"info\": 0,\n    \"warn\": 0\n  },\n  \"version\": 1\n}",
+      "detail": "{\n  \"contract_path\": \"脚本/第1集/preventive_contracts.json\",\n  \"episode\": \"第1集\",\n  \"findings\": [],\n  \"gates\": [\n    \"reference_slot_gate\"\n  ],\n  \"generated_at\": \"2026-07-16T01:22:56+00:00\",\n  \"kind\": \"n2d_preventive_contract_report\",\n  \"outputs\": {\n    \"json\": \"生产数据/preventive_contracts_image_preflight_第1集.json\",\n    \"markdown\": \"生产数据/preventive_contracts_image_preflight_第1集.md\"\n  },\n  \"root\": \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\",\n  \"scaffolded\": false,\n  \"stage\": \"image_preflight\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"block\": 0,\n    \"info\": 0,\n    \"warn\": 0\n  },\n  \"version\": 1\n}",
       "payload": {
         "contract_path": "脚本/第1集/preventive_contracts.json",
         "episode": "第1集",
@@ -300,7 +294,7 @@
         "gates": [
           "reference_slot_gate"
         ],
-        "generated_at": "2026-07-15T16:32:53+00:00",
+        "generated_at": "2026-07-16T01:22:56+00:00",
         "kind": "n2d_preventive_contract_report",
         "outputs": {
           "json": "生产数据/preventive_contracts_image_preflight_第1集.json",

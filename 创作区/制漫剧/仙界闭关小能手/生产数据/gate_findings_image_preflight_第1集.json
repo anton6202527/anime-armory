@@ -86,6 +86,38 @@
     },
     {
       "affected_artifacts": [
+        "['出图/共享/identity_registry.json']"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生产锁版账"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "['出图/共享/identity_registry.json']"
+          ],
+          "affected_shots": [],
+          "dim": "生产锁版账",
+          "dim_key": "生产锁版账",
+          "dimension": "生产锁版账",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_locks_check_image_preflight_第1集.json",
+          "message": "image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image_preflight --write-missing`。",
+          "msg": "image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image_preflight --write-missing`。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：['出图/共享/identity_registry.json']"
+    },
+    {
+      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第1集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -227,6 +259,48 @@
       ],
       "affected_shots": [],
       "dimensions": [
+        "跨集记忆锚落实"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第1集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "跨集记忆锚落实",
+          "dim_key": "跨集记忆锚落实",
+          "dimension": "跨集记忆锚落实",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/memory_anchor_plan_第1集.json",
+          "message": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+          "msg": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
         "character_consistency"
       ],
       "findings": [
@@ -257,6 +331,40 @@
       ],
       "return_to_stage": "review",
       "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/identity_eval_pack.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "核心人物多视图验收"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "生产数据/identity_eval_pack.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "affected_shots": [],
+          "dim": "核心人物多视图验收",
+          "dim_key": "核心人物多视图验收",
+          "dimension": "核心人物多视图验收",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
+          "message": "identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。",
+          "msg": "identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：生产数据/identity_eval_pack.json、出图/共享/identity_registry.json"
     },
     {
       "affected_artifacts": [
@@ -764,6 +872,25 @@
     },
     {
       "affected_artifacts": [
+        "['出图/共享/identity_registry.json']"
+      ],
+      "affected_shots": [],
+      "dim": "生产锁版账",
+      "dim_key": "生产锁版账",
+      "dimension": "生产锁版账",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_locks_check_image_preflight_第1集.json",
+      "message": "image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image_preflight --write-missing`。",
+      "msg": "image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：出图/共享/identity_registry.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image_preflight --write-missing`。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第1集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -1060,6 +1187,30 @@
         "出图/第1集/prompt"
       ],
       "affected_shots": [],
+      "dim": "跨集记忆锚落实",
+      "dim_key": "跨集记忆锚落实",
+      "dimension": "跨集记忆锚落实",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/memory_anchor_plan_第1集.json",
+      "message": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+      "msg": "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第1集/prompt"
+      ],
+      "affected_shots": [],
       "dim": "导演运镜落实",
       "dim_key": "导演运镜落实",
       "dimension": "导演运镜落实",
@@ -1096,6 +1247,26 @@
       "return_to_stage": "review",
       "sev": "warn",
       "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/identity_eval_pack.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "affected_shots": [],
+      "dim": "核心人物多视图验收",
+      "dim_key": "核心人物多视图验收",
+      "dimension": "核心人物多视图验收",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
+      "message": "identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。",
+      "msg": "identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1718,18 +1889,20 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-16T00:40:29+00:00",
+  "generated_at": "2026-07-16T01:22:00+00:00",
   "inputs_fingerprint": {
     "files": {
+      "['出图/共享/identity_registry.json']": null,
       "出图/共享/asset_registry.json": "d3cddf734216112a3c57c94fb27c8a068baff36bc80e0ecef57bcb13bdc90d55",
-      "出图/共享/identity_registry.json": "687406bfd65891db812b5786e8f0d220b8cb719264fe053b18d153dafd5b46e2",
+      "出图/共享/identity_registry.json": "418956e4a49a8f6bfe7c6069c3e887a0a793b5aaa1161335c8d2cdd354c4a6d3",
       "出图/共享/prompt": null,
       "出图/第1集/prompt": null,
       "出视频/第1集/prompt": null,
       "合规/compliance_manifest.json": "75854205eaad87161a929bb21ae4c77cdba6a9ebf6bbd03be59af8624e1791c8",
+      "生产数据/identity_eval_pack.json": "ce9cc4d21283e0bfb28b14751105292f0d3d43cac8e01b5a6b818805fc18804b",
       "脚本/第1集/storyboard.json": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
     },
-    "sha": "d61bda735640655825ad70215f992799040eff6f917f5c4ece9c5e2f356150a2"
+    "sha": "752c1ff8313e0a7c3db826312a0cbb282c797d3f84a178401ffaa20f4150e99c"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
@@ -1774,9 +1947,19 @@
         "info": 0,
         "warn": 1
       },
+      "核心人物多视图验收": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "物料漂移预案": {
         "block": 0,
         "info": 8,
+        "warn": 0
+      },
+      "生产锁版账": {
+        "block": 1,
+        "info": 0,
         "warn": 0
       },
       "生图后端适配": {
@@ -1794,6 +1977,11 @@
         "info": 0,
         "warn": 2
       },
+      "跨集记忆锚落实": {
+        "block": 1,
+        "info": 0,
+        "warn": 0
+      },
       "风格化脸机检": {
         "block": 0,
         "info": 0,
@@ -1801,11 +1989,11 @@
       }
     },
     "severity": {
-      "block": 0,
+      "block": 3,
       "info": 13,
       "warn": 31
     },
-    "total": 44
+    "total": 47
   },
   "version": 1
 }
