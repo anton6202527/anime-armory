@@ -102,7 +102,21 @@ def write_missing(root: str | Path) -> Path:
         for section in ("canonical_names", "dialogue_registers"):
             current = dict(existing.get(section) or {}) if isinstance(existing.get(section), Mapping) else {}
             for key, value in (generated.get(section) or {}).items():
-                current.setdefault(key, value)
+                old = current.get(key)
+                if section == "canonical_names" and old not in (None, "") and not isinstance(old, Mapping):
+                    # Pre-v1 projects stored ``CHAR_01: 人名``.  Preserve the
+                    # accepted name while upgrading to the validated row shape.
+                    current[key] = {
+                        "canonical_name": str(old),
+                        "forbidden_variants": [],
+                    }
+                elif isinstance(old, Mapping) and isinstance(value, Mapping):
+                    row = dict(old)
+                    for field, default in value.items():
+                        row.setdefault(field, default)
+                    current[key] = row
+                else:
+                    current.setdefault(key, value)
             merged[section] = current
         for key in ("subtitle_style", "audio_baseline", "note"):
             if key not in merged:

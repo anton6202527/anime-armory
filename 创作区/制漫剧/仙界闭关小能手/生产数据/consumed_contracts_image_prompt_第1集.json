@@ -6,7 +6,7 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-14T17:06:23+00:00",
+  "generated_at": "2026-07-15T17:20:47+00:00",
   "contracts": [
     {
       "name": "storyboard",
@@ -18,7 +18,7 @@
       "name": "continuity_chain",
       "path": "脚本/第1集/continuity_chain.json",
       "exists": true,
-      "sha256": "b9569c84f961671b0d08357cfba3ac8bf4a289cddc09b872f1d76d52680f2bb0"
+      "sha256": "faf95b0f1fd246c7617328c6752ed91baac02f285434a7c210b0333de4e3352c"
     },
     {
       "name": "shot_reverse_contract",
@@ -30,31 +30,31 @@
       "name": "script_quality_contract",
       "path": "生产数据/script_quality_contract_第1集.json",
       "exists": true,
-      "sha256": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3"
+      "sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d"
     },
     {
       "name": "director_camera_plan",
       "path": "生产数据/director_camera_plan_第1集.json",
-      "exists": false,
-      "sha256": ""
+      "exists": true,
+      "sha256": "3cc2ffbb9464d11c11c533538cddc8cb793e1e60d31571e1d9b95c5210dbaef0"
     },
     {
       "name": "reference_plan",
       "path": "生产数据/reference_plan_第1集.json",
-      "exists": false,
-      "sha256": ""
+      "exists": true,
+      "sha256": "d47bebc0cb1261c8849561ca6c793ace5a8c6a1068b0444431a4ce65eba80dc3"
     }
   ],
   "prompt_files": [
     {
       "path": "出图/第1集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "4e69b26efaec20748e67395d0ee7a9fd5230409d7906edc556c731d433b372bd"
+      "sha256": "3b6aac0ec28432bf6c3eef756ca28725a9e4c8b34fd06f13498b5bbf6a84db20"
     },
     {
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
-      "sha256": "a32b1bd526e4d249bd4b4528d4ad7814930c389e8ae6e45f785a15d414caa296"
+      "sha256": "42b35e2c07cfb64b20286a80f8a3bff305119b90f0907db0876689b1fec066a8"
     }
   ]
 }

@@ -20,7 +20,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 KIND = "n2d_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-12.1"
+PROFILE_VERSION = "2026-07-16.1"
 COMPILED_HEADING = "### 后端编译提交 image prompt"
 
 TASK_TYPES = {
@@ -329,6 +329,28 @@ def resolve_contract_conflicts(
         resolved["action"] = ""
         decisions.append("neutral_catalog_dropped_story_action")
 
+    # Natural-language image backends can interpret graphic anatomy words in
+    # negative constraints as requested content. Keep the production contract
+    # untouched for QC, but submit a positive anatomy formulation and soften a
+    # small set of clearly non-violent social actions at the provider boundary.
+    if str(profile.get("backend") or "") in {"codex", "openai"}:
+        action = _one_line(resolved.get("action"))
+        if not re.search(r"刀|剑|枪|矛|匕首|武器|流血|伤口|受伤|搏斗|打斗|攻击|杀", action):
+            softened = action
+            softened = softened.replace("用两指弹回木牌", "用两指点住木牌，再把木牌递回少年胸前")
+            softened = softened.replace("承受冲击但不后退", "稳稳站住")
+            if softened != action:
+                resolved["action"] = softened
+                decisions.append("nonviolent_social_action_softened_for_provider")
+
+        exclusions = normalize_exclusions(resolved.get("exclude") or [])
+        graphic_anatomy = re.compile(r"断手|断肢|缺肢|血光|伤口|入体|贯穿")
+        if any(graphic_anatomy.search(item) for item in exclusions):
+            exclusions = [item for item in exclusions if not graphic_anatomy.search(item)]
+            exclusions.append("人体与手部结构自然完整")
+            resolved["exclude"] = _dedupe(exclusions, limit=14)
+            decisions.append("graphic_negative_anatomy_rewritten_positive")
+
     before_preserve = len(_dedupe(resolved.get("preserve") or []))
     before_guards = len(_dedupe(resolved.get("policy_guards") or []))
     resolved["preserve"] = _compress_repeated(resolved.get("preserve") or [], limit=5)
@@ -503,6 +525,10 @@ def contract_from_section(
     risk_flags: Any = None,
 ) -> Dict[str, Any]:
     """Extract a compact canonical image contract from a full Markdown block."""
+    # Prompt packs append an auditable compiled-request block. It is output,
+    # never source. Reading it back recursively makes every retry longer and
+    # can resurrect stale or safety-sensitive constraints.
+    section = section_without_compiled(section)
     positive = _prompt_block(section, "中文")
     inferred = task_type or infer_task_type(section, mode=mode, target_path=target_path)
     makeup = _makeup_submission_block(section) if inferred == "character_catalog" else ""
@@ -510,6 +536,11 @@ def contract_from_section(
     identity_lock = _prompt_line(positive, "身份锁定句") or _field(section, "身份锁定句")
     composition = _prompt_line(positive, "镜头构图") or _field(section, "镜头/机位")
     action = _prompt_line(positive, "动作瞬间") or _field(section, "剧本描述")
+    action = re.split(
+        r"；(?:人体完整性|解剖完整性|手部归属|身体接地|身体裁切|本镜状态锁)[^：:]*[：:]",
+        action,
+        maxsplit=1,
+    )[0].strip()
     scene_light = _prompt_line(positive, "场景光影") or _field(section, "场景 DNA")
     mood = _prompt_line(positive, "情绪张力") or _field(section, "导演意图")
     style_text = style or _prompt_line(positive, "画风规格")

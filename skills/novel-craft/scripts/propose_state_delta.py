@@ -24,6 +24,21 @@ COMMON_WORDS = {
     "看向", "拔剑", "出现", "走进", "开口", "冷笑", "转身", "抬手",
 }
 
+# 虚词字：任一字命中即丢弃该 2-gram 候选。
+#
+# 为什么需要它：下面的 fallback 抽取把 >3 字的 CJK 串切成**全部重叠 2-gram**，
+# 再按词频排序。中文里最高频的 2-gram 必然是虚词组合，于是 candidate_entities
+# 会稳定产出「不是 / 了一 / 的人 / 上的」这类词——实测某 24 章项目全书 257 个候选里
+# 词频前列是 `不是(12)、了一(9)、的人(6)`，一个真实体都没有；下游 character_changes
+# 因此 24/24 章全空。COMMON_WORDS 是手工黑名单，永远追不上真实语料；改成按**字**
+# 过滤才收敛。
+FUNCTION_CHARS = set(
+    "的了是不在有和就也都这那我你他她它一个上下来去中为以而与等被把给对从向到过着"
+    "呢吗吧啊么们很再又还只能会要说道时里外前后大小多少好没相之于其所且但却把"
+)
+ROSTER_ALIAS_REL = "设定/角色别名.json"
+ROSTER_CARD_REL = "设定/角色卡.md"
+
 
 def sha256_file(path: str) -> str:
     h = hashlib.sha256()
@@ -52,19 +67,46 @@ def find_chapter(root: str, chapter: int) -> str | None:
     return sorted(candidates)[0] if candidates else None
 
 
-def candidate_entities(text: str, limit: int = 20) -> list[str]:
+def candidate_entities(text: str, roster: list[str] | None = None, limit: int = 20) -> list[str]:
+    """本章的候选实体，**名册优先**。
+
+    返回两段拼接：① 名册（`设定/角色别名.json` confirmed + 角色卡）里在本章正文实际
+    出现过的角色，按出场次数排序——这段是高置信、可直接填进 character_changes 的；
+    ② 名册外的 2-gram 盲抽候选，用于发现名册还没登记的新角色。
+
+    ② 段永远是噪音大户（中文最高频 2-gram 就是虚词组合），所以既过滤 FUNCTION_CHARS
+    又限量到总额的 1/4；名册非空时它只是补充，名册为空（新项目还没写角色卡）时才是
+    唯一来源。调用方须把这里的输出当**提示**而非结论——manual_todo 里明写了要删误抽。
+    """
+    roster = roster or []
+    ranked: list[str] = []
+
+    # ① 名册命中：按本章出场次数排序。长名优先匹配，避免「林」吃掉「林贵妃」的计数。
+    hits: dict[str, int] = {}
+    for name in sorted(roster, key=lambda n: (-len(n), n)):
+        count = text.count(name)
+        if count:
+            hits[name] = count
+    ranked.extend(name for name, _c in sorted(hits.items(), key=lambda kv: (-kv[1], kv[0])))
+
+    # ② 名册外盲抽：仅用于发现未登记的新实体。
     counts: dict[str, int] = {}
     for match in CJK_NAME_RE.finditer(text):
         seq = match.group(0).strip("，。！？；：、（）()《》")
         tokens = [seq] if len(seq) <= 3 else [seq[i:i + 2] for i in range(0, len(seq) - 1)]
         for token in tokens:
-            if len(token) < 2 or token in COMMON_WORDS:
+            if len(token) < 2 or token in COMMON_WORDS or token in hits:
+                continue
+            if any(ch in FUNCTION_CHARS for ch in token):
                 continue
             if re.search(r"第\d+章", token):
                 continue
             counts[token] = counts.get(token, 0) + 1
-    ranked = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
-    return [name for name, _count in ranked[:limit]]
+
+    discovery_cap = max(1, limit // 4) if ranked else limit
+    extra = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    ranked.extend(name for name, _count in extra[:discovery_cap])
+    return ranked[:limit]
 
 
 def build_delta(root: str, chapter: int) -> tuple[dict, str]:

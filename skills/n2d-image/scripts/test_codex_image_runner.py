@@ -98,6 +98,51 @@ def test_image_generation_failure_detail_keeps_non_retryable_status() -> None:
     assert codex_image_runner.transient_codex_image_failure(detail) is False
 
 
+def test_image_generation_failure_detail_reads_final_refusal_without_tool_event() -> None:
+    stdout = json.dumps({
+        "payload": {
+            "type": "agent_message",
+            "phase": "final_answer",
+            "message": "失败：内置 image_gen 单次最多接收 5 张参考图，未生成文件。",
+        }
+    }, ensure_ascii=False)
+
+    assert "最多接收 5 张" in codex_image_runner.image_generation_failure_detail(stdout)
+
+
+def test_codex_reference_cap_balances_two_characters_and_location() -> None:
+    section = codex_image_runner.ClipSection(
+        "Clip_01", "## Clip_01", "动作瞬间：两人递交 PROP_01。", ""
+    )
+    target = codex_image_runner.Target(
+        "Clip_01_first", "Clip_01", "firstframe", "out.png", section
+    )
+    rows = []
+    sequence = 0
+    for owner in ("CHAR_01/常态", "CHAR_02/常态"):
+        for suffix in ("front", "expression", "side", "back"):
+            rows.append({
+                "role": "character",
+                "owner": owner,
+                "rel_path": f"{owner}_{suffix}.png",
+                "priority": 30,
+                "sequence": sequence,
+            })
+            sequence += 1
+    rows.extend([
+        {"role": "style", "owner": "STYLE_ANCHOR", "rel_path": "style.png", "priority": 60, "sequence": 8},
+        {"role": "asset", "owner": "LOC_01", "rel_path": "location.png", "priority": 100, "sequence": 9},
+        {"role": "asset", "owner": "PROP_01", "rel_path": "prop.png", "priority": 100, "sequence": 10},
+    ])
+
+    selected = codex_image_runner.select_codex_reference_inputs(target, rows, 5)
+
+    assert len(selected) == 5
+    assert [row["owner"] for row in selected].count("CHAR_01/常态") == 2
+    assert [row["owner"] for row in selected].count("CHAR_02/常态") == 1
+    assert [row["owner"] for row in selected[-2:]] == ["LOC_01", "PROP_01"]
+
+
 def test_transient_codex_image_failure_recognizes_http_5xx_not_4xx() -> None:
     assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 520") is True
     assert codex_image_runner.transient_codex_image_failure("imagegen returned HTTP 503") is True
@@ -576,6 +621,48 @@ def test_load_sections_falls_back_to_storyboard_targets(tmp_path: Path) -> None:
         codex_image_runner.target_for_shot("Clip_12_end", section, "第1集").rel_path
         == "出图/第1集/图片/镜头12_end.png"
     )
+
+
+def test_load_sections_drops_appended_compiled_prompt(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## Clip_01\n"
+        "**目标**：`出图/第1集/图片/Clip01.png`\n"
+        "动作瞬间：两人隔桌递回木牌。\n"
+        "### 后端编译提交 image prompt\n"
+        "上一轮错误残留：武器入体、伤口、动作高潮。\n",
+    )
+
+    section = codex_image_runner.load_sections(tmp_path, "第1集")[0]
+
+    assert "隔桌递回木牌" in section.body
+    assert "上一轮错误残留" not in section.body
+
+
+def test_nonviolent_action_does_not_trigger_cross_episode_or_weapon_guards() -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip_01",
+        body=(
+            "**剧本描述**：杂役大殿里递回木牌。\n"
+            "**跨集接力源帧**：无跨集动作接力。\n"
+            "动作瞬间：张老大用两指弹回木牌，贺平生承受冲击但不后退；"
+            "人体完整性/解剖完整性合约：不得穿模，身体结构完整。\n"
+            "禁止：刀柄附近不要出现漂浮手。\n"
+        ),
+        target_line="`出图/第1集/图片/Clip01.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_01_first",
+        clip="Clip_01",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip01.png",
+        section=section,
+    )
+
+    assert codex_image_runner.source_frame_geometry_guidance(target) == ""
+    assert codex_image_runner.weapon_body_contact_guidance(target) == ""
+    assert "弹回木牌" in codex_image_runner.target_story_action_scope(target)
 
 
 def test_explicit_prompt_target_line_wins_over_storyboard(tmp_path: Path) -> None:
@@ -2888,6 +2975,38 @@ def test_shared_first_interlock_passes_when_character_pack_complete(tmp_path: Pa
     write_valid_png(tmp_path / refs["rear_three_quarter"], fill=b"1")
     stale = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
     assert any("current_hash_review_receipts:rear_three_quarter" in issue for issue in stale)
+
+
+def test_shared_first_interlock_accepts_authorized_executor_visual_receipts(tmp_path: Path) -> None:
+    refs = {
+        view: f"出图/共享/图片/{view}.png"
+        for view in codex_image_runner.CHARACTER_SHARED_CORE_FIELDS
+    }
+    for index, rel in enumerate(refs.values(), start=1):
+        write_valid_png(tmp_path / rel, fill=bytes([index]))
+    face = "出图/共享/图片/expression.png"
+    write_valid_png(tmp_path / face, fill=b"\x80")
+    form = _reviewed_core_form(tmp_path, refs, face)
+
+    for item in list(form["reference_group"].values()):
+        rows = item if isinstance(item, list) else [item]
+        for row in rows:
+            if not isinstance(row, dict) or "human_review" not in row:
+                continue
+            receipt = row.pop("human_review")
+            receipt.update({
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": False,
+            })
+            row["visual_review"] = receipt
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式：逐张机器QC+执行者实际像素目视后再继续  # source=explicit_user；用户明确要求\n",
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner._core_review_receipt_issues(tmp_path, "CHAR_01", form) == []
 
 
 def test_shared_first_pre_spend_duplicate_png_sha_blocks_copied_views(tmp_path: Path) -> None:

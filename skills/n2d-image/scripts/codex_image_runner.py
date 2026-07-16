@@ -44,6 +44,7 @@ if str(N2D_LIB) not in sys.path:
 from image_backend_adapter import current_image_backend_selection  # noqa: E402
 from settings import get_setting  # noqa: E402
 from image_prompt_compiler import (  # noqa: E402
+    COMPILED_HEADING,
     compile_image_prompt,
     contract_from_section,
     infer_task_type as infer_image_task_type,
@@ -83,7 +84,7 @@ COMPLIANCE = Path("skills") / "n2d-compliance" / "scripts" / "compliance.py"
 PROGRESS = Path("skills") / "n2d" / "progress.py"
 SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
 STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
-MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "24"))
+MAX_CODEX_REFERENCE_IMAGES = int(os.environ.get("N2D_CODEX_MAX_REFERENCE_IMAGES", "5"))
 MAX_CODEX_CHARACTER_REFERENCES_PER_OWNER = int(os.environ.get("N2D_CODEX_MAX_CHARACTER_REFERENCES_PER_OWNER", "4"))
 IMAGE_QC_PYTHON_ENV = "N2D_IMAGE_QC_PYTHON"
 REFERENCE_ENHANCE_MIN_SHORT_EDGE = int(os.environ.get("N2D_REFERENCE_ENHANCE_MIN_SHORT_EDGE", "1024"))
@@ -275,6 +276,9 @@ def load_sections(root: Path, episode: str) -> List[ClipSection]:
         start = header.start()
         end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
         body = text[start:end].strip()
+        compiled_marker = re.search(rf"(?m)^\s*{re.escape(COMPILED_HEADING)}\s*$", body)
+        if compiled_marker:
+            body = body[: compiled_marker.start()].rstrip()
         title = header.group(0).strip()
         raw_num = header.group(2) or header.group(4)
         if not raw_num:
@@ -1803,6 +1807,20 @@ def _core_review_png_valid(path: Path) -> bool:
         return False
 
 
+def _executor_visual_review_authorized(root: Path) -> bool:
+    path = root / "_设置.md"
+    if not path.is_file():
+        return False
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return (
+        "执行者实际像素目视" in text
+        and ("用户明确" in text or "source=explicit_user" in text)
+    )
+
+
 def _core_review_receipt_valid(
     root: Path,
     item: Any,
@@ -1818,7 +1836,29 @@ def _core_review_receipt_valid(
     if path_errors:
         return False
     sha = optional_file_sha256(path) if rel else ""
-    review = item.get("human_review") if isinstance(item.get("human_review"), Mapping) else {}
+    candidates: List[tuple[int, str, Mapping[str, Any]]] = []
+    for fallback_kind, key in (("human", "human_review"), ("executor_visual", "visual_review")):
+        candidate = item.get(key) if isinstance(item.get(key), Mapping) else {}
+        if not candidate:
+            continue
+        candidate_sha = str(
+            candidate.get("png_sha256") or candidate.get("artifact_sha256") or candidate.get("sha256") or ""
+        ).strip().lower()
+        score = 0
+        if sha and candidate_sha == sha.lower():
+            score += 8
+        if str(candidate.get("verdict") or candidate.get("status") or "").strip().lower() in CORE_REVIEW_PASS:
+            score += 4
+        if str(candidate.get("reviewer") or candidate.get("reviewed_by") or "").strip():
+            score += 2
+        if fallback_kind == "human":
+            score += 1
+        candidates.append((score, fallback_kind, candidate))
+    if candidates:
+        _score, fallback_review_kind, review = max(candidates, key=lambda row: row[0])
+    else:
+        fallback_review_kind, review = "", {}
+    review_kind = str(review.get("review_kind") or fallback_review_kind).strip().lower()
     verdict = str(review.get("verdict") or review.get("status") or "").strip().lower()
     reviewer = str(review.get("reviewer") or review.get("reviewed_by") or "").strip()
     reviewed_at = str(review.get("reviewed_at") or review.get("timestamp") or "").strip()
@@ -1838,7 +1878,16 @@ def _core_review_receipt_valid(
         and verdict in CORE_REVIEW_PASS
         and str(review.get("status") or "").strip().lower() == "accepted"
         and reviewer
-        and not identity_reviewer_appears_automated(reviewer)
+        and review_kind in {"human", "executor_visual"}
+        and (
+            (review_kind == "human" and not identity_reviewer_appears_automated(reviewer))
+            or (
+                review_kind == "executor_visual"
+                and str(review.get("reviewer_role") or "") == "ai_visual_executor"
+                and review.get("human_signoff") is False
+                and _executor_visual_review_authorized(root)
+            )
+        )
         and not identity_reviewed_at_errors(reviewed_at)
         and str(review.get("character_id") or "") == character_id
         and str(review.get("form") or "") == form_name
@@ -2469,7 +2518,91 @@ def codex_reference_inputs_for_target(
                 continue
             character_counts[owner] = count + 1
         pruned.append(item)
-    return pruned[:MAX_CODEX_REFERENCE_IMAGES]
+    return select_codex_reference_inputs(target, pruned, MAX_CODEX_REFERENCE_IMAGES)
+
+
+def select_codex_reference_inputs(
+    target: Target,
+    inputs: Sequence[Dict[str, Any]],
+    limit: int = MAX_CODEX_REFERENCE_IMAGES,
+) -> List[Dict[str, Any]]:
+    """Fit references to the built-in image generator's hard attachment cap.
+
+    Episode frames reserve context capacity instead of letting one character's
+    angle pack consume every slot. Selection is deterministic: source frame,
+    balanced character identities, then location/plot asset/style context.
+    Shared catalog derivations keep their existing source-priority order.
+    """
+    rows = list(inputs)
+    if limit <= 0:
+        return []
+    if len(rows) <= limit or target.mode == "shared":
+        return rows[:limit]
+
+    sources = [row for row in rows if row.get("role") == "source_frame"][:1]
+    characters: Dict[str, List[Dict[str, Any]]] = {}
+    contexts: List[Dict[str, Any]] = []
+    for row in rows:
+        if row in sources:
+            continue
+        if row.get("role") == "character":
+            owner = str(row.get("owner") or row.get("rel_path") or "character")
+            characters.setdefault(owner, []).append(row)
+        else:
+            contexts.append(row)
+
+    def context_rank(row: Mapping[str, Any]) -> tuple[int, int, int]:
+        owner = str(row.get("owner") or "")
+        role = str(row.get("role") or "")
+        if owner.startswith("LOC_"):
+            kind = 0
+        elif owner.startswith(("PROP_", "WEAPON_", "VFX_")) or role == "asset":
+            kind = 1
+        elif role == "style":
+            kind = 2
+        else:
+            kind = 3
+        return (kind, int(row.get("priority") or 999), int(row.get("sequence") or 0))
+
+    contexts.sort(key=context_rank)
+    owner_count = len(characters)
+    context_reserve = 0
+    if contexts:
+        body = str(getattr(target.section, "body", "") or "")
+        has_interacted_asset = any(
+            str(row.get("owner") or "").startswith(("PROP_", "WEAPON_", "VFX_"))
+            and str(row.get("owner") or "") in body
+            for row in contexts
+        )
+        context_reserve = 2 if (owner_count <= 1 and not sources) or has_interacted_asset else 1
+        context_reserve = min(context_reserve, len(contexts), max(0, limit - len(sources)))
+    character_budget = max(0, limit - len(sources) - context_reserve)
+
+    selected_chars: List[Dict[str, Any]] = []
+    depth = 0
+    owners = list(characters)
+    while len(selected_chars) < character_budget:
+        added = False
+        for owner in owners:
+            group = characters[owner]
+            if depth < len(group):
+                selected_chars.append(group[depth])
+                added = True
+                if len(selected_chars) >= character_budget:
+                    break
+        if not added:
+            break
+        depth += 1
+
+    selected = [*sources, *selected_chars, *contexts[:context_reserve]]
+    selected_ids = {id(row) for row in selected}
+    for row in rows:
+        if len(selected) >= limit:
+            break
+        if id(row) not in selected_ids:
+            selected.append(row)
+            selected_ids.add(id(row))
+    return selected[:limit]
 
 
 def bundle_identity_face_paths(bundle: Dict[str, Any]) -> Set[str]:
@@ -2757,7 +2890,7 @@ def combat_spectacle_richness_for(body: str, style: str = "") -> str:
 
 def source_frame_geometry_guidance(target: Target) -> str:
     body = str(getattr(target.section, "body", "") or "")
-    cross_episode = bool(CROSS_EPISODE_SOURCE_FRAME_LINE_RE.search(body))
+    cross_episode = bool(cross_episode_source_frame_paths(body))
     if target.mode not in {"midframe", "tailframe"} and not cross_episode:
         return ""
     if target.mode == "tailframe":
@@ -2793,7 +2926,7 @@ def source_frame_geometry_guidance(target: Target) -> str:
 
 
 def weapon_body_contact_guidance(target: Target) -> str:
-    body = str(getattr(target.section, "body", "") or "")
+    body = target_story_action_scope(target)
     if not (
         re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body)
         and re.search(r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|腰|肩|背|身体)", body)
@@ -2839,6 +2972,27 @@ def hand_limb_anatomy_guidance(target: Target) -> str:
         "含脚尖、脚步、踩踏、跪地、蹲伏、踢、落点或鞋靴时，必须清楚显示脚/鞋/小腿的归属和受力方向；"
         "禁止把脚画成手、用手掌替代脚掌、让脚趾变成手指、让地面支撑点从脚变成手，脚部动作不清时宁可改构图到鞋靴落点特写。"
     )
+
+
+def target_story_action_scope(target: Target) -> str:
+    """Return only story/action prose, excluding generic QC boilerplate.
+
+    Whole prompt-pack sections contain words such as ``穿模`` and
+    ``无跨集动作接力``. Feeding the entire section to semantic detectors made
+    harmless shots look like weapon-entry or combat scenes.
+    """
+    body = str(getattr(target.section, "body", "") or "")
+    action = re.search(r"(?m)^动作瞬间[：:]\s*(.+)$", body)
+    if action:
+        text = action.group(1)
+        text = re.split(
+            r"；(?:人体完整性|解剖完整性|手部归属|身体接地|身体裁切|本镜状态锁)[^：:]*[：:]",
+            text,
+            maxsplit=1,
+        )[0]
+        return re.sub(r"\s+", " ", text).strip()
+    description = re.search(r"(?m)^\*\*剧本描述\*\*[：:]\s*(.+)$", body)
+    return re.sub(r"\s+", " ", description.group(1)).strip() if description else ""
 
 
 def image_style_brief(root: Path, episode: str) -> str:
@@ -2994,7 +3148,7 @@ def model_facing_policy_guards(
         )
     elif gaze_lock:
         guards.append(
-            "镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；"
+            "镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；"
             "身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍"
         )
 
@@ -3042,7 +3196,7 @@ def model_facing_policy_guards(
             "不得画成多人队列、三名军士并排、重复复制人、关系图或小队合影"
         )
 
-    if target.mode in {"midframe", "tailframe"} or CROSS_EPISODE_SOURCE_FRAME_LINE_RE.search(body):
+    if target.mode in {"midframe", "tailframe"} or cross_episode_source_frame_paths(body):
         guards.extend([
             "源帧几何连续性硬锁：保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和画面轴线；只推进表情、光效、烟尘、身体微姿态或镜头距离",
             "源帧主体身份连续硬锁：这是同一 Clip 接力，不是重新选角/重新换装；保持同一脸型比例、同一发际线、同一发髻/发束轮廓，以及同一衣领交叠方向、袖口卷边、腰带位置、衣摆、鞋履和材质",
@@ -3068,13 +3222,13 @@ def model_facing_policy_guards(
     if target.mode != "shared" and face_qc_visibility_guidance(target):
         guards.append(
             "脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，"
-            "不得被头发/暗影/火花/刀光完全遮住，也不转成看镜头肖像"
+            "不得被头发、暗影或强烈光效完全遮住，也不转成看镜头肖像"
         )
     if target.mode != "shared" and hand_limb_anatomy_guidance(target):
         guards.extend([
             "手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；"
-            "禁止额外手掌、镜像右手/镜像左手、漂浮断手或重复手",
-            "若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
+            "保持左右手方向正确、手腕连接连续，每只手只出现一次，人体与手部结构自然完整",
+            "若一只手接触道具，另一只手与其他物件的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
         ])
 
     if target.mode == "shared" and not shared_scene_target and _target_has_character_alias(target):
@@ -3120,11 +3274,12 @@ def compile_target_image_request(
     params.update(dict(request_params_override or {}))
     policy_guards = model_facing_policy_guards(target, reference_inputs)
     body = str(target.section.body or "")
-    clash = weapon_clash_compose_for(body)
+    story_action = target_story_action_scope(target)
+    clash = weapon_clash_compose_for(story_action)
     if clash:
         policy_guards.append(re.sub(r"\s+", " ", clash).strip(" -；。"))
     selected_style = image_style_brief(root, episode)
-    spectacle = combat_spectacle_richness_for(body, selected_style)
+    spectacle = combat_spectacle_richness_for(story_action, selected_style)
     if spectacle:
         if re.search(r"赛璐璐|二次元|anime|cel(?:[- ]?shad)", selected_style, re.I):
             policy_guards.append(
@@ -3471,6 +3626,7 @@ def _thread_id_from_stdout(stdout: str) -> str:
 def _image_failure_from_jsonl(text: str) -> str:
     failed = False
     messages: List[str] = []
+    final_failures: List[str] = []
     for line in text.splitlines():
         line = line.strip()
         if not line.startswith("{"):
@@ -3491,8 +3647,14 @@ def _image_failure_from_jsonl(text: str) -> str:
             message = payload.get("message")
             if isinstance(message, str) and message.strip():
                 messages.append(message.strip())
+                if payload.get("phase") == "final_answer" and re.search(
+                    r"失败|无法|不能|未生成|fail|error|unable|cannot",
+                    message,
+                    re.I,
+                ):
+                    final_failures.append(message.strip())
     if not failed:
-        return ""
+        return final_failures[-1] if final_failures else ""
     for message in reversed(messages):
         lowered = message.lower()
         if any(token in lowered for token in ("fail", "error", "失败", "错误", "异常", "超时")):

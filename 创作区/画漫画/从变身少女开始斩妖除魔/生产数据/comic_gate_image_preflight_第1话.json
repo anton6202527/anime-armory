@@ -4,15 +4,26 @@
   "project_root": ".",
   "chapter": "第1话",
   "stage": "image_preflight",
-  "created_at": "2026-07-15T02:41:22",
-  "verdict": "warn",
+  "created_at": "2026-07-15T22:30:22",
+  "verdict": "block",
   "summary": {
-    "finding_count": 43,
-    "block_count": 0,
+    "finding_count": 45,
+    "block_count": 2,
     "warn_count": 21,
     "info_count": 22
   },
   "findings": [
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "panel_jobs_stale_contract",
+      "artifact": "出图/第1话/prompt/panel_jobs.json",
+      "reason": "这些格的落盘出图包与当前脚本/收尾/风格契约不一致（改了契约没重建出图包）：P001、P002、P003、P004、P005、P006、P007、P008、P009、P010、P011、P012、P013、P014、P015、P016、P017、P018、P019、P020",
+      "return_to_stage": "image",
+      "suggested_fix": "重跑 comic-image/scripts/build_panel_jobs.py（陈旧格自动回 planned），再重抽这些格。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
     {
       "severity": "warn",
       "dimension": "comic_gate",
@@ -32,6 +43,17 @@
       "reason": "短语『斩杀生物』在 P021/P023/P025 复现 3 格——同一信息反复告知读者即冗余；只留首次落地处。",
       "return_to_stage": "comic-script",
       "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "reference_plan_stale",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "已落盘处方的 plan_sha256 与当前输入不一致。",
+      "return_to_stage": "identity",
+      "suggested_fix": "重跑 comic-image 构建参考处方和 panel_jobs。",
       "evidence_family": "deterministic",
       "confidence": "deterministic"
     },
@@ -491,7 +513,7 @@
     "开发包严格合同: pass",
     "源范围/SHA/逐格 coverage 合同: pass",
     "continuity_audit: chapters=1 block=0 warn=0",
-    "ネーム审批合同: pass",
+    "缩略分镜/name board 审批合同: pass",
     "排版审批合同: pass",
     "原稿收尾合同: pass",
     "backend adapter: openai_gpt_image_project_memory; reference_image_limit=16; persistent_subject=False",
@@ -500,7 +522,7 @@
     "chapter_beat_audit: must=0 warn=0（advisory·不阻断）",
     "setup_payoff_ledger: must=0 warn=0（advisory·不阻断）",
     "redundancy_audit: must=0 warn=2（advisory·不阻断）",
-    "reference_planner: 含角色格 28 需处理 24；处方 SHA 已校验"
+    "reference_planner: 含角色格 27 需处理 24；处方 SHA 已校验"
   ],
   "inputs_fingerprint": {
     "kind": "comic_inputs_fingerprint",
@@ -551,7 +573,7 @@
       {
         "path": "脚本/第1话/source_semantics.json",
         "exists": true,
-        "sha256": "45f3b0df310d0b65821fede1ea13301617cf81bd3d5ebbbcac17d55b38571a79",
+        "sha256": "586d24f5b2dccd4264bf5b5d593e1235e547e1ac36565db7537458d80e232e64",
         "size": 91149
       },
       {
@@ -581,7 +603,7 @@
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "fd5bdbbfaa1eb419c9060621d33fdebd8b6a72ffad08a7d4cddc5db2f092dc55",
+        "sha256": "13937e67ecb82c675273995e87299fbdf5c4387e6e15044cea199ea2e3725d1b",
         "size": 6894
       },
       {
@@ -611,8 +633,8 @@
       {
         "path": "出图/第1话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "46af549df0f0160934e29eaae04320f424a812fb74c9d2fee21802160cadc8fb",
-        "size": 728829
+        "sha256": "168e80ac948001655162b38846901051c4d381f1d0347530d7e4057899bbd678",
+        "size": 729447
       },
       {
         "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -889,9 +911,15 @@
         "exists": true,
         "sha256": "54a875412db5572bb4a59c9d20500b7b9d13bf1d822651451a8223c060d3d53a",
         "size": 1877220
+      },
+      {
+        "path": "出图/第1话/panels/P014.png",
+        "exists": true,
+        "sha256": "4e907f85b04657ab9daa58cc2ce22b47fd7039504fb3b6877032218d66cc1fc5",
+        "size": 2330922
       }
     ],
-    "sha256": "e3b3f7c4b693e73d0869cd86812bdac827be1e7143ff0fb4c440497411d183bf"
+    "sha256": "0e4520ca46f573b8401767447e50e6fa2d919bed267d6b3ef8695cb740f21595"
   },
-  "receipt_id": "0710b3760353559c9c2ca7a0baa9a4b2866d79f282775bb2b321fd344840a42b"
+  "receipt_id": "ad5f8749402eccf5e2d73fa0b6ec9000f97da77e2297ac4ede3fde4e05c602d3"
 }

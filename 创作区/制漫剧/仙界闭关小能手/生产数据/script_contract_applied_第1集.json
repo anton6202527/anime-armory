@@ -6,11 +6,11 @@
     {
       "scope": "出图",
       "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
-      "prompt_sha256": "a32b1bd526e4d249bd4b4528d4ad7814930c389e8ae6e45f785a15d414caa296",
+      "prompt_sha256": "42b35e2c07cfb64b20286a80f8a3bff305119b90f0907db0876689b1fec066a8",
       "contract_path": "生产数据/script_quality_contract_第1集.json",
-      "contract_content_hash": "9a25037297f2528e",
-      "contract_file_sha256": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3",
-      "contract_sha256": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3",
+      "contract_content_hash": "0ae0dfd5e69f20e5",
+      "contract_file_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",
+      "contract_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",
       "consumed_fields": [
         "core_attraction",
         "first_3s_visual_hook",
@@ -34,13 +34,13 @@
         "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
         "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
       ],
-      "reviewed_at": "2026-07-14T17:06:23+00:00"
+      "reviewed_at": "2026-07-15T17:20:47+00:00"
     }
   ],
   "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-14T17:06:23+00:00",
+  "reviewed_at": "2026-07-15T17:20:47+00:00",
   "contract_path": "生产数据/script_quality_contract_第1集.json",
-  "contract_content_hash": "9a25037297f2528e",
-  "contract_file_sha256": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3",
-  "contract_sha256": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3"
+  "contract_content_hash": "0ae0dfd5e69f20e5",
+  "contract_file_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",
+  "contract_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d"
 }

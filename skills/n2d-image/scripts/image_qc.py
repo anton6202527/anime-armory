@@ -3475,7 +3475,15 @@ def _upsert_face_rows(root: Path, ep: str, rows: Sequence[Mapping[str, Any]],
 
 
 def confirm_face_targets(root: Path, ep: str, selector: str,
-                         *, reviewer: str = "manual", reason: str = "") -> Dict[str, Any]:
+                         *, reviewer: str = "manual", reason: str = "",
+                         review_kind: str = "human") -> Dict[str, Any]:
+    normalized_kind = str(review_kind or "human").strip().lower()
+    if normalized_kind not in {"human", "executor_visual"}:
+        return {"ok": False, "msg": "review_kind 只能是 human 或 executor_visual"}
+    if normalized_kind == "executor_visual" and not executor_visual_review_authorized(root):
+        return {"ok": False, "msg": "项目未明确授权执行者实际像素目视，不能写 executor_visual 脸部复核收据"}
+    if normalized_kind == "human" and identity_reviewer_appears_automated(reviewer):
+        return {"ok": False, "msg": "human 复核 reviewer 不能使用自动化/AI 身份；请改用 executor_visual"}
     report = face_confirmation_report(root, ep)
     selector = str(selector or "").strip()
     targets = report.get("targets") or []
@@ -3500,7 +3508,10 @@ def confirm_face_targets(root: Path, ep: str, selector: str,
             "shot": t.get("shot"),
             "verdict": "ok",
             "reviewer": reviewer,
-            "source": "image_qc:manual_face_confirm",
+            "review_kind": normalized_kind,
+            "reviewer_role": "ai_visual_executor" if normalized_kind == "executor_visual" else "human_creative_reviewer",
+            "human_signoff": normalized_kind == "human",
+            "source": f"image_qc:{normalized_kind}_face_confirm",
             "confirmed_at": now,
             "reason": reason or "人工确认与角色定妆一致，embedding 低分为角度/暗光/侧背等误报",
             "original_verdict": t.get("original_verdict"),
@@ -6358,6 +6369,96 @@ def executor_visual_review_authorized(root: Path) -> bool:
     )
 
 
+def review_style_anchor(
+    root: Path,
+    *,
+    reviewer: str,
+    review_kind: str = "human",
+    note: str = "",
+    accept_current_pixels: bool = False,
+) -> Dict[str, Any]:
+    """Accept the selected style anchor against its current PNG hash.
+
+    Style anchors used to be the only shared visual primitive without a
+    first-class review receipt: the generator could leave them
+    ``review_pending`` but executors had to edit JSON by hand to release the
+    image preflight.  Keep the same explicit-current-pixels and reviewer-kind
+    rules as character view receipts, and update both ``selected_anchor`` and
+    the matching item in ``anchors`` atomically.
+    """
+    root = Path(root)
+    reviewer = str(reviewer or "").strip()
+    if not reviewer:
+        return {"ok": False, "msg": "风格锚复核必须填写 reviewer"}
+    if not accept_current_pixels:
+        return {"ok": False, "msg": "风格锚 pass 必须显式确认已查看当前像素（--accept-current-pixels）"}
+    normalized_kind = str(review_kind or "human").strip().lower()
+    if normalized_kind not in {"human", "executor_visual"}:
+        return {"ok": False, "msg": "review_kind 只能是 human 或 executor_visual"}
+    if normalized_kind == "executor_visual" and not executor_visual_review_authorized(root):
+        return {"ok": False, "msg": "项目未在 _设置.md 明确授权执行者实际像素目视，不能写 executor_visual 收据"}
+    if normalized_kind == "human" and identity_reviewer_appears_automated(reviewer):
+        return {"ok": False, "msg": "human reviewer 禁止使用 bot/codex/agent/runner 等自动化标识"}
+
+    registry_path = root / "出图" / "共享" / "style_anchor_registry.json"
+    with _project_write_lock(root):
+        try:
+            registry = json.loads(registry_path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            return {"ok": False, "msg": f"读 style_anchor_registry 失败：{exc}"}
+        selected = registry.get("selected_anchor")
+        if not isinstance(selected, dict):
+            return {"ok": False, "msg": "style_anchor_registry 缺 selected_anchor"}
+        rel = str(selected.get("path") or "").strip()
+        path = root / rel
+        sha = _sha256_file(path) if rel else None
+        if not sha:
+            return {"ok": False, "msg": f"风格锚图不存在或不可读：{rel}"}
+        try:
+            from PIL import Image  # type: ignore
+            with Image.open(path) as opened:
+                if opened.format != "PNG":
+                    return {"ok": False, "msg": f"风格锚不是 PNG：{rel}"}
+                width, height = opened.size
+                opened.verify()
+            with Image.open(path) as decoded:
+                decoded.load()
+        except Exception as exc:
+            return {"ok": False, "msg": f"风格锚 PNG 必须可完整解码：{rel} ({type(exc).__name__})"}
+        if min(int(width), int(height)) < 512:
+            return {"ok": False, "msg": f"风格锚短边 {min(int(width), int(height))}px，小于验收底线 512px"}
+
+        receipt = {
+            "status": "accepted",
+            "verdict": "pass",
+            "path": rel,
+            "reviewer": reviewer,
+            "review_kind": normalized_kind,
+            "reviewer_role": "ai_visual_executor" if normalized_kind == "executor_visual" else "human_creative_reviewer",
+            "human_signoff": normalized_kind == "human",
+            "reviewed_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+            "png_sha256": sha,
+            "confirmation": {"kind": "explicit_current_pixels_acceptance", "accepted_current_pixels": True},
+            "note": note or "核验渲染语言、材质、色彩与项目基础视觉风格一致，且不继承人物身份或服装。",
+        }
+        receipt_key = "human_review" if normalized_kind == "human" else "visual_review"
+
+        def promote(item: Dict[str, Any]) -> None:
+            item["status"] = "ready"
+            item["sha256"] = sha
+            item[receipt_key] = dict(receipt)
+
+        promote(selected)
+        registry["selected_anchor"] = selected
+        for item in registry.get("anchors") or []:
+            if isinstance(item, dict) and str(item.get("path") or "").strip() == rel:
+                promote(item)
+        registry["updated_at"] = receipt["reviewed_at"]
+        _write_json_atomic(registry_path, registry)
+    return {"ok": True, "path": rel, "png_sha256": sha,
+            "msg": f"style_anchor review=pass sha={sha[:12]}…"}
+
+
 def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool = True) -> Dict[str, Any]:
     """把共享定妆/资产的机器可读 finalize 真值 `self_check_passed` 置位（补 `00_索引.md` 人读 ✅）。
 
@@ -6387,6 +6488,17 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
                     if value:
                         for key in ("reference_group", "reference_atlas", "scene_atlas"):
                             _promote_reference_slots(root, a.get(key), label_prefix=key)
+                        rel = _asset_primary_relpath(a)
+                        sha = _sha256_file(root / rel) if rel else None
+                        if not sha:
+                            a["self_check_passed"] = False
+                            _write_json_atomic(p, reg)
+                            return {"ok": False, "msg": f"{t} 主参考 PNG 缺失，不能写像素绑定自检收据"}
+                        a["artifact_sha256"] = sha
+                        a["self_check_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+                        a["self_check_by"] = "image_qc.mark_finalized"
+                    else:
+                        a.pop("artifact_sha256", None)
                     _write_json_atomic(p, reg)
                     return {"ok": True, "target": t, "value": bool(value), "msg": f"{t}.self_check_passed={value}"}
         return {"ok": False, "msg": f"asset_registry 无资产 `{t}`"}
@@ -6429,6 +6541,7 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
             sha = _sha256_file(root / rel) if rel else None
             if sha:
                 fm["anchor_sha"] = sha
+                fm["artifact_sha256"] = sha
                 auto_pinned.append(sha)
             else:
                 anchor_missing = True
@@ -6441,6 +6554,21 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
                 msg += "（front 锚点图缺失，未自动钉死——补图后跑 --pin-anchor）"
         return {"ok": True, "target": t, "value": bool(value),
                 "auto_pinned": bool(auto_pinned), "msg": msg}
+
+
+def _asset_primary_relpath(asset: Mapping[str, Any]) -> str:
+    """Return the canonical image path used to bind an asset finalize receipt."""
+    group = asset.get("reference_group") if isinstance(asset.get("reference_group"), Mapping) else {}
+    for key in ("primary", "front", "hero", "canonical"):
+        item = group.get(key)
+        if isinstance(item, Mapping) and str(item.get("path") or "").strip():
+            return str(item.get("path")).strip()
+    for item in asset.get("reference_slots") or []:
+        if not isinstance(item, Mapping):
+            continue
+        if str(item.get("slot") or "") == "primary_reference" and str(item.get("path") or "").strip():
+            return str(item.get("path")).strip()
+    return ""
 
 
 def _mark_front_reference_ready(root: Path, form: Dict[str, Any]) -> bool:
@@ -6699,6 +6827,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("episode", nargs="?")
     ap.add_argument("--mark-finalized", metavar="TARGET",
                     help="把共享定妆/资产 `self_check_passed` 置 true；core_full 必须先逐视图 --review-view：CHAR_xx/形态 或 LOC/PROP/WEAPON/OUTFIT/VFX_xx")
+    ap.add_argument("--finalize-style-anchor", action="store_true",
+                    help="实际查看当前风格锚 PNG 后，以当前 hash 写验收收据并把 selected anchor 置 ready")
+    ap.add_argument("--style-reviewer", default="",
+                    help="与 --finalize-style-anchor 连用：真实审阅者/岗位标识，必填")
+    ap.add_argument("--style-review-kind", choices=("human", "executor_visual"), default="human",
+                    help="与 --finalize-style-anchor 连用；executor_visual 不冒充人工签收")
+    ap.add_argument("--style-note", default="",
+                    help="与 --finalize-style-anchor 连用：风格、材质、色彩与身份隔离复核说明")
     ap.add_argument("--unfinalize", action="store_true",
                     help="与 --mark-finalized 连用：改置 false（标记脏定妆，gate 引用即 block）")
     ap.add_argument("--no-auto-pin", action="store_true",
@@ -6749,6 +6885,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="把指定 face warn/block 复核项标 ok；SELECTOR=all/pending 或 char/png/shot/id 列表。需人工已看过图片")
     ap.add_argument("--face-reviewer", default="manual",
                     help="与 --face-confirm-ok 连用，写入 reviewer 字段")
+    ap.add_argument("--face-review-kind", choices=("human", "executor_visual"), default="human",
+                    help="与 --face-confirm-ok 连用；executor_visual 记录执行者实际像素目视且不冒充人工")
     ap.add_argument("--face-reason", default="",
                     help="与 --face-confirm-ok 连用，写入人工确认原因")
     ap.add_argument("--prop-shape-report", action="store_true",
@@ -6769,6 +6907,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="只打印 pending 高风险 PROP 的 `--affected-shot ...` 串，便于 n2d-batch 最小重出")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
+    if ns.finalize_style_anchor:
+        r = review_style_anchor(
+            root,
+            reviewer=ns.style_reviewer,
+            review_kind=ns.style_review_kind,
+            note=ns.style_note,
+            accept_current_pixels=ns.accept_current_pixels,
+        )
+        print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
+        return 0 if r.get("ok") else 1
     if ns.review_view:
         if not ns.view or not ns.view_verdict or not str(ns.view_reviewer or "").strip():
             ap.error("--review-view 必须同时提供 --view、--view-verdict、--view-reviewer")
@@ -6803,7 +6951,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(json.dumps(r, ensure_ascii=False, indent=2, sort_keys=True))
         return 0 if r.get("available") else 1
     if not ns.episode:
-        ap.error("episode 必填（除非用 --review-view / --mark-finalized / --pin-anchor / --finalize-expr / --record-faceless 写 registry）")
+        ap.error("episode 必填（除非用 --finalize-style-anchor / --review-view / --mark-finalized / --pin-anchor / --finalize-expr / --record-faceless 写 registry）")
     if ns.face_report:
         report = face_confirmation_report(root, ns.episode)
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
@@ -6815,6 +6963,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             ns.face_confirm_ok,
             reviewer=ns.face_reviewer,
             reason=ns.face_reason,
+            review_kind=ns.face_review_kind,
         )
         print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
         return 0 if res.get("ok") else 1

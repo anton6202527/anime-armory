@@ -114,6 +114,17 @@ def test_audience_questions_ignore_storyboard_negative_constraints(tmp_path: Pat
     assert ledger["questions"] == []
 
 
+def test_question_context_never_truncates_structured_identifier() -> None:
+    text = "x" * 28 + "为何" + " audience_effect 明确尺度 scene LOC_01 后续"
+    match = sqp.QUESTION_RE.search(text)
+    assert match is not None
+
+    context = sqp._context(text, match)
+
+    assert "LOC_01" in context
+    assert not context.endswith("LOC_0")
+
+
 def test_boundary_continuation_accepts_explicit_hook_bridge(tmp_path: Path) -> None:
     ep1 = tmp_path / "脚本" / "第1集"
     ep2 = tmp_path / "脚本" / "第2集"

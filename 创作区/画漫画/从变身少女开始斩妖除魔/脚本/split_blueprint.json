@@ -3,6 +3,10 @@
   "version": 2,
   "status": "confirmed",
   "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。",
+  "coverage_scope": {
+    "planned_through": "第1章",
+    "reason": "首批仅完成第1话制作，用于验证主角定妆、新国风水墨画风与条漫生产流程；后续章节将在首话完成终审后逐批规划。"
+  },
   "chapters": [
     {
       "chapter": "第1话",

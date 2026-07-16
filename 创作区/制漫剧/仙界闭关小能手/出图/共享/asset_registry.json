@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-14T17:06:22+00:00",
+  "generated_at": "2026-07-15T16:39:30+00:00",
   "assets": [
     {
       "id": "LOC_01",
@@ -12,25 +12,41 @@
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.371828+00:00"
           }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.371918+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.371934+00:00"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.371946+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -92,7 +108,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
@@ -107,16 +123,27 @@
             "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
             "status": "ready",
             "human_review": {
-              "status": "pending",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-15T16:44:20.371961+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
-            "status": "ready"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-15T16:44:20.371971+00:00"
+            }
           }
         }
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:20+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "fdc3555045015eb67daf525a7389e33266f38ce307a6bd6a2bb57405e0674d1b"
     },
     {
       "id": "PROP_木牌",
@@ -125,26 +152,32 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_木牌.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.515512+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_木牌_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.515602+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_木牌_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.515620+00:00"
           }
         }
       },
@@ -158,7 +191,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_木牌.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "3281e941d555fc03541190cfaec464edaca2bd6a1dedc52a1f560c1281db5d34",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -201,8 +235,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "木牌",
       "lifecycle": {
@@ -212,7 +246,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:20+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "3281e941d555fc03541190cfaec464edaca2bd6a1dedc52a1f560c1281db5d34"
     },
     {
       "id": "LOC_02",
@@ -223,25 +260,41 @@
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.660199+00:00"
           }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
           "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.660286+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.660301+00:00"
+          }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.660313+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -303,7 +356,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
@@ -318,16 +371,27 @@
             "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
             "status": "ready",
             "human_review": {
-              "status": "pending",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-15T16:44:20.660327+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
-            "status": "ready"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-15T16:44:20.660337+00:00"
+            }
           }
         }
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:20+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "57a8a3997329e241331459f4ea839c85fa472408a30a7e6eebd529c83a579fc2"
     },
     {
       "id": "PROP_旧布包",
@@ -336,26 +400,32 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_旧布包.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.804974+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_旧布包_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.805058+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_旧布包_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.805075+00:00"
           }
         }
       },
@@ -369,7 +439,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_旧布包.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "501ae7cc06d2ed6e3837117b568ca323ee739b4310c5ad14d48c9187eee15a85",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -412,8 +483,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "旧布包",
       "lifecycle": {
@@ -423,7 +494,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:20+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "501ae7cc06d2ed6e3837117b568ca323ee739b4310c5ad14d48c9187eee15a85"
     },
     {
       "id": "PROP_扁担",
@@ -432,26 +506,32 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_扁担.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.948864+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_扁担_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.948945+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_扁担_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:20.948963+00:00"
           }
         }
       },
@@ -465,7 +545,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_扁担.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "ea4e3cf2c7c6fc324e185879172c599f8010ab61830b76e672d9592febcb4e8f",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -509,8 +590,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "+ PROP_水桶",
       "lifecycle": {
@@ -520,7 +601,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:20+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "ea4e3cf2c7c6fc324e185879172c599f8010ab61830b76e672d9592febcb4e8f"
     },
     {
       "id": "PROP_水桶",
@@ -529,26 +613,32 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_水桶.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.091819+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_水桶_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.091902+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_水桶_手持.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.091919+00:00"
           }
         }
       },
@@ -562,7 +652,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_水桶.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "7d3d3993e74d01a0861b57b8f6ec36acd3868f62da66b1d167863ffa514d00d4",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -605,8 +696,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "水桶",
       "lifecycle": {
@@ -616,7 +707,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:21+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "7d3d3993e74d01a0861b57b8f6ec36acd3868f62da66b1d167863ffa514d00d4"
     },
     {
       "id": "LOC_03",
@@ -625,34 +719,42 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.231118+00:00"
           }
         },
         "front": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.231201+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.231216+00:00"
           }
         },
         "floor_plan": {
           "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.231228+00:00"
           }
         }
       },
@@ -666,8 +768,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-          "status": "review_pending",
-          "sha256": "d2a9a2e3f0aa7a753005c64673f3afa948147d1de8e9b86b904a288b6e4f95bc",
+          "status": "ready",
+          "sha256": "64f62b309d4cded94a44ebf00f2d0a0f7958b580da1f7468b9422955c73fa6a2",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -715,7 +817,7 @@
           "空间轴线随机跳变"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
@@ -728,22 +830,29 @@
         "base_views": {
           "front": {
             "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-            "status": "review_pending",
+            "status": "ready",
             "human_review": {
-              "status": "pending",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-15T16:44:21.231242+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
-            "status": "review_pending",
+            "status": "ready",
             "human_review": {
-              "status": "pending",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-15T16:44:21.231252+00:00"
             }
           }
         }
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:21+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "64f62b309d4cded94a44ebf00f2d0a0f7958b580da1f7468b9422955c73fa6a2"
     },
     {
       "id": "PROP_01",
@@ -752,23 +861,33 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_破损黑盆.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.375253+00:00"
           }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_破损黑盆_比例.png",
-          "status": "review_pending",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.375339+00:00"
           }
         },
         "in_hand": {
           "path": "出图/共享/图片/定妆_道具_破损黑盆_手持.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-15T16:44:21.375356+00:00"
+          }
         }
       },
       "reference_slots": [
@@ -781,7 +900,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_破损黑盆.png",
-          "status": "review_pending",
+          "status": "ready",
+          "sha256": "01df7cd0a9660358a76ced308bf5574e9b7a647e8e34af9830e4b618d90e3b38",
           "human_review": {
             "status": "pending",
             "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -824,8 +944,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "破损黑盆",
       "lifecycle": {
@@ -835,7 +955,10 @@
           "本集引用"
         ],
         "status": "active"
-      }
+      },
+      "self_check_at": "2026-07-15T16:44:21+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "01df7cd0a9660358a76ced308bf5574e9b7a647e8e34af9830e4b618d90e3b38"
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

@@ -132,3 +132,21 @@ def test_write_missing_merges_new_identity_rows_into_existing_contract(tmp_path)
     assert merged["status"] == "confirmed"
     assert merged["canonical_names"]["BEAST_01"]["canonical_name"] == "虎山神"
     assert merged["dialogue_registers"]["BEAST_01"]["formality"]
+
+
+def test_write_missing_upgrades_legacy_scalar_canonical_name(tmp_path):
+    _identity(tmp_path)
+    payload = sc.scaffold(tmp_path)
+    payload["status"] = "confirmed"
+    payload["canonical_names"]["CHAR_01"] = "沈念"
+    sc.path(tmp_path).parent.mkdir(parents=True, exist_ok=True)
+    sc.path(tmp_path).write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    sc.write_missing(tmp_path)
+    merged = sc.load(tmp_path)
+
+    assert merged["canonical_names"]["CHAR_01"] == {
+        "canonical_name": "沈念",
+        "forbidden_variants": [],
+    }
+    assert not sc.validate(tmp_path, "第1集", phase="script")

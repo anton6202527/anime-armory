@@ -3357,7 +3357,21 @@ def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
         return False
     if asset_type in {"vfx", "effect"} and weapon_like_role in {"vfx_only", "effect_only", "not_entity_weapon"}:
         return False
-    blob = json.dumps(asset, ensure_ascii=False).lower()
+    # Scan creative semantics only.  Evidence metadata such as
+    # ``artifact_sha256`` contains the English word ``artifact`` and used to
+    # promote every finalized prop (bucket, cloth bag, nameplate...) to a
+    # magic weapon.  Paths, hashes, receipts and adapter records are not
+    # evidence of an asset's story function.
+    semantic = {
+        key: asset.get(key)
+        for key in (
+            "id", "type", "name", "description", "positive", "current_state",
+            "weapon_like_role", "constraints", "drift_forbidden", "scene_dna",
+            "lifecycle", "notes",
+        )
+        if key in asset
+    }
+    blob = json.dumps(semantic, ensure_ascii=False).lower()
     for term in WEAPON_LIKE_ASSET_TERMS:
         needle = term.lower()
         if re.fullmatch(r"[a-z_]+", needle):

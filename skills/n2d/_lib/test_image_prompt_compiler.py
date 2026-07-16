@@ -9,6 +9,7 @@ from image_prompt_compiler import (
     PROFILE_VERSION,
     compile_image_prompt,
     compile_image_section,
+    contract_from_section,
     infer_task_type,
     lint_compiled_prompt,
     lint_compiled_section,
@@ -441,6 +442,39 @@ def test_embedded_compiled_section_gate_detects_missing_stale_and_wrong_backend(
         code.startswith("compiled_backend_mismatch")
         for code in lint_compiled_section(embedded, expected_backend="dreamina")["errors"]
     )
+
+
+def test_codex_compiler_drops_recursive_block_and_softens_nonviolent_action():
+    section = """## Clip_01
+**剧本描述**：大殿内的阶层压力。
+### 正向 prompt（中文）
+```text
+锚点句：少年与管事；
+动作瞬间：管事用两指弹回木牌，少年承受冲击但不后退；
+禁止：断手、断肢、血光、水印；
+```
+### 后端编译提交 image prompt
+上一轮错误残留：武器入体与伤口。
+"""
+    contract = contract_from_section(
+        section,
+        backend="codex",
+        mode="firstframe",
+        task_type="multi_subject",
+        target_path="Clip01.png",
+        request_params={"aspect_ratio": "9:16"},
+    )
+    payload = compile_image_prompt(contract, "codex")
+
+    assert "上一轮错误残留" not in payload["prompt"]
+    assert "武器入体" not in payload["prompt"]
+    assert "点住木牌" in payload["prompt"]
+    assert "稳稳站住" in payload["prompt"]
+    assert "断手" not in payload["prompt"]
+    assert "断肢" not in payload["prompt"]
+    assert "血光" not in payload["prompt"]
+    assert "人体与手部结构自然完整" in payload["prompt"]
+    assert "nonviolent_social_action_softened_for_provider" in payload["compiler_decisions"]
 
 
 def test_backend_and_task_golden_fixtures():

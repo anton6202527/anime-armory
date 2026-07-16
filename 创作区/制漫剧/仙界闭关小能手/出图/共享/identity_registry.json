@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-14T17:06:22+00:00",
+  "generated_at": "2026-07-15T16:58:37+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -51,6 +51,36 @@
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "本集为14岁杂役常态",
+                "library_tier": "core_full",
+                "view": "front",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-15T15:50:26+00:00",
+                "png_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
+                "registry_binding_fingerprint": "d703e59f07527d08baa53a8ee75d12219ce7ec636c4a7b00bb65ae2cb0aeb034",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "实际目视：14岁清瘦少年脸型、低小髻灰布发带、灰褐粗布短打、完整头脚线与中性站姿通过。"
               }
             },
             "outfit": {
@@ -85,27 +115,10 @@
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
-            "expressions": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
+                  "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
                   "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
@@ -115,149 +128,323 @@
                     1
                   ]
                 },
-                "emotion": "基础",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:28+00:00",
+                  "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e",
+                  "registry_binding_fingerprint": "fbaad911e201342f73ffb9f482ad4649c0a7e11c0544a4fdab93c154e7eeabfb",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：六格同一角色身份、年龄、发髻与服装一致，六种基础剧情表情区分可读。"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
-                }
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:28+00:00",
+                  "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e",
+                  "registry_binding_fingerprint": "fbaad911e201342f73ffb9f482ad4649c0a7e11c0544a4fdab93c154e7eeabfb",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：六格同一角色身份、年龄、发髻与服装一致，六种基础剧情表情区分可读。"
+                },
+                "layout": "two_by_three_expression_sheet_v1"
               }
             ],
             "three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                 "crop_box": [
                   0,
                   0,
-                  1024,
-                  1819
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-14T17:23:56+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                    "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                    "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_45度",
-                    "source": "same_source_makeup_parent"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "本集为14岁杂役常态",
+                "library_tier": "core_full",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-15T15:50:27+00:00",
+                "png_sha256": "80b68295ac6d528f7eb2d1f9edd4d1f08879483ba6cdfaceb614e3fdb32fe340",
+                "registry_binding_fingerprint": "b3d13ab16a9d5ea5fad3bd67a850819319578b8db0a427e3c958b0dd5cfe026b",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "实际目视：与正面同人同服装，前3/4骨相、发带、衣领与全身比例对齐。"
               }
             },
             "side": {
               "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                 "crop_box": [
                   0,
                   0,
-                  1024,
-                  1819
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-14T17:27:22+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                    "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                    "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_侧",
-                    "source": "same_source_makeup_parent"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "本集为14岁杂役常态",
+                "library_tier": "core_full",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-15T15:50:27+00:00",
+                "png_sha256": "17c9544dba319cbfc26265893c52dda6219bff7d1a7f5f5edb5ef64801da316e",
+                "registry_binding_fingerprint": "68175ecabbeca81db91b92a84fdc8318614114b6f8e58315aa898dba69d9d3ca",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "实际目视：侧面鼻额下颌轮廓、发髻、服装层次与全身比例同源。"
               }
             },
             "rear_three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                 "crop_box": [
                   0,
                   0,
-                  1024,
-                  1819
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-14T17:30:57+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                    "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                    "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_后45度",
-                    "source": "same_source_makeup_parent"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "本集为14岁杂役常态",
+                "library_tier": "core_full",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-15T15:50:27+00:00",
+                "png_sha256": "48f29a9cb10a3258837a877503159cf5d7d96dea22b1e600141e79e3dc05d1dd",
+                "registry_binding_fingerprint": "aa3191c97be1537db1d7fcb715a110673681e7b241113cbbc37a93b9b7657519",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "实际目视：后3/4发髻发带、肩背轮廓与服装背部结构和前视图一致。"
               }
             },
             "back": {
               "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                 "crop_box": [
                   0,
                   0,
-                  1024,
-                  1819
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-14T17:35:45+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                    "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                    "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_背",
-                    "source": "same_source_makeup_parent"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "本集为14岁杂役常态",
+                "library_tier": "core_full",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-15T15:50:27+00:00",
+                "png_sha256": "408eba9d4fb48a5035e2f1438da5ff3bd1c9599c73077fff64af58ed4425431c",
+                "registry_binding_fingerprint": "a6b138ecad29b401327e72ecdb21dd6780cf8047468b0e327e71404d7a7c78e5",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "实际目视：背面发髻、衣服后片、腰带、绑腿和完整头脚线成立。"
               }
             },
             "turnaround": {
               "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png",
-              "status": "review_pending",
+              "status": "ready",
               "layout": "five_angle_v1",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "本集为14岁杂役常态",
+                "library_tier": "core_full",
+                "view": "turnaround",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png",
+                "reviewer": "executor:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-15T15:50:28+00:00",
+                "png_sha256": "ef5d0fa7a56c6dab52a66c8b45a4196d3c639e70efaea45ba6d00abede839b40",
+                "registry_binding_fingerprint": "dadb9762a9dacb17bdeb3fe566761addbd90343e677b06ce687d7be3806cad6f",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "实际目视：五角总览身份、服装、头脚线、中心线与身高比例整体一致。"
+              },
               "column_count": 5,
               "view_order": [
                 "front",
@@ -265,72 +452,7 @@
                 "side",
                 "rear_three_quarter",
                 "back"
-              ],
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                "crop_box": [
-                  0,
-                  0,
-                  1024,
-                  1819
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-14T17:47:14+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                    "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                    "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态_45度__80b68295ac6d_941x1672_to_1024x1819.png",
-                    "sha256": "80b68295ac6d528f7eb2d1f9edd4d1f08879483ba6cdfaceb614e3fdb32fe340",
-                    "prepared_sha256": "8b8d29d89c66dcb4730fdfc5b7c1e048e47fad77734e5fd37542fb11e0e75113",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态_侧__17c9544dba31_941x1672_to_1024x1819.png",
-                    "sha256": "17c9544dba319cbfc26265893c52dda6219bff7d1a7f5f5edb5ef64801da316e",
-                    "prepared_sha256": "61ab1227fb89a89463dcc7e8ffbbfb429411e80755c677bffb773df1a8c54c55",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态_后45度__48f29a9cb10a_941x1672_to_1024x1819.png",
-                    "sha256": "48f29a9cb10a3258837a877503159cf5d7d96dea22b1e600141e79e3dc05d1dd",
-                    "prepared_sha256": "044d705b7cb00ccefb3e95f71a60fe0f9c45817f99a2a8ffa7943ca964f2ae3a",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  },
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态_背__408eba9d4fb4_941x1672_to_1024x1819.png",
-                    "sha256": "408eba9d4fb48a5035e2f1438da5ff3bd1c9599c73077fff64af58ed4425431c",
-                    "prepared_sha256": "0e61825e4dfc92e2d9e85fd746b6c1040a407992f7f89b1189916cb915dfc163",
-                    "role": "source_frame",
-                    "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_三视图",
-                    "source": "same_source_makeup_parent"
-                  }
-                ]
-              },
-              "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
-              }
+              ]
             }
           },
           "reference_atlas": {
@@ -342,138 +464,232 @@
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "front",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:26+00:00",
+                  "png_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
+                  "registry_binding_fingerprint": "d703e59f07527d08baa53a8ee75d12219ce7ec636c4a7b00bb65ae2cb0aeb034",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：14岁清瘦少年脸型、低小髻灰布发带、灰褐粗布短打、完整头脚线与中性站姿通过。"
                 }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
-                "status": "review_pending",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                  "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
                     0,
                     0,
-                    1024,
-                    1819
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-14T17:23:56+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                      "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                      "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_45度",
-                      "source": "same_source_makeup_parent"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:27+00:00",
+                  "png_sha256": "80b68295ac6d528f7eb2d1f9edd4d1f08879483ba6cdfaceb614e3fdb32fe340",
+                  "registry_binding_fingerprint": "b3d13ab16a9d5ea5fad3bd67a850819319578b8db0a427e3c958b0dd5cfe026b",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：与正面同人同服装，前3/4骨相、发带、衣领与全身比例对齐。"
                 }
               },
               "side": {
                 "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
-                "status": "review_pending",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                  "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
                     0,
                     0,
-                    1024,
-                    1819
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-14T17:27:22+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                      "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                      "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_侧",
-                      "source": "same_source_makeup_parent"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:27+00:00",
+                  "png_sha256": "17c9544dba319cbfc26265893c52dda6219bff7d1a7f5f5edb5ef64801da316e",
+                  "registry_binding_fingerprint": "68175ecabbeca81db91b92a84fdc8318614114b6f8e58315aa898dba69d9d3ca",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：侧面鼻额下颌轮廓、发髻、服装层次与全身比例同源。"
                 }
               },
               "rear_three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
-                "status": "review_pending",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                  "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
                     0,
                     0,
-                    1024,
-                    1819
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-14T17:30:57+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                      "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                      "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_后45度",
-                      "source": "same_source_makeup_parent"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:27+00:00",
+                  "png_sha256": "48f29a9cb10a3258837a877503159cf5d7d96dea22b1e600141e79e3dc05d1dd",
+                  "registry_binding_fingerprint": "aa3191c97be1537db1d7fcb715a110673681e7b241113cbbc37a93b9b7657519",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：后3/4发髻发带、肩背轮廓与服装背部结构和前视图一致。"
                 }
               },
               "back": {
                 "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
-                "status": "review_pending",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                  "source_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
                     0,
                     0,
-                    1024,
-                    1819
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-14T17:35:45+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
-                      "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                      "prepared_sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7",
-                      "role": "source_frame",
-                      "owner": "CHAR_01::定妆_CHAR_01__本集为14岁杂役常态_背",
-                      "source": "same_source_makeup_parent"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:27+00:00",
+                  "png_sha256": "408eba9d4fb48a5035e2f1438da5ff3bd1c9599c73077fff64af58ed4425431c",
+                  "registry_binding_fingerprint": "a6b138ecad29b401327e72ecdb21dd6780cf8047468b0e327e71404d7a7c78e5",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：背面发髻、衣服后片、腰带、绑腿和完整头脚线成立。"
                 }
               },
               "half_body": {
@@ -494,27 +710,10 @@
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
-            "expression_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
+                  "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
                   "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
@@ -524,11 +723,87 @@
                     1
                   ]
                 },
-                "emotion": "基础",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:28+00:00",
+                  "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e",
+                  "registry_binding_fingerprint": "fbaad911e201342f73ffb9f482ad4649c0a7e11c0544a4fdab93c154e7eeabfb",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：六格同一角色身份、年龄、发髻与服装一致，六种基础剧情表情区分可读。"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+                  "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
                 "human_review": {
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
-                }
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "本集为14岁杂役常态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                  "reviewer": "executor:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-15T15:50:28+00:00",
+                  "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e",
+                  "registry_binding_fingerprint": "fbaad911e201342f73ffb9f482ad4649c0a7e11c0544a4fdab93c154e7eeabfb",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "实际目视：六格同一角色身份、年龄、发髻与服装一致，六种基础剧情表情区分可读。"
+                },
+                "layout": "two_by_three_expression_sheet_v1"
               }
             ],
             "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
@@ -554,8 +829,12 @@
           "identity_adapters": {
             "image": {
               "codex": {
-                "mode": "reference_group",
-                "status": "fallback_reference_group"
+                "mode": "image2image_reference_chain",
+                "status": "ready",
+                "reference_input_mode": "codex_exec_image_flags",
+                "actual_image_input_required": true,
+                "reference_manifest_required": true,
+                "full_qc_required": true
               },
               "openai": {
                 "mode": "reference_group",
@@ -674,8 +953,12 @@
           ],
           "performance_signature": "面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动",
           "signature_equipment": [],
-          "self_check_passed": false,
-          "self_check_note": "PNG exists but requires explicit visual/QC signoff"
+          "self_check_passed": true,
+          "self_check_note": "PNG exists but requires explicit visual/QC signoff",
+          "self_check_at": "2026-07-15T16:44:19+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
+          "anchor_sha": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3"
         }
       ],
       "asset_bundle": {
@@ -744,8 +1027,10 @@
               "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
               "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:58:24.813140+00:00"
               }
             },
             "outfit": {
@@ -761,6 +1046,12 @@
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:58:24.813163+00:00"
               }
             },
             "half_body": {
@@ -776,31 +1067,20 @@
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:58:24.813181+00:00"
               }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                "path": "出图/共享/图片/定妆_CHAR_02__常态_表情_克制.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
-            "expressions": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
+                  "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                   "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
                   "crop_box": [
@@ -810,44 +1090,99 @@
                     1
                   ]
                 },
-                "emotion": "基础",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813196+00:00"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__常态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813208+00:00"
                 }
               }
             ],
             "three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_02__常态_45度.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
-                "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
-                "source_sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
                 "crop_box": [
                   0,
                   0,
-                  1024,
-                  1819
-                ],
-                "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                "generated_at": "2026-07-14T17:52:10+00:00",
-                "reference_input_mode": "codex_exec_image_flags",
-                "reference_inputs": [
-                  {
-                    "rel_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                    "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
-                    "sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
-                    "prepared_sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16",
-                    "role": "source_frame",
-                    "owner": "CHAR_02::定妆_CHAR_02__常态_45度",
-                    "source": "same_source_makeup_parent"
-                  }
+                  1,
+                  1
                 ]
               },
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:58:24.813222+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_02__常态_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared side reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:58:24.813234+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_02__常态_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared back reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:58:24.813248+00:00"
               }
             }
           },
@@ -858,41 +1193,73 @@
                 "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                 "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813263+00:00"
                 }
               },
               "three_quarter": {
                 "path": "出图/共享/图片/定妆_CHAR_02__常态_45度.png",
-                "status": "review_pending",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
-                  "source_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
-                  "source_sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
                   "crop_box": [
                     0,
                     0,
-                    1024,
-                    1819
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/codex_image_runner.py",
-                  "generated_at": "2026-07-14T17:52:10+00:00",
-                  "reference_input_mode": "codex_exec_image_flags",
-                  "reference_inputs": [
-                    {
-                      "rel_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
-                      "sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
-                      "prepared_sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16",
-                      "role": "source_frame",
-                      "owner": "CHAR_02::定妆_CHAR_02__常态_45度",
-                      "source": "same_source_makeup_parent"
-                    }
+                    1,
+                    1
                   ]
                 },
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813273+00:00"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_02__常态_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared side reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813283+00:00"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_02__常态_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared back reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813292+00:00"
                 }
               },
               "half_body": {
@@ -908,32 +1275,21 @@
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813304+00:00"
                 }
               }
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                "path": "出图/共享/图片/定妆_CHAR_02__常态_表情_克制.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
-            "expression_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
+                  "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                   "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
                   "crop_box": [
@@ -943,10 +1299,35 @@
                     1
                   ]
                 },
-                "emotion": "基础",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813315+00:00"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__常态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+                  "source_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:58:24.813325+00:00"
                 }
               }
             ],
@@ -1090,8 +1471,12 @@
           ],
           "performance_signature": "先咧嘴嘲笑再突然收笑；拍肩、俯视、手指点人",
           "signature_equipment": [],
-          "self_check_passed": false,
-          "self_check_note": "PNG exists but requires explicit visual/QC signoff"
+          "self_check_passed": true,
+          "self_check_note": "PNG exists but requires explicit visual/QC signoff",
+          "self_check_at": "2026-07-15T16:58:24+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b",
+          "anchor_sha": "6389b731f460221a87d6cf03b9790a79f5e5dc13d7810bad03e31645aaefc92b"
         }
       ],
       "asset_bundle": {
@@ -1128,7 +1513,7 @@
         {
           "form": "常态",
           "asset_key": "GROUP_01__常态",
-          "anchor_phrase": "三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。",
+          "anchor_phrase": "杂役背景组·杂役背景组 的剧情视觉真值必须入画：三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。；三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。·三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。",
           "character_dna": {
             "face": "杂役背景组 的剧情视觉真值必须入画：三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。；三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。",
             "hair": "背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份。",
@@ -1165,24 +1550,30 @@
               "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
               "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared silhouette reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:44:20.084798+00:00"
               }
             },
             "hand": {
               "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
               "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared hand reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:44:20.084819+00:00"
               }
             },
             "outfit": {
               "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
               "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:44:20.084833+00:00"
               }
             }
           },
@@ -1193,24 +1584,30 @@
                 "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
                 "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared silhouette reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.084849+00:00"
                 }
               },
               "hand": {
                 "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
                 "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared hand reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.084859+00:00"
                 }
               },
               "outfit": {
                 "path": "出图/共享/图片/定妆_GROUP_01__常态.png",
                 "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared outfit reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.084869+00:00"
                 }
               }
             },
@@ -1222,7 +1619,7 @@
               "slot": "character_card",
               "path": "生产数据/卡片快照/角色/GROUP_01.md",
               "status": "ready",
-              "sha256": "fdf7df816da88f2c620c899156d28128657d5c6038a5cb7cb7fa27f0feec1084"
+              "sha256": "7e51b73c6fddd4bb0962e4906396105ff90d55c055829d41f979ec153f86786a"
             },
             {
               "slot": "primary_reference",
@@ -1360,10 +1757,14 @@
           ],
           "performance_signature": "只作远后景笑声和肩部轮廓层，不单独表演，不出现可识别清晰脸。",
           "signature_equipment": [],
-          "self_check_passed": false,
+          "self_check_passed": true,
           "self_check_note": "PNG exists but requires explicit visual/QC signoff",
           "restricted_partial": true,
-          "no_full_face": true
+          "no_full_face": true,
+          "self_check_at": "2026-07-15T16:44:20+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "57addaf25a1083a3858dc0e8ca640125845ca775c0e4e522752e8099fd3468a9",
+          "anchor_sha": "57addaf25a1083a3858dc0e8ca640125845ca775c0e4e522752e8099fd3468a9"
         }
       ],
       "asset_bundle": {
@@ -1400,7 +1801,7 @@
         {
           "form": "常态",
           "asset_key": "CHAR_03__常态",
-          "anchor_phrase": "韩老三·40岁上下；瘦高、长脸、眼下凹、黑发夹灰，低发髻·灰青粗布长衫，卷袖，旧布鞋",
+          "anchor_phrase": "瘦高长脸·眼下凹·夹灰低髻·灰青卷袖长衫·略驼背",
           "character_dna": {
             "face": "40岁上下；瘦高、长脸、眼下凹、黑发夹灰，低发髻",
             "hair": "韩老三 使用古装束发或布巾束发，发型轮廓跨镜保持。",
@@ -1432,8 +1833,10 @@
               "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
               "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:44:20.228483+00:00"
               }
             },
             "outfit": {
@@ -1449,6 +1852,12 @@
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:44:20.228504+00:00"
               }
             },
             "half_body": {
@@ -1464,6 +1873,12 @@
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-15T16:44:20.228518+00:00"
               }
             },
             "face_anchor_refs": [
@@ -1480,6 +1895,12 @@
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.228530+00:00"
                 }
               }
             ],
@@ -1500,8 +1921,10 @@
                 },
                 "emotion": "基础",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.228541+00:00"
                 }
               }
             ]
@@ -1513,8 +1936,10 @@
                 "path": "出图/共享/图片/定妆_CHAR_03__常态.png",
                 "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.228557+00:00"
                 }
               },
               "half_body": {
@@ -1530,6 +1955,12 @@
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.228566+00:00"
                 }
               }
             },
@@ -1547,6 +1978,12 @@
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.228576+00:00"
                 }
               }
             ],
@@ -1567,8 +2004,10 @@
                 },
                 "emotion": "基础",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-15T16:44:20.228585+00:00"
                 }
               }
             ],
@@ -1712,8 +2151,12 @@
           ],
           "performance_signature": "表演按剧情身份保持，眼神和动作服务当前戏剧功能，不看镜头摆拍。",
           "signature_equipment": [],
-          "self_check_passed": false,
-          "self_check_note": "PNG exists but requires explicit visual/QC signoff"
+          "self_check_passed": true,
+          "self_check_note": "PNG exists but requires explicit visual/QC signoff",
+          "self_check_at": "2026-07-15T16:44:20+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "9b1c16b4e76ffb55bb8b54e930b2c7560273938512002fec400ed3c9c4743b37",
+          "anchor_sha": "9b1c16b4e76ffb55bb8b54e930b2c7560273938512002fec400ed3c9c4743b37"
         }
       ],
       "asset_bundle": {

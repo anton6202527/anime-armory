@@ -1,27 +1,127 @@
 {
-  "assets": [],
-  "characters": [],
+  "assets": [
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_01",
+      "name": "秀竹峰杂役大殿",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_木牌",
+      "name": "木牌",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_02",
+      "name": "秀竹峰杂役院",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_旧布包",
+      "name": "旧布包",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_扁担",
+      "name": "扁担",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_水桶",
+      "name": "水桶",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_03",
+      "name": "秀竹峰后山浅潭",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_01",
+      "name": "破损黑盆",
+      "type": "prop"
+    }
+  ],
+  "characters": [
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_01__本集为14岁杂役常态",
+          "form": "本集为14岁杂役常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_01",
+      "name": "贺平生",
+      "scope": "核心主角/全篇长线；太虚门秀竹峰新入杂役弟子，五行灵根"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_02__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_02",
+      "name": "张老大",
+      "scope": "秀竹峰杂役班班长"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "GROUP_01__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "GROUP_01",
+      "name": "杂役背景组",
+      "scope": "三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_03__常态",
+          "form": "常态",
+          "has_performance_signature": true,
+          "signature_equipment": null
+        }
+      ],
+      "id": "CHAR_03",
+      "name": "韩老三",
+      "scope": "秀竹峰杂役"
+    }
+  ],
   "episodes": [
     "第1集"
   ],
   "findings": [
-    {
-      "code": "missing_identity_registry",
-      "message": "缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。",
-      "severity": "warn"
-    },
-    {
-      "code": "missing_asset_registry",
-      "message": "缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。",
-      "severity": "info"
-    },
     {
       "code": "series_layers_not_registered",
       "message": "以下剧级层尚未登记：narrative_state_ledger、leitmotif_registry、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-14T16:28:29+00:00",
+  "generated_at": "2026-07-15T14:35:27+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -177,7 +277,7 @@
     "thread_scheduler": "设定库/thread_scheduler.json",
     "translation_glossary": null,
     "ui_asset_registry": null,
-    "角色圣经": null
+    "角色圣经": "设定库/角色圣经.md"
   },
   "version": 1
 }

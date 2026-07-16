@@ -1,9 +1,9 @@
 {
-  "content_hash": "9a25037297f2528e",
-  "contract_hash": "9a25037297f2528e",
+  "content_hash": "0ae0dfd5e69f20e5",
+  "contract_hash": "0ae0dfd5e69f20e5",
   "episode": "第1集",
   "findings": [],
-  "generated_at": "2026-07-14T16:28:05+00:00",
+  "generated_at": "2026-07-15T16:38:54+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -38,14 +38,14 @@
       "questions": [
         {
           "expected_next_handling": "本集兑现/推进",
-          "question_context": "s）不肯离山 铺垫·长镜。用旧布包、空旧鞋和远山门压缩身世，不拍回忆人脸。切至杂役院两口巨缸，贺平生在环境尺度下显",
+          "question_context": "469s）不肯离山 铺垫·长镜。用旧布包、空旧鞋和远山门压缩身世，不拍回忆人脸。切至杂役院两口巨缸，贺平生在环境尺度下显",
           "question_id": "Q01",
           "signal": "身世",
           "status": "paid_or_progressed"
         },
         {
           "expected_next_handling": "本集兑现/推进",
-          "question_context": "udience_effect 明确外部压力尺度，留意少年为何不反驳 continuity_story start_s",
+          "question_context": "audience_effect 明确外部压力尺度，留意少年为何不反驳 rhythm 铺垫·长镜 continuity_story",
           "question_id": "Q02",
           "signal": "为何",
           "status": "paid_or_progressed"
@@ -261,7 +261,118 @@
       },
       "source": "storyboard.pacing_allocation"
     },
-    "performance_cues": [],
+    "performance_cues": [
+      {
+        "clip": "EP01_CLIP01",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          },
+          {
+            "character_form": "CHAR_02/常态",
+            "prompt_cue": "freeform=先咧嘴嘲笑再突然收笑；拍肩、俯视、手指点人"
+          },
+          {
+            "character_form": "GROUP_01/常态",
+            "prompt_cue": "freeform=只作远后景笑声和肩部轮廓层，不单独表演，不出现可识别清晰脸。"
+          }
+        ]
+      },
+      {
+        "clip": "EP01_CLIP02",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          },
+          {
+            "character_form": "CHAR_02/常态",
+            "prompt_cue": "freeform=先咧嘴嘲笑再突然收笑；拍肩、俯视、手指点人"
+          }
+        ]
+      },
+      {
+        "clip": "EP01_CLIP03",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          }
+        ]
+      },
+      {
+        "clip": "EP01_CLIP04",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          }
+        ]
+      },
+      {
+        "clip": "EP01_CLIP05",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          }
+        ]
+      },
+      {
+        "clip": "EP01_CLIP06",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          }
+        ]
+      },
+      {
+        "clip": "EP01_CLIP07",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/本集为14岁杂役常态",
+            "prompt_cue": "freeform=面对强者先垂眼、短答；独处时会快速观察门窗和藏物位置；受压时握紧扁担但不冲动"
+          }
+        ]
+      }
+    ],
     "retention_promise_ledger": [
       {
         "bait_risk": "low",
@@ -294,7 +405,7 @@
   },
   "source_sha256": {
     "adaptation_triage": "d9ccc5e0a968a9cefd40e745fbc04568258e16ed6e13b1cfe54ddf3b22636bd1",
-    "story_quality_pack": "0e2df946f7ee1a64ced464ca8b6e310b8449fc78c856d55eba6b232bd4aff1f3",
+    "story_quality_pack": "737038cb0a50bb93e2f6d4c8cc45800e024e2a787a7383dba07c02961b5a9b22",
     "storyboard": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
   },
   "status": "pass",

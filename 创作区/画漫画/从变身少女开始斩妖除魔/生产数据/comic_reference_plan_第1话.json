@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第1话",
-  "generated_at": "2026-07-14T15:21:44+00:00",
+  "generated_at": "2026-07-15T16:57:52+00:00",
   "inputs": {
     "files": [
       {
@@ -62,7 +62,7 @@
   },
   "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
   "summary": {
-    "panels_with_characters": 28,
+    "panels_with_characters": 27,
     "panels_needing_action": 24,
     "panels_blocked": 0,
     "block": 0,
@@ -5707,5 +5707,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "559bdfad7ddc984fb0e181127bac42f75ddb261bb2f271e620bfad347a8e7177"
+  "plan_sha256": "16df3e554e02a6eb6e6fb8a4651f8b77cd062bb36315585df8f6ab8808169da5"
 }

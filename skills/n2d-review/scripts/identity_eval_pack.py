@@ -15,6 +15,7 @@ import json
 import os
 import sys
 import tempfile
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
@@ -178,11 +179,41 @@ def _reference_path(value: Any) -> str:
     return ""
 
 
-def _human_review(value: Any) -> Mapping[str, Any]:
+def _project_authorizes_executor_visual(root: str) -> bool:
+    path = os.path.join(root, "_设置.md")
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return (
+        "执行者实际像素目视" in text
+        and ("用户明确" in text or "source=explicit_user" in text)
+    )
+
+
+def _review_receipt(value: Any, expected_sha: str = "") -> Tuple[str, Mapping[str, Any]]:
     if not isinstance(value, Mapping):
-        return {}
-    review = value.get("human_review")
-    return review if isinstance(review, Mapping) else {}
+        return "", {}
+    candidates: List[Tuple[int, str, Mapping[str, Any]]] = []
+    for fallback_kind, key in (("human", "human_review"), ("executor_visual", "visual_review")):
+        review = value.get(key)
+        if not isinstance(review, Mapping):
+            continue
+        declared_sha = str(review.get("png_sha256") or "").strip().lower()
+        score = 0
+        if expected_sha and declared_sha == expected_sha.lower():
+            score += 8
+        if str(review.get("verdict") or review.get("status") or "").strip().lower() in {"pass", "accepted"}:
+            score += 4
+        if str(review.get("reviewer") or "").strip():
+            score += 2
+        if fallback_kind == "human":
+            score += 1
+        candidates.append((score, fallback_kind, review))
+    if not candidates:
+        return "", {}
+    _score, fallback_kind, review = max(candidates, key=lambda row: row[0])
+    return str(review.get("review_kind") or fallback_kind).strip().lower(), review
 
 
 def _view_node(form: Mapping[str, Any], view: str) -> Any:
@@ -237,7 +268,7 @@ def _review_errors(
     view: str,
 ) -> Tuple[List[str], str, str, str, Mapping[str, Any]]:
     raw_rel = _reference_path(node)
-    review = _human_review(node)
+    review_kind, review = _review_receipt(node)
     errors: List[str] = []
     node_status = (
         str(node.get("status") or "").strip().lower()
@@ -271,8 +302,9 @@ def _review_errors(
                 if not decoded_pixel_fingerprint and not fingerprint_errors:
                     errors.append("png_pixel_fingerprint_unavailable")
     if not review:
-        errors.append("human_review_missing")
+        errors.append("review_receipt_missing")
         return errors, rel, actual_sha, decoded_pixel_fingerprint, review
+    review_kind, review = _review_receipt(node, actual_sha)
     if str(review.get("status") or "").strip().lower() != "accepted":
         errors.append(f"review_status={review.get('status') or 'missing'}")
     if str(review.get("verdict") or "").strip().lower() != "pass":
@@ -311,8 +343,17 @@ def _review_errors(
     reviewer = str(review.get("reviewer") or "").strip()
     if not reviewer:
         errors.append("reviewer_missing")
-    elif _reviewer_is_automated(reviewer):
+    if review_kind not in {"human", "executor_visual"}:
+        errors.append("review_kind_missing_or_invalid")
+    elif review_kind == "human" and _reviewer_is_automated(reviewer):
         errors.append("reviewer_appears_automated")
+    elif review_kind == "executor_visual":
+        if str(review.get("reviewer_role") or "") != "ai_visual_executor":
+            errors.append("executor_visual_reviewer_role_missing_or_mismatch")
+        if review.get("human_signoff") is not False:
+            errors.append("executor_visual_human_signoff_must_be_false")
+        if not _project_authorizes_executor_visual(root):
+            errors.append("executor_visual_review_not_authorized_by_project_setting")
     errors.extend(_reviewed_at_errors(review.get("reviewed_at")))
     criteria = {str(item) for item in (review.get("criteria") or []) if str(item)}
     if not _required_criteria(view).issubset(criteria):
@@ -351,7 +392,7 @@ def _bucket_from_node(
     )
     return {
         "status": "pass" if not errors else "fail",
-        "evidence_kind": "structured_human_review",
+        "evidence_kind": "structured_visual_review" if str(review.get("review_kind") or "") == "executor_visual" else "structured_human_review",
         "character_id": character_id,
         "form": form_name,
         "library_tier": tier,
@@ -364,6 +405,9 @@ def _bucket_from_node(
         "registry_binding_fingerprint_kind": str(review.get("registry_binding_fingerprint_kind") or ""),
         "review_contract": str(review.get("review_contract") or ""),
         "reviewer": str(review.get("reviewer") or ""),
+        "review_kind": str(review.get("review_kind") or "human"),
+        "reviewer_role": str(review.get("reviewer_role") or ""),
+        "human_signoff": review.get("human_signoff", True),
         "reviewed_at": str(review.get("reviewed_at") or ""),
         "criteria": list(review.get("criteria") or []),
         "confirmation": dict(review.get("confirmation") or {})

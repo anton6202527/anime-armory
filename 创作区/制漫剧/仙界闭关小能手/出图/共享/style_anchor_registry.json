@@ -1,33 +1,65 @@
 {
   "kind": "n2d_style_anchor_registry",
   "version": 1,
-  "generated_at": "2026-07-14T17:06:22+00:00",
+  "generated_at": "2026-07-15T16:44:32+00:00",
   "style_name": "国漫写实",
   "selected_anchor": {
     "id": "STYLE_ANCHOR",
     "name": "国漫写实",
     "path": "出图/共享/图片/风格锚_国漫写实.png",
-    "status": "review_pending",
+    "status": "ready",
     "use_policy": "style_only",
     "identity_policy": "do_not_clone_face_or_costume",
     "role": "shared_rendering_language_anchor",
-    "sha256": "d24411bd9aff6d2e1aa7970b8781a5bf6e7e785401f6d2f4a112aed15a389ccf"
+    "sha256": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
+    "visual_review": {
+      "status": "accepted",
+      "verdict": "pass",
+      "path": "出图/共享/图片/风格锚_国漫写实.png",
+      "reviewer": "executor:codex",
+      "review_kind": "executor_visual",
+      "reviewer_role": "ai_visual_executor",
+      "human_signoff": false,
+      "reviewed_at": "2026-07-15T16:41:33+00:00",
+      "png_sha256": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
+      "confirmation": {
+        "kind": "explicit_current_pixels_acceptance",
+        "accepted_current_pixels": true
+      },
+      "note": "当前PNG哈希与既有执行者实际像素目视收据一致；prompt pack仅刷新合同，画面未变化。"
+    }
   },
   "anchors": [
     {
       "id": "STYLE_ANCHOR",
       "name": "国漫写实",
       "path": "出图/共享/图片/风格锚_国漫写实.png",
-      "status": "review_pending",
+      "status": "ready",
       "use_policy": "style_only",
       "identity_policy": "do_not_clone_face_or_costume",
       "role": "shared_rendering_language_anchor",
-      "sha256": "d24411bd9aff6d2e1aa7970b8781a5bf6e7e785401f6d2f4a112aed15a389ccf"
+      "sha256": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
+      "visual_review": {
+        "status": "accepted",
+        "verdict": "pass",
+        "path": "出图/共享/图片/风格锚_国漫写实.png",
+        "reviewer": "executor:codex",
+        "review_kind": "executor_visual",
+        "reviewer_role": "ai_visual_executor",
+        "human_signoff": false,
+        "reviewed_at": "2026-07-15T16:41:33+00:00",
+        "png_sha256": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
+        "confirmation": {
+          "kind": "explicit_current_pixels_acceptance",
+          "accepted_current_pixels": true
+        },
+        "note": "当前PNG哈希与既有执行者实际像素目视收据一致；prompt pack仅刷新合同，画面未变化。"
+      }
     }
   ],
   "rules": {
     "use_policy": "style_only",
     "identity_policy": "do_not_clone_face_or_costume",
-    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
+    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。生成风格锚时不得把 `style_contract.镜头与构图` 的剧情机位、前中后景、人物调度、场景或物件描述注入风格板；角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
   }
 }

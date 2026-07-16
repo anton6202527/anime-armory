@@ -3654,6 +3654,31 @@ def test_asset_reference_registry_weapon_requires_weapon_profile(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "主角装备库" and "weapon_profile" in f["loc"] for f in gate.findings)
 
 
+def test_finalized_prop_artifact_hash_is_not_weapon_semantics(tmp_path):
+    data = _asset_registry()
+    data["assets"].append({
+        "id": "PROP_水桶",
+        "type": "prop",
+        "name": "木水桶",
+        "owner": "剧情资产",
+        "current_state": "完好装水",
+        "lifecycle": {"first_seen": "第1集", "status": "active"},
+        "reference_group": {"primary": "出图/共享/图片/定妆_道具_水桶.png"},
+        "constraints": {"structure": "一只普通木桶"},
+        "drift_forbidden": ["不要现代塑料桶"],
+        "self_check_passed": True,
+        "artifact_sha256": "a" * 64,
+    })
+    root = _write_asset_registry(tmp_path, data)
+
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+
+    assert not any(
+        f["dim"] == "主角装备库" and "asset#2" in f["loc"]
+        for f in gate.findings
+    )
+
+
 def test_asset_reference_registry_weapon_profile_passes(tmp_path):
     data = _asset_registry()
     data["assets"].append({

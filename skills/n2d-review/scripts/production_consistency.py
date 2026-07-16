@@ -36,6 +36,7 @@ import os
 import re
 import sys
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from image_evidence import (
@@ -839,6 +840,34 @@ def _multiview_registry_nodes(form: Mapping[str, Any], bucket: str) -> List[Mapp
     return [node] if isinstance(node, Mapping) else []
 
 
+def _multiview_executor_visual_authorized(root: str) -> bool:
+    try:
+        text = Path(os.path.join(root, "_设置.md")).read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return (
+        "执行者实际像素目视" in text
+        and ("用户明确" in text or "source=explicit_user" in text)
+    )
+
+
+def _multiview_review_receipt(node: Mapping[str, Any], expected_sha: str = "") -> Tuple[str, Mapping[str, Any]]:
+    candidates: List[Tuple[int, str, Mapping[str, Any]]] = []
+    for fallback_kind, key in (("human", "human_review"), ("executor_visual", "visual_review")):
+        review = node.get(key)
+        if not isinstance(review, Mapping):
+            continue
+        score = 8 if expected_sha and str(review.get("png_sha256") or "").strip() == expected_sha else 0
+        score += 4 if str(review.get("verdict") or review.get("status") or "").strip().lower() in MULTIVIEW_PASS_STATUSES else 0
+        score += 2 if str(review.get("reviewer") or "").strip() else 0
+        score += 1 if fallback_kind == "human" else 0
+        candidates.append((score, fallback_kind, review))
+    if not candidates:
+        return "", {}
+    _score, fallback_kind, review = max(candidates, key=lambda row: row[0])
+    return str(review.get("review_kind") or fallback_kind).strip().lower(), review
+
+
 def _multiview_registry_form_index(
     root: str,
 ) -> Dict[Tuple[str, str], Tuple[Mapping[str, Any], Mapping[str, Any], str]]:
@@ -880,7 +909,7 @@ def _bucket_evidence_errors(
     kind = str(value.get("evidence_kind") or value.get("review_kind") or "").strip()
     # v2 pack currently has one implemented, reproducible evidence route.  Do
     # not let an arbitrary file self-label as calibrated_embedding/geometry.
-    if kind != "structured_human_review":
+    if kind not in {"structured_human_review", "structured_visual_review"}:
         errors.append(f"evidence_kind={kind or 'missing'}")
     expected_view = "side" if bucket == "profile_or_side" else bucket
     expected_fields = {
@@ -957,10 +986,20 @@ def _bucket_evidence_errors(
     if str(value.get("review_contract") or "") != expected_contract:
         errors.append("review_contract_invalid_for_view")
     reviewer = str(value.get("reviewer") or "").strip()
+    review_kind = str(value.get("review_kind") or ("executor_visual" if kind == "structured_visual_review" else "human")).strip().lower()
     if not reviewer:
         errors.append("reviewer_missing")
-    elif identity_reviewer_appears_automated(reviewer):
+    elif review_kind == "human" and identity_reviewer_appears_automated(reviewer):
         errors.append("reviewer_appears_automated")
+    elif review_kind == "executor_visual":
+        if str(value.get("reviewer_role") or "") != "ai_visual_executor":
+            errors.append("executor_visual_reviewer_role_missing_or_mismatch")
+        if value.get("human_signoff") is not False:
+            errors.append("executor_visual_human_signoff_must_be_false")
+        if not _multiview_executor_visual_authorized(root):
+            errors.append("executor_visual_review_not_authorized_by_project_setting")
+    elif review_kind not in {"human", "executor_visual"}:
+        errors.append("review_kind_missing_or_invalid")
     errors.extend(identity_reviewed_at_errors(value.get("reviewed_at")))
     criteria = {str(item) for item in (value.get("criteria") or []) if str(item)}
     if not set(identity_review_required_criteria(expected_view)).issubset(criteria):
@@ -995,9 +1034,9 @@ def _bucket_evidence_errors(
         node_status = str(matching_node.get("status") or "").strip().lower()
         if node_status not in {"ready", "registered"}:
             errors.append(f"registry_node_status={node_status or 'missing'}")
-        review = matching_node.get("human_review")
-        if not isinstance(review, Mapping):
-            errors.append("registry_human_review_missing")
+        registry_review_kind, review = _multiview_review_receipt(matching_node, actual_sha)
+        if not review:
+            errors.append("registry_review_receipt_missing")
         else:
             if str(review.get("status") or "").strip().lower() != "accepted":
                 errors.append("registry_review_not_accepted")
@@ -1018,8 +1057,17 @@ def _bucket_evidence_errors(
             if str(review.get("review_contract") or "") != str(value.get("review_contract") or ""):
                 errors.append("registry_review_contract_mismatch")
             registry_reviewer = str(review.get("reviewer") or "").strip()
-            if identity_reviewer_appears_automated(registry_reviewer):
+            if registry_review_kind == "human" and identity_reviewer_appears_automated(registry_reviewer):
                 errors.append("registry_reviewer_appears_automated")
+            elif registry_review_kind == "executor_visual":
+                if str(review.get("reviewer_role") or "") != "ai_visual_executor":
+                    errors.append("registry_executor_visual_role_invalid")
+                if review.get("human_signoff") is not False:
+                    errors.append("registry_executor_visual_human_signoff_invalid")
+                if not _multiview_executor_visual_authorized(root):
+                    errors.append("registry_executor_visual_not_authorized")
+            if registry_review_kind != review_kind:
+                errors.append("registry_review_kind_mismatch")
             if registry_reviewer != str(value.get("reviewer") or "").strip():
                 errors.append("registry_reviewer_mismatch")
             registry_reviewed_at = str(review.get("reviewed_at") or "").strip()

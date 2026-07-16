@@ -39,6 +39,7 @@ if str(SCRIPT_DIR) not in sys.path:
 from chapter_contract import (
     SCHEMA_VERSION,
     parse_numbered_label,
+    source_units,
     validate_blueprint,
 )
 
@@ -216,6 +217,129 @@ def _coverage_issues(blueprint: Mapping[str, Any]) -> List[Dict[str, str]]:
     return issues
 
 
+def _read_source_text(path: Path) -> str | None:
+    """Read a declared source file with the semantic gate's reader (TXT/MD/JSON/DOCX)."""
+    try:
+        from source_semantics_gate import read_text
+    except Exception:
+        return None
+    try:
+        return read_text(path)
+    except Exception:
+        return None
+
+
+def _planned_units(blueprint: Mapping[str, Any]) -> tuple[Dict[str, set[int]], Dict[str, set[str]], set[str]]:
+    """Collect planned unit numbers per source_path, plus declared kinds and whole-file sources."""
+    planned: Dict[str, set[int]] = {}
+    kinds: Dict[str, set[str]] = {}
+    whole_file: set[str] = set()
+    for entry in blueprint.get("chapters") or []:
+        if not isinstance(entry, Mapping) or entry.get("source_mode", "adapted") != "adapted":
+            continue
+        for span in entry.get("source_spans") or []:
+            if not isinstance(span, Mapping):
+                continue
+            source_path = str(span.get("source_path") or "").strip()
+            if not source_path:
+                continue
+            if span.get("whole_file") is True:
+                whole_file.add(source_path)
+                continue
+            start = parse_numbered_label(span.get("start"))
+            end = parse_numbered_label(span.get("end") or span.get("start"))
+            if not start or not end or start[1] != end[1]:
+                continue
+            planned.setdefault(source_path, set()).update(range(start[0], end[0] + 1))
+            kinds.setdefault(source_path, set()).add(start[1])
+    return planned, kinds, whole_file
+
+
+def _coverage_scope_for(blueprint: Mapping[str, Any], source_path: str) -> Mapping[str, Any] | None:
+    """Return an explicit partial-coverage declaration applying to ``source_path``."""
+    scope = blueprint.get("coverage_scope")
+    if not isinstance(scope, Mapping):
+        return None
+    declared_path = str(scope.get("source_path") or "").strip()
+    if declared_path and declared_path != source_path:
+        return None
+    return scope
+
+
+def _breadth_issues(root: Path, blueprint: Mapping[str, Any]) -> tuple[List[Dict[str, str]], List[Dict[str, str]]]:
+    """Compare the whole source against what the blueprint actually plans.
+
+    ``_coverage_issues`` only compares *declared* spans against each other, so a
+    blueprint that plans 第1话 out of a 120-章 source is internally consistent and
+    passes.  Planning breadth can only be judged against the source itself: read
+    each declared source, count its units, and subtract the planned union.
+
+    Partial first batches stay legal, but must be declared on the blueprint as
+    ``coverage_scope: {planned_through, reason}`` — an explicit, reviewable
+    statement instead of silence.  Holes *inside* the declared scope are gaps.
+    """
+    gaps: List[Dict[str, str]] = []
+    warnings: List[Dict[str, str]] = []
+    planned, kinds, whole_file = _planned_units(blueprint)
+    for source_path in sorted(planned):
+        if source_path in whole_file:
+            continue
+        path = (root / source_path)
+        if not path.is_file():
+            continue  # _source_path_issues already reports this
+        text = _read_source_text(path)
+        if text is None:
+            continue
+        units = source_units(text)
+        declared_kinds = kinds.get(source_path) or set()
+        available = {int(unit["number"]) for unit in units if unit.get("kind") in declared_kinds}
+        if not available:
+            continue  # source has no unit markers in the declared kind — cannot judge breadth
+        kind = sorted(declared_kinds)[0]
+        uncovered = sorted(available - planned[source_path])
+        if not uncovered:
+            continue
+        scope = _coverage_scope_for(blueprint, source_path)
+        through = parse_numbered_label(scope.get("planned_through")) if scope else None
+        reason = str(scope.get("reason") or "").strip() if scope else ""
+        if scope and through and through[1] == kind and reason:
+            inside = [number for number in uncovered if number <= through[0]]
+            if inside:
+                gaps.append({
+                    "code": "source_coverage_incomplete",
+                    "message": f"{source_path} 声明 planned_through=第{through[0]}{kind}，但范围内第"
+                               f"{'、'.join(str(number) for number in inside[:8])}{kind}未被任何话次规划"
+                               f"（共 {len(inside)} 个）。",
+                })
+            beyond = len(uncovered) - len(inside)
+            if beyond:
+                warnings.append({
+                    "code": "source_beyond_planned_scope",
+                    "message": f"{source_path} 共 {len(available)} {kind}，本批规划到第{through[0]}{kind}；"
+                               f"其后 {beyond} {kind}尚未规划（已由 coverage_scope 声明：{reason}）。",
+                })
+            continue
+        if scope and not reason:
+            gaps.append({
+                "code": "coverage_scope_reason_missing",
+                "message": f"{source_path} 写了 coverage_scope 却缺 reason——部分覆盖必须说明理由。",
+            })
+        if scope and through and through[1] != kind:
+            gaps.append({
+                "code": "coverage_scope_unit_mismatch",
+                "message": f"{source_path} 的 coverage_scope.planned_through 用「{through[1]}」，"
+                           f"但源的单位是「{kind}」。",
+            })
+        gaps.append({
+            "code": "source_coverage_incomplete",
+            "message": f"{source_path} 共 {len(available)} {kind}，只有 {len(planned[source_path] & available)} "
+                       f"{kind}进入话次规划；第{'、'.join(str(number) for number in uncovered[:8])}"
+                       f"{kind}等 {len(uncovered)} 个未规划。首批只做一部分是合法的，"
+                       f"但要在 split_blueprint 顶层写 coverage_scope:{{planned_through, reason}} 明示。",
+        })
+    return gaps, warnings
+
+
 def _source_path_issues(root: Path, blueprint: Mapping[str, Any]) -> List[Dict[str, str]]:
     issues: List[Dict[str, str]] = []
     for entry in blueprint.get("chapters") or []:
@@ -278,6 +402,9 @@ def check_pack(root: Path) -> Dict[str, Any]:
             gaps.extend(validate_blueprint(data))
             gaps.extend(_coverage_issues(data))
             gaps.extend(_source_path_issues(root, data))
+            breadth_gaps, breadth_warnings = _breadth_issues(root, data)
+            gaps.extend(breadth_gaps)
+            warnings.extend(breadth_warnings)
             if status == "confirmed":
                 for entry in data.get("chapters") or []:
                     if isinstance(entry, Mapping) and entry.get("status") not in {"confirmed", "locked"}:

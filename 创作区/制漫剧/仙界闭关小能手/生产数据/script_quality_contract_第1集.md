@@ -13,7 +13,7 @@
 - retention_promise_ledger: 2
 - pacing_allocation: declared primary_runtime_focus EP01_CLIP01 EP01_CLIP04 EP01_CLIP07 compressed_clip_ids  highlight_budget_note 主时长留给当众受辱、主动起担和破盆异光；身世与往返用物件和剪辑压缩。 compression_strategy 身世不做长回忆，用空院、旧衣
 - audience_question_ledger: 2
-- performance_cues: 0
+- performance_cues: 7
 
 ## Clip 戏剧功能与时长角色
 

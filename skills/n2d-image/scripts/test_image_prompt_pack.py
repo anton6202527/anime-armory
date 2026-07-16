@@ -799,18 +799,26 @@ def test_existing_style_anchor_requires_review_and_preserves_approval(tmp_path: 
 
     pending = image_prompt_pack.style_anchor_registry(tmp_path, story)
     assert pending["selected_anchor"]["status"] == "review_pending"
+    current_sha = image_prompt_pack.sha256_file(path)
 
     registry_path = tmp_path / image_prompt_pack.STYLE_ANCHOR_REGISTRY_REL
     registry_path.write_text(json.dumps({
         "selected_anchor": {
             "path": rel,
             "status": "approved",
-            "human_review": {"reviewer": "user"},
+            "human_review": {"reviewer": "user", "png_sha256": current_sha},
+            "visual_review": {"reviewer": "executor:codex", "png_sha256": current_sha},
         }
     }), encoding="utf-8")
     approved = image_prompt_pack.style_anchor_registry(tmp_path, story)
     assert approved["selected_anchor"]["status"] == "approved"
     assert approved["selected_anchor"]["human_review"]["reviewer"] == "user"
+    assert approved["selected_anchor"]["visual_review"]["reviewer"] == "executor:codex"
+
+    path.write_bytes(b"regenerated-anchor")
+    stale = image_prompt_pack.style_anchor_registry(tmp_path, story)
+    assert "human_review" not in stale["selected_anchor"]
+    assert "visual_review" not in stale["selected_anchor"]
 
 
 def test_inner_focus_directive_isolates_subject_and_context_entities() -> None:

@@ -52,6 +52,70 @@ def resolve_character_card(project_root: str) -> Optional[str]:
     return None
 
 
+# ---- B3：角色名册（权威实体源）---------------------------------------------
+#
+# 存在动机：`propose_state_delta.candidate_entities` 原来靠「把 CJK 串切成全部重叠
+# 2-gram 再按词频排序」盲抽实体，产出的是「不是 / 了一 / 的人」这类虚词组合，作者
+# 面对一堆噪音候选就懒得填 `character_changes`——实测某 24 章项目 24/24 章的
+# character_changes / relationship_changes 全空，state_ledger 因此退化成模板。
+# 而项目里其实**早就有权威名册**（角色卡 + 人工确认的别名表），只是抽取侧没读。
+# 本函数把「名册优先」收成单一真值源，供 craft/wiki/review 各侧共用。
+
+_ROSTER_NAME_RE = re.compile(r"#{1,4}\s+([一-鿿·]{2,6})\s*$")
+_ROSTER_FIELD_RE = re.compile(r"(?:姓名|名字|角色)[:：]\s*([一-鿿·]{2,6})")
+_ROSTER_ALIAS_RE = re.compile(r"(?:别称|别名|封号|旧名|曾用名|尊称)[:：]\s*(.+)")
+
+
+def load_character_roster(project_root: str) -> List[str]:
+    """返回本项目**已知**的角色规范名 + 别名（去重、按长度降序）。
+
+    两个来源合并：
+      1. `设定/角色别名.json`，且仅当 `status == "confirmed"`（人工确认过才算权威；
+         draft 期的建议表不参与，与 `alias_scaffold.py` 的口径一致）。
+      2. 角色卡（`resolve_character_card` 兜底 `角色卡.md` / `人物.md`）里的
+         标题行、`姓名:` 字段与 `别称/封号:` 列表。
+
+    按长度降序返回，让调用方做最长匹配优先（「林贵妃」先于「林」）。
+    名册为空是合法的（新项目还没写角色卡）——调用方须自行降级，不要当错误。
+    """
+    names: set = set()
+
+    alias_path = os.path.join(project_root, "设定", "角色别名.json")
+    try:
+        with open(alias_path, encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict) and str(data.get("status") or "").strip().lower() == "confirmed":
+            table = data.get("character_aliases") or data.get("aliases") or {}
+            if isinstance(table, dict):
+                for canonical, alias_list in table.items():
+                    names.add(str(canonical).strip())
+                    if isinstance(alias_list, list):
+                        names.update(str(a).strip() for a in alias_list)
+    except (OSError, ValueError):
+        pass
+
+    card = resolve_character_card(project_root)
+    if card:
+        try:
+            with open(card, encoding="utf-8") as f:
+                card_text = f.read()
+        except OSError:
+            card_text = ""
+        for line in card_text.splitlines():
+            stripped = line.strip()
+            for regex in (_ROSTER_NAME_RE, _ROSTER_FIELD_RE):
+                match = regex.search(stripped) if regex is _ROSTER_FIELD_RE else regex.match(stripped)
+                if match:
+                    names.add(match.group(1).strip())
+            match = _ROSTER_ALIAS_RE.search(stripped)
+            if match:
+                for alias in re.split(r"[、，,/\s]+", match.group(1).strip()):
+                    if 2 <= len(alias) <= 6:
+                        names.add(alias)
+
+    return sorted((n for n in names if n), key=lambda n: (-len(n), n))
+
+
 # ---- B1：一致性注册表脚手架 -------------------------------------------------
 
 def character_guardrails_skeleton() -> dict:

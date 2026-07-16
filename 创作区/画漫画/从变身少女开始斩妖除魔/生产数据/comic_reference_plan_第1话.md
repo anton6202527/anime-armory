@@ -1,7 +1,7 @@
 # 逐格参考规划（事前处方）· 第1话
 
 - 后端 openai_gpt_image_project_memory（持久主体 False·单角色参考上限 5）
-- 含角色格 28 · 需处理 24 · warn 19 · info 22
+- 含角色格 27 · 需处理 24 · warn 19 · info 22
 
 - ℹ️ `escalation_suggested` P004·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
 - ⚠️ `same_frame_color_collision` P004 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。

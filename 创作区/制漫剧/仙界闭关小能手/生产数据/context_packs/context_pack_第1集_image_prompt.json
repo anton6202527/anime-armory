@@ -44,11 +44,11 @@
       "sha256": "1d7821b28b3868cbb3ad04e390b2f309f7282205d5e03fd8baaac6e54af52280"
     },
     {
-      "bytes": 583,
+      "bytes": 585,
       "exists": true,
-      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **1** 集（全本约估 1176 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **1** 集（全本约估 1176 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ⬜ | 28/46 | ⬜ | ⬜ | ⬜ | ⬜ |",
       "relpath": "_进度.md",
-      "sha256": "cc97945ee9f791177a625253c4798a104746d2587f01cb9675e7f7a5f97b5e2f"
+      "sha256": "0a87adb8ac6bdb41a7db393894b56d0741019d3ba1bb54be31af354a8bf4a88f"
     },
     {
       "bytes": 36669,
@@ -916,12 +916,38 @@
       "sha256": "f302eb83a43bf9aff26b9589e262c91b22eca5aee0e3a3ad9d4c629612f68c12"
     },
     {
-      "exists": false,
-      "relpath": "出图/共享/identity_registry.json"
+      "bytes": 75225,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "57712ba77ace184ab698abb297fc229d960cfc3d207c89c6e6c06dd7e64824db"
     },
     {
-      "exists": false,
-      "relpath": "出图/共享/asset_registry.json"
+      "bytes": 31904,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "ed2c98570c47890ee564aebb2c7b1cc1a5325cbf570bdf2a14b7882205623d3e"
     },
     {
       "bytes": 263,
@@ -983,7 +1009,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "a52ee1225f6668ff39c96a29a8235f55e146b118abc36507507ff2a9b32f02cf"
+      "sha256": "b2f5f1005f46efbc3569d236b64ead991207e3a830dd9b34d0220435cae13a9f"
     }
   ],
   "genre_pack_context": {
@@ -997,7 +1023,7 @@
     },
     "active_scene_archetypes": [],
     "episode": "第1集",
-    "generated_at": "2026-07-14T16:28:29+00:00",
+    "generated_at": "2026-07-15T14:35:26+00:00",
     "genre": {
       "genre_key": "",
       "label": "",
@@ -1034,10 +1060,7 @@
     "version": 1
   },
   "kind": "n2d_context_pack",
-  "missing_required_files": [
-    "出图/共享/identity_registry.json",
-    "出图/共享/asset_registry.json"
-  ],
+  "missing_required_files": [],
   "root": "创作区/制漫剧/仙界闭关小能手",
   "settings_context": {
     "authority": {
@@ -1141,6 +1164,8 @@
       "_进度.md",
       "脚本/第1集/storyboard.json",
       "脚本/第1集/素材清单.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json",
       "生产数据/spectacle_plan_第1集.json",
       "生产数据/episode_graph_第1集.json"
     ],

@@ -1,7 +1,7 @@
 {
   "approvals": [
     {
-      "decision": "approved",
+      "decision": "approved_with_risk",
       "evidence": [
         {
           "path": "脚本/第1集/ai_call_sheet.md",
@@ -9,53 +9,55 @@
         },
         {
           "path": "脚本/第1集/ai_shooting_schedule.json",
-          "sha256": "1ab868bff3df625b52b97a8500444cd28c0c3fbfd839f0ba49ce05e64ca240cb"
+          "sha256": "ddef8aa1dba2729eb74eb6dc494ca6bce5bc668a39f8833aaf7e93b62280c1bb"
         },
         {
           "path": "脚本/第1集/continuity_bible.json",
-          "sha256": "925443c100c72bb47bf5f1d19ca3e7d76f45d68d89d889a9883b6657e956ff8c"
+          "sha256": "bc9beeaa74b337c214c9e649c2e1e4edf3f00769cb2369c7b0eeb6e750fd83e7"
         },
         {
           "path": "脚本/第1集/continuity_breakdown.json",
-          "sha256": "e1ffc13b18d376261051d30b9f05a1583d2e670967e4eaa938b556cb2e6ab6f0"
+          "sha256": "c886aca46f76008886b3c026fb233c96411f68f48a6c493250417af5dd778ffe"
         },
         {
           "path": "脚本/第1集/continuity_chain.json",
-          "sha256": "b9569c84f961671b0d08357cfba3ac8bf4a289cddc09b872f1d76d52680f2bb0"
+          "sha256": "faf95b0f1fd246c7617328c6752ed91baac02f285434a7c210b0333de4e3352c"
         },
         {
           "path": "脚本/第1集/production_breakdown.json",
-          "sha256": "be77f74e49c1310da9d35f7490f63ad1ab15be0278bb06eadd6899ea84147c32"
+          "sha256": "f9145cc6ce8e38a517c8c844b8bac7d88a08c71acd07455bfdb605092ad5154b"
         }
       ],
-      "note": "最终脚本质量合同已稳定；制片交接哈希重新绑定。",
-      "reviewed_at": "2026-07-14T16:28:23+00:00",
-      "reviewer_id": "user:request-author",
+      "note": "用户要求不中断执行至第一集完结；执行者核对当前P-3文件与最新脚本/故事板哈希，按内部预览用途签收。",
+      "reviewed_at": "2026-07-15T16:47:58+00:00",
+      "reviewer_id": "executor:codex",
       "reviewer_role": "producer",
-      "signed_evidence_fingerprint_sha": "b62e5bb680f824122eca2bc601685a081fee768275d63fcfb81c2fa2f2d4bf59",
-      "signed_input_fingerprint_sha": "730e776beed9e1d09bea64ed27b25788ee2d6646093947a046e6008cbbc49338",
-      "unresolved_risks": [],
-      "waiver_reason": ""
+      "signed_evidence_fingerprint_sha": "9fd780805edbda3a697c9e7787945db2dffb178f8ee6923d3158dfa6bb26c91c",
+      "signed_input_fingerprint_sha": "ce37581414d5ce996a55a0d4a7d1126a459b14f2c1f715ac188e9f2a23baf1ae",
+      "unresolved_risks": [
+        "未进行真人制片复核，仅限内部预览。"
+      ],
+      "waiver_reason": "用户明确授权执行者连续完成；公开投放前必须补真人制片终审。"
     }
   ],
   "artifact_scope": "p3_production_handoff",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-14T16:28:23+00:00",
+  "created_at": "2026-07-15T16:47:58+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
       "脚本/第1集/ai_call_sheet.md": "0c2deb0e2a1aa65ca52bc485940162c970ef96cabc48f2ad581422827bbcb33d",
-      "脚本/第1集/ai_shooting_schedule.json": "1ab868bff3df625b52b97a8500444cd28c0c3fbfd839f0ba49ce05e64ca240cb",
-      "脚本/第1集/continuity_bible.json": "925443c100c72bb47bf5f1d19ca3e7d76f45d68d89d889a9883b6657e956ff8c",
-      "脚本/第1集/continuity_breakdown.json": "e1ffc13b18d376261051d30b9f05a1583d2e670967e4eaa938b556cb2e6ab6f0",
-      "脚本/第1集/continuity_chain.json": "b9569c84f961671b0d08357cfba3ac8bf4a289cddc09b872f1d76d52680f2bb0",
-      "脚本/第1集/production_breakdown.json": "be77f74e49c1310da9d35f7490f63ad1ab15be0278bb06eadd6899ea84147c32"
+      "脚本/第1集/ai_shooting_schedule.json": "ddef8aa1dba2729eb74eb6dc494ca6bce5bc668a39f8833aaf7e93b62280c1bb",
+      "脚本/第1集/continuity_bible.json": "bc9beeaa74b337c214c9e649c2e1e4edf3f00769cb2369c7b0eeb6e750fd83e7",
+      "脚本/第1集/continuity_breakdown.json": "c886aca46f76008886b3c026fb233c96411f68f48a6c493250417af5dd778ffe",
+      "脚本/第1集/continuity_chain.json": "faf95b0f1fd246c7617328c6752ed91baac02f285434a7c210b0333de4e3352c",
+      "脚本/第1集/production_breakdown.json": "f9145cc6ce8e38a517c8c844b8bac7d88a08c71acd07455bfdb605092ad5154b"
     },
-    "sha": "b62e5bb680f824122eca2bc601685a081fee768275d63fcfb81c2fa2f2d4bf59"
+    "sha": "9fd780805edbda3a697c9e7787945db2dffb178f8ee6923d3158dfa6bb26c91c"
   },
   "input_fingerprint": {
     "files": {
-      "生产数据/script_quality_contract_第1集.json": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3",
+      "生产数据/script_quality_contract_第1集.json": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",
       "脚本/第1集/animatic_signoff.json": "ad933c492fac06f85d286856ed39e64d661ce76ca4f0180d140e207c9522390d",
       "脚本/第1集/director_blocking_signoff.json": "318ee581e7a8d95fe1f4ce25677220560be4253ab8c910d0d52cd36e6bf5262a",
       "脚本/第1集/preventive_contracts.json": "ace9538a0cb12d8ba27a3dc1877134d0a4d99c17876a642665dd9040f8c8d29f",
@@ -64,7 +66,7 @@
       "脚本/第1集/镜头时长.json": "3cc009bed4ab22a411127a7d293c9c530dabc47c3013308b0ff35148267cf95c",
       "设定库/source_comprehension.json": "31817bdcebc5243949cc83811a9401c45b42817c74d20c16b7ef5d8bf660968a"
     },
-    "sha": "730e776beed9e1d09bea64ed27b25788ee2d6646093947a046e6008cbbc49338"
+    "sha": "ce37581414d5ce996a55a0d4a7d1126a459b14f2c1f715ac188e9f2a23baf1ae"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -78,6 +80,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-14T16:28:23+00:00",
+  "updated_at": "2026-07-15T16:47:58+00:00",
   "version": 1
 }

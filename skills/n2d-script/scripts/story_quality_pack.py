@@ -160,6 +160,16 @@ def clip_id(clip: Mapping[str, Any], idx: int) -> str:
 def _context(text: str, match: re.Match[str], pad: int = 28) -> str:
     start = max(0, match.start() - pad)
     end = min(len(text), match.end() + pad)
+    # Do not slice through structured identifiers or flattened JSON keys.
+    # A fixed-width cut used to turn e.g. ``LOC_01`` into ``LOC_0`` and the
+    # downstream asset registry correctly (but misleadingly) rejected it as
+    # an unknown asset.  Expanding only across ASCII identifier characters
+    # keeps Chinese prose windows compact while preserving machine tokens.
+    ident = re.compile(r"[A-Za-z0-9_-]")
+    while start > 0 and start < len(text) and ident.match(text[start - 1]) and ident.match(text[start]):
+        start -= 1
+    while end > 0 and end < len(text) and ident.match(text[end - 1]) and ident.match(text[end]):
+        end += 1
     return re.sub(r"\s+", " ", text[start:end]).strip()
 
 

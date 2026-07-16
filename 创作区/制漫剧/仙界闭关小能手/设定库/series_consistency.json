@@ -20,18 +20,62 @@
     "safe_width_margin_px": 60
   },
   "canonical_names": {
-    "CHAR_01": "贺平生",
-    "CHAR_02": "张老大",
-    "CHAR_03": "韩老三",
+    "CHAR_01": {
+      "canonical_name": "贺平生",
+      "forbidden_variants": []
+    },
+    "CHAR_02": {
+      "canonical_name": "张老大",
+      "forbidden_variants": []
+    },
+    "CHAR_03": {
+      "canonical_name": "韩老三",
+      "forbidden_variants": []
+    },
     "SECT_01": "太虚门",
     "LOC_01": "秀竹峰",
-    "PROP_01": "破旧陶盆"
+    "PROP_01": "破旧陶盆",
+    "GROUP_01": {
+      "canonical_name": "杂役背景组",
+      "forbidden_variants": []
+    }
   },
   "dialogue_registers": {
     "贺平生": "十四岁少年，谨慎、恭敬、短句，不说现代网络梗；心声比对白稍直接但仍克制",
     "张老大": "粗声粗气、命令式、带嘲弄和威胁，称上层为老爷们/姑奶奶们",
     "韩老三": "瘦高中年杂役，话少、实用、避免抢戏",
-    "旁白": "简短、冷静、只补画面无法自然呈现的背景，不替角色总结情绪"
+    "旁白": "简短、冷静、只补画面无法自然呈现的背景，不替角色总结情绪",
+    "CHAR_01": {
+      "formality": "按角色卡身份、年龄与关系保持稳定语域；不使用无来源现代网络梗。",
+      "anchors": [
+        "是。",
+        "我要留下",
+        "我决定"
+      ],
+      "forbidden_terms": [],
+      "sentence_len_max": null
+    },
+    "CHAR_02": {
+      "formality": "按角色卡身份、年龄与关系保持稳定语域；不使用无来源现代网络梗。",
+      "anchors": [
+        "从今天起",
+        "这是命令"
+      ],
+      "forbidden_terms": [],
+      "sentence_len_max": null
+    },
+    "GROUP_01": {
+      "formality": "按角色卡身份、年龄与关系保持稳定语域；不使用无来源现代网络梗。",
+      "anchors": [],
+      "forbidden_terms": [],
+      "sentence_len_max": null
+    },
+    "CHAR_03": {
+      "formality": "按角色卡身份、年龄与关系保持稳定语域；不使用无来源现代网络梗。",
+      "anchors": [],
+      "forbidden_terms": [],
+      "sentence_len_max": null
+    }
   },
   "audio_baseline": {
     "target_lufs": -16.0,

@@ -7,7 +7,7 @@
 
 ## 真值源
 - global_style: 设定库/global_style.md
-- 角色圣经: 未登记
+- 角色圣经: 设定库/角色圣经.md
 - setup_payoff_ledger: 设定库/setup_payoff_ledger.json
 - narrative_state_ledger: 未登记
 - story_integrity_ledger: 设定库/story_integrity_ledger.json
@@ -30,8 +30,10 @@
 
 | 角色 | 形态 | performance_signature | signature_equipment |
 |---|---|---|---|
+| CHAR_01 贺平生 | 本集为14岁杂役常态 | ready | - |
+| CHAR_02 张老大 | 常态 | ready | - |
+| GROUP_01 杂役背景组 | 常态 | ready | - |
+| CHAR_03 韩老三 | 常态 | ready | - |
 
 ## Findings
-- WARN [missing_identity_registry] 缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。
-- INFO [missing_asset_registry] 缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。
 - INFO [series_layers_not_registered] 以下剧级层尚未登记：narrative_state_ledger、leitmotif_registry、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan

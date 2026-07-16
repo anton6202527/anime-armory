@@ -2,12 +2,18 @@
   "episode": "第1集",
   "generated_at": "2026-07-14T15:51:44+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-14T16:28:24+00:00",
-  "last_confirmed_by": "user:request-author",
+  "last_confirmed_at": "2026-07-15T17:00:17+00:00",
+  "last_confirmed_by": "executor:codex",
   "last_confirmed_lock_ids": [
     "source_lock",
     "script_lock",
-    "storyboard_lock"
+    "storyboard_lock",
+    "style_identity_lock",
+    "voice_timing_lock",
+    "video_material_lock",
+    "rough_cut_lock",
+    "picture_lock",
+    "delivery_lock"
   ],
   "locks": [
     {
@@ -17,19 +23,19 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T16:28:24+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 2,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-14T15:44:18+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "设定库/source_comprehension.json",
           "sha256": "31817bdcebc5243949cc83811a9401c45b42817c74d20c16b7ef5d8bf660968a"
         },
         {
           "exists": true,
-          "mtime": "2026-07-14T15:44:52+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "小说/_源指纹.json",
           "sha256": "ebc203f1cbff59b023c073e19af0d42efdf955145ce0ce801a9cdb034033412b"
         }
@@ -58,27 +64,27 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T16:28:24+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-14T16:15:56+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "脚本/第1集/voiceover.txt",
           "sha256": "8583285a8894320317aafc6da7387a328d3dc24fcd7f4928fc13eb135e5c0158"
         },
         {
           "exists": true,
-          "mtime": "2026-07-14T15:47:25+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "脚本/第1集/bgm.txt",
           "sha256": "4a603462e91b26bdd87ef36bbc47d0ccd8ee8c1a79b7fdbe57cd684bcd67a037"
         },
         {
           "exists": true,
-          "mtime": "2026-07-14T16:28:05+00:00",
+          "mtime": "2026-07-15T16:38:54+00:00",
           "path": "生产数据/script_quality_contract_第1集.json",
-          "sha256": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3"
+          "sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d"
         }
       ],
       "episode": "第1集",
@@ -106,25 +112,25 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T16:28:24+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-14T16:22:25+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "脚本/第1集/storyboard.json",
           "sha256": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
         },
         {
           "exists": true,
-          "mtime": "2026-07-14T16:17:50+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "脚本/第1集/镜头时长.json",
           "sha256": "3cc009bed4ab22a411127a7d293c9c530dabc47c3013308b0ff35148267cf95c"
         },
         {
           "exists": true,
-          "mtime": "2026-07-14T16:05:13+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "脚本/第1集/director_blocking_pack.json",
           "sha256": "234653871713eda5b8538e9b84e03ba7b776f0934b593a614c09a0cfc29bc4a9"
         }
@@ -154,40 +160,39 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T15:51:44+00:00",
-      "approver": "user:request-author",
-      "artifact_count": 2,
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
+      "artifact_count": 4,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-14T15:41:13+00:00",
+          "mtime": "2026-07-15T15:38:22+00:00",
           "path": "_设置.md",
-          "sha256": "1d7821b28b3868cbb3ad04e390b2f309f7282205d5e03fd8baaac6e54af52280"
+          "sha256": "85a39090c152a79b2cb9665271691ec874094b91072cacc5c2dd86da27872afd"
         },
         {
           "exists": true,
-          "mtime": "2026-07-14T15:40:00+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "设定库/global_style.md",
           "sha256": "181309e0eadae694ad45e5024156dad1c0110946a1028e1776c5cde68f6f7015"
         },
         {
-          "exists": false,
+          "exists": true,
+          "mtime": "2026-07-15T17:00:07+00:00",
           "path": "出图/共享/identity_registry.json",
-          "sha256": ""
+          "sha256": "687406bfd65891db812b5786e8f0d220b8cb719264fe053b18d153dafd5b46e2"
         },
         {
-          "exists": false,
+          "exists": true,
+          "mtime": "2026-07-15T17:00:17+00:00",
           "path": "生产数据/identity_adapter_matrix.json",
-          "sha256": ""
+          "sha256": "6bdf41951ba2b78f5443f5d6dc4707a01ca125011354589f89151f70b8742bad"
         }
       ],
       "episode": "第1集",
       "label": "风格身份锁",
       "lock_id": "style_identity_lock",
-      "missing_artifacts": [
-        "出图/共享/identity_registry.json",
-        "生产数据/identity_adapter_matrix.json"
-      ],
+      "missing_artifacts": [],
       "required_approver_roles": [
         "director",
         "art_director",
@@ -208,8 +213,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T15:51:44+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 0,
       "artifacts": [
         {
@@ -250,9 +255,9 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T15:51:44+00:00",
-      "approver": "user:request-author",
-      "artifact_count": 0,
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
+      "artifact_count": 1,
       "artifacts": [
         {
           "exists": false,
@@ -265,9 +270,10 @@
           "sha256": ""
         },
         {
-          "exists": false,
+          "exists": true,
+          "mtime": "2026-07-15T15:37:41+00:00",
           "path": "生产数据/image_qc/第1集/image_qc_第1集.json",
-          "sha256": ""
+          "sha256": "128fecffe3513bba82965a00bd5a109e578479284af0add3c5e1721900c6bdc5"
         },
         {
           "exists": false,
@@ -281,7 +287,6 @@
       "missing_artifacts": [
         "出视频/第1集/视频",
         "出视频/第1集/prompt/video_model_routes.json",
-        "生产数据/image_qc/第1集/image_qc_第1集.json",
         "生产数据/video_qc_第1集.json"
       ],
       "required_approver_roles": [
@@ -305,8 +310,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T15:51:44+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 0,
       "artifacts": [
         {
@@ -354,8 +359,8 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T15:51:44+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 0,
       "artifacts": [
         {
@@ -403,15 +408,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-14T15:51:44+00:00",
-      "approver": "user:request-author",
+      "approved_at": "2026-07-15T17:00:17+00:00",
+      "approver": "executor:codex",
       "artifact_count": 1,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-14T15:47:39+00:00",
+          "mtime": "2026-07-15T01:22:25+00:00",
           "path": "合成/第1集/配音/timing_estimate.json",
-          "sha256": "eebecb66d5e76dbebe1eab9c9915c5e18bc187b9cf405ed1dbf5fc7d53886baa"
+          "sha256": "337cd3eac582643348b0fab447f57afbb30cf42219f57976213553808845168c"
         },
         {
           "exists": false,
@@ -450,6 +455,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-14T16:28:24+00:00",
+  "updated_at": "2026-07-15T17:00:17+00:00",
   "version": 1
 }

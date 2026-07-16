@@ -121,3 +121,86 @@ def test_chapter_sequence_and_long_series_state_are_deterministic_gaps(tmp_path)
     codes = {gap["code"] for gap in report["gaps"]}
     assert "chapter_sequence_gap" in codes
     assert "exit_state_missing" in codes
+
+
+def _fill_with_source(tmp_path, chapters_in_source, planned_end):
+    """Confirmed pack whose source has ``chapters_in_source`` 章 but plans through ``planned_end``."""
+    dp.scaffold(tmp_path, write=True)
+    for key, path in dp.pack_files(tmp_path).items():
+        if key == "signoff":
+            continue
+        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(json.dumps(data, ensure_ascii=False).replace("待补", "已填内容").replace("待填", "已填"))
+        data["status"] = "confirmed"
+        if key == "split_blueprint":
+            entry = data["chapters"][0]
+            entry["status"] = "confirmed"
+            entry["source_spans"][0]["start"] = "第1章"
+            entry["source_spans"][0]["end"] = f"第{planned_end}章"
+            source_path = tmp_path / entry["source_spans"][0]["source_path"]
+            source_path.parent.mkdir(parents=True, exist_ok=True)
+            source_path.write_text(
+                "\n".join(f"第{index}章\n正文内容" for index in range(1, chapters_in_source + 1)),
+                encoding="utf-8",
+            )
+        path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+
+def test_unplanned_source_breadth_is_a_gap(tmp_path):
+    """120 章的源只规划 1 章不能算通过——这正是水浒传/金瓶梅实测漏掉的那类。"""
+    _fill_with_source(tmp_path, chapters_in_source=120, planned_end=1)
+    report = dp.check_pack(tmp_path)
+    gap = next(g for g in report["gaps"] if g["code"] == "source_coverage_incomplete")
+    assert "120 章" in gap["message"]
+    assert "1 章进入话次规划" in gap["message"]
+
+
+def test_full_coverage_has_no_breadth_gap(tmp_path):
+    _fill_with_source(tmp_path, chapters_in_source=3, planned_end=3)
+    report = dp.check_pack(tmp_path)
+    assert not [g for g in report["gaps"] if "coverage" in g["code"]]
+
+
+def test_declared_coverage_scope_downgrades_breadth_to_warning(tmp_path):
+    """首批只切一部分是合法的，但必须显式声明 planned_through + reason。"""
+    _fill_with_source(tmp_path, chapters_in_source=120, planned_end=10)
+    blueprint = dp.pack_files(tmp_path)["split_blueprint"]
+    data = json.loads(blueprint.read_text(encoding="utf-8"))
+    data["coverage_scope"] = {"planned_through": "第10章", "reason": "首批试切 10 章验证画风"}
+    blueprint.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    report = dp.check_pack(tmp_path)
+    assert not [g for g in report["gaps"] if "coverage" in g["code"]]
+    assert any(w["code"] == "source_beyond_planned_scope" for w in report["warnings"])
+
+
+def test_hole_inside_declared_scope_still_blocks(tmp_path):
+    """声明规划到第10章，却在范围内留洞，仍是 gap——声明不是免死金牌。"""
+    _fill_with_source(tmp_path, chapters_in_source=120, planned_end=1)
+    blueprint = dp.pack_files(tmp_path)["split_blueprint"]
+    data = json.loads(blueprint.read_text(encoding="utf-8"))
+    data["coverage_scope"] = {"planned_through": "第10章", "reason": "首批试切 10 章"}
+    blueprint.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    report = dp.check_pack(tmp_path)
+    gap = next(g for g in report["gaps"] if g["code"] == "source_coverage_incomplete")
+    assert "范围内" in gap["message"]
+
+
+def test_coverage_scope_without_reason_is_a_gap(tmp_path):
+    _fill_with_source(tmp_path, chapters_in_source=120, planned_end=1)
+    blueprint = dp.pack_files(tmp_path)["split_blueprint"]
+    data = json.loads(blueprint.read_text(encoding="utf-8"))
+    data["coverage_scope"] = {"planned_through": "第1章"}
+    blueprint.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    report = dp.check_pack(tmp_path)
+    assert any(g["code"] == "coverage_scope_reason_missing" for g in report["gaps"])
+
+
+def test_source_without_unit_markers_is_not_judged(tmp_path):
+    """源里没有第N章标记时无法判断广度，不能瞎报。"""
+    _fill_with_source(tmp_path, chapters_in_source=5, planned_end=1)
+    blueprint = dp.pack_files(tmp_path)["split_blueprint"]
+    data = json.loads(blueprint.read_text(encoding="utf-8"))
+    source_path = tmp_path / data["chapters"][0]["source_spans"][0]["source_path"]
+    source_path.write_text("一段没有任何章节标记的散文。", encoding="utf-8")
+    report = dp.check_pack(tmp_path)
+    assert not [g for g in report["gaps"] if "coverage_incomplete" in g["code"]]

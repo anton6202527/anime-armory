@@ -4,8 +4,8 @@
   "chapter": "第1话",
   "panel_id": "P010",
   "reference_input_mode": "codex_exec_image_flags",
-  "reference_attachment_limit": 3,
-  "cli_image_input_count": 3,
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
   "references": [
     {
       "id": "CHAR_JIANG_YUECHU",
@@ -27,20 +27,23 @@
       "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a",
       "role": "location",
       "required": true
-    }
-  ],
-  "omitted_attachment_count": 2,
-  "omitted_attachments": [
+    },
     {
       "id": "STYLE_USER_JIANG_YUECHU_REF",
       "path": "出图/共享/图片/user_reference_clean_source.png",
-      "reason": "codex_image_generation_reference_limit; textual_contract_retained"
+      "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+      "role": "style",
+      "required": false
     },
     {
       "id": "CHAR_JIANG_YUECHU",
       "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
-      "reason": "codex_image_generation_reference_limit; textual_contract_retained"
+      "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321",
+      "role": "face",
+      "required": false
     }
   ],
-  "created_at": "2026-07-15T02:16:56"
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-16T00:59:07"
 }

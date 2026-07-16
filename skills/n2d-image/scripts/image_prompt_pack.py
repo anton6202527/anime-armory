@@ -2521,6 +2521,8 @@ def ref_item(root: Path, path: str, *, key: str = "", source: str = "出图/共�
     item: Dict[str, Any] = {"path": path, "status": "ready" if (root / path).is_file() else "planned"}
     if key in {"three_quarter", "side", "rear_three_quarter", "back", "expression", "expressions"}:
         method = "controlled_multiref_generation"
+    elif key == "face_anchor_refs" and "_表情_" in Path(path).stem:
+        method = "controlled_multiref_generation"
     elif key in {"half_body", "full_body", "face_anchor_refs"}:
         method = "front_crop"
     else:
@@ -2719,6 +2721,7 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
                     shared_rel(ak, "_脸部特写"),
                     shared_rel(ak, "_表情_克制_脸锚裁切"),
                     shared_rel(ak, "_表情_克制"),
+                    shared_rel(ak, "_表情_六联表"),
                     source,
                 ],
                 key="face_anchor_refs",
@@ -2729,11 +2732,16 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
     }
     if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or three_quarter.get("status") == "ready":
         rg["three_quarter"] = three_quarter
-    if library_tier == FULL_LIBRARY_TIER or side.get("status") == "ready":
+    # recurring_standard keeps side/back as on-demand planned slots.  They are
+    # not baseline gate requirements, but the shot-level shared-first
+    # interlock may require one for a profile/back-facing composition.  Without
+    # registering the slots, the runner could demand a view that no shared
+    # target was capable of generating.
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or side.get("status") == "ready":
         rg["side"] = side
     if library_tier == FULL_LIBRARY_TIER or rear_three_quarter.get("status") == "ready":
         rg["rear_three_quarter"] = rear_three_quarter
-    if library_tier == FULL_LIBRARY_TIER or back.get("status") == "ready":
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or back.get("status") == "ready":
         rg["back"] = back
     if library_tier == FULL_LIBRARY_TIER or turnaround.get("status") == "ready":
         rg["turnaround"] = turnaround
@@ -2804,7 +2812,7 @@ def partial_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tup
     return rg, atlas
 
 
-IDENTITY_FORM_PRESERVE_KEYS = {
+IDENTITY_FORM_PRESERVE_KEYS = (
     "image_adapters",
     "reference_manifest",
     "reference_input_mode",
@@ -2812,7 +2820,7 @@ IDENTITY_FORM_PRESERVE_KEYS = {
     "signoff",
     "adapter_signoff",
     "lock_signoff",
-}
+)
 
 
 def deep_merge_mapping(base: Mapping[str, Any], override: Mapping[str, Any]) -> Dict[str, Any]:
@@ -3122,13 +3130,14 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
     }
 
 
-PRESERVED_REGISTRY_KEYS = {
+PRESERVED_REGISTRY_KEYS = (
     "anchor_sha",
     "self_check_passed",
     "self_check_note",
     "self_check_at",
     "self_check_by",
     "human_review",
+    "visual_review",
     "face_consistency",
     "machine_evidence",
     "png_sha256",
@@ -3139,7 +3148,7 @@ PRESERVED_REGISTRY_KEYS = {
     "layout",
     "column_count",
     "view_order",
-}
+)
 
 
 def preserve_registry_evidence(new_value: Any, old_value: Any) -> Any:
@@ -3200,10 +3209,66 @@ def preserve_registry_evidence(new_value: Any, old_value: Any) -> Any:
     return new_value
 
 
+def _primary_registry_image_rel(record: Mapping[str, Any]) -> str:
+    group = record.get("reference_group") if isinstance(record.get("reference_group"), Mapping) else {}
+    for key in ("front", "primary", "hero", "canonical"):
+        item = group.get(key)
+        if isinstance(item, Mapping) and str(item.get("path") or "").strip():
+            return str(item.get("path")).strip()
+    for item in record.get("reference_slots") or []:
+        if not isinstance(item, Mapping):
+            continue
+        if str(item.get("slot") or "") == "primary_reference" and str(item.get("path") or "").strip():
+            return str(item.get("path")).strip()
+    return str(record.get("path") or "").strip()
+
+
+def carry_current_self_check_evidence(root: Path, new_value: Any, old_value: Any) -> Any:
+    """Carry finalize receipts only when they bind the exact current pixels."""
+    if isinstance(new_value, dict) and isinstance(old_value, Mapping):
+        merged: Dict[str, Any] = dict(new_value)
+        if old_value.get("self_check_passed") is True:
+            rel = _primary_registry_image_rel(old_value)
+            expected = str(old_value.get("artifact_sha256") or old_value.get("anchor_sha") or "").strip()
+            path = root / rel if rel else None
+            if path and path.is_file() and expected and sha256_file(path) == expected:
+                for key in (
+                    "self_check_passed", "self_check_note", "self_check_at",
+                    "self_check_by", "artifact_sha256", "anchor_sha",
+                ):
+                    if key in old_value:
+                        merged[key] = old_value[key]
+        for key, child in list(merged.items()):
+            if key in old_value and key not in PRESERVED_REGISTRY_KEYS:
+                merged[key] = carry_current_self_check_evidence(root, child, old_value[key])
+        return merged
+    if isinstance(new_value, list) and isinstance(old_value, Sequence) and not isinstance(old_value, (str, bytes, bytearray)):
+        old_items = [item for item in old_value if isinstance(item, Mapping)]
+
+        def key_for(item: Any) -> Optional[Tuple[str, str]]:
+            if not isinstance(item, Mapping):
+                return None
+            for key in ("id", "form", "emotion", "path", "asset_key", "name"):
+                if item.get(key) not in (None, ""):
+                    return (key, str(item.get(key)))
+            return None
+
+        old_by_key = {key_for(item): item for item in old_items if key_for(item)}
+        out: List[Any] = []
+        for idx, item in enumerate(new_value):
+            old_item = old_by_key.get(key_for(item))
+            if old_item is None and idx < len(old_value) and isinstance(old_value[idx], Mapping):
+                old_item = old_value[idx]
+            out.append(carry_current_self_check_evidence(root, item, old_item) if old_item is not None else item)
+        return out
+    return new_value
+
+
 def merge_existing_registry_evidence(root: Path, rel_path: Path, new_data: Dict[str, Any]) -> Dict[str, Any]:
     existing = load_json(root / rel_path)
     if not isinstance(existing, Mapping):
         return new_data
+    new_data = carry_current_self_check_evidence(root, new_data, existing)
     merged = preserve_registry_evidence(new_data, existing)
     if not isinstance(merged, dict):
         return new_data
@@ -3802,9 +3867,29 @@ def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, 
             "role": "shared_rendering_language_anchor",
         }
         if path.is_file():
-            entry["sha256"] = sha256_file(path)
-            if str(previous_selected.get("path") or "") == rel and isinstance(previous_selected.get("human_review"), Mapping):
-                entry["human_review"] = dict(previous_selected["human_review"])
+            current_sha = sha256_file(path)
+            entry["sha256"] = current_sha
+            if str(previous_selected.get("path") or "") == rel:
+                # Prompt-pack rebuilds must not erase a valid review of the
+                # exact current pixels.  Conversely, never carry a receipt
+                # across a regenerated anchor merely because the path stayed
+                # the same.  Both human and explicitly authorized executor
+                # visual reviews are first-class evidence in image_qc.
+                for review_key in ("human_review", "visual_review"):
+                    review = previous_selected.get(review_key)
+                    if not isinstance(review, Mapping):
+                        continue
+                    receipt_sha = str(
+                        review.get("png_sha256")
+                        or review.get("artifact_sha256")
+                        or ""
+                    ).strip()
+                    if receipt_sha == current_sha:
+                        entry[review_key] = dict(review)
+                        if str(review.get("status") or review.get("verdict") or "").lower() in {
+                            "accepted", "approved", "pass",
+                        }:
+                            entry["status"] = "ready"
         anchors.append(entry)
     selected = dict(anchors[0]) if anchors else {
         "id": "STYLE_ANCHOR",

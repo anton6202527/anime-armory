@@ -6,7 +6,7 @@
   ],
   "episode": "第1集",
   "findings": [],
-  "generated_at": "2026-07-14T16:28:24+00:00",
+  "generated_at": "2026-07-15T14:40:12+00:00",
   "kind": "n2d_production_locks_check",
   "lock_path": "生产数据/production_locks_第1集.json",
   "stage": "image_prompt",

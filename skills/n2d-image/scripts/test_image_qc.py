@@ -481,6 +481,41 @@ def test_face_confirmations_require_current_png_hash_and_convert_rows(tmp_path: 
     assert payload["checks"]["face"]["shots"][0]["verdict"] == "warn"
 
 
+def test_face_confirmation_executor_visual_is_explicit_and_authorized(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式: 逐张机器QC+执行者实际像素目视后再继续  # source=explicit_user；用户明确要求\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip01.png").write_bytes(b"image-v1")
+    qc_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
+    qc_dir.mkdir(parents=True)
+    (qc_dir / "image_qc_第1集.json").write_text(json.dumps({
+        "checks": {"face": {"shots": [{
+            "char": "CHAR_01",
+            "png": "图片/Clip01.png",
+            "verdict": "warn",
+        }]}}
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.confirm_face_targets(
+        tmp_path,
+        "第1集",
+        "all",
+        reviewer="executor:codex",
+        review_kind="executor_visual",
+        reason="实际查看当前像素并与定妆并排核对",
+    )
+
+    assert res["ok"] is True
+    data = json.loads((qc_dir / "face_confirmations.json").read_text(encoding="utf-8"))
+    receipt = data["confirmations"][0]
+    assert receipt["review_kind"] == "executor_visual"
+    assert receipt["reviewer_role"] == "ai_visual_executor"
+    assert receipt["human_signoff"] is False
+
+
 def test_face_confirmation_allows_face_reference_coverage(tmp_path: Path) -> None:
     img = tmp_path / "出图" / "第1集" / "图片"
     img.mkdir(parents=True)
@@ -3670,6 +3705,42 @@ def test_executor_visual_receipt_requires_explicit_project_authorization(tmp_pat
     audit = image_qc.audit_turnaround_alignment(root, "第1集")
     pending_front = [row for row in audit["human_review_required"] if row["view"] == "front"]
     assert pending_front == []
+
+
+def test_style_anchor_executor_visual_review_promotes_matching_entries(tmp_path: Path) -> None:
+    from PIL import Image
+
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    rel = "出图/共享/图片/风格锚_国漫写实.png"
+    Image.new("RGB", (512, 768), (80, 90, 100)).save(tmp_path / rel)
+    registry_path = tmp_path / "出图" / "共享" / "style_anchor_registry.json"
+    item = {"id": "STYLE_ANCHOR", "path": rel, "status": "review_pending"}
+    registry_path.write_text(json.dumps({
+        "selected_anchor": dict(item),
+        "anchors": [dict(item)],
+    }, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式：逐张机器QC+实际目视  # source=explicit_user\n"
+        "- 用户明确要求每张由执行者实际像素目视后才进入下一张\n",
+        encoding="utf-8",
+    )
+
+    result = image_qc.review_style_anchor(
+        tmp_path,
+        reviewer="Codex视觉执行者",
+        review_kind="executor_visual",
+        note="style/material/color checked",
+        accept_current_pixels=True,
+    )
+
+    assert result["ok"] is True
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    selected = registry["selected_anchor"]
+    assert selected["status"] == "ready"
+    assert selected["sha256"] == result["png_sha256"]
+    assert selected["visual_review"]["human_signoff"] is False
+    assert registry["anchors"][0]["visual_review"]["png_sha256"] == result["png_sha256"]
 
 
 @pytest.mark.parametrize("mode", ["absolute", "path_escape", "symlink", "noncanonical"])

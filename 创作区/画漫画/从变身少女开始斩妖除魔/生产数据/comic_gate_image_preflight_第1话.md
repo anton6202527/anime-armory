@@ -1,15 +1,15 @@
 # 漫画 Gate — image_preflight — 第1话
 
-- 生成时间：2026-07-15T02:41:22
-- 结论：warn
-- block/warn/info：0 / 21 / 22
+- 生成时间：2026-07-15T22:30:22
+- 结论：block
+- block/warn/info：2 / 21 / 22
 
 ## 记录
 
 - 开发包严格合同: pass
 - 源范围/SHA/逐格 coverage 合同: pass
 - continuity_audit: chapters=1 block=0 warn=0
-- ネーム审批合同: pass
+- 缩略分镜/name board 审批合同: pass
 - 排版审批合同: pass
 - 原稿收尾合同: pass
 - backend adapter: openai_gpt_image_project_memory; reference_image_limit=16; persistent_subject=False
@@ -18,14 +18,16 @@
 - chapter_beat_audit: must=0 warn=0（advisory·不阻断）
 - setup_payoff_ledger: must=0 warn=0（advisory·不阻断）
 - redundancy_audit: must=0 warn=2（advisory·不阻断）
-- reference_planner: 含角色格 28 需处理 24；处方 SHA 已校验
+- reference_planner: 含角色格 27 需处理 24；处方 SHA 已校验
 
 ## Findings
 
 | severity | code | artifact | reason | return_to | suggested_fix |
 |---|---|---|---|---|---|
+| block | panel_jobs_stale_contract | 出图/第1话/prompt/panel_jobs.json | 这些格的落盘出图包与当前脚本/收尾/风格契约不一致（改了契约没重建出图包）：P001、P002、P003、P004、P005、P006、P007、P008、P009、P010、P011、P012、P013、P014、P015、P016、P017、P018、P019、P020 | image | 重跑 comic-image/scripts/build_panel_jobs.py（陈旧格自动回 planned），再重抽这些格。 |
 | warn | narration_heavy_chapter | 生产数据/comic_redundancy_audit_第1话.json | 本话 14/25 个有文本格是纯旁白（56%>50%）——信息压缩靠旁白硬转=没画面化的流水账；条漫铁律是能画不说：把交代改成画面/对白/道具特写，旁白只留画面外增量。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | repeated_fact_mention | 生产数据/comic_redundancy_audit_第1话.json | 短语『斩杀生物』在 P021/P023/P025 复现 3 格——同一信息反复告知读者即冗余；只留首次落地处。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
+| block | reference_plan_stale | 生产数据/comic_reference_plan_第1话.json | 已落盘处方的 plan_sha256 与当前输入不一致。 | identity | 重跑 comic-image 构建参考处方和 panel_jobs。 |
 | info | escalation_suggested | 生产数据/comic_reference_plan_第1话.json | P004·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第1话.json | P004 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | info | escalation_suggested | 生产数据/comic_reference_plan_第1话.json | P005·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
