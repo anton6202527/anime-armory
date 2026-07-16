@@ -4,11 +4,13 @@
   "decision": "approved",
   "reviewer": "lalala",
   "role": "出品人",
-  "time": "2026-07-14T07:16:49Z",
+  "time": "2026-07-16T11:21:32Z",
   "reason": "第1话开发包通过",
+  "amended_by": "Codex制作代理",
+  "amendment_reason": "仅补充首批覆盖范围 coverage_scope，未改变已通过的第1话剧情、章节边界与48格预算。",
   "file_sha256": {
     "adaptation_strategy": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
     "season_arc": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
-    "split_blueprint": "e819524215a6a733a4423c118be09704fd78a94445cf4af910929e633674928c"
+    "split_blueprint": "ba3ced4e03126283dee29677f06753943cf3114d8e0a04f116e709a5ef322541"
   }
 }

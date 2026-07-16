@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-16T06:28:23+00:00",
+  "created_at": "2026-07-16T11:30:08+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -17,62 +17,58 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+          "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          }
         },
         {
           "view": "three_quarter",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+          "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+          "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "14454572127399b711d73a463af605a877960f360ba0054a74ef5afc3df734e5",
+      "model_pack_fingerprint": "7cb47ee4a6f7aeb03c72fd2b3feb07e344ecb48880e01d794d1d76d2d765942d",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_ABBOT_SHANGQING.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T10:50:03+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "three_quarter",
-          "message": "缺必需视图 three_quarter"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     },
     {
       "kind": "comic_character_model_pack",
@@ -139,47 +135,44 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+          "sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+            "source_sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__face.png",
+          "sha256": "08df4832416ce0989409d29da16f79babfbfe855de35b03b60d038e68ad0f135",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+            "source_sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "edf94fdf802be7d2001fc5e915a24aa81b976df36eb799e7f630d1ba9ec49c3e",
+      "model_pack_fingerprint": "af410242994f125841d446f6c8b2995bca83ac7c0b172598cfc38738edd1de02",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_FAN_ZHONGYAN.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T10:50:04+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     },
     {
       "kind": "comic_character_model_pack",
@@ -344,47 +337,44 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+          "sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+            "source_sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_WEN_YANBO__face.png",
+          "sha256": "1019f7641e6763576795c7a22eae96d390e661a3fca3b00584f66313c5afe9e5",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+            "source_sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "2a6516fecf373286bb1445e14a63a7f4e6ad0de56a8760fff22d4d1c3ea61e71",
+      "model_pack_fingerprint": "abdd35df7616e30c3d41bd9bcf831dae7ecf42ac9a5eefe202649b38e3320207",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_WEN_YANBO.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T10:50:04+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     },
     {
       "kind": "comic_character_model_pack",
@@ -399,47 +389,44 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+          "sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+            "source_sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/CHAR_ZHAO_ZHE__face.png",
+          "sha256": "8588ebc6dd698db1d942e0ee94069d54b7021d69000cfbf050a84b788a58f6cc",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+            "source_sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "a73c7ce946afc646bf4ef8fcd64a6a4aeedbfbb6e04813ce7bf75d5b4a3c6419",
+      "model_pack_fingerprint": "1f6a2a5d4f2cc862e9e1f36af4409a1ec4663f7fdc19618804e08b8c48d9ff06",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_ZHAO_ZHE.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T10:50:04+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     },
     {
       "kind": "comic_character_model_pack",
@@ -455,62 +442,58 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+          "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+            "crop_box": []
+          }
         },
         {
           "view": "three_quarter",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+          "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__face.png",
+          "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "a636ae9099bbfa2d8caaa1068894eeccafeb1f1b3f227bf63633ee0157d75b9f",
+      "model_pack_fingerprint": "60adc15efbcb36623059472fc8eeb59c6fd329c0b546eff4105e5f2bbcd74b3d",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/MON_SNOW_SERPENT.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T10:07:59+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "three_quarter",
-          "message": "缺必需视图 three_quarter"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     },
     {
       "kind": "comic_character_model_pack",
@@ -526,70 +509,66 @@
       "view_evidence": [
         {
           "view": "front",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+          "sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "source_sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+            "crop_box": []
+          }
         },
         {
           "view": "three_quarter",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/MON_WHITE_TIGER__three_quarter.png",
+          "sha256": "93ae3b93a742db5ea825c8937bb3f14be7c1241bcaacc203970986bbe9128d07",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "source_sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+            "crop_box": []
+          }
         },
         {
           "view": "face",
-          "path": "",
-          "sha256": "",
-          "width": 0,
-          "height": 0,
-          "source_view": "",
-          "derivation": {}
+          "path": "出图/共享/图片/MON_WHITE_TIGER__face.png",
+          "sha256": "3fa67b59c7e736bf7413fbb1997e4c5d52f908f01f4a70c3e397916095502d59",
+          "width": 1086,
+          "height": 1448,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "source_sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+            "crop_box": []
+          }
         }
       ],
-      "model_pack_fingerprint": "cf7226e1523b55e3d553c10525cacc08434253324feceb0abc576965ab56c08b",
+      "model_pack_fingerprint": "5a4cf217537fd9cb86e8b3930115f8336a4b31e9aa127bb0711c340c00ded340",
       "signoff": {
         "path": "生产数据/comic_model_pack_signoffs/MON_WHITE_TIGER.json",
-        "status": "missing",
-        "approved_at": "",
-        "reviewer": ""
+        "status": "current",
+        "approved_at": "2026-07-16T10:50:03+00:00",
+        "reviewer": "Codex制作代理"
       },
       "signoff_required": true,
-      "readiness": "needs_fix",
-      "technical_block": true,
-      "findings": [
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "front",
-          "message": "缺必需视图 front"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "three_quarter",
-          "message": "缺必需视图 three_quarter"
-        },
-        {
-          "severity": "block",
-          "code": "model_pack_view_missing",
-          "view": "face",
-          "message": "缺必需视图 face"
-        }
-      ]
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
     }
   ],
   "summary": {
     "assets": 9,
     "characters": 7,
     "monsters": 2,
-    "ready": 3,
+    "ready": 9,
     "needs_approval": 0,
-    "needs_fix": 6
+    "needs_fix": 0
   }
 }

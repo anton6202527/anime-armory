@@ -11,12 +11,7 @@
   "asset_face_policy": {
     "available": true,
     "findings": [],
-    "notes": [
-      "资产 VFX_百妖谱：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 VFX_道行灌注：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 VFX_黑妖血：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。",
-      "资产 VFX_道行反噬：faceless PNG 尚未生成，出图时按 faceless 约束生成后再核。"
-    ]
+    "notes": []
   },
   "asset_human_review": [],
   "asset_lifecycle": {
@@ -102,8 +97,8 @@
           "intra_pairs": 3
         },
         "CHAR_04__常态": {
-          "floor": 0.9823,
-          "intra_pairs": 4
+          "floor": 0.9332,
+          "intra_pairs": 5
         }
       },
       "margin": 0.08,
@@ -198,7 +193,8 @@
         "CHAR_04__常态",
         "CHAR_04__常态_脸部特写_脸锚裁切",
         "CHAR_04__常态_表情_克制",
-        "CHAR_04__常态_45度"
+        "CHAR_04__常态_45度",
+        "CHAR_04__常态_后45度"
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第1集",
@@ -222,8 +218,8 @@
           "intra_pairs": 3
         },
         "CHAR_04__常态": {
-          "floor": 0.9813,
-          "intra_pairs": 4
+          "floor": 0.9433,
+          "intra_pairs": 5
         }
       },
       "margin": 0.1,
@@ -263,7 +259,7 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 4,
+    "checked": 5,
     "findings": [],
     "notes": []
   },
@@ -700,17 +696,17 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "a8552fb502cf2b4a325b18b13651dc5bdf26238cb0019ac646b6a377313daf97",
-      "出图/共享/identity_registry.json": "2a52e18bf11dba85e18b10b5e19167d8f77245491d03d4751e8ef99a52d42c11",
-      "出图/共享/style_anchor_registry.json": "cbce0749a034895b26bdeb992f7b74bd3dfe68c01852f510bba3ccbe5338c01c",
+      "出图/共享/asset_registry.json": "cad4ccfd7e02755675c697cb5657bd6191d26bf6d1f3e822d539e99a59d70ad1",
+      "出图/共享/identity_registry.json": "82f99442e2f40da14385a6c871b2ce5472e7967090de445fcb777e7ba98a63e8",
+      "出图/共享/style_anchor_registry.json": "3e25a9605e6281e1def35fdda8d1e318e7beb8434f1e349cac2baa5e9f76a8a4",
       "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
       "出图/第1集/prompt/00_总览.md": "a9b61d6f7b1c1aeec31a89fa2413c3065bc5e049f15d903666073bd9aa47588c",
-      "出图/第1集/prompt/01_分镜出图.md": "067376f06c94086b9b94641f7db4a0e1d10296b365cdba50a2a6dccfbec706d2",
+      "出图/第1集/prompt/01_分镜出图.md": "4583160e3a41782c0f40253f84c16264e9e5c1b7ea94aa31efe2751a53ccc494",
       "生产数据/image_qc/第1集/face_confirmations.json": null,
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "e552fd8593a2aa410d7aee2b399c4d27bbf555848067e817266c74977a67d963"
+    "sha": "1aadb23500a1d82d27179f309b65ce88df9cce7732c5b89c8ee0ca8747b59e6f"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1164,7 +1160,13 @@
         "shot": "Clip_13"
       }
     ],
-    "findings": [],
+    "findings": [
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      }
+    ],
     "notes": [],
     "shots_linted": 13
   },
@@ -1264,7 +1266,7 @@
     ]
   },
   "summary": {
-    "advisory": 0,
+    "advisory": 1,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1294,7 +1296,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 0
+        "warn": 1
       },
       "multimodal": {
         "block": 0,
@@ -1350,7 +1352,108 @@
   "turnaround_alignment": {
     "available": true,
     "checked_forms": 3,
-    "findings": [],
+    "findings": [
+      {
+        "body_views": {
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              174,
+              174,
+              172
+            ],
+            "border_delta_p90": 30,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              178,
+              178,
+              173
+            ],
+            "border_delta_p90": 35,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              182,
+              182,
+              181
+            ],
+            "bbox_normalized": [
+              0.0,
+              0.0141,
+              0.7917,
+              0.9812
+            ],
+            "border_delta_p90": 15,
+            "centerline": 0.3958,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9812,
+            "head_top": 0.0141,
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9672,
+            "subject_width": 0.7917
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              160,
+              160,
+              160
+            ],
+            "border_delta_p90": 32,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "rear_three_quarter": [
+            0.6427,
+            0.0377
+          ],
+          "side": [
+            0.1037,
+            0.0309
+          ],
+          "three_quarter": [
+            0.0876,
+            0.1525
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      }
+    ],
     "forms": [
       {
         "character_id": "CHAR_01",
@@ -1359,34 +1462,18 @@
           "candidates": [
             {
               "human_review": {
-                "expected_registry_binding_fingerprint": null,
-                "png_sha256": null,
-                "reasons": [
-                  "verdict_not_pass",
-                  "reviewer_missing",
-                  "review_kind_missing_or_invalid",
-                  "reviewed_at_missing",
-                  "character_id_missing_or_mismatch",
-                  "form_missing_or_mismatch",
-                  "library_tier_missing_or_mismatch",
-                  "view_missing_or_mismatch",
-                  "path_missing_or_mismatch",
-                  "review_contract_missing_or_mismatch",
-                  "registry_binding_fingerprint_kind_missing_or_mismatch",
-                  "criteria_incomplete",
-                  "explicit_current_pixels_confirmation_missing",
-                  "png_not_fully_decodable_or_pillow_missing",
-                  "png_missing_or_unreadable"
-                ],
-                "registry_binding_fingerprint": null,
-                "review_kind": null,
-                "reviewed_at": null,
-                "reviewer": null,
-                "valid": false,
-                "verdict": null
+                "expected_registry_binding_fingerprint": "73a6645e5147b4f77c581a49c9b6a18cdad21d9c7262a3c3d61ab4d6261f44b6",
+                "png_sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb",
+                "reasons": [],
+                "registry_binding_fingerprint": "73a6645e5147b4f77c581a49c9b6a18cdad21d9c7262a3c3d61ab4d6261f44b6",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-07-16T11:05:11+00:00",
+                "reviewer": "Codex视觉执行者",
+                "valid": true,
+                "verdict": "pass"
               },
               "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
-              "png_sha256": null
+              "png_sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb"
             },
             {
               "human_review": {
@@ -1811,9 +1898,9 @@
           "back": {
             "machine_evidence": {
               "measurable": false,
-              "reason": "path_missing"
+              "reason": "png_missing"
             },
-            "path": null,
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
             "view": "back"
           },
           "front": {
@@ -1850,19 +1937,89 @@
             "view": "front"
           },
           "rear_three_quarter": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "face_geometry": {
+              "center_y": 0.6427,
+              "confidence": "heuristic",
+              "face_height": 0.0377
             },
-            "path": null,
+            "human_review": {
+              "expected_registry_binding_fingerprint": "c75b1e775068a9b0ca9bb3b24aadbe8fbf0b2b8319e6870f8b555eff935bb108",
+              "png_sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53",
+              "reasons": [],
+              "registry_binding_fingerprint": "c75b1e775068a9b0ca9bb3b24aadbe8fbf0b2b8319e6870f8b555eff935bb108",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-16T11:46:03+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                178,
+                178,
+                173
+              ],
+              "border_delta_p90": 35,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+            "png_sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53",
             "view": "rear_three_quarter"
           },
           "side": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "face_geometry": {
+              "center_y": 0.1037,
+              "confidence": "heuristic",
+              "face_height": 0.0309
             },
-            "path": null,
+            "human_review": {
+              "expected_registry_binding_fingerprint": "0235afb3c1a87999155b6578972475e55bd308ebdcf26d9e36b92f7a4d8b021d",
+              "png_sha256": "9c39952d03635bf7c7678157461964b3a5d89c445f8e07a616fbd978cfb3787d",
+              "reasons": [],
+              "registry_binding_fingerprint": "0235afb3c1a87999155b6578972475e55bd308ebdcf26d9e36b92f7a4d8b021d",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-16T11:31:09+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                182,
+                182,
+                181
+              ],
+              "bbox_normalized": [
+                0.0,
+                0.0141,
+                0.7917,
+                0.9812
+              ],
+              "border_delta_p90": 15,
+              "centerline": 0.3958,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9812,
+              "head_top": 0.0141,
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9672,
+              "subject_width": 0.7917
+            },
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+            "png_sha256": "9c39952d03635bf7c7678157461964b3a5d89c445f8e07a616fbd978cfb3787d",
             "view": "side"
           },
           "three_quarter": {

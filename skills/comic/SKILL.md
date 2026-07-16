@@ -132,6 +132,8 @@ python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作�
 ```bash
 python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image_preflight
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P001 --limit 1
+# 项目选择 Dreamina/即梦官方 CLI 时：
+python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --max-attempts 2
 python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image
 python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render --qc-slots
 python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage compose

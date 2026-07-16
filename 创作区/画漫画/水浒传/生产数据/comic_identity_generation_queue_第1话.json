@@ -140,6 +140,42 @@
         "ratio": "4:5"
       },
       "successful_attempt_id": "30e4fd161b341d6826f7"
+    },
+    {
+      "priority": 5,
+      "asset_id": "MON_SNOW_SERPENT",
+      "variant": "front,three_quarter,face",
+      "kind": "model_pack",
+      "panel_occurrences": 4,
+      "attempts_used": {
+        "front": 2,
+        "three_quarter": 1,
+        "face": 1
+      },
+      "attempts_remaining": {
+        "front": 0,
+        "three_quarter": 1,
+        "face": 1
+      },
+      "status": "ready",
+      "artifacts": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+          "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+          "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__face.png",
+          "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0"
+        }
+      ],
+      "model_pack_signoff": "生产数据/comic_model_pack_signoffs/MON_SNOW_SERPENT.json"
     }
   ],
   "exhausted": [
@@ -205,37 +241,6 @@
     }
   ],
   "pending": [
-    {
-      "priority": 5,
-      "asset_id": "MON_SNOW_SERPENT",
-      "variant": "front",
-      "kind": "view",
-      "panel_occurrences": 4,
-      "attempts_used": 2,
-      "attempts_remaining": 0,
-      "status": "running_attempt_2",
-      "current_attempt": {
-        "attempt_id": "9e1f7ec3cdc038a0d419",
-        "attempt": 2,
-        "max_attempts_total": 2,
-        "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__front_builtin-imagegen__20260716T153024257496.md",
-        "prompt_sha256": "a625db5d2e5e8b7aaaa0ef60de5d1ab2f5193095230a96eb6d93482e7d0e6dda",
-        "status": "started",
-        "retry_of_attempt_id": "9d74eef9d5edc525261e"
-      },
-      "previous_attempt": {
-        "attempt_id": "9d74eef9d5edc525261e",
-        "attempt": 1,
-        "status": "failed",
-        "error_class": "builtin_network_error",
-        "image_generated": false
-      },
-      "followups_after_success": [
-        "three_quarter",
-        "face",
-        "model_pack_signoff"
-      ]
-    },
     {
       "priority": 6,
       "asset_id": "MON_WHITE_TIGER",

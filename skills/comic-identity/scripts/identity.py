@@ -1715,7 +1715,32 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
             rid = str(ref.get("id") or "")
             if not rid:
                 continue
-            path = resolve_reference_path(root, rid, registry, view=str(ref.get("view") or ""))
+            view = str(ref.get("view") or "")
+            role = str(ref.get("role") or "")
+            lookup_view = view
+            if view == "outfit" or role == "outfit":
+                binding = job.get("outfit_binding") if isinstance(job.get("outfit_binding"), dict) else {}
+                outfit_id = str(binding.get("outfit_id") or "").strip()
+                if outfit_id:
+                    lookup_view = f"outfit:{outfit_id}"
+
+            path = ""
+            if lookup_view.startswith("outfit:"):
+                outfit_id = lookup_view.split(":", 1)[1]
+                assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+                asset = assets.get(rid) if isinstance(assets, dict) else None
+                outfits = asset.get("outfits") if isinstance(asset, dict) and isinstance(asset.get("outfits"), dict) else {}
+                outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else {}
+                for item in outfit.get("reference_images") or []:
+                    raw = item.get("path") if isinstance(item, dict) else item
+                    if not isinstance(raw, str) or not raw.strip():
+                        continue
+                    candidate = resolve_path(root, raw)
+                    if candidate.is_file():
+                        path = rel_to_root(root, candidate)
+                        break
+            if not path:
+                path = resolve_reference_path(root, rid, registry, view=lookup_view)
             if path and ref.get("path") != path:
                 ref["path"] = path
                 changed += 1

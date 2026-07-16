@@ -2802,6 +2802,65 @@ def test_audit_face_anchor_quality_blocks_core_low_res(tmp_path):
     assert image_qc.summarize(payload)["verdict"] == "block"
 
 
+def test_audit_face_anchor_quality_normalizes_six_panel_expression_sheet(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    rel = "出图/共享/图片/定妆_沈念_表情_六联表.png"
+    (root / rel).parent.mkdir(parents=True)
+    Image.new("RGB", (1200, 1800), (128, 128, 128)).save(root / rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(_path):
+            # Each face is only 3% of the complete sheet, but 18% of one 2x3 panel.
+            return [(0, 0, 180, 360)] * 6
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": "长线女主·全篇", "forms": [{
+            "form": "常态",
+            "reference_group": {"expressions": [{"emotion": "六联表", "path": rel}]},
+            "reference_atlas": {"expression_refs": [{"emotion": "六联表", "path": rel}]},
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert res["checked"] == 1
+    assert not [f for f in res["findings"] if f["code"] == "weak_face_anchor_core"]
+    assert not [f for f in res["findings"] if f["code"] == "expression_sheet_face_count"]
+
+
+def test_audit_face_anchor_quality_blocks_incomplete_six_panel_expression_sheet(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    rel = "出图/共享/图片/定妆_沈念_表情_六联表.png"
+    (root / rel).parent.mkdir(parents=True)
+    Image.new("RGB", (1200, 1800), (128, 128, 128)).save(root / rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(_path):
+            return [(0, 0, 180, 360)] * 5
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": "长线女主·全篇", "forms": [{
+            "form": "常态",
+            "reference_atlas": {"expression_refs": [{"emotion": "六联表", "path": rel}]},
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert any(
+        finding["level"] == "block" and finding["code"] == "expression_sheet_face_count"
+        for finding in res["findings"]
+    )
+
+
 def test_native_multiref_tiers_by_persistent_subject():
     # ④ 持久主体后端（Seedream/可灵/Sora）：把「喂全组」换成「ID+单强锚」口径，不再误导堆图
     body = "**参考图**：\n- `定妆_沈念.png`（正脸主参考）"
@@ -2935,12 +2994,18 @@ def test_mark_finalized_asset(tmp_path: Path) -> None:
     (tmp_path / "出图" / "共享").mkdir(parents=True)
     img = tmp_path / "出图" / "共享" / "图片"
     img.mkdir(parents=True)
+    (img / "定妆_毒酒壶.png").write_bytes(b"\x89PNG-prop-bytes")
     (img / "定妆_马队.png").write_bytes(b"\x89PNG-mount-bytes")
+    prop_rel = "出图/共享/图片/定妆_毒酒壶.png"
     mount_rel = "出图/共享/图片/定妆_马队.png"
     (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
         json.dumps({
             "assets": [
-                {"id": "PROP_01", "name": "毒酒壶"},
+                {
+                    "id": "PROP_01",
+                    "name": "毒酒壶",
+                    "reference_group": {"primary": {"path": prop_rel, "status": "review_pending"}},
+                },
                 {
                     "id": "MOUNT_GROUP_01",
                     "name": "马队",
@@ -2961,8 +3026,15 @@ def test_mark_finalized_asset(tmp_path: Path) -> None:
 
 def test_mark_finalized_asset_uses_project_write_lock(tmp_path: Path) -> None:
     (tmp_path / "出图" / "共享").mkdir(parents=True)
+    rel = "出图/共享/图片/定妆_断碑.png"
+    (tmp_path / rel).parent.mkdir(parents=True)
+    (tmp_path / rel).write_bytes(b"\x89PNG-prop-bytes")
     (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
-        json.dumps({"assets": [{"id": "PROP_01", "name": "断碑"}]}), encoding="utf-8")
+        json.dumps({"assets": [{
+            "id": "PROP_01",
+            "name": "断碑",
+            "reference_group": {"primary": {"path": rel, "status": "review_pending"}},
+        }]}), encoding="utf-8")
     entered = []
 
     @contextlib.contextmanager

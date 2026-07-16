@@ -3,6 +3,10 @@
   "version": 2,
   "status": "confirmed",
   "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。第1话完整覆盖原第一回，保留‘金光散去’的回末钩子。",
+  "coverage_scope": {
+    "planned_through": "第1章",
+    "reason": "首批仅制作第1话/第1章，用于完成画风、角色、服饰道、场景与整话生产链验证；第1话验收后再继续规划后续章节。"
+  },
   "chapters": [
     {
       "chapter": "第1话",

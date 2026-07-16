@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P009",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 6,
+  "references": [
+    {
+      "id": "CHAR_EMPEROR_RENZONG",
+      "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+      "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_ZICHEN_HALL",
+      "path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
+      "sha256": "7596bb41dca0bab5d6f72dcd87e1a048ef64fdff85269676c211f79681048c3e",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_IMPERIAL_EDICT",
+      "path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+      "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "PROP_SILVER_CENSER",
+      "path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+      "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_EMPEROR_RENZONG",
+      "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+      "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898",
+      "role": "face",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-16T19:38:33"
+}

@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第1集
-- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 0 · 视觉降级 1
+- 总判定: **review** · 硬阻断 0（必须修） · 非阻断初筛 1 · 视觉降级 1
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
 - 阶段跳转: **video** · full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
 
@@ -33,6 +33,7 @@
 - 🟢 未发现最新落档事件来自本地贴脸修复。
 
 ## 执行层 lint（逐镜 prompt）
-- 🟢 13 镜已 lint · block 0 · warn 0
+- 🟡 13 镜已 lint · block 0 · warn 1
+  - 🟡 多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。
 
 落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

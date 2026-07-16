@@ -200,6 +200,61 @@ def test_report_accepts_deduplicated_front_as_registered_outfit_reference(tmp_pa
     assert report["outfit_gaps"] == {}
 
 
+def test_bind_job_references_preserves_registered_outfit_reference(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    shared = root / "出图" / "共享" / "图片"
+    shared.mkdir(parents=True)
+    front_rel = "出图/共享/图片/CHAR_A__front.png"
+    face_rel = "出图/共享/图片/CHAR_A__face.png"
+    outfit_rel = "出图/共享/图片/CHAR_A__OUTFIT_TRAVEL.png"
+    (root / front_rel).write_bytes(PNG_1X1)
+    (root / face_rel).write_bytes(PNG_1X1)
+    (root / outfit_rel).write_bytes(PNG_1X1)
+    registry = {
+        "assets": {
+            "CHAR_A": {
+                "id": "CHAR_A",
+                "reference_images": [
+                    {"view": "front", "path": front_rel},
+                    {"view": "face", "path": face_rel},
+                ],
+                "outfits": {
+                    "OUTFIT_TRAVEL": {
+                        "id": "OUTFIT_TRAVEL",
+                        "status": "ready",
+                        "reference_images": [{"path": outfit_rel}],
+                    }
+                },
+            }
+        }
+    }
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P001",
+                "outfit_binding": {
+                    "ref_id": "CHAR_A",
+                    "outfit_id": "OUTFIT_TRAVEL",
+                    "registered": True,
+                },
+                "references": [
+                    {
+                        "id": "CHAR_A",
+                        "role": "outfit",
+                        "view": "outfit",
+                        "path": face_rel,
+                    }
+                ],
+            }
+        ]
+    }
+
+    changed = identity.bind_job_references(root, jobs, registry)
+
+    assert changed == 1
+    assert jobs["jobs"][0]["references"][0]["path"] == outfit_rel
+
+
 def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     shared = root / "出图" / "共享" / "图片"

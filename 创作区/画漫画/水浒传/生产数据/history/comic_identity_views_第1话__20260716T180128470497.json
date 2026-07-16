@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-16T17:41:55+08:00",
+  "characters": [
+    "MON_SNOW_SERPENT"
+  ],
+  "views": [
+    "front",
+    "three_quarter"
+  ],
+  "backend": "builtin_imagegen",
+  "attempted_backends": [
+    "builtin_imagegen"
+  ],
+  "model": "GPT Image 2",
+  "execution_mode": "builtin_imagegen_tool",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_views_第1话__20260716T174155892940.json",
+  "previous_manifest_sha256": "cc4bc8df78c051c38c4bcfd88e2e831e97c1d77397a041500314f14f9799f9cb",
+  "contact_sheet": "",
+  "generated": 2,
+  "pending": 0,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-16T17:41:55+08:00",
+      "status": "character_view_reused",
+      "ref_id": "MON_SNOW_SERPENT",
+      "view": "front",
+      "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+      "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "attempt": 2,
+      "visual_review": "passed_by_authorized_production_agent"
+    },
+    {
+      "ts": "2026-07-16T17:41:55+08:00",
+      "status": "character_view_generated",
+      "ref_id": "MON_SNOW_SERPENT",
+      "view": "three_quarter",
+      "anchor_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+      "anchor_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+      "anchor_kind": "front_view_anchor",
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "execution_mode": "builtin_imagegen_tool",
+      "attempt_id": "3b9d3aa531f60533d073",
+      "attempt": 1,
+      "attempts_used": 1,
+      "attempts_authorized": 2,
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__three_quarter_builtin-imagegen__20260716T174155892226.md",
+      "prompt_sha256": "6bd89434fbfb502c441d1fc5315469442b626a7209bba02d59a20e1f059f701c",
+      "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "style_reference_role": "style_only",
+      "path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+      "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b",
+      "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_zEkTedp0PQtZKjubWULs90xf.png",
+      "visual_review": "passed_by_authorized_production_agent",
+      "visual_review_notes": "雪蛇three_quarter通过：与front为同一原创头骨、金色眼、乳白冷灰鳞色和体粗比例；真实约45度头颈，闭口中性警觉，完整盘绕及尾端，无龙角骨刺、绿色魔法雾、文字水印。"
+    }
+  ]
+}

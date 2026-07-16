@@ -51,6 +51,20 @@ def test_traditional_off_still_keeps_name_as_required_editorial_contract(tmp_pat
     assert "原稿收尾" not in stages
 
 
+def test_image_runner_script_follows_project_channel(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 生图模型：Dreamina 5.0\n- 生图渠道：Dreamina/即梦官方 CLI\n",
+        encoding="utf-8",
+    )
+    assert batch.image_runner_script(tmp_path).endswith("dreamina_panel_runner.py")
+
+    (tmp_path / "_设置.md").write_text(
+        "- 生图模型：GPT Image 2\n- 生图渠道：Codex CLI\n",
+        encoding="utf-8",
+    )
+    assert batch.image_runner_script(tmp_path).endswith("codex_panel_runner.py")
+
+
 def test_batch_stops_cleanly_at_name_draft_without_running_next_stage(tmp_path: Path, monkeypatch) -> None:
     chapter = "第1话"
     (tmp_path / "_设置.md").write_text("- 传统原稿流程：启用\n", encoding="utf-8")

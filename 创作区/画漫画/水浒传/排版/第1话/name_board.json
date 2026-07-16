@@ -4773,17 +4773,17 @@
     "panel_script": "脚本/第1话/panel_script.json",
     "panel_script_sha256": "14a3806b3ebc974c23a75da5075e5c705e3eb92ab570564223a66a6274024a26",
     "settings": "_设置.md",
-    "settings_sha256": "855100f5a740184377051f3919d544f9fde19660a77145e10c7f33a6dee79429"
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
   },
   "approval": {
     "kind": "comic_name_board_approval",
     "status": "approved",
-    "reviewed_by": "Codex制作代理（用户授权）",
-    "reviewed_at": "2026-07-15T04:19:37.935869+00:00",
-    "note": "依据设定库/approval_delegation.json代行常规审阅；48格同序覆盖、8个段尾钩子、画面描述、气泡优先级和上游SHA复核通过；内容延续用户已批准版本，仅设置术语与审阅策略变化",
-    "subject_sha256": "ca31b1b8f7b4d4528edd43303f7853068ea3f03002bf4437cee86e2c5eb7a7aa",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-16T11:22:01.549317+00:00",
+    "note": "同步已授权的 Dreamina 5.0 官方渠道设置指纹；48格页流、8段钩子与气泡优先级复核无变化。",
+    "subject_sha256": "e35a29673227f9e4e527bd4f5dd5139af100ee10e7dfb793fbe2ab8bb476532d",
     "panel_script_sha256": "14a3806b3ebc974c23a75da5075e5c705e3eb92ab570564223a66a6274024a26",
-    "settings_sha256": "855100f5a740184377051f3919d544f9fde19660a77145e10c7f33a6dee79429"
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
   },
   "validation": {
     "status": "pass",

@@ -1,0 +1,11 @@
+{
+  "asset_id": "MON_WHITE_TIGER",
+  "variant": "front",
+  "attempt_id": "92c01967a8f19d6c36bb",
+  "attempt": 2,
+  "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_builtin-imagegen__20260716T181224818469.md",
+  "prompt_sha256": "4fc89a7bd5ced2357d89e759a94514ce6476e5201d10ce3690b74929d603b409",
+  "references": [
+    "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png"
+  ]
+}

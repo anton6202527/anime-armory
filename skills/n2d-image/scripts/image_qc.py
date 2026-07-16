@@ -4774,8 +4774,27 @@ def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
     return out
 
 
-def _png_face_ratio_and_size(face_mod: Any, abspath: str) -> Tuple[Optional[float], Optional[int]]:
-    """(最大脸 bbox 占整图面积比, 短边像素)。检测器缺席/漏检 → ratio=None；读不到尺寸 → min_dim=None。"""
+def _expression_sheet_panel_count(label: str, rel: str) -> Optional[int]:
+    """Infer declared multi-panel expression-board size from stable naming signals."""
+    text = f"{label} {Path(rel).stem}".lower()
+    if any(token in text for token in ("六联", "六格", "six-panel", "six_panel", "two_by_three", "2x3")):
+        return 6
+    return None
+
+
+def _png_face_ratio_and_size(
+    face_mod: Any,
+    abspath: str,
+    *,
+    panel_count: Optional[int] = None,
+) -> Tuple[Optional[float], Optional[int], Optional[int]]:
+    """Return normalized face ratio, short edge and detected face count.
+
+    A normal tight anchor uses the largest face bbox divided by the whole image.
+    A declared expression sheet instead normalizes the median detected face bbox
+    to one panel (whole area / panel_count); otherwise a valid 2x3 sheet is
+    guaranteed to look six times weaker than a single-face crop.
+    """
     size: Optional[Tuple[int, int]] = None
     try:
         from PIL import Image  # type: ignore
@@ -4784,19 +4803,31 @@ def _png_face_ratio_and_size(face_mod: Any, abspath: str) -> Tuple[Optional[floa
     except Exception:
         size = None
     if size is None:
-        return None, None
+        return None, None, None
     w, h = size
     min_dim = min(int(w), int(h)) if w and h else None
     ratio: Optional[float] = None
+    detected_count: Optional[int] = None
     if face_mod is not None and hasattr(face_mod, "cv2_face_boxes") and w and h:
         try:
             boxes = face_mod.cv2_face_boxes(abspath)
         except Exception:
             boxes = None
+        if boxes is not None:
+            detected_count = len(boxes)
         if boxes:  # 非空=真检到脸；[]=检测器跑了但 0 脸（风格化脸常漏）→ 不据占比判
-            bx = max(boxes, key=lambda b: int(b[2]) * int(b[3]))
-            ratio = (int(bx[2]) * int(bx[3])) / float(int(w) * int(h))
-    return ratio, min_dim
+            ratios = sorted(
+                ((int(b[2]) * int(b[3])) / float(int(w) * int(h)) for b in boxes),
+                reverse=True,
+            )
+            if panel_count and len(ratios) >= 2:
+                sample = ratios[:min(len(ratios), panel_count)]
+                mid = len(sample) // 2
+                median = sample[mid] if len(sample) % 2 else (sample[mid - 1] + sample[mid]) / 2.0
+                ratio = median * panel_count
+            else:
+                ratio = ratios[0]
+    return ratio, min_dim, detected_count
 
 
 def _character_form_is_non_human(char: Mapping[str, Any], form: Mapping[str, Any]) -> bool:
@@ -4849,12 +4880,36 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
                 if not os.path.isfile(abspath):
                     continue  # 缺图非本门职责
                 res["checked"] += 1
-                ratio, min_dim = _png_face_ratio_and_size(face_mod, abspath)
+                panel_count = _expression_sheet_panel_count(label, rel)
+                ratio, min_dim, detected_count = _png_face_ratio_and_size(
+                    face_mod,
+                    abspath,
+                    panel_count=panel_count,
+                )
                 if non_human:
                     # Human detectors are not calibrated for creature heads;
                     # retain the pixel-size floor but ignore their bbox ratio.
                     ratio = None
-                reason = weak_face_anchor_reason(ratio, min_dim, core=core)
+                if panel_count and detected_count is not None and detected_count != panel_count:
+                    level = "block" if core else "warn"
+                    res["findings"].append({
+                        "level": level,
+                        "code": "expression_sheet_face_count",
+                        "msg": f"表情板人脸数量不符 {cid}/{fm}「{label}」（{rel}）："
+                               f"声明 {panel_count} 格，机器检出 {detected_count} 张脸；"
+                               "需确认是否缺格、重复拼接、遮脸或检测漏脸后再放行。",
+                        "asset": rel,
+                    })
+                if panel_count:
+                    # Expression boards complement, rather than replace, the
+                    # separate canonical tight face anchor.  Apply the normal
+                    # per-panel signal floor, while retaining the core 1024px
+                    # resolution floor for the complete sheet.
+                    ratio_reason = weak_face_anchor_reason(ratio, None, core=False)
+                    size_reason = weak_face_anchor_reason(None, min_dim, core=core)
+                    reason = "；".join(part for part in (ratio_reason, size_reason) if part) or None
+                else:
+                    reason = weak_face_anchor_reason(ratio, min_dim, core=core)
                 if reason:
                     level = "block" if core else "warn"
                     code = "weak_face_anchor_core" if core else "weak_face_anchor"
