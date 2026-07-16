@@ -7,24 +7,24 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 2 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 1 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 2
+      "value": 1
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 2 项",
+      "message": "第1集 QA 阻断 1 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 2
+      "value": 1
     }
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.0364,
+      "blockers_per_attempt": 0.0179,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -33,18 +33,18 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "2h30m10s",
-      "duration_sec": 9009.982,
-      "elapsed_per_finished_min_sec": 10762.257,
+      "duration_hms": "2h35m40s",
+      "duration_sec": 9339.991,
+      "elapsed_per_finished_min_sec": 11156.446,
       "episode": "第1集",
-      "event_count": 117,
+      "event_count": 118,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 55,
-      "generation_fails": 4,
-      "generation_pass_rate": 0.9273,
+      "generation_attempts": 56,
+      "generation_fails": 5,
+      "generation_pass_rate": 0.9107,
       "generation_passes": 51,
       "image_qc_passive": {
         "freshness": "stale",
@@ -52,21 +52,17 @@
       },
       "missing_deliverables": [],
       "one_pass_count": 41,
-      "one_pass_rate": 0.7455,
+      "one_pass_rate": 0.7321,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图prompt",
-      "qa_blockers": 2,
+      "qa_blockers": 1,
+      "qa_blockers_historical": 1,
       "qa_gate_passes": 2,
       "qa_gate_runs": 2,
       "qa_infos": 34,
       "qa_warnings": 36,
+      "qa_warnings_historical": 36,
       "recent_blockers": [
-        {
-          "dim": "逐张机器QC+实际目视",
-          "loc": "EP01_CLIP01 木牌结构",
-          "msg": "执行者实际查看当前像素：两名角色身份、场景、光位、手部与背景群演通过；机器 face warn 经并排定妆核对为侧角度/光照误报；但 PROP_木牌 未继承横向多木条、竖杆和麻绳结构，变成手持断木板，资产连续性失败，当前图拒绝并只重抽本目标。",
-          "stage": "image"
-        },
         {
           "dim": "出图落档QC",
           "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
@@ -91,12 +87,12 @@
       "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 9009.982,
-          "generation_attempts": 55,
-          "generation_fails": 4,
+          "duration_sec": 9339.991,
+          "generation_attempts": 56,
+          "generation_fails": 5,
           "generation_passes": 51,
           "missing_deliverables": 0,
-          "qa_blockers": 2,
+          "qa_blockers": 1,
           "qa_infos": 10,
           "qa_warnings": 0,
           "redraw_count": 0
@@ -124,7 +120,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.6545
+      "warnings_per_attempt": 0.6429
     },
     {
       "blockers_per_attempt": null,
@@ -156,10 +152,12 @@
       "progress_next_skill": "",
       "progress_next_stage": "",
       "qa_blockers": 0,
+      "qa_blockers_historical": 0,
       "qa_gate_passes": 0,
       "qa_gate_runs": 0,
-      "qa_infos": 2,
+      "qa_infos": 1,
       "qa_warnings": 0,
+      "qa_warnings_historical": 0,
       "recent_blockers": [],
       "recoup_ratio": {},
       "redraw_categories": {},
@@ -184,7 +182,7 @@
           "generation_passes": 0,
           "missing_deliverables": 0,
           "qa_blockers": 0,
-          "qa_infos": 2,
+          "qa_infos": 1,
           "qa_warnings": 0,
           "redraw_count": 0
         }
@@ -193,7 +191,7 @@
     }
   ],
   "event_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-16T13:43:00+00:00",
+  "generated_at": "2026-07-16T13:48:31+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -671,7 +669,7 @@
   "retention_trend": {},
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.0364,
+    "blockers_per_attempt": 0.0179,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
@@ -682,32 +680,34 @@
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "2h30m10s",
-    "duration_sec": 9009.982,
-    "elapsed_per_finished_min_sec": 10762.257,
+    "duration_hms": "2h35m40s",
+    "duration_sec": 9339.991,
+    "elapsed_per_finished_min_sec": 11156.446,
     "episode_count": 2,
-    "event_count": 119,
+    "event_count": 120,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 2,
-      "gates_passed_per_day": 1.063,
+      "gates_passed_per_day": 1.06,
       "measurement_start": "2026-07-14T16:32:29+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 55,
-    "generation_fails": 4,
-    "generation_pass_rate": 0.9273,
+    "generation_attempts": 56,
+    "generation_fails": 5,
+    "generation_pass_rate": 0.9107,
     "generation_passes": 51,
     "one_pass_count": 41,
-    "one_pass_rate": 0.7455,
-    "qa_blockers": 2,
-    "qa_infos": 36,
+    "one_pass_rate": 0.7321,
+    "qa_blockers": 1,
+    "qa_blockers_historical": 1,
+    "qa_infos": 35,
     "qa_warnings": 36,
+    "qa_warnings_historical": 36,
     "recoup_ratio": {},
     "redraw_categories": {},
     "redraw_count": 0,
@@ -719,7 +719,7 @@
     "release_spend_totals": {},
     "runtime_hms": "50s",
     "runtime_sec": 50.231,
-    "warnings_per_attempt": 0.6545
+    "warnings_per_attempt": 0.6429
   },
   "version": 1
 }
