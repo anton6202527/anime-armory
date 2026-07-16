@@ -3161,7 +3161,15 @@ def write_prop_shape_skeleton(root: Path, ep: str, *, include_confirmed: bool = 
 
 
 def confirm_prop_shape_targets(root: Path, ep: str, selector: str,
-                               *, reviewer: str = "manual", reason: str = "") -> Dict[str, Any]:
+                               *, reviewer: str = "manual", reason: str = "",
+                               review_kind: str = "human") -> Dict[str, Any]:
+    normalized_kind = str(review_kind or "human").strip().lower()
+    if normalized_kind not in {"human", "executor_visual"}:
+        return {"ok": False, "msg": "review_kind 只能是 human 或 executor_visual"}
+    if normalized_kind == "executor_visual" and not executor_visual_review_authorized(root):
+        return {"ok": False, "msg": "项目未明确授权执行者实际像素目视，不能写 executor_visual 道具复核收据"}
+    if normalized_kind == "human" and identity_reviewer_appears_automated(reviewer):
+        return {"ok": False, "msg": "human 复核 reviewer 不能使用自动化/AI 身份；请改用 executor_visual"}
     report = prop_shape_review_report(root, ep, build_stitches=True)
     selector = str(selector or "").strip()
     targets = report.get("targets") or []
@@ -3187,7 +3195,10 @@ def confirm_prop_shape_targets(root: Path, ep: str, selector: str,
             "shot": t.get("shot"),
             "verdict": "ok",
             "reviewer": reviewer,
-            "source": "image_qc:manual_prop_shape_confirm",
+            "review_kind": normalized_kind,
+            "reviewer_role": "ai_visual_executor" if normalized_kind == "executor_visual" else "human_creative_reviewer",
+            "human_signoff": normalized_kind == "human",
+            "source": f"image_qc:{normalized_kind}_prop_shape_confirm",
             "confirmed_at": now,
             "reason": reason or "人工确认无禁形且尺寸符合设定",
             "must_not_have": t.get("must_not_have") or [],
@@ -6897,6 +6908,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="把指定高风险 PROP 复核项标 ok；SELECTOR=all/pending 或 asset/png/shot/id 列表。需人工已看过并排图")
     ap.add_argument("--prop-shape-reviewer", default="manual",
                     help="与 --prop-shape-confirm-ok 连用，写入 reviewer 字段")
+    ap.add_argument("--prop-shape-review-kind", choices=("human", "executor_visual"), default="human",
+                    help="与 --prop-shape-confirm-ok 连用；executor_visual 记录执行者实际像素目视且不冒充人工")
     ap.add_argument("--prop-shape-reason", default="",
                     help="与 --prop-shape-confirm-ok 连用，写入人工确认原因")
     ap.add_argument("--prop-shape-vlm-confirm", action="store_true",
@@ -6985,6 +6998,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             ns.prop_shape_confirm_ok,
             reviewer=ns.prop_shape_reviewer,
             reason=ns.prop_shape_reason,
+            review_kind=ns.prop_shape_review_kind,
         )
         print(json.dumps(res, ensure_ascii=False, indent=2, sort_keys=True))
         return 0 if res.get("ok") else 1

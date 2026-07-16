@@ -648,6 +648,40 @@ def test_confirm_prop_shape_targets_marks_pending_ok(tmp_path: Path) -> None:
     assert data["confirmations"][0]["png_sha256"] == image_qc._sha256_file(img / "Clip_01.png")
 
 
+def test_confirm_prop_shape_executor_visual_does_not_impersonate_human(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式: 逐张机器QC+执行者实际像素目视后再继续  # source=explicit_user；用户明确要求\n",
+        encoding="utf-8",
+    )
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{"id": "PROP_01", "type": "prop", "name": "木牌", "constraints": {"must_not_have": ["结构漂移"]}}],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 木牌。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"x")
+
+    res = image_qc.confirm_prop_shape_targets(
+        tmp_path,
+        "第1集",
+        "all",
+        reviewer="executor:codex",
+        review_kind="executor_visual",
+        reason="实际查看当前像素并与道具主参考并排核对",
+    )
+
+    assert res["ok"] is True
+    data = json.loads((tmp_path / "生产数据" / "image_qc" / "第1集" / "prop_shape_confirmations.json").read_text(encoding="utf-8"))
+    receipt = data["confirmations"][0]
+    assert receipt["review_kind"] == "executor_visual"
+    assert receipt["reviewer_role"] == "ai_visual_executor"
+    assert receipt["human_signoff"] is False
+
+
 def test_vlm_confirm_prop_shape_targets_writes_only_high_confidence_ok(tmp_path: Path, monkeypatch) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
