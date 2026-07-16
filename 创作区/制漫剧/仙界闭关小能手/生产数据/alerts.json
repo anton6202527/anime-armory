@@ -22,9 +22,9 @@
     "critical": 1,
     "warn": 1
   },
-  "generated_at": "2026-07-16T13:41:39+00:00",
+  "generated_at": "2026-07-16T13:43:00+00:00",
   "kind": "n2d_production_alerts",
-  "root": "创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "thresholds": {
     "beat_density_variance_ceiling": null,
     "bounce_3s_ceiling": null,

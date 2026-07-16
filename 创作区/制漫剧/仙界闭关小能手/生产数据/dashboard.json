@@ -48,7 +48,7 @@
       "generation_passes": 51,
       "image_qc_passive": {
         "freshness": "stale",
-        "path": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json"
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json"
       },
       "missing_deliverables": [],
       "one_pass_count": 41,
@@ -69,7 +69,7 @@
         },
         {
           "dim": "出图落档QC",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
           "msg": "发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。",
           "stage": "image"
         }
@@ -88,7 +88,7 @@
       "retention_3s": null,
       "runtime_hms": "50s",
       "runtime_sec": 50.231,
-      "runtime_source": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 9009.982,
@@ -192,8 +192,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-16T13:41:39+00:00",
+  "event_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-16T13:43:00+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -669,7 +669,7 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
     "blockers_per_attempt": 0.0364,
     "consistency_blockers": 0,

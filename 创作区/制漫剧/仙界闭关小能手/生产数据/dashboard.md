@@ -1,7 +1,7 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-16T13:41:39+00:00
-- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-16T13:43:00+00:00
+- 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
@@ -53,4 +53,4 @@
 ## 最新阻断
 
 - 第1集 / image / 逐张机器QC+实际目视: EP01_CLIP01 木牌结构 — 执行者实际查看当前像素：两名角色身份、场景、光位、手部与背景群演通过；机器 face warn 经并排定妆核对为侧角度/光照误报；但 PROP_木牌 未继承横向多木条、竖杆和麻绳结构，变成手持断木板，资产连续性失败，当前图拒绝并只重抽本目标。
-- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。
+- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。
