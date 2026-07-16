@@ -2508,6 +2508,29 @@ def codex_reference_inputs_for_target(
         return int(value)
 
     inputs.sort(key=lambda item: (sort_int(item, "priority", 999), sort_int(item, "sequence", 0)))
+    # A turnaround generated from an already approved character front does not
+    # benefit from uploading every redundant crop plus the original style
+    # anchor.  The full-body front already carries the approved outfit/style;
+    # the tight face anchor supplies high-frequency identity detail.  Keeping
+    # exactly those two inputs reduces edit payload size and conflicting pose
+    # signals while retaining both body and face truth.  Older projects without
+    # a tight face anchor keep the general reference-budget path below.
+    target_stem = Path(target.rel_path).stem
+    if target.mode == "shared" and target_stem.endswith("_三视图"):
+        base_stem = target_stem.removesuffix("_三视图")
+        exact_front = next((
+            item for item in inputs
+            if item.get("role") in {"character", "source_frame"}
+            and Path(str(item.get("rel_path") or "")).stem == base_stem
+        ), None)
+        face_anchor = next((
+            item for item in inputs
+            if item.get("role") == "character"
+            and any(token in Path(str(item.get("rel_path") or "")).stem.lower()
+                    for token in ("脸部特写", "face_anchor", "face"))
+        ), None)
+        if exact_front is not None and face_anchor is not None:
+            return [exact_front, face_anchor]
     pruned: List[Dict[str, Any]] = []
     character_counts: Dict[str, int] = {}
     for item in inputs:
@@ -3507,15 +3530,27 @@ def run_codex(
     delay_sec = max(0.0, float(os.environ.get("N2D_CODEX_TRANSPORT_RETRY_DELAY", "5")))
     proc: subprocess.CompletedProcess[str]
     for attempt in range(1, attempts + 1):
-        proc = subprocess.run(
-            cmd,
-            stdin=subprocess.DEVNULL,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-            timeout=timeout_sec,
-        )
+        try:
+            proc = subprocess.run(
+                cmd,
+                stdin=subprocess.DEVNULL,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+                timeout=timeout_sec,
+            )
+        except subprocess.TimeoutExpired:
+            if attempt >= attempts:
+                raise
+            print(
+                f"[retry] Codex image generation timed out on attempt {attempt}/{attempts}; "
+                "retrying same target",
+                file=sys.stderr,
+            )
+            if delay_sec:
+                time.sleep(delay_sec * attempt)
+            continue
         image_failure = image_generation_failure_detail(proc.stdout or "")
         retryable_image_failure = (
             proc.returncode == 0

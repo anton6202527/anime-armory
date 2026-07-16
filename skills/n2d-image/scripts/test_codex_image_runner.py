@@ -45,6 +45,25 @@ def test_run_codex_retries_transient_transport_failure(monkeypatch, tmp_path: Pa
     assert calls[0] == calls[1]
 
 
+def test_run_codex_retries_timeout_on_same_target(monkeypatch, tmp_path: Path) -> None:
+    calls = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+        if len(calls) == 1:
+            raise subprocess.TimeoutExpired(cmd, kwargs.get("timeout"))
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(codex_image_runner.time, "sleep", lambda _seconds: None)
+
+    proc = codex_image_runner.run_codex(tmp_path, "prompt", 10, [])
+
+    assert proc.returncode == 0
+    assert len(calls) == 2
+    assert calls[0] == calls[1]
+
+
 def test_run_codex_does_not_retry_non_transient_failure(monkeypatch, tmp_path: Path) -> None:
     calls = []
 
@@ -2432,6 +2451,47 @@ def test_shared_turnaround_inputs_auto_include_same_source_views(tmp_path: Path)
         "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_背.png",
         "出图/共享/图片/定妆_CHAR_WANG_DUN__常态_半身.png",
     ]
+
+
+def test_shared_turnaround_with_front_and_face_anchor_uses_minimal_identity_payload(
+    tmp_path: Path,
+) -> None:
+    base = "出图/共享/图片/定妆_CHAR_01__常态"
+    refs = [
+        f"{base}.png",
+        f"{base}_半身.png",
+        f"{base}_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/风格锚.png",
+    ]
+    for rel in refs:
+        write_valid_png(tmp_path / rel)
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_01",
+        title="## 姜月初（`CHAR_01/常态`）",
+        body="## 姜月初\n**目标存档**：`出图/共享/图片/定妆_CHAR_01__常态_三视图.png`\n",
+        target_line="`出图/共享/图片/定妆_CHAR_01__常态_三视图.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="CHAR_01::定妆_CHAR_01__常态_三视图",
+        clip="CHAR_01",
+        mode="shared",
+        rel_path="出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+        section=section,
+    )
+    bundle = {
+        "items": [
+            {"kind": "character", "id": "CHAR_01", "form": "常态", "paths": refs[:3]},
+            {"kind": "style", "id": "STYLE_ANCHOR", "paths": refs[3:]},
+        ]
+    }
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(
+        tmp_path, "第1集", target, bundle
+    )
+
+    assert [item["rel_path"] for item in inputs] == [refs[0], refs[2]]
+    assert inputs[0]["role"] in {"character", "source_frame"}
+    assert inputs[1]["role"] == "character"
 
 
 def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path) -> None:

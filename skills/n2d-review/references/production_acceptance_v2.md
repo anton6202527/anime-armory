@@ -83,16 +83,26 @@ python3 skills/n2d-review/scripts/identity_eval_pack.py <作品根> \
 python3 skills/n2d-review/scripts/identity_eval_pack.py <作品根> --write --json
 ```
 
+若项目 `_设置.md` 已由用户明确授权“执行者实际像素目视”，执行者签收必须显式区分、不得冒充人工：
+
+```bash
+python3 skills/n2d-review/scripts/identity_eval_pack.py <作品根> \
+  --record-current-view \
+  --character-id CHAR_01 --form 常态 --view front \
+  --review-kind executor_visual --reviewer '<视觉执行者标识>' \
+  --accept-current-pixels --json
+```
+
 逐桶放行必须同时满足：
 
 - 当前 registry 节点为 `ready/registered`，不是 `planned`；角色、形态、档位、view 和 path 精确匹配。
 - PNG 可完整解码，格式/CRC/IDAT/scanline 有效，宽高均不低于 512，SHA 与当前文件一致。
 - 五角、turnaround、expression 使用解析后仍在作品根内的规范相对路径和不同 decoded-pixel fingerprint；该指纹把合法 PNG 统一解码到 RGBA16 像素域，忽略压缩、filter、metadata 与 Adam7/非交错编码差异。禁止绝对路径、`..` 越界、软链/非规范别名、同图换标签、复制同字节文件、同像素重编码换 SHA、跨形态复用或普通文件伪 PNG。同源母本的不同真实裁切像素允许通过。
-- binding fingerprint、对应 view 的 review contract、完整 criteria、人工声明 reviewer、带时区时间齐全；reviewer 必须非空且不得含明显自动化标识。
-- receipt 有 `confirmation.kind=explicit_current_pixels_acceptance` 且 `confirmation.accepted_current_pixels=true`；`bot/codex/agent/runner` 不能作为 reviewer。
+- binding fingerprint、对应 view 的 review contract、完整 criteria、reviewer、带时区时间齐全。默认人工路由要求 reviewer 非空且不得含明显自动化标识；执行者路由只在项目有显式用户授权时成立，并强制 `review_kind=executor_visual`、`reviewer_role=ai_visual_executor`、`human_signoff=false`。
+- receipt 有 `confirmation.kind=explicit_current_pixels_acceptance` 且 `confirmation.accepted_current_pixels=true`；`bot/codex/agent/runner` 不能冒充人工 reviewer，但可在上述显式授权下以独立的 executor_visual 证据类别留痕。
 - 生产 consumer 会再次从当前 registry 和当前 PNG 重算以上字段，不能只信 producer 输出。
 
-这里的 `reviewer` 和 `confirmation={"kind":"explicit_current_pixels_acceptance","accepted_current_pixels":true}` 是**本地人工声明合同**：它证明收据声明者对该收据所绑定的当前 `character_id/form/library_tier/view/path/verdict/reviewer/reviewed_at/png_sha256/registry_binding_fingerprint/registry_binding_fingerprint_kind/review_contract/criteria/confirmation` 作了当前像素确认，并能排除空值或明显自动化标识；它不能认证声明者一定是真实自然人，也不能证明其与生成、实现或选样独立。若项目需要真实身份、职责隔离或不可抵赖的强保证，必须接入本地产线之外的认证 reviewer ID、签名或审批系统收据，并让外部收据绑定同一组当前像素对象与 SHA；不能只把本地字符串改得像人名。
+这里的 `reviewer` 和 `confirmation={"kind":"explicit_current_pixels_acceptance","accepted_current_pixels":true}` 是**本地像素审阅声明合同**：它证明收据声明者对该收据所绑定的当前 `character_id/form/library_tier/view/path/verdict/reviewer/reviewed_at/png_sha256/registry_binding_fingerprint/registry_binding_fingerprint_kind/review_contract/criteria/confirmation` 作了当前像素确认。`human` 只是一种人工声明证据，`executor_visual` 则明确不是人工签收；两者都不能认证声明者真实身份，也不能证明其与生成、实现或选样独立。若项目需要真实身份、职责隔离或不可抵赖的强保证，必须接入本地产线之外的认证 reviewer ID、签名或审批系统收据，并让外部收据绑定同一组当前像素对象与 SHA；不能只改本地字符串。
 
 ### 3.3 出图前预检与出图后回验
 

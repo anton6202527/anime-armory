@@ -1,7 +1,7 @@
 {
   "backend": "codex",
   "carried_identity": [],
-  "cli_image_input_count": 4,
+  "cli_image_input_count": 2,
   "cli_image_input_limit": 24,
   "cli_image_inputs": [
     {
@@ -38,39 +38,6 @@
       "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态.png"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_半身.png",
-      "bytes": 1755113,
-      "owner": "CHAR_01::定妆_CHAR_01__常态_三视图",
-      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/reference_enhanced/第1集/定妆_CHAR_01__常态_半身__2b4ed2c211ee_941x1672_to_1024x1819.png",
-      "prepared_bytes": 2142718,
-      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__常态_半身__2b4ed2c211ee_941x1672_to_1024x1819.png",
-      "prepared_sha256": "f91a778843f4ec9c26d2fb39973cf4b592875ae9820bc04b4292e718047712da",
-      "priority": 0,
-      "reference_quality": {
-        "enabled": true,
-        "enhanced": true,
-        "max_long_edge": 2048,
-        "method": "lanczos_upscale_unsharp_mask",
-        "min_short_edge": 1024,
-        "original_height": 1672,
-        "original_long_edge": 1672,
-        "original_short_edge": 941,
-        "original_width": 941,
-        "policy": "low_res_reference_enhancement",
-        "prepared_height": 1819,
-        "prepared_width": 1024,
-        "status": "enhanced",
-        "target_height": 1819,
-        "target_width": 1024
-      },
-      "rel_path": "出图/共享/图片/定妆_CHAR_01__常态_半身.png",
-      "role": "source_frame",
-      "sequence": 1,
-      "sha256": "2b4ed2c211ee3d541fba1a463036b209b749bd19769c78e627f67f37854f2b58",
-      "source": "same_source_makeup_parent",
-      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_半身.png"
-    },
-    {
       "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
       "bytes": 825683,
       "owner": "CHAR_01/常态",
@@ -92,39 +59,6 @@
       "sequence": 3,
       "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849",
       "source": "reference_bundle"
-    },
-    {
-      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
-      "bytes": 2911473,
-      "owner": "STYLE_ANCHOR",
-      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/reference_enhanced/第1集/风格锚_黑赤镇魔水墨妖谱__7943cb3f18d2_941x1672_to_1024x1819.png",
-      "prepared_bytes": 3746910,
-      "prepared_rel_path": "生产数据/reference_enhanced/第1集/风格锚_黑赤镇魔水墨妖谱__7943cb3f18d2_941x1672_to_1024x1819.png",
-      "prepared_sha256": "78955712744bd3c3b7114ac2c3b091c7d4f64abb1c2c0ac1e2089aade144ab18",
-      "priority": 60,
-      "reference_quality": {
-        "enabled": true,
-        "enhanced": true,
-        "max_long_edge": 2048,
-        "method": "lanczos_upscale_unsharp_mask",
-        "min_short_edge": 1024,
-        "original_height": 1672,
-        "original_long_edge": 1672,
-        "original_short_edge": 941,
-        "original_width": 941,
-        "policy": "low_res_reference_enhancement",
-        "prepared_height": 1819,
-        "prepared_width": 1024,
-        "status": "enhanced",
-        "target_height": 1819,
-        "target_width": 1024
-      },
-      "rel_path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
-      "role": "style",
-      "sequence": 2,
-      "sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
-      "source": "reference_bundle",
-      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png"
     }
   ],
   "episode": "第1集",

@@ -24,7 +24,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 4.6316,
+      "blockers_per_attempt": 4.1905,
       "completion_rate": null,
       "consistency_blockers": 5,
       "consistency_ledger": {},
@@ -33,18 +33,18 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "1h55m33s",
-      "duration_sec": 6932.86,
-      "elapsed_per_finished_min_sec": 3203.577,
+      "duration_hms": "2h17m31s",
+      "duration_sec": 8251.05,
+      "elapsed_per_finished_min_sec": 3812.693,
       "episode": "第1集",
-      "event_count": 212,
+      "event_count": 214,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 19,
-      "generation_fails": 10,
-      "generation_pass_rate": 0.4737,
+      "generation_attempts": 21,
+      "generation_fails": 12,
+      "generation_pass_rate": 0.4286,
       "generation_passes": 9,
       "image_qc_passive": {
         "advisory": 0,
@@ -54,7 +54,7 @@
       },
       "missing_deliverables": [],
       "one_pass_count": 5,
-      "one_pass_rate": 0.2632,
+      "one_pass_rate": 0.2381,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 88,
@@ -118,7 +118,7 @@
         "prompt_conflict": 2
       },
       "redraw_count": 4,
-      "redraw_rate": 0.2105,
+      "redraw_rate": 0.1905,
       "redraw_reasons": {
         "full QC 拒收：核心脸锚脸框面积约10%且短边941px，低于≥30%与≥1024px生产门槛；需从同一正面母版更紧方形裁切。": 1,
         "第二抽实际目视仍为具体城寨工作台场景，含建筑、器皿、箱匣、卷轴与伪文字；编译器对 style_anchor 错加人物/兵器剧情通用约束并截断关键负面词，继续修复后重抽": 1,
@@ -138,9 +138,9 @@
       "stages": {
         "image": {
           "consistency_blockers": 5,
-          "duration_sec": 6803.014,
-          "generation_attempts": 18,
-          "generation_fails": 10,
+          "duration_sec": 8121.204,
+          "generation_attempts": 20,
+          "generation_fails": 12,
           "generation_passes": 8,
           "missing_deliverables": 0,
           "qa_blockers": 5,
@@ -182,7 +182,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 3.8421
+      "warnings_per_attempt": 3.4762
     },
     {
       "blockers_per_attempt": null,
@@ -663,7 +663,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-15T12:11:42+00:00",
+  "generated_at": "2026-07-15T16:29:45+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1141,7 +1141,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "totals": {
-    "blockers_per_attempt": 4.6316,
+    "blockers_per_attempt": 4.1905,
     "consistency_blockers": 5,
     "consistency_ledger_counts": {
       "block": 0,
@@ -1152,29 +1152,29 @@
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "1h55m33s",
-    "duration_sec": 6932.86,
-    "elapsed_per_finished_min_sec": 3203.577,
+    "duration_hms": "2h17m31s",
+    "duration_sec": 8251.05,
+    "elapsed_per_finished_min_sec": 3812.693,
     "episode_count": 10,
-    "event_count": 212,
+    "event_count": 214,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 1,
-      "gates_passed_per_day": 0.974,
+      "gates_passed_per_day": 0.829,
       "measurement_start": "2026-07-14T11:33:02+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 19,
-    "generation_fails": 10,
-    "generation_pass_rate": 0.4737,
+    "generation_attempts": 21,
+    "generation_fails": 12,
+    "generation_pass_rate": 0.4286,
     "generation_passes": 9,
     "one_pass_count": 5,
-    "one_pass_rate": 0.2632,
+    "one_pass_rate": 0.2381,
     "qa_blockers": 88,
     "qa_infos": 39,
     "qa_warnings": 73,
@@ -1184,7 +1184,7 @@
       "prompt_conflict": 2
     },
     "redraw_count": 4,
-    "redraw_rate": 0.2105,
+    "redraw_rate": 0.1905,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1192,7 +1192,7 @@
     "release_spend_totals": {},
     "runtime_hms": "2m10s",
     "runtime_sec": 129.846,
-    "warnings_per_attempt": 3.8421
+    "warnings_per_attempt": 3.4762
   },
   "version": 1
 }

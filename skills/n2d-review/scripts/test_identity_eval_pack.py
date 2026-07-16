@@ -104,6 +104,17 @@ def _review(cid: str, form: str, view: str, rel: str, data: bytes) -> dict:
     }
 
 
+def _executor_review(cid: str, form: str, view: str, rel: str, data: bytes) -> dict:
+    review = _review(cid, form, view, rel, data)
+    review.update({
+        "reviewer": "Codex视觉执行者",
+        "review_kind": "executor_visual",
+        "reviewer_role": "ai_visual_executor",
+        "human_signoff": False,
+    })
+    return review
+
+
 def _project(root: Path) -> dict:
     cid, form = "CHAR_01", "常态"
     group = {}
@@ -146,6 +157,54 @@ def test_build_pack_promotes_only_current_bound_review_receipts(tmp_path: Path) 
     assert not [row for row in audit["findings"] if row["verdict"] == "block"]
 
 
+def test_authorized_executor_visual_receipt_is_consumed_without_impersonating_human(
+    tmp_path: Path,
+) -> None:
+    registry = _project(tmp_path)
+    node = registry["characters"][0]["forms"][0]["reference_group"]["front"]
+    data = (tmp_path / node["path"]).read_bytes()
+    node.pop("human_review")
+    node["visual_review"] = _executor_review(
+        "CHAR_01", "常态", "front", node["path"], data
+    )
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式：逐张机器QC+实际目视  # source=explicit_user\n"
+        "- 记录：用户明确授权执行者实际像素目视\n",
+        encoding="utf-8",
+    )
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
+
+    pack = iep.build_pack(str(tmp_path))
+    bucket = pack["rows"][0]["buckets"]["front"]
+    assert pack["version"] == 3
+    assert bucket["status"] == "pass"
+    assert bucket["evidence_kind"] == "structured_executor_visual_review"
+    assert bucket["review_kind"] == "executor_visual"
+    assert bucket["human_signoff"] is False
+
+    iep.write_pack(str(tmp_path), pack)
+    audit = pc.check_multiview_identity_pack(str(tmp_path), "第1集")
+    assert not [row for row in audit["findings"] if row["verdict"] == "block"]
+
+
+def test_executor_visual_receipt_without_explicit_project_authorization_fails(
+    tmp_path: Path,
+) -> None:
+    registry = _project(tmp_path)
+    node = registry["characters"][0]["forms"][0]["reference_group"]["front"]
+    data = (tmp_path / node["path"]).read_bytes()
+    node.pop("human_review")
+    node["visual_review"] = _executor_review(
+        "CHAR_01", "常态", "front", node["path"], data
+    )
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
+
+    bucket = iep.build_pack(str(tmp_path))["rows"][0]["buckets"]["front"]
+
+    assert bucket["status"] == "fail"
+    assert "executor_visual_review_not_authorized_by_project_setting" in bucket["errors"]
+
+
 def test_changed_png_invalidates_old_receipt(tmp_path: Path) -> None:
     _project(tmp_path)
     (tmp_path / "出图" / "共享" / "图片" / "rear_three_quarter.png").write_bytes(b"changed")
@@ -164,7 +223,7 @@ def test_planned_or_unreviewed_view_never_counts_as_ready(tmp_path: Path) -> Non
     _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
     pack = iep.build_pack(str(tmp_path))
     assert pack["rows"][0]["buckets"]["side"]["status"] == "fail"
-    assert "human_review_missing" in pack["rows"][0]["buckets"]["side"]["errors"]
+    assert "structured_pixel_review_missing" in pack["rows"][0]["buckets"]["side"]["errors"]
 
 
 def test_planned_view_cannot_reuse_a_stale_accepted_receipt(tmp_path: Path) -> None:
@@ -604,6 +663,41 @@ def test_record_current_view_receipt_is_hash_bound_atomic_and_pack_consumable(tm
     bucket = iep.build_pack(str(tmp_path))["rows"][0]["buckets"]["side"]
     assert bucket["status"] == "pass"
     assert bucket["sha256"] == receipt["png_sha256"]
+
+
+def test_record_authorized_executor_visual_receipt_stays_separate_from_human_signoff(
+    tmp_path: Path,
+) -> None:
+    registry = _project(tmp_path)
+    node = registry["characters"][0]["forms"][0]["reference_group"]["side"]
+    node["status"] = "review_pending"
+    node.pop("human_review")
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
+    (tmp_path / "_设置.md").write_text(
+        "- 图片验收模式：逐张机器QC+实际目视  # source=explicit_user\n"
+        "- 记录：用户明确授权执行者实际像素目视\n",
+        encoding="utf-8",
+    )
+
+    result = iep.record_current_view_receipt(
+        str(tmp_path),
+        character_id="CHAR_01",
+        form="常态",
+        view="side",
+        reviewer="Codex视觉执行者",
+        review_kind="executor_visual",
+        accept_current_pixels=True,
+    )
+
+    saved = json.loads(
+        (tmp_path / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8")
+    )
+    saved_node = saved["characters"][0]["forms"][0]["reference_group"]["side"]
+    assert "human_review" not in saved_node
+    assert saved_node["visual_review"]["human_signoff"] is False
+    assert saved_node["visual_review"]["reviewer_role"] == "ai_visual_executor"
+    assert result["review_kind"] == "executor_visual"
+    assert iep.build_pack(str(tmp_path))["rows"][0]["buckets"]["side"]["status"] == "pass"
 
 
 def test_record_expression_requires_exact_path_and_writes_expression_contract(tmp_path: Path) -> None:

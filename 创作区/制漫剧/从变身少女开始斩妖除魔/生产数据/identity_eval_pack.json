@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-15T07:10:57.453205+00:00",
+  "generated_at": "2026-07-15T14:15:00.908967+00:00",
   "identity_registry_path": "出图/共享/identity_registry.json",
-  "identity_registry_sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f",
+  "identity_registry_sha256": "d80a99d977cd148d026ce4f8e6c4db0edf43d8d1e1c6063d02c8283ca416630a",
   "kind": "n2d_identity_eval_pack",
   "rows": [
     {
@@ -15,67 +15,85 @@
           "errors": [
             "registry_node_status=planned",
             "path_not_found_or_unreadable",
-            "human_review_missing"
+            "structured_pixel_review_missing"
           ],
           "evidence_kind": "structured_human_review",
           "form": "常态",
+          "human_signoff": true,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
           "registry_binding_fingerprint": "",
           "registry_binding_fingerprint_kind": "",
           "review_contract": "",
+          "review_kind": "human",
           "reviewed_at": "",
           "reviewer": "",
+          "reviewer_role": "",
           "sha256": "",
           "status": "fail",
           "view": "back"
         },
         "expression": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "human_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "expression_readable_without_identity_drift",
+            "hair_accessories_and_costume_continuity",
+            "neutral_or_declared_expression_lighting",
+            "same_identity_as_canonical_face_anchor"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "60b114bdf9cf7b0956b4e179ee57f62d4da27b35fe4b8dc86e77e925076be638",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
+          "human_signoff": false,
           "library_tier": "core_full",
-          "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "reviewed_at": "",
-          "reviewer": "",
-          "sha256": "",
-          "status": "fail",
+          "path": "出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
+          "registry_binding_fingerprint": "e316209101451a9c310dcae528cd60c814c590c6ff09f739186b8bfa1edbdadd",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_expression_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-15T10:38:32+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849",
+          "status": "pass",
           "view": "expression"
         },
         "front": {
           "character_id": "CHAR_01",
-          "confirmation": {},
-          "criteria": [],
-          "decoded_pixel_fingerprint": "",
-          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
-          "errors": [
-            "registry_node_status=planned",
-            "path_not_found_or_unreadable",
-            "human_review_missing"
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
           ],
-          "evidence_kind": "structured_human_review",
+          "decoded_pixel_fingerprint": "4a412a265b807b71e3fb45720747f71eedae3ae96f32115309357e8f557c2d15",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
+          "human_signoff": false,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-          "registry_binding_fingerprint": "",
-          "registry_binding_fingerprint_kind": "",
-          "review_contract": "",
-          "reviewed_at": "",
-          "reviewer": "",
-          "sha256": "",
-          "status": "fail",
+          "registry_binding_fingerprint": "8220b30d1d7a15367f6cbf50a374d6d81afff9c2d4fb97a6fd7208d3880fc564",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-15T10:24:34+00:00",
+          "reviewer": "Codex视觉执行者",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
+          "status": "pass",
           "view": "front"
         },
         "rear_three_quarter": {
@@ -87,17 +105,20 @@
           "errors": [
             "registry_node_status=planned",
             "path_not_found_or_unreadable",
-            "human_review_missing"
+            "structured_pixel_review_missing"
           ],
           "evidence_kind": "structured_human_review",
           "form": "常态",
+          "human_signoff": true,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
           "registry_binding_fingerprint": "",
           "registry_binding_fingerprint_kind": "",
           "review_contract": "",
+          "review_kind": "human",
           "reviewed_at": "",
           "reviewer": "",
+          "reviewer_role": "",
           "sha256": "",
           "status": "fail",
           "view": "rear_three_quarter"
@@ -111,17 +132,20 @@
           "errors": [
             "registry_node_status=planned",
             "path_not_found_or_unreadable",
-            "human_review_missing"
+            "structured_pixel_review_missing"
           ],
           "evidence_kind": "structured_human_review",
           "form": "常态",
+          "human_signoff": true,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
           "registry_binding_fingerprint": "",
           "registry_binding_fingerprint_kind": "",
           "review_contract": "",
+          "review_kind": "human",
           "reviewed_at": "",
           "reviewer": "",
+          "reviewer_role": "",
           "sha256": "",
           "status": "fail",
           "view": "side"
@@ -135,17 +159,20 @@
           "errors": [
             "registry_node_status=planned",
             "path_not_found_or_unreadable",
-            "human_review_missing"
+            "structured_pixel_review_missing"
           ],
           "evidence_kind": "structured_human_review",
           "form": "常态",
+          "human_signoff": true,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
           "registry_binding_fingerprint": "",
           "registry_binding_fingerprint_kind": "",
           "review_contract": "",
+          "review_kind": "human",
           "reviewed_at": "",
           "reviewer": "",
+          "reviewer_role": "",
           "sha256": "",
           "status": "fail",
           "view": "three_quarter"
@@ -159,17 +186,20 @@
           "errors": [
             "registry_node_status=planned",
             "path_not_found_or_unreadable",
-            "human_review_missing"
+            "structured_pixel_review_missing"
           ],
           "evidence_kind": "structured_human_review",
           "form": "常态",
+          "human_signoff": true,
           "library_tier": "core_full",
           "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
           "registry_binding_fingerprint": "",
           "registry_binding_fingerprint_kind": "",
           "review_contract": "",
+          "review_kind": "human",
           "reviewed_at": "",
           "reviewer": "",
+          "reviewer_role": "",
           "sha256": "",
           "status": "fail",
           "view": "turnaround"
@@ -177,12 +207,10 @@
       },
       "character_id": "CHAR_01",
       "failed_buckets": [
-        "front",
         "three_quarter",
         "side",
         "rear_three_quarter",
         "back",
-        "expression",
         "turnaround"
       ],
       "form": "常态",
@@ -204,5 +232,5 @@
     "failed": 1,
     "passed": 0
   },
-  "version": 2
+  "version": 3
 }
