@@ -7,24 +7,24 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 9 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 1 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 9
+      "value": 1
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 9 项",
+      "message": "第1集 QA 阻断 1 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 9
+      "value": 1
     }
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.1607,
+      "blockers_per_attempt": 0.0179,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -37,7 +37,7 @@
       "duration_sec": 9339.991,
       "elapsed_per_finished_min_sec": 11156.446,
       "episode": "第1集",
-      "event_count": 126,
+      "event_count": 118,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
@@ -48,68 +48,26 @@
       "generation_passes": 51,
       "image_qc_passive": {
         "freshness": "stale",
-        "path": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json"
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json"
       },
       "missing_deliverables": [],
       "one_pass_count": 41,
       "one_pass_rate": 0.7321,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图prompt",
-      "qa_blockers": 9,
-      "qa_blockers_historical": 9,
-      "qa_gate_passes": 1,
+      "qa_blockers": 1,
+      "qa_blockers_historical": 1,
+      "qa_gate_passes": 2,
       "qa_gate_runs": 2,
       "qa_infos": 34,
       "qa_warnings": 36,
       "qa_warnings_historical": 36,
       "recent_blockers": [
         {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "identity_eval_pack 必须是 kind=n2d_identity_eval_pack、version=3；旧版或自定义 JSON 不能作为核心人物多视图放行证据。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 front 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 three_quarter 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 profile_or_side 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 rear_three_quarter 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 back 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 expression 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "核心人物多视图验收",
-          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json",
-          "msg": "CHAR_01/本集为14岁杂役常态 多视图桶 turnaround 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
-          "stage": "image_preflight"
+          "dim": "出图落档QC",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "msg": "发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)、出图/第1集/prompt/01_分镜出图.md(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。",
+          "stage": "image"
         }
       ],
       "recoup_ratio": {},
@@ -126,7 +84,7 @@
       "retention_3s": null,
       "runtime_hms": "50s",
       "runtime_sec": 50.231,
-      "runtime_source": "创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "runtime_source": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 9339.991,
@@ -145,7 +103,7 @@
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 8,
+          "qa_blockers": 0,
           "qa_infos": 13,
           "qa_warnings": 31,
           "redraw_count": 0
@@ -232,8 +190,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-16T13:53:39+00:00",
+  "event_file": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-16T13:57:08+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -709,9 +667,9 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 0.1607,
+    "blockers_per_attempt": 0.0179,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
@@ -726,14 +684,14 @@
     "duration_sec": 9339.991,
     "elapsed_per_finished_min_sec": 11156.446,
     "episode_count": 2,
-    "event_count": 128,
+    "event_count": 120,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
-      "gates_passed": 1,
-      "gates_passed_per_day": 0.529,
+      "gates_passed": 2,
+      "gates_passed_per_day": 1.057,
       "measurement_start": "2026-07-14T16:32:29+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
@@ -745,8 +703,8 @@
     "generation_passes": 51,
     "one_pass_count": 41,
     "one_pass_rate": 0.7321,
-    "qa_blockers": 9,
-    "qa_blockers_historical": 9,
+    "qa_blockers": 1,
+    "qa_blockers_historical": 1,
     "qa_infos": 35,
     "qa_warnings": 36,
     "qa_warnings_historical": 36,

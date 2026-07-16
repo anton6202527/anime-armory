@@ -1,14 +1,14 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-16T13:53:39+00:00
-- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-16T13:57:08+00:00
+- 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 128 | — | 2h35m40s | 56 | 0 | 9 | 36 | 91.1% | 0.0% |
+| 2 | 120 | — | 2h35m40s | 56 | 0 | 1 | 36 | 91.1% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.6429 | 0.1607 | 0 | 0.0% |
+| 0.6429 | 0.0179 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,16 +47,9 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图prompt | — | — | 2h35m40s | 73.2% | 0.0% | — | 9 | — | — | — | — | — | — |
+| 第1集 | 出图prompt | — | — | 2h35m40s | 73.2% | 0.0% | — | 1 | — | — | — | — | — | — |
 | 全剧 | — | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 最新阻断
 
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — identity_eval_pack 必须是 kind=n2d_identity_eval_pack、version=3；旧版或自定义 JSON 不能作为核心人物多视图放行证据。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 front 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 three_quarter 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 profile_or_side 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 rear_three_quarter 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 back 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 expression 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
-- 第1集 / image_preflight / 核心人物多视图验收: 创作区/制漫剧/仙界闭关小能手/生产数据/identity_eval_pack.json — CHAR_01/本集为14岁杂役常态 多视图桶 turnaround 缺可核验通过证据：evidence_kind=structured_visual_review。identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。
+- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)、出图/第1集/prompt/01_分镜出图.md(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。
