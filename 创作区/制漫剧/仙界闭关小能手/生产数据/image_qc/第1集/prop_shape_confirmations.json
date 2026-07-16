@@ -1,0 +1,30 @@
+{
+  "confirmations": [
+    {
+      "asset": "PROP_木牌",
+      "asset_name": "木牌",
+      "confirmed_at": "2026-07-16T00:28:45+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP01.png",
+      "png_sha256": "7f1cd3a60ce98b721e492b61b50487339346eed2af39ebb64efea93c6b032230",
+      "reason": "执行者已实际查看当前 EP01_CLIP01 像素并与 PROP_木牌 主参考并排核对：横向旧木条板、中央竖杆、麻绳固定、深褐旧化材质和单一道具数量一致，无文字水印。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_01_EP01_CLIP01_compare.png",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_prop_shape_confirmations",
+  "updated_at": "2026-07-16T00:28:45+00:00",
+  "version": 1
+}

@@ -2732,14 +2732,15 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
     }
     if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or three_quarter.get("status") == "ready":
         rg["three_quarter"] = three_quarter
-    # recurring_standard keeps side/back as on-demand planned slots.  They are
+    # recurring_standard keeps side/rear-three-quarter/back as on-demand
+    # planned slots.  They are
     # not baseline gate requirements, but the shot-level shared-first
     # interlock may require one for a profile/back-facing composition.  Without
     # registering the slots, the runner could demand a view that no shared
     # target was capable of generating.
     if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or side.get("status") == "ready":
         rg["side"] = side
-    if library_tier == FULL_LIBRARY_TIER or rear_three_quarter.get("status") == "ready":
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or rear_three_quarter.get("status") == "ready":
         rg["rear_three_quarter"] = rear_three_quarter
     if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or back.get("status") == "ready":
         rg["back"] = back

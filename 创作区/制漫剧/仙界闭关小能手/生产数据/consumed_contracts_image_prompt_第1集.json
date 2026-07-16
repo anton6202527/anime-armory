@@ -6,7 +6,7 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-15T17:20:47+00:00",
+  "generated_at": "2026-07-16T00:54:22+00:00",
   "contracts": [
     {
       "name": "storyboard",

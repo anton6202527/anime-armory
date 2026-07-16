@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第1集
-- 总判定: **block** · 硬阻断 6（必须修） · 非阻断初筛 10 · 视觉降级 0
+- 总判定: **block** · 硬阻断 3（必须修） · 非阻断初筛 11 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniconda/base/bin/python3`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -12,9 +12,9 @@
 - 🟢 active rejects 0 · review `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/human_image_review.json`
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🟡 block 0 · warn 1
-- 发型 H1: 🟡 block 0 · warn 1
-- 服装 N1: 🟡 block 0 · warn 1
+- 崩脸 G1: 🟢 block 0 · warn 0
+- 发型 H1: 🟡 block 0 · warn 2
+- 服装 N1: 🟡 block 0 · warn 2
 - 场景 O2: 🟢 block 0 · warn 0
 - 道具/特效 P2: 🟢 block 0 · warn 0
 - 人体解剖 N5: 🟢 block 0 · warn 0
@@ -22,9 +22,8 @@
 - 锚点门 N3: 🟢 block 0 · warn 0
 
 ## 角色脸定妆比对覆盖（硬闸）
-- 🔴 已落档角色图 required 2 · covered 0 · missing 2 · pending 15 · precision full
-  - 🔴 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking） 图片/EP01_CLIP01.png：face_verdict_warn
-  - 🔴 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking） 图片/EP01_CLIP01.png：face_verdict_warn
+- 🟢 已落档角色图 required 2 · covered 2 · missing 0 · pending 15 · precision full
+- 人工脸部确认: applied 2 · 确认文件 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json`
 
 ## 核心角色五角 turnaround（逐视图 hash 收据硬闸）
 - 🟢 checked forms 4 · pending/stale receipts 0 · contract `front/three_quarter/side/rear_three_quarter/back`
@@ -48,8 +47,8 @@
   - 🟡 VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。
 
 ## 高风险道具禁形/尺寸逐图复核（硬闸）
-- total 1 · pending 1 · confirmed 0
+- total 1 · pending 0 · confirmed 1
 - 确认文件: `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json`
-  - 🔴 Clip_01 图片/EP01_CLIP01.png（PROP_木牌 木牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_01_EP01_CLIP01_compare.png
+  - 🟢 Clip_01 图片/EP01_CLIP01.png（PROP_木牌 木牌） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_01_EP01_CLIP01_compare.png
 
 落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

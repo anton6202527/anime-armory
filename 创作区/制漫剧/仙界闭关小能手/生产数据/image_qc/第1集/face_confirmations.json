@@ -1,0 +1,42 @@
+{
+  "confirmations": [
+    {
+      "char": "CHAR_01__本集为14岁杂役常态",
+      "confirmed_at": "2026-07-16T00:28:45+00:00",
+      "floor": 0.4747,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP01_CLIP01.png",
+      "png_sha256": "7f1cd3a60ce98b721e492b61b50487339346eed2af39ebb64efea93c6b032230",
+      "reason": "执行者已实际查看当前 EP01_CLIP01 像素并与 CHAR_01、CHAR_02 定妆正面并排核对：脸型、眉眼鼻口比例、发际线、发髻、年龄和服装一致；embedding warn 为低头三分之二侧角度与场景光照误报。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.548,
+      "shot": "Clip_01",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_02__常态",
+      "confirmed_at": "2026-07-16T00:48:43+00:00",
+      "floor": 0.639,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP01_CLIP01_a1.png",
+      "png_sha256": "ef194654abd2d9114fb5a689e98450bfcea5128e6d871267053554d0557db5ae",
+      "reason": "执行者已实际打开当前 EP01_CLIP01_a1 原分辨率像素并与首帧及 CHAR_01、CHAR_02 定妆锚核对：两人脸型、眉眼鼻口比例、发际线发髻、年龄体型、服装材质、左右站位均连续；木牌结构与手指接触点一致；本次机器 warn 来自低头侧角与场景冷光，不是换脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.5941,
+      "score_vs_main": 0.4965,
+      "shot": "Clip_01",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_face_confirmations",
+  "updated_at": "2026-07-16T00:48:43+00:00",
+  "version": 1
+}

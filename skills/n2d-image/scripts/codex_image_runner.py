@@ -2901,10 +2901,19 @@ def source_frame_geometry_guidance(target: Target) -> str:
         role = "跨集首帧"
     else:
         role = "接力帧"
+    weapon_body_contact = has_weapon_body_contact(target)
+    geometry_lock = (
+        "必须保持同一角色站位、同一道具接触点、同一手握位置和同一画面轴线；"
+        "动作推进只能在表情、光效、烟尘、身体微姿态和局部镜头距离上变化，不得把道具接触点移到另一处。"
+    )
+    if weapon_body_contact:
+        geometry_lock = (
+            "必须保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和同一画面轴线；"
+            "动作推进只能在表情、光效、烟尘、身体微姿态和局部镜头距离上变化，不得把接触点或伤口换到身体另一处。"
+        )
     lines = [
         "- **源帧几何连续性硬锁**：本次附加的 `source_frame` 是几何底板，不是普通风格参考。"
-        "必须保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和同一画面轴线；"
-        "动作推进只能在表情、光效、烟尘、身体微姿态和局部镜头距离上变化，不得把接触点或伤口换到身体另一处。",
+        + geometry_lock,
         f"- **源帧主体身份连续硬锁**：本次目标是同一 Clip 的{role}，不是重新选角/重新换装。"
         "主检角色必须继承 `source_frame` 与角色定妆附件里的同一张脸、同一脸型比例、同一发际线、同一发髻/发束轮廓、"
         "同一衣领交叠方向、袖口卷边、腰带位置、裙摆/裤摆长度、鞋履形状和脏旧材质；"
@@ -2917,7 +2926,7 @@ def source_frame_geometry_guidance(target: Target) -> str:
             "禁止重新建立远景、禁止让上一集已经近身/亮爪/开战的主体退回深景，禁止把群体动作画成重新从远处走来；"
             "只能在上一集尾帧站位、距离、朝向、光位和轴线上推进拔刀、扑杀、闪避等下一拍动作。"
         )
-    if re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body) and re.search(r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|肩|背|身体)", body):
+    if weapon_body_contact:
         lines.append(
             "- **入体点硬锁**：若上一帧已有武器插入身体，本帧只能保留同一把武器、同一处入体点和同一条伤口线；"
             "禁止新增第二处伤口，禁止把胸口伤改成腹部/腰部/肩部伤，禁止让同一把刀像插了多刀一样跳位。"
@@ -2926,11 +2935,8 @@ def source_frame_geometry_guidance(target: Target) -> str:
 
 
 def weapon_body_contact_guidance(target: Target) -> str:
-    body = target_story_action_scope(target)
-    if not (
-        re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body)
-        and re.search(r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|腰|肩|背|身体)", body)
-    ):
+    body = target_story_action_scope(target) or str(getattr(target.section, "body", "") or "")
+    if not has_weapon_body_contact(target):
         return ""
     lines = [
         "- **武器入体/接触点铁律**：本镜若表现武器插入/刺入/贯穿身体，画面只能有一个明确入体点或接触点，"
@@ -2939,6 +2945,23 @@ def weapon_body_contact_guidance(target: Target) -> str:
     if re.search(r"(胸口|胸膛|胸前|心口)", body):
         lines.append("  本镜已指定胸口/胸前，入体点必须在上胸/胸口区域；不得画成腹部、腰部、肩部或大腿入刀。")
     return "\n".join(lines)
+
+
+def has_weapon_body_contact(target: Target) -> bool:
+    """Detect an actual weapon/body entry beat without matching QC boilerplate.
+
+    A former detector treated the single character ``入`` as an entry verb.
+    Harmless phrases such as ``必须入画`` plus ``木牌递回少年胸前`` then
+    injected wound/weapon language into a nonviolent relay-edit prompt, which
+    could trigger an image-provider safety rejection.  Use only explicit entry
+    verb phrases and the story/action slice here.
+    """
+    body = target_story_action_scope(target) or str(getattr(target.section, "body", "") or "")
+    return bool(
+        re.search(r"(?:插(?:入|进|在)|刺(?:入|中|穿|在)|贯穿|捅入|扎入|钉入|没入|贯入)", body)
+        and re.search(r"(?:刀|剑|枪|矛|匕首|刃|武器)", body)
+        and re.search(r"(?:胸口|胸膛|胸前|心口|腹部|腹|腰部|腰|肩部|肩|背部|背|身体|躯干)", body)
+    )
 
 
 def face_qc_visibility_guidance(target: Target) -> str:
@@ -3197,13 +3220,20 @@ def model_facing_policy_guards(
         )
 
     if target.mode in {"midframe", "tailframe"} or cross_episode_source_frame_paths(body):
+        source_geometry_guard = (
+            "源帧几何连续性硬锁：保持同一角色站位、同一道具接触点、同一手握位置和画面轴线；"
+            "只推进表情、光效、烟尘、身体微姿态或镜头距离"
+        )
+        if has_weapon_body_contact(target):
+            source_geometry_guard = (
+                "源帧几何连续性硬锁：保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、"
+                "同一入射角/刀柄角度和画面轴线；只推进表情、光效、烟尘、身体微姿态或镜头距离"
+            )
         guards.extend([
-            "源帧几何连续性硬锁：保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和画面轴线；只推进表情、光效、烟尘、身体微姿态或镜头距离",
+            source_geometry_guard,
             "源帧主体身份连续硬锁：这是同一 Clip 接力，不是重新选角/重新换装；保持同一脸型比例、同一发际线、同一发髻/发束轮廓，以及同一衣领交叠方向、袖口卷边、腰带位置、衣摆、鞋履和材质",
         ])
-        if re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body) and re.search(
-            r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|肩|背|身体)", body
-        ):
+        if has_weapon_body_contact(target):
             guards.append(
                 "入体点硬锁：保留同一把武器、同一处入体点和同一条伤口线；"
                 "禁止新增第二处伤口，禁止把胸口伤改成腹部/腰部/肩部伤"
@@ -3325,7 +3355,9 @@ def compile_target_image_request(
         )))
     if target.mode in {"midframe", "tailframe"}:
         preserve = list(contract.get("preserve") or [])
-        preserve.append("源帧的角色身份、服装、站位、场景几何、光位、轴线、手握/道具接触点和伤口位置")
+        preserve.append("源帧的角色身份、服装、站位、场景几何、光位、轴线、手握位置与道具接触点")
+        if has_weapon_body_contact(target):
+            preserve.append("源帧既有武器接触点、伤口位置与入射角")
         contract["preserve"] = preserve
         role = "中段动作增量" if target.mode == "midframe" else "尾态动作/表情增量"
         contract["action"] = "；".join(filter(None, (str(contract.get("action") or ""), role)))

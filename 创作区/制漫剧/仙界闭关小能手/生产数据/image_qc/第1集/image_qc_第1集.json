@@ -54,16 +54,16 @@
       "available": true,
       "characters": {
         "CHAR_01__本集为14岁杂役常态": {
-          "ep_mean_score": 0.548,
-          "ep_n_shots": 1,
+          "ep_mean_score": 0.5381,
+          "ep_n_shots": 2,
           "floor": 0.4747,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
         "CHAR_02__常态": {
-          "ep_mean_score": 0.5998,
-          "ep_n_shots": 1,
+          "ep_mean_score": 0.5482,
+          "ep_n_shots": 2,
           "floor": 0.639,
           "floor_calibrated": true,
           "has_main": true,
@@ -135,9 +135,61 @@
           },
           "floor": 0.4747,
           "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-16T00:28:45+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "执行者已实际查看当前 EP01_CLIP01 像素并与 CHAR_01、CHAR_02 定妆正面并排核对：脸型、眉眼鼻口比例、发际线、发髻、年龄和服装一致；embedding warn 为低头三分之二侧角度与场景光照误报。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP01_CLIP01.png",
           "score": 0.548,
-          "verdict": "warn"
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_02__常态",
+          "face_idx": 0,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_02__常态",
+                "face_idx": 0,
+                "score": 0.5941
+              },
+              {
+                "char": "CHAR_01__本集为14岁杂役常态",
+                "face_idx": 1,
+                "score": 0.5281
+              },
+              {
+                "char": "CHAR_01__本集为14岁杂役常态",
+                "face_idx": 2,
+                "score": 0.0283
+              },
+              {
+                "char": "CHAR_01__本集为14岁杂役常态",
+                "face_idx": 3,
+                "score": 0.0398
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__本集为14岁杂役常态"
+            ],
+            "missing_chars": [],
+            "swap_suspected": false
+          },
+          "floor": 0.639,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-16T00:48:43+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "执行者已实际打开当前 EP01_CLIP01_a1 原分辨率像素并与首帧及 CHAR_01、CHAR_02 定妆锚核对：两人脸型、眉眼鼻口比例、发际线发髻、年龄体型、服装材质、左右站位均连续；木牌结构与手指接触点一致；本次机器 warn 来自低头侧角与场景冷光，不是换脸。",
+          "manual_reviewer": "executor:codex",
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.5941,
+          "score_vs_main": 0.4965,
+          "verdict": "ok"
         }
       ]
     },
@@ -172,6 +224,14 @@
           "floor": 0.8728,
           "png": "图片/EP01_CLIP01.png",
           "score": 0.7424,
+          "verdict": "warn"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.8728,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.7049,
           "verdict": "warn"
         }
       ]
@@ -243,6 +303,12 @@
         "CHAR_02__常态",
         "CHAR_02__常态_表情_克制",
         "CHAR_02__常态_45度",
+        "CHAR_02__常态_后45度",
+        "CHAR_02__常态__6389b731f460_941x1672_to_1024x1819",
+        "CHAR_02__常态_表情_克制__c41e46a2a65f_941x1672_to_1024x1819",
+        "CHAR_02__常态_45度__a84b4c637010_941x1672_to_1024x1819",
+        "CHAR_02__常态_侧__1f9b0d585ba4_941x1672_to_1024x1819",
+        "CHAR_02__常态_背__a56eb20f71a4_941x1672_to_1024x1819",
         "杂役背景组",
         "GROUP_01",
         "GROUP_01__常态",
@@ -321,6 +387,14 @@
           "png": "图片/EP01_CLIP01.png",
           "score": 0.5057,
           "verdict": "warn"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.7384,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.5056,
+          "verdict": "warn"
         }
       ]
     },
@@ -348,7 +422,7 @@
             ]
           },
           "registered_id": "LOC_01",
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         }
       },
@@ -420,42 +494,34 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 0,
+    "applied": 2,
     "available": true,
-    "configured": 0,
+    "configured": 2,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
-    "rows": []
+    "rows": [
+      {
+        "char": "CHAR_01__本集为14岁杂役常态",
+        "original_verdict": "warn",
+        "png": "图片/EP01_CLIP01.png",
+        "reason": "执行者已实际查看当前 EP01_CLIP01 像素并与 CHAR_01、CHAR_02 定妆正面并排核对：脸型、眉眼鼻口比例、发际线、发髻、年龄和服装一致；embedding warn 为低头三分之二侧角度与场景光照误报。",
+        "reviewer": "executor:codex",
+        "score": 0.548
+      },
+      {
+        "char": "CHAR_02__常态",
+        "original_verdict": "warn",
+        "png": "图片/EP01_CLIP01_a1.png",
+        "reason": "执行者已实际打开当前 EP01_CLIP01_a1 原分辨率像素并与首帧及 CHAR_01、CHAR_02 定妆锚核对：两人脸型、眉眼鼻口比例、发际线发髻、年龄体型、服装材质、左右站位均连续；木牌结构与手指接触点一致；本次机器 warn 来自低头侧角与场景冷光，不是换脸。",
+        "reviewer": "executor:codex",
+        "score": 0.5941
+      }
+    ]
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 0,
+    "covered": 2,
     "face_mode": "insightface",
-    "missing": [
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态",
-          "CHAR_02/常态"
-        ],
-        "label": "镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
-        "png": "图片/EP01_CLIP01.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_01"
-      },
-      {
-        "face_coverage_required": true,
-        "face_verdict": "warn",
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态",
-          "CHAR_02/常态"
-        ],
-        "label": "镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
-        "png": "图片/EP01_CLIP01.png",
-        "reason": "face_verdict_warn",
-        "shot": "Clip_01"
-      }
-    ],
+    "missing": [],
     "notes": [],
     "pending": [
       {
@@ -601,7 +667,7 @@
     "required": 2,
     "skipped": [],
     "unclassified": [],
-    "verdict": "block"
+    "verdict": "ok"
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -612,17 +678,18 @@
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "d3cddf734216112a3c57c94fb27c8a068baff36bc80e0ecef57bcb13bdc90d55",
-      "出图/共享/identity_registry.json": "687406bfd65891db812b5786e8f0d220b8cb719264fe053b18d153dafd5b46e2",
+      "出图/共享/identity_registry.json": "418956e4a49a8f6bfe7c6069c3e887a0a793b5aaa1161335c8d2cdd354c4a6d3",
       "出图/共享/style_anchor_registry.json": "d5699112a0f4176bc8a16afd97500383c66b66fac919c44700792952db1ce9c3",
       "出图/共享/图片/风格锚_国漫写实.png": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
       "出图/第1集/prompt/00_总览.md": "3b6aac0ec28432bf6c3eef756ca28725a9e4c8b34fd06f13498b5bbf6a84db20",
       "出图/第1集/prompt/01_分镜出图.md": "42b35e2c07cfb64b20286a80f8a3bff305119b90f0907db0876689b1fec066a8",
       "出图/第1集/图片/EP01_CLIP01.png": "7f1cd3a60ce98b721e492b61b50487339346eed2af39ebb64efea93c6b032230",
-      "生产数据/image_qc/第1集/face_confirmations.json": null,
+      "出图/第1集/图片/EP01_CLIP01_a1.png": "ef194654abd2d9114fb5a689e98450bfcea5128e6d871267053554d0557db5ae",
+      "生产数据/image_qc/第1集/face_confirmations.json": "62544b940805ec87bbe84a16c31747f32104d2d9eeb2d55a4f3c961e18035d9b",
       "生产数据/image_qc/第1集/human_image_review.json": null,
-      "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "f292ba669d4dc83fb72a3bf9d63c02d55ef834a8cae723edb089645e706fcbed"
     },
-    "sha": "74a2b74021c1765f57121806edbcba38032f189ffb61ecaffbf7b1fdafa6d391"
+    "sha": "becf92e67edd9d92f5f984f4573758f8ba0f4ffcf2c9c795e5403d9617ed84d8"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -843,15 +910,15 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 0,
-    "pending": 1,
+    "confirmed": 1,
+    "pending": 0,
     "targets": [
       {
         "asset": "PROP_木牌",
         "asset_name": "木牌",
         "asset_type": "prop",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": false,
+        "confirmed": true,
         "label": "镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
         "must_not_have": [
           "现代物件",
@@ -921,18 +988,18 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 1,
-    "distance": 1.05,
+    "checked": 2,
+    "distance": 1.023,
     "episode_fingerprint": {
-      "contrast": 63.0,
-      "edge": 25.2,
-      "sat": 37.0
+      "contrast": 64.0,
+      "edge": 25.9,
+      "sat": 37.5
     },
     "findings": [
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 1 帧整体风格指纹偏离风格锚（线条边缘度偏离最大，归一距离 1.05 ≥ 1.00）——渲染可能漂出「国漫写实」。锚[饱和14.0/对比130.0/边缘52.5] vs 本集[饱和37.0/对比63.0/边缘25.2]；最偏离镜：EP01_CLIP01.png（偏离 1.05）。人判：是否踩 风格禁忌（欧美脸、塑料页游服装、过度磨皮、现代物件、随机霓虹、水印、可读乱码文字、肢体或手指畸变）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 2 帧整体风格指纹偏离风格锚（线条边缘度偏离最大，归一距离 1.02 ≥ 1.00）——渲染可能漂出「国漫写实」。锚[饱和14.0/对比130.0/边缘52.5] vs 本集[饱和37.5/对比64.0/边缘25.9]；最偏离镜：EP01_CLIP01.png（偏离 1.05）。人判：是否踩 风格禁忌（欧美脸、塑料页游服装、过度磨皮、现代物件、随机霓虹、水印、可读乱码文字、肢体或手指畸变）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -953,7 +1020,7 @@
     }
   },
   "summary": {
-    "advisory": 10,
+    "advisory": 11,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -964,20 +1031,14 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
-        "warn": 1
-      },
-      "face_reference_coverage": {
-        "block": 2,
-        "noface": 0,
-        "ok": 0,
+        "ok": 2,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 2
       },
       "human_anatomy": {
         "block": 0,
@@ -1001,16 +1062,10 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 2
       },
       "prohibited_face_patch": {
         "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 0
-      },
-      "prop_shape_review": {
-        "block": 1,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -1041,18 +1096,18 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 6,
+    "hard_blocks": 3,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 1,
+    "checked": 2,
     "findings": [
       {
         "code": "tone_warmth_contradiction",
         "level": "warn",
-        "msg": "色调像素兜底：契约基调=冷（前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光），但本集 1 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.15 ≥ 0.10）——渲染与契约暖冷相反，人判。"
+        "msg": "色调像素兜底：契约基调=冷（前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光），但本集 2 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.15 ≥ 0.10）——渲染与契约暖冷相反，人判。"
       }
     ],
     "intent": {
@@ -1060,8 +1115,8 @@
       "evidence": "前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光",
       "warmth": "cool"
     },
-    "luma_median": 46.4,
-    "warmth_median": 0.1
+    "luma_median": 45.7,
+    "warmth_median": 0.2
   },
   "turnaround_alignment": {
     "available": true,
@@ -1227,6 +1282,23 @@
               134
             ],
             "border_delta_p90": 41,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              142,
+              142,
+              147
+            ],
+            "border_delta_p90": 35,
             "confidence": "heuristic",
             "image_size": {
               "height": 1672,
@@ -1564,7 +1636,7 @@
                 ],
                 "registry_binding_fingerprint": null,
                 "review_kind": "human",
-                "reviewed_at": "2026-07-15T16:58:24.813208+00:00",
+                "reviewed_at": "2026-07-16T01:19:52.447563+00:00",
                 "reviewer": "image_qc.mark_finalized",
                 "valid": false,
                 "verdict": "accepted"
@@ -1626,7 +1698,7 @@
               ],
               "registry_binding_fingerprint": null,
               "review_kind": "human",
-              "reviewed_at": "2026-07-15T16:58:24.813248+00:00",
+              "reviewed_at": "2026-07-16T01:19:52.447656+00:00",
               "reviewer": "image_qc.mark_finalized",
               "valid": false,
               "verdict": "accepted"
@@ -1676,7 +1748,7 @@
               ],
               "registry_binding_fingerprint": null,
               "review_kind": "human",
-              "reviewed_at": "2026-07-15T16:58:24.813140+00:00",
+              "reviewed_at": "2026-07-16T01:19:52.447500+00:00",
               "reviewer": "image_qc.mark_finalized",
               "valid": false,
               "verdict": "accepted"
@@ -1703,11 +1775,36 @@
             "view": "front"
           },
           "rear_three_quarter": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "human_review": {
+              "expected_registry_binding_fingerprint": "3c0e796ca0260f1704bf0df9c4561b8909e180394c281bb10ebfa290a89e3011",
+              "png_sha256": "396abdc03be2411f3b7b13e0063a868ab551a69500c767f3e46cb733240e6883",
+              "reasons": [],
+              "registry_binding_fingerprint": "3c0e796ca0260f1704bf0df9c4561b8909e180394c281bb10ebfa290a89e3011",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-16T01:19:52+00:00",
+              "reviewer": "executor:codex",
+              "valid": true,
+              "verdict": "pass"
             },
-            "path": null,
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                142,
+                142,
+                147
+              ],
+              "border_delta_p90": 35,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__常态_后45度.png",
+            "png_sha256": "396abdc03be2411f3b7b13e0063a868ab551a69500c767f3e46cb733240e6883",
             "view": "rear_three_quarter"
           },
           "side": {
@@ -1734,7 +1831,7 @@
               ],
               "registry_binding_fingerprint": null,
               "review_kind": "human",
-              "reviewed_at": "2026-07-15T16:58:24.813234+00:00",
+              "reviewed_at": "2026-07-16T01:19:52.447589+00:00",
               "reviewer": "image_qc.mark_finalized",
               "valid": false,
               "verdict": "accepted"
@@ -1784,7 +1881,7 @@
               ],
               "registry_binding_fingerprint": null,
               "review_kind": "human",
-              "reviewed_at": "2026-07-15T16:58:24.813222+00:00",
+              "reviewed_at": "2026-07-16T01:19:52.447577+00:00",
               "reviewer": "image_qc.mark_finalized",
               "valid": false,
               "verdict": "accepted"

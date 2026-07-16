@@ -6,24 +6,21 @@
 - 需要重制：是
 - 重制策略：`最小`
 - 共享定妆库：默认沿用（定妆照/场景照 PNG 复用，重制只覆盖本集分镜帧）
-- 需刷新 gate/QC：是（image）
-- 变动 skill：n2d, n2d-image
+- 变动 skill：n2d-image
 
 ## 变动文件
-- `skills/n2d-image/scripts/codex_image_runner.py`
-- `skills/n2d-image/scripts/image_qc.py`
-- `skills/n2d/SKILL.md`
+- `skills/n2d-image/scripts/image_prompt_pack.py`
 
 ## 当前生产缺口
 - 当前待办：`出图返修`（出图 = `33/50`）
 - 建议 skill：`n2d-image`
 - 建议命令：`n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手 第1集`
-- 备注：image_qc=block，hard_blocks=6；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md
+- 备注：image_qc=block，hard_blocks=3；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md
 
 ## 图片质检环境与阶段跳转
 - 机检能力：`full`
 - 当前解释器：`/opt/homebrew/Caskroom/miniconda/base/bin/python3`
-- 当前 image_qc：`verdict=block`，硬阻断 `6`，非阻断初筛 `8`，降级 `False`
+- 当前 image_qc：`verdict=block`，硬阻断 `3`，非阻断初筛 `11`，降级 `False`
 - block 摘要：prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 | prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 | prompt lint:  脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。
 - 当前应停在/回退：`image` — image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 - 建议安装：无需补装
@@ -31,8 +28,8 @@
 
 ## 健康检测（源/三帧/图片/契约继承）
 - **源小说**：✅ 源未变动
-- **帧策略合同**：⚠️ 必需执行锚缺失 0/7 Clip；缺尾帧声明 0 Clip；缺 PNG 文件 10 个（普通镜不设默认三帧；backend=`seedance-2.0`）
-- **图片一致性**：⚠️ hard_blocks=6（verdict=`block`，精度 `full`）
+- **帧策略合同**：⚠️ 必需执行锚缺失 0/7 Clip；缺尾帧声明 0 Clip；缺 PNG 文件 9 个（普通镜不设默认三帧；backend=`seedance-2.0`）
+- **图片一致性**：⚠️ hard_blocks=3（verdict=`block`，精度 `full`）
 
 ## 执行步骤
 1. `queue_bounded_rerun`
@@ -49,5 +46,6 @@ python3 skills/n2d-dashboard/scripts/dashboard.py gate "/Users/lalala/learn/anim
 ## 备注
 - 真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。
 - 共享定妆库默认沿用：本次变更未命中定妆库生产规则（标准三视图/角色一致性/资产注册/LoRA），`出图/共享/图片/` 的定妆照/场景照 PNG 与 identity_registry 复用不重出，重制范围只覆盖本集分镜帧。n2d-image 共享先行硬闸门会跳过已 ✅ 的共享 PNG，直接以其为参考重出分镜。
-- 帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 10 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP02_a2.png, 出图/第1集/图片/EP01_CLIP03_a1.png
-- 图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=6）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。
+- 帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 9 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP02_a2.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png
+- 图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=3）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。
+- 图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第1集` 再据此判断。

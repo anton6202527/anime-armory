@@ -1259,6 +1259,21 @@ def test_core_reference_group_marks_new_turnaround_as_five_angle_board(tmp_path:
     assert expression["path"] != rg["front"]["path"]
 
 
+def test_recurring_reference_group_registers_on_demand_rear_three_quarter_slot(tmp_path: Path) -> None:
+    cfg = {
+        "asset_key": "CHAR_STANDARD__常态",
+        "name": "复现配角",
+        "form": "常态",
+        "library_tier": "recurring_standard",
+    }
+
+    rg, atlas = image_prompt_pack.full_reference_group(tmp_path, "CHAR_STANDARD", cfg)
+
+    assert rg["rear_three_quarter"]["status"] == "planned"
+    assert rg["rear_three_quarter"]["path"].endswith("_后45度.png")
+    assert atlas["base_views"]["rear_three_quarter"] == rg["rear_three_quarter"]
+
+
 def test_core_reference_group_marks_unlabelled_existing_turnaround_as_unknown(tmp_path: Path) -> None:
     path = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_CORE__常态_三视图.png"
     path.parent.mkdir(parents=True)

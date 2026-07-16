@@ -1161,6 +1161,33 @@ def test_codex_prompt_locks_source_frame_weapon_wound_geometry(tmp_path: Path) -
     assert "禁止把胸口伤改成腹部/腰部/肩部伤" in prompt
 
 
+def test_codex_prompt_keeps_nonviolent_midframe_free_of_wound_boilerplate(tmp_path: Path) -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip_01",
+        body=(
+            "**剧本描述**：壮汉把木牌递回少年胸前，少年稳稳站住。\n"
+            "动作瞬间：木牌必须入画；壮汉把木牌递回少年胸前，少年垂眼。"
+        ),
+        target_line="`出图/第1集/图片/Clip01_mid.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_01_mid",
+        "Clip_01",
+        "midframe",
+        "出图/第1集/图片/Clip01_mid.png",
+        section,
+    )
+
+    prompt = codex_image_runner.build_codex_prompt(tmp_path, "第1集", target, tmp_path / "out.png", "seed-1")
+
+    assert "源帧几何连续性硬锁" in prompt
+    assert "同一道具接触点、同一手握位置" in prompt
+    assert "伤口" not in prompt
+    assert "入体点" not in prompt
+    assert "武器入体" not in prompt
+
+
 def test_codex_prompt_locks_weapon_body_contact_even_on_firstframe(tmp_path: Path) -> None:
     section = codex_image_runner.ClipSection(
         clip="Clip_01",

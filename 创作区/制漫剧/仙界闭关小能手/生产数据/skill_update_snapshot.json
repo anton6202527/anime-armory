@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-15T17:51:39+00:00",
+  "created_at": "2026-07-16T00:54:45+00:00",
   "episodes": [
     "第1集"
   ],
@@ -38,14 +38,14 @@
     "skills/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d-image/scripts/candidate_select.py": "ea378289fa05523d9bc2279133bcbac149685ca56966d4fead0f2ec97803d4b3",
     "skills/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d-image/scripts/codex_image_runner.py": "cfff76a31fb6252a34f280fb27478bd9135e456ef9edd2750c967d879f5428f7",
+    "skills/n2d-image/scripts/codex_image_runner.py": "9e2e236b94efa353e67479aeca1ab5f50e77c8e990660cc24d5935837cfa18f0",
     "skills/n2d-image/scripts/derive_makeup_pack.py": "7c448a8bc7cbff03f6adade78cfdedefb33cc65fb269df123231192b50397722",
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
     "skills/n2d-image/scripts/dreamina_image_runner.py": "9cb5e08607aa50f2c725ee8eb79f8152135a3e81abbd30cab68e909a45e72a52",
     "skills/n2d-image/scripts/face_drift_risk.py": "5e51ac470565bb5ccd72e58da2b3d3cbe7d5ca984f36331196b44aa7be535cec",
     "skills/n2d-image/scripts/image_prompt_metrics.py": "dbf846f0ec43962f4b87300fdd352374cf3f8594f8a0ac299e3077441d938eaf",
-    "skills/n2d-image/scripts/image_prompt_pack.py": "b72769c74560c219486cdc17b20a755b29ea66eb7730630976a11fe904d62183",
-    "skills/n2d-image/scripts/image_qc.py": "59078d2e70c7795cae5533fa06101de80f978c92aad4a196d93692e53591ef26",
+    "skills/n2d-image/scripts/image_prompt_pack.py": "6bfd10e04a581e189b881656a4218da9ba71e70d72642ade16ff27ec20a4f180",
+    "skills/n2d-image/scripts/image_qc.py": "7f27dca79b5e7d9d0c453c33be07950ee9ec7e835d34280731b0e72989fce961",
     "skills/n2d-image/scripts/keyshot_candidate_runner.py": "271b94e40c31e1c27ca8a78607f981f0c265bdbbb9adeb6a782a7d7251a7cae7",
     "skills/n2d-image/scripts/keyshot_candidates.py": "ef32dbf664e1416526e7e382eae36fdd25096fd83b5c0aea76090eed344c636e",
     "skills/n2d-image/scripts/migrate_character_library.py": "65d42bcfd71ac15ce263c7306b114a95e0b7432555b68e6dc222df9d7aa82ba4",
@@ -275,7 +275,7 @@
     "skills/n2d-voice/voice_preflight.py": "8d48392e7229fc3ccf2a1ba96c27ba1c7ed6796f831dd4cf8e6bc577ecc3dd1d",
     "skills/n2d-voice/voice_text.py": "8b168cb9cda1f07e09e02d459accf6f31200ff044df284fd81ecd454426bf961",
     "skills/n2d/Q&A.md": "957ce9f3191c0244ff4c141155bf5ccee702e3d35f9baf872b0fa7f491a8e928",
-    "skills/n2d/SKILL.md": "9cbce5a196359a00b12d45df635a8eb31a2a656ef8598e5badc734982a9fea9d",
+    "skills/n2d/SKILL.md": "f4be2d6b97c3937696df3cc74be9764749e43363924e01de1b28200f2e93016d",
     "skills/n2d/_lib/backend_smoke.py": "e350c97c3a686add93e8b6c919fadc8a7965ae76c72f4997f879a72c7ad3acbf",
     "skills/n2d/_lib/bgm_contract.py": "1ec1f68bcc9c6ed2e138354153a9079bee655f1d5a81c66749ce21cea425fb03",
     "skills/n2d/_lib/continuity_chain.py": "2442df8b7287e018d5ab791dcc63df8e1c1709c163c433f3fc50fb943f0e07b6",
