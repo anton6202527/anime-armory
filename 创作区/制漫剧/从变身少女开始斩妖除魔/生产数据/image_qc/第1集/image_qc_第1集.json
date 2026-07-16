@@ -97,8 +97,8 @@
           "intra_pairs": 3
         },
         "CHAR_04__常态": {
-          "floor": 0.9332,
-          "intra_pairs": 5
+          "floor": 0.9135,
+          "intra_pairs": 6
         }
       },
       "margin": 0.08,
@@ -218,8 +218,8 @@
           "intra_pairs": 3
         },
         "CHAR_04__常态": {
-          "floor": 0.9433,
-          "intra_pairs": 5
+          "floor": 0.9084,
+          "intra_pairs": 6
         }
       },
       "margin": 0.1,
@@ -1355,6 +1355,29 @@
     "findings": [
       {
         "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              142,
+              142,
+              142
+            ],
+            "bbox_normalized": [
+              0.0,
+              0.0,
+              1.0,
+              0.9922
+            ],
+            "border_delta_p90": 28,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "foreground_bbox_implausible"
+          },
           "front": {
             "background_delta": 28,
             "background_rgb": [
@@ -1896,11 +1919,58 @@
         },
         "views": {
           "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
+              "png_sha256": null,
+              "reasons": [
+                "verdict_not_pass",
+                "reviewer_missing",
+                "review_kind_missing_or_invalid",
+                "reviewed_at_missing",
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": null,
+              "reviewed_at": null,
+              "reviewer": null,
+              "valid": false,
+              "verdict": null
+            },
             "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                142,
+                142,
+                142
+              ],
+              "bbox_normalized": [
+                0.0,
+                0.0,
+                1.0,
+                0.9922
+              ],
+              "border_delta_p90": 28,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
               "measurable": false,
-              "reason": "png_missing"
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "foreground_bbox_implausible"
             },
             "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+            "png_sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
             "view": "back"
           },
           "front": {

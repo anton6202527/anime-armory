@@ -9375,7 +9375,7 @@
     },
     {
       "panel_id": "P029",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
@@ -9663,8 +9663,60 @@
         "style_reference_limit": 1,
         "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第1话/panels/P029.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "generated_at": "2026-07-16T20:07:13",
+      "backend_version": "{",
+      "artifact_sha256": "7775b072994671255b26d621aca2a024c7eb8abff0e57c9f6099d4c635e70370",
+      "attempt": 1,
+      "submit_id": "5a5aa246-5808-40b4-8994-1327120ad7f5",
+      "service_ratio": "4:3",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P029.json",
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P029.txt",
+      "prompt_snapshot_sha256": "51c8a79fc67b20a239b5ba311a58060e1c36b7ba3b6e66ea399614b72845f60a",
+      "raw_candidate_path": "出图/第1话/candidates/P029/20260716T200542_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2304,
+          "height": 1728
+        },
+        "target_size": {
+          "width": 1188,
+          "height": 920
+        }
+      },
+      "generated_from_contract_sha256": "1a02c07d363ec97b45e315eb324c8095b26b784147ffbe6000c355b392b39d8f",
+      "generated_from_submit_prompt_sha256": "55b5fdc2d1c4fbb21cd60ec38a7fb10307ea5727a293ee7c9bfa4ad914279555",
+      "generated_from_execution_input_sha256": "660d97671c50abf47409026eb647c55139431d2a2996d75644f9fa51efb7f75e",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P029",
+        "created_at": "2026-07-16T20:07:13",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P029.png",
+        "size": {
+          "width": 1188,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "declared_reference_count": 8,
+        "reference_input_count": 8,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P030",
