@@ -313,6 +313,11 @@ def main() -> int:
         default="",
         help="仅用于已目检失败目标格的执行层纠偏补充；不改写已哈希剧情/画面合同，prompt 快照会留痕",
     )
+    parser.add_argument(
+        "--recheck-existing",
+        action="store_true",
+        help="只复核并恢复现有 panel PNG 的状态，不归档、不调用 Dreamina，也不消耗新的生成尝试",
+    )
     parser.add_argument("--no-post-qc", action="store_true")
     parser.add_argument("--continue-on-qc-block", action="store_true")
     parser.add_argument("--skip-gate", action="store_true")
@@ -376,7 +381,7 @@ def main() -> int:
         final = panel_dir / f"{panel_id}.png"
         archived_existing = (
             shared.archive_existing(final, candidate_root / panel_id, "previous")
-            if args.force else ""
+            if args.force and not args.recheck_existing else ""
         )
         all_records = shared.collect_reference_images(root, job)
         records, omitted = shared.select_reference_attachments(all_records, reference_limit)
@@ -402,6 +407,59 @@ def main() -> int:
         reference_manifest = write_reference_manifest(
             root, args.chapter, panel_id, records, omitted, reference_limit
         )
+        if args.recheck_existing:
+            if not shared.png_valid(final):
+                failures += 1
+                job["status"] = "failed"
+                job["error"] = f"existing panel PNG missing or invalid: {shared.rel_to_root(root, final)}"
+                shared.write_json(jobs_path, data)
+                print(f"[fail] {panel_id}: {job['error']}", file=sys.stderr, flush=True)
+                continue
+            post_qc = (
+                {}
+                if args.no_post_qc
+                else shared.post_qc_panel(root, args.chapter, job, final, records, omitted)
+            )
+            post_qc_verdict = str(post_qc.get("verdict") or "skipped")
+            checked_at = dt.datetime.now().isoformat(timespec="seconds")
+            job.update(
+                {
+                    "status": "qc_block" if post_qc_verdict == "block" else "ready",
+                    "result_path": shared.rel_to_root(root, final),
+                    "artifact_sha256": shared.file_sha256(final),
+                    "reference_manifest": shared.rel_to_root(root, reference_manifest),
+                    "reference_input_count": len(records),
+                    "post_qc": post_qc,
+                    "rechecked_at": checked_at,
+                }
+            )
+            job.pop("error", None)
+            shared.append_event(
+                root,
+                {
+                    "ts": checked_at,
+                    "panel_id": panel_id,
+                    "status": job["status"],
+                    "backend": str(job.get("source") or DREAMINA_CHANNEL),
+                    "model": str(job.get("model") or DREAMINA_MODEL),
+                    "path": job["result_path"],
+                    "sha256": job["artifact_sha256"],
+                    "operation": "recheck_existing_without_generation",
+                    "reference_manifest": job["reference_manifest"],
+                    "reference_input_count": len(records),
+                    "post_qc_verdict": post_qc_verdict,
+                },
+            )
+            shared.write_json(jobs_path, data)
+            if post_qc_verdict == "block":
+                qc_blocked += 1
+                print(f"[qc-block] {panel_id} existing -> {job['result_path']}", file=sys.stderr, flush=True)
+                if not args.continue_on_qc_block:
+                    return 3
+            else:
+                print(f"[recheck] {panel_id} -> {job['result_path']} (post_qc={post_qc_verdict})", flush=True)
+            continue
+
         ratio = nearest_supported_ratio(job.get("size") or {})
         prompt = build_prompt(job, records, ratio, correction=args.correction)
         prompt_path = root / "出图" / args.chapter / "prompt" / "dreamina" / f"{panel_id}.txt"

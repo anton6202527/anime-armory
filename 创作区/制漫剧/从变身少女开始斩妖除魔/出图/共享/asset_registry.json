@@ -180,7 +180,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "review_pending",
+          "status": "ready",
           "derivation": {
             "method": "dreamina_seedream5_topology_repair",
             "provider": "Dreamina/即梦官方 CLI",
@@ -195,8 +195,10 @@
             ]
           },
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reason": "shared reference promoted to ready after reviewed shared generation",
+            "reviewed_by": "skills/n2d-image/scripts/codex_image_runner.py",
+            "reviewed_at": "2026-07-16T13:51:47+00:00"
           }
         },
         "scale_ref": {
@@ -218,7 +220,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "review_pending",
+          "status": "ready",
           "sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
           "derivation": {
             "method": "dreamina_seedream5_topology_repair",
@@ -234,8 +236,10 @@
             ]
           },
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reason": "shared reference promoted to ready after reviewed shared generation",
+            "reviewed_by": "skills/n2d-image/scripts/codex_image_runner.py",
+            "reviewed_at": "2026-07-16T13:51:47+00:00"
           }
         }
       ],
@@ -344,7 +348,7 @@
           {
             "png": {
               "path": "出图/共享/图片/定妆_武器_横刀.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "dreamina_seedream5_topology_repair",
                 "provider": "Dreamina/即梦官方 CLI",
@@ -374,7 +378,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "review_pending",
+          "status": "ready",
           "derivation": {
             "method": "dreamina_seedream5_topology_repair",
             "provider": "Dreamina/即梦官方 CLI",
@@ -389,8 +393,10 @@
             ]
           },
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reason": "shared reference promoted to ready after reviewed shared generation",
+            "reviewed_by": "skills/n2d-image/scripts/codex_image_runner.py",
+            "reviewed_at": "2026-07-16T13:51:47+00:00"
           }
         },
         "scale_ref": {
@@ -412,7 +418,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "review_pending",
+          "status": "ready",
           "sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
           "derivation": {
             "method": "dreamina_seedream5_topology_repair",
@@ -428,8 +434,10 @@
             ]
           },
           "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "status": "accepted",
+            "reason": "shared reference promoted to ready after reviewed shared generation",
+            "reviewed_by": "skills/n2d-image/scripts/codex_image_runner.py",
+            "reviewed_at": "2026-07-16T13:51:47+00:00"
           }
         }
       ],
@@ -522,7 +530,7 @@
           {
             "png": {
               "path": "出图/共享/图片/定妆_武器_横刀.png",
-              "status": "review_pending",
+              "status": "ready",
               "derivation": {
                 "method": "dreamina_seedream5_topology_repair",
                 "provider": "Dreamina/即梦官方 CLI",

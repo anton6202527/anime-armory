@@ -1,0 +1,43 @@
+{
+  "confirmations": [
+    {
+      "asset": "WEAPON_01",
+      "asset_name": "横刀",
+      "confirmed_at": "2026-07-16T13:50:56+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "变成长剑",
+        "华丽仙剑",
+        "现代军刀",
+        "多把复制",
+        "副刀",
+        "短刃",
+        "匕首",
+        "右手第二把刀",
+        "副手持刀",
+        "后手短刀",
+        "双持",
+        "刀鞘变成刀刃",
+        "双刃",
+        "多刃",
+        "双向开刃",
+        "第二把刀刃",
+        "光效变成实体刀刃"
+      ],
+      "png": "出图/共享/图片/定妆_武器_横刀.png",
+      "png_sha256": "cb194704b70ee11165f1112e90db21074ced9316baa8c0183888b58ad432f159",
+      "reason": "原像素3040x5404确认：单柄单刀身；画面左侧为连续暗色厚钝刀背，右侧仅一条窄亮磨刃面；无中央脊、无双刃/多刃/第二刀，刀尖由唯一刃侧不对称收拢；无文字水印。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_shared_primary_定妆_武器_横刀_compare.png",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_prop_shape_confirmations",
+  "updated_at": "2026-07-16T13:50:56+00:00",
+  "version": 1
+}

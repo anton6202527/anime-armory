@@ -2826,7 +2826,7 @@
     },
     {
       "panel_id": "P010",
-      "status": "failed",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1116
@@ -3168,7 +3168,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P010",
-        "created_at": "2026-07-16T19:41:24",
+        "created_at": "2026-07-16T21:53:18",
         "verdict": "pass",
         "path": "出图/第1话/panels/P010.png",
         "size": {
@@ -3187,7 +3187,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "error": "dreamina image2image exit 1: do request: Post \"https://jimeng.jianying.com/mweb/v1/get_history_by_ids?agent_detect=agent%3Acodex&aid=513695&cli_version=c58a6a2-dirty&from=dreamina_cli\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)\n"
+      "rechecked_at": "2026-07-16T21:53:18"
     },
     {
       "panel_id": "P011",
