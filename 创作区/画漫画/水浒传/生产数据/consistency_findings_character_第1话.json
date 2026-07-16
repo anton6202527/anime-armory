@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "character_consistency",
+  "chapter": "第1话",
+  "created_at": "2026-07-16T20:35:49",
+  "summary": {
+    "character_count": 9,
+    "panel_binding_count": 76,
+    "finding_count": 4,
+    "block_count": 0,
+    "warn_count": 4,
+    "info_count": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WEN_YANBO face 指纹与参考图相似度偏低：score=0.451。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WEN_YANBO hair 指纹与参考图相似度偏低：score=0.168。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "outfit_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WEN_YANBO outfit 指纹与参考图相似度偏低：score=0.329。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P005",
+      "artifact": "出图/第1话/panels/P005.png",
+      "reason": "CHAR_WEN_YANBO hair 指纹与参考图相似度偏低：score=0.296。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    }
+  ]
+}
