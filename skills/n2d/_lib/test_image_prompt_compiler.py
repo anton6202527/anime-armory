@@ -477,6 +477,34 @@ def test_codex_compiler_drops_recursive_block_and_softens_nonviolent_action():
     assert "nonviolent_social_action_softened_for_provider" in payload["compiler_decisions"]
 
 
+def test_codex_compiler_softens_adult_minor_shoulder_pressure_to_table_blocking():
+    section = """## Clip_02
+**剧本描述**：管事向少年下达劳役命令。
+### 正向 prompt（中文）
+```text
+锚点句：成年管事与十四岁少年；
+动作瞬间：管事俯身，粗大右手压在瘦削左肩，粗布轻微凹下；肩头接触只用手部插入镜；拍肩为张老大右手；手掌压肩插入镜；
+```
+"""
+    contract = contract_from_section(
+        section,
+        backend="codex",
+        mode="firstframe",
+        task_type="multi_subject",
+        target_path="Clip02.png",
+        request_params={"aspect_ratio": "9:16"},
+    )
+    payload = compile_image_prompt(contract, "codex")
+
+    assert "压在瘦削左肩" not in payload["prompt"]
+    assert "压到少年肩头" not in payload["prompt"]
+    assert "压肩" not in payload["prompt"]
+    assert "撑在少年身侧的木桌边" in payload["prompt"]
+    assert "不接触身体" in payload["prompt"]
+    assert "手掌与桌面接触" in payload["prompt"]
+    assert "撑桌为张老大右手" in payload["prompt"]
+
+
 def test_backend_and_task_golden_fixtures():
     fixture_path = Path(__file__).with_name("fixtures") / "image_prompt_compiler_golden.json"
     fixture = json.loads(fixture_path.read_text(encoding="utf-8"))

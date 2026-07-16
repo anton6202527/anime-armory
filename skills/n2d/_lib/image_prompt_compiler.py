@@ -20,7 +20,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 KIND = "n2d_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-16.1"
+PROFILE_VERSION = "2026-07-16.2"
 COMPILED_HEADING = "### 后端编译提交 image prompt"
 
 TASK_TYPES = {
@@ -339,6 +339,17 @@ def resolve_contract_conflicts(
             softened = action
             softened = softened.replace("用两指弹回木牌", "用两指点住木牌，再把木牌递回少年胸前")
             softened = softened.replace("承受冲击但不后退", "稳稳站住")
+            # Preserve the hierarchy/dialogue beat while avoiding an adult-on-
+            # minor coercive-contact reading at the provider boundary. The
+            # source script and QC contract remain unchanged.
+            softened = softened.replace(
+                "粗大右手压在瘦削左肩，粗布轻微凹下",
+                "粗大右手撑在少年身侧的木桌边，靠近但不接触身体",
+            )
+            softened = softened.replace("手掌压到少年肩头", "手掌落在少年身侧的木桌面")
+            softened = softened.replace("肩头接触只用手部插入镜", "手掌与桌面接触只用手部插入镜")
+            softened = softened.replace("拍肩为张老大右手", "撑桌为张老大右手")
+            softened = softened.replace("手掌压肩插入镜", "手掌撑桌插入镜")
             if softened != action:
                 resolved["action"] = softened
                 decisions.append("nonviolent_social_action_softened_for_provider")
