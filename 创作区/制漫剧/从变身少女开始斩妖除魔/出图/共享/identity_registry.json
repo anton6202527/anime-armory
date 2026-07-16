@@ -1878,7 +1878,7 @@
             },
             "back": {
               "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
@@ -1889,6 +1889,37 @@
                   1,
                   1
                 ]
+              },
+              "sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_04",
+                "form": "常态",
+                "library_tier": "recurring_standard",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-16T12:13:12+00:00",
+                "png_sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+                "registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "原像素核验：3040x5404，严格180度正背面，后脑双耳与脊柱居中，零眼鼻口和侧脸；肩胛、腰胯、双腿双足近似对称，耳尖至足底完整；虎纹、腰布、腕腿缠带同源，胸伤不可见，无尾巴、无血迹、无多肢、无文字水印。"
               }
             }
           },
@@ -2092,7 +2123,7 @@
               },
               "back": {
                 "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
@@ -2103,6 +2134,37 @@
                     1,
                     1
                   ]
+                },
+                "sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_04",
+                  "form": "常态",
+                  "library_tier": "recurring_standard",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-16T12:13:12+00:00",
+                  "png_sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+                  "registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "原像素核验：3040x5404，严格180度正背面，后脑双耳与脊柱居中，零眼鼻口和侧脸；肩胛、腰胯、双腿双足近似对称，耳尖至足底完整；虎纹、腰布、腕腿缠带同源，胸伤不可见，无尾巴、无血迹、无多肢、无文字水印。"
                 }
               },
               "half_body": {

@@ -697,7 +697,7 @@
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "cad4ccfd7e02755675c697cb5657bd6191d26bf6d1f3e822d539e99a59d70ad1",
-      "出图/共享/identity_registry.json": "82f99442e2f40da14385a6c871b2ce5472e7967090de445fcb777e7ba98a63e8",
+      "出图/共享/identity_registry.json": "b1d02f048ac5328bd5b69502d8723ef1ef4e7bb10fae16a7d1b4f56c4608321d",
       "出图/共享/style_anchor_registry.json": "3e25a9605e6281e1def35fdda8d1e318e7beb8434f1e349cac2baa5e9f76a8a4",
       "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
       "出图/第1集/prompt/00_总览.md": "a9b61d6f7b1c1aeec31a89fa2413c3065bc5e049f15d903666073bd9aa47588c",
@@ -706,7 +706,7 @@
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "1aadb23500a1d82d27179f309b65ce88df9cce7732c5b89c8ee0ca8747b59e6f"
+    "sha": "e534f6479f481e7d9fdf5adb494069c951281a5a6577574ec057c0ac590fb36a"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1921,30 +1921,14 @@
           "back": {
             "human_review": {
               "expected_registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
-              "png_sha256": null,
-              "reasons": [
-                "verdict_not_pass",
-                "reviewer_missing",
-                "review_kind_missing_or_invalid",
-                "reviewed_at_missing",
-                "character_id_missing_or_mismatch",
-                "form_missing_or_mismatch",
-                "library_tier_missing_or_mismatch",
-                "view_missing_or_mismatch",
-                "path_missing_or_mismatch",
-                "review_contract_missing_or_mismatch",
-                "registry_binding_fingerprint_kind_missing_or_mismatch",
-                "criteria_incomplete",
-                "explicit_current_pixels_confirmation_missing",
-                "png_sha256_missing_or_stale",
-                "registry_binding_fingerprint_missing_or_stale"
-              ],
-              "registry_binding_fingerprint": null,
-              "review_kind": null,
-              "reviewed_at": null,
-              "reviewer": null,
-              "valid": false,
-              "verdict": null
+              "png_sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+              "reasons": [],
+              "registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-16T12:13:12+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
             },
             "machine_evidence": {
               "background_delta": 28,
