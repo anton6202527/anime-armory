@@ -346,24 +346,8 @@
         "checker": "face_consistency.verify_faceless",
         "records": [
           {
-            "png": {
-              "path": "出图/共享/图片/定妆_武器_横刀.png",
-              "status": "ready",
-              "derivation": {
-                "method": "dreamina_seedream5_topology_repair",
-                "provider": "Dreamina/即梦官方 CLI",
-                "model": "Seedream 5.0",
-                "submit_id": "d8fee00c-b407-46d3-ab65-3ad68c059bac",
-                "source": "text_candidate_local_topology_edit",
-                "review_focus": [
-                  "single_cutting_edge",
-                  "continuous_thick_spine",
-                  "no_central_ridge",
-                  "asymmetric_edge-biased_tip"
-                ]
-              }
-            },
-            "png_sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+            "png": "出图/共享/图片/定妆_武器_横刀.png",
+            "png_sha256": "cb194704b70ee11165f1112e90db21074ced9316baa8c0183888b58ad432f159",
             "verdict": "ok",
             "clear_faces": 0,
             "max_ratio": 0.0
@@ -528,24 +512,8 @@
         "checker": "face_consistency.verify_faceless",
         "records": [
           {
-            "png": {
-              "path": "出图/共享/图片/定妆_武器_横刀.png",
-              "status": "ready",
-              "derivation": {
-                "method": "dreamina_seedream5_topology_repair",
-                "provider": "Dreamina/即梦官方 CLI",
-                "model": "Seedream 5.0",
-                "submit_id": "d8fee00c-b407-46d3-ab65-3ad68c059bac",
-                "source": "text_candidate_local_topology_edit",
-                "review_focus": [
-                  "single_cutting_edge",
-                  "continuous_thick_spine",
-                  "no_central_ridge",
-                  "asymmetric_edge-biased_tip"
-                ]
-              }
-            },
-            "png_sha256": "42e79393bdd67905678ccba35ff98960915e28cc3389c92e414309b052c02208",
+            "png": "出图/共享/图片/定妆_武器_横刀.png",
+            "png_sha256": "cb194704b70ee11165f1112e90db21074ced9316baa8c0183888b58ad432f159",
             "verdict": "ok",
             "clear_faces": 0,
             "max_ratio": 0.0
