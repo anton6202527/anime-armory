@@ -286,9 +286,9 @@ def test_prop_shape_review_requires_shared_high_risk_primary_confirmation(tmp_pa
         tmp_path,
         "第1集",
         "all",
-        reviewer="视觉执行者",
+        reviewer="道具美术复核员",
         reason="原像素确认单刃厚背，无双刃或第二把刀刃",
-        review_kind="executor_visual",
+        review_kind="human",
     )
     targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
     assert targets[0]["confirmed"] is True
