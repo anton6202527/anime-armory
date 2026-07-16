@@ -69,6 +69,11 @@ def _iter_character_changes(ledger: Dict[str, Any]):
         items = [(d.get("chapter") or d.get("chapter_key") or i, d) for i, d in enumerate(deltas)]
         items.sort(key=lambda kv: _chapter_no(kv[0]))
     for key, delta in items:
+        # reconcile_ledger.merge 落库形如 chapter_deltas[key]={merged_at, summary:<delta>, verification}——
+        # 真实 state_ledger 是 summary 包裹的；旧测试/手拼台账是裸 delta。两种都要认，否则本确定性生死闸
+        # 在**生产合并后的台账上永久 no-op**（summary 包裹时 .get('character_changes') 恒 None）。
+        if isinstance(delta, dict) and isinstance(delta.get("summary"), dict):
+            delta = delta["summary"]
         ch = _chapter_no(key) or (delta.get("chapter") if isinstance(delta, dict) else 0) or 0
         for cc in (delta.get("character_changes") or []) if isinstance(delta, dict) else []:
             if isinstance(cc, dict):

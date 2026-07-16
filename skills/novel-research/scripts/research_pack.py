@@ -27,6 +27,21 @@ RESEARCH_SCENE_USAGE_KIND = "novel_research_scene_usage"
 
 SOURCE_EVALUATION_AXES = ("currency", "relevance", "authority", "accuracy", "purpose")
 
+DEFAULT_FRESHNESS_DAYS = 90
+# 按领域分档有效期（天）：把 SKILL.md 早已承诺却没落地的「平台/法律/医疗短、历史/文化长」写进代码。
+# 平台规则最易变（当日就可能改），历史近乎静态。未列领域回退 DEFAULT_FRESHNESS_DAYS。
+# 仅当资料包**没有显式** freshness_days 时生效；作者手填的 --freshness-days 永远优先。
+DOMAIN_FRESHNESS_DEFAULTS = {
+    "platform": 30,
+    "legal": 90, "finance": 90, "medical": 120, "technology": 120,
+    "military": 180, "career": 180, "crime": 365, "overseas": 365,
+    "religion": 730, "history": 1825,
+}
+
+
+def domain_freshness_default(domain: str | None) -> int:
+    return DOMAIN_FRESHNESS_DEFAULTS.get(str(domain or "").strip().lower(), DEFAULT_FRESHNESS_DAYS)
+
 HIGH_RISK_DOMAINS = {
     "medical",
     "legal",
@@ -145,6 +160,31 @@ DOMAIN_PITFALLS = {
         ("辣椒", "辣椒明代才传入中国；写唐宋人吃辣是时代错位"),
         ("土豆", "土豆/玉米/红薯为明代传入；上古中古背景出现是常见穿帮"),
         ("陛下", "‘陛下’称皇帝；对王侯/未称帝者用‘陛下’是称谓错位"),
+    ],
+    "religion": [
+        (("僧人", "吃肉"), "汉传佛教僧人持素戒荤；僧人日常大口吃肉需特定语境（破戒/济公式），否则外行"),
+        (("道士", "化缘"), "‘化缘’是佛教僧人乞食用语；道士称‘募化/募捐’，混用露怯"),
+        (("清真", "猪"), "清真饮食禁猪；穆斯林角色吃猪肉、清真馆上猪肉是宗教常识硬伤"),
+        (("罗马教皇", "东正教"), "东正教不承认罗马教皇权威；把教皇安到东正教是混淆天主教/东正教"),
+    ],
+    "overseas": [
+        (("美国", "身份证"), "美国无全国统一身份证，通用证件是驾照/SSN/护照；‘出示身份证’是中式错位"),
+        (("英国", "总统"), "英国君主立宪+首相制，无‘总统’；国家元首是君主、政府首脑是首相"),
+        (("日本", "农历"), "日本明治后过公历元旦、不过农历春节（除非在日华人语境）；节庆错位常见"),
+    ],
+    "technology": [
+        (("量子", "瞬间通信"), "量子纠缠不能超光速传信息（无通信定理）；‘量子瞬时通讯’是伪科学"),
+        (("黑客", "秒破"), "口令/加密暴力破解需算力与时间，影视式‘敲几下键盘即破’是外行"),
+        (("IP", "门牌"), "公网 IP 只能定位到运营商/城市级；精确到门牌需运营商配合，非随手可查"),
+    ],
+    "career": [
+        (("上市公司", "一个人说了算"), "上市公司重大事项须董事会/股东会决议；一人独断不合规且易被监管否决"),
+        (("试用期", "不签合同"), "用工即须订立劳动合同、缴社保，试用期也不例外；‘试用期不签合同’违法"),
+        (("年终奖", "离职就没"), "年终奖归属看合同/制度约定，非‘一离职必然作废’；一刀切写法失真"),
+    ],
+    "platform": [
+        (("独家", "多平台同步"), "签约独家文不能多平台同步首发；‘各大平台同步上架’与独家条款直接冲突"),
+        (("上架", "全免费"), "签约上架章节通常转付费/分成；写成‘上架后全部免费看到底’与平台商业模式冲突"),
     ],
 }
 
@@ -532,7 +572,7 @@ def scaffold(root: Path, args: argparse.Namespace) -> dict[str, Any]:
         "pack_path": pack_path,
         "applicable_chapters": parse_chapters(args.chapters) or ["all"],
         "keywords": args.keyword or [],
-        "freshness_days": args.freshness_days,
+        "freshness_days": args.freshness_days if args.freshness_days is not None else domain_freshness_default(args.domain),
         "updated_at": today(),
         "sources": sources or pack.get("sources", []),
         "claims": claims or pack.get("claims", []),
@@ -686,7 +726,8 @@ def pack_is_high_risk(pack: dict[str, Any]) -> bool:
 
 
 def pack_freshness(pack: dict[str, Any]) -> dict[str, Any]:
-    freshness_days = safe_int(pack.get("freshness_days"), 90)
+    # 显式 freshness_days 优先；缺失/None → 按领域分档默认（平台短、历史长），而非一刀切 90。
+    freshness_days = safe_int(pack.get("freshness_days"), domain_freshness_default(pack.get("domain")))
     raw_updated_at = str(pack.get("updated_at") or "").strip()
     updated_at = parse_date(raw_updated_at)
     if not updated_at:
@@ -804,6 +845,21 @@ def validate_pack(root: Path, pack: dict[str, Any], chapter: int | None = None) 
             out.append(finding("阻断级", "claim_unknown_source", f"{cid} 引用未知来源：{', '.join(missing)}", pack=topic))
         if claim.get("confidence") not in {"high", "medium", "low"}:
             out.append(finding("阻断级", "claim_missing_confidence", f"{cid} 可信度必须是 high/medium/low", pack=topic))
+        # 置信度↔来源质量绑定：high 置信不该压在单条非权威来源上（幻觉最易在此处混过审）。
+        # 规则：confidence=high 要么至少一条 reliability=high 来源，要么 ≥2 条来源交叉印证；否则建议降级或补源。
+        # 关键词/可信度都是结构化字段，判定确定性；但"权威度"有主观性，故只出建议级（守 B10：不硬拦）。
+        if claim.get("confidence") == "high":
+            bound = [s for s in sources if s.get("id") in ids]
+            if bound:
+                has_high_authority = any(s.get("reliability") == "high" for s in bound)
+                corroborated = len(bound) >= 2
+                if not has_high_authority and not corroborated:
+                    out.append(finding(
+                        "建议级", "claim_confidence_unbacked",
+                        f"{cid} 标 confidence=high，却既无 high 可信度来源、也无 ≥2 条来源交叉印证"
+                        f"（当前 {len(bound)} 条来源）——high 置信不应压在单条非权威来源上：补一条权威来源、"
+                        "加一条独立印证，或把置信度降为 medium。",
+                        pack=topic))
         if not claim.get("applicable_chapters"):
             out.append(finding("建议级", "claim_missing_chapter_scope", f"{cid} 未写适用章节", pack=topic))
     freshness = pack_freshness(pack)
@@ -1851,7 +1907,8 @@ def main(argv: list[str] | None = None) -> int:
     sc.add_argument("--chapters", default="all")
     sc.add_argument("--risk", choices=["high", "medium", "low"], default="high")
     sc.add_argument("--status", choices=["draft", "ready", "stale", "needs_review"], default=None)
-    sc.add_argument("--freshness-days", type=int, default=90)
+    sc.add_argument("--freshness-days", type=int, default=None,
+                    help="有效期天数；不填则按领域分档默认（平台30/法律医疗90-120/历史1825…）")
     sc.add_argument("--keyword", action="append", default=[])
     sc.add_argument("--source", action="append", default=[], help="标题|日期|类型|可信度|URL|说明")
     sc.add_argument("--claim", action="append", default=[], help="事实|来源ID|可信度|章节|使用方式|不确定项|禁用写法")

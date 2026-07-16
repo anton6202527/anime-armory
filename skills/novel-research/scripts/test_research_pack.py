@@ -343,3 +343,36 @@ def test_scan_unsupported_professional_details():
     assert out and "麻醉" in out[0]["evidence"] and "诊断" not in out[0]["evidence"]
     assert research_pack.scan_unsupported_professional_details(
         "麻醉。", [{"domain": "medical", "status": "draft"}], {"medical": ["麻醉"]}) == []
+
+
+def test_domain_freshness_default_applies_when_unset():
+    # 平台包默认 30 天、历史包默认 1825 天；显式 freshness_days 优先。
+    assert research_pack.pack_freshness({"domain": "platform", "updated_at": "2020-01-01"})["freshness_days"] == 30
+    assert research_pack.pack_freshness({"domain": "history", "updated_at": "2020-01-01"})["freshness_days"] == 1825
+    assert research_pack.pack_freshness({"domain": "platform", "freshness_days": 200, "updated_at": "2020-01-01"})["freshness_days"] == 200
+    assert research_pack.domain_freshness_default("unlisted") == research_pack.DEFAULT_FRESHNESS_DAYS
+
+
+def test_high_confidence_needs_authority_or_corroboration():
+    import pathlib
+    pack = {
+        "topic": "T", "domain": "medical", "status": "ready", "pack_path": "资料/x.md",
+        "applicable_chapters": ["all"], "updated_at": research_pack.today(), "freshness_days": 90,
+        "sources": [{"id": "SRC-1", "title": "某论坛帖", "accessed_date": "2026-07-01", "reliability": "low",
+                     "evaluation": {a: "ok" for a in research_pack.SOURCE_EVALUATION_AXES}}],
+        "claims": [{"id": "FACT-1", "claim": "某高置信断言", "source_ids": ["SRC-1"], "confidence": "high",
+                    "applicable_chapters": ["all"]}],
+    }
+    codes = [f["type"] for f in research_pack.validate_pack(pathlib.Path("/tmp"), pack)]
+    assert "claim_confidence_unbacked" in codes
+    # 换成 high 可信度来源后不再报
+    pack["sources"][0]["reliability"] = "high"
+    codes2 = [f["type"] for f in research_pack.validate_pack(pathlib.Path("/tmp"), pack)]
+    assert "claim_confidence_unbacked" not in codes2
+
+
+def test_new_domain_pitfalls_present_and_match():
+    for dom in ("religion", "overseas", "technology", "career", "platform"):
+        assert dom in research_pack.DOMAIN_PITFALLS and research_pack.DOMAIN_PITFALLS[dom]
+    hits = research_pack.scan_amateur_pitfalls("他在美国警局出示身份证，警察愣了一下。", {"overseas": []})
+    assert any("身份证" in h["evidence"] for h in hits)

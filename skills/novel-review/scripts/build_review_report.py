@@ -168,6 +168,14 @@ CONSISTENCY_SECTION_MAP = {
         "problem": "高价值伏笔越过预期回收窗口，疑似遗忘/烂尾",
         "fix_hint": "回 `设定/foreshadowing_ledger.json` 与章纲，补回收或调整 expected_payoff_chapter；确认废弃则 drop。",
     },
+    "trope_cliche": {
+        "dimension": "novelty",
+        "recommended_skill": "novel-create",
+        "return_to_stage": "blueprint",
+        "count_key": "alerts",
+        "problem": "前提/开局命中高频套路，且未在差异化决策里点名如何颠覆（同质化预警·建议级）",
+        "fix_hint": "回 `设定/创作蓝图.md` 的差异化决策段，为命中套路写明差异化/颠覆点（或换开局）；也可在 author_intent.forbidden_tropes 显式登记。",
+    },
 }
 
 

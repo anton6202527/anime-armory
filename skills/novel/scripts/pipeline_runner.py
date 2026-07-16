@@ -34,6 +34,7 @@ try:
     from provenance import append_event  # noqa: E402
 except Exception:  # pragma: no cover - runner should still work without provenance helper
     append_event = None
+from store import file_lock  # noqa: E402  行级锁：run-state 读-改-写并发 claim 的防丢更新
 
 RUN_KIND = "novel_pipeline_run"
 
@@ -207,6 +208,25 @@ def load_run(root: str, run_id: str) -> dict[str, Any]:
 
 
 def update_run_stage(
+    root: str,
+    run_id: str,
+    stage_key: str,
+    action: str,
+    *,
+    actor: str = "",
+    reason: str = "",
+) -> dict[str, Any]:
+    # 行级锁包住 load→modify→write（F2）：两个 orchestrator 并发 --claim-stage 时，
+    # 无锁的读-改-写会双双读到 pending、双双通过守卫、双双写 running（双 claim + 丢 attempts）。
+    # 与 progress.py / provenance.py 的加锁一致；lock 文件与 run 文件同名 + .lock。
+    root = os.path.abspath(root)
+    with file_lock(run_path(root, run_id) + ".lock"):
+        return _update_run_stage_locked(
+            root, run_id, stage_key, action, actor=actor, reason=reason
+        )
+
+
+def _update_run_stage_locked(
     root: str,
     run_id: str,
     stage_key: str,

@@ -193,3 +193,18 @@ def test_build_alias_map_idempotent_and_canonical_self():
     assert graph_sentry._canonical("先皇", m) == "李乾元"
     assert graph_sentry._canonical("无名", m) == "无名"   # 未登记原样返回
     assert graph_sentry.build_alias_map({}) == {}          # 无源 → 空 map
+
+
+def test_merged_summary_wrapped_ledger_still_fires():
+    # 回归：reconcile_ledger 合并后真实 chapter_deltas[key]={merged_at,summary:<delta>,verification}。
+    # 此前 _iter_character_changes 裸读 character_changes → 生产台账上确定性生死闸永久 no-op。
+    led = {"chapter_deltas": {
+        "chapter_03": {"merged_at": "2026-07-15",
+                        "summary": {"chapter": 3, "character_changes": [{"name": "王五", "event": "death", "change": "力战而亡"}]},
+                        "verification": {}},
+        "chapter_07": {"merged_at": "2026-07-15",
+                        "summary": {"chapter": 7, "character_changes": [{"name": "王五", "event": "fights", "change": "挥刀杀敌"}]},
+                        "verification": {}},
+    }}
+    a = graph_sentry.detect_lifecycle_conflicts(led)
+    assert len(a) == 1 and a[0]["entity"] == "王五" and a[0]["severity"] == "阻断级"

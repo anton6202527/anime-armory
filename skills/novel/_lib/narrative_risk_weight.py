@@ -81,6 +81,10 @@ def build_churn_map(state_ledger, world_ledger=None):
     elif isinstance(deltas, list):
         items = [((d.get("chapter") or d.get("chapter_key") or i), d) for i, d in enumerate(deltas)]
     for key, delta in items:
+        # 与 graph_sentry 同：合并后 chapter_deltas[key] 是 {merged_at, summary:<delta>, verification} 包裹，
+        # 裸读 character_changes 会恒 0 → churn 永远为空、热点权重静默退化。解包 summary 兜底。
+        if isinstance(delta, dict) and isinstance(delta.get("summary"), dict):
+            delta = delta["summary"]
         ch = _chapter_no(key) or (_chapter_no(delta.get("chapter")) if isinstance(delta, dict) else 0)
         if not ch:
             continue

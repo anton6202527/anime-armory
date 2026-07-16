@@ -19,7 +19,7 @@ if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
 from novel_route import summarize
-from novel_contract import is_long_arc_project
+from novel_contract import is_long_arc_project, demo_chapters_for
 from project_io import load_project_settings
 import sweep_schedule  # 小批回扫 due 点单一真值源（含中段防守加密）
 
@@ -181,7 +181,13 @@ def main():
     blockers = []
     
     # 1. Demo Gate 检查
-    demo_count = int(meta.get("demo_chapters") or 0)
+    # demo_chapters 缺失 ≠ 显式关闭：与 novel-gate 对齐，缺失且有 target_chapters 时按其推得，
+    # 否则 flow 会在正是 novel-gate 要拦的项目上静默放过 Demo 闸（F8）。
+    raw_demo = meta.get("demo_chapters")
+    if raw_demo is None and int(meta.get("target_chapters") or 0) > 0:
+        demo_count = demo_chapters_for(int(meta.get("target_chapters") or 0))
+    else:
+        demo_count = int(raw_demo or 0)
     if ch_num > demo_count and demo_count > 0:
         gate = load_json(os.path.join(root, "审稿", "demo_gate.json"))
         if gate.get("status") != "passed":
@@ -223,17 +229,19 @@ def main():
                     f"边写边自检：正文、审稿/state_delta_{ch_text}.json 与对账结论 {conclusion_path} 落盘后，执行 "
                     f"python3 skills/novel/scripts/post_write.py \"{root}\" --chapter {ch_text} --conclusion \"{conclusion_path}\""
                 )
-                window = batch_review_window(ch_num, review_interval, meta)
-                if window and window[0] is not None:
-                    start, end = window
-                    advice.append(
-                        f"小批回扫：本章自检通过后跑第 {start:02d}-{end:02d} 章 review："
-                        f"python3 skills/novel-review/scripts/mechanical_check.py \"{root}\" "
-                        f"--range {start}-{end} --json-out \"{root}/审稿/batch_mechanical_第{start:02d}-{end:02d}章.json\""
-                    )
-                elif window:
-                    _unused, next_due = window
-                    advice.append(f"小批回扫节奏：每 {review_interval} 章一次，下一次预计第 {next_due:02d} 章写后触发。")
+            # 小批回扫提醒对**所有**工作流生效（含默认「单步」）：中段防守（40-60% 带）是长篇一致性
+            # 实证高发区，此前只在 live_check 分支提醒，默认项目 due 点静默丢失（F4）。此处收口。
+            window = batch_review_window(ch_num, review_interval, meta)
+            if window and window[0] is not None:
+                start, end = window
+                advice.append(
+                    f"小批回扫：跑第 {start:02d}-{end:02d} 章 review（中段防守/节奏/钩子/人设集中修正）："
+                    f"python3 skills/novel-review/scripts/mechanical_check.py \"{root}\" "
+                    f"--range {start}-{end} --json-out \"{root}/审稿/batch_mechanical_第{start:02d}-{end:02d}章.json\""
+                )
+            elif window:
+                _unused, next_due = window
+                advice.append(f"小批回扫节奏：每 {review_interval} 章一次，下一次预计第 {next_due:02d} 章写后触发。")
 
     if long_arc_mode(settings, meta) and stage_label in ["机检", "审稿", "评分"]:
         start, end = arc_window_for_chapter(ch_num, review_interval or 5, meta)

@@ -198,8 +198,42 @@ def payoff_rate(seeds):
             "dropped": len(confirmed) - len(effective), "candidates": candidates}
 
 
-def scan(data, through_chapter, grace=DEFAULT_GRACE):
-    """巡检：揪超期伏笔（烂尾预警的真实数据源）+ 算回收率。纯函数，便于单测。"""
+def never_fired_at_finale(seeds, through_chapter, target_chapters, grace=DEFAULT_GRACE):
+    """契诃夫之枪的反向检查：临近/抵达终章仍未击发的「已上膛的枪」。
+
+    `is_overdue` 只抓「设了 expected_payoff_chapter 又越窗」的伏笔；但一条**已确认、却从没设回收章**的
+    伏笔（expected=None）在 is_overdue 里永远返回 False——埋了忘了，机检完全看不见（正是本函数补的洞）。
+    终章判据：target_chapters>0 且 through_chapter>=target_chapters。到终章仍 pending/partially_resolved 的
+    已确认伏笔 = 上膛未击发。为避免与 overdue 双报，**已被 is_overdue 命中的不重复计**。
+    high/critical=阻断级（读者会记得你埋过、却没兑现），low/medium=建议级。纯函数。"""
+    if not target_chapters or through_chapter < int(target_chapters):
+        return []
+    out = []
+    for s in seeds:
+        if not is_confirmed(s):
+            continue
+        if s.get("status") not in ("pending", "partially_resolved"):
+            continue
+        if is_overdue(s, through_chapter, grace):
+            continue  # 已在 overdue 里，别双报
+        out.append({
+            "id": s["id"],
+            "description": s.get("description", ""),
+            "status": s.get("status"),
+            "planted_chapter": s.get("planted_chapter"),
+            "expected_payoff_chapter": s.get("expected_payoff_chapter"),
+            "importance": s.get("importance", "medium"),
+            "severity": "阻断级" if s.get("importance") in ("high", "critical") else "建议级",
+            "kind": "foreshadow_never_fired",
+            "note": ("已抵达终章仍未回收的伏笔（上膛未击发的契诃夫之枪）——要么补一次回收、"
+                     "要么显式 drop 并清干净前文线索；埋而不收会被读者记恨为烂尾"),
+            "auto": True,
+        })
+    return out
+
+
+def scan(data, through_chapter, grace=DEFAULT_GRACE, target_chapters=None):
+    """巡检：揪超期伏笔（烂尾预警的真实数据源）+ 算回收率 + 终章未击发反查。纯函数，便于单测。"""
     seeds = data.get("seeds", [])
     candidates = [
         {
@@ -227,20 +261,39 @@ def scan(data, through_chapter, grace=DEFAULT_GRACE):
                 "note": "高价值伏笔已越过预期回收窗口，疑似遗忘/烂尾——补回收或调整章纲",
                 "auto": True,
             })
+    never_fired = never_fired_at_finale(seeds, through_chapter, target_chapters, grace)
     rate = payoff_rate(seeds)
-    blocking = sum(1 for o in overdue if o["severity"] == "阻断级")
+    blocking = (sum(1 for o in overdue if o["severity"] == "阻断级")
+                + sum(1 for n in never_fired if n["severity"] == "阻断级"))
     return {
         "kind": "foreshadow_report",
         "through_chapter": through_chapter,
+        "target_chapters": target_chapters,
         "grace": grace,
         "total_seeds": len(seeds),
         "payoff_rate": rate,
         "overdue_count": len(overdue),
+        "never_fired_count": len(never_fired),
         "blocking": blocking,
         "overdue": overdue,
+        "never_fired": never_fired,
         "candidate_count": len(candidates),
         "candidates": candidates,
     }
+
+
+def _target_chapters(project):
+    """从 _meta.json 读 target_chapters；缺失/异常 → None（终章反查即优雅关闭，不误报）。"""
+    path = os.path.join(project, "_meta.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            meta = json.load(f)
+        tc = int(meta.get("target_chapters") or 0)
+        return tc or None
+    except Exception:
+        return None
 
 
 def _max_written_chapter(project):
@@ -271,11 +324,11 @@ def analyze(project, through_chapter=None, grace=DEFAULT_GRACE):
                 "skipped": "无伏笔台账或台账为空（先用 foreshadow_ledger.py plant 埋点）"}
     if through_chapter is None:
         through_chapter = _max_written_chapter(project)
-    report = scan(data, through_chapter, grace)
+    report = scan(data, through_chapter, grace, target_chapters=_target_chapters(project))
     report["ran"] = True
-    # alerts = 已确认伏笔的超期（可阻断）+ 待确认候选（建议级，提示人 confirm/drop，永不阻断）。
+    # alerts = 已确认伏笔的超期（可阻断）+ 终章未击发（契诃夫反查，可阻断）+ 待确认候选（建议级，永不阻断）。
     # 派生线一开局就有候选 → analyze 不再 ran:False 空转，但噪声候选挡不住导出。
-    alerts = list(report.get("overdue", []))
+    alerts = list(report.get("overdue", [])) + list(report.get("never_fired", []))
     for c in report.get("candidates", []):
         alerts.append({**c, "severity": "建议级", "auto": True,
                        "kind": "foreshadow_candidate"})
@@ -348,7 +401,7 @@ def main():
         print(f"🗑️  作废 {seed['id']}（dropped，不计入回收率）")
 
     elif args.cmd == "scan":
-        report = scan(data, args.through, args.grace)
+        report = scan(data, args.through, args.grace, target_chapters=_target_chapters(args.project_path))
         out_dir = os.path.join(args.project_path, "审稿")
         os.makedirs(out_dir, exist_ok=True)
         out = os.path.join(out_dir, "foreshadow_report.json")
@@ -358,9 +411,12 @@ def main():
         rate_str = "—（无有效伏笔）" if rate is None else f"{rate*100:.1f}%"
         print(f"伏笔台账巡检（对账至第{args.through}章）→ {out}")
         cand = report.get("candidate_count", 0)
-        print(f"  伏笔 {report['total_seeds']} 条 · 回收率 {rate_str} · 超期 {report['overdue_count']} 条（阻断 {report['blocking']}）· 待确认候选 {cand} 条")
+        nf = report.get("never_fired_count", 0)
+        print(f"  伏笔 {report['total_seeds']} 条 · 回收率 {rate_str} · 超期 {report['overdue_count']} 条 · 终章未击发 {nf} 条（合计阻断 {report['blocking']}）· 待确认候选 {cand} 条")
         for o in report["overdue"]:
             print(f"  [{o['severity']}] {o['id']} 超期{o['overdue_by']}章 · {o['description']}")
+        for n in report.get("never_fired", []):
+            print(f"  [{n['severity']}·未击发] {n['id']} 第{n.get('planted_chapter')}章埋 · {n['description']}")
         for c in report.get("candidates", []):
             print(f"  [候选] {c['id']} 第{c['planted_chapter']}章「{c.get('anchor','')}」· {c['description']} → confirm/drop")
 

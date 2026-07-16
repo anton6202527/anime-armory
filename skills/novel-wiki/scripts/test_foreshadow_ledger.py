@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import importlib.util, os
+def _fl():
+    import foreshadow_ledger; return foreshadow_ledger
 """Tests for foreshadow_ledger.py — 伏笔台账确定性部分（超期判定 + 回收率）。
 
 Run from this directory:
@@ -239,3 +242,37 @@ def test_manual_plant_is_confirmed():
     data = {"kind": fl.KIND, "seeds": []}
     seed = fl.plant(data, "手动埋点", 5, 50)
     assert seed["confirmed"] is True and seed["auto_extracted"] is False
+
+
+def test_never_fired_at_finale_flags_undated_gun():
+    # 已确认但从没设 expected_payoff_chapter 的伏笔：is_overdue 永远 False，
+    # 终章反查必须抓住它（契诃夫之枪的反向检查）。
+    fl = _fl()
+    data = {"kind": fl.KIND, "seeds": [
+        {"id": "SEED_001", "description": "少年袖中藏着的半枚玉佩", "status": "pending",
+         "planted_chapter": 3, "expected_payoff_chapter": None, "importance": "high", "confirmed": True},
+    ]}
+    # 未到终章 → 不报
+    assert fl.never_fired_at_finale(data["seeds"], through_chapter=40, target_chapters=90) == []
+    # 抵达终章 → high 伏笔上膛未击发 = 阻断级
+    hit = fl.never_fired_at_finale(data["seeds"], through_chapter=90, target_chapters=90)
+    assert len(hit) == 1 and hit[0]["severity"] == "阻断级" and hit[0]["kind"] == "foreshadow_never_fired"
+
+
+def test_never_fired_does_not_double_report_overdue():
+    fl = _fl()
+    seeds = [{"id": "SEED_002", "description": "被夺走的兵符", "status": "pending",
+              "planted_chapter": 3, "expected_payoff_chapter": 10, "importance": "high", "confirmed": True}]
+    # 到终章：这条已被 is_overdue 命中（10+grace<90），never_fired 不重复计
+    assert fl.never_fired_at_finale(seeds, through_chapter=90, target_chapters=90) == []
+
+
+def test_never_fired_ignores_resolved_and_unconfirmed():
+    fl = _fl()
+    seeds = [
+        {"id": "S1", "status": "resolved", "planted_chapter": 3, "expected_payoff_chapter": None,
+         "importance": "high", "confirmed": True},
+        {"id": "S2", "status": "pending", "planted_chapter": 3, "expected_payoff_chapter": None,
+         "importance": "high", "confirmed": False},  # 未确认候选
+    ]
+    assert fl.never_fired_at_finale(seeds, through_chapter=90, target_chapters=90) == []

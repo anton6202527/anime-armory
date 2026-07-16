@@ -143,6 +143,10 @@ def build_delta(root: str, chapter: int) -> tuple[dict, str]:
         "manual_todo": [
             "把本章确定发生的状态变化写成可合并条目：new_facts（新设定事实）、"
             "character_changes（[{name,change,state_update}]）、open_threads_added / threads_resolved（线程）。",
+            "【生死/退场务必加 event 枚举】character_changes 里凡涉及**死亡/退场/复活**，"
+            "必须补 `event`：death/exit/revival（如 {name:\"王五\",event:\"death\",change:\"力战而亡\"}）。"
+            "这是 graph_sentry 确定性生死闸(阻断级)的**唯一**输入——只写自由文本 change 不带 event，"
+            "「已死角色后文再行动」的硬矛盾无法被机检抓住，只会降级为关键词 advisory。复活桥段补一条 event=revival 解闸。",
             "candidate_entities 仅是抽取提示，挑出真正出场/有变化的角色填进 character_changes，删除误抽实体。",
             "伏笔/关系温度/能力数值变化分别落 open_threads_*、relationship_changes、character_changes.state_update。",
             "relationship_changes 每条 {pair:\"甲↔乙\", temperature:-100..100, label:\"本章关系如何变\", "

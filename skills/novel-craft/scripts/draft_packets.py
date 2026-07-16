@@ -884,15 +884,23 @@ def research_pack_section(packs):
         claims = pack.get("claims") or []
         forbidden = pack.get("forbidden_items") or []
         uncertain = pack.get("uncertain_items") or []
-        lines.append(
+        status = pack.get("status", "draft")
+        is_ready = status == "ready"
+        # 非 ready 包不把 facts 呈现为可写事实——只标"未定稿·先补证据"，避免文案说"只用 ready"、
+        # 正文却把未定稿 facts 当确定事实写（G8）。
+        head = (
             f"- **{pack.get('topic') or pack.get('topic_slug') or '未命名'}** "
-            f"[{pack.get('domain', 'other')}/{pack.get('risk_level', 'medium')}/{pack.get('status', 'draft')}] "
-            f"`{path}`；facts={len(claims)}"
+            f"[{pack.get('domain', 'other')}/{pack.get('risk_level', 'medium')}/{status}] `{path}`；"
         )
+        if is_ready:
+            lines.append(head + f"facts={len(claims)}（可作确定事实写入）")
+        else:
+            lines.append(head + f"⚠ 未 ready（{status}）：本章**不得**把该包 facts 写成确定事实；"
+                                f"先回 `novel-research` 补齐/定稿，或本章只写准备稿。")
         if uncertain:
-            lines.append(f"  - 不确定项：{'；'.join(str(x) for x in uncertain[:3])}")
+            lines.append(f"  - 不确定项（禁止写成旁白定论）：{'；'.join(str(x) for x in uncertain[:3])}")
         if forbidden:
-            lines.append(f"  - 禁用项：{'；'.join(str(x) for x in forbidden[:3])}")
+            lines.append(f"  - 禁用项（不得出现）：{'；'.join(str(x) for x in forbidden[:3])}")
     return "\n".join(lines) + "\n"
 
 
@@ -1638,6 +1646,9 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
   "next_chapter_carry": []
 }}
 ```
+> **character_changes 生死/退场必带 `event` 枚举**（death/exit/revival），例：
+> `{{"name":"王五","event":"death","change":"力战而亡"}}`。这是确定性生死闸(阻断级)的唯一输入——
+> 只写自由文本 change 不带 event，「已死角色后文再动作」的硬矛盾抓不住。复活桥段补 `event:"revival"` 解闸。
 </dynamic_context>
 """
 

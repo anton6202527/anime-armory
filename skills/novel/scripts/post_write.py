@@ -19,10 +19,16 @@ import re
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
 _LIB = os.path.abspath(os.path.join(_HERE, "..", "_lib"))
-if _LIB not in sys.path:
-    sys.path.insert(0, _LIB)
+_CRAFT = os.path.abspath(os.path.join(_HERE, "..", "..", "novel-craft", "scripts"))
+for _p in (_LIB, _CRAFT):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from project_io import find_chapter_file, load_project_settings
+try:
+    import provenance as _provenance  # 写后闭环留痕：让 artifact_graph 的 stale 检测对章节/账本真正生效（F1）
+except Exception:  # pragma: no cover - provenance 缺失不得阻断写后闭环
+    _provenance = None
 
 def load_json(path):
     if not os.path.exists(path):
@@ -33,6 +39,21 @@ def load_json(path):
 def die(message, code=1):
     print(f"[err] {message}", file=sys.stderr)
     sys.exit(code)
+
+def run_step(label, cmd, *, check=True):
+    """跑一个写后自检子步骤；check=True 时失败给出干净的 blocker 提示而非裸 traceback。
+
+    返回子进程 returncode。硬闸失败（returncode!=0 且 check）走 die()，明确指出是哪一步、
+    如何回流，避免 CalledProcessError 直接抛栈把真正的 blocker 淹没。"""
+    try:
+        proc = subprocess.run(cmd)
+    except OSError as exc:  # 脚本缺失/不可执行等
+        die(f"写后自检步骤「{label}」无法启动：{exc}")
+    if check and proc.returncode != 0:
+        die(f"写后自检未通过：「{label}」返回非零（{proc.returncode}）。"
+            f"这是硬闸——请按上面的报告修正本章后重跑 post_write；未通过前不会合并账本、不会标 ✅。",
+            code=proc.returncode)
+    return proc.returncode
 
 def load_required_delta(path, ch_num):
     if not os.path.exists(path):
@@ -88,22 +109,22 @@ def main():
     # 1. 读者契约逐章硬闸：防止长篇只推进事件、不推进题旨/承诺/文学质感。
     print(f"🔄 正在运行读者契约自检...")
     rc_script = os.path.join(_HERE, "..", "..", "novel-review", "scripts", "reader_contract_sentry.py")
-    subprocess.run([sys.executable, rc_script, root, "--chapter", str(ch_num)], check=True)
+    run_step("读者契约自检", [sys.executable, rc_script, root, "--chapter", str(ch_num)])
 
     # 2. 状态账本对账 (Audit)
     print(f"🔄 正在运行状态账本对账 (Audit)...")
     reconcile_script = os.path.join(_HERE, "..", "..", "novel-craft", "scripts", "reconcile_ledger.py")
-    subprocess.run([sys.executable, reconcile_script, root, "--chapter", str(ch_num), "--audit"], check=True)
+    run_step("状态账本对账", [sys.executable, reconcile_script, root, "--chapter", str(ch_num), "--audit"])
 
     # 3. 增量更新百科
     print(f"🔄 正在提取百科事实...")
     wiki_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "wiki_builder.py")
-    subprocess.run([sys.executable, wiki_script, root, "--chapter", str(ch_num)], check=True)
+    run_step("百科事实提取", [sys.executable, wiki_script, root, "--chapter", str(ch_num)])
 
     # 4. 逻辑哨兵
     print(f"🔄 正在运行逻辑哨兵...")
     sentry_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "logic_sentry.py")
-    subprocess.run([sys.executable, sentry_script, root, "--chapter", str(ch_num)], check=True)
+    run_step("逻辑哨兵", [sys.executable, sentry_script, root, "--chapter", str(ch_num)])
 
     # 5. 力量体系自检（穿越/系统流/修仙：等级·成长值·战力逐章一致性）
     #     受 `力量体系自检` 选择点控制（关闭→跳过；仅建议→全降建议级）。无 power_system_registry.json
@@ -115,7 +136,7 @@ def main():
         ps_cmd = [sys.executable, ps_script, root]
         if "仅建议" in ps_mode:
             ps_cmd.append("--advisory")
-        subprocess.run(ps_cmd, check=True)
+        run_step("力量体系自检", ps_cmd)
 
         # 5b. 反派/威胁战力 scaling 自检（反向战力崩坏：威胁缺位/反派突兀膨胀）——advisory（exit 恒 0，不硬挡）。
         #     无 registry / 无反派标注时引擎自身优雅跳过，非力量题材零成本。
@@ -127,7 +148,7 @@ def main():
     #     无 timeline.json 时只做保守的时间倒流提示（exit 0）；有台账且乱序才非零退出硬挡。
     print("🔄 正在运行时间线/事件顺序校验...")
     tl_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "timeline_check.py")
-    subprocess.run([sys.executable, tl_script, root], check=True)
+    run_step("时间线/事件顺序校验", [sys.executable, tl_script, root])
 
     # 6. 状态账本合并：给了对账结论就在标进度前自动合并，让「进度✅」与「账本已合并」同生共死。
     #     这是修掉「audit 完就标✅但忘了 merge → review/export 报 STATE-LEDGER-MISSING」的关键。
@@ -137,10 +158,10 @@ def main():
         if not os.path.exists(concl):
             die(f"找不到对账结论文件：{concl}。请把上面审计 Prompt 的核对结论存成 JSON 再重跑。")
         print(f"🔄 正在按对账结论合并状态账本：{concl}")
-        subprocess.run([
+        run_step("状态账本合并", [
             sys.executable, reconcile_script, root, "--chapter", str(ch_num),
             "--merge", "--verified", concl, "--stamp-hashes",
-        ], check=True)
+        ])
         merged = True
 
     if not merged:
@@ -156,7 +177,27 @@ def main():
     # 7. 所有硬闸通过且账本合并后再更新进度，避免检查失败或未合并账本时留下假阳性。
     print(f"🔄 正在更新进度：{ch_padded} 正文初稿 ✅")
     prog_script = os.path.join(_HERE, "..", "progress.py")
-    subprocess.run([sys.executable, prog_script, "set", root, ch_padded, "正文初稿", "✅"], check=True)
+    run_step("更新进度", [sys.executable, prog_script, "set", root, ch_padded, "正文初稿", "✅"])
+
+    # 8. 写后闭环留痕（F1）：给章节正文 + state_ledger + state_delta/verify 记一条 provenance 事件。
+    #    此前 post_write 全程无 provenance，artifact_graph 的 stale 检测对这些最高价值产物永久 no-op；
+    #    现在写后即留痕，dashboard 的 stale 面板与 lineage 才对逐章生产真正生效。留痕失败绝不阻断已完成的写后闭环。
+    if _provenance is not None:
+        try:
+            ledger_path = os.path.join(root, "审稿", "state_ledger.json")
+            verify_path = os.path.abspath(args.conclusion) if args.conclusion else None
+            outputs = [p for p in (chapter_path, ledger_path) if p and os.path.exists(p)]
+            inputs = [p for p in (delta_path, verify_path) if p and os.path.exists(p)]
+            _provenance.append_event(
+                root,
+                event_type="chapter_post_write",
+                tool="novel/scripts/post_write.py",
+                inputs=inputs,
+                outputs=outputs,
+                metadata={"chapter": ch_num, "merged": True},
+            )
+        except Exception as exc:  # pragma: no cover - 留痕失败不影响写后闭环结果
+            print(f"  [warn] provenance 留痕失败（不影响本章写后闭环）：{exc}", file=sys.stderr)
 
     print(f"\n✅ 任务完成！{ch_padded} 状态账本已合并，已准备好进入 Review 阶段。")
 

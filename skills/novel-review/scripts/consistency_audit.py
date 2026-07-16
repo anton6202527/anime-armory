@@ -46,6 +46,10 @@ try:
 except Exception:  # pragma: no cover
     hook_endings = voice_drift = tone_check = thread_resolution = reader_contract_sentry = None
 try:
+    import trope_cliche  # noqa: E401  (同目录) — 套路/前提级陈词滥调（建议级）
+except Exception:  # pragma: no cover
+    trope_cliche = None
+try:
     import antagonist_scaling, timeline_check, minor_characters  # noqa: E401  (novel-wiki/scripts)
 except Exception:  # pragma: no cover
     antagonist_scaling = timeline_check = minor_characters = None
@@ -514,6 +518,8 @@ def main():
             "antagonist_scaling": _run_detector("反派战力", antagonist_scaling, args.project_path, "antagonist_findings.json"),
             "timeline": _run_detector("时间线", timeline_check, args.project_path, "timeline_findings.json"),
             "minor_characters": _run_detector("配角连续性", minor_characters, args.project_path, "minor_character_findings.json"),
+            # 想象力侧：套路/前提级陈词滥调（建议级·不阻断）。补‘只有行文级 AI 腔、没有情节级套路探测’的洞。
+            "trope_cliche": _run_detector("套路探测", trope_cliche, args.project_path, "trope_cliche_findings.json"),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:
