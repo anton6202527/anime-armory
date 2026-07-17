@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第1话",
-  "generated_at": "2026-07-17T09:51:31+00:00",
+  "generated_at": "2026-07-17T10:03:59+00:00",
   "inputs": {
     "files": [
       {
@@ -13,7 +13,7 @@
       {
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "6203d5e31f9a693a2b818722200d69f2fbaf6383e227eff6dea9dbec7271327f"
+        "sha256": "5d44ccf855642e1da68701d3970e3377a91cb16fcc276fe773d3ea26c136db79"
       },
       {
         "path": "生产数据/comic_memory_anchor_第1话.json",
@@ -46,7 +46,7 @@
       "inputs_fingerprint": null
     }
   },
-  "inputs_fingerprint": "89ae0043b8df72f269c977a795a9865d5939452a56464d59c1ae5c6919725bcc",
+  "inputs_fingerprint": "eefb64c5add68267093a0009f27774572fcce6cedf918cb158c70ecc77608707",
   "backend": {
     "adapter_id": "dreamina_image2image",
     "model": "Dreamina 5.0",
@@ -63,10 +63,10 @@
   "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
   "summary": {
     "panels_with_characters": 42,
-    "panels_needing_action": 35,
-    "panels_blocked": 18,
-    "block": 18,
-    "warn": 5,
+    "panels_needing_action": 32,
+    "panels_blocked": 0,
+    "block": 0,
+    "warn": 9,
     "info": 0
   },
   "panel_plans": [
@@ -3577,13 +3577,20 @@
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 4,
+            "requested": 5,
             "selected": 4,
-            "dropped": 0
+            "dropped": 1
           },
-          "dropped_references": [],
+          "dropped_references": [
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
           "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+            "参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 expression）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -3763,12 +3770,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "994b401a2736940ed18fccf8c5a3e9bcb7ee7cdddd6d13d6299adaf03dd346fd"
+      "panel_plan_sha256": "4f55ae32a530ef2ec63217a44e5f0504666ea71ade2017986310bb10611f8f65"
     },
     {
       "panel_id": "P025",
@@ -3821,18 +3826,24 @@
               "strength_hint": 0.55
             },
             {
-              "role": "side",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
-              "strength_hint": 0.55
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
             }
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 5,
+            "requested": 6,
             "selected": 4,
-            "dropped": 1
+            "dropped": 2
           },
           "dropped_references": [
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
+              "strength_hint": 0.55
+            },
             {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
@@ -3840,7 +3851,7 @@
             }
           ],
           "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+            "参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 side）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -4018,12 +4029,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "11ca859f77059097f3fd3cfb3a451eac25874fa2c0fc00f2dcf7b46aecf3dc39"
+      "panel_plan_sha256": "3a54ca6b9aacd107c4e83c36fa4bfcac5a4cf3fe1bcdff71a6c7c592eb2d0656"
     },
     {
       "panel_id": "P026",
@@ -4083,13 +4092,20 @@
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 4,
+            "requested": 5,
             "selected": 4,
-            "dropped": 0
+            "dropped": 1
           },
-          "dropped_references": [],
+          "dropped_references": [
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
           "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+            "参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 expression）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -4269,12 +4285,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "a8c660a83f262ff23bfc7cee84d0c1c19c9a634bd07032ddc6cef6b02f3614aa"
+      "panel_plan_sha256": "f9778d4c0bff56648ea424d3fefda19bcbfb02dbd347ea5928ebd69f4387c8d2"
     },
     {
       "panel_id": "P027",
@@ -4319,6 +4333,12 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            },
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
@@ -4326,26 +4346,24 @@
           ],
           "reference_budget": {
             "limit": 5,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
         "limit": 10,
         "required_count": 5,
-        "selected_count": 8,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -4403,6 +4421,16 @@
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
+            "role": "expression",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+            "strength_hint": 0.6,
+            "contract_id": "EXPR_TERRIFIED",
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f"
+          },
+          {
             "role": "three_quarter",
             "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
             "strength_hint": 0.65,
@@ -4416,12 +4444,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
-      "needs_action": true,
-      "panel_plan_sha256": "b6ea4559a2a06d93cb2c3e5989a2cc778763c28eb8dc0a6f5067e2904eb47fdd"
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "709772f0bf90d4f60bd95955e40c607138fd3fcaef2f8116736f09a1e1310866"
     },
     {
       "panel_id": "P028",
@@ -4465,6 +4491,12 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            },
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
@@ -4472,26 +4504,24 @@
           ],
           "reference_budget": {
             "limit": 5,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
         "limit": 10,
         "required_count": 5,
-        "selected_count": 8,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -4549,6 +4579,16 @@
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
+            "role": "expression",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+            "strength_hint": 0.6,
+            "contract_id": "EXPR_TERRIFIED",
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f"
+          },
+          {
             "role": "three_quarter",
             "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
             "strength_hint": 0.65,
@@ -4562,12 +4602,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
-      "needs_action": true,
-      "panel_plan_sha256": "e15326751fd4a5f618e28de22d33c0427672ba683fe2c2e82a6356521dbbfb3f"
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "ad8853bd52f82bb63fdd616622a51779650c6c9d2982cb4492469cad8c1ffc95"
     },
     {
       "panel_id": "P029",
@@ -4611,6 +4649,12 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            },
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
@@ -4618,26 +4662,24 @@
           ],
           "reference_budget": {
             "limit": 5,
-            "requested": 4,
-            "selected": 4,
+            "requested": 5,
+            "selected": 5,
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
         "limit": 10,
         "required_count": 5,
-        "selected_count": 8,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -4695,6 +4737,16 @@
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
+            "role": "expression",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+            "strength_hint": 0.6,
+            "contract_id": "EXPR_TERRIFIED",
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f"
+          },
+          {
             "role": "three_quarter",
             "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
             "strength_hint": 0.65,
@@ -4708,12 +4760,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
-      "needs_action": true,
-      "panel_plan_sha256": "1aef53bf722545d68171dd821923504e0a07905b4bc76b61f92e152d3113222b"
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "5484afee59ee4d8d5139a32e6be8e911c11547c8e30df747edad05e2f6bfef61"
     },
     {
       "panel_id": "P030",
@@ -4766,26 +4816,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -4955,12 +5010,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "490525f1fd9810fb9e3bede24958809a311d71a9ed83128cb6509130f96705c3"
+      "panel_plan_sha256": "60fcbf858a23cc82c6839f233a6fac98e70d21dd41b7c5ff7e7eb70fbf9cdde3"
     },
     {
       "panel_id": "P031",
@@ -5012,26 +5065,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -5200,12 +5258,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "5cff9b83127a41a3be4728d084d893238493e4e57ba9d0961fae2f0ceae1a416"
+      "panel_plan_sha256": "10595cdd9e7d7cd18a2d20c6095dc8fc5a30653370514ba5df1db4313cf6bd73"
     },
     {
       "panel_id": "P032",
@@ -5257,26 +5313,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -5445,12 +5506,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "93312212681a7bbc1e44b53cb4de264f991ac5b43fc0cf6f56668d80610da9fd"
+      "panel_plan_sha256": "a3a10a5ea0d319448e17ec5b6f7f104a806894d3f3e4937a7f7efeb3d4ec8232"
     },
     {
       "panel_id": "P033",
@@ -5502,26 +5561,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -5690,12 +5754,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "ca350916f67578e8764db6b7fe58f06320bf3c39e885c74f4179215f585889df"
+      "panel_plan_sha256": "50ba3a04eb9b9bb22780122f97fae5c1bbd67393a735364a02aa7684d7cf2e0d"
     },
     {
       "panel_id": "P034",
@@ -5747,26 +5809,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -5935,12 +6002,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "616f60c28e650c578982fdc109b729d349c14163bcde95250116e2855928d6f3"
+      "panel_plan_sha256": "e0a51e8fe5fc7ef6df614588fa9a8c83802e4a06e3cbbda3904f058401be8e04"
     },
     {
       "panel_id": "P035",
@@ -5992,26 +6057,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -6180,12 +6250,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "91cfa782e43dcdca1da45f44e0d6e92b5768b68ecbee14f18a75b6c365454e89"
+      "panel_plan_sha256": "339dddc12e43270040fe076cb6f29769940a37c63fea5b3c1bee4b8321d64f9d"
     },
     {
       "panel_id": "P036",
@@ -6237,26 +6305,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -6425,12 +6498,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4bad78e2fe11dc18495797ba3e6ab62eeaeb1bd0f91b875ae97a0ff4a6864151"
+      "panel_plan_sha256": "8325e62a30650612b9911a1079a467956f80f1dcc24b6754ba5b0735b3ce5179"
     },
     {
       "panel_id": "P037",
@@ -6482,26 +6553,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -6670,12 +6746,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "5dfef0502672b3dac6e1be5a147c0b35ade3fa8f7a685f8e5c4624f62b530363"
+      "panel_plan_sha256": "72fc5e6a97c4247d4e7737495d1bbb3ef9b3a94036d3b427cd157c0e5b0d197c"
     },
     {
       "panel_id": "P038",
@@ -6735,13 +6809,20 @@
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 4,
+            "requested": 5,
             "selected": 4,
-            "dropped": 0
+            "dropped": 1
           },
-          "dropped_references": [],
+          "dropped_references": [
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
           "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+            "参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 expression）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -6921,12 +7002,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "d1eaf251bde446606be567069d6b371bee5b627d9fb999a3b9edcf057ea1bd2b"
+      "panel_plan_sha256": "ab30f7aabf0320139d96af637151e65c32c93be521c61a629d2772ef8da83ad5"
     },
     {
       "panel_id": "P039",
@@ -6978,26 +7057,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -7166,12 +7250,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "b22ea2f8c3f88c6538780837677caa149f3d1350b03f7fb732bc263e90bcffc8"
+      "panel_plan_sha256": "af0edddebceed0d0d28f761c3e2051a0a4c6c5c4d1a07dfc0207e93d54b1d598"
     },
     {
       "panel_id": "P040",
@@ -7223,26 +7305,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -7411,12 +7498,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4b58c1dbc57ea8210a819e855baebc1077d7fd833447323c9ff629d32348679e"
+      "panel_plan_sha256": "bc56b6ed8efc859f38552eab128d70204889c62ef41e071e0e3601c20d629511"
     },
     {
       "panel_id": "P041",
@@ -7468,26 +7553,31 @@
               "strength_hint": 0.55
             },
             {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_TERRIFIED"
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -7656,12 +7746,10 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": true,
-      "blocking_codes": [
-        "strong_emotion_expression_reference_missing"
-      ],
+      "blocked": false,
+      "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "6e86aae10f6d326059660fe841da0cf65616d900c61e787b8392794781bc0f75"
+      "panel_plan_sha256": "8c7c50c479c52f066fb39799ae06eaa1f5d36568cd277671053d64efd0adda6c"
     },
     {
       "panel_id": "P042",
@@ -9316,18 +9404,18 @@
       "message": "P008 多人同框主色撞色（易串脸）：CHAR_FAN_ZHONGYAN↔CHAR_EMPEROR_RENZONG（同主色「红」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
     },
     {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
+      "severity": "warn",
+      "code": "missing_reference",
       "panel": "P024",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P024·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+      "message": "P024·洪信：缺 参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 expression）；拆格/升档/精选参考包"
     },
     {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
+      "severity": "warn",
+      "code": "missing_reference",
       "panel": "P025",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P025·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+      "message": "P025·洪信：缺 参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 side）；拆格/升档/精选参考包"
     },
     {
       "severity": "warn",
@@ -9337,39 +9425,11 @@
       "message": "P025·吊睛白额锦毛大虫：缺 侧脸参考（极端角度/转头格）"
     },
     {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
+      "severity": "warn",
+      "code": "missing_reference",
       "panel": "P026",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P026·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P027",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P027·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P028",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P028·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P029",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P029·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P030",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P030·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+      "message": "P026·洪信：缺 参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 expression）；拆格/升档/精选参考包"
     },
     {
       "severity": "warn",
@@ -9378,81 +9438,11 @@
       "message": "P030 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
     },
     {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P031",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P031·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P032",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P032·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P033",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P033·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P034",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P034·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P035",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P035·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P036",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P036·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P037",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P037·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
+      "severity": "warn",
+      "code": "missing_reference",
       "panel": "P038",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P038·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P039",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P039·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P040",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P040·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
-    },
-    {
-      "severity": "block",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P041",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P041·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+      "message": "P038·洪信：缺 参考预算溢出（后端 multi_character_reference_limit=4 张，裁掉必需 expression）；拆格/升档/精选参考包"
     },
     {
       "severity": "warn",
@@ -9468,5 +9458,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "7a1f167442c842bbcc0bb730f0d04df6e00fffeb9cf355b73f8f581779c1a012"
+  "plan_sha256": "8199d2fc4f586ca32d1a2a40d03f195608866af48d060e47e334017fbc6448f1"
 }
