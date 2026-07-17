@@ -129,7 +129,9 @@ python3 skills/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 只跑锚
 
 **JSON schema**（落 `生产数据/image_qc/image_qc.json`(+`.md`)）：在原 face/palette/lint/local-patch 字段外，含 `generation_provenance:{expected_model,expected_channel,uniform,complete,rows[]}`；正式 gate 要求 `complete=true`。
 
-**落档判定（MV 筛选宽容铁律）**：`verdict=block`（主角脸崩/图损坏/禁用本地贴脸产物）→ 必须重抽后重跑；`verdict=review`（只有主色/锚点初筛或视觉降级）→ 先处理报告建议；`verdict=ok` → 放行。`mv-craft gate --stage video_jobs` 会强制读取本报告：缺报告、hard block、`precision_level!=full`、图片晚于 QC 报告都会挡住正式出视频；若确需降级/人审放行，需在报告中人工留痕 `manual_review_accepted=true`。脚本退出码恒 0，是否阻断由 gate 消费报告决定。
+**落档判定（MV 筛选宽容铁律）**：`verdict=block`（主角脸崩/图损坏/禁用本地贴脸产物）→ 必须重抽后重跑；`verdict=review`（只有主色/锚点初筛或视觉降级）→ 先处理报告建议；`verdict=ok` → 放行。`mv-craft gate --stage video_jobs` 会强制读取本报告：缺报告、hard block、`precision_level!=full`、图片晚于 QC 报告都会挡住正式出视频。若确需降级/人审放行，用 `image_qc.py <作品根> --accept-degraded --reviewer <name> --notes <复核说明>` 写**具名 + 绑定报告 hash** 的 `manual_review` 留痕（报告一重跑绑定即失效，需重新放行；旧式裸布尔 `manual_review_accepted` 不再被 gate 接受——无法证明复核对应当前报告）。脚本退出码恒 0，是否阻断由 gate 消费报告决定。
+
+**定妆组离群自检（G1 地基保护 · advisory）**：脸检 floor 由主角定妆组自标定（取组内最小相似度），一张漂了的定妆图会悄悄拉低地板、放松整套脸检。`run_face_check` 现在把每个定妆变体 vs 主参考的相似度落 `intra_by_variant`，显著低于组内最高值（差距 > 0.20）的变体报 `costume_outliers`（advisory warn）——人工确认后若真漂了，重抽该定妆再重跑，floor 随之回升。
 
 测试：`cd skills/mv-image/scripts && python3 -m pytest test_image_qc.py`（CI-safe，走纯函数/降级路径/fixtures，不需要实跑脸栈）。
 

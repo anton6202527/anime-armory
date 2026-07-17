@@ -27,9 +27,9 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | novel | `novel` + `novel-*` | 29 | 3145 | 68250 |
 | comic | `comic` + `comic-*` | 13 | 1446 | 40777 |
 | song | `song` + `song-*` | 11 | 660 | 9899 |
-| mv | `mv` + `mv-*` | 14 | 1128 | 19967 |
+| mv | `mv` + `mv-*` | 14 | 1130 | 20575 |
 | ad | `ad` + `ad-*` | 14 | 1098 | 34595 |
-| **合计** | `skills/*/SKILL.md` | **102** | 12190 | 457928 |
+| **合计** | `skills/*/SKILL.md` | **102** | 12192 | 458626 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 

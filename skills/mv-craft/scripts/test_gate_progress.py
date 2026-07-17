@@ -196,6 +196,96 @@ class GateProgressTest(unittest.TestCase):
                 f.write(b"video-v2")
             self.assertTrue(any("已变化" in error for error in gate._video_report_errors(tmp, "compose")))
 
+    def test_degraded_image_qc_legacy_boolean_no_longer_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            write_clip_plan_with_image(tmp)
+            write_image_qc(tmp, precision="degraded")
+            path = os.path.join(tmp, "生产数据", "image_qc", "image_qc.json")
+            report = json.load(open(path, encoding="utf-8"))
+            report["manual_review_accepted"] = True
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(report, f, ensure_ascii=False)
+            errors, _warnings = gate.check(tmp, "video_jobs")
+            self.assertTrue(any("旧式 manual_review_accepted" in e for e in errors))
+
+    def test_degraded_image_qc_bound_manual_review_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            write_clip_plan_with_image(tmp)
+            write_image_qc(tmp, precision="degraded")
+            path = os.path.join(tmp, "生产数据", "image_qc", "image_qc.json")
+            report = json.load(open(path, encoding="utf-8"))
+            binding = mv_utils.json_hash({k: v for k, v in report.items()
+                                          if k not in ("manual_review", "json_path", "markdown_path")})
+            report["manual_review"] = {"accepted": True, "reviewer": "审图人",
+                                       "notes": "逐图并排看过", "bound_report_sha256": binding}
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(report, f, ensure_ascii=False)
+            errors, warnings = gate.check(tmp, "video_jobs")
+            self.assertEqual(errors, [])
+            self.assertTrue(any("具名人工放行" in w for w in warnings))
+            # 报告内容变化（如重跑 QC）后绑定失效，必须重新放行
+            report["summary"]["advisory"] = 5
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(report, f, ensure_ascii=False)
+            errors, _warnings = gate.check(tmp, "video_jobs")
+            self.assertTrue(any("绑定 hash 与当前报告不符" in e for e in errors))
+
+    def _write_identity_registry(self, root, ref_count=3):
+        os.makedirs(os.path.join(root, "设定"), exist_ok=True)
+        os.makedirs(os.path.join(root, "出图", "共享", "图片"), exist_ok=True)
+        paths = []
+        for idx in range(ref_count):
+            rel = f"出图/共享/图片/定妆_主角_{idx}.png"
+            with open(os.path.join(root, rel), "wb") as f:
+                f.write(b"fake")
+            paths.append(rel)
+        registry = {
+            "lead_id": "CHAR_lead",
+            "identities": [{"id": "CHAR_lead", "display_name": "主角",
+                            "reference_group": "REF_lead"}],
+            "reference_groups": [{"id": "REF_lead", "identity_id": "CHAR_lead",
+                                  "status": "ready" if ref_count >= 3 else "partial",
+                                  "paths": paths}],
+        }
+        with open(os.path.join(root, "设定", "identity_registry.json"), "w", encoding="utf-8") as f:
+            json.dump(registry, f, ensure_ascii=False)
+
+    def test_formal_video_jobs_requires_lead_costume_readiness(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            errors, warnings = gate._identity_readiness(tmp, "video_jobs", {"is_demo": False})
+            self.assertTrue(any("identity_registry" in e for e in errors))
+            self._write_identity_registry(tmp, ref_count=1)
+            errors, warnings = gate._identity_readiness(tmp, "video_jobs", {"is_demo": False})
+            self.assertTrue(any("定妆包未 ready" in e for e in errors))
+            self._write_identity_registry(tmp, ref_count=3)
+            errors, warnings = gate._identity_readiness(tmp, "video_jobs", {"is_demo": False})
+            self.assertEqual(errors, [])
+            self.assertEqual(warnings, [])
+
+    def test_demo_identity_readiness_is_advisory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            errors, warnings = gate._identity_readiness(tmp, "video_jobs", {"is_demo": True})
+            self.assertEqual(errors, [])
+            self.assertTrue(any("identity_registry" in w for w in warnings))
+            errors, warnings = gate._identity_readiness(tmp, "image", {"is_demo": False})
+            self.assertEqual(errors, [])  # image 期共享定妆本身在产出，只提醒
+            self.assertTrue(warnings)
+
+    def test_demo_flag_with_formal_traces_warns(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            self.assertEqual(gate._demo_flag_warnings(tmp, "image", {"is_demo": True}), [])
+            os.makedirs(os.path.join(tmp, "制片"), exist_ok=True)
+            with open(os.path.join(tmp, "制片", "picture_lock.json"), "w", encoding="utf-8") as f:
+                json.dump({"accepted": True}, f)
+            warnings = gate._demo_flag_warnings(tmp, "image", {"is_demo": True})
+            self.assertTrue(any("正式生产痕迹" in w for w in warnings))
+            self.assertEqual(gate._demo_flag_warnings(tmp, "image", {"is_demo": False}), [])
+
 
 if __name__ == "__main__":
     unittest.main()

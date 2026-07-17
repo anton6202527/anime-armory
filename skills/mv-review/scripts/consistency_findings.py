@@ -298,6 +298,7 @@ def build_report(root: str) -> dict[str, Any]:
                    "video_handoff", "inherit_contract")
     video_qc_details(findings, root)
     timing_checks(findings, root)
+    production_stats(findings, root)
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
     if has_clip_plan(root) and not meta.get("is_demo"):
         lock = load_json(os.path.join(root, "制片", "picture_lock.json"))
@@ -329,6 +330,8 @@ def build_report(root: str) -> dict[str, Any]:
             "生产数据/video_inherit_contract/inherit_contract.json",
             "生产数据/video_qc/video_qc.json",
             "字幕/alignment_report.json",
+            "生产数据/production_events.jsonl",
+            "出视频/jobs_manifest.json",
             "制片/picture_lock.json",
             "生产数据/delivery_qc/delivery_qc.json",
             "合规/provenance.json",

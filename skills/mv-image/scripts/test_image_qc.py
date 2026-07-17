@@ -540,3 +540,73 @@ def test_shot_variety_counts_as_advisory_never_hard(tmp_path: Path) -> None:
     assert summary["by_check"].get("shot_variety", {}).get("warn", 0) >= 1
     findings = image_qc.to_findings(payload)
     assert any(f["dim"] == "shot_variety" and f["sev"] == "warn" for f in findings)
+
+
+# ── 定妆组离群检测（防漂移定妆拉低自标定 floor） ──────────────────────────────
+
+def test_costume_set_outliers_flags_low_variant() -> None:
+    scores = {"侧": 0.72, "全身": 0.68, "背": 0.31}
+    assert image_qc.costume_set_outliers(scores) == ["背"]
+
+
+def test_costume_set_outliers_needs_two_and_tolerates_close_scores() -> None:
+    assert image_qc.costume_set_outliers({"侧": 0.4}) == []          # 单对无法互证
+    assert image_qc.costume_set_outliers({}) == []
+    assert image_qc.costume_set_outliers({"侧": 0.7, "全身": 0.55}) == []   # 差距 < gap
+    assert image_qc.costume_set_outliers({"侧": None, "全身": 0.7}) == []
+
+
+def test_summarize_counts_costume_outliers_as_advisory() -> None:
+    payload = {"checks": {"face": {"available": True, "mode": "insightface", "shots": [],
+                                   "costume_outliers": ["背"], "intra_by_variant": {"背": 0.31}},
+                          "palette": {"available": True, "shots": []}},
+               "lint": {"findings": []}}
+    summary = image_qc.summarize(payload)
+    assert summary["hard_blocks"] == 0
+    assert summary["advisory"] >= 1
+    assert summary["by_check"].get("costume_set", {}).get("warn") == 1
+    findings = image_qc.to_findings(payload)
+    assert any("定妆组离群" in f["msg"] and f["sev"] == "warn" for f in findings)
+
+
+# ── 降级机检人工放行（具名 + hash 绑定） ─────────────────────────────────────
+
+def test_manual_review_binding_invalidates_on_report_change() -> None:
+    report = {"kind": "mv_image_qc", "summary": {"advisory": 1},
+              "qc_environment": {"precision_level": "degraded"}}
+    binding = image_qc.manual_review_binding(report)
+    report["manual_review"] = {"accepted": True, "reviewer": "审图人",
+                               "bound_report_sha256": binding}
+    assert image_qc.manual_review_valid(report) is True
+    report["summary"]["advisory"] = 2   # 报告变化（重跑）→ 绑定失效
+    assert image_qc.manual_review_valid(report) is False
+
+
+def test_manual_review_requires_named_reviewer() -> None:
+    report = {"kind": "mv_image_qc"}
+    binding = image_qc.manual_review_binding(report)
+    report["manual_review"] = {"accepted": True, "reviewer": " ", "bound_report_sha256": binding}
+    assert image_qc.manual_review_valid(report) is False
+
+
+def test_accept_degraded_cli_writes_bound_manual_review(tmp_path: Path) -> None:
+    out = tmp_path / "生产数据" / "image_qc"
+    out.mkdir(parents=True)
+    report = {"kind": "mv_image_qc", "summary": {"hard_blocks": 0, "advisory": 0, "verdict": "review"},
+              "qc_environment": {"precision_level": "degraded"}, "checks": {}, "lint": {}}
+    (out / "image_qc.json").write_text(json.dumps(report, ensure_ascii=False), encoding="utf-8")
+    assert image_qc.accept_degraded(tmp_path, "", "看过") == 2          # 必须具名
+    assert image_qc.accept_degraded(tmp_path, "审图人", "") == 2        # 必须写说明
+    assert image_qc.accept_degraded(tmp_path, "审图人", "逐图并排看过") == 0
+    saved = json.loads((out / "image_qc.json").read_text(encoding="utf-8"))
+    assert image_qc.manual_review_valid(saved) is True
+    assert saved["manual_review"]["reviewer"] == "审图人"
+    assert "降级人工放行" in (out / "image_qc.md").read_text(encoding="utf-8")
+
+
+def test_accept_degraded_rejects_full_precision(tmp_path: Path) -> None:
+    out = tmp_path / "生产数据" / "image_qc"
+    out.mkdir(parents=True)
+    report = {"kind": "mv_image_qc", "qc_environment": {"precision_level": "full"}}
+    (out / "image_qc.json").write_text(json.dumps(report), encoding="utf-8")
+    assert image_qc.accept_degraded(tmp_path, "审图人", "看过") == 2

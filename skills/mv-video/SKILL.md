@@ -28,7 +28,7 @@ description: 制MV 出视频 — 把 mv-image PNG 图生视频成卡点 MV clip�
 - **生成单元可大于 clip，签收单元仍是 clip**：支持多镜头的后端可把同一 section + setup、总时长在能力上限内的相邻镜头编成 `sequence_units`，优先解决连续动作/正反关系；成片仍按 picture lock 切点拆回逐 clip 登记、评分和 QC，不能用一次生成绕过逐镜责任。
 - **首尾帧能力要诚实**：只有 capability profile 明确支持时才提交 end frame；不支持时在 job 中写明回退为多镜头生成或剪辑匹配复核，不能把“计划有尾帧”伪装成“后端收到了尾帧”。
 - **继承合约必跑**：`scripts/inherit_contract.py` 检查 `clip_plan` 的身份锚点、参考输入、首帧/尾帧、shot_design 和 continuity 是否进入 `jobs_manifest` 与逐 take prompt；缺失先修 prompt/job，不要带病出视频。
-- **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。
+- **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。逐帧脸相似阈值**自标定**：优先借 `image_qc` 主角定妆组的 `lead_floor`（同人下限，留 0.05 视频运动余量，夹在 0.20–0.60），未自标定回退经验值 0.45——与 mv-image「用本曲定妆组做地板，不写死阈值」同理念，风格化 MV 不再被经验值系统性误报。接缝除连续接缝色差外，还查**同场景硬切色跳**（`same_scene_hard_cut_color_jump`，同 location 相邻镜主色/色温跳变 → advisory 风险，人工并排复核）。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
 - **视频任务 manifest**：先用 `scripts/video_jobs.py` 从 `分镜/clip_plan.json` 生成 `出视频/jobs_manifest.json` 和逐 take prompt；AI/网页/人工生成的视频先登记到 `takes/`，评分后挑版复制到 `出视频/视频/Clip_XXX.mp4` 并同步 `分镜/timeline_manifest.json`。不要只把 mp4 扔进目录让下游猜来源。
 - **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则生成 job 包并指导 web/manual 登记。若 `_设置.md` 未显式固定模型/渠道，先按可用 CLI/API 与 `生视频渠道` 偏好决定入口；探测不到可执行入口时再问用户选渠道或 `manual`。**不装第三方逆向 CLI**。

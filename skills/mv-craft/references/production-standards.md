@@ -25,7 +25,7 @@
 | 视觉蓝图 | 歌曲结构、按需歌词、用途、画幅 | 非 rough；含核心视觉概念、身份/场景锚、palette/section look、母题 | “这首歌为什么要这样看”成立；段落变化有因果，不是套模板 | mv-script |
 | Clip/时间线 | 已签收 beatgrid、歌词、蓝图、设置 | `inputs_sha256` 全输入收据；clip/timeline 顺序与时长一致；段落边界不被成本上限吞掉；动作峰值实际落在镜内确认拍；每个出缝有分类合同 | 景别/运镜/动作/表演层次、歌词意象、轴线和视觉覆盖 | mv-plan |
 | 节奏预检 | 当前 plan + beatgrid + song | 新鲜 `pacing_prescore`；等长嫌疑、总时长、重拍对齐、副歌/主歌密度均可复算 | 指标只是证据；是否采用主歌长镜/副歌碎切由歌曲和概念决定。未显式设阈值时不做主观硬挡 | mv-plan / mv-script |
-| 两层出图 | identity/asset/reference 注册表 + clip prompt | 所属图片可解码；full QC 或具名人工放行；每张图有具体 model + channel + prompt + asset SHA-256 收据；项目内模型/渠道一致 | 身份、服化道、道具、构图、手部、色彩；`match_action` 镜的尾帧确实能交给下一镜 | mv-image |
+| 两层出图 | identity/asset/reference 注册表 + clip prompt | 所属图片可解码；主角定妆包 ready（≥3 张多角度参考，正式 video_jobs 前硬拦——脸检 floor 靠它自标定）；full QC 或**具名 + 绑定报告 hash** 的人工放行（`image_qc.py --accept-degraded`，报告重跑即失效）；每张图有具体 model + channel + prompt + asset SHA-256 收据；项目内模型/渠道一致 | 身份、服化道、道具、构图、手部、色彩；`match_action` 镜的尾帧确实能交给下一镜 | mv-image |
 | Animatic/Picture Lock | 当前首/尾帧、正式歌、clip/timeline、OTIO | animatic 输出 hash；OTIO 有 V1+A1、段落/接缝 markers 和 receipt；picture lock 绑定规范化编辑 hash、上游文件和全部帧/prompt | 叙事覆盖、切奏、动作峰值、接缝意图、空间方向、身份、色彩、字幕安全区具名签收 | mv-plan / mv-image |
 | 视频任务/挑版 | 已锁画时间线、图片、模型能力 profile | compiler 产提交字段；jobs 绑定 plan hash；每 take 有具名评分；全部 selected；inherit/QC 报告绑定当前文件 | 基础四维：motion/identity/beat_fit/clarity；连续镜另评 seam_fit；演唱镜另评 lip_sync | mv-video / mv-image |
 | 视频接缝签收 | 逐镜首/中/尾帧 + seam contract | 逐缝风险信号；签收绑定 selected video hashes 和 seam-contract hash | 按接缝类别验收，不能用同一标准：卡点切允许有意跳变；动作匹配切必须接姿态相位、运动方向、视线、道具和光位 | mv-video / mv-plan |
