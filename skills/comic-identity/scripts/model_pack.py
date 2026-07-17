@@ -343,6 +343,27 @@ def create_signoff(root: Path, registry: dict[str, Any], character_id: str, revi
     return receipt
 
 
+def write_stable_report(path: Path, payload: dict[str, Any]) -> dict[str, Any]:
+    """Persist the shared report without timestamp-only fingerprint churn."""
+    try:
+        previous = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        previous = {}
+    semantic = {key: value for key, value in payload.items() if key != "created_at"}
+    previous_semantic = (
+        {key: value for key, value in previous.items() if key != "created_at"}
+        if isinstance(previous, dict)
+        else {}
+    )
+    if semantic == previous_semantic and previous.get("created_at"):
+        payload["created_at"] = previous["created_at"]
+    serialized = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    if not path.is_file() or path.read_text(encoding="utf-8") != serialized:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(serialized, encoding="utf-8")
+    return payload
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="漫画角色 turnaround/model-pack 技术检查与人审签收")
     parser.add_argument("project_root")
@@ -389,8 +410,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     if args.write or args.command == "signoff":
         out = root / "生产数据" / "comic_model_pack_report.json"
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        payload = write_stable_report(out, payload)
     print(json.dumps(payload, ensure_ascii=False, indent=2) if args.json else (
         f"model-pack: ready={payload['summary']['ready']} needs_approval={payload['summary']['needs_approval']} "
         f"needs_fix={payload['summary']['needs_fix']}"

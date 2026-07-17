@@ -1759,6 +1759,17 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
             if view == "outfit" or role == "outfit":
                 binding = job.get("outfit_binding") if isinstance(job.get("outfit_binding"), dict) else {}
                 outfit_id = str(binding.get("outfit_id") or "").strip()
+                if not outfit_id or (
+                    binding.get("ref_id") and str(binding.get("ref_id")) != rid
+                ):
+                    outfit_id = ""
+                    for character_binding in job.get("character_bindings") or []:
+                        if not isinstance(character_binding, dict):
+                            continue
+                        if str(character_binding.get("character_id") or "") != rid:
+                            continue
+                        outfit_id = str(character_binding.get("outfit_id") or "").strip()
+                        break
                 if outfit_id:
                     lookup_view = f"outfit:{outfit_id}"
             elif view == "expression" or role == "expression":
@@ -1804,11 +1815,14 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
                     if candidate.is_file():
                         path = rel_to_root(root, candidate)
                         break
-            if not path:
+            if not path and not lookup_view.startswith(("outfit:", "expression:")):
                 path = resolve_reference_path(root, rid, registry, view=lookup_view)
-            if path and ref.get("path") != path:
-                ref["path"] = path
-                changed += 1
+            if path:
+                current_sha = file_sha256(resolve_path(root, path))
+                if ref.get("path") != path or ref.get("sha256") != current_sha:
+                    ref["path"] = path
+                    ref["sha256"] = current_sha
+                    changed += 1
     return changed
 
 

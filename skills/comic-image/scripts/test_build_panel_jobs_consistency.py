@@ -240,6 +240,30 @@ def test_preserve_resets_ready_when_submit_prompt_changed(tmp_path: Path) -> Non
     assert not rebuilt["jobs"][0].get("result_path")
 
 
+def test_preserve_keeps_ready_when_only_reference_execution_input_changes(tmp_path: Path) -> None:
+    root = tmp_path / "work"
+    chapter = "第1话"
+    make_fixture(root, chapter)
+    jobs = build_panel_jobs.build_jobs(root, chapter)
+    simulate_generated(root, chapter, jobs)
+
+    rebuilt = build_panel_jobs.build_jobs(root, chapter)
+    rebuilt["jobs"][0]["execution_input_sha256"] = "f" * 64
+    rebuilt["jobs"][0]["references"].append(
+        {
+            "id": "CHAR_MAIN",
+            "path": "出图/共享/图片/CHAR_MAIN__side.png",
+            "sha256": "e" * 64,
+        }
+    )
+
+    preserved, stale = build_panel_jobs.preserve_ready_jobs(root, chapter, rebuilt)
+
+    assert preserved == 1
+    assert stale == []
+    assert rebuilt["jobs"][0]["status"] == "ready"
+
+
 def test_outfit_binding_injects_refs_and_contract(tmp_path: Path) -> None:
     root = tmp_path / "work"
     chapter = "第1话"

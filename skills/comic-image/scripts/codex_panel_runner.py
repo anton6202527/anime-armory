@@ -513,6 +513,28 @@ def image_size(path: Path) -> tuple[int, int]:
         return (0, 0)
 
 
+def declared_reference_attachment_count(root: Path, job: dict[str, Any]) -> int:
+    """Count executable attachments, not semantic bindings.
+
+    One image may intentionally satisfy more than one semantic role (for example
+    the same character close-up can bind both ``face`` and ``outfit``). Reference
+    collection de-duplicates those paths before invoking a backend, so post-QC
+    must use the same unit or it will report a reference that never existed as a
+    distinct attachment.
+    """
+    keys: set[str] = set()
+    for ref in job.get("references") or []:
+        if not isinstance(ref, dict) or not ref.get("id"):
+            continue
+        raw = str(ref.get("path") or "").strip()
+        if raw:
+            keys.add(f"path:{resolve_path(root, raw).resolve()}")
+            continue
+        role = str(ref.get("role") or ref.get("view") or "reference")
+        keys.add(f"semantic:{ref.get('id')}:{role}")
+    return len(keys)
+
+
 def post_qc_panel(
     root: Path,
     chapter: str,
@@ -546,9 +568,13 @@ def post_qc_panel(
             }
         )
 
-    declared_refs = [ref for ref in job.get("references") or [] if isinstance(ref, dict) and ref.get("id")]
+    declared_bindings = [
+        ref for ref in job.get("references") or []
+        if isinstance(ref, dict) and ref.get("id")
+    ]
+    declared_attachment_count = declared_reference_attachment_count(root, job)
     unresolved_reference_count = max(
-        0, len(declared_refs) - len(reference_records) - len(omitted_reference_records)
+        0, declared_attachment_count - len(reference_records) - len(omitted_reference_records)
     )
     if unresolved_reference_count:
         issues.append(
@@ -588,7 +614,8 @@ def post_qc_panel(
         "path": rel_to_root(root, path),
         "size": {"width": actual_w, "height": actual_h},
         "expected_size": {"width": expected_w, "height": expected_h},
-        "declared_reference_count": len(declared_refs),
+        "declared_reference_count": declared_attachment_count,
+        "declared_reference_binding_count": len(declared_bindings),
         "reference_input_count": len(reference_records),
         "omitted_attachment_count": len(omitted_reference_records),
         "omitted_attachment_ids": [record.get("id", "") for record in omitted_reference_records],

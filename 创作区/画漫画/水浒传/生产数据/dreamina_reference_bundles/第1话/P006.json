@@ -5,13 +5,13 @@
   "panel_id": "P006",
   "reference_input_mode": "dreamina_image2image_images",
   "reference_attachment_limit": 10,
-  "cli_image_input_count": 5,
+  "cli_image_input_count": 6,
   "references": [
     {
       "id": "CHAR_EMPEROR_RENZONG",
-      "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
-      "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
-      "role": "front",
+      "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+      "sha256": "62a96c9c4166bae73c6d2b4c1161d9f4c791a34a904de1f7bca7b5c9001d45b0",
+      "role": "three_quarter",
       "required": true
     },
     {
@@ -37,6 +37,13 @@
     },
     {
       "id": "CHAR_EMPEROR_RENZONG",
+      "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+      "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+      "role": "front",
+      "required": false
+    },
+    {
+      "id": "CHAR_EMPEROR_RENZONG",
       "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
       "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898",
       "role": "face",
@@ -45,5 +52,5 @@
   ],
   "omitted_attachment_count": 0,
   "omitted_attachments": [],
-  "created_at": "2026-07-16T20:51:01"
+  "created_at": "2026-07-17T18:59:54"
 }

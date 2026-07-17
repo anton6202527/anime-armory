@@ -253,6 +253,58 @@ def test_bind_job_references_preserves_registered_outfit_reference(tmp_path: Pat
 
     assert changed == 1
     assert jobs["jobs"][0]["references"][0]["path"] == outfit_rel
+    assert jobs["jobs"][0]["references"][0]["sha256"] == identity.file_sha256(root / outfit_rel)
+
+
+def test_bind_job_references_resolves_outfit_from_multi_character_binding(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    shared = root / "出图" / "共享" / "图片"
+    shared.mkdir(parents=True)
+    face_rel = "出图/共享/图片/CHAR_A__face.png"
+    outfit_rel = "出图/共享/图片/CHAR_A__OUTFIT_TRAVEL.png"
+    (root / face_rel).write_bytes(PNG_1X1)
+    (root / outfit_rel).write_bytes(PNG_1X1)
+    registry = {
+        "assets": {
+            "CHAR_A": {
+                "id": "CHAR_A",
+                "reference_images": [{"view": "face", "path": face_rel}],
+                "outfits": {
+                    "OUTFIT_TRAVEL": {
+                        "id": "OUTFIT_TRAVEL",
+                        "status": "ready",
+                        "reference_images": [{"path": outfit_rel}],
+                    }
+                },
+            }
+        }
+    }
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P019",
+                "character_bindings": [
+                    {"character_id": "CHAR_A", "outfit_id": "OUTFIT_TRAVEL"},
+                    {"character_id": "CHAR_B", "outfit_id": "OUTFIT_BASE"},
+                ],
+                "references": [
+                    {
+                        "id": "CHAR_A",
+                        "role": "outfit",
+                        "view": "outfit",
+                        "path": face_rel,
+                        "sha256": identity.file_sha256(root / face_rel),
+                    }
+                ],
+            }
+        ]
+    }
+
+    changed = identity.bind_job_references(root, jobs, registry)
+
+    assert changed == 1
+    assert jobs["jobs"][0]["references"][0]["path"] == outfit_rel
+    assert jobs["jobs"][0]["references"][0]["sha256"] == identity.file_sha256(root / outfit_rel)
 
 
 def test_bind_job_references_preserves_registered_expression_reference(tmp_path: Path) -> None:

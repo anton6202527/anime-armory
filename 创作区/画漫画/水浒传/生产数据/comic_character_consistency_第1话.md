@@ -1,6 +1,6 @@
 # 漫画角色一致性报告 — 第1话
 
-- 生成时间：2026-07-17T10:53:16
+- 生成时间：2026-07-17T21:36:38
 - 结论：pass
 - 角色数：9
 - 出场绑定：76
@@ -18,10 +18,10 @@
 
 | character | refs | panels |
 |---|---:|---:|
-| CHAR_ABBOT_SHANGQING | 3 | 16 |
-| CHAR_EMPEROR_RENZONG | 2 | 7 |
+| CHAR_ABBOT_SHANGQING | 5 | 16 |
+| CHAR_EMPEROR_RENZONG | 4 | 7 |
 | CHAR_FAN_ZHONGYAN | 2 | 1 |
-| CHAR_HONG_XIN | 3 | 36 |
+| CHAR_HONG_XIN | 5 | 36 |
 | CHAR_MASTER_XUJING | 3 | 5 |
 | CHAR_WEN_YANBO | 2 | 2 |
 | CHAR_ZHAO_ZHE | 2 | 2 |

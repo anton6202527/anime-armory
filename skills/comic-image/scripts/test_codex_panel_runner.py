@@ -111,6 +111,32 @@ def test_post_qc_accepts_disclosed_tool_limit_omission(tmp_path: Path, monkeypat
     assert payload["manual_review_required"] is False
 
 
+def test_post_qc_counts_one_attachment_reused_for_multiple_semantic_roles(
+    tmp_path: Path, monkeypatch
+) -> None:
+    panel = tmp_path / "P019.png"
+    panel.write_bytes(b"png")
+    shared_ref = tmp_path / "hong_xin_face.png"
+    shared_ref.write_bytes(b"png")
+    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
+    monkeypatch.setattr(runner, "image_size", lambda _path: (100, 100))
+    monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    job = {
+        "panel_id": "P019",
+        "size": {"width": 100, "height": 100},
+        "references": [
+            {"id": "CHAR_HONG_XIN", "path": str(shared_ref), "role": "face"},
+            {"id": "CHAR_HONG_XIN", "path": str(shared_ref), "role": "outfit"},
+        ],
+    }
+    used = [{"id": "CHAR_HONG_XIN", "path": str(shared_ref), "role": "face"}]
+
+    payload = runner.post_qc_panel(tmp_path, "第1话", job, panel, used, [])
+
+    assert runner.declared_reference_attachment_count(tmp_path, job) == 1
+    assert payload["verdict"] == "pass"
+
+
 def test_gate_receipt_must_bind_current_panel_jobs_sha(tmp_path: Path) -> None:
     jobs = tmp_path / "出图" / "第1话" / "prompt" / "panel_jobs.json"
     jobs.parent.mkdir(parents=True)

@@ -5,7 +5,7 @@
   "panel_id": "P048",
   "reference_input_mode": "dreamina_image2image_images",
   "reference_attachment_limit": 10,
-  "cli_image_input_count": 9,
+  "cli_image_input_count": 10,
   "references": [
     {
       "id": "CHAR_HONG_XIN",
@@ -69,9 +69,16 @@
       "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68",
       "role": "face",
       "required": false
+    },
+    {
+      "id": "CHAR_HONG_XIN",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+      "sha256": "1fa172b10d5c96aaa234a75ca78a6dbf6d9b9db0c70cc6d34700d35047a58ac4",
+      "role": "expression",
+      "required": false
     }
   ],
   "omitted_attachment_count": 0,
   "omitted_attachments": [],
-  "created_at": "2026-07-17T10:42:36"
+  "created_at": "2026-07-17T19:15:37"
 }

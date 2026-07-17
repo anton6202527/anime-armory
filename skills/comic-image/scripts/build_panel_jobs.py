@@ -855,8 +855,6 @@ def job_is_stale(old: dict, new: dict) -> bool:
     """
     if str(old.get("submit_prompt_sha256") or "") != str(new.get("submit_prompt_sha256") or ""):
         return True
-    if str(old.get("execution_input_sha256") or "") != str(new.get("execution_input_sha256") or ""):
-        return True
     return (old.get("size") or {}) != (new.get("size") or {})
 
 
