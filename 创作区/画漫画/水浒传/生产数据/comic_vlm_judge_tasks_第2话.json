@@ -3,7 +3,7 @@
   "kind": "comic_vlm_judge_tasks",
   "protocol": "CANVAS-ContinuityEval-3axis",
   "chapter": "第2话",
-  "created_at": "2026-07-17T16:58:02",
+  "created_at": "2026-07-17T17:09:58",
   "axes": [
     "character_identity",
     "background_continuity",
@@ -1010,7 +1010,7 @@
       "panel": {
         "panel_id": "P006",
         "path": "出图/第2话/panels/P006.png",
-        "sha256": "1ed8c949d76259ee5e0a121affd7dfe62b835b4e1c26602f76694ca2775702ed"
+        "sha256": "4c7a6e1ea620b25d3b8d01986564ca132de54853831d2ff7c1c48bd5f8b6ce93"
       },
       "subject": "LOC_FUMO_HALL_INTERIOR",
       "references": [
@@ -1021,7 +1021,7 @@
       "references_sha256": {
         "出图/第2话/panels/P005.png": "0c8e61beac7ab94f60e46c3bd742f53372b44bb845ebff341a026430018a00df"
       },
-      "task_sha256": "7354a01fbf08e8c8a571a91e3bd1e54412aa67ee4331326805ea01217f825ece"
+      "task_sha256": "f52894e3909ea9715de5fd1ccb05029626b81cc2191682a8ba1242ceb0932f51"
     },
     {
       "task_id": "P006__P007__background",
@@ -1035,12 +1035,12 @@
       "references": [
         "出图/第2话/panels/P006.png"
       ],
-      "reference_sha256": "1ed8c949d76259ee5e0a121affd7dfe62b835b4e1c26602f76694ca2775702ed",
+      "reference_sha256": "4c7a6e1ea620b25d3b8d01986564ca132de54853831d2ff7c1c48bd5f8b6ce93",
       "question": "这两格同属场景锚 LOC_FUMO_HALL_INTERIOR（前格 P006 → 本格 P007）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第2话/panels/P006.png": "1ed8c949d76259ee5e0a121affd7dfe62b835b4e1c26602f76694ca2775702ed"
+        "出图/第2话/panels/P006.png": "4c7a6e1ea620b25d3b8d01986564ca132de54853831d2ff7c1c48bd5f8b6ce93"
       },
-      "task_sha256": "e252323561104f5e3b762825b7fe05b7d74ed363a016d141e753ba8d111b7f33"
+      "task_sha256": "53624bc500e00517833627563b4ae26e9804404f2213685d73ff4b51f3b26c5f"
     },
     {
       "task_id": "P007__P008__background",

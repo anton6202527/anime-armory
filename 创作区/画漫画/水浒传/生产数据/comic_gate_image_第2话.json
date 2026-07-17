@@ -4,12 +4,12 @@
   "project_root": ".",
   "chapter": "第2话",
   "stage": "image",
-  "created_at": "2026-07-17T16:56:21",
+  "created_at": "2026-07-17T17:09:28",
   "verdict": "warn",
   "summary": {
-    "finding_count": 34,
+    "finding_count": 33,
     "block_count": 0,
-    "warn_count": 30,
+    "warn_count": 29,
     "info_count": 4
   },
   "findings": [
@@ -80,7 +80,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P004.png",
-      "reason": "风格指纹内聚度 0.7360 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7359 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -91,18 +91,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P005.png",
-      "reason": "风格指纹内聚度 0.7069 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "dimension": "comic_gate",
-      "code": "panel_style_outlier",
-      "artifact": "出图/第2话/panels/P006.png",
-      "reason": "风格指纹内聚度 0.6676 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7061 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -113,7 +102,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P008.png",
-      "reason": "风格指纹内聚度 0.6214 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.6205 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -124,7 +113,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P009.png",
-      "reason": "风格指纹内聚度 0.6549 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.6543 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -135,7 +124,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P010.png",
-      "reason": "风格指纹内聚度 0.7094 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7092 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -146,7 +135,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P013.png",
-      "reason": "风格指纹内聚度 0.6856 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.6865 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -157,7 +146,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P016.png",
-      "reason": "风格指纹内聚度 0.6813 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.6836 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -168,7 +157,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P017.png",
-      "reason": "风格指纹内聚度 0.7150 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7165 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -179,7 +168,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P023.png",
-      "reason": "风格指纹内聚度 0.7252 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7271 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -190,7 +179,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P034.png",
-      "reason": "风格指纹内聚度 0.7078 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7108 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -201,7 +190,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P036.png",
-      "reason": "风格指纹内聚度 0.7347 明显低于本话中位 0.7800，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7373 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "evidence_family": "appearance_embedding",
@@ -267,7 +256,7 @@
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P006.png",
-      "reason": "黑白灰量化偏离话内中位：black_ratio=0.4496（中位 0.017），线宽代理 edge_density=0.0616（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.3399（中位 0.017），线宽代理 edge_density=0.0664（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
       "return_to_stage": "image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
       "evidence_family": "tone_value",
@@ -333,7 +322,7 @@
       "dimension": "comic_gate",
       "code": "style_anchor_drift",
       "artifact": "出图/共享/style_baseline.json",
-      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8779，风格锚可能已失去约束力。",
+      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8789，风格锚可能已失去约束力。",
       "return_to_stage": "image",
       "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
       "evidence_family": "cross_chapter_baseline",
@@ -476,7 +465,7 @@
       {
         "path": "脚本/第2话/source_semantics.json",
         "exists": true,
-        "sha256": "eef4e343b6c18d61c8eb590a97539d8ce19285e29f966e383b69fe0a5e943a7b",
+        "sha256": "ad9ba7c8dc89fa4f368bdb89f06a8cd33e8d7d177c56d4780c00737b14660bcd",
         "size": 116404
       },
       {
@@ -506,7 +495,7 @@
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "42c98e3403ae8f9fb62e4ec92b0b6ea7934302077d7e8aaa6c9a4e876291deb7",
+        "sha256": "c6b24cfbc0759c027b58a6f66a3e9ab218268fbf75de28625d88744c55a103cf",
         "size": 21059
       },
       {
@@ -578,8 +567,8 @@
       {
         "path": "出图/第2话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "acf64155c40ef0cabea43c11d82fc5af450d940f888558de8f4dd6114cfcf545",
-        "size": 1029339
+        "sha256": "cf5f0214c18ff370f949b2988d5ad259c583afbd35042d26ab425771fae19c78",
+        "size": 1029574
       },
       {
         "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
@@ -1370,14 +1359,20 @@
       {
         "path": "出图/第2话/panels/P006.png",
         "exists": true,
-        "sha256": "1ed8c949d76259ee5e0a121affd7dfe62b835b4e1c26602f76694ca2775702ed",
-        "size": 1230626
+        "sha256": "4c7a6e1ea620b25d3b8d01986564ca132de54853831d2ff7c1c48bd5f8b6ce93",
+        "size": 1343074
       },
       {
-        "path": "出图/第2话/candidates/P006/20260717T150209_attempt1_dreamina_raw.png",
+        "path": "出图/第2话/candidates/P006/20260717T170400_attempt1_dreamina_raw.png",
         "exists": true,
-        "sha256": "fdbc9a35eb2fb0bb60312779cabbc978f65dae16b3a2a89c88bf9eb2878bd185",
-        "size": 2915741
+        "sha256": "9248058329bf13b54b2eab39871720e58fcc4b10827e8e10152f62010df31f79",
+        "size": 3256431
+      },
+      {
+        "path": "出图/第2话/candidates/P006/P006_20260717_170400_previous.png",
+        "exists": true,
+        "sha256": "1ed8c949d76259ee5e0a121affd7dfe62b835b4e1c26602f76694ca2775702ed",
+        "size": 1230626
       },
       {
         "path": "出图/第2话/panels/P007.png",
@@ -1880,7 +1875,7 @@
       {
         "path": "生产数据/panel_qc/第2话/P006.json",
         "exists": true,
-        "sha256": "e3bea3e0b2f40571b730593aa9e31130007df33eedcb8f4eb5e766617db2da55",
+        "sha256": "892a23e4fd09e87c78f6211e0b85db5f3ed46690e30742067f9710602528e5e4",
         "size": 538
       },
       {
@@ -2100,7 +2095,7 @@
         "size": 540
       }
     ],
-    "sha256": "ff0322ddc4e6761c312da7fd82bb7e3f5f98f90cd1a39a22c79fd07aad502393"
+    "sha256": "075f2c096ed047fee7325685820c5beeddd606ebc718a6c39527c830368ce272"
   },
-  "receipt_id": "46672c5fb6dd17d95e939973552c31c96dcdfe3845a29ae99e2dfbd26933e8ee"
+  "receipt_id": "0708984516042a76ce49e6860bad8e6c25d63bddf58d475c3e50d8d8258f4605"
 }

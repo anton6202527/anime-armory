@@ -3,7 +3,7 @@
   "kind": "comic_scene_prop_consistency",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第2话",
-  "created_at": "2026-07-17T16:58:05",
+  "created_at": "2026-07-17T17:10:04",
   "available": true,
   "verdict": "warn",
   "summary": {
@@ -158,7 +158,7 @@
           "path": "出图/第2话/panels/P030.png"
         }
       ],
-      "layout_cohesion_floor": 0.9116,
+      "layout_cohesion_floor": 0.9083,
       "contact_sheet": "生产数据/qa_previews/第2话_scene_LOC_FUMO_HALL_INTERIOR_sheet.jpg"
     },
     {
