@@ -349,7 +349,7 @@
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 840
@@ -619,8 +619,43 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P002.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-17T09:13:56",
+      "backend_version": "codex-cli 0.144.4",
+      "artifact_sha256": "cda5f9466c5efd543686fa0a7298ce84dd715cefc22bb6d0f6001032fec53fb0",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P002.json",
+      "generated_from_contract_sha256": "9fb15e8ba301f34054db76e752ee41698fc8918ac801e274fe22b412217cbb2b",
+      "generated_from_submit_prompt_sha256": "d204fefed1a0b3edbd7a9fd04bb92d7c2c3db35f1326b29f3177fcafca000ab7",
+      "generated_from_execution_input_sha256": "0c2c70b7957a27c8abb1e47041fa9f1b0dcec9b3d21d1636dfa6c13c8f0743a6",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P002",
+        "created_at": "2026-07-17T09:13:56",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P002.png",
+        "size": {
+          "width": 1188,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 840
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P003",
