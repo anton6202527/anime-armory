@@ -294,6 +294,26 @@ def write_reference_manifest(
     return path
 
 
+def unrepresented_required_ids(
+    selected: list[dict[str, str]],
+    omitted: list[dict[str, str]],
+) -> set[str]:
+    """Return required contracts that have no executable image at all.
+
+    Multiple views of one subject share an ID. If at least one view survives
+    Dreamina's attachment limit, omitting extra views is a disclosed fidelity
+    reduction, not a missing critical contract.
+    """
+    selected_ids = {str(record.get("id") or "") for record in selected}
+    return {
+        str(record.get("id") or "")
+        for record in omitted
+        if record.get("required")
+        and str(record.get("id") or "")
+        and str(record.get("id") or "") not in selected_ids
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="用 Dreamina 官方 CLI 生成 comic panel PNG")
     parser.add_argument("project_root")
@@ -385,7 +405,7 @@ def main() -> int:
         )
         all_records = shared.collect_reference_images(root, job)
         records, omitted = shared.select_reference_attachments(all_records, reference_limit)
-        omitted_required = [record for record in omitted if record.get("required")]
+        missing_required_ids = unrepresented_required_ids(records, omitted)
         selected_subjects = {
             str(record.get("id") or "")
             for record in records
@@ -396,10 +416,15 @@ def main() -> int:
             for binding in job.get("character_bindings") or []
             if isinstance(binding, dict)
         }
-        if omitted_required or not required_subjects.issubset(selected_subjects):
+        missing_subjects = required_subjects - selected_subjects
+        if missing_required_ids or missing_subjects:
             failures += 1
             job["status"] = "failed"
-            job["error"] = "executable reference budget cannot carry all critical contracts"
+            missing_contracts = sorted(missing_required_ids | missing_subjects)
+            job["error"] = (
+                "executable reference budget cannot carry all critical contracts: "
+                + ", ".join(missing_contracts)
+            )
             shared.write_json(jobs_path, data)
             print(f"[fail] {panel_id}: {job['error']}", file=sys.stderr, flush=True)
             continue

@@ -30,6 +30,19 @@ def test_normalize_panel_outputs_exact_size(tmp_path: Path) -> None:
     assert result["target_size"] == {"width": 1296, "height": 1040}
 
 
+def test_extra_required_view_can_be_omitted_when_subject_is_represented() -> None:
+    selected = [
+        {"id": "CHAR_HONG_XIN", "role": "front", "required": True},
+        {"id": "STYLE_SHUIHU", "role": "style", "required": True},
+    ]
+    omitted = [
+        {"id": "CHAR_HONG_XIN", "role": "face", "required": True},
+        {"id": "PROP_SILVER_CENSER", "role": "prop", "required": True},
+    ]
+
+    assert runner.unrepresented_required_ids(selected, omitted) == {"PROP_SILVER_CENSER"}
+
+
 def test_build_prompt_accepts_dreamina_compiled_job() -> None:
     submit_prompt = (
         "生成一张铺满画布的单格无字漫画画面。"

@@ -4,7 +4,7 @@
   "project_root": ".",
   "chapter": "第1话",
   "stage": "image_preflight",
-  "created_at": "2026-07-17T08:54:20",
+  "created_at": "2026-07-17T10:20:57",
   "verdict": "warn",
   "summary": {
     "finding_count": 37,
@@ -487,7 +487,7 @@
       {
         "path": "脚本/第1话/source_semantics.json",
         "exists": true,
-        "sha256": "14859017d88e33b4468cbf98db78bc8d2ec2156074f9d47862bca109b148584a",
+        "sha256": "bd26218c9726d96badae194db4c5ac020f5f29abfe0f9a450eccda78220d3fa0",
         "size": 83436
       },
       {
@@ -517,7 +517,7 @@
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "fb118ac3d84152b188c90d6ae883486d29f09765cd97892e7f237d4b79a09dac",
+        "sha256": "b5301ca73efab3e48dfe19db7444ed855537dc0cd2287ffbcf7a90c586936a3b",
         "size": 21059
       },
       {
@@ -587,8 +587,8 @@
       {
         "path": "出图/第1话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "b5e7f2fdc5ccb4581c57bbdea02a24664c62d45cf516740e9cbf128efdccdc84",
-        "size": 1479065
+        "sha256": "8301557e954168f6cc989637819bc38385a4e9f44def2029fba606c17476e26b",
+        "size": 1479950
       },
       {
         "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
@@ -1601,26 +1601,38 @@
       {
         "path": "出图/第1话/panels/P030.png",
         "exists": true,
+        "sha256": "8e6e6914adde0a9938caa05a3e37b811df3ef6343d7b6e5bfe02e26de2f922a4",
+        "size": 2042636
+      },
+      {
+        "path": "出图/第1话/candidates/P030/20260717T085420_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "931173d3f5959c5f21f5dfebbec6343a23ce09c9827b9cb21d4df7ba3e38c5c6",
+        "size": 4723538
+      },
+      {
+        "path": "出图/第1话/candidates/P030/P030_20260717_085420_previous.png",
+        "exists": true,
         "sha256": "dd4da6140a09b190f3a249d6466cf375c0914230f40990e78fb58e6926ebd5d4",
         "size": 2296246
       },
       {
-        "path": "出图/第1话/candidates/P030/20260716T200713_attempt1_dreamina_raw.png",
+        "path": "出图/第1话/panels/P031.png",
         "exists": true,
-        "sha256": "10d7671b7f29bc304519d33d043e39748bb4ad9af0626901111041f83c3d9114",
-        "size": 5890121
+        "sha256": "46a1e0d103e907cdd9fc41b15ed185b650cf1abba36c5fb3554dfc6f42b6b38d",
+        "size": 2337189
       },
       {
-        "path": "出图/第1话/panels/P031.png",
+        "path": "出图/第1话/candidates/P031/20260717T091230_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "d1be9225b5e7266aa3061aa1434912d36e932a4a7875c950371b07a4f591d6fe",
+        "size": 5887383
+      },
+      {
+        "path": "出图/第1话/candidates/P031/P031_20260717_091230_previous.png",
         "exists": true,
         "sha256": "b7138133aa7f8c2c7842e1fe1d8e24b08eda0cb46f6bae5d205b12f572f84ed6",
         "size": 2544743
-      },
-      {
-        "path": "出图/第1话/candidates/P031/20260716T200842_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "364526352f9c2a32fc26402b4959fad58120c3c189cc26c2b068c6b2d8e6481e",
-        "size": 6241777
       },
       {
         "path": "出图/第1话/panels/P032.png",
@@ -1649,14 +1661,20 @@
       {
         "path": "出图/第1话/panels/P034.png",
         "exists": true,
-        "sha256": "7772d86118d9f7d23c4f7e3d962b20ed3090801dc474681d7e3c3bcfa973a1f0",
-        "size": 2156417
+        "sha256": "5c7f4c7f6401547c3a6703323c70ad077b21ca83e8ce63daf2650077bffb538a",
+        "size": 1992958
       },
       {
-        "path": "出图/第1话/candidates/P034/20260716T201246_attempt1_dreamina_raw.png",
+        "path": "出图/第1话/candidates/P034/20260717T093824_attempt1_dreamina_raw.png",
         "exists": true,
-        "sha256": "fe08de18c948f3041a30cc4b2c4e316160d803dd3537ac804dead63ec0996f1f",
-        "size": 5249619
+        "sha256": "1662451524313deecfad81503d1efc9f29718647dd9b72fb3db7bfd7ef17f87c",
+        "size": 5133816
+      },
+      {
+        "path": "出图/第1话/candidates/P034/P034_20260717_093824_previous.png",
+        "exists": true,
+        "sha256": "7772d86118d9f7d23c4f7e3d962b20ed3090801dc474681d7e3c3bcfa973a1f0",
+        "size": 2156417
       },
       {
         "path": "出图/第1话/panels/P035.png",
@@ -1827,7 +1845,7 @@
         "size": 4413945
       }
     ],
-    "sha256": "72b26f50020c1c7c9e5fec83f07320078131c7d96bec5c0e8daead47bcd2bad4"
+    "sha256": "d08eb073b0538a6fe3e9ddf5622de0a668ff6a27d96cca110bb1aa8e64de9a6a"
   },
-  "receipt_id": "f5137aae97600c93d9eb02e26da02de1226793776393f424fd1287b1e7531951"
+  "receipt_id": "c1c1e615e2b72ae72a7be0fc45d15c670f539180acd0e12a0e80b313a07f8c7f"
 }
