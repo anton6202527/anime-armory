@@ -4,7 +4,7 @@
   "project_root": ".",
   "chapter": "第1话",
   "stage": "image_preflight",
-  "created_at": "2026-07-17T10:20:57",
+  "created_at": "2026-07-17T10:21:39",
   "verdict": "warn",
   "summary": {
     "finding_count": 37,
@@ -487,7 +487,7 @@
       {
         "path": "脚本/第1话/source_semantics.json",
         "exists": true,
-        "sha256": "bd26218c9726d96badae194db4c5ac020f5f29abfe0f9a450eccda78220d3fa0",
+        "sha256": "9b43eaa263fb916953be4353b85c77a4040c56c8348d5433912581e67b9164d3",
         "size": 83436
       },
       {
@@ -517,7 +517,7 @@
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "b5301ca73efab3e48dfe19db7444ed855537dc0cd2287ffbcf7a90c586936a3b",
+        "sha256": "8696553aeaaa55e93f617d21ff1b6df00f7df1b26fd2bd7c88da6b7a868bf7df",
         "size": 21059
       },
       {
@@ -587,8 +587,8 @@
       {
         "path": "出图/第1话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "8301557e954168f6cc989637819bc38385a4e9f44def2029fba606c17476e26b",
-        "size": 1479950
+        "sha256": "5c1ab690e9ca9db8aef2f0014cc9b4a08f5018d119670545585106e5bd5719ed",
+        "size": 1480040
       },
       {
         "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
@@ -1845,7 +1845,7 @@
         "size": 4413945
       }
     ],
-    "sha256": "d08eb073b0538a6fe3e9ddf5622de0a668ff6a27d96cca110bb1aa8e64de9a6a"
+    "sha256": "7896fdd973dd3c01512f8b987fbc04b50409001fe214632cba12287378935e2a"
   },
-  "receipt_id": "c1c1e615e2b72ae72a7be0fc45d15c670f539180acd0e12a0e80b313a07f8c7f"
+  "receipt_id": "4c4511bd995e473755fdfeaa6f4e791e96b480d3e10431e9d1b8e36c076a36c7"
 }

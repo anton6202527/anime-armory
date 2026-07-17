@@ -13304,7 +13304,7 @@
     },
     {
       "panel_id": "P039",
-      "status": "failed",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 956
@@ -13666,7 +13666,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P039",
-        "created_at": "2026-07-16T20:21:13",
+        "created_at": "2026-07-17T10:21:35",
         "verdict": "pass",
         "path": "出图/第1话/panels/P039.png",
         "size": {
@@ -13685,7 +13685,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "error": "dreamina image2image exit 1: "
+      "rechecked_at": "2026-07-17T10:21:35"
     },
     {
       "panel_id": "P040",
@@ -14040,7 +14040,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P040",
-        "created_at": "2026-07-16T20:22:34",
+        "created_at": "2026-07-17T10:21:35",
         "verdict": "pass",
         "path": "出图/第1话/panels/P040.png",
         "size": {
@@ -14058,7 +14058,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "rechecked_at": "2026-07-17T10:21:35"
     },
     {
       "panel_id": "P041",
