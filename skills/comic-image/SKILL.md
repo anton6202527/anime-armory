@@ -114,7 +114,13 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P003 --timeout-sec 600 --ignore-user-config
 ```
 
-若仍复现同类说明文档输出，再追加 `--ignore-rules`；若两者仍不能稳定返回 PNG，应停下报告当前 Codex CLI 子进程不可稳定落图，不要继续批量重试消耗额度。
+若仍复现同类说明文档输出，再追加 `--ignore-rules`。Codex 路线必须有熔断，禁止死磕：
+
+- 明确返回配额耗尽、余额不足、rate limit/credit exhausted 时，立刻停止 Codex 重试。
+- `--ignore-user-config --ignore-rules` 后仍连续出现 transport/TLS/app-server 失败，最多再做一次与正式请求同附件范围的健康验证；仍失败即把 Codex 队列标为通道不可用，不得拿其它正式 panel 逐个试错。
+- 项目已有用户对备用后端与预算的明确授权时，同一轮直接经本线适配层切备用后端；没有授权才停下说明成本与缺口。切换时必须把“具体生图模型+版本”和“访问渠道”分列记录，不能只写“即梦/某厂商”。
+- 切到即梦官方时，先用 `comic-settings` 写入适配层核验后的具体模型版本与 `即梦官方 CLI` 渠道，再重建 `panel_jobs.json` 和 reference plan、重跑 `image_preflight`；不得把 Codex 编译 prompt、gate receipt 或失败状态直接冒充即梦任务。沿用同一 panel 的画面合同、身份锚、场景锚、附件 SHA、无字要求和 QC 标准，失败请求保留在 history/事件账。
+- 备用后端也失败时再熔断并报告；不得在 Codex 与备用后端之间无限来回切换。
 
 若人工看图后需要重抽某几格，用 `--force --targets P003,P007`；旧图会归档到 `出图/第N话/candidates/<panel_id>/`，新图覆盖正式 `panels/Pxxx.png` 并写入 job history。
 

@@ -1104,6 +1104,95 @@ def test_target_qc_retry_guidance_includes_prop_shape_review(tmp_path: Path) -> 
     assert "PROP_OK" not in guidance
 
 
+def test_target_qc_retry_guidance_consumes_hash_bound_executor_visual_rejection(tmp_path: Path) -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_02",
+        title="## Clip_02",
+        body="**剧本描述**：管事俯身下令。",
+        target_line="`出图/第1集/图片/EP01_CLIP02.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_02_first",
+        "Clip_02",
+        "firstframe",
+        "出图/第1集/图片/EP01_CLIP02.png",
+        section,
+    )
+    image = tmp_path / target.rel_path
+    write_valid_png(image)
+    artifact_sha = codex_image_runner.optional_file_sha256(image)
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    events.write_text(json.dumps({
+        "event": "qa",
+        "generation": {"asset": target.rel_path, "status": "rejected"},
+        "qa": {"msg": "木牌消失；重抽必须保留完整旧木牌贴在少年胸前。"},
+        "meta": {
+            "artifact_sha256": artifact_sha,
+            "review_kind": "executor_visual",
+            "human_signoff": "false",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    guidance = codex_image_runner.target_qc_retry_guidance(tmp_path, "第1集", target)
+
+    assert "executor_visual_rejection" in guidance
+    assert "木牌消失" in guidance
+    assert "完整旧木牌贴在少年胸前" in guidance
+
+
+def test_compiled_retry_keeps_actual_pixel_rejection_ahead_of_objective_truncation(tmp_path: Path) -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_02",
+        title="## Clip_02",
+        body=(
+            "**剧本描述**：" + "很长的剧情目的" * 40 + "\n"
+            "**专项镜头模板**：shot_type=dialogue_shot_reverse；"
+            "continuity_must=[\"左右站位不换\", \"木牌始终在少年胸前\"]；negative=[]。"
+        ),
+        target_line="`出图/第1集/图片/EP01_CLIP02.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_02_first",
+        "Clip_02",
+        "firstframe",
+        "出图/第1集/图片/EP01_CLIP02.png",
+        section,
+    )
+
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path,
+        "第1集",
+        target,
+        [],
+        retry_guidance=(
+            "QC 重抽纠偏：\n"
+            "- 上一次当前像素实际目视拒收原因：木牌消失；"
+            "重抽必须保留完整旧木牌贴在少年胸前。"
+        ),
+    )
+
+    prompt = str(compiled.get("prompt") or "")
+    assert "返工硬约束（最高优先级）" in prompt
+    assert "木牌消失" in prompt
+    assert "完整旧木牌贴在少年胸前" in prompt
+    assert "专项连续性硬约束" in prompt
+    assert "木牌始终在少年胸前" in prompt
+
+
+def test_continuity_must_rewrites_adult_minor_shoulder_contact_to_non_contact() -> None:
+    body = (
+        "十四岁少年与成年管事对话。\n"
+        "**专项镜头模板**：continuity_must=[\"拍肩为张老大右手\", \"木牌始终在少年胸前\"]；negative=[]。"
+    )
+
+    clauses = codex_image_runner.section_continuity_must_for_model(body)
+
+    assert "木牌始终在少年胸前" in clauses
+    assert "成人右手只撑在少年身侧桌边，靠近但不接触少年身体" in clauses
+    assert all("拍肩" not in item for item in clauses)
+
+
 def test_codex_prompt_for_group_character_split_ref_forces_single_member(tmp_path: Path) -> None:
     section = codex_image_runner.ClipSection(
         clip="CHAR_PURSUER",

@@ -460,13 +460,33 @@ def _reference_group_path(form: dict[str, Any], key: str, fallback_suffix: str) 
 
 def _face_anchor_path(form: dict[str, Any]) -> str:
     rg = form.setdefault("reference_group", {})
+    expression_paths = {rel for rel, _emotion in _expression_items(form)}
     refs = rg.get("face_anchor_refs")
     if isinstance(refs, list):
         for item in refs:
             rel = _item_path(item)
-            if rel:
+            if rel and rel not in expression_paths:
                 return rel
-    return _reference_group_path(form, "face_anchor_refs", FACE_ANCHOR_SUFFIX)
+    front_rel = _item_path(rg.get("front"))
+    if front_rel:
+        front = Path(front_rel)
+        return str(front.with_name(f"{front.stem}_{FACE_ANCHOR_SUFFIX}{front.suffix or '.png'}"))
+    asset_key = str(form.get("asset_key") or "CHAR_UNKNOWN").strip()
+    return f"出图/共享/图片/{asset_key}_{FACE_ANCHOR_SUFFIX}.png"
+
+
+def _without_reference_paths(items: Any, forbidden: set[str]) -> Any:
+    """Remove aliases that point at a different semantic asset class."""
+    if not forbidden:
+        return items
+    if isinstance(items, list):
+        return [item for item in items if _item_path(item) not in forbidden]
+    if isinstance(items, dict):
+        return {
+            key: value for key, value in items.items()
+            if _item_path(value) not in forbidden
+        }
+    return None if _item_path(items) in forbidden else items
 
 
 def _update_reference_slots_for_path(form: dict[str, Any], rel: str, dst: Path | None) -> None:
@@ -686,11 +706,20 @@ def derive_project(
                                 crop_box = list(_front_crop_box(im, "face_anchor_refs"))
                         deriv = _derivation(FACE_ANCHOR_METHOD, front_rel, source_sha, crop_box)
                         label = f"{form_label} 同源脸锚"
+                        expression_paths = {path for path, _emotion in _expression_items(form)}
                         rg["face_anchor_refs"] = _update_face_anchor_list(
-                            rg.get("face_anchor_refs"), rel, deriv, label, dst if write else None
+                            _without_reference_paths(rg.get("face_anchor_refs"), expression_paths),
+                            rel,
+                            deriv,
+                            label,
+                            dst if write else None,
                         )
                         atlas["face_anchor_refs"] = _update_face_anchor_list(
-                            atlas.get("face_anchor_refs"), rel, deriv, label, dst if write else None
+                            _without_reference_paths(atlas.get("face_anchor_refs"), expression_paths),
+                            rel,
+                            deriv,
+                            label,
+                            dst if write else None,
                         )
                         _update_reference_slots_for_path(form, rel, dst if write else None)
                         summary["derived"].append({

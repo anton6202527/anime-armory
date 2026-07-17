@@ -19,17 +19,17 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-07-16。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-07-17。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4712 | 284048 |
+| n2d | `n2d` + `n2d-*` | 21 | 4713 | 284440 |
 | novel | `novel` + `novel-*` | 29 | 3145 | 68250 |
-| comic | `comic` + `comic-*` | 13 | 1440 | 40771 |
+| comic | `comic` + `comic-*` | 13 | 1446 | 40777 |
 | song | `song` + `song-*` | 11 | 660 | 9899 |
-| mv | `mv` + `mv-*` | 14 | 1123 | 19133 |
-| ad | `ad` + `ad-*` | 14 | 989 | 28385 |
-| **合计** | `skills/*/SKILL.md` | **102** | 12069 | 450486 |
+| mv | `mv` + `mv-*` | 14 | 1128 | 19967 |
+| ad | `ad` + `ad-*` | 14 | 1098 | 34595 |
+| **合计** | `skills/*/SKILL.md` | **102** | 12190 | 457928 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -214,11 +214,11 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `创
 | 节拍 | `mv-beat` | BPM/tempo/beat/downbeat 候选；正式版绑定当前歌曲，并具名确认拍号、小节相位和完整 sections |
 | 视觉蓝图 | `mv-script` | 听歌识影、角色/场景/叙事结构 |
 | 分镜规划 | `mv-plan` | song/beat/lyrics/blueprint/settings 收据、clip/timeline、动作峰值音乐锚、接缝分类、语义 prompt 任务包 |
-| 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；逐图登记 model+channel+实际 prompt/reference/asset hash，跑本线 image_qc，批后总检 |
+| 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；逐图登记 model+channel+实际 prompt/reference/asset hash，跑本线 image_qc（脸漂移 G1/主色/**帧级视觉多样性 dHash**·构图撞脸+静态长镜/锚点 lint/禁本地贴脸/来源链），批后总检 |
 | 出视频 | `mv-video` | 后端能力编译、可选多镜头 `sequence_units`、逐镜任务/登记/具名评分/挑版；连续镜加 seam、唱演镜加 lip-sync；歌曲永远外铺 |
 | 字幕/唱演时间轴（条件） | `mv-lyric-sync` | 已知歌词字符时间轴强制对齐、hash-bound 覆盖报告、LRC/ASS/Karaoke；低覆盖只允许具名逐行听审；纯器乐且无字幕/口型可跳过 |
 | 合成 | `mv-compose` | 严格时间线与 OTIO 合同，trim/尾帧 hold 不批量变速；ProRes/PCM 母版 + BT.709 H.264/AAC 交付 + 时长/响度/真峰值 QC |
-| 质检/评分 | `mv-review` / `mv-score` | 新鲜节奏收据、逐缝分类审片、锁版/字幕/交付/来源链总审；启发式阈值仅项目显式选择时硬挡 |
+| 质检/评分 | `mv-review` / `mv-score` | 新鲜节奏收据、逐缝分类审片、锁版/字幕/交付/来源链总审；**出图前 `shot_variety_audit` 事前拦同构图反复/景别单调/副歌静镜/场景滞留/缺参考锚**（advisory·补纯数值卡点引擎不读画面的盲区）；启发式阈值仅项目显式选择时硬挡 |
 
 **允许的跨线交接**：song 或用户提供的成品歌/歌词文件可进入 mv；mv 不 import song 实现，深度审歌只提示回 `song-review`。
 

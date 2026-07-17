@@ -469,3 +469,74 @@ def test_generation_provenance_binds_model_channel_prompt_and_asset(tmp_path: Pa
         finding.startswith("required_reference_not_submitted:")
         for finding in missing_ref["rows"][0]["findings"]
     )
+
+
+# ── 帧级视觉多样性 dHash（P1） ────────────────────────────────────────────────
+
+def _make_png(path: Path, mode: str) -> None:
+    from PIL import Image
+    path.parent.mkdir(parents=True, exist_ok=True)
+    img = Image.new("RGB", (32, 32))
+    px = img.load()
+    for y in range(32):
+        for x in range(32):
+            if mode == "hgrad":       # 水平渐变
+                px[x, y] = (x * 8 % 256, 0, 0)
+            elif mode == "vgrad":     # 垂直渐变（与 hgrad 的 dHash 明显不同）
+                px[x, y] = (0, y * 8 % 256, 0)
+            else:
+                px[x, y] = (0, 0, 0)
+    img.save(path)
+
+
+def _write_plan(root: Path, clips: list) -> None:
+    p = root / "分镜" / "clip_plan.json"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps({"kind": "mv_clip_plan", "clips": clips}, ensure_ascii=False), encoding="utf-8")
+
+
+def test_dhash_and_hamming_pure() -> None:
+    assert image_qc._hamming(0b1010, 0b1000) == 1
+    assert image_qc._hamming(5, 5) == 0
+
+
+def test_run_shot_variety_flags_static_and_duplicate(tmp_path: Path) -> None:
+    root = tmp_path
+    # Clip_001 静态长镜：首尾帧相同 + 时长 8s
+    _make_png(root / "出图/段落/图片/Clip_001.png", "hgrad")
+    _make_png(root / "出图/段落/图片/Clip_001_end.png", "hgrad")
+    # Clip_002 / Clip_003 首帧相同 → 跨 clip 构图重复
+    _make_png(root / "出图/段落/图片/Clip_002.png", "vgrad")
+    _make_png(root / "出图/段落/图片/Clip_003.png", "vgrad")
+    _write_plan(root, [
+        {"clip_id": "Clip_001", "duration": 8.0, "image_path": "出图/段落/图片/Clip_001.png",
+         "need_end_frame": True, "end_frame_path": "出图/段落/图片/Clip_001_end.png"},
+        {"clip_id": "Clip_002", "duration": 2.0, "image_path": "出图/段落/图片/Clip_002.png"},
+        {"clip_id": "Clip_003", "duration": 2.0, "image_path": "出图/段落/图片/Clip_003.png"},
+    ])
+    res = image_qc.run_shot_variety_check(root)
+    assert res["available"] is True
+    codes = {f["code"] for f in res["findings"]}
+    assert "static_long_take" in codes
+    assert "duplicate_composition" in codes
+    static_clips = {t["clip"] for t in res["static_takes"]}
+    assert "Clip_001" in static_clips
+    dup = {tuple(sorted(p["clips"])) for p in res["duplicate_pairs"]}
+    assert ("Clip_002", "Clip_003") in dup
+
+
+def test_shot_variety_counts_as_advisory_never_hard(tmp_path: Path) -> None:
+    root = tmp_path
+    _make_png(root / "出图/段落/图片/Clip_002.png", "vgrad")
+    _make_png(root / "出图/段落/图片/Clip_003.png", "vgrad")
+    _write_plan(root, [
+        {"clip_id": "Clip_002", "duration": 2.0, "image_path": "出图/段落/图片/Clip_002.png"},
+        {"clip_id": "Clip_003", "duration": 2.0, "image_path": "出图/段落/图片/Clip_003.png"},
+    ])
+    payload = {"checks": {}, "shot_variety": image_qc.run_shot_variety_check(root), "lint": {}}
+    summary = image_qc.summarize(payload)
+    assert summary["hard_blocks"] == 0
+    assert summary["advisory"] >= 1
+    assert summary["by_check"].get("shot_variety", {}).get("warn", 0) >= 1
+    findings = image_qc.to_findings(payload)
+    assert any(f["dim"] == "shot_variety" and f["sev"] == "warn" for f in findings)

@@ -3307,6 +3307,53 @@ def model_facing_policy_guards(
     return list(dict.fromkeys(item.strip(" ；。") for item in guards if item.strip()))
 
 
+def section_continuity_must_for_model(body: str) -> List[str]:
+    """Extract storyboard ``continuity_must`` clauses from a prompt section.
+
+    The prompt pack already carries the authoritative storyboard contract, but
+    the compact compiler previously discarded this field.  That made visible
+    props disappear between adjacent episode frames even though the upstream
+    plan explicitly required them.  Keep the clauses compact and rewrite an
+    adult/minor shoulder-contact beat to the same non-contact staging used by
+    the safety adapter.
+    """
+    match = re.search(r"continuity_must\s*=\s*(\[[^\n]*?\])(?=；|;|\n|$)", str(body or ""))
+    if not match:
+        return []
+    try:
+        raw = json.loads(match.group(1))
+    except (TypeError, json.JSONDecodeError):
+        return []
+    if not isinstance(raw, list):
+        return []
+    has_minor = bool(re.search(r"(?:十四岁|14岁|少年|未成年)", str(body or ""), re.I))
+    clauses: List[str] = []
+    for item in raw:
+        clause = re.sub(r"\s+", " ", str(item or "")).strip(" ；。")
+        if not clause:
+            continue
+        if has_minor and re.search(r"(?:拍肩|压(?:到|住|在)?[^；。]{0,8}肩|肩头接触)", clause):
+            clause = "成人右手只撑在少年身侧桌边，靠近但不接触少年身体"
+        clauses.append(clause)
+    return list(dict.fromkeys(clauses))
+
+
+def critical_retry_guard(retry_guidance: str) -> str:
+    """Return a compact, compiler-surviving guard for an actual-pixel rerun."""
+    text = str(retry_guidance or "").strip()
+    if not text:
+        return ""
+    prefix = "上一次当前像素实际目视拒收原因："
+    for raw in text.splitlines():
+        line = re.sub(r"\s+", " ", raw).strip(" -")
+        if line.startswith(prefix):
+            reason = line[len(prefix):].strip()
+            if reason:
+                return "返工硬约束（最高优先级）：" + reason
+    flattened = re.sub(r"\s+", " ", text).strip()
+    return "返工硬约束（最高优先级）：" + flattened
+
+
 def compile_target_image_request(
     root: Path,
     episode: str,
@@ -3325,8 +3372,17 @@ def compile_target_image_request(
     task = infer_image_task_type(target.section.body, mode=target.mode, target_path=target.rel_path)
     params = image_request_params(root)
     params.update(dict(request_params_override or {}))
-    policy_guards = model_facing_policy_guards(target, reference_inputs)
     body = str(target.section.body or "")
+    policy_guards = model_facing_policy_guards(target, reference_inputs)
+    continuity_must = section_continuity_must_for_model(body)
+    if continuity_must:
+        policy_guards.insert(0, "专项连续性硬约束：" + "；".join(continuity_must))
+    retry_guard = critical_retry_guard(retry_guidance)
+    if retry_guard:
+        # Keep the actual-pixel rejection in a dedicated high-priority clause.
+        # Appending it to a long objective silently loses it when the compiler
+        # compacts objective to 180 characters.
+        policy_guards.insert(0, retry_guard)
     story_action = target_story_action_scope(target)
     clash = weapon_clash_compose_for(story_action)
     if clash:
@@ -3384,10 +3440,10 @@ def compile_target_image_request(
         contract["preserve"] = preserve
         role = "中段动作增量" if target.mode == "midframe" else "尾态动作/表情增量"
         contract["action"] = "；".join(filter(None, (str(contract.get("action") or ""), role)))
-    if retry_guidance:
+    if retry_guard:
         contract["objective"] = "；".join(filter(None, (
+            retry_guard,
             str(contract.get("objective") or ""),
-            "返工修复：" + re.sub(r"\s+", " ", retry_guidance).strip(),
         )))
     payload = compile_image_prompt(contract, backend)
     experiment = image_prompt_experiment_context()
@@ -4156,10 +4212,13 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
     try:
         payload = json.loads(report.read_text(encoding="utf-8"))
     except Exception:
-        return ""
+        payload = {}
 
     target_key = episode_png_key(target.rel_path, episode)
     problems: List[str] = []
+    executor_visual_rejection = latest_hash_bound_executor_visual_rejection(root, target)
+    if executor_visual_rejection:
+        problems.append("executor_visual_rejection")
 
     coverage = payload.get("face_reference_coverage") or {}
     for row in coverage.get("missing") or []:
@@ -4216,6 +4275,11 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
         + "、".join(problems)
         + "。本次是强制重抽，必须优先修复这些失败项。",
     ]
+    if executor_visual_rejection:
+        lines.append(
+            "- 上一次当前像素实际目视拒收原因："
+            + re.sub(r"\s+", " ", executor_visual_rejection).strip()[:700]
+        )
     if has_face_problem:
         lines.append(
             "- face:block/warn 修复：主检人物必须给出可比对的眼鼻嘴三角区和脸部轮廓，"
@@ -4250,6 +4314,45 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
             lines.append(f"  - {label}: 按参考 `{ref}` 的结构与旧化材质生成{suffix}。")
     lines.append("- 不要降低画质或缩小主体来逃避 QC；必须清晰、高分辨率、无水印、无字幕、无 UI。")
     return "\n".join(lines)
+
+
+def latest_hash_bound_executor_visual_rejection(root: Path, target: Target) -> str:
+    """Return the latest actual-pixel rejection for the exact current PNG.
+
+    Machine QC can pass while a visual reviewer catches continuity errors such
+    as a missing registered prop.  Force-rerunning the same prompt without that
+    finding wastes another paid attempt.  Consume only a rejection bound to
+    the current artifact SHA and explicitly labelled ``executor_visual``.
+    """
+    path = root / "生产数据" / "production_events.jsonl"
+    final = root / target.rel_path
+    current_sha = optional_file_sha256(final) if final.is_file() else ""
+    if not current_sha or not path.is_file():
+        return ""
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return ""
+    for raw in reversed(lines):
+        try:
+            row = json.loads(raw)
+        except (TypeError, json.JSONDecodeError):
+            continue
+        generation = row.get("generation") if isinstance(row.get("generation"), Mapping) else {}
+        meta = row.get("meta") if isinstance(row.get("meta"), Mapping) else {}
+        qa = row.get("qa") if isinstance(row.get("qa"), Mapping) else {}
+        if str(row.get("event") or "") != "qa":
+            continue
+        if str(generation.get("asset") or "") != target.rel_path:
+            continue
+        if str(generation.get("status") or "").lower() != "rejected":
+            continue
+        if str(meta.get("artifact_sha256") or "") != current_sha:
+            continue
+        if str(meta.get("review_kind") or "").lower() != "executor_visual":
+            continue
+        return str(qa.get("msg") or "").strip()
+    return ""
 
 
 def append_log(root: Path, row: dict) -> None:

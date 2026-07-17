@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-16T13:53:24+00:00",
+  "created_at": "2026-07-16T15:53:51+00:00",
   "episodes": [
     "第1集"
   ],
@@ -38,7 +38,7 @@
     "skills/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d-image/scripts/candidate_select.py": "ea378289fa05523d9bc2279133bcbac149685ca56966d4fead0f2ec97803d4b3",
     "skills/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d-image/scripts/codex_image_runner.py": "f60dc0688c65e9433b6983c0d5815a0cadf398a10566f92776c7b02d22430900",
+    "skills/n2d-image/scripts/codex_image_runner.py": "8129de7ad5e7e53808f0a1d5e7519edfaefe7ca746a2efd4e034dcfe13b45eca",
     "skills/n2d-image/scripts/cover_pack.py": "d28e040d2bce55e1a4df57f485f26d4fd5bb922a936a58104588fff23448de9c",
     "skills/n2d-image/scripts/derive_makeup_pack.py": "746909ef80b3f7f9c8e781ce84017ac612f48805280e4bc348fb42ef1c8d8580",
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
@@ -276,7 +276,7 @@
     "skills/n2d-voice/voice_preflight.py": "8d48392e7229fc3ccf2a1ba96c27ba1c7ed6796f831dd4cf8e6bc577ecc3dd1d",
     "skills/n2d-voice/voice_text.py": "8b168cb9cda1f07e09e02d459accf6f31200ff044df284fd81ecd454426bf961",
     "skills/n2d/Q&A.md": "957ce9f3191c0244ff4c141155bf5ccee702e3d35f9baf872b0fa7f491a8e928",
-    "skills/n2d/SKILL.md": "c3395102f89ea2c2fcff1dd1df5d556121307f897f90a8444ed3bab3e8be1163",
+    "skills/n2d/SKILL.md": "aa878e787edd966e1846e2db2a39d0eab199d398d963967479d0fe9166b7a311",
     "skills/n2d/_lib/backend_smoke.py": "e350c97c3a686add93e8b6c919fadc8a7965ae76c72f4997f879a72c7ad3acbf",
     "skills/n2d/_lib/bgm_contract.py": "1ec1f68bcc9c6ed2e138354153a9079bee655f1d5a81c66749ce21cea425fb03",
     "skills/n2d/_lib/continuity_chain.py": "2442df8b7287e018d5ab791dcc63df8e1c1709c163c433f3fc50fb943f0e07b6",

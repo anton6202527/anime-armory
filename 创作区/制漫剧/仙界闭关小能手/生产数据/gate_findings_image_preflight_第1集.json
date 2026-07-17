@@ -86,6 +86,7 @@
     },
     {
       "affected_artifacts": [
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json",
         "合规/compliance_manifest.json",
         "脚本/第1集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -98,6 +99,25 @@
         "生图后端适配"
       ],
       "findings": [
+        {
+          "affected_artifacts": [
+            "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端适配",
+          "dim_key": "生图后端适配",
+          "dimension": "生图后端适配",
+          "episode": "第1集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "msg": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "block",
+          "severity": "block",
+          "source": "n2d-dashboard/gate"
+        },
         {
           "affected_artifacts": [
             "合规/compliance_manifest.json",
@@ -148,7 +168,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json、合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
     },
     {
       "affected_artifacts": [
@@ -760,6 +780,25 @@
       "return_to_stage": "voice",
       "sev": "warn",
       "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端适配",
+      "dim_key": "生图后端适配",
+      "dimension": "生图后端适配",
+      "episode": "第1集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
+      "message": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "msg": "生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Codex CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "block",
+      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1718,9 +1757,10 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-16T13:57:08+00:00",
+  "generated_at": "2026-07-16T23:28:45+00:00",
   "inputs_fingerprint": {
     "files": {
+      "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json": "a30abd7b6ec4424dcf5c5a69e3a08805845189d3a79006f86febc8a8f2e52c8d",
       "出图/共享/asset_registry.json": "d3cddf734216112a3c57c94fb27c8a068baff36bc80e0ecef57bcb13bdc90d55",
       "出图/共享/identity_registry.json": "861e41fea3f0bea74bb708be7c42751f70bb732476408c6454ceeb6f8bc9bb50",
       "出图/共享/prompt": null,
@@ -1729,7 +1769,7 @@
       "合规/compliance_manifest.json": "75854205eaad87161a929bb21ae4c77cdba6a9ebf6bbd03be59af8624e1791c8",
       "脚本/第1集/storyboard.json": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
     },
-    "sha": "0866301856b3d17d762495fb3b0c7fb55a7cf719df272b6c1fad593ef0109632"
+    "sha": "8c60ab77d37021fc61e5aa32e6f2bfb35a7460c71c1836074eaf4f2a2d443f52"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
@@ -1780,7 +1820,7 @@
         "warn": 0
       },
       "生图后端适配": {
-        "block": 0,
+        "block": 1,
         "info": 0,
         "warn": 2
       },
@@ -1801,11 +1841,11 @@
       }
     },
     "severity": {
-      "block": 0,
+      "block": 1,
       "info": 13,
       "warn": 31
     },
-    "total": 44
+    "total": 45
   },
   "version": 1
 }

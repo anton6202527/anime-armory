@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-16T13:57:08+00:00
-- 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-16T23:39:18+00:00
+- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 120 | — | 2h35m40s | 56 | 0 | 1 | 36 | 91.1% | 0.0% |
+| 2 | 136 | — | 4h17m12s | 66 | 0 | 2 | 36 | 84.9% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 50s | — | 2h35m40s | 73.2% | 0.0% | 0 | — | — | — | — |
+| 50s | — | 4h17m12s | 68.2% | 0.0% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.6429 | 0.0179 | 0 | 0.0% |
+| 0.5455 | 0.0303 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,7 +28,7 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 73.2% | 90.0% | ⚠️ 差距 |
+| 一次通过率 | 68.2% | 90.0% | ⚠️ 差距 |
 | 重抽率 | 0.0% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
@@ -47,9 +47,10 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图prompt | — | — | 2h35m40s | 73.2% | 0.0% | — | 1 | — | — | — | — | — | — |
+| 第1集 | 出图prompt | — | — | 4h17m12s | 68.2% | 0.0% | — | 2 | — | — | — | — | — | — |
 | 全剧 | — | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 最新阻断
 
-- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/共享/identity_registry.json(变更)、出图/第1集/prompt/01_分镜出图.md(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。
+- 第1集 / image_preflight / 生图后端适配: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md — 生图后端「Codex CLI」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend "Codex CLI" --source "<官方文档或CLI/API证据>" --source-url "<链接或留空>" --evidence-kind official_docs --note "<本次能力结论>"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/codex.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。
+- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：生产数据/image_qc/第1集/face_confirmations.json(变更)、生产数据/image_qc/第1集/prop_shape_confirmations.json(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。

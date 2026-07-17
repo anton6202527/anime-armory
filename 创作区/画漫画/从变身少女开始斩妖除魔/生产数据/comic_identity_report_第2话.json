@@ -1,0 +1,1421 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_report",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
+  "chapter": "第2话",
+  "created_at": "2026-07-17T07:31:19",
+  "write_back": true,
+  "job_reference_paths_updated": 0,
+  "summary": {
+    "reference_count": 6,
+    "panel_count": 30,
+    "missing_ref_count": 0,
+    "rerun_target_count": 0,
+    "outfit_gap_count": 0
+  },
+  "outfit_gaps": {},
+  "registry_validation": {
+    "kind": "comic_identity_registry_validation",
+    "schema_version": 2,
+    "valid": true,
+    "summary": {
+      "assets": 6,
+      "identity_assets": 3,
+      "characters": 2,
+      "monsters": 1,
+      "block": 0,
+      "warn": 0
+    },
+    "issues": []
+  },
+  "model_pack_reports": {
+    "CHAR_JIANG_YUECHU": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_JIANG_YUECHU",
+      "asset_type": "character",
+      "tier": "core_full",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "side",
+        "back",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/user_reference_clean_source.png",
+            "source_sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+          "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "side",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+          "sha256": "f8a76b244e408caeb8a6225ef4cbfd1ee8c9aff854deffc0140da894a6645ebe",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "back",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "af482223115b6e220c798538afe9ed99c5854871d2e62c2a0037434469f92da1",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIANG_YUECHU.json",
+        "status": "current",
+        "approved_at": "2026-07-14T14:07:26+00:00",
+        "reviewer": "Codex代理美术审阅（用户授权连续执行）"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        }
+      ]
+    },
+    "CHAR_PEI_CHANGQING": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_PEI_CHANGQING",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+          "width": 862,
+          "height": 1824,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "source_sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e",
+          "width": 862,
+          "height": 1824,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "source_sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba",
+          "width": 1060,
+          "height": 1484,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "source_sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "0928789fe04d2aec76bec47fb4c6fdd1729609a3dfa571c9342374048f241f7e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_PEI_CHANGQING.json",
+        "status": "current",
+        "approved_at": "2026-07-14T14:34:15+00:00",
+        "reviewer": "Codex代理美术审阅（用户授权连续执行）"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    }
+  },
+  "model_pack_gaps": {},
+  "missing_refs": {},
+  "required_character_views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "tier_required_views": {
+    "core_full": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ],
+    "recurring_standard": [
+      "front",
+      "three_quarter",
+      "face"
+    ],
+    "named_minimal": [
+      "front",
+      "face"
+    ],
+    "restricted_partial": []
+  },
+  "character_views": {
+    "CHAR_JIANG_YUECHU": {
+      "user_reference": "出图/共享/图片/user_reference_clean_source.png",
+      "front": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+      "back": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+      "face": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png"
+    },
+    "CHAR_PEI_CHANGQING": {
+      "front": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+      "face": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png"
+    }
+  },
+  "missing_character_views": {},
+  "rerun_targets": [],
+  "panels": [
+    {
+      "panel_id": "P001",
+      "status": "failed",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P002",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P003",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P004",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P005",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P006",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P007",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P008",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P009",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P010",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P011",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P012",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P013",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P014",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P015",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P016",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P017",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P018",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P019",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P020",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P021",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P022",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P023",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P024",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P025",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P026",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P027",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P028",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P029",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P030",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "LOC_DESOLATE_WILDERNESS",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+        },
+        {
+          "id": "PROP_HENGDAO_BROKEN",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "STYLE_USER_JIANG_YUECHU_REF",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    }
+  ]
+}

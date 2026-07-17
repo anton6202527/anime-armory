@@ -22,9 +22,32 @@
       "source": "image_qc:executor_visual_prop_shape_confirm",
       "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_01_EP01_CLIP01_compare.png",
       "verdict": "ok"
+    },
+    {
+      "asset": "PROP_木牌",
+      "asset_name": "木牌",
+      "confirmed_at": "2026-07-16T23:38:46+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/EP01_CLIP02.png",
+      "png_sha256": "971950b1163faedab24e70c20841168896f1a564fc85cbbfcab0f0231d57e330",
+      "reason": "执行者已实际查看当前原图及 PROP_木牌_Clip_02_EP01_CLIP02_compare.png 并排图：横向大号粗木板、中央长杆、顶端短榫、旧化木纹和落地石基结构一致；本镜竖直位于少年胸腹前，无现代物件、文字水印、结构或数量漂移。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shot": "Clip_02",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_02_EP01_CLIP02_compare.png",
+      "verdict": "ok"
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-07-16T00:28:45+00:00",
+  "updated_at": "2026-07-16T23:38:46+00:00",
   "version": 1
 }

@@ -92,6 +92,29 @@ python3 skills/ad-craft/scripts/meta_card.py cover "<作品根>" --png 出图/�
 ## 一致性梯子（出图）
 ①参考图派生（默认）→ ②后端原生主体ID/主体库（Seedream/可灵/Sora Cameo·opt-in）→ ③LoRA（仅核心长线代言人）。锚点句（锁特征词）+ 身份锁定句（锁"同一张脸/同一个包装"）叠加用。产品/logo 用后端原生主体库或多参考最稳。
 
+梯子不再只是散文：档位真值在 **`skills/ad/_lib/image_backend_adapter.py`**，与 `_设置.md` 的
+`一致性增强` 四档（共享定妆+锚点 | 指定参考图 | 后端主体库 | +LoRA）一一对齐。后端按 **能力**登记
+（与 `ad-video/scripts/route.py` 同哲学：问能力不问品牌，换厂只改能力表）。能力是**三态**——
+厂商无公开证据的一律 `unknown`，`has_capability()` 只认 available，**未知绝不当作支持**；未知后端回退保守
+profile（只有 reference、参考预算 1）。默认路线 GPT Image 2 via Codex **无持久主体库**，梯子真实封顶在
+「指定参考图」档——想上第②档必须换后端并签核。
+
+### 逐镜参考处方（事前·出图前跑）
+
+```bash
+python3 skills/ad-image/scripts/reference_planner.py "<作品根>" --write
+```
+
+治的根因：单张定妆照对 AI 只是个"固定板式"，身份判别细节不足；换景别/角度/光线/表情时模型会重画，
+逐镜累积成漂移。此前 `plan_prompts.reference_paths()` 只是把 registry 里**静态登记**的 `reference_images`
+原样列出，**不看镜头变化量、不看后端能力**。规划器逐镜逐资产算变化量 delta × 后端能力，开出"这镜喂哪些参考 +
+要不要控制网 + 要不要升档"，产 `生产数据/ad_reference_plan.{json,md}`。**产品/品牌资产按最严格的"角色"加权**
+（`PROD_*`/`BRAND_*` 漂了整片报废），产品镜单参考会告警。
+
+与 `product_qc` 的关系是**互补**，不是替代：`reference_planner` 是**事前处方**（还没花钱），`product_qc` 是
+**事后诊断**（图已生成）。gate 在 `--stage image` 以 **advisory** 并入（缺报告只 info、报告里的 block 降为
+warn）——创意/启发式不硬挡付费的规矩见 `gate.py` 的 `score_findings`。
+
 ## 重抽预算策略（两档）
 
 图片重抽只保留两档：`预算充足` / `预算一般`，默认 `预算充足`。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限。

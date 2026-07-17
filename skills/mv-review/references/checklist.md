@@ -16,6 +16,8 @@
 | 画面糊/低质 | 判 | 出图/clip 分辨率清晰度够投放 | 🟡 |
 | 单曲视觉一致性包缺失 | 判 | `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger` 是否在视觉蓝图/设定/分镜里被继承；MV 可换段落 look，但不能一支歌内换脸换主画风 | 🟡 |
 | 参考输入/LoRA 未登记 | 判 | 若 `_设置.md` 写 `MV一致性增强=指定参考图/后端主体库/+LoRA`，检查 prompt 是否含 `reference_inputs`、参考图路径/主体 ID/LoRA trigger+底模+授权说明 | 🟡 |
+| 构图重复 / 景别单调 / 静态长镜 | 机（+判） | **事前**：`shot_variety_audit.py` 读 `clip_plan.shot_design` 查同 (场景,景别,机位,运镜) 反复、连续同场景 run 景别<3 种、副歌 key 镜静止运镜、单场景占比过高、母题过用、大变化镜头缺参考锚。**事后**：`image_qc` dHash 查跨 clip 首帧撞脸、首↔尾帧几乎不动的静态长镜。都是 advisory（MV 命门=视觉不重复，但 recurring hook 可能刻意，只 warn 交人判） | 🟡 |
+| 大变化镜头缺参考锚（易漂） | 机 | `shot_variety_audit` 的 `reference_gap`：近景/极端角度/换装/有禁漂约束的 clip 却没规划 `reference_inputs`——最易崩脸，出图前按 `MV一致性增强` 补参考图/后端主体库/LoRA | 🟡 |
 | 出图来源链缺失/漂移 | 机 | 每张正式帧必须有统一 model+channel、实际 prompt、reference inputs、asset SHA-256；prompt/参考/图片被替换后收据应失效 | 正式版 🔴 |
 | 演唱镜口型对不上 | 判 | **正面跟唱大特写**主角嘴型是否对得上人声（仅 `演唱口型≠关闭` 时要求；远景/侧脸/B-roll/空镜豁免）。对不上→用人声音频条件或后期 pass（LatentSync 优先）重做该 clip，或回 `mv-plan` 改分镜规避。见 `mv-video`「演唱口型对齐」 | 🟡 |
 

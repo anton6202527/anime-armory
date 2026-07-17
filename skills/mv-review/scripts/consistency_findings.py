@@ -78,6 +78,18 @@ def has_clip_plan(root: str) -> bool:
     return os.path.exists(os.path.join(root, "分镜", "clip_plan.json"))
 
 
+def manual_review_ok(report: dict[str, Any]) -> bool:
+    """image_qc 降级人工放行是否有效：具名 + 绑定报告 hash（与 mv-image/mv-craft gate 同算法）。"""
+    manual = report.get("manual_review") or {}
+    if not (manual.get("accepted") and str(manual.get("reviewer") or "").strip()):
+        return False
+    stripped = {k: v for k, v in report.items()
+                if k not in ("manual_review", "json_path", "markdown_path")}
+    encoded = json.dumps(stripped, ensure_ascii=False, sort_keys=True,
+                         separators=(",", ":")).encode("utf-8")
+    return manual.get("bound_report_sha256") == hashlib.sha256(encoded).hexdigest()
+
+
 def image_qc(findings: list[dict[str, Any]], root: str) -> None:
     rel = "生产数据/image_qc/image_qc.json"
     report = load_json(os.path.join(root, rel))
@@ -95,13 +107,16 @@ def image_qc(findings: list[dict[str, Any]], root: str) -> None:
         findings.append(finding("warn", "visual_identity", "image_qc_warn", f"image_qc advisory={advisory}，需并排复核。", rel, "image_qc"))
     env = report.get("qc_environment") if isinstance(report.get("qc_environment"), dict) else {}
     precision = str(env.get("precision_level") or "").strip()
-    manual_ok = bool(report.get("manual_review_accepted") or env.get("manual_review_accepted"))
+    manual_ok = manual_review_ok(report)
     if precision and precision != "full" and not manual_ok:
+        legacy = " 旧式布尔留痕已不被接受，需 --accept-degraded 具名绑定放行。" if (
+            report.get("manual_review_accepted") or env.get("manual_review_accepted")
+            or report.get("manual_review")) else ""
         findings.append(finding("block", "visual_identity", "image_qc_precision",
-                                f"image_qc 精度为 {precision}，不能当作完整脸/主色一致性证据。", rel))
+                                f"image_qc 精度为 {precision}，不能当作完整脸/主色一致性证据。{legacy}", rel))
     elif precision and precision != "full":
         findings.append(finding("warn", "visual_identity", "image_qc_precision_manual",
-                                f"image_qc 精度为 {precision}，已有人工放行留痕。", rel))
+                                f"image_qc 精度为 {precision}，已有具名人工放行（绑定当前报告）。", rel))
     if not hard and not advisory and (not precision or precision == "full"):
         findings.append(finding("info", "visual_identity", "image_qc_clean", "出图一致性机检没有阻断项。", rel))
 
@@ -186,10 +201,98 @@ def timing_checks(findings: list[dict[str, Any]], root: str) -> None:
             findings.append(finding("info", "lyric_timeline", "alignment_clean", "字幕对齐报告无 warning。", "字幕/alignment_report.json"))
 
 
+def shot_variety(findings: list[dict[str, Any]], root: str) -> None:
+    """视觉多样性/构图冗余事前机检（advisory）——有 clip_plan 时应先跑，出图/出视频前拦同构图反复。"""
+    if not has_clip_plan(root):
+        return
+    rel = "生产数据/shot_variety/shot_variety.json"
+    report = load_json(os.path.join(root, rel))
+    if not isinstance(report, dict):
+        findings.append(finding("info", "shot_variety", "shot_variety_missing",
+                                "未跑视觉多样性事前机检（shot_variety_audit）；出图前建议补跑。", rel))
+        return
+    summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+    warn = int(summary.get("warn") or 0)
+    if warn:
+        codes = sorted({str(f.get("code")) for f in (report.get("findings") or [])
+                        if f.get("severity") == "warn"})
+        findings.append(finding("warn", "shot_variety", "shot_variety_warn",
+                                f"视觉多样性 advisory={warn}（{'/'.join(codes) or 'n/a'}），回 mv-plan 换景别/机位/场景。", rel, "shot_variety_audit"))
+    else:
+        findings.append(finding("info", "shot_variety", "shot_variety_clean", "视觉多样性事前机检无重复/单调项。", rel))
+
+
+REDRAW_RATE_WARN = 0.35        # 与 n2d stop_loss 默认 max_redraw_rate 同口径
+TAKES_PER_CLIP_WARN = 3.0      # 平均每 clip 抽 take 数超过此值 → 出视频侧烧钱失控预警
+
+
+def production_stats(findings: list[dict[str, Any]], root: str) -> None:
+    """止损轻量件（stop_loss lite）：从生产事件账本与挑版台账算重画率 / 每镜 take 数。
+
+    MV 单曲工位小，不移植 n2d 整套 stop_loss；但「同一张图反复重抽 / 一个 clip 抽了
+    一堆 take 还挑不出」正是积分烧穿的前兆，advisory 提示回看 prompt/参考锚。"""
+    events_rel = "生产数据/production_events.jsonl"
+    events_path = os.path.join(root, events_rel)
+    if os.path.exists(events_path):
+        per_asset: dict[str, int] = {}
+        try:
+            with open(events_path, encoding="utf-8") as handle:
+                for line in handle:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        event = json.loads(line)
+                    except ValueError:
+                        continue
+                    if not isinstance(event, dict) or event.get("event") != "generation":
+                        continue
+                    if event.get("stage") != "image":
+                        continue
+                    asset = str((event.get("generation") or {}).get("asset") or "").strip()
+                    if asset:
+                        per_asset[asset] = per_asset.get(asset, 0) + 1
+        except OSError:
+            per_asset = {}
+        if per_asset:
+            redrawn = sum(1 for count in per_asset.values() if count >= 2)
+            rate = redrawn / len(per_asset)
+            detail = {"assets": len(per_asset), "redrawn_assets": redrawn,
+                      "redraw_rate": round(rate, 3), "threshold": REDRAW_RATE_WARN}
+            if rate > REDRAW_RATE_WARN:
+                worst = max(per_asset.items(), key=lambda kv: kv[1])
+                findings.append(finding("warn", "production_economy", "image_redraw_rate_high",
+                                        f"出图重画率 {rate:.0%}（{redrawn}/{len(per_asset)} 资产重抽过，"
+                                        f"最多 {worst[0]} 抽了 {worst[1]} 次）——积分烧穿前兆；"
+                                        "回看该批 prompt 锚点/参考图是否缺失，别硬抽。",
+                                        events_rel, "production_events", detail))
+            else:
+                findings.append(finding("info", "production_economy", "image_redraw_rate",
+                                        f"出图重画率 {rate:.0%}（{redrawn}/{len(per_asset)}）。",
+                                        events_rel, "production_events", detail))
+    jobs_rel = "出视频/jobs_manifest.json"
+    jobs = (load_json(os.path.join(root, jobs_rel), {}) or {}).get("jobs") or []
+    takes_counts = [len(job.get("takes") or []) for job in jobs if isinstance(job, dict)]
+    counted = [n for n in takes_counts if n]
+    if counted:
+        avg = sum(counted) / len(counted)
+        detail = {"jobs_with_takes": len(counted), "avg_takes_per_clip": round(avg, 2),
+                  "max_takes": max(counted), "threshold": TAKES_PER_CLIP_WARN}
+        if avg > TAKES_PER_CLIP_WARN:
+            findings.append(finding("warn", "production_economy", "takes_per_clip_high",
+                                    f"平均每 clip 抽 {avg:.1f} 个 take（最多 {max(counted)}）——"
+                                    "出视频侧烧钱失控预警；先回 mv-image/mv-plan 修首帧与动作锚再抽。",
+                                    jobs_rel, "jobs_manifest", detail))
+        else:
+            findings.append(finding("info", "production_economy", "takes_per_clip",
+                                    f"平均每 clip 抽 {avg:.1f} 个 take。", jobs_rel, "jobs_manifest", detail))
+
+
 def build_report(root: str) -> dict[str, Any]:
     root = os.path.abspath(root)
     findings: list[dict[str, Any]] = []
     registry_checks(findings, root)
+    shot_variety(findings, root)
     image_qc(findings, root)
     report_summary(findings, root, "生产数据/video_inherit_contract/inherit_contract.json",
                    "video_handoff", "inherit_contract")
@@ -221,6 +324,7 @@ def build_report(root: str) -> dict[str, Any]:
             "设定/asset_registry.json",
             "分镜/reference_plan.json",
             "设定/reference_requirements.json",
+            "生产数据/shot_variety/shot_variety.json",
             "生产数据/image_qc/image_qc.json",
             "生产数据/video_inherit_contract/inherit_contract.json",
             "生产数据/video_qc/video_qc.json",

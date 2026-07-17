@@ -38,11 +38,12 @@ python3 skills/mv-plan/scripts/plan_clips.py "<制MV作品根>" --granularity �
 3. 跑语义分镜引擎。demo 可先查看框架；**正式付费出图必须注入覆盖全部 clip 的具体画面/动作并落 hash 收据**。AI 代理先把 `compose_prompts.py` 输出交给用户/导演复核，再用 `--mock-assessment` 注入；不得把通用动作占位直接送下游。
    - 语义补全时读取 `mv-video/references/action_knowledge.md`（动作家族/动作峰值/转场母题）和 `mv-image/references/visual_consistency.md`（身份锚点/主色/母题），优先补 `action_family/action_peak/visual_motif/transition_motif/shot_design`，再补 continuity；写回时同步落 `分镜/semantic_prompts.json`，便于复查和重跑。`compose_prompts.py` 默认要求覆盖全部 clip，缺字段会报错；临时局部注入才用 `--allow-partial`。
 4. 跑 `mv-craft/scripts/identity_registry.py <作品根>`，生成身份/资产/参考注册表。
-5. 跑 `mv-score` 产绑定当前 plan/beatgrid/song 的 deterministic pacing receipt；不设 `--threshold` 时只给证据、不把审美启发式做硬挡。
-6. `mv-image` 按 `clip_plan.json` 出首帧和 `match_action` 接缝需要的尾帧，并登记每张图的 model/channel/prompt/hash 收据。
-7. `mv-craft` 生成 production pack、真实 animatic、OTIO 并完成具名 picture lock。
-8. `mv-video/scripts/video_jobs.py` 按锁定计划生成逐 clip 任务和可用的多镜头 `sequence_units`。
-9. `mv-compose` 按 `timeline_manifest.json` 合成。
+5. 跑 `mv-score` 产绑定当前 plan/beatgrid/song 的 deterministic pacing receipt；不设 `--threshold` 时只给证据、不把审美启发式做硬挡。`mv-score`/`pacing.py` 是**纯数值卡点引擎**（等长/downbeat/密度/总时长），从不读画面字段——视觉重复它看不见。
+6. **出图前跑 `mv-review/scripts/shot_variety_audit.py <作品根> --write`**：读本阶段写好的 `shot_design`，在花积分前拦「同 (场景,景别,机位,运镜) 反复 / 连续同场景景别单调 / 副歌 key 镜静止运镜 / 单场景占比过高 / 母题过用 / 大变化镜头缺参考锚」。report-only（advisory·永不 block），被 image gate 与审片消费。命中就回本阶段换景别/机位/场景/补参考再出图——MV 命门除卡点就是视觉不重复。
+7. `mv-image` 按 `clip_plan.json` 出首帧和 `match_action` 接缝需要的尾帧，并登记每张图的 model/channel/prompt/hash 收据。
+8. `mv-craft` 生成 production pack、真实 animatic、OTIO 并完成具名 picture lock。
+9. `mv-video/scripts/video_jobs.py` 按锁定计划生成逐 clip 任务和可用的多镜头 `sequence_units`。
+10. `mv-compose` 按 `timeline_manifest.json` 合成。
 
 ## 原则
 

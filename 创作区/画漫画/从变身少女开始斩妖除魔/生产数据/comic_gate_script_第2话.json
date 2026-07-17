@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第2话",
+  "stage": "script",
+  "created_at": "2026-07-16T23:59:44",
+  "verdict": "pass",
+  "summary": {
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "findings": [],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=2 block=0 warn=0"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4",
+        "size": 936
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "f4c7e7f3407872010882e9e05dcff60c8746c8e8f09bed08b0e4e9fb8b985b13",
+        "size": 1280
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "38751ac75ee5167418344ddc621aa6a2f1e111d7311912342a15a83716e18147",
+        "size": 1155
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "7719f6e060ac51dfc8733608edfb6149d42b781214e1f70ac912532cea788b93",
+        "size": 8787
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "fbfb656662b29a731966f704e40417d542b3f24be855fe2b735b2dc150f0ef4f",
+        "size": 525
+      },
+      {
+        "path": "源本/从变身少女开始斩妖除魔.txt",
+        "exists": true,
+        "sha256": "215b63ec3042c4dce3c350272a3e7c0a9b879c3916992024ee1565b2b1a44f77",
+        "size": 5630151
+      },
+      {
+        "path": "脚本/第2话/panel_script.json",
+        "exists": true,
+        "sha256": "51d7c971c1622b6306a0be862eac7de13b9c41792ea1fa4aac1f650327aa82a1",
+        "size": 54053
+      },
+      {
+        "path": "脚本/第2话/source_semantics.json",
+        "exists": true,
+        "sha256": "cdcfa563543a7543d20eb5feaffe07fea1892aaead3221da2274575506cffe29",
+        "size": 65149
+      }
+    ],
+    "sha256": "39daccde07d34930298b751f0483389a74f78ee216bc7553ac9cb9412b0df113"
+  },
+  "receipt_id": "ff9a114d9eb4bc9175149229248c862a40ce5615bc635216b16b804e13b6ad62"
+}

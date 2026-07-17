@@ -36,7 +36,8 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
   python3 <skill>/scripts/mv_check.py <制MV作品根>          # 人读
   python3 <skill>/scripts/mv_check.py <制MV作品根> --json   # 喂回 LLM 汇总
   ```
-  `consistency_findings.py` 写 `生产数据/consistency_findings.{json,md}`，把 `identity_registry` / `reference_plan` / `image_qc` / `inherit_contract` / `video_qc` / `alignment_report` 收成一个统一一致性证据面，供审片和返修排序使用。
+  `consistency_findings.py` 写 `生产数据/consistency_findings.{json,md}`，把 `identity_registry` / `reference_plan` / `shot_variety` / `image_qc` / `inherit_contract` / `video_qc` / `alignment_report` 收成一个统一一致性证据面，供审片和返修排序使用。
+- **视觉多样性事前机检（出图前跑，最便宜的点）**：`scripts/shot_variety_audit.py <制MV作品根> --write` —— 读 `分镜/clip_plan.json` 的 `shot_design`，在花积分出图前拦「同构图反复 / 景别单调 / 副歌静镜 / 场景滞留 / 大变化镜头缺参考锚」。report-only（最高 warn，永不 block），写 `生产数据/shot_variety/shot_variety.{json,md}`，被 gate（image 阶段）、`consistency_findings` 与 `mv_check` 消费。补 `mv-score`/`pacing.py` 纯数值卡点引擎**从不读画面字段**的盲区——MV 命门除了卡点就是**视觉不重复**。出图后由 `mv-image` 的 `image_qc` dHash 做像素级现实核对。参照 n2d `audit_shot_variety` + `redundancy_audit`（MV 无台词，故其文本信号不移植）。
   > `ffprobe` 缺失时，clip/成片 的时长·分辨率·音轨检查**显式标「跳过」**，绝不静默略过。`song.wav` 时长优先走标准库 `wave`，mp3/m4a/flac 走 ffprobe。
 
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。

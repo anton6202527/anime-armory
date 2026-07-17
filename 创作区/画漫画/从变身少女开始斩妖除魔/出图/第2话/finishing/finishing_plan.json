@@ -1,0 +1,2930 @@
+{
+  "schema_version": 2,
+  "kind": "comic_finishing_plan",
+  "workflow_status": "validated",
+  "chapter": "第2话",
+  "render_stage": "完成稿",
+  "style": "国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)",
+  "delivery_mode": "color_digital",
+  "layer_contract": {
+    "delivery_mode": "color_digital",
+    "ordered_layers": [
+      {
+        "layer_id": "ROUGH",
+        "role": "rough",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "PENCIL",
+        "role": "pencil",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "LINEART",
+        "role": "lineart",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "INK_BLACKS",
+        "role": "ink_blacks",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "TONE_OR_COLOR",
+        "role": "tone_or_color",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "EFFECTS",
+        "role": "effects",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "LETTERING_SFX",
+        "role": "lettering_sfx",
+        "required": true,
+        "blend": "normal"
+      }
+    ],
+    "text_separation": "dialogue/narration stay in post-lettering layers; only contracted drawn SFX may enter art layers",
+    "flatten_policy": "keep logical layer manifest even when a backend returns one flattened raster"
+  },
+  "tone_strategy": "风格驱动",
+  "effects_strategy": "剧情驱动",
+  "page_value_plans": [
+    {
+      "page_or_segment_id": "SCROLL_001",
+      "panel_ids": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "focal_panel_ids": [
+        "P001",
+        "P005",
+        "P006"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    },
+    {
+      "page_or_segment_id": "SCROLL_002",
+      "panel_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "focal_panel_ids": [
+        "P009"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    },
+    {
+      "page_or_segment_id": "SCROLL_003",
+      "panel_ids": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "focal_panel_ids": [
+        "P013",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    },
+    {
+      "page_or_segment_id": "SCROLL_004",
+      "panel_ids": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "focal_panel_ids": [
+        "P019",
+        "P020",
+        "P021",
+        "P023"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    },
+    {
+      "page_or_segment_id": "SCROLL_005",
+      "panel_ids": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "focal_panel_ids": [
+        "P027",
+        "P028",
+        "P030"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第2话/panel_script.json",
+    "panel_script_sha256": "51d7c971c1622b6306a0be862eac7de13b9c41792ea1fa4aac1f650327aa82a1",
+    "name_board": "排版/第2话/name_board.json",
+    "name_board_sha256": "0a10153ec0e3ed4d452493083a5b1d25fe687a43decfe9eeecc35ad112839c45",
+    "layout": "排版/第2话/layout.json",
+    "layout_sha256": "99764152fc08060fc862ff2ee4c3388993363c3b0bd1c2961507967e3e5a0087",
+    "settings": "_设置.md",
+    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4",
+    "name_approval_subject_sha256": "6f722975d7e8304be0ae6234d4df518584bd2336feea12487272a32230c46b38",
+    "layout_approval_subject_sha256": "43b5dbc42a9b29e5b2c29ea39042f65e29fbd6caea343e29120989103b24be5a"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P001_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P001_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "噗。",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P001_SFX_01",
+          "content_ref": "panel:P001.sfx:1",
+          "text_hint": "噗。",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P002",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P002_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P002_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P003",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P003_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P003_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P004",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P004_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P004_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P005",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P005_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P005_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P006",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P006_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P006_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嗡——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P006_SFX_01",
+          "content_ref": "panel:P006.sfx:1",
+          "text_hint": "嗡——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P007",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P007_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P007_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "噗。",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P007_SFX_01",
+          "content_ref": "panel:P007.sfx:1",
+          "text_hint": "噗。",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P008",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P008_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P008_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "呼——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P008_SFX_01",
+          "content_ref": "panel:P008.sfx:1",
+          "text_hint": "呼——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P009",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P009_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P009_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "轰！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P009_SFX_01",
+          "content_ref": "panel:P009.sfx:1",
+          "text_hint": "轰！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P010",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P010_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P010_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "吼——！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P010_SFX_01",
+          "content_ref": "panel:P010.sfx:1",
+          "text_hint": "吼——！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P011",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P011_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P011_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "呜——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P011_SFX_01",
+          "content_ref": "panel:P011.sfx:1",
+          "text_hint": "呜——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P012",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P012_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P012_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "唰！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P012_SFX_01",
+          "content_ref": "panel:P012.sfx:1",
+          "text_hint": "唰！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P013",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P013_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P013_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "铮——！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P013_SFX_01",
+          "content_ref": "panel:P013.sfx:1",
+          "text_hint": "铮——！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P014",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P014_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P014_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "当！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P014_SFX_01",
+          "content_ref": "panel:P014.sfx:1",
+          "text_hint": "当！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P015",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P015_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P015_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P015_SFX_01",
+          "content_ref": "panel:P015.sfx:1",
+          "text_hint": "沙……",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P016",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P016_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P016_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "咚。；喝……喝……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P016_SFX_01",
+          "content_ref": "panel:P016.sfx:1",
+          "text_hint": "咚。",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        {
+          "item_id": "P016_SFX_02",
+          "content_ref": "panel:P016.sfx:2",
+          "text_hint": "喝……喝……",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P017",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P017_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P017_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P017_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P017_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P017_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P017_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P017_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P017_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嗡——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P017_SFX_01",
+          "content_ref": "panel:P017.sfx:1",
+          "text_hint": "嗡——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P018",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P018_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P018_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P018_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P018_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P018_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P018_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P018_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P018_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "哗——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P018_SFX_01",
+          "content_ref": "panel:P018.sfx:1",
+          "text_hint": "哗——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P019",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P019_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P019_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P019_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P019_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P019_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P019_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P019_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P019_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙沙沙——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P019_SFX_01",
+          "content_ref": "panel:P019.sfx:1",
+          "text_hint": "沙沙沙——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P020",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P020_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P020_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P020_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P020_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P020_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P020_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P020_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P020_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "轰——！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P020_SFX_01",
+          "content_ref": "panel:P020.sfx:1",
+          "text_hint": "轰——！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P021",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P021_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P021_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P021_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P021_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P021_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P021_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P021_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P021_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嗡——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P021_SFX_01",
+          "content_ref": "panel:P021.sfx:1",
+          "text_hint": "嗡——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P022",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P022_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P022_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P022_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P022_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P022_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P022_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P022_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P022_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "锵。",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P022_SFX_01",
+          "content_ref": "panel:P022.sfx:1",
+          "text_hint": "锵。",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P023",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P023_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P023_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P023_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P023_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P023_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P023_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P023_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P023_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P024",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P024_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P024_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P024_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P024_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P024_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P024_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P024_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P024_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P025",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P025_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P025_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P025_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P025_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P025_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P025_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P025_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P025_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P025_SFX_01",
+          "content_ref": "panel:P025.sfx:1",
+          "text_hint": "沙……",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P026",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P026_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P026_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P026_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P026_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P026_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P026_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P026_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P026_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙、沙。",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P026_SFX_01",
+          "content_ref": "panel:P026.sfx:1",
+          "text_hint": "沙、沙。",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P027",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P027_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P027_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P027_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P027_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P027_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P027_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P027_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P027_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P028",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P028_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P028_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P028_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P028_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P028_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P028_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P028_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P028_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P029",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P029_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P029_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P029_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P029_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P029_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P029_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P029_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "stable contour lineart with modest line-weight variation and clean readable anatomy",
+      "black_fill_plan": "use small black accents for depth and material separation; keep safe text areas low detail",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P029_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: subtle focus or atmosphere lines only if they improve reading",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P030",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P030_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P030_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P030_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P030_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P030_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P030_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P030_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable",
+      "black_fill_plan": "assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features",
+      "tone_plan": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+      "tone_items": [
+        {
+          "item_id": "P030_TONE_01",
+          "role": "grayscale_underpainting",
+          "strategy": "风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "three-value read: focal subject, acting silhouette, background depth must remain separable in grayscale",
+      "effects_plan": "剧情驱动: speed/action lines following motion path, impact flash near hit point, do not cover face/hands/key props",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "呼——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P030_SFX_01",
+          "content_ref": "panel:P030.sfx:1",
+          "text_hint": "呼——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    }
+  ],
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

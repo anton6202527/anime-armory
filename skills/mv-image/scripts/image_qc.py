@@ -47,6 +47,7 @@ import math
 import os
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
@@ -129,6 +130,22 @@ def floor_calibrated(intra_scores: Sequence[float]) -> bool:
     return any(s is not None for s in intra_scores)
 
 
+COSTUME_OUTLIER_GAP = 0.20
+
+
+def costume_set_outliers(variant_scores: Mapping[str, Optional[float]],
+                         gap: float = COSTUME_OUTLIER_GAP) -> List[str]:
+    """定妆组离群检测：某变体 vs 主参考的相似度比组内最高值低超过 gap → 疑似漂移定妆。
+
+    floor 取组内最小值，一张漂了的定妆会悄悄把自标定地板拉低（放松整套脸检）；
+    离群项 advisory 提示人工确认——真漂了就重抽该定妆再重跑（floor 随之回升）。纯函数·可测。"""
+    vals = {k: v for k, v in variant_scores.items() if v is not None}
+    if len(vals) < 2:
+        return []
+    top = max(vals.values())
+    return sorted(k for k, v in vals.items() if top - v > gap)
+
+
 def band(score: float, floor: float, margin: float = DEFAULT_MARGIN) -> str:
     """落档：score≥floor→ok / floor-margin≤score<floor→warn / 更低→block。纯函数·可测。"""
     if score >= floor:
@@ -201,6 +218,19 @@ COLOR_NAME_RGB: Dict[str, Tuple[int, int, int]] = {
     "棕": (130, 90, 60), "褐": (110, 80, 55), "米": (225, 215, 185),
 }
 PALETTE_DRIFT_THRESHOLD = 110.0  # 最近主色欧氏距离阈值（0-441），超过=该 clip 主色离 anchor 太远。
+
+# —— 帧级视觉多样性 dHash 阈值（对齐 n2d audit_shot_variety 的量级；全 advisory）——
+def _int_env_iqc(name: str, default: int) -> int:
+    try:
+        return int(os.environ.get(name, "").strip() or default)
+    except (TypeError, ValueError):
+        return default
+
+# 首帧↔尾帧 dHash ≤ 此 + 时长 ≥ STATIC_TAKE_MIN_SEC → 静态长镜（首尾几乎没变）。
+STATIC_ANCHOR_DHASH_MAX = _int_env_iqc("MV_STATIC_ANCHOR_DHASH_MAX", 10)
+STATIC_TAKE_MIN_SEC = _int_env_iqc("MV_STATIC_TAKE_MIN_SEC", 6)
+# 两个不同 clip 的首帧 dHash ≤ 此 → 跨 clip 构图重复（画面几乎一样）。
+CROSS_CLIP_DUP_DHASH_MAX = _int_env_iqc("MV_CROSS_CLIP_DUP_DHASH_MAX", 10)
 
 
 def parse_palette_anchor(raw: str) -> List[Tuple[int, int, int]]:
@@ -541,19 +571,27 @@ def run_face_check(root: Path, margin: float = DEFAULT_MARGIN) -> Dict[str, Any]
         result["available"] = True
         result["mode"] = "insightface"
         main = _embed(app, lead_set.get("主") or next(iter(lead_set.values())))
-        intra: List[float] = []
+        intra_by_variant: Dict[str, float] = {}
         if main is not None:
             for v, p in lead_set.items():
                 if v == "主":
                     continue
                 e = _embed(app, p)
                 if e is not None:
-                    intra.append(cosine(main, e))
+                    intra_by_variant[v] = cosine(main, e)
+        intra: List[float] = list(intra_by_variant.values())
         floor = calibrate_floor(intra)
         calibrated = floor_calibrated(intra)
         result["lead_floor"] = round(floor, 4)
         result["lead_calibrated"] = calibrated
         result["lead_intra_pairs"] = len(intra)
+        result["intra_by_variant"] = {v: round(s, 4) for v, s in intra_by_variant.items()}
+        outliers = costume_set_outliers(intra_by_variant)
+        result["costume_outliers"] = outliers
+        if outliers:
+            result["notes"].append(
+                f"定妆组离群：变体 {'/'.join(outliers)} 与主参考相似度显著低于组内其它定妆——"
+                "疑似该定妆本身漂了，会拉低自标定 floor 放松整套脸检；先人工确认，真漂了重抽该定妆后重跑。")
         if main is None:
             result["notes"].append("主角主参考未检出脸——floor 无法标定，脸漂移降级交人判。")
         for cid, ap in frames:
@@ -636,6 +674,93 @@ def run_palette_check(root: Path, threshold: float = PALETTE_DRIFT_THRESHOLD) ->
         row: Dict[str, Any] = {"clip": cid, "png": rel, "verdict": v,
                                "nearest_dist": dist, "dominant": [list(c) for c in dominant]}
         result["shots"].append(row)
+    return result
+
+
+def _pillow_dhash(image_mod, png: str, hash_size: int = 8) -> Optional[int]:
+    """感知哈希 dHash（灰度→(hash_size+1)×hash_size→水平相邻像素比大小）。纯 Pillow·失败返回 None。"""
+    try:
+        img = image_mod.open(png).convert("L").resize((hash_size + 1, hash_size))
+    except Exception:
+        return None
+    px = list(img.getdata())
+    w = hash_size + 1
+    bits = 0
+    for row in range(hash_size):
+        base = row * w
+        for col in range(hash_size):
+            bits = (bits << 1) | (1 if px[base + col] > px[base + col + 1] else 0)
+    return bits
+
+
+def _hamming(a: int, b: int) -> int:
+    return bin(a ^ b).count("1")
+
+
+def run_shot_variety_check(root: Path) -> Dict[str, Any]:
+    """帧级视觉多样性（确定性·dHash）——出图落档后的现实核对，补 shot_variety_audit 计划期机检的盲区：
+    计划里换了景别但两张图实际出得几乎一样，或首尾帧几乎不动的静态长镜，只有像素能看出来。
+
+    全 advisory（warn/info）：MV 筛选宽容，且 recurring hook 可能刻意——绝不硬拦。无 Pillow → 跳过交人判。"""
+    result: Dict[str, Any] = {"available": False, "findings": [], "notes": [],
+                              "duplicate_pairs": [], "static_takes": [], "checked": 0}
+    image_mod = _load_pillow()
+    if image_mod is None:
+        result["notes"].append("未装 Pillow——帧级视觉多样性 dHash 机检跳过（交人判并排读图）。")
+        return result
+
+    plan = load_clip_plan(root) or {}
+    dur_by_id: Dict[str, float] = {}
+    for clip in plan.get("clips", []) or []:
+        if isinstance(clip, dict) and clip.get("clip_id"):
+            try:
+                dur_by_id[str(clip["clip_id"])] = float(clip.get("duration") or 0.0)
+            except (TypeError, ValueError):
+                continue
+
+    first_hashes: List[Tuple[str, str, int]] = []   # (clip_id, rel, hash)
+    end_hash: Dict[str, int] = {}
+    for cid, ap in discover_clip_frames(root):
+        if not os.path.exists(ap):
+            continue
+        h = _pillow_dhash(image_mod, ap)
+        if h is None:
+            continue
+        rel = os.path.relpath(ap, str(root))
+        if cid.endswith("_end"):
+            end_hash[cid[:-4]] = h
+        else:
+            first_hashes.append((cid, rel, h))
+    result["available"] = True
+    result["checked"] = len(first_hashes)
+
+    # 静态长镜：首↔尾帧几乎没变 + 时长够长。
+    for cid, rel, h in first_hashes:
+        if cid not in end_hash:
+            continue
+        dist = _hamming(h, end_hash[cid])
+        duration = dur_by_id.get(cid, 0.0)
+        if dist <= STATIC_ANCHOR_DHASH_MAX and duration >= STATIC_TAKE_MIN_SEC:
+            result["static_takes"].append({"clip": cid, "png": rel, "dhash": dist, "duration": duration})
+            result["findings"].append({"level": "warn", "code": "static_long_take", "clips": [cid],
+                                        "msg": f"{cid} 首尾帧几乎无变化（dHash={dist}）却长 {duration:.1f}s——"
+                                               "静态长镜，MV 会显拖；加运镜/换尾帧目标，或缩短该 clip"})
+
+    # 跨 clip 构图重复：不同 clip 首帧几乎一样。
+    seen_pairs = 0
+    for i in range(len(first_hashes)):
+        for j in range(i + 1, len(first_hashes)):
+            dist = _hamming(first_hashes[i][2], first_hashes[j][2])
+            if dist <= CROSS_CLIP_DUP_DHASH_MAX:
+                a, b = first_hashes[i][0], first_hashes[j][0]
+                result["duplicate_pairs"].append({"clips": [a, b], "dhash": dist})
+                seen_pairs += 1
+                if seen_pairs <= 20:
+                    result["findings"].append({"level": "warn", "code": "duplicate_composition", "clips": [a, b],
+                                               "msg": f"{a} 与 {b} 首帧画面几乎一样（dHash={dist}）——"
+                                                      "换其一的景别/机位/主体位置，别让两拍撞脸"})
+    if seen_pairs > 20:
+        result["notes"].append(f"另有 {seen_pairs - 20} 对重复构图未逐条列出（见 duplicate_pairs）。")
     return result
 
 
@@ -932,6 +1057,11 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     l_block = sum(1 for f in lint.get("findings", []) if f.get("level") == "block")
     rows_by_check["lint"] = {"block": l_block, "warn": l_warn, "noface": 0, "ok": 0}
     advisory += l_block + l_warn   # 锚点 lint 全 advisory（缺锚点块不硬拦，提示补）
+    variety = payload.get("shot_variety") or {}
+    v_warn = sum(1 for f in variety.get("findings", []) if f.get("level") == "warn")
+    if v_warn:
+        rows_by_check["shot_variety"] = {"block": 0, "warn": v_warn, "noface": 0, "ok": 0}
+        advisory += v_warn   # 帧级构图重复/静态长镜全 advisory（MV 筛选宽容，recurring hook 可能刻意）
     patch_outputs = (payload.get("prohibited_local_patch_outputs") or {}).get("outputs") or []
     if patch_outputs:
         rows_by_check["prohibited_local_patch"] = {"block": len(patch_outputs), "warn": 0, "noface": 0, "ok": 0}
@@ -948,6 +1078,10 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
             "noface": 0,
             "ok": int(((payload.get("generation_provenance") or {}).get("summary") or {}).get("ok") or 0),
         }
+    outliers = (payload.get("checks", {}).get("face") or {}).get("costume_outliers") or []
+    if outliers:
+        rows_by_check["costume_set"] = {"block": 0, "warn": len(outliers), "noface": 0, "ok": 0}
+        advisory += len(outliers)   # 离群定妆全 advisory（可能是合法风格变体，人判后重抽才升级）
     unavailable = unavailable_visual_checks(payload)
     face_mode = str((payload.get("checks", {}).get("face") or {}).get("mode") or "")
     degraded = bool(unavailable) or face_mode in FACE_DEGRADED_MODES
@@ -1020,6 +1154,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             out.append(_qc_finding(v, "character_consistency", s.get("png"),
                                    f"主角脸漂移 G1 {v}：{s.get('png')}"
                                    f"（score={s.get('score')} floor={s.get('floor')}）"))
+    for variant in (checks.get("face") or {}).get("costume_outliers", []):
+        scores = (checks.get("face") or {}).get("intra_by_variant") or {}
+        out.append(_qc_finding("warn", "character_consistency", None,
+                               f"定妆组离群：变体『{variant}』与主参考相似度 {scores.get(variant)} 显著低于组内其它定妆——"
+                               "疑漂移定妆拉低自标定 floor；人工确认，真漂了重抽该定妆后重跑 image_qc。"))
     for s in (checks.get("palette") or {}).get("shots", []):
         if s.get("verdict") in ("block", "warn"):
             out.append(_qc_finding("warn", "palette_consistency", s.get("png"),
@@ -1027,6 +1166,8 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                                    "（非阻断，MV 段落允许加亮/变暗）"))
     for f in (payload.get("lint", {}) or {}).get("findings", []):
         out.append(_qc_finding("warn", "anchor_prompt_lint", None, f.get("msg")))
+    for f in (payload.get("shot_variety", {}) or {}).get("findings", []):
+        out.append(_qc_finding("warn", "shot_variety", None, f.get("msg")))
     for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
         out.append(_qc_finding("block", "local_patch_prohibited", row.get("png"),
                                f"生产事件账本显示该 MV 帧来自本地贴脸/换脸/混合修复：{row.get('png')} "
@@ -1107,6 +1248,69 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
     return sorted(by_clip.values(), key=lambda d: d["clip"])
 
 
+# ── 降级机检人工放行（具名 + hash 绑定） ─────────────────────────────────────
+
+MANUAL_REVIEW_EXCLUDED_KEYS = ("manual_review", "json_path", "markdown_path")
+
+
+def manual_review_binding(report: Mapping[str, Any]) -> str:
+    """人工放行绑定摘要：报告剥离 manual_review 后的稳定 JSON sha256。
+
+    裸布尔 manual_review_accepted 无法证明「人看的就是这份报告」——重跑 QC 后旧留痕
+    还能继续放行。绑定到报告内容 hash 后：报告一重跑，绑定即失效，必须重新具名放行。
+    与 mv-craft gate 的核对算法一致（json.dumps sort_keys+separators → sha256）。纯函数·可测。"""
+    stripped = {k: v for k, v in report.items() if k not in MANUAL_REVIEW_EXCLUDED_KEYS}
+    encoded = json.dumps(stripped, ensure_ascii=False, sort_keys=True,
+                         separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def manual_review_valid(report: Mapping[str, Any]) -> bool:
+    """报告中的 manual_review 是否有效：accepted + 具名 reviewer + 绑定 hash 与当前报告一致。纯函数·可测。"""
+    manual = report.get("manual_review") or {}
+    if not (manual.get("accepted") and str(manual.get("reviewer") or "").strip()):
+        return False
+    return manual.get("bound_report_sha256") == manual_review_binding(report)
+
+
+def accept_degraded(root: Path, reviewer: str, notes: str) -> int:
+    """在已有降级报告上记录具名人工放行（绑定报告内容 hash）。报告重跑后需重新放行。"""
+    json_path = production_dir(root) / "image_qc" / "image_qc.json"
+    if not json_path.is_file():
+        print(f"[err] 缺 {json_path}；先跑 image_qc 再人工放行", file=sys.stderr)
+        return 2
+    try:
+        report = json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"[err] image_qc 报告不可读：{exc}", file=sys.stderr)
+        return 2
+    level = str((report.get("qc_environment") or {}).get("precision_level") or "")
+    if level == "full":
+        print("[err] 机检精度已是 full，无需降级人工放行", file=sys.stderr)
+        return 2
+    if not reviewer.strip():
+        print("[err] 降级放行必须具名：--reviewer <name>", file=sys.stderr)
+        return 2
+    if not notes.strip():
+        print("[err] 降级放行必须写复核说明（看了什么、怎么确认的）：--notes <text>", file=sys.stderr)
+        return 2
+    report.pop("manual_review", None)
+    report["manual_review"] = {
+        "accepted": True,
+        "reviewer": reviewer.strip(),
+        "notes": notes.strip(),
+        "accepted_at": date.today().isoformat(),
+        "scope": "degraded_precision_visual_checks",
+        "bound_report_sha256": manual_review_binding(report),
+    }
+    json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+                         encoding="utf-8")
+    md_path = json_path.with_suffix(".md")
+    md_path.write_text(render_markdown(report), encoding="utf-8")
+    print(f"[ok] 降级机检人工放行已记录（reviewer={reviewer.strip()}，绑定当前报告 hash）→ {json_path}")
+    return 0
+
+
 # ── 报告落档 ──────────────────────────────────────────────────────────────────
 
 def production_dir(root: Path) -> Path:
@@ -1141,6 +1345,7 @@ def run_qc(root: Path, with_pixel: bool = True, margin: float = DEFAULT_MARGIN,
     if with_pixel:
         with contextlib.redirect_stdout(sys.stderr):
             payload["checks"] = run_pixel_checks(root, margin, palette_threshold)
+            payload["shot_variety"] = run_shot_variety_check(root)
     payload["lint"] = lint_prompts(root)
     payload["prohibited_local_patch_outputs"] = prohibited_local_patch_outputs(root)
     payload["generation_provenance"] = generation_provenance(root)
@@ -1184,6 +1389,12 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"- 缺失/降级: {', '.join(str(x) for x in env['missing_or_degraded'])}")
         if env.get("recommended_install"):
             lines.append(f"- 建议安装: {env.get('recommended_install')}")
+    manual = payload.get("manual_review") or {}
+    if manual:
+        bound = "✅ 绑定当前报告" if manual_review_valid(payload) else "❌ 绑定失效（报告已重跑，需重新放行）"
+        lines.append(f"- 降级人工放行: reviewer={manual.get('reviewer')} · {manual.get('accepted_at')} · {bound}")
+        if manual.get("notes"):
+            lines.append(f"  - 复核说明: {manual.get('notes')}")
     lines.extend([
         "",
         "## 像素机检（主角脸=硬阻断，主色=非阻断初筛）",
@@ -1194,6 +1405,10 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     if face.get("available"):
         lines.append(f"  - 主角 floor={face.get('lead_floor')} 自标定={face.get('lead_calibrated')} "
                      f"模式={face.get('mode')}")
+    if face.get("costume_outliers"):
+        scores = face.get("intra_by_variant") or {}
+        detail = "、".join(f"{v}={scores.get(v)}" for v in face["costume_outliers"])
+        lines.append(f"  - 🟡 定妆组离群变体: {detail}（疑漂移定妆拉低自标定 floor；人工确认后重抽再重跑）")
     pal = checks.get("palette") or {}
     if pal.get("available"):
         lines.append(f"  - palette_anchor={pal.get('palette_anchor')} 阈值={pal.get('threshold')}")
@@ -1212,6 +1427,19 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             lines.append(f"  - 🟡 {f.get('msg')}")
     for n in lint.get("notes", []):
         lines.append(f"- note: {n}")
+    lines.extend(["", "## 帧级视觉多样性 dHash（构图重复 / 静态长镜 · advisory）"])
+    variety = payload.get("shot_variety") or {}
+    if not variety.get("available"):
+        lines.append(f"- ⏭ 跳过（{'；'.join(variety.get('notes', [])) or '无 Pillow'}）")
+    else:
+        vfind = variety.get("findings", [])
+        flag = "🟡" if vfind else "🟢"
+        lines.append(f"- {flag} 检 {variety.get('checked', 0)} 首帧 · 重复构图 {len(variety.get('duplicate_pairs', []))} 对"
+                     f" · 静态长镜 {len(variety.get('static_takes', []))} 个")
+        for f in vfind:
+            lines.append(f"  - 🟡 {f.get('msg')}")
+        for n in variety.get("notes", []):
+            lines.append(f"  - note: {n}")
     patch = payload.get("prohibited_local_patch_outputs") or {}
     patch_rows = patch.get("outputs") or []
     lines.extend(["", "## 禁用本地身份像素修复检查"])
@@ -1258,10 +1486,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--findings", action="store_true", help="打印与 mv-review/gate 同形的 findings")
     ap.add_argument("--regen-list", action="store_true", help="打印「要重抽」的 clip（普通落档 QC；warn 不进）")
     ap.add_argument("--strict", action="store_true", help="严审刷新：block/warn/降级都进候选重出清单")
+    ap.add_argument("--accept-degraded", action="store_true",
+                    help="不重跑机检；在已有降级报告上记录具名人工放行（绑定报告 hash，报告重跑即失效）")
+    ap.add_argument("--reviewer", default="", help="人工放行具名（--accept-degraded 必填）")
+    ap.add_argument("--notes", default="", help="人工复核说明（--accept-degraded 必填）")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
     if not root.is_dir():
         ap.error(f"找不到作品根：{root}")
+    if ns.accept_degraded:
+        return accept_degraded(root, ns.reviewer, ns.notes)
     payload = run_qc(root, with_pixel=not ns.no_pixel, margin=ns.margin,
                      palette_threshold=ns.palette_threshold)
     regen = to_strict_regen_list(payload) if ns.strict else to_regen_list(payload)

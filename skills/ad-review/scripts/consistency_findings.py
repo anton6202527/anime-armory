@@ -23,6 +23,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 import asset_consistency  # noqa: E402
+import asset_drift_report  # noqa: E402
 import final_media_consistency  # noqa: E402
 import voice_consistency  # noqa: E402
 
@@ -186,6 +187,9 @@ def build_report(root: str) -> dict[str, Any]:
     for module, relpath, dimension in (
         (asset_consistency, "生产数据/asset_consistency.json", "asset_identity"),
         (voice_consistency, "生产数据/voice_consistency.json", "voice_identity"),
+        # 跨镜聚合层：回答"哪个资产从第几镜开始崩"。它自身恒不产 block（见其 finding()
+        # 构造层降档），故此处直通 severity 不会把启发式聚合变成硬阻断。
+        (asset_drift_report, "生产数据/asset_drift_report.json", "asset_drift"),
     ):
         payload = module.build(Path(root))
         write_json(os.path.join(root, relpath), payload)
@@ -221,6 +225,7 @@ def build_report(root: str) -> dict[str, Any]:
             "合规/ai_usage.json",
             "生产数据/asset_consistency.json",
             "生产数据/voice_consistency.json",
+            "生产数据/asset_drift_report.json",
             "生产数据/final_media_consistency.json",
         ],
     }

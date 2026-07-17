@@ -84,100 +84,100 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
-      "value": true
+      "value": false
     },
     "exact_model_id": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
-      "value": ""
+      "value": "GPT Image 2"
     },
     "max_reference_images": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "model_precision": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
-      "value": "normalized_family"
+      "value": "provider_model"
     },
     "negative_strategy": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "inline_constraints"
     },
     "official": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": false
     },
     "prompt_language": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "zh"
     },
     "prompt_profile": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": [
         "aspect_ratio",
@@ -186,60 +186,60 @@
       ]
     },
     "reference_mode": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
-      "source": "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
+      "source": "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "official_cli_help",
+  "evidence_kind": "local_cli_help",
   "kind": "n2d_image_backend_refresh_evidence",
   "model_evidence": {
-    "exact_model_id": "",
+    "exact_model_id": "GPT Image 2",
     "normalized_model_label": "GPT Image 2",
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
-    "precision": "normalized_family"
+    "precision": "provider_model"
   },
-  "note": "本轮确认 Codex CLI 可调用 GPT Image 2 生成 PNG；runner 以多个 --image 真输入完成共享定妆和表情锚；CLI 不暴露可复现 seed，按 adapter 记录降级。",
+  "note": "2026-07-17 local verification: codex exec exposes repeatable --image attachments, --json JSONL event output, --enable feature toggles and --output-schema; n2d runner successfully decoded real image_generation PNGs today. Persistent subject IDs, mask edit API, price and credit schema are not exposed by CLI help; keep multi-reference identity compensation and per-image machine+executor visual QC.",
   "source_urls": [],
   "sources": [
-    "本机官方 Codex CLI 0.144.4 --help/--version；已通过官方 image_generation 能力真实生成多参考 PNG"
+    "local codex-cli 0.144.4: codex --version + codex exec --help + same-day successful image_generation PNG event decode"
   ],
-  "verified_at": "2026-07-16"
+  "verified_at": "2026-07-17"
 }

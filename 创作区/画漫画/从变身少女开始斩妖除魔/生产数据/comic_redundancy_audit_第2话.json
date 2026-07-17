@@ -1,0 +1,86 @@
+{
+  "kind": "comic_redundancy_audit",
+  "version": 1,
+  "chapter": "第2话",
+  "generated_at": "2026-07-16T23:31:19+00:00",
+  "thresholds": {
+    "pair_sim_warn": 0.6,
+    "strict_sim": 0.75,
+    "narration_ratio_warn": 0.5,
+    "provenance": "internal-heuristic·confidence=low·2026-07，误报校准后再议升硬闸"
+  },
+  "summary": {
+    "panels": 30,
+    "text_rows": 26,
+    "redundant_pairs": 0,
+    "repeated_fact_phrases": 0,
+    "repeated_composition_groups": 3,
+    "narration_only_panels": 19,
+    "texty_panels": 24,
+    "narration_ratio": 0.792,
+    "block": 0,
+    "warn": 4
+  },
+  "redundant_pairs": [],
+  "repeated_fact_mentions": [],
+  "repeated_compositions": [
+    {
+      "panels": [
+        "P003",
+        "P018"
+      ],
+      "scene": "LOC_DESOLATE_WILDERNESS",
+      "characters": [
+        "CHAR_JIANG_YUECHU"
+      ],
+      "lens": "近景"
+    },
+    {
+      "panels": [
+        "P007",
+        "P026"
+      ],
+      "scene": "LOC_DESOLATE_WILDERNESS",
+      "characters": [
+        "CHAR_JIANG_YUECHU",
+        "CHAR_PEI_CHANGQING"
+      ],
+      "lens": "中景"
+    },
+    {
+      "panels": [
+        "P001",
+        "P002",
+        "P028"
+      ],
+      "scene": "LOC_DESOLATE_WILDERNESS",
+      "characters": [
+        "CHAR_JIANG_YUECHU",
+        "CHAR_PEI_CHANGQING"
+      ],
+      "lens": "近景"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "narration_heavy_chapter",
+      "message": "本话 19/24 个有文本格是纯旁白（79%>50%）——信息压缩靠旁白硬转=没画面化的流水账；条漫铁律是能画不说：把交代改成画面/对白/道具特写，旁白只留画面外增量。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P003、P018 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P007、P026 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU/CHAR_PEI_CHANGQING, 景别=中景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P001、P002、P028 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU/CHAR_PEI_CHANGQING, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    }
+  ]
+}

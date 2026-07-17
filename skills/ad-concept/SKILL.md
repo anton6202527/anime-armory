@@ -8,7 +8,7 @@ description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客�
 把**客户需求 brief** 转成**创意**。广告创意先定 big idea 和一句话主张，再进入脚本分镜。**自身只产创意文档，不写分拆镜头脚本**（那是 `ad-script`）。
 
 **输入**：`需求/brief.json` + `brief.md`（若还没填全，先访谈式补齐）。
-**产物**：`创意/concept.md`（big idea/主张/路线/mood&reference/KV方向/故事线）+ `创意/创意脚本.md`（creative treatment：一段式叙述创意如何展开，给 ad-script 拆镜头用）。
+**产物**：`创意/concept.json`（**机器真值**）+ `创意/concept.md`（人读：big idea/主张/路线/mood&reference/KV方向/故事线）+ `创意/创意脚本.md`（creative treatment：一段式叙述创意如何展开，给 ad-script 拆镜头用）。
 
 ## 偏好（私有）
 
@@ -40,7 +40,35 @@ description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客�
 按 `主片时长` 给**段落级故事线**（不是逐镜头）：黄金 3 秒钩子 → 痛点/情境 → 产品/方案 → 证据/记忆点 → CTA/品牌包装。每段给秒数预算（给 ad-script 当时间轴种子）。
 
 ### 第4步：落档 + 推进
-写 `创意/concept.md` + `创意/创意脚本.md`，回写 `_进度.md` 创意策划 ✅，提示下一步 `ad-script`。
+写 `创意/concept.json`（机器真值）+ `创意/concept.md` + `创意/创意脚本.md`，跑机检，回写 `_进度.md`
+创意策划 ✅，提示下一步 `ad-script`。
+
+```bash
+python3 skills/ad-concept/scripts/concept_pack.py "<作品根>" --write
+```
+
+### concept.json（机器真值 · AI 自己落，别让用户填）
+
+和 `brief.json` 同一条纪律：**AI 问人话 → 自己落 JSON**。此前创意包只有 Markdown，唯一验收是
+"5 个关键词在全文出现过就算通过"（别名甚至含"为什么"，中文创意稿几乎必然命中）——等于没有验收；
+且 big idea / 主张定完**全线无人回头核对分镜是否兑现**。concept.json 就是补这两个洞的真值源，
+`idea_payoff_ledger` 靠它对账兑现。
+
+```json
+{"schema_version": 1, "kind": "ad_concept_pack",
+ "big_idea": "...", "key_message": "...", "creative_route": "...",
+ "objective": "转化行动",              // 必须与 需求/brief.json 的 campaign_objective 一致
+ "hypothesis": "为什么这个 idea 能达成 objective",
+ "usps": [{"id": "USP_01", "text": "...", "supports_key_message": true, "claim_id": "CLM_01"}],
+ "kv_direction": "...", "mood_refs": ["..."],
+ "storyline": [{"section": "钩子", "desc": "...", "planned_seconds": 3}]}
+```
+
+> **单一主张聚焦（SMP）**：`supports_key_message` 不是装饰字段。广告 doctrine 是一条广告只讲一个主张；
+> 而领域研究显示——该拦的**不是"卖点多"，而是"卖点与主张不相关"**：多个**相关**卖点反而提升表现，
+> 多个**不相关**卖点则显著拖垮转化。所以机检判据落在 `supports_key_message=false` 的条目数上，
+> 不是 `len(usps)`。逐条如实标：**别为了过检把不相关的卖点标成 true**——那是自欺，不是通过。
+> 机检只 warn 不 block（这是启发式，不是法条）。
 
 ## concept.md 结构（建议）
 

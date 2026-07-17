@@ -271,9 +271,19 @@ def check_clip(root, clip, expected_aspect):
     }
 
 
+def location_key(clip):
+    """clip 的场景键（与 mv-review shot_variety_audit 同口径：location_id/setup_group/location_name/section）。"""
+    sd = clip.get("shot_design") or {}
+    for key in ("location_id", "setup_group", "location_name"):
+        value = str(sd.get(key) or "").strip()
+        if value:
+            return value
+    return str(clip.get("section") or "").strip()
+
+
 def seam_rows(clips, clip_rows):
     rows = []
-    for prev_clip, prev, cur in zip(clips, clip_rows, clip_rows[1:]):
+    for prev_clip, cur_clip, prev, cur in zip(clips, clips[1:], clip_rows, clip_rows[1:]):
         contract = prev_clip.get("seam_contract") or (prev_clip.get("continuity") or {}).get("outgoing_seam") or {}
         risk = []
         if prev.get("verdict") != "ok" or cur.get("verdict") != "ok":
@@ -288,6 +298,10 @@ def seam_rows(clips, clip_rows):
         if dist is not None and dist > 120:
             if contract.get("continuity_required"):
                 risk.append("large_color_delta_breaks_continuous_seam")
+            elif location_key(prev_clip) and location_key(prev_clip) == location_key(cur_clip):
+                # 同场景硬切色跳（n2d 实跑回修实证信号）：同一场景相邻镜主色/色温跳变=观感断裂。
+                # 非连续接缝无 end-frame 合同可依，只作 advisory 风险提示，人工并排复核。
+                risk.append("same_scene_hard_cut_color_jump")
         seam_similarity = hash_similarity(
             (prev_end.get("stats") or {}).get("perceptual_hash"),
             (cur_start.get("stats") or {}).get("perceptual_hash"),
@@ -314,11 +328,28 @@ def seam_rows(clips, clip_rows):
     return rows
 
 
+FACE_DRIFT_FALLBACK = 0.45
+
+
+def face_drift_threshold(root):
+    """脸相似阈值自标定：借 image_qc 主角定妆组 lead_floor（同人下限），留 0.05 视频运动余量。
+
+    此前硬编码 0.45 与 image_qc『用本曲定妆组自标定、不写死阈值』的理念相悖——
+    风格化 MV 脸跨帧余弦整体偏低，经验值会系统性误报 review。未自标定时回退 0.45。"""
+    report = mv_utils.load_json(os.path.join(root, "生产数据", "image_qc", "image_qc.json"), {}) or {}
+    face = (report.get("checks") or {}).get("face") or {}
+    floor = face.get("lead_floor")
+    if face.get("lead_calibrated") and isinstance(floor, (int, float)):
+        return max(0.20, min(0.60, float(floor) - 0.05)), "image_qc_lead_floor_calibrated"
+    return FACE_DRIFT_FALLBACK, "fallback_uncalibrated"
+
+
 def apply_face_identity_qc(root, clips, clip_rows):
     image_qc = load_image_qc()
     app = image_qc._load_embedder() if image_qc else None
     if app is None:
         return "unavailable"
+    threshold, threshold_source = face_drift_threshold(root)
     for clip, row in zip(clips, clip_rows):
         source = clip.get("image_path")
         if not source or not os.path.exists(os.path.join(root, source)):
@@ -333,11 +364,14 @@ def apply_face_identity_qc(root, clips, clip_rows):
             embedding = image_qc._embed(app, os.path.join(root, frame["path"]))
             if embedding is not None:
                 scores.append({"label": frame.get("label"), "score": round(image_qc.cosine(source_embedding, embedding), 4)})
-        row["face_identity_adherence"] = {"mode": "insightface", "source": source, "samples": scores}
-        low = [sample for sample in scores if sample["score"] < 0.45]
+        row["face_identity_adherence"] = {"mode": "insightface", "source": source, "samples": scores,
+                                          "threshold": threshold, "threshold_source": threshold_source}
+        low = [sample for sample in scores if sample["score"] < threshold]
         if low:
             row["findings"].append({"level": "warn", "code": "video_face_identity_drift",
-                                    "samples": low, "message": "需与定妆/首帧并排人工复核"})
+                                    "samples": low, "threshold": threshold,
+                                    "threshold_source": threshold_source,
+                                    "message": "需与定妆/首帧并排人工复核"})
             row["verdict"] = "review"
     return "insightface"
 

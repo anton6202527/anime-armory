@@ -251,6 +251,27 @@ def image_backend_findings(root):
     return out
 
 
+def registry_snapshot_findings(root):
+    """定妆库母本↔快照对账：照过期 registry 出图，本身就是漂移源。
+
+    `设定库/asset_registry.json` 是人写的**母本**；`出图/共享/asset_registry.json` 是
+    `plan_prompts.build_shared_registry` 生成的**快照**（图实际是照它出的，故 product_qc /
+    asset_consistency 读快照才是对的）。两份的主从关系此前没有文档、也没有机检：母本改了而
+    快照没刷新时，prompt 与 QC 会照旧快照跑，而这套系统本身就是用来防漂移的。
+    与 report_freshness_findings 同一条哲学：干净但过期的证据不是证据。
+    """
+    master = os.path.join(root, "设定库", "asset_registry.json")
+    snapshot = os.path.join(root, "出图", "共享", "asset_registry.json")
+    if not os.path.isfile(master) or not os.path.isfile(snapshot):
+        return []
+    if os.path.getmtime(snapshot) + 1e-6 < os.path.getmtime(master):
+        return [finding("block", "asset_registry_snapshot_stale",
+                        "出图/共享/asset_registry.json 早于 设定库/asset_registry.json："
+                        "定妆母本已改而出图快照未刷新，prompt/QC 会照过期 registry 跑；"
+                        "重跑 ad-image plan_prompts.py 刷新快照后再出图", snapshot)]
+    return []
+
+
 def image_output_backend_findings(root):
     """已落图 provenance 对账：不能用 Dreamina 图片伪装成 Codex 项目继续出视频。"""
     manifest_path = os.path.join(root, "出图", "分镜", "image_jobs_manifest.json")
@@ -506,6 +527,77 @@ def score_findings(root):
     return []
 
 
+def _advisory_report_findings(root, relpath, code, hint, sources=()):
+    """读一份 advisory 侧车报告并降档并入 gate。
+
+    与 product_qc_findings 那类硬闸的分界线（`score_findings` 立的规矩：创意/启发式只提示复核，
+    只有广告法与确定性闸门能 BLOCK）：
+      · 报告缺失 → info（"建议先跑"），**不是 block**——这些是"审"不是"门"。
+      · 报告里的 block → 降为 warn；warn → 降为 info。侧车自己也不产 block，此处是第二道保险。
+      · 报告过期 → warn（不用 report_freshness_findings，那个硬编码 block）。
+    """
+    path = os.path.join(root, relpath)
+    report = load_json(path)
+    if not isinstance(report, dict):
+        return [finding("info", f"{code}_missing", hint, path)]
+    if report.get("available") is False:
+        return [finding("info", f"{code}_unavailable",
+                        f"{relpath} 因缺料降级（available=false），未产出有效结论", path)]
+    out = []
+    summary = report.get("summary") or {}
+    try:
+        blocks, warns = int(summary.get("block") or 0), int(summary.get("warn") or 0)
+    except (TypeError, ValueError):
+        return [finding("info", f"{code}_malformed", f"{relpath} 缺 summary.block/warn", path)]
+    if blocks:
+        out.append(finding("warn", f"{code}_advisory",
+                           f"{relpath} 有 {blocks} 条待处理；启发式只提示复核，不作为付费硬阻断", path))
+    if warns:
+        out.append(finding("info", f"{code}_warn", f"{relpath} warn={warns}，建议复核", path))
+    newest = _newest_mtime([p for p in (os.path.join(root, s) for s in sources) if os.path.exists(p)])
+    if newest and os.path.getmtime(path) + 1e-6 < newest:
+        out.append(finding("warn", f"{code}_stale",
+                           f"{os.path.basename(path)} 早于其输入产物，结论可能过期；建议重跑", path))
+    return out
+
+
+def reference_plan_findings(root):
+    """出图前·参考处方落实（事前处方，与 product_qc 的事后诊断互补）。"""
+    return _advisory_report_findings(
+        root, os.path.join("生产数据", "ad_reference_plan.json"), "ad_reference_plan",
+        "未生成逐镜参考处方；建议出图前先跑 ad-image/scripts/reference_planner.py"
+        "（产品镜单参考是最危险的漂移源）",
+        sources=[os.path.join("脚本", "storyboard.json"),
+                 os.path.join("设定库", "asset_registry.json")])
+
+
+def creative_axis_findings(root):
+    """编剧轴 advisory：创意包结构 / 创意承诺兑现 / 文案质量。
+
+    与 score_findings 同档——创意启发式只提示复核，永不硬挡付费。
+    """
+    out = []
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_concept_pack_check.json"), "ad_concept_pack",
+        "未生成创意包机检；建议 ad-concept 落 创意/concept.json 后跑 concept_pack.py",
+        sources=[os.path.join("创意", "concept.json"), os.path.join("需求", "brief.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_idea_payoff_audit.json"), "ad_idea_payoff",
+        "未对账创意承诺→分镜兑现；建议跑 ad-script/scripts/idea_payoff_ledger.py"
+        "（big idea/主张定完无人核对是否落镜）",
+        sources=[os.path.join("创意", "concept.json"), os.path.join("脚本", "storyboard.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_copy_quality_audit.json"), "ad_copy_quality",
+        "未跑文案质量机检；建议跑 ad-script/scripts/copy_quality_audit.py",
+        sources=[os.path.join("脚本", "voiceover.txt"), os.path.join("脚本", "storyboard.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_shot_variety_audit.json"), "ad_shot_variety",
+        "未跑分镜视觉多样性机检；建议出图前跑 ad-script/scripts/shot_variety_audit.py"
+        "（同景别机位反复/画面复读/场景单调，出图前拦最省钱）",
+        sources=[os.path.join("脚本", "storyboard.json")]))
+    return out
+
+
 def compose_output_findings(root):
     path = os.path.join(root, "合成", "成片_主片.mp4")
     if os.path.isfile(path):
@@ -524,9 +616,13 @@ def run_gate(root, stage, allow_placeholder=False):
     findings.extend(voice_findings(root, stage, allow_placeholder))
     findings.extend(producer_pack_findings(root))
     findings.extend(score_findings(root))
+    findings.extend(registry_snapshot_findings(root))
+    findings.extend(creative_axis_findings(root))
     if stage == "image":
         # 出图前：核验生图后端治理（白名单/不混用），此时图还没生成，不查 product_qc。
         findings.extend(image_backend_findings(root))
+        # 事前处方：出图前就该开好"每镜喂哪些参考"，等 product_qc 事后发现产品漂就已花钱。
+        findings.extend(reference_plan_findings(root))
     if stage in ("video", "compose"):
         findings.extend(platform_pack_findings(root))
         # 图已生成：查存在性 + 产品/品牌色一致性机检（最便宜的拦截点）+ 契约继承。

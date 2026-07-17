@@ -4,8 +4,8 @@
   "status": "confirmed",
   "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。",
   "coverage_scope": {
-    "planned_through": "第1章",
-    "reason": "首批仅完成第1话制作，用于验证主角定妆、新国风水墨画风与条漫生产流程；后续章节将在首话完成终审后逐批规划。"
+    "planned_through": "第2章",
+    "reason": "第一话已经完成内部终审；当前批次继续制作第2话，覆盖原作第2章并兑现百妖谱首次收录与猛虎快刀成长机制。后续章节将在第2话完成终审后逐批规划。"
   },
   "chapters": [
     {
@@ -42,7 +42,7 @@
           "moral_boundary": "仍持现代人不杀人的本能"
         }
       },
-      "continuity_delta": [
+    "continuity_delta": [
         {
           "entity_id": "CHAR_JIANG_YUECHU",
           "field": "moral_boundary",
@@ -66,6 +66,138 @@
         },
         "CHAR_JIANG_YUECHU": {
           "moral_boundary": "为求生主动杀死濒死裴长青"
+        }
+      },
+      "status": "confirmed"
+    },
+    {
+      "chapter": "第2话",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_002",
+          "source_path": "源本/从变身少女开始斩妖除魔.txt",
+          "start": "第2章",
+          "end": "第2章"
+        }
+      ],
+      "reader_promise": "姜月初用裴长青的性命换来二十年道行后，能否在一刀内反杀拥有复生神通的虎妖，并第一次真正掌握百妖谱",
+      "core_conflict": "姜月初承受亲手杀人的道德冲击，却没有悔恨的时间；虎妖近在眼前，她必须把仅有的二十年道行全部押在一刀上",
+      "turning_point": "姜月初与虎妖交错而过后虎首落地，百妖谱提示可消耗道行收录虎山神；她在脱力中选择收录",
+      "payoff": "百妖谱摹影虎山神并馈赠圆满猛虎快刀，姜月初恢复伤势、踏入闻弦初境，理解道行应优先用于收录妖物",
+      "ending_mode": "emotional_aftershock",
+      "budget": {
+        "unit": "panels",
+        "target": 30,
+        "soft_range": [
+          26,
+          36
+        ]
+      },
+      "entry_state": {
+        "story": {
+          "chapter_state": "裴长青被姜月初一刀刺中胸口；虎妖在数步外观看；姜月初尚未看见获得二十年道行的结果"
+        },
+        "CHAR_JIANG_YUECHU": {
+          "moral_boundary": "为求生主动杀死濒死裴长青",
+          "cultivation": "凡境、无武学、无可控道行",
+          "injury": "无明显外伤，强烈恶心与颤抖"
+        },
+        "CHAR_PEI_CHANGQING": {
+          "life_state": "胸口中刀、濒死"
+        },
+        "MON_TIGER_SHANSHEN": {
+          "life_state": "复生后重伤，胸前暗黑空洞仍在"
+        },
+        "PROP_HENGDAO_BROKEN": {
+          "owner": "CHAR_JIANG_YUECHU"
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "CHAR_PEI_CHANGQING",
+          "field": "life_state",
+          "from": "胸口中刀、濒死",
+          "to": "死亡，遗体留在尸骸荒野",
+          "panel_id": "P003",
+          "reason": "姜月初的刺击令裴长青彻底失去生命迹象，触发百妖谱道行奖励"
+        },
+      {
+        "entity_id": "MON_TIGER_SHANSHEN",
+        "field": "life_state",
+        "from": "复生后重伤，胸前暗黑空洞仍在",
+        "to": "被姜月初以二十年道行横斩击杀",
+        "panel_id": "P016",
+        "reason": "姜月初把全部临时道行灌入唯一一刀，斩断虎妖颈部"
+      },
+      {
+        "entity_id": "MON_TIGER_SHANSHEN",
+        "field": "life_state",
+        "from": "被姜月初以二十年道行横斩击杀",
+        "to": "死亡并被百妖谱摹影",
+        "panel_id": "P020",
+        "reason": "姜月初确认击杀后选择消耗七十五年道行，将虎山神收入百妖谱"
+      },
+      {
+        "entity_id": "CHAR_JIANG_YUECHU",
+        "field": "cultivation",
+        "from": "凡境、无武学、无可控道行",
+        "to": "闻弦初境、猛虎快刀圆满、剩余二十五年道行、已摹影虎山神",
+        "panel_id": "P023",
+        "reason": "百妖谱消耗七十五年道行收录虎山神并反馈武学与身体强化"
+      },
+      {
+        "entity_id": "CHAR_JIANG_YUECHU",
+        "field": "injury",
+        "from": "无明显外伤，强烈恶心与颤抖",
+        "to": "百妖谱反馈后恢复",
+        "panel_id": "P021",
+        "reason": "虎山神摹影完成后的妖物馈赠清除脱力与反噬伤势"
+      },
+      {
+        "entity_id": "CHAR_JIANG_YUECHU",
+        "field": "moral_boundary",
+        "from": "为求生主动杀死濒死裴长青",
+        "to": "承认自己的求生选择并对裴长青保留偿还承诺",
+        "panel_id": "P028",
+        "reason": "她没有否认杀人的责任，以道歉和未来偿还承诺保留现代人的道德余烬"
+      },
+      {
+        "entity_id": "PROP_HENGDAO_BROKEN",
+        "field": "owner",
+        "from": "CHAR_JIANG_YUECHU",
+        "to": "CHAR_JIANG_YUECHU",
+        "panel_id": "P022",
+        "reason": "战斗中横刀脱手，恢复后姜月初重新拾起并确立持刀者身份"
+      },
+      {
+        "entity_id": "story",
+        "field": "chapter_state",
+        "from": "裴长青被姜月初一刀刺中胸口；虎妖在数步外观看；姜月初尚未看见获得二十年道行的结果",
+        "to": "虎山神已被斩杀并被百妖谱摹影；姜月初获得圆满猛虎快刀，独自留在尸骸荒野处理裴长青遗体",
+        "panel_id": "P030",
+        "reason": "本话完成首次斩妖、首次收录与力量体系揭示，并以姜月初承担裴长青之死收束"
+      }
+      ],
+      "exit_state": {
+        "story": {
+          "chapter_state": "虎山神已被斩杀并被百妖谱摹影；姜月初获得圆满猛虎快刀，独自留在尸骸荒野处理裴长青遗体"
+        },
+        "CHAR_JIANG_YUECHU": {
+          "moral_boundary": "承认自己的求生选择并对裴长青保留偿还承诺",
+          "cultivation": "闻弦初境、猛虎快刀圆满、剩余二十五年道行、已摹影虎山神",
+          "injury": "百妖谱反馈后恢复"
+        },
+        "CHAR_PEI_CHANGQING": {
+          "life_state": "死亡，遗体留在尸骸荒野"
+        },
+        "MON_TIGER_SHANSHEN": {
+          "life_state": "死亡并被百妖谱摹影"
+        },
+        "PROP_HENGDAO_BROKEN": {
+          "owner": "CHAR_JIANG_YUECHU"
         }
       },
       "status": "confirmed"

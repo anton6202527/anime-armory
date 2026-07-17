@@ -2,7 +2,7 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（目标/KPI→创意→脚本→VO→分镜→产品/角色/场景定妆→AI出图→AI视频→剪辑交付→发布合规→质检→投放反馈）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + cutdown + 多比例）。**不拆集**、**自包含**。读 _进度.md 路由到 ad-progress / ad-update / ad-craft / ad-concept / ad-script / ad-voice / ad-image / ad-video / ad-compose / ad-review / ad-feedback。Use when given a 客户需求/brief（哪怕只有一句话）, a product/brand to advertise, an existing 拍广告 project, or asked 拍广告 / 广告创意 / TVC / 信息流广告 / 产品demo / 带货视频 / 投放复盘. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, 投放复盘, ad.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 989 | 目录文本总行数 28385
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1098 | 目录文本总行数 34595
 
 # ad — 拍广告生产线 · 总调度
 
@@ -51,7 +51,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 |---|---|---|---|
 | 共享契约/立项 | 本调度 + **`ad-craft`** | `_设置.md`+`_进度.md`+`_meta.json`+`需求/brief.json`+`生产数据/producer_pack.json`+`platform_pack.json` | ✅ |
 | 客户需求 brief | 本调度 | `需求/brief.md`+`brief.json`（结构化客户需求） | ✅ |
-| 创意策划 | **`ad-concept`** | `创意/concept.md`+`创意脚本.md` | ✅ |
+| 创意策划 | **`ad-concept`** | `创意/concept.json`（机器真值）+`concept.md`+`创意脚本.md` | ✅ |
 | 广告脚本+VO+时间轴 | **`ad-script`** | `脚本/广告脚本.md`+`voiceover.txt`+`时间轴.json`+**广告法机检** | ✅ |
 | VO配音 | **`ad-voice`** | `配音/时长清单.json` + `voice_qc.json`（驱动镜头时长且实测非静音/时长） | ✅ |
 | 分镜（实测时长） | **`ad-script`** | `storyboard.json`+`镜头时长.json`+字幕 | ✅ |
@@ -89,7 +89,9 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 - **平台交付包**：平台名不等于版位。按实际 placement 的比例、时长、声音模式与安全区出包；不用“通用 9:16”伪装已适配。
 - **创意策划层**：big idea / 一句话主张 / mood&reference / KV 方向（`ad-concept`）。
 - **《广告法》分层机检**：法定明确禁用/失效背书、医疗疗效、虚假收益等高确定性项 block；「最新/领先/销量第一」等语境型表述 warn 并要求比较范围、时间、样本、出处和具名复核，避免关键词表代替法律判断。
-- **产品定妆（三层定妆库第三层）**：hero product 包装/logo/品牌色跨镜零漂移，是最严格的"角色"。
+- **产品定妆（三层定妆库第三层）**：hero product 包装/logo/品牌色跨镜零漂移，是最严格的"角色"。事前有 `ad-image/scripts/reference_planner.py` 按镜头变化量×后端能力开参考处方（能力表 `skills/ad/_lib/image_backend_adapter.py`，与 `一致性增强` 四档对齐），事后有 `ad-review/scripts/asset_drift_report.py` 出逐资产×逐镜时间线与 `first_bad_shot`。
+- **创意承诺要兑现**：`创意/concept.json` 是创意机器真值；`ad-script/scripts/idea_payoff_ledger.py` 对账 big idea/主张/USP/KV 是否真的落镜，抓"分镜冒出 concept 未登记的卖点"这类创意漂移。单一主张聚焦(SMP)看 `usps[].supports_key_message`——拦的是卖点与主张**不相关**，不是卖点多。
+- **镜头别重复单调**：一致性套件保的是"资产不漂"，`ad-script/scripts/shot_variety_audit.py` 补的是**视觉不重复**（参照 n2d `audit_shot_variety`）——出图前查同景别机位反复/画面描述复读/长片单场景单景别。广告有意重复（产品 beauty/片尾板/logo·CTA 板）已豁免，短广告单场景合法只 info。全 advisory，出图 gate 抬进报告不硬挡。
 - **品牌包装 + 交付**：片尾、claim/披露原子 cutdown、多比例 reframe、placement 规格、BT.709、响度、字幕与闪烁快筛。
 - **最终文件证据**：关键口播四路对账、最终像素文字逐项具名确认、实际 C2PA/隐式标识探测、逐资产 contact sheet、逐 deliverable 发布变体链和内容哈希选择性失效。
 
@@ -106,7 +108,9 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 |---|---|
 | 把广告拆成「集」 | 不拆集；多时长/多比例走 cutdown 交付件矩阵 |
 | 把所有“最/第一”一律当违法或一律放行 | 国家级/最高级/最佳等明确项硬挡；最新/领先/销量第一等先警告、补时空范围与证据并具名复核 |
-| 产品包装/logo 跨镜漂移 | 产品定妆当最严格"角色"，进三层定妆库 + 逐镜锁 PROD_xx |
+| 产品包装/logo 跨镜漂移 | 产品定妆当最严格"角色"，进三层定妆库 + 逐镜锁 PROD_xx；出图前跑 `reference_planner`（产品镜单参考最危险），审片跑 `asset_drift_report` 看从第几镜开始崩 |
+| 定妆母本改了却没刷出图快照 | `设定库/asset_registry.json` 是母本、`出图/共享/` 是快照；母本改了要重跑 `plan_prompts.py` 刷新，否则 prompt/QC 照过期 registry 跑（gate 已硬挡 `asset_registry_snapshot_stale`）|
+| 创意定完 big idea 就没人管 | `创意/concept.json` 落机器真值，`idea_payoff_ledger` 对账兑现；分镜临时加卖点会被 `usp_offledger` 抓 |
 | App/UI/片尾镜没写 `PROD_*`/`BRAND_*` | producer_pack 和 product_qc 会抓；先把产品/App/品牌资产结构化绑定再出图 |
 | 跳过创意策划直接出图 | 先 `ad-concept` 定 big idea/主张，再脚本分镜，别无脑批量生成 |
 | 不留授权痕/平台声明证据 | 先写 ai_usage，再写 compliance_manifest；平台动作由发布方执行，证据必须回写后才可 release-ready |

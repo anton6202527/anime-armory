@@ -33,7 +33,26 @@ python3 skills/ad-review/scripts/human_signoff.py "<作品根>" --reviewer "<姓
 python3 skills/ad-craft/scripts/stage_acceptance.py "<作品根>" --stage review
 ```
 
-产物：`生产数据/final_media_consistency.json` + `final_media_frames/` + 按 product/character/scene/prop 分类的 `final_media_contact_sheets/`，以及 `consistency_findings.{json,md}`、`合规/ad_review_m0.{json,md}`、`human_signoff.json`。签收 SHA-256 绑定全部未取消交付件、逐资产 contact sheet、delivery/color/accessibility/rendered-text/ASR/provenance/locale/release-variant QC 与当前 M0。每个检查都必须有本地证据哈希；URL/record 证据另传 `--evidence-sha CHECK=64HEX`。脚本刻意没有 `--approve-all`。
+产物：`生产数据/final_media_consistency.json` + `final_media_frames/` + 按 product/character/scene/prop 分类的 `final_media_contact_sheets/`，以及 `consistency_findings.{json,md}`、`asset_drift_report.{json,md}`、`合规/ad_review_m0.{json,md}`、`human_signoff.json`。签收 SHA-256 绑定全部未取消交付件、逐资产 contact sheet、delivery/color/accessibility/rendered-text/ASR/provenance/locale/release-variant QC 与当前 M0。每个检查都必须有本地证据哈希；URL/record 证据另传 `--evidence-sha CHECK=64HEX`。脚本刻意没有 `--approve-all`。
+
+## 跨镜资产漂移报表（事后聚合）
+
+```bash
+python3 skills/ad-review/scripts/asset_drift_report.py "<作品根>" --write
+```
+
+补的空档：`asset_consistency.py` 做 dHash 时**显式排除 `PROD_`/`BRAND_`**（只覆盖 CHAR_/LOC_/PROP_），
+而 `product_qc` 虽覆盖产品却只在**单批次内**比对——于是广告线最严的铁律「产品/logo/品牌色跨镜零漂移」，
+在**跨镜聚合**维度上没有任何机器统计：没人知道"哪个资产从第几镜开始崩"。本报表把已有各份机检汇总成
+**逐资产 × 逐镜**的 ok/warn/block/noevidence 时间线，标出 `first_bad_shot`、连崩镜数，并给修复建议
+（单镜孤立崩 → 只重抽该镜；同一资产多镜连崩 → 回定妆库/registry，别只重抽单图；产品/品牌资产崩 → P0）。
+`consistency_findings.py --write` 已自动带上它，无需单独记得跑。
+
+**诚实边界**：① 它**零像素、只聚合上游报告**，不会发现上游没发现的漂移——`PROD_`/`BRAND_` 的跨镜像素
+比对**仍是真空**（要堵得改 `asset_consistency.py` 的资产前缀排除）；② `noevidence ≠ ok`，上游对完全干净的
+镜头不留痕，故干净项目也会出 info，**缺证据不算通过**是刻意的；③ 它是"审"不是"门"——**恒不产 block**
+（`finding()` 在构造层强制降档），紧迫度读 `detail.priority` 而非 severity。硬闸仍是 `product_qc` 的
+prompt-lint 与 provenance。
 
 ## 检查项
 

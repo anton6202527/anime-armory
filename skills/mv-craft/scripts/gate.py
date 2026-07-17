@@ -352,12 +352,26 @@ def _image_qc_errors_warnings(root, stage):
     if hard:
         errors.append(f"mv-image image_qc 仍有 hard block={hard}（主角脸崩/图损坏/禁用本地贴脸产物）；先回 mv-image 修复重跑")
     precision = str(env.get("precision_level") or "").strip()
-    manual_ok = bool(report.get("manual_review_accepted") or env.get("manual_review_accepted"))
+    # 降级放行必须具名并绑定报告 hash（与 video_qc semantic_review 同强度）：
+    # 裸布尔留痕无法证明「人看的就是这份报告」，报告一重跑绑定即失效。
+    manual = report.get("manual_review") or {}
+    manual_ok = False
+    manual_note = ""
+    if manual.get("accepted") and str(manual.get("reviewer") or "").strip():
+        stripped = {k: v for k, v in report.items()
+                    if k not in ("manual_review", "json_path", "markdown_path")}
+        manual_ok = manual.get("bound_report_sha256") == mv_utils.json_hash(stripped)
+        if not manual_ok:
+            manual_note = "（已有 manual_review 但绑定 hash 与当前报告不符——报告重跑后需重新放行）"
+    elif report.get("manual_review_accepted") or env.get("manual_review_accepted"):
+        manual_note = "（旧式 manual_review_accepted 布尔留痕不再放行——无法证明复核对应当前报告）"
     if precision != "full" and not manual_ok:
-        errors.append(f"mv-image image_qc 机检精度为 {precision or 'unknown'}，未达到 full；正式进 mv-video 前需补依赖重跑，"
-                      "或在报告中人工留痕 manual_review_accepted=true 后再继续")
+        errors.append(f"mv-image image_qc 机检精度为 {precision or 'unknown'}，未达到 full{manual_note}；"
+                      "正式进 mv-video 前需补依赖重跑，或逐图人工复核后用 "
+                      "`image_qc.py <作品根> --accept-degraded --reviewer <name> --notes <说明>` 具名绑定放行")
     elif precision != "full" and manual_ok:
-        warnings.append(f"mv-image image_qc 机检精度为 {precision or 'unknown'}，但已有人工复核放行留痕")
+        warnings.append(f"mv-image image_qc 机检精度为 {precision or 'unknown'}，"
+                        f"已有具名人工放行（reviewer={manual.get('reviewer')}，绑定当前报告）")
     try:
         advisory = int(summary.get("advisory") or 0)
     except (TypeError, ValueError):
@@ -393,6 +407,89 @@ def _image_qc_errors_warnings(root, stage):
     if stale:
         errors.append(f"mv-image image_qc 已过期：{len(stale)} 张图片晚于 QC 报告，例：{stale[0]}；重跑 image_qc")
     return errors, warnings
+
+
+def _identity_readiness(root, stage, meta):
+    """主角定妆包 readiness 闸（参照 n2d image_preflight 对核心角色缺锚直接 BLOCK）。
+
+    此前定妆包不全只在 mv-review 汇总为 warn，付费 gate 不拦——定妆不 ready 时
+    image_qc 的脸检 floor 无法自标定，出视频后主角漂移无人拦。image 期共享定妆
+    本身尚在产出 → 只 warn 提醒先做定妆；video_jobs（正式）→ error。"""
+    if stage not in {"image", "video_jobs"}:
+        return [], []
+    formal_block = stage == "video_jobs" and not meta.get("is_demo")
+    registry = mv_utils.load_json(os.path.join(root, "设定", "identity_registry.json"), None)
+    if not isinstance(registry, dict):
+        msg = ("缺 设定/identity_registry.json（身份/参考真值）；"
+               "先跑 `python3 skills/mv-craft/scripts/identity_registry.py <作品根>`")
+        return ([msg], []) if formal_block else ([], [msg])
+    lead_id = registry.get("lead_id")
+    lead = next((row for row in registry.get("identities") or []
+                 if isinstance(row, dict) and row.get("id") == lead_id), None)
+    if not isinstance(lead, dict):
+        return [], ["identity_registry 缺主角身份行（lead_id 未命中 identities）；重跑 identity_registry.py"]
+    groups = {g.get("id"): g for g in registry.get("reference_groups") or [] if isinstance(g, dict)}
+    group = groups.get(lead.get("reference_group")) or {}
+    existing = [p for p in group.get("paths") or [] if p and os.path.exists(os.path.join(root, str(p)))]
+    if group.get("status") == "ready" and len(existing) >= 3:
+        return [], []
+    msg = (f"主角『{lead.get('display_name') or lead_id}』定妆包未 ready"
+           f"（现存参考 {len(existing)} 张，需≥3：正面/侧脸或三分之二/全身…）；"
+           "先补共享定妆再批量出图——定妆不全时脸机检 floor 无法自标定，出视频后漂移无人拦")
+    return ([msg], []) if formal_block else ([], [msg])
+
+
+def _demo_flag_warnings(root, stage, meta):
+    """demo 自证护栏：is_demo=true 会短路几乎所有正式一致性闸，但该标记写在 _meta.json
+    无人复核。若项目已出现正式生产痕迹，提示复核标记（advisory，不拦）。"""
+    if not meta.get("is_demo") or stage not in _COSTLY_STAGES:
+        return []
+    evidence = []
+    lock = mv_utils.load_json(os.path.join(root, "制片", "picture_lock.json"), {}) or {}
+    if lock.get("accepted"):
+        evidence.append("picture_lock 已签收")
+    jobs = (mv_utils.load_json(os.path.join(root, "出视频", "jobs_manifest.json"), {}) or {}).get("jobs") or []
+    if any(isinstance(j, dict) and j.get("selected_take") for j in jobs):
+        evidence.append("jobs_manifest 已有挑版记录")
+    qc = mv_utils.load_json(_image_qc_path(root), {}) or {}
+    if (qc.get("generation_provenance") or {}).get("complete"):
+        evidence.append("出图生成收据完整")
+    if evidence:
+        return [f"_meta.is_demo=true 但已有正式生产痕迹（{'；'.join(evidence)}）——demo 标记会短路正式一致性闸；"
+                "若已转正式，先跑 formal_readiness.py 评估并把 _meta.is_demo 置 false"]
+    return []
+
+
+def _shot_variety_warnings(root, stage):
+    """视觉多样性/构图冗余 事前机检（advisory · 出图前）。永不制造 block——只把 warn 抬进报告。
+
+    出图（image）是最便宜的拦截点：clip_plan 已定、还没花积分出图/出视频。此层照『advisory 绝不
+    造假 block』约定，全部落 warnings。"""
+    if stage not in {"image", "video_jobs"}:
+        return []
+    clip_plan = os.path.join(root, "分镜", "clip_plan.json")
+    if not os.path.exists(clip_plan):
+        return []
+    path = os.path.join(root, "生产数据", "shot_variety", "shot_variety.json")
+    report = mv_utils.load_json(path, None)
+    if not isinstance(report, dict):
+        return ["未跑视觉多样性事前机检；出图前建议 `python3 skills/mv-review/scripts/shot_variety_audit.py <作品根> --write`"
+                "（查同构图反复/景别单调/副歌静镜/场景滞留/大变化镜头缺参考锚）"]
+    warnings = []
+    recorded = (report.get("inputs_sha256") or {}).get("分镜/clip_plan.json")
+    if recorded and recorded != mv_utils.content_hash(clip_plan):
+        warnings.append("视觉多样性机检已过期：clip_plan 变化后未重跑 shot_variety_audit")
+    summary = report.get("summary") or {}
+    try:
+        warn = int(summary.get("warn") or 0)
+    except (TypeError, ValueError):
+        warn = 0
+    if warn:
+        codes = sorted({str(f.get("code")) for f in (report.get("findings") or [])
+                        if f.get("severity") == "warn"})
+        warnings.append(f"视觉多样性事前机检有 {warn} 条 advisory（{'/'.join(codes) or 'n/a'}）——"
+                        "出图前回 mv-plan 换景别/机位/运镜/场景/补参考，别把同构图撑满全曲")
+    return warnings
 
 
 def _video_report_errors(root, stage):
@@ -542,6 +639,11 @@ def check(root, stage):
     qc_errors, qc_warnings = _image_qc_errors_warnings(root, stage)
     errors.extend(qc_errors)
     warnings.extend(qc_warnings)
+    identity_errors, identity_warnings = _identity_readiness(root, stage, meta)
+    errors.extend(identity_errors)
+    warnings.extend(identity_warnings)
+    warnings.extend(_demo_flag_warnings(root, stage, meta))
+    warnings.extend(_shot_variety_warnings(root, stage))
     errors.extend(_video_report_errors(root, stage))
     errors.extend(_picture_lock_errors(root, stage, meta))
     errors.extend(_timeline_contract_errors(root, stage, meta))

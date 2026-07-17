@@ -352,6 +352,18 @@ def check_consistency_artifacts(root, meta=None):
             rows = refs.get("clips") or []
             ready = sum(1 for r in rows if r.get("status") == "ready")
             add(INFO, "一致性", "reference_plan.json", f"clip 参考计划：{ready}/{len(rows)} ready")
+        variety = mv_utils.load_json(os.path.join(root, "生产数据", "shot_variety", "shot_variety.json"), {}) or {}
+        if variety:
+            vs = variety.get("summary") or {}
+            vwarn = int(vs.get("warn") or 0)
+            if vwarn:
+                codes = sorted({str(f.get("code")) for f in (variety.get("findings") or []) if f.get("severity") == "warn"})
+                add(WARN, "一致性", "shot_variety.json",
+                    f"视觉多样性事前机检 advisory={vwarn}（{'/'.join(codes) or 'n/a'}）——同构图反复/景别单调/副歌静镜/场景滞留/缺参考锚，回 mv-plan 调分镜")
+            else:
+                add(INFO, "一致性", "shot_variety.json", f"视觉多样性事前机检无重复/单调项（clips={vs.get('clips_checked')}）")
+        elif not (meta or {}).get("is_demo"):
+            add(INFO, "一致性", "shot_variety.json", "未跑视觉多样性事前机检（shot_variety_audit）——出图前建议补跑，拦同构图反复/副歌静镜")
         requirements = mv_utils.load_json(requirements_path, {}) or {}
         if requirements:
             rows = requirements.get("requirements") or []
