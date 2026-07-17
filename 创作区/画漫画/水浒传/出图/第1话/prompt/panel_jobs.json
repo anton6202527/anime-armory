@@ -15187,7 +15187,7 @@
     },
     {
       "panel_id": "P044",
-      "status": "ready",
+      "status": "failed",
       "size": {
         "width": 1188,
         "height": 1040
@@ -15558,7 +15558,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "error": "dreamina result not ready within 240s: "
     },
     {
       "panel_id": "P045",
