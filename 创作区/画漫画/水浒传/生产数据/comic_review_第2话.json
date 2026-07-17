@@ -1,292 +1,450 @@
 {
   "schema_version": 1,
-  "kind": "comic_consistency_findings",
-  "dimension": "style_consistency",
+  "kind": "comic_review",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第2话",
-  "created_at": "2026-07-17T17:15:52",
+  "created_at": "2026-07-17T17:15:27",
+  "verdict": "revise",
+  "settings": {
+    "定妆级别": "长线专门定妆+高一致性",
+    "参考一致性策略": "共享参考图",
+    "年龄形态继承": "开启",
+    "角色一致性硬闸": "开启",
+    "风格锚": "STYLE_SHUIHU_SONG_CINEMATIC",
+    "文字语言": "中文",
+    "合规用途": "demo学习"
+  },
   "summary": {
     "panel_count": 42,
-    "finding_count": 23,
+    "issue_count": 28,
     "block_count": 0,
-    "warn_count": 23,
-    "info_count": 0
+    "warn_count": 26,
+    "info_count": 2
   },
-  "findings": [
+  "artifacts": {
+    "panel_script": "脚本/第2话/panel_script.json",
+    "source_semantics": "脚本/第2话/source_semantics.json",
+    "layout": "排版/第2话/layout.json",
+    "lettering": "排版/第2话/lettering.json",
+    "manifest": "排版/第2话/export_manifest.json",
+    "identity_report": "生产数据/comic_identity_report_第2话.json",
+    "style_report": "生产数据/comic_style_consistency_第2话.json",
+    "character_report": "生产数据/comic_character_consistency_第2话.json",
+    "rendered": [
+      {
+        "path": "排版/第2话/长图/longstrip.png",
+        "panel_ids": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012",
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018",
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024",
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030",
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036",
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042"
+        ],
+        "size": {
+          "width": 1440,
+          "height": 41440
+        },
+        "format": "png"
+      }
+    ],
+    "lettering_slot_qc": {
+      "path": "生产数据/qa_previews/第2话_lettering_slots.jpg",
+      "items": 45,
+      "missing_slots": []
+    },
+    "qa_preview": "生产数据/qa_previews/第2话_longstrip_preview.webp",
+    "contact_sheet": "生产数据/panel_contact_sheet_第2话.jpg"
+  },
+  "raw_bubble_candidates": [
+    {
+      "panel_id": "P036",
+      "path": "出图/第2话/panels/P036.png",
+      "components": [
+        {
+          "x": 0,
+          "y": 210,
+          "w": 437,
+          "h": 275,
+          "area": 24683
+        },
+        {
+          "x": 372,
+          "y": 456,
+          "w": 283,
+          "h": 64,
+          "area": 4680
+        }
+      ]
+    },
+    {
+      "panel_id": "P037",
+      "path": "出图/第2话/panels/P037.png",
+      "components": [
+        {
+          "x": 128,
+          "y": 217,
+          "w": 91,
+          "h": 282,
+          "area": 21488
+        }
+      ]
+    }
+  ],
+  "accepted_raw_bubble_candidates": [
+    {
+      "panel_id": "P036",
+      "path": "出图/第2话/panels/P036.png",
+      "components": [
+        {
+          "x": 0,
+          "y": 210,
+          "w": 437,
+          "h": 275,
+          "area": 24683
+        },
+        {
+          "x": 372,
+          "y": 456,
+          "w": 283,
+          "h": 64,
+          "area": 4680
+        }
+      ]
+    },
+    {
+      "panel_id": "P037",
+      "path": "出图/第2话/panels/P037.png",
+      "components": [
+        {
+          "x": 128,
+          "y": 217,
+          "w": 91,
+          "h": 282,
+          "area": 21488
+        }
+      ]
+    }
+  ],
+  "style_consistency": {
+    "verdict": "warn",
+    "summary": {
+      "panel_count": 42,
+      "finding_count": 23,
+      "block_count": 0,
+      "warn_count": 23,
+      "info_count": 0
+    }
+  },
+  "character_consistency": {
+    "verdict": "warn",
+    "summary": {
+      "character_count": 3,
+      "panel_binding_count": 38,
+      "finding_count": 3,
+      "block_count": 0,
+      "warn_count": 3,
+      "info_count": 0
+    },
+    "contact_sheet": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第2话/panels/P036.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：原图放大复核后确认白色区域为宫观天空与室内壁面采光，不是烘焙气泡或文字容器；远景白鹤、无脸道童收拾法器的余韵语义可执行。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第2话/panels/P037.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：原图放大复核后确认候选白色区域为侧殿自然逆光和空白墙面，不是烘焙气泡；洪信人物、服装、宫廷空间与惊疑后回望语义一致。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P004",
+      "category": "style",
       "artifact": "出图/第2话/panels/P004.png",
       "reason": "风格指纹内聚度 0.7359 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P005",
+      "category": "style",
       "artifact": "出图/第2话/panels/P005.png",
       "reason": "风格指纹内聚度 0.7061 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P008",
+      "category": "style",
       "artifact": "出图/第2话/panels/P008.png",
       "reason": "风格指纹内聚度 0.6205 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P009",
+      "category": "style",
       "artifact": "出图/第2话/panels/P009.png",
       "reason": "风格指纹内聚度 0.6543 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P010",
+      "category": "style",
       "artifact": "出图/第2话/panels/P010.png",
       "reason": "风格指纹内聚度 0.7092 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P013",
+      "category": "style",
       "artifact": "出图/第2话/panels/P013.png",
       "reason": "风格指纹内聚度 0.6865 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P016",
+      "category": "style",
       "artifact": "出图/第2话/panels/P016.png",
       "reason": "风格指纹内聚度 0.6836 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P017",
+      "category": "style",
       "artifact": "出图/第2话/panels/P017.png",
       "reason": "风格指纹内聚度 0.7165 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P023",
+      "category": "style",
       "artifact": "出图/第2话/panels/P023.png",
       "reason": "风格指纹内聚度 0.7271 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P034",
+      "category": "style",
       "artifact": "出图/第2话/panels/P034.png",
       "reason": "风格指纹内聚度 0.7108 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "panel_style_outlier",
-      "panel_id": "P036",
+      "category": "style",
       "artifact": "出图/第2话/panels/P036.png",
       "reason": "风格指纹内聚度 0.7373 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "location_color_grade_shift",
-      "panel_id": "P013",
+      "category": "style",
       "artifact": "出图/第2话/panels/P013.png",
       "reason": "同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.225, tint_dev=0.015。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
-      "evidence_family": "color_grade",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "location_color_grade_shift",
-      "panel_id": "P030",
+      "category": "style",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.223, tint_dev=0.007。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
-      "evidence_family": "color_grade",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "location_color_grade_shift",
-      "panel_id": "P017",
+      "category": "style",
       "artifact": "出图/第2话/panels/P017.png",
       "reason": "同场景“坍塌后的伏魔殿外廊”内调色代理偏离组中位：warmth_dev=0.239, tint_dev=0.048。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
-      "evidence_family": "color_grade",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P004",
+      "category": "style",
       "artifact": "出图/第2话/panels/P004.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3642（中位 0.017），线宽代理 edge_density=0.0758（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P005",
+      "category": "style",
       "artifact": "出图/第2话/panels/P005.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.4058（中位 0.017），线宽代理 edge_density=0.0866（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P006",
+      "category": "style",
       "artifact": "出图/第2话/panels/P006.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3399（中位 0.017），线宽代理 edge_density=0.0664（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P007",
+      "category": "style",
       "artifact": "出图/第2话/panels/P007.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3799（中位 0.017），线宽代理 edge_density=0.0814（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P008",
+      "category": "style",
       "artifact": "出图/第2话/panels/P008.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.4579（中位 0.017），线宽代理 edge_density=0.0685（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P009",
+      "category": "style",
       "artifact": "出图/第2话/panels/P009.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.5737（中位 0.017），线宽代理 edge_density=0.0747（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P010",
+      "category": "style",
       "artifact": "出图/第2话/panels/P010.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.4456（中位 0.017），线宽代理 edge_density=0.0682（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "tone_value_outlier",
-      "panel_id": "P030",
+      "category": "style",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3463（中位 0.017），线宽代理 edge_density=0.073（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
-      "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
       "severity": "warn",
-      "dimension": "style_consistency",
-      "code": "style_anchor_drift",
-      "panel_id": "",
+      "category": "style",
       "artifact": "出图/共享/style_baseline.json",
       "reason": "本话整体指纹与风格锚图最高相似度仅 0.8789，风格锚可能已失去约束力。",
-      "return_to_stage": "image",
+      "return_to": "comic-image",
       "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
-      "evidence_family": "cross_chapter_baseline",
       "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第2话/panels/P029.png",
+      "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.405。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第2话/panels/P030.png",
+      "reason": "CHAR_ABBOT_SHANGQING face 指纹与参考图相似度偏低：score=0.428。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第2话/panels/P030.png",
+      "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.373。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
     }
+  ],
+  "notes": [
+    "已刷新风格一致性报告：生产数据/comic_style_consistency_第2话.md",
+    "已刷新角色一致性报告：生产数据/comic_character_consistency_第2话.md",
+    "demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",
+    "已刷新 QA 长图预览：生产数据/qa_previews/第2话_longstrip_preview.webp",
+    "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第2话.jpg"
   ]
 }

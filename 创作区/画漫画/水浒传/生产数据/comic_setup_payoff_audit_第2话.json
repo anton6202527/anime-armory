@@ -2,7 +2,7 @@
   "kind": "comic_setup_payoff_audit",
   "version": 1,
   "chapter": "第2话",
-  "generated_at": "2026-07-17T09:09:38+00:00",
+  "generated_at": "2026-07-17T09:15:29+00:00",
   "provenance": "SP1·显式标记进 gate/弱信号只提示·development_pack 种子并入·2026-07",
   "summary": {
     "detected_setups": 0,
@@ -22,7 +22,7 @@
   "ledger": {
     "kind": "comic_setup_payoff_ledger",
     "version": 1,
-    "generated_at": "2026-07-17T09:09:38+00:00",
+    "generated_at": "2026-07-17T09:15:29+00:00",
     "pairs": [
       {
         "id": "FSH_001",
