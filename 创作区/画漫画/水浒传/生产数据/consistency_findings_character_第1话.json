@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "character_consistency",
+  "chapter": "第1话",
+  "created_at": "2026-07-17T10:53:16",
+  "summary": {
+    "character_count": 9,
+    "panel_binding_count": 76,
+    "finding_count": 4,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 4
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WEN_YANBO face 指纹与参考图相似度偏低：score=0.451。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "群臣中远景、侧向站位和殿内逆光压缩脸部色彩；幞头、脸型、胡须和官服轮廓并排目检可连续识别。",
+        "evidence": "生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "8ae7ee00acd42e1f558557a0417fcef2c0266d86fe1ae250852aa4307c0f6a8c",
+        "source": "生产数据/character_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WEN_YANBO hair 指纹与参考图相似度偏低：score=0.168。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "幞头遮盖与中远景缩小导致发色代理低分，人物冠帽和头部轮廓目检连续。",
+        "evidence": "生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "8ae7ee00acd42e1f558557a0417fcef2c0266d86fe1ae250852aa4307c0f6a8c",
+        "source": "生产数据/character_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "outfit_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WEN_YANBO outfit 指纹与参考图相似度偏低：score=0.329。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "朝堂群像受殿柱暖光与人物遮挡影响色彩分布；官服层级、帽形与站位没有串衣。",
+        "evidence": "生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "8ae7ee00acd42e1f558557a0417fcef2c0266d86fe1ae250852aa4307c0f6a8c",
+        "source": "生产数据/character_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_WEN_YANBO",
+      "panel_id": "P005",
+      "artifact": "出图/第1话/panels/P005.png",
+      "reason": "CHAR_WEN_YANBO hair 指纹与参考图相似度偏低：score=0.296。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "中景幞头覆盖和侧向光使头发色彩代理不足；与 P004 的人物轮廓、胡须和服装连续。",
+        "evidence": "生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "ee25330ff798f37550dcb60272b6e8d2cea4387d2ca5c1d5462327189587058c",
+        "source": "生产数据/character_consistency_acceptance_第1话.json"
+      }
+    }
+  ]
+}

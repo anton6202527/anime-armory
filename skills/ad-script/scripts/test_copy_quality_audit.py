@@ -256,7 +256,7 @@ def test_adjectives_with_evidence_downgrade_to_info(tmp_path):
 
 
 def test_plain_usp_copy_is_not_flagged(tmp_path):
-    """领域差异：广告 VO 直给卖点是**好文案**，不该像 n2d 那样报『信息直给』。"""
+    """领域差异：广告 VO 直给卖点是**好文案**，不该报『信息直给』。"""
     _brief(tmp_path)
     _registry(tmp_path)
     _write(tmp_path, "脚本/voiceover.txt",

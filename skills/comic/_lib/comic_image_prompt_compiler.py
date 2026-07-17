@@ -12,10 +12,10 @@ KIND = "comic_compiled_image_prompt"
 VERSION = 1
 PROFILE_VERSION = "2026-07-15.1"
 _INTERNAL_RE = re.compile(
-    r"(?:CHAR_|MON_|LOC_|PROP_|SYS_|FX_|STYLE_|出图/|\.png\b|identity_registry|asset_registry|reference_group)",
+    r"(?:CHAR_|MON_|LOC_|PROP_|SYS_|VFX_|FX_|STYLE_|出图/|\.png\b|identity_registry|asset_registry|reference_group)",
     re.I,
 )
-_INTERNAL_TOKEN_RE = re.compile(r"\b(?:CHAR|MON|LOC|PROP|SYS|FX|STYLE)_[A-Z0-9_]+\b", re.I)
+_INTERNAL_TOKEN_RE = re.compile(r"\b(?:CHAR|MON|LOC|PROP|SYS|VFX|FX|STYLE)_[A-Z0-9_]+\b", re.I)
 _IMAGE_PATH_RE = re.compile(r"(?:[^\s；;,，。]+[/\\])?[^\s；;,，。]+\.(?:png|jpe?g|webp|avif)\b", re.I)
 _TOKEN_LABELS = {
     "CHAR": "已登记角色参考",
@@ -23,6 +23,7 @@ _TOKEN_LABELS = {
     "LOC": "已登记场景锚",
     "PROP": "已登记道具参考",
     "SYS": "已登记效果参考",
+    "VFX": "已登记效果参考",
     "FX": "已登记效果参考",
     "STYLE": "项目风格锚",
 }

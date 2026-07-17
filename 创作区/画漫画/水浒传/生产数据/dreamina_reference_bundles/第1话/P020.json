@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P020",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 10,
+  "references": [
+    {
+      "id": "CHAR_HONG_XIN",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+      "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+      "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHANGQING_PALACE",
+      "path": "出图/共享/图片/LOC_SHANGQING_PALACE__anchor.png",
+      "sha256": "cfdabe60dc88efa15bcb97d1c9fb5c19c6ed2f697e1134283c29ade0f9f4a539",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_IMPERIAL_EDICT",
+      "path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+      "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "PROP_SILVER_CENSER",
+      "path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+      "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_HONG_XIN",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+      "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+      "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_HONG_XIN",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+      "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1",
+      "role": "three_quarter",
+      "required": false
+    },
+    {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+      "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-17T08:37:54"
+}

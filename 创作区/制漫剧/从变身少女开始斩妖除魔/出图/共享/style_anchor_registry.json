@@ -1,48 +1,33 @@
 {
+  "kind": "n2d_style_anchor_registry",
+  "version": 1,
+  "generated_at": "2026-07-16T10:35:28+00:00",
+  "style_name": "黑赤镇魔·水墨妖谱",
+  "selected_anchor": {
+    "id": "STYLE_ANCHOR",
+    "name": "黑赤镇魔·水墨妖谱",
+    "path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+    "status": "review_pending",
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "role": "shared_rendering_language_anchor",
+    "sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+  },
   "anchors": [
     {
       "id": "STYLE_ANCHOR",
-      "identity_policy": "do_not_clone_face_or_costume",
       "name": "黑赤镇魔·水墨妖谱",
       "path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
-      "png_sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
+      "status": "review_pending",
+      "use_policy": "style_only",
+      "identity_policy": "do_not_clone_face_or_costume",
       "role": "shared_rendering_language_anchor",
-      "status": "ready",
-      "use_policy": "style_only"
+      "sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
     }
   ],
-  "generated_at": "2026-07-15T03:56:58+00:00",
-  "kind": "n2d_style_anchor_registry",
   "rules": {
-    "identity_policy": "do_not_clone_face_or_costume",
-    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。",
-    "use_policy": "style_only"
-  },
-  "selected_anchor": {
-    "id": "STYLE_ANCHOR",
-    "identity_policy": "do_not_clone_face_or_costume",
-    "machine_qc": {
-      "face_reference_coverage": "ok",
-      "precision_level": "full",
-      "report": "生产数据/image_qc/第1集/image_qc_第1集.json",
-      "style_anchor_status": "ok"
-    },
-    "name": "黑赤镇魔·水墨妖谱",
-    "path": "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
-    "png_sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
-    "role": "style_anchor",
-    "status": "ready",
-    "updated_at": "2026-07-15T08:14:47+00:00",
-    "updated_by": "Codex执行者实际像素目视 + n2d-image full QC",
     "use_policy": "style_only",
-    "visual_review": {
-      "note": "抽象分区式风格语言板；仅含色阶、笔触、材质和光比样本；未见人物、妖物、建筑、兵器、道具、器皿、卷轴、伪文字或剧情场景。",
-      "reviewed_at": "2026-07-15T08:14:47+00:00",
-      "reviewer": "Codex执行者（实际像素目视）",
-      "verdict": "pass"
-    }
-  },
-  "style_name": "黑赤镇魔·水墨妖谱",
-  "updated_at": "2026-07-15T08:14:47+00:00",
-  "version": 1
+    "identity_policy": "do_not_clone_face_or_costume",
+    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。生成风格锚时不得把 `style_contract.镜头与构图` 的剧情机位、前中后景、人物调度、场景或物件描述注入风格板；角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
+  }
 }

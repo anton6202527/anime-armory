@@ -1,6 +1,9 @@
 {
   "kind": "n2d_image_backend_override",
   "version": 1,
+  "approved": true,
+  "scope": "image",
+  "backend": "dreamina_official",
   "approved_at": "2026-07-16T06:50:20+00:00",
   "authority": "explicit_user",
   "decision": {
@@ -12,7 +15,7 @@
     "generation_granularity": "逐个",
     "acceptance_mode": "逐张机器QC+实际目视"
   },
-  "scope": {
+  "authorization_scope": {
     "episode": "第1集",
     "applies_from_completed_count": 20,
     "applies_to": "all remaining shared assets and episode images",

@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-15T04:05:24+00:00",
+  "generated_at": "2026-07-16T10:35:28+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -51,7 +51,6 @@
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
               },
-              "sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
               "visual_review": {
                 "status": "accepted",
                 "verdict": "pass",
@@ -85,11 +84,11 @@
             },
             "outfit": {
               "path": "出图/共享/图片/定妆_CHAR_01__常态_半身.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                 "crop_box": [
                   0,
                   0,
@@ -108,16 +107,9 @@
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  936
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-15T10:39:05+00:00"
-              },
-              "sha256": "2b4ed2c211ee3d541fba1a463036b209b749bd19769c78e627f67f37854f2b58",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                  1,
+                  1
+                ]
               }
             },
             "face_anchor_refs": [
@@ -129,19 +121,11 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
                   "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
-                    353,
-                    75,
-                    587,
-                    309
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-15T10:37:15+00:00"
-                },
-                "label": "CHAR_01/常态 同源脸锚",
-                "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -177,11 +161,11 @@
             "expressions": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
                     0,
                     0,
@@ -190,29 +174,52 @@
                   ]
                 },
                 "emotion": "六联表（冷静/警觉/震惊/隐忍/将哭/决绝）",
-                "layout": "two_by_three_expression_sheet_v1"
+                "layout": "two_by_three_expression_sheet_v1",
+                "sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "常态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-16T11:05:11+00:00",
+                  "png_sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb",
+                  "registry_binding_fingerprint": "73a6645e5147b4f77c581a49c9b6a18cdad21d9c7262a3c3d61ab4d6261f44b6",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "原像素核验：严格2x3六格；姜月初同一脸型、眉眼、鼻口、高马尾、黑赤交领与棚拍光；冷静/警觉/震惊/隐忍/将哭/决绝层级可区分；每格单脸，无文字水印。"
+                }
               }
             ],
             "three_quarter": {
               "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
               "status": "ready",
               "derivation": {
-                "method": "turnaround_split",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                 "crop_box": [
-                  334,
                   0,
-                  669,
-                  941
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-16T02:10:15+00:00"
-              },
-              "sha256": "db5ce4cb5d115fbaef26424c45e38e55f51337fb5ebeb715405c56766d599cce",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                  0,
+                  1,
+                  1
+                ]
               },
               "visual_review": {
                 "status": "accepted",
@@ -249,22 +256,15 @@
               "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
               "status": "ready",
               "derivation": {
-                "method": "turnaround_split",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                 "crop_box": [
-                  669,
                   0,
-                  1003,
-                  941
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-16T02:15:33+00:00"
-              },
-              "sha256": "8b9b3f4a0de65ea1aafb91a6c2a4c4515949b83ca140be65cf307ce64cc95de7",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                  0,
+                  1,
+                  1
+                ]
               },
               "visual_review": {
                 "status": "accepted",
@@ -301,22 +301,15 @@
               "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
               "status": "ready",
               "derivation": {
-                "method": "turnaround_split",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                 "crop_box": [
-                  1003,
                   0,
-                  1338,
-                  941
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-16T02:21:30+00:00"
-              },
-              "sha256": "17fad145e3565e198c531d5ed351094b78dcb717432259f123359b1b2f07159a",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                  0,
+                  1,
+                  1
+                ]
               },
               "visual_review": {
                 "status": "accepted",
@@ -353,22 +346,15 @@
               "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
               "status": "ready",
               "derivation": {
-                "method": "turnaround_split",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                 "crop_box": [
-                  1338,
                   0,
-                  1672,
-                  941
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-16T02:27:51+00:00"
-              },
-              "sha256": "2e379d2ebc3332e68845dfbaac1fae7e4df5ad355ad181e577c65b8e79abce09",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                  0,
+                  1,
+                  1
+                ]
               },
               "visual_review": {
                 "status": "accepted",
@@ -405,19 +391,10 @@
               "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
               "status": "ready",
               "layout": "five_angle_v1",
-              "column_count": 5,
-              "view_order": [
-                "front",
-                "three_quarter",
-                "side",
-                "rear_three_quarter",
-                "back"
-              ],
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
               },
-              "sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
               "visual_review": {
                 "status": "accepted",
                 "verdict": "pass",
@@ -447,7 +424,15 @@
                   "accepted_current_pixels": true
                 },
                 "note": "五角总览板实际像素目视通过：正/前45/侧/后45/背五列独立、同身高、头脚完整；脸型高马尾同族；黑色长层叠不对称衣摆、黑腰封、暗红滚绣、黑护腕与高筒靴前后结构一致；无武器、文字、水印。"
-              }
+              },
+              "column_count": 5,
+              "view_order": [
+                "front",
+                "three_quarter",
+                "side",
+                "rear_three_quarter",
+                "back"
+              ]
             }
           },
           "reference_atlas": {
@@ -460,7 +445,6 @@
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
                 },
-                "sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                 "visual_review": {
                   "status": "accepted",
                   "verdict": "pass",
@@ -496,22 +480,15 @@
                 "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "turnaround_split",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                  "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                  "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
-                    334,
                     0,
-                    669,
-                    941
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T02:10:15+00:00"
-                },
-                "sha256": "db5ce4cb5d115fbaef26424c45e38e55f51337fb5ebeb715405c56766d599cce",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -548,22 +525,15 @@
                 "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "turnaround_split",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                  "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                  "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
-                    669,
                     0,
-                    1003,
-                    941
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T02:15:33+00:00"
-                },
-                "sha256": "8b9b3f4a0de65ea1aafb91a6c2a4c4515949b83ca140be65cf307ce64cc95de7",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -600,22 +570,15 @@
                 "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "turnaround_split",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                  "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                  "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
-                    1003,
                     0,
-                    1338,
-                    941
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T02:21:30+00:00"
-                },
-                "sha256": "17fad145e3565e198c531d5ed351094b78dcb717432259f123359b1b2f07159a",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -652,22 +615,15 @@
                 "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "turnaround_split",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-                  "source_sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2",
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
+                  "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
-                    1338,
                     0,
-                    1672,
-                    941
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T02:27:51+00:00"
-                },
-                "sha256": "2e379d2ebc3332e68845dfbaac1fae7e4df5ad355ad181e577c65b8e79abce09",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -710,16 +666,9 @@
                   "crop_box": [
                     0,
                     0,
-                    941,
-                    936
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-15T10:39:05+00:00"
-                },
-                "sha256": "2b4ed2c211ee3d541fba1a463036b209b749bd19769c78e627f67f37854f2b58",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
+                    1,
+                    1
+                  ]
                 }
               }
             },
@@ -732,19 +681,11 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
                   "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
-                    353,
-                    75,
-                    587,
-                    309
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-15T10:37:15+00:00"
-                },
-                "label": "CHAR_01/常态 同源脸锚",
-                "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -780,11 +721,11 @@
             "expression_refs": [
               {
                 "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
-                "status": "planned",
+                "status": "ready",
                 "derivation": {
                   "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
                   "crop_box": [
                     0,
                     0,
@@ -793,7 +734,37 @@
                   ]
                 },
                 "emotion": "六联表（冷静/警觉/震惊/隐忍/将哭/决绝）",
-                "layout": "two_by_three_expression_sheet_v1"
+                "layout": "two_by_three_expression_sheet_v1",
+                "sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "常态",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-16T11:05:11+00:00",
+                  "png_sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb",
+                  "registry_binding_fingerprint": "73a6645e5147b4f77c581a49c9b6a18cdad21d9c7262a3c3d61ab4d6261f44b6",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "原像素核验：严格2x3六格；姜月初同一脸型、眉眼、鼻口、高马尾、黑赤交领与棚拍光；冷静/警觉/震惊/隐忍/将哭/决绝层级可区分；每格单脸，无文字水印。"
+                }
               }
             ],
             "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
@@ -808,7 +779,8 @@
             {
               "slot": "primary_reference",
               "path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-              "status": "review_pending",
+              "status": "ready",
+              "sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -944,8 +916,8 @@
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
           "self_check_at": "2026-07-16T02:31:00+00:00",
           "self_check_by": "image_qc.mark_finalized",
-          "anchor_sha": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
-          "artifact_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e"
+          "artifact_sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e",
+          "anchor_sha": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e"
         }
       ],
       "asset_bundle": {
@@ -1017,7 +989,6 @@
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
               },
-              "sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
               "visual_review": {
                 "status": "accepted",
                 "verdict": "pass",
@@ -1051,11 +1022,11 @@
             },
             "outfit": {
               "path": "出图/共享/图片/定妆_CHAR_02__常态_半身.png",
-              "status": "planned",
+              "status": "ready",
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                 "crop_box": [
                   0,
                   0,
@@ -1072,18 +1043,11 @@
                 "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                 "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                 "crop_box": [
-                  303,
                   0,
-                  1317,
-                  531
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-16T03:37:09+00:00"
-              },
-              "sha256": "99a27f73c7c91a6c8c7cc81c215d0b5991b197cc8c5f28cbbeabd4cc2f3d2fa6",
-              "dimensions": {
-                "width": 1672,
-                "height": 941
+                  0,
+                  1,
+                  1
+                ]
               }
             },
             "face_anchor_refs": [
@@ -1095,19 +1059,11 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                   "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                   "crop_box": [
-                    772,
-                    62,
-                    899,
-                    189
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T02:58:38+00:00"
-                },
-                "label": "CHAR_02/常态 同源脸锚",
-                "sha256": "64a936070c894623081e3a2969bc3fc513e7b90428911abd49dc161d4cadbbfe",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "human_review": {
                   "status": "pending",
@@ -1151,7 +1107,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                   "crop_box": [
                     0,
                     0,
@@ -1164,7 +1120,6 @@
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
                 },
-                "sha256": "64a936070c894623081e3a2969bc3fc513e7b90428911abd49dc161d4cadbbfe",
                 "visual_review": {
                   "status": "accepted",
                   "verdict": "pass",
@@ -1207,7 +1162,6 @@
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
                 },
-                "sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                 "visual_review": {
                   "status": "accepted",
                   "verdict": "pass",
@@ -1247,18 +1201,11 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                   "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                   "crop_box": [
-                    303,
                     0,
-                    1317,
-                    531
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T03:37:09+00:00"
-                },
-                "sha256": "99a27f73c7c91a6c8c7cc81c215d0b5991b197cc8c5f28cbbeabd4cc2f3d2fa6",
-                "dimensions": {
-                  "width": 1672,
-                  "height": 941
+                    0,
+                    1,
+                    1
+                  ]
                 }
               }
             },
@@ -1271,19 +1218,11 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                   "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                   "crop_box": [
-                    772,
-                    62,
-                    899,
-                    189
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T02:58:38+00:00"
-                },
-                "label": "CHAR_02/常态 同源脸锚",
-                "sha256": "64a936070c894623081e3a2969bc3fc513e7b90428911abd49dc161d4cadbbfe",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "human_review": {
                   "status": "pending",
@@ -1327,7 +1266,7 @@
                 "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
                   "crop_box": [
                     0,
                     0,
@@ -1340,7 +1279,6 @@
                   "status": "pending",
                   "reason": "Codex text-generated character candidate requires human approval before ready"
                 },
-                "sha256": "64a936070c894623081e3a2969bc3fc513e7b90428911abd49dc161d4cadbbfe",
                 "visual_review": {
                   "status": "accepted",
                   "verdict": "pass",
@@ -1384,7 +1322,8 @@
             {
               "slot": "primary_reference",
               "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-              "status": "review_pending",
+              "status": "ready",
+              "sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -1514,7 +1453,7 @@
             "WEAPON_01"
           ],
           "self_check_passed": false,
-          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+          "self_check_note": "PNG exists but requires explicit visual/QC signoff"
         }
       ],
       "asset_bundle": {
@@ -1590,7 +1529,6 @@
                 "reason": "shared front reference passed finalized review",
                 "reviewed_at": "2026-07-16T04:35:09.239586+00:00"
               },
-              "sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
               "visual_review": {
                 "status": "ready",
                 "verdict": "pass",
@@ -1634,7 +1572,7 @@
               "derivation": {
                 "method": "front_crop",
                 "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                 "crop_box": [
                   0,
                   0,
@@ -1659,16 +1597,9 @@
                 "crop_box": [
                   0,
                   0,
-                  941,
-                  912
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-16T03:45:59+00:00"
-              },
-              "sha256": "c15ccbd710ef9dae15675e803fcd1ec9fd5a2dfcb9e24e9ffb8809dc4a4354fe",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
+                  1,
+                  1
+                ]
               },
               "human_review": {
                 "status": "accepted",
@@ -1686,19 +1617,17 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
                   "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                   "crop_box": [
-                    356,
-                    73,
-                    584,
-                    301
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T03:48:25+00:00"
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
-                "label": "CHAR_04/常态 同源脸锚",
-                "sha256": "179ea069f4a334e752d13a2aef15647d81fbf32d19aead01c9e65e4203e9f796",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-16T04:35:09.239669+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -1734,12 +1663,6 @@
                     "reason": "shared visual_review reference passed finalized review",
                     "reviewed_at": "2026-07-16T04:35:09.239682+00:00"
                   }
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-16T04:35:09.239669+00:00"
                 }
               }
             ],
@@ -1748,23 +1671,24 @@
                 "path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_expression_crop",
+                  "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
                   "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                   "crop_box": [
-                    242,
                     0,
-                    698,
-                    456
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T04:00:34+00:00"
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "emotion": "克制",
-                "sha256": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                "self_check_passed": true,
+                "anchor_sha": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-16T04:35:09.239714+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -1800,14 +1724,6 @@
                     "reason": "shared visual_review reference passed finalized review",
                     "reviewed_at": "2026-07-16T04:35:09.239727+00:00"
                   }
-                },
-                "self_check_passed": true,
-                "anchor_sha": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8",
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared expressions[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-16T04:35:09.239714+00:00"
                 }
               }
             ],
@@ -1817,7 +1733,7 @@
               "derivation": {
                 "method": "controlled_multiref_generation",
                 "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                "source_sha256": "prompt-stage-source-pending",
+                "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                 "crop_box": [
                   0,
                   0,
@@ -1825,7 +1741,12 @@
                   1
                 ]
               },
-              "sha256": "2d3febbe23f64fe241eb55649b474f927189c4ecfe499d2e3253c2de87466bc7",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-16T04:35:09.239760+00:00"
+              },
               "visual_review": {
                 "status": "ready",
                 "verdict": "pass",
@@ -1861,12 +1782,144 @@
                   "reason": "shared visual_review reference passed finalized review",
                   "reviewed_at": "2026-07-16T04:35:09.239770+00:00"
                 }
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
               },
-              "human_review": {
+              "sha256": "9c39952d03635bf7c7678157461964b3a5d89c445f8e07a616fbd978cfb3787d",
+              "visual_review": {
                 "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared three_quarter reference passed finalized review",
-                "reviewed_at": "2026-07-16T04:35:09.239760+00:00"
+                "verdict": "pass",
+                "character_id": "CHAR_04",
+                "form": "常态",
+                "library_tier": "recurring_standard",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-16T11:31:09+00:00",
+                "png_sha256": "9c39952d03635bf7c7678157461964b3a5d89c445f8e07a616fbd978cfb3787d",
+                "registry_binding_fingerprint": "0235afb3c1a87999155b6578972475e55bd308ebdcf26d9e36b92f7a4d8b021d",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "原像素核验：90度左侧，单眼侧脸，肩髋叠线，远侧肢体遮挡，耳尖到足爪完整；白额虎纹、胸伤侧缘、破布与缠带同源，无新增尾巴。"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_04",
+                "form": "常态",
+                "library_tier": "recurring_standard",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-16T11:46:03+00:00",
+                "png_sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53",
+                "registry_binding_fingerprint": "c75b1e775068a9b0ca9bb3b24aadbe8fbf0b2b8319e6870f8b555eff935bb108",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "原像素核验：3040x5404，真实后45度约135度，宽阔背部主导，仅一只眼侧缘可见；吊睛白额、虎纹、腰布缠带同源；耳尖至双足完整，双手足爪自然；胸伤未迁移到背肩或双臂，无尾巴、无多肢、无文字水印。"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_04",
+                "form": "常态",
+                "library_tier": "recurring_standard",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+                "reviewer": "Codex视觉执行者",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-16T12:13:12+00:00",
+                "png_sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+                "registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "原像素核验：3040x5404，严格180度正背面，后脑双耳与脊柱居中，零眼鼻口和侧脸；肩胛、腰胯、双腿双足近似对称，耳尖至足底完整；虎纹、腰布、腕腿缠带同源，胸伤不可见，无尾巴、无血迹、无多肢、无文字水印。"
               }
             }
           },
@@ -1882,7 +1935,6 @@
                   "reason": "shared front reference passed finalized review",
                   "reviewed_at": "2026-07-16T04:35:09.239803+00:00"
                 },
-                "sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                 "visual_review": {
                   "status": "ready",
                   "verdict": "pass",
@@ -1926,7 +1978,7 @@
                 "derivation": {
                   "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
+                  "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                   "crop_box": [
                     0,
                     0,
@@ -1934,7 +1986,12 @@
                     1
                   ]
                 },
-                "sha256": "2d3febbe23f64fe241eb55649b474f927189c4ecfe499d2e3253c2de87466bc7",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-16T04:35:09.239842+00:00"
+                },
                 "visual_review": {
                   "status": "ready",
                   "verdict": "pass",
@@ -1970,12 +2027,144 @@
                     "reason": "shared visual_review reference passed finalized review",
                     "reviewed_at": "2026-07-16T04:35:09.239852+00:00"
                   }
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
-                "human_review": {
+                "sha256": "9c39952d03635bf7c7678157461964b3a5d89c445f8e07a616fbd978cfb3787d",
+                "visual_review": {
                   "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared three_quarter reference passed finalized review",
-                  "reviewed_at": "2026-07-16T04:35:09.239842+00:00"
+                  "verdict": "pass",
+                  "character_id": "CHAR_04",
+                  "form": "常态",
+                  "library_tier": "recurring_standard",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-16T11:31:09+00:00",
+                  "png_sha256": "9c39952d03635bf7c7678157461964b3a5d89c445f8e07a616fbd978cfb3787d",
+                  "registry_binding_fingerprint": "0235afb3c1a87999155b6578972475e55bd308ebdcf26d9e36b92f7a4d8b021d",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "原像素核验：90度左侧，单眼侧脸，肩髋叠线，远侧肢体遮挡，耳尖到足爪完整；白额虎纹、胸伤侧缘、破布与缠带同源，无新增尾巴。"
+                }
+              },
+              "rear_three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_04",
+                  "form": "常态",
+                  "library_tier": "recurring_standard",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-16T11:46:03+00:00",
+                  "png_sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53",
+                  "registry_binding_fingerprint": "c75b1e775068a9b0ca9bb3b24aadbe8fbf0b2b8319e6870f8b555eff935bb108",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "原像素核验：3040x5404，真实后45度约135度，宽阔背部主导，仅一只眼侧缘可见；吊睛白额、虎纹、腰布缠带同源；耳尖至双足完整，双手足爪自然；胸伤未迁移到背肩或双臂，无尾巴、无多肢、无文字水印。"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_04",
+                  "form": "常态",
+                  "library_tier": "recurring_standard",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+                  "reviewer": "Codex视觉执行者",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-16T12:13:12+00:00",
+                  "png_sha256": "c1b406dc10e46410dea71141c080f6c2d0fa8d9c9ab7510ff5ee36387ec444d9",
+                  "registry_binding_fingerprint": "dd0bca329384f2ae121966a505a33749b54a01a56bc572e3d8856e0e233fda04",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "原像素核验：3040x5404，严格180度正背面，后脑双耳与脊柱居中，零眼鼻口和侧脸；肩胛、腰胯、双腿双足近似对称，耳尖至足底完整；虎纹、腰布、腕腿缠带同源，胸伤不可见，无尾巴、无血迹、无多肢、无文字水印。"
                 }
               },
               "half_body": {
@@ -1988,16 +2177,9 @@
                   "crop_box": [
                     0,
                     0,
-                    941,
-                    912
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T03:45:59+00:00"
-                },
-                "sha256": "c15ccbd710ef9dae15675e803fcd1ec9fd5a2dfcb9e24e9ffb8809dc4a4354fe",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
+                    1,
+                    1
+                  ]
                 },
                 "human_review": {
                   "status": "accepted",
@@ -2016,19 +2198,17 @@
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
                   "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                   "crop_box": [
-                    356,
-                    73,
-                    584,
-                    301
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T03:48:25+00:00"
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
                 },
-                "label": "CHAR_04/常态 同源脸锚",
-                "sha256": "179ea069f4a334e752d13a2aef15647d81fbf32d19aead01c9e65e4203e9f796",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-16T04:35:09.239892+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -2064,12 +2244,6 @@
                     "reason": "shared visual_review reference passed finalized review",
                     "reviewed_at": "2026-07-16T04:35:09.239904+00:00"
                   }
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-16T04:35:09.239892+00:00"
                 }
               }
             ],
@@ -2078,23 +2252,24 @@
                 "path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "front_expression_crop",
+                  "method": "controlled_multiref_generation",
                   "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
                   "source_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
                   "crop_box": [
-                    242,
                     0,
-                    698,
-                    456
-                  ],
-                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-16T04:00:34+00:00"
+                    0,
+                    1,
+                    1
+                  ]
                 },
                 "emotion": "克制",
-                "sha256": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8",
-                "dimensions": {
-                  "width": 1024,
-                  "height": 1024
+                "self_check_passed": true,
+                "anchor_sha": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-16T04:35:09.239933+00:00"
                 },
                 "visual_review": {
                   "status": "ready",
@@ -2130,14 +2305,6 @@
                     "reason": "shared visual_review reference passed finalized review",
                     "reviewed_at": "2026-07-16T04:35:09.239945+00:00"
                   }
-                },
-                "self_check_passed": true,
-                "anchor_sha": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8",
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared expression_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-16T04:35:09.239933+00:00"
                 }
               }
             ],
@@ -2153,7 +2320,8 @@
             {
               "slot": "primary_reference",
               "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-              "status": "review_pending",
+              "status": "ready",
+              "sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
               "human_review": {
                 "status": "pending",
                 "reason": "Codex text-generated character candidate requires human approval before ready"
@@ -2286,8 +2454,8 @@
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
           "self_check_at": "2026-07-16T04:35:09+00:00",
           "self_check_by": "image_qc.mark_finalized",
-          "anchor_sha": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
-          "artifact_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d"
+          "artifact_sha256": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d",
+          "anchor_sha": "743b727227f0b096831a03ed49b3504ce8af6a18f9fa15629386769f11ec046d"
         }
       ],
       "asset_bundle": {

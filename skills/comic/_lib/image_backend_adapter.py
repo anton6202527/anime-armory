@@ -97,12 +97,16 @@ def resolve_capabilities(model: str, channel: str = "") -> ImageBackendCapabilit
             channel=channel_raw,
             supports_image_inputs=True,
             persistent_subject=False,
-            reference_image_limit=8,
-            single_character_reference_limit=4,
-            multi_character_reference_limit=2,
-            non_character_reference_limit=1,
+            reference_image_limit=10,
+            single_character_reference_limit=5,
+            multi_character_reference_limit=4,
+            non_character_reference_limit=2,
             style_reference_limit=1,
-            notes="Dreamina route: keep prompt and reference set compact unless the runner proves a larger budget.",
+            notes=(
+                "Dreamina official CLI image2image route: 1-10 local image inputs are supported "
+                "(verified 2026-07-16 with `dreamina image2image --help`); keep one slot for "
+                "style_only when the panel also needs identity/location/prop anchors."
+            ),
         )
 
     if any(token in combined for token in ("flux", "comfyui", "sdxl", "stable diffusion")):

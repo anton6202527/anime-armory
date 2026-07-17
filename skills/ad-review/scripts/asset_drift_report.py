@@ -14,8 +14,7 @@
 设计铁律：
   - **纯标准库·零像素**：只聚合已有报告，不开图、不算距离、不依赖 Pillow。
     因此不存在"缺 Pillow 输出假距离"的风险；精度完全继承上游报告。
-  - **ad 线自包含**：不 import n2d/comic 任何模块（结构参考 comic-identity/scripts/drift_report.py，
-    但为**重实现**）。同目录 sibling import 允许。
+  - **ad 线自包含**：不 import 其他系列任何模块，全部结构均在本线重实现。同目录 sibling import 允许。
   - **advisory 不是 gate·默认绝不产 block**：`consistency_findings.py:195` 把 severity **直通**给
     总账，`review.py:139-158` 见 block 即硬阻断——本报表一旦产 block 就等于把一个启发式聚合
     变成真实发布阻断。故 findings **只允许 warn/info，`summary.block` 恒为 0**；

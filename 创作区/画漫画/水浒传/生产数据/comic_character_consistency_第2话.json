@@ -1,0 +1,1308 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_consistency",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
+  "chapter": "第2话",
+  "created_at": "2026-07-17T17:34:54",
+  "available": true,
+  "capabilities": {
+    "pillow": true,
+    "ccip": false
+  },
+  "verdict": "pass",
+  "summary": {
+    "character_count": 3,
+    "panel_binding_count": 38,
+    "finding_count": 3,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 3
+  },
+  "contact_sheet": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+  "characters": [
+    {
+      "character_id": "CHAR_ABBOT_SHANGQING",
+      "references": [
+        {
+          "id": "CHAR_ABBOT_SHANGQING",
+          "role": "face",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+          "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
+        },
+        {
+          "id": "CHAR_ABBOT_SHANGQING",
+          "role": "front",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+          "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca"
+        },
+        {
+          "id": "CHAR_ABBOT_SHANGQING",
+          "role": "three_quarter",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+          "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436"
+        },
+        {
+          "id": "CHAR_ABBOT_SHANGQING",
+          "role": "side",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__side.png",
+          "sha256": "663578048a2ce49fd65ffd43e10252d85ad38d888403e4ca00916f293c3e805f"
+        },
+        {
+          "id": "CHAR_ABBOT_SHANGQING",
+          "role": "back",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__back.png",
+          "sha256": "5086c9cbc8f0f9bd6f4a4f51c540f98823ee47fcebe6869d45d850476f68dac5"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P002",
+          "path": "出图/第2话/panels/P002.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第2话/panels/P003.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第2话/panels/P011.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第2话/panels/P012.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第2话/panels/P018.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第2话/panels/P022.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第2话/panels/P024.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第2话/panels/P026.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第2话/panels/P027.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第2话/panels/P028.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第2话/panels/P029.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第2话/panels/P030.png",
+          "char_count": 1
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P002",
+          "face": {
+            "score": 0.7694,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7549,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.4579,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P003",
+          "face": {
+            "score": 0.8449,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8605,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6205,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P011",
+          "face": {
+            "score": 0.8576,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8004,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6617,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P012",
+          "face": {
+            "score": 0.8483,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8743,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.593,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P018",
+          "face": {
+            "score": 0.8877,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8962,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5848,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P022",
+          "face": {
+            "score": 0.9007,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.9268,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5953,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P024",
+          "face": {
+            "score": 0.811,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7819,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6724,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P026",
+          "face": {
+            "score": 0.89,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8877,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7093,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P027",
+          "face": {
+            "score": 0.816,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8315,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6023,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P028",
+          "face": {
+            "score": 0.8703,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8577,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8138,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P029",
+          "face": {
+            "score": 0.5154,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4053,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6545,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P030",
+          "face": {
+            "score": 0.4282,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.3735,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5829,
+            "reference": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    },
+    {
+      "character_id": "CHAR_EMPEROR_RENZONG",
+      "references": [
+        {
+          "id": "CHAR_EMPEROR_RENZONG",
+          "role": "face",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+          "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898"
+        },
+        {
+          "id": "CHAR_EMPEROR_RENZONG",
+          "role": "front",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+          "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02"
+        },
+        {
+          "id": "CHAR_EMPEROR_RENZONG",
+          "role": "three_quarter",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+          "sha256": "62a96c9c4166bae73c6d2b4c1161d9f4c791a34a904de1f7bca7b5c9001d45b0"
+        },
+        {
+          "id": "CHAR_EMPEROR_RENZONG",
+          "role": "side",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__side.png",
+          "sha256": "a184a5a3f547a52f925e770c8a4fbfdc1dc0c355d8b94ad745eeee60ddf767ad"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P039",
+          "path": "出图/第2话/panels/P039.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第2话/panels/P040.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第2话/panels/P041.png",
+          "char_count": 2
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P039",
+          "face": {
+            "score": 0.8116,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6946,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7609,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P040",
+          "face": {
+            "score": 0.7929,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6569,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8414,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P041",
+          "face": {
+            "score": 0.7541,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6968,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8068,
+            "reference": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    },
+    {
+      "character_id": "CHAR_HONG_XIN",
+      "references": [
+        {
+          "id": "CHAR_HONG_XIN",
+          "role": "face",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+          "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
+        },
+        {
+          "id": "CHAR_HONG_XIN",
+          "role": "front",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+          "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f"
+        },
+        {
+          "id": "CHAR_HONG_XIN",
+          "role": "three_quarter",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+          "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+        },
+        {
+          "id": "CHAR_HONG_XIN",
+          "role": "side",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
+          "sha256": "712637d9296c5af739354cbfab30eb38edae81d461e68b71e2dcaa082de62b4c"
+        },
+        {
+          "id": "CHAR_HONG_XIN",
+          "role": "back",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__back.png",
+          "sha256": "f99fc8667d233a9ea351e87690924608d82cb75a4f7b1278ed30131829ac6b1b"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P002",
+          "path": "出图/第2话/panels/P002.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第2话/panels/P003.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第2话/panels/P011.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第2话/panels/P012.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第2话/panels/P014.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第2话/panels/P017.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第2话/panels/P018.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第2话/panels/P019.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第2话/panels/P020.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第2话/panels/P021.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第2话/panels/P022.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第2话/panels/P023.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第2话/panels/P024.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第2话/panels/P025.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第2话/panels/P026.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第2话/panels/P027.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第2话/panels/P031.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第2话/panels/P032.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第2话/panels/P037.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第2话/panels/P038.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第2话/panels/P039.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第2话/panels/P040.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第2话/panels/P041.png",
+          "char_count": 2
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P002",
+          "face": {
+            "score": 0.8718,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7933,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7577,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P003",
+          "face": {
+            "score": 0.9512,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.9329,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7917,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P011",
+          "face": {
+            "score": 0.7963,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7158,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8735,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P012",
+          "face": {
+            "score": 0.9017,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8757,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8381,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P014",
+          "face": {
+            "score": 0.8851,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8334,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8821,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P017",
+          "face": {
+            "score": 0.8131,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6621,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8111,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P018",
+          "face": {
+            "score": 0.9159,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8972,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7952,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P019",
+          "face": {
+            "score": 0.9059,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8499,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8691,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P020",
+          "face": {
+            "score": 0.5367,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.5422,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8724,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P021",
+          "face": {
+            "score": 0.8989,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.826,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7704,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P022",
+          "face": {
+            "score": 0.9247,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.936,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8298,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P023",
+          "face": {
+            "score": 0.8694,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8081,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7328,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P024",
+          "face": {
+            "score": 0.8858,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8144,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8224,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P025",
+          "face": {
+            "score": 0.8953,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.797,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8287,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P026",
+          "face": {
+            "score": 0.8777,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8943,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7513,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P027",
+          "face": {
+            "score": 0.8446,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8178,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7289,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P031",
+          "face": {
+            "score": 0.8219,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8225,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8253,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P032",
+          "face": {
+            "score": 0.8765,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8221,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8543,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P037",
+          "face": {
+            "score": 0.9076,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7841,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.9294,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P038",
+          "face": {
+            "score": 0.8529,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7205,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7712,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P039",
+          "face": {
+            "score": 0.8358,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7206,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.761,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P040",
+          "face": {
+            "score": 0.8505,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6979,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7726,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P041",
+          "face": {
+            "score": 0.9103,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.809,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8489,
+            "reference": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_ABBOT_SHANGQING",
+      "panel_id": "P029",
+      "artifact": "出图/第2话/panels/P029.png",
+      "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.405。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "火光暗场、侧向站位和幅巾覆盖压缩头发色彩分布；脸型、长须、青灰道袍与方丈参考可连续识别。",
+        "evidence": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "7896d85c08d013980121bb6f5dec81cc3f17152b5b5f4a2dfb72ef2b09692e7c",
+        "source": "生产数据/character_consistency_acceptance_第2话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_ABBOT_SHANGQING",
+      "panel_id": "P030",
+      "artifact": "出图/第2话/panels/P030.png",
+      "reason": "CHAR_ABBOT_SHANGQING face 指纹与参考图相似度偏低：score=0.428。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "记忆层黑场、火把侧光和中远景改变了脸部色彩代理；眉眼、脸型、长须与服装层级与 P029 连续。",
+        "evidence": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c",
+        "source": "生产数据/character_consistency_acceptance_第2话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_ABBOT_SHANGQING",
+      "panel_id": "P030",
+      "artifact": "出图/第2话/panels/P030.png",
+      "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.373。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "幅巾、暗场和火光使头发色彩代理低分，头部轮廓与方丈多视图一致。",
+        "evidence": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c",
+        "source": "生产数据/character_consistency_acceptance_第2话.json"
+      }
+    }
+  ],
+  "notes": [
+    "CCIP 动漫身份 embedding 不可用（色彩指纹只是代理，换脸同色调会漏报）。建议在独立 venv 安装 dghs-imgutils（pip install dghs-imgutils）后重跑，获得阈值化的同角色判定（threshold=0.178）。",
+    "VLM 并排判定任务包已刷新：生产数据/comic_vlm_judge_tasks_第2话.json（裁决 0/74）；由多模态 agent 看图执行并写回 verdict 文件。",
+    "已生成角色一致性并排复核图：生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+    "已按 生产数据/character_consistency_acceptance_第2话.json 人审签收 3 条角色一致性 finding；原始机器 severity 保留在 machine_severity。"
+  ]
+}

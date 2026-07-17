@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "comic_identity_generation_attempt_ledger",
   "chapter": "第1话",
-  "updated_at": "2026-07-16T15:41:03.791171",
+  "updated_at": "2026-07-17T17:56:57.752852",
   "migration": {
     "status": "backfilled_from_existing_evidence",
     "recorded_at": "2026-07-15T15:47:00+08:00",
@@ -336,7 +336,7 @@
     {
       "attempt_id": "9e1f7ec3cdc038a0d419",
       "started_at": "2026-07-16T15:41:03.791171",
-      "status": "started",
+      "status": "succeeded",
       "generation_kind": "view",
       "asset_id": "MON_SNOW_SERPENT",
       "variant": "front",
@@ -352,7 +352,870 @@
           "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
           "role": "style_only"
         }
-      ]
+      ],
+      "finished_at": "2026-07-16T17:37:51.523710",
+      "artifact_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+      "artifact_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496"
+    },
+    {
+      "attempt_id": "3b9d3aa531f60533d073",
+      "started_at": "2026-07-16T17:41:55.893708",
+      "status": "succeeded",
+      "generation_kind": "view",
+      "asset_id": "MON_SNOW_SERPENT",
+      "variant": "three_quarter",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "6bd89434fbfb502c441d1fc5315469442b626a7209bba02d59a20e1f059f701c",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__three_quarter_builtin-imagegen__20260716T174155892226.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+          "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+          "role": "identity_anchor"
+        },
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T18:00:00.316884",
+      "artifact_path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+      "artifact_sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b"
+    },
+    {
+      "attempt_id": "2bc9bcffbd44bb89251a",
+      "started_at": "2026-07-16T18:01:28.465895",
+      "status": "succeeded",
+      "generation_kind": "view",
+      "asset_id": "MON_SNOW_SERPENT",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "aa721088f25d24be20a212db2d25c7a806a27aa69eb1a6d8d306ee316b6de289",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__face_builtin-imagegen__20260716T180128465142.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+          "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+          "role": "identity_anchor"
+        },
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T18:07:59.358779",
+      "artifact_path": "出图/共享/图片/MON_SNOW_SERPENT__face.png",
+      "artifact_sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0"
+    },
+    {
+      "attempt_id": "3f6f63d3e7822c8d6eed",
+      "started_at": "2026-07-16T18:10:48.003294",
+      "status": "succeeded",
+      "generation_kind": "outfit_fallback",
+      "asset_id": "CHAR_HONG_XIN",
+      "variant": "OUTFIT_MOUNTAIN_PLAIN",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "2ce106889b07f448768bb55f974ee7befa30df5c525abcb252ac1cd7423bf5ba",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN_dreamina-fallback__20260716T181048002621.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+          "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:12:30.112352",
+      "artifact_path": "出图/共享/candidates/CHAR_HONG_XIN/OUTFIT_MOUNTAIN_PLAIN/20260716T181134094729__dreamina5.png",
+      "artifact_sha256": "74d65f91677d3fbb1a940c9a6bda90b1d16cd0a89d5a8bb3ee942aa870b3a572"
+    },
+    {
+      "attempt_id": "dfd591d7fea76bab23ed",
+      "started_at": "2026-07-16T18:10:48.003682",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_ABBOT_SHANGQING",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "f1e5827d3cc21096e1633ec00a598dc236cc52df7f653ce92d93bc8b94e239e2",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__front_dreamina-fallback__20260716T181048003457.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:12:30.112766",
+      "artifact_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/front/20260716T181134094858__dreamina5.png",
+      "artifact_sha256": "9a8e8d489803ca06edcdf3192cddee756f7535a650d8fb6c9759b083b642a3cf"
+    },
+    {
+      "attempt_id": "a7d0776e3ce67320c56a",
+      "started_at": "2026-07-16T18:10:48.003994",
+      "status": "failed",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_SHANGQING_PALACE",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "9fa497130b135b88aa6e67a0a7f0369b2a35ec8c7a34d9c53803bdfb1b9815c6",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_SHANGQING_PALACE__anchor_dreamina-fallback__20260716T181048003804.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "4:5",
+      "finished_at": "2026-07-16T18:12:30.113017",
+      "error": "dreamina output did not include submit_id: {\n  \"submit_id\": \"\",\n  \"gen_status\": \"fail\",\n  \"fail_reason\": \"ratio must be one of 21:9, 16:9, 3:2, 4:3, 1:1, 3:4, 2:3, 9:16\"\n}\n"
+    },
+    {
+      "attempt_id": "446a57b00e70e3a7d1a8",
+      "started_at": "2026-07-16T18:10:48.004296",
+      "status": "failed",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_ZICHEN_HALL",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "880007ca235868272095d3420c2c88ac54a2fd9c3d591a528abcf5fbd6b1766f",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_ZICHEN_HALL__anchor_dreamina-fallback__20260716T181048004104.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "4:5",
+      "finished_at": "2026-07-16T18:12:30.113256",
+      "error": "dreamina output did not include submit_id: {\n  \"submit_id\": \"\",\n  \"gen_status\": \"fail\",\n  \"fail_reason\": \"ratio must be one of 21:9, 16:9, 3:2, 4:3, 1:1, 3:4, 2:3, 9:16\"\n}\n"
+    },
+    {
+      "attempt_id": "7c846b2335e9ca3be69e",
+      "started_at": "2026-07-16T18:10:48.004583",
+      "status": "failed",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "PROP_IMPERIAL_EDICT",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "0eb509c10661ed4564953cd352225f447c4e23891e47869031fb286c5f5a498d",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_IMPERIAL_EDICT__anchor_dreamina-fallback__20260716T181048004404.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "4:5",
+      "finished_at": "2026-07-16T18:12:30.113491",
+      "error": "dreamina output did not include submit_id: {\n  \"submit_id\": \"\",\n  \"gen_status\": \"fail\",\n  \"fail_reason\": \"ratio must be one of 21:9, 16:9, 3:2, 4:3, 1:1, 3:4, 2:3, 9:16\"\n}\n"
+    },
+    {
+      "attempt_id": "7ee40d1cc5c8ea8b668a",
+      "started_at": "2026-07-16T18:10:48.004869",
+      "status": "failed",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "PROP_SILVER_CENSER",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "366efd171dcd2cf6666b143b266d3f668ceae06ee90c5471d580f3973ec9eb43",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_SILVER_CENSER__anchor_dreamina-fallback__20260716T181048004689.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "4:5",
+      "finished_at": "2026-07-16T18:12:30.113729",
+      "error": "dreamina output did not include submit_id: {\n  \"submit_id\": \"\",\n  \"gen_status\": \"fail\",\n  \"fail_reason\": \"ratio must be one of 21:9, 16:9, 3:2, 4:3, 1:1, 3:4, 2:3, 9:16\"\n}\n"
+    },
+    {
+      "attempt_id": "3fb4f38eaeb899b103dc",
+      "started_at": "2026-07-16T18:12:24.819133",
+      "status": "failed",
+      "generation_kind": "view",
+      "asset_id": "MON_WHITE_TIGER",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "4fc89a7bd5ced2357d89e759a94514ce6476e5201d10ce3690b74929d603b409",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_builtin-imagegen__20260716T181224818469.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T18:18:24.075419",
+      "error": "class=builtin_network_error; detail=network error sending request to built-in image edits endpoint; image_generated=false"
+    },
+    {
+      "attempt_id": "92c01967a8f19d6c36bb",
+      "started_at": "2026-07-16T18:18:24.076011",
+      "status": "failed",
+      "generation_kind": "view",
+      "asset_id": "MON_WHITE_TIGER",
+      "variant": "front",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "内置 imagegen",
+      "model": "GPT Image 2",
+      "prompt_sha256": "4fc89a7bd5ced2357d89e759a94514ce6476e5201d10ce3690b74929d603b409",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_builtin-imagegen__20260716T181224818469.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "finished_at": "2026-07-16T18:24:34.208864",
+      "error": "class=builtin_network_error; detail=network error sending request to built-in image edits endpoint; image_generated=false"
+    },
+    {
+      "attempt_id": "92d7866b8e57dfcb3106",
+      "started_at": "2026-07-16T18:24:34.210462",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "MON_WHITE_TIGER",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "40c79fc00af2628f24c2cc339e67023a76493d1ddd675c19bcf4b55ef47b7ed4",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_dreamina-fallback__20260716T182434209543.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:25:23.136298",
+      "artifact_path": "出图/共享/candidates/MON_WHITE_TIGER/front/20260716T182434213467__dreamina5.png",
+      "artifact_sha256": "393545ea27f365422a9467b88187338f3df7b5e37a62fbc12ef1072d0727603e"
+    },
+    {
+      "attempt_id": "e160eb59c4c8125179fd",
+      "started_at": "2026-07-16T18:28:34.463995",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_ABBOT_SHANGQING",
+      "variant": "front",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "4298ce3486de27a8e88c931fc7fe11fd3b92fc790669a2571e09b110e7134921",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__front_dreamina-fallback-corrective__20260716T182834460473.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/front/20260716T181134094858__dreamina5.png",
+          "sha256": "9a8e8d489803ca06edcdf3192cddee756f7535a650d8fb6c9759b083b642a3cf",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:29:58.231529",
+      "artifact_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/front/20260716T182834497189__dreamina5_attempt2.png",
+      "artifact_sha256": "882c410db15aff8e475442988ff42701e0796c9c817cd104a9b6aa4ecf37a0d3"
+    },
+    {
+      "attempt_id": "12fdef167a8266d32a13",
+      "started_at": "2026-07-16T18:28:34.465623",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_SHANGQING_PALACE",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "20ffddf56ce523ea024e453113ef56272c956a2b849f1e5689e47adff95983e4",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_SHANGQING_PALACE__anchor_dreamina-fallback-3x4__20260716T182834464742.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:29:58.233433",
+      "artifact_path": "出图/共享/candidates/LOC_SHANGQING_PALACE/anchor/20260716T182834503800__dreamina5_attempt2.png",
+      "artifact_sha256": "4d9093b384a4d1d3ad79093a46cc0fedef2f1a3c546b72b5cd4271b09fff61f9"
+    },
+    {
+      "attempt_id": "cb21aef6a1b206c9fe50",
+      "started_at": "2026-07-16T18:28:34.466932",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_ZICHEN_HALL",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "f92459b4b201723e8d0d9e2c91ba1a357eaa48df73690c2749c37dacb2d66522",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_ZICHEN_HALL__anchor_dreamina-fallback-3x4__20260716T182834466121.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:29:58.234256",
+      "artifact_path": "出图/共享/candidates/LOC_ZICHEN_HALL/anchor/20260716T182834505442__dreamina5_attempt2.png",
+      "artifact_sha256": "83b98941b975d124f6e8403b69dc311b00bef910d8357090c17fc507e0f06e9d"
+    },
+    {
+      "attempt_id": "fc8a4fde9017e00eca90",
+      "started_at": "2026-07-16T18:28:34.467995",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "PROP_IMPERIAL_EDICT",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "670c923d776afa10b9a9313b666e1a0375ffcc1ce7c14b4229745f391385fab5",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_IMPERIAL_EDICT__anchor_dreamina-fallback-3x4__20260716T182834467372.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:29:58.234664",
+      "artifact_path": "出图/共享/candidates/PROP_IMPERIAL_EDICT/anchor/20260716T182834528448__dreamina5_attempt2.png",
+      "artifact_sha256": "424c22cf46aaf6144a426e4d3a9dd7f711ebaff9edfbbad8e191538520869ff9"
+    },
+    {
+      "attempt_id": "33bec704f2958e5d2c2c",
+      "started_at": "2026-07-16T18:28:34.469473",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "PROP_SILVER_CENSER",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "f9d8b9c2fd076c3fe26bf9db157c5119872cdbe8a72185d71b8dae3569fef657",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_SILVER_CENSER__anchor_dreamina-fallback-3x4__20260716T182834468701.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "finished_at": "2026-07-16T18:29:58.235002",
+      "artifact_path": "出图/共享/candidates/PROP_SILVER_CENSER/anchor/20260716T182834545795__dreamina5_attempt2.png",
+      "artifact_sha256": "ebd63a889ef1bb51db21b022fe78ee3f415cdfe227b81a786fcc7948d5702fb8"
+    },
+    {
+      "attempt_id": "f620840cd7ed78fa6f2c",
+      "started_at": "2026-07-16T18:36:40.033272",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_ABBOT_SHANGQING",
+      "variant": "three_quarter",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "84ed314fcf0fbacfec0018e2196d3bc37830eec7d273b17125c5a6583dece38d",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__three_quarter_dreamina-fallback__20260716T183640032555.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+          "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.976261",
+      "artifact_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/three_quarter/20260716T183640054236__dreamina5_attempt1.png",
+      "artifact_sha256": "8cdb4d5012513122c9382017938f040f85e8ef759c73d8580f5d180da3b8f022"
+    },
+    {
+      "attempt_id": "0e834008696d0e6a6894",
+      "started_at": "2026-07-16T18:36:40.034066",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_ABBOT_SHANGQING",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "c7090edde96b35cc720937d3ae2f1611856e47a09b77c1c55316f7e272859f0f",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__face_dreamina-fallback__20260716T183640033668.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+          "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.976868",
+      "artifact_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/face/20260716T183640054318__dreamina5_attempt1.png",
+      "artifact_sha256": "b0d3ee3c867f6fefcf5d33aaf27b8575e0b3694fa3fe8b1432e3d212426e56d3"
+    },
+    {
+      "attempt_id": "d312635cc5f78e39ea9f",
+      "started_at": "2026-07-16T18:36:40.034700",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "MON_WHITE_TIGER",
+      "variant": "three_quarter",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "d036519446cab85ef522100bea3fcad82733dee451b1533db702a2a0ba616f87",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__three_quarter_dreamina-fallback__20260716T183640034379.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+          "sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.977274",
+      "artifact_path": "出图/共享/candidates/MON_WHITE_TIGER/three_quarter/20260716T183640054384__dreamina5_attempt1.png",
+      "artifact_sha256": "cdc362f98c0204699702ae2601dafb8ca8b6ab927a34cd4f17929e20ce1a523e"
+    },
+    {
+      "attempt_id": "de4331bc53480c4b2758",
+      "started_at": "2026-07-16T18:36:40.035362",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "MON_WHITE_TIGER",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "c51f4ef6d9e0360b70d30d78bfc569b95f064fe3aee19c8f685f6b784a3bd38f",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__face_dreamina-fallback__20260716T183640035043.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+          "sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.977658",
+      "artifact_path": "出图/共享/candidates/MON_WHITE_TIGER/face/20260716T183640054439__dreamina5_attempt1.png",
+      "artifact_sha256": "9c77ef8eaac35aeaa86418955428ede1098c12a8cff66f3805e19a7ecd8fb29f"
+    },
+    {
+      "attempt_id": "3f5b30e430c99573fe9a",
+      "started_at": "2026-07-16T18:36:40.035813",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_FUMO_HALL_EXTERIOR",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "215d8fa36742a867a2d2c691d82af87f73a413d330b99abc61ff6f0a23ae81e9",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_EXTERIOR__anchor_dreamina-fallback__20260716T183640035547.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.978030",
+      "artifact_path": "出图/共享/candidates/LOC_FUMO_HALL_EXTERIOR/anchor/20260716T183640054546__dreamina5_attempt1.png",
+      "artifact_sha256": "038099800dacdb2e8b14867b67d471c04cb44fc8f2e58bcec43834fbb6fbfef2"
+    },
+    {
+      "attempt_id": "7a6e543294516741e15e",
+      "started_at": "2026-07-16T18:36:40.036241",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_FUMO_HALL_INTERIOR",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "4ac06af14e4fb8e077ebb5efec08e7be0b5049ad154cb31e761977e11334f7ee",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_INTERIOR__anchor_dreamina-fallback__20260716T183640035992.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.978397",
+      "artifact_path": "出图/共享/candidates/LOC_FUMO_HALL_INTERIOR/anchor/20260716T183640054629__dreamina5_attempt1.png",
+      "artifact_sha256": "129fe484a84c1a6fa4c3f809c4747adfa96afbf835e5d3c851c63cf59361a6bb"
+    },
+    {
+      "attempt_id": "3792c212de24ab196502",
+      "started_at": "2026-07-16T18:36:40.036689",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_CAPITAL_PLAGUE_STREET",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "5dd8ad97a224741fa53a257705088a3786e45044f608c66acf5dd90c49c3edd0",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_CAPITAL_PLAGUE_STREET__anchor_dreamina-fallback__20260716T183640036423.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.978770",
+      "artifact_path": "出图/共享/candidates/LOC_CAPITAL_PLAGUE_STREET/anchor/20260716T183640054753__dreamina5_attempt1.png",
+      "artifact_sha256": "4d2fea43caefd0f97e675dcad83fd421faa3f02e8466049bcba1e433602a88bb"
+    },
+    {
+      "attempt_id": "877840d984d9edd2191e",
+      "started_at": "2026-07-16T18:36:40.037254",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "PROP_STONE_STELE",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "52b7f08d45cf1bc5768f294b213755c9e585a61d4601da8c4876afb5297a4fd6",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_STONE_STELE__anchor_dreamina-fallback__20260716T183640036947.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.979146",
+      "artifact_path": "出图/共享/candidates/PROP_STONE_STELE/anchor/20260716T183640054958__dreamina5_attempt1.png",
+      "artifact_sha256": "68118fa1b74b0a2cb2dc321dade89a0a7d9393a1198949951834e8ce99ad153b"
+    },
+    {
+      "attempt_id": "0f5669009a351d5ecc59",
+      "started_at": "2026-07-16T18:36:40.037871",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_ZHAO_ZHE",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "34e5c4250428e4634ae579cb64ff4c088f74f637ad1f73eb0df8384d6f09ee1c",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__front_dreamina-fallback__20260716T183640037595.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.979547",
+      "artifact_path": "出图/共享/candidates/CHAR_ZHAO_ZHE/front/20260716T183640055084__dreamina5_attempt1.png",
+      "artifact_sha256": "f316f0ea3a18cbc5d96f73cd958ac4d2ce8d3a93691ede45d10ffefeb4725ccd"
+    },
+    {
+      "attempt_id": "55fb0cbf47106d83d93f",
+      "started_at": "2026-07-16T18:36:40.038472",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_WEN_YANBO",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "55608ec9f763c50eccd80c20eb7854425e4dcaa93c3150ea0b657387aea92884",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__front_dreamina-fallback__20260716T183640038189.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.980015",
+      "artifact_path": "出图/共享/candidates/CHAR_WEN_YANBO/front/20260716T183640055260__dreamina5_attempt1.png",
+      "artifact_sha256": "41322a47d4d042d9051210f44414c9b4a8ea239ad2e5e7f74730906380bead96"
+    },
+    {
+      "attempt_id": "9a556b0c8541d25bb519",
+      "started_at": "2026-07-16T18:36:40.039066",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_FAN_ZHONGYAN",
+      "variant": "front",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "db75a5a2d40043cc2f2f07311b63169e7298a0c734bf2b4b06f6ca889ff27ae2",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__front_dreamina-fallback__20260716T183640038789.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable_after_two_consecutive_builtin_network_errors",
+      "finished_at": "2026-07-16T18:37:41.980423",
+      "artifact_path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/front/20260716T183640055350__dreamina5_attempt1.png",
+      "artifact_sha256": "4bf6ef3eb6633c54cdfbe4e32aa4609156afb3cc9166659df0a6072c52d0df8b"
+    },
+    {
+      "attempt_id": "b1a2d315b318ac726b9a",
+      "started_at": "2026-07-16T18:46:00.327786",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_ZHAO_ZHE",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "d6bf786e55cd1841c15fd55cf97e7cbef83b9ff4d71f162ac60769b56de186bd",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__face_dreamina-fallback__20260716T184600326690.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+          "sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable",
+      "finished_at": "2026-07-16T18:47:02.267613",
+      "artifact_path": "出图/共享/candidates/CHAR_ZHAO_ZHE/face/20260716T184600338302__dreamina5_attempt1.png",
+      "artifact_sha256": "cd0a83969a954f4c24fceb425ecb3f354e2cffaed674a87829e451a335cef403"
+    },
+    {
+      "attempt_id": "1b0429308c64fe96322e",
+      "started_at": "2026-07-16T18:46:00.328932",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_WEN_YANBO",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "fac0dac1748fec94ca306986c9e38db188a00e0146ff33a0e447b79ecd9693d1",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__face_dreamina-fallback__20260716T184600328360.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+          "sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable",
+      "finished_at": "2026-07-16T18:47:02.268173",
+      "artifact_path": "出图/共享/candidates/CHAR_WEN_YANBO/face/20260716T184600338362__dreamina5_attempt1.png",
+      "artifact_sha256": "019cb2db102142cad5e416dbbd70ea5901a29147574eb1c8faa5e01fa94ae420"
+    },
+    {
+      "attempt_id": "81ce612f5b515f9b78f3",
+      "started_at": "2026-07-16T18:46:00.329602",
+      "status": "succeeded",
+      "generation_kind": "view_fallback",
+      "asset_id": "CHAR_FAN_ZHONGYAN",
+      "variant": "face",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "3615d190e3c747764cf7539d587baee0733454c12bb00e2609407f352a2e1355",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__face_dreamina-fallback__20260716T184600329287.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+          "sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+          "role": "identity_anchor"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable",
+      "finished_at": "2026-07-16T18:47:02.268605",
+      "artifact_path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/face/20260716T184600338401__dreamina5_attempt1.png",
+      "artifact_sha256": "3fb49b9ac3707f1745a8dc1b66f2db2f2003010b5d74144e7cfabca1164edc18"
+    },
+    {
+      "attempt_id": "5f6a34f0129003c018bd",
+      "started_at": "2026-07-16T18:46:00.330115",
+      "status": "succeeded",
+      "generation_kind": "anchor_fallback",
+      "asset_id": "LOC_FUMO_HALL_INTERIOR",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "即梦官方 CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "ca9d871250f93dc6b20fcee12a554bc70058ced4da8719e65fabb918339c2bbd",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_INTERIOR__anchor_dreamina-fallback-corrective__20260716T184600329806.md",
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "primary_backend_status": "explicitly_unavailable",
+      "finished_at": "2026-07-16T18:47:02.269032",
+      "artifact_path": "出图/共享/candidates/LOC_FUMO_HALL_INTERIOR/anchor/20260716T184600338433__dreamina5_attempt2.png",
+      "artifact_sha256": "79cfe0702aa82152aad51b66b041432c3c82dbcc4147d4c4ba3ca1c599dd8c25"
+    },
+    {
+      "attempt_id": "859ef62c00c5b60a8a9a",
+      "started_at": "2026-07-17T17:55:58.047150",
+      "status": "succeeded",
+      "generation_kind": "expression",
+      "asset_id": "CHAR_HONG_XIN",
+      "variant": "EXPR_TERRIFIED",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "8ae0fac65ff964cf9168c99fa9036b184a4cabce6156b7b83ed89fdb735856f5",
+      "finished_at": "2026-07-17T17:56:57.752849",
+      "artifact_path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+      "artifact_sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f"
     }
   ]
 }

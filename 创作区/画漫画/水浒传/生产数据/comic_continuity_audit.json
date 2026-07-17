@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "kind": "comic_continuity_audit",
-  "created_at": "2026-07-15T07:22:19+00:00",
+  "created_at": "2026-07-17T09:34:17+00:00",
   "project_root": ".",
-  "through_chapter": "第1话",
+  "through_chapter": "第2话",
   "summary": {
-    "chapters": 1,
+    "chapters": 2,
     "block": 0,
     "warn": 0,
     "info": 0
@@ -74,6 +74,76 @@
           },
           "WORLD_ORDER": {
             "state": "神话序章从封闭宫观转入全国性群像时空。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        }
+      }
+    },
+    {
+      "chapter": "第2话",
+      "panel_script_path": "脚本/第2话/panel_script.json",
+      "panel_script_sha256": "721b127a2dbc161ad0993ca1728a4c482681e62da98b6edfb9764dcf6800cd56",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "伏魔殿半角掀塌，一百零八星已散，住持将在下话说出天罡地煞的真相。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "擅开封印、面对灾变且尚未承认责任的当事人。",
+            "visual_state": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "化为百十道金光散入人间。"
+          },
+          "WORLD_ORDER": {
+            "state": "神话序章从封闭宫观转入全国性群像时空。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。"
           },
           "PROP_IMPERIAL_EDICT": {
             "location": "收藏于上清宫御书匣。"

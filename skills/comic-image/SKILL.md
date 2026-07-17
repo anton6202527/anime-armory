@@ -95,6 +95,17 @@ Codex 内置 `image_generation` 当前单次最多接收 5 张图片附件。即
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
+若项目选择 `生图渠道=Dreamina/即梦官方 CLI`，使用同样受 `image_preflight` 约束的 Dreamina runner。它按逐格目标画布选择官方支持的最近画幅，最多附入 10 张真实参考图，保留服务端原始候选，再以中央安全区规则裁到 layout 的精确尺寸；每格立即写回 submit_id、参考 bundle、prompt 快照、原始候选、画布归一记录与 post-QC：
+
+```bash
+python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
+  --max-attempts 2 --timeout-sec 600 --continue-on-qc-block
+```
+
+`comic-batch` 会读取本项目 `_设置.md` 的生图模型/渠道，在 Codex 与 Dreamina runner 之间自动分派；已明确选定的渠道不可被批跑器静默改写。
+
+目检发现伪字、串脸、服装漂移或关键接触点错误时，可在该格剩余尝试额度内用 `--force --targets Pxxx --max-attempts 1 --correction "..."` 做一次执行层纠偏；纠偏文本写进 prompt 快照与生成事件，不得借此改剧情、加角色或绕过原始哈希合同。
+
 建议先 `--targets P001 --limit 1` 做 smoke test；通过后再批跑。生成完成会更新 `panel_jobs.json` 的 `result_path/status`，全部面板就绪时把本话 `出图` 标为 `✅`。
 每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=block` 时该 job 标为 `qc_block` 而不是 `ready`，默认立即停止批跑，不能进入合成；修复后用 `--force --targets Pxxx` 重抽。`verdict=warn` 可继续登记，但 `comic-review gate --stage image` 会要求人审签收或重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
 
@@ -155,6 +166,7 @@ python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画
    - 除非本格明确 `camera_role=POV/破第四墙`，不要让角色看读者镜头；眼神应锁定对话对象、对手、武器/道具、命中点、画外声源或下一动作目标。
    - 启用传统原稿流程时，应先跑 `comic-finishing`，让 job 带 `traditional_finish_contract`，把墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划注入 prompt。缺该契约时 gate 给 warn，正式长线项目应补齐后再批量出图。
 2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
+   - 即梦官方 CLI 的 `image2image` 当前实机支持 1–10 张本地图片（2026-07-16 以 `dreamina image2image --help` 核验）；适配层按 10 张总预算规划，仍需为 `style_only`、具名主体、LOC 与关键 PROP 公平保留槽位。CLI/版本变化后先重跑 `--help` 再改能力表，不能凭旧印象降成 2 张。
 3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；`character_dna`、`variant_policy`、`STYLE_` 风格锚进入完整合同，模型通过真实图片输入 + 精简身份保持语句消费，不把 registry 全文粘进 prompt。
 4. `build_panel_jobs.py` 会生成并立即消费 `生产数据/comic_reference_plan_第N话.json`。计划绑定 panel script、registry、memory anchor、设置与实际参考图片 SHA，逐格写 `panel_plan_sha256`；job 再写 `execution_input_sha256` 和 `consumed_contracts`。计划过期、具名角色没有至少一个真实身份锚、LOC/常驻 PROP 缺真实图、关键附件超过执行后端上限时拒绝构建并给拆反打/分区合成建议，不静默丢约束。
 5. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约、混用生成配方、legacy schema、缺 compiler、后端/profile 不一致或 prompt/hash 漂移；`comic-batch` 会自动跑。

@@ -299,7 +299,7 @@ def seam_rows(clips, clip_rows):
             if contract.get("continuity_required"):
                 risk.append("large_color_delta_breaks_continuous_seam")
             elif location_key(prev_clip) and location_key(prev_clip) == location_key(cur_clip):
-                # 同场景硬切色跳（n2d 实跑回修实证信号）：同一场景相邻镜主色/色温跳变=观感断裂。
+                # 同场景硬切色跳：同一场景相邻镜主色/色温跳变=观感断裂。
                 # 非连续接缝无 end-frame 合同可依，只作 advisory 风险提示，人工并排复核。
                 risk.append("same_scene_hard_cut_color_jump")
         seam_similarity = hash_similarity(

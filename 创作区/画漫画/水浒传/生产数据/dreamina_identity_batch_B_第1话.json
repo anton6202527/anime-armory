@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "items": [
+    {
+      "kind": "view_fallback",
+      "asset_id": "CHAR_ZHAO_ZHE",
+      "variant": "face",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__face_dreamina-fallback__20260716T184600326690.md",
+      "prompt_sha256": "d6bf786e55cd1841c15fd55cf97e7cbef83b9ff4d71f162ac60769b56de186bd",
+      "anchor": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+      "ratio": "3:4",
+      "attempt_id": "b1a2d315b318ac726b9a",
+      "attempt": 1,
+      "status": "generated_candidate",
+      "submit_id": "c8b30424-caf3-4e0a-8331-6fb1455ced46",
+      "candidate_path": "出图/共享/candidates/CHAR_ZHAO_ZHE/face/20260716T184600338302__dreamina5_attempt1.png",
+      "candidate_sha256": "cd0a83969a954f4c24fceb425ecb3f354e2cffaed674a87829e451a335cef403",
+      "error": ""
+    },
+    {
+      "kind": "view_fallback",
+      "asset_id": "CHAR_WEN_YANBO",
+      "variant": "face",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__face_dreamina-fallback__20260716T184600328360.md",
+      "prompt_sha256": "fac0dac1748fec94ca306986c9e38db188a00e0146ff33a0e447b79ecd9693d1",
+      "anchor": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+      "ratio": "3:4",
+      "attempt_id": "1b0429308c64fe96322e",
+      "attempt": 1,
+      "status": "generated_candidate",
+      "submit_id": "25fa16c2-595c-4a62-a2bc-66ef05dd85d8",
+      "candidate_path": "出图/共享/candidates/CHAR_WEN_YANBO/face/20260716T184600338362__dreamina5_attempt1.png",
+      "candidate_sha256": "019cb2db102142cad5e416dbbd70ea5901a29147574eb1c8faa5e01fa94ae420",
+      "error": ""
+    },
+    {
+      "kind": "view_fallback",
+      "asset_id": "CHAR_FAN_ZHONGYAN",
+      "variant": "face",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__face_dreamina-fallback__20260716T184600329287.md",
+      "prompt_sha256": "3615d190e3c747764cf7539d587baee0733454c12bb00e2609407f352a2e1355",
+      "anchor": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+      "ratio": "3:4",
+      "attempt_id": "81ce612f5b515f9b78f3",
+      "attempt": 1,
+      "status": "generated_candidate",
+      "submit_id": "c535cb30-f909-4c19-9446-c90b5fd0aaf5",
+      "candidate_path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/face/20260716T184600338401__dreamina5_attempt1.png",
+      "candidate_sha256": "3fb49b9ac3707f1745a8dc1b66f2db2f2003010b5d74144e7cfabca1164edc18",
+      "error": ""
+    },
+    {
+      "kind": "anchor_fallback",
+      "asset_id": "LOC_FUMO_HALL_INTERIOR",
+      "variant": "anchor",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_INTERIOR__anchor_dreamina-fallback-corrective__20260716T184600329806.md",
+      "prompt_sha256": "ca9d871250f93dc6b20fcee12a554bc70058ced4da8719e65fabb918339c2bbd",
+      "anchor": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "ratio": "3:4",
+      "attempt_id": "5f6a34f0129003c018bd",
+      "attempt": 2,
+      "status": "generated_candidate",
+      "submit_id": "e7fef5db-1831-4095-9015-318a154123be",
+      "candidate_path": "出图/共享/candidates/LOC_FUMO_HALL_INTERIOR/anchor/20260716T184600338433__dreamina5_attempt2.png",
+      "candidate_sha256": "79cfe0702aa82152aad51b66b041432c3c82dbcc4147d4c4ba3ca1c599dd8c25",
+      "error": ""
+    }
+  ]
+}

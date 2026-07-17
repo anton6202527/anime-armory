@@ -249,6 +249,8 @@ def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_p
     assert "独立资产档案" in weapon_positive
     assert "无剧情场景、无人、无手、无脸" in weapon_positive
     assert "特效边界" in image_prompt_pack.shared_asset_positive(defs["VFX_TEST"])
+    assert "独立特效资产档案" in image_prompt_pack.shared_asset_positive(defs["VFX_TEST"])
+    assert "允许且只允许合同声明的受控特效形态" in image_prompt_pack.shared_asset_positive(defs["VFX_TEST"])
 
     old_assets = image_prompt_pack.ASSET_DEFS
     old_chars = image_prompt_pack.CHARACTER_DEFS
@@ -264,6 +266,28 @@ def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_p
     assert "weapon_count=1" in shot_text
     assert "刀光只能是半透明光轨" in shot_text
     assert "不是实体武器" in shot_text
+
+
+def test_body_bound_vfx_allows_faceless_anatomy_without_generic_no_hand_conflict() -> None:
+    cfg = {
+        "id": "VFX_BACKLASH",
+        "type": "vfx",
+        "name": "道行反噬",
+        "positive": "手臂震颤、呼吸失控、轻微血点与肌肉拉扯；不新增虎纹或兽化。",
+        "constraints": {
+            "face_policy": "faceless",
+            "structure": "手臂震颤、呼吸失控、轻微血点与肌肉拉扯。",
+        },
+    }
+
+    positive = image_prompt_pack.shared_asset_positive(cfg)
+
+    assert image_prompt_pack.asset_is_body_bound_vfx(cfg) is True
+    assert "独立身体绑定特效档案" in positive
+    assert "允许下巴以下躯干、手臂或手部" in positive
+    assert "不得出现头部、清晰人脸、头发" in positive
+    assert "无人、无手、无脸" not in positive
+    assert "不新增服装形态、兽化特征" in positive
 
 
 def test_named_saber_gets_single_cutting_edge_and_offset_tip_contract(tmp_path: Path) -> None:

@@ -33,6 +33,19 @@ def test_deltas_detect_closeup_and_emotion():
     assert "closeup" in d and "strong_emotion" in d
 
 
+def test_structured_medium_expression_overrides_story_function_heuristic():
+    d = rp.variation_deltas("他从恐惧转为主动隐瞒", "turning_point")
+    assert "strong_emotion" in d
+    adjusted = rp.apply_structured_expression_intensity(d, "medium")
+    assert "strong_emotion" not in adjusted
+
+
+def test_explicit_panel_strong_overrides_structured_medium_expression():
+    d = rp.variation_deltas("他压低声音", "turning_point")
+    adjusted = rp.apply_structured_expression_intensity(d, "medium", explicit_panel_strong=True)
+    assert "strong_emotion" in adjusted
+
+
 def test_deltas_action_sets_eyeline_lock():
     d = rp.variation_deltas("激烈打斗，长剑劈向对手")
     assert "action_eyeline_lock" in d
@@ -53,6 +66,24 @@ def test_missing_front_flagged():
 def test_strong_emotion_wants_expression_bank():
     plan = rp.plan_character_in_panel(_char(), ["strong_emotion"], False, CAPS_WEAK, True)
     assert any("强情绪格缺对应表情参考" in m for m in plan["missing_references"])
+
+
+def test_back_emotion_shot_keeps_back_and_expression_before_optional_views():
+    char = _char(
+        panel_expression_id="EXPR_STUNNED",
+        expression_refs={"EXPR_STUNNED": "expr.png"},
+        expression_emotions={"EXPR_STUNNED": "stunned"},
+    )
+    plan = rp.plan_character_in_panel(
+        char,
+        ["back_or_over_shoulder", "strong_emotion"],
+        multi=True,
+        caps={**CAPS_WEAK, "multi_character_reference_limit": 4},
+        scope_is_core=True,
+    )
+    roles = [item["role"] for item in plan["recommended_references"]]
+    assert roles == ["front", "face", "expression", "back"]
+    assert not any("参考预算溢出" in item for item in plan["missing_references"])
 
 
 def test_action_promotes_three_quarter_and_writes_directive():

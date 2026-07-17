@@ -1,64 +1,90 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""dreamina_panel_runner helpers; no real paid requests."""
-import json
-import subprocess
-import sys
 from pathlib import Path
-from unittest import mock
+import importlib.util
+import json
 
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import dreamina_panel_runner as runner  # noqa: E402
+MODULE_PATH = Path(__file__).with_name("dreamina_panel_runner.py")
+SPEC = importlib.util.spec_from_file_location("comic_dreamina_panel_runner", MODULE_PATH)
+assert SPEC and SPEC.loader
+runner = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(runner)
 
 
-def test_closest_ratio_uses_panel_geometry():
-    assert runner.closest_ratio(1296, 1040) == "4:3"
-    assert runner.closest_ratio(1040, 1296) == "3:4"
-    assert runner.closest_ratio(1080, 1920) == "9:16"
+def test_nearest_supported_ratio() -> None:
+    assert runner.nearest_supported_ratio({"width": 1296, "height": 1040}) == "4:3"
+    assert runner.nearest_supported_ratio({"width": 1080, "height": 620}) == "16:9"
+    assert runner.nearest_supported_ratio({"width": 1296, "height": 1232}) == "1:1"
 
 
-def test_submit_id_from_json_and_text():
-    assert runner.submit_id_from('{"submit_id":"abc-123"}') == "abc-123"
-    assert runner.submit_id_from("submit_id = xyz") == "xyz"
+def test_normalize_panel_outputs_exact_size(tmp_path: Path) -> None:
+    from PIL import Image
 
-
-def test_run_dreamina_passes_all_references_and_downloads(tmp_path):
-    submit = subprocess.CompletedProcess(
-        ["dreamina"],
-        0,
-        json.dumps({"submit_id": "sid", "gen_status": "success", "credit_count": 1}),
-        "",
-    )
-    query = subprocess.CompletedProcess(["dreamina"], 0, '{"gen_status":"success"}', "")
     source = tmp_path / "source.png"
-    source.write_bytes(b"\x89PNG\r\n\x1a\n" + b"x" * 100)
+    target = tmp_path / "target.png"
+    Image.new("RGB", (1600, 1200), (30, 40, 50)).save(source)
 
-    calls = []
+    result = runner.normalize_panel(source, target, {"width": 1296, "height": 1040})
 
-    def fake_run(cmd, **_kwargs):
-        calls.append(cmd)
-        if cmd[1] == "image2image":
-            return submit
-        download_dir = Path(cmd[cmd.index("--download_dir") + 1])
-        download_dir.mkdir(parents=True, exist_ok=True)
-        (download_dir / "result.png").write_bytes(source.read_bytes())
-        return query
+    assert Image.open(target).size == (1296, 1040)
+    assert result["source_size"] == {"width": 1600, "height": 1200}
+    assert result["target_size"] == {"width": 1296, "height": 1040}
 
-    with mock.patch("dreamina_panel_runner.subprocess.run", side_effect=fake_run):
-        ok, submit_id, payload, error = runner.run_dreamina(
-            "prompt",
-            [tmp_path / "a.png", tmp_path / "b.png"],
-            tmp_path / "out.png",
-            ratio="4:3",
-            resolution_type="2k",
-            model_version="5.0",
-            poll_sec=1,
-            timeout_sec=10,
-        )
 
-    assert ok and not error
-    assert submit_id == "sid"
-    assert payload["credit_count"] == 1
-    assert (tmp_path / "out.png").is_file()
-    assert calls[0][calls[0].index("--images") + 1] == f"{tmp_path / 'a.png'},{tmp_path / 'b.png'}"
+def test_extra_required_view_can_be_omitted_when_subject_is_represented() -> None:
+    selected = [
+        {"id": "CHAR_HONG_XIN", "role": "front", "required": True},
+        {"id": "STYLE_SHUIHU", "role": "style", "required": True},
+    ]
+    omitted = [
+        {"id": "CHAR_HONG_XIN", "role": "face", "required": True},
+        {"id": "PROP_SILVER_CENSER", "role": "prop", "required": True},
+    ]
+
+    assert runner.unrepresented_required_ids(selected, omitted) == {"PROP_SILVER_CENSER"}
+
+
+def test_build_prompt_accepts_dreamina_compiled_job() -> None:
+    submit_prompt = (
+        "生成一张铺满画布的单格无字漫画画面。"
+        "画面事实：黎明中的北宋宫城与紫宸殿在薄雾中显现。"
+        "画风与稿层：宋画工笔淡彩、国漫写实人物、低饱和矿物色彩色完成稿。"
+    )
+    material = {
+        "submit_prompt_sha256": runner.hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
+        "size": {"width": 1296, "height": 1040},
+        "references": [],
+        "character_bindings": [],
+        "panel_plan_sha256": "",
+    }
+    execution_hash = runner.hashlib.sha256(
+        json.dumps(material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    job = {
+        "panel_id": "P001",
+        "size": material["size"],
+        "prompt_source_kind": "compiled_submit_prompt",
+        "prompt_compiler": {
+            "kind": runner.shared.COMPILER_KIND,
+            "version": runner.shared.COMPILER_VERSION,
+            "profile_version": "test",
+            "profile": "zh_comic_reference_first",
+            "backend": "dreamina",
+            "language": "zh",
+        },
+        "submit_prompt": submit_prompt,
+        "prompt": submit_prompt,
+        "negative_prompt": "",
+        "source_contract_sha256": "a" * 64,
+        "submit_prompt_sha256": material["submit_prompt_sha256"],
+        "execution_input_sha256": execution_hash,
+        "consumed_contracts": {"reference_plan": {"panel_plan_sha256": ""}},
+        "references": [],
+        "character_bindings": [],
+    }
+
+    prompt = runner.build_prompt(job, [], "4:3", correction="卷轴表面保持纯色，不生成任何字符。")
+
+    assert "Dreamina" not in prompt
+    assert "1296x1040" in prompt
+    assert submit_prompt in prompt
+    assert "卷轴表面保持纯色" in prompt

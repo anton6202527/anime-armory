@@ -66,7 +66,7 @@ python3 skills/ad-script/scripts/shot_variety_audit.py "<作品根>" --write   #
   ② 与 `ad_law_check` **去重**——已被广告法机检命中的片段不再重复报（套话表与绝对化用语表本就重叠）。
 - **`shot_variety_audit`（分镜视觉多样性·出图前最省钱的点）**：ad 的一致性套件（product_qc /
   reference_planner / asset_drift_report）全在保**资产不漂**，没有东西查**镜头设计是否重复单调**。
-  参照 n2d `audit_shot_variety`＋`redundancy_audit` 补这条视觉不重复轴：`duplicate_shot_composition`
+  补齐视觉不重复轴：`duplicate_shot_composition`
   （同景别/场景/机位反复）、`duplicate_shot_description`（画面描述 char-2gram≥0.6 近重复·分镜没结构
   字段时也能抓）、`scene_monotony`/`framing_variety_low`（长片单场景/单景别，只 info）。
   **广告专有收敛**：① 产品 beauty/特写、片尾 endcard、logo/CTA/价格板等**有意重复镜豁免**；

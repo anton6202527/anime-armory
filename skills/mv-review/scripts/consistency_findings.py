@@ -222,14 +222,14 @@ def shot_variety(findings: list[dict[str, Any]], root: str) -> None:
         findings.append(finding("info", "shot_variety", "shot_variety_clean", "视觉多样性事前机检无重复/单调项。", rel))
 
 
-REDRAW_RATE_WARN = 0.35        # 与 n2d stop_loss 默认 max_redraw_rate 同口径
+REDRAW_RATE_WARN = 0.35        # 单曲工位默认重画率预警线
 TAKES_PER_CLIP_WARN = 3.0      # 平均每 clip 抽 take 数超过此值 → 出视频侧烧钱失控预警
 
 
 def production_stats(findings: list[dict[str, Any]], root: str) -> None:
     """止损轻量件（stop_loss lite）：从生产事件账本与挑版台账算重画率 / 每镜 take 数。
 
-    MV 单曲工位小，不移植 n2d 整套 stop_loss；但「同一张图反复重抽 / 一个 clip 抽了
+    MV 单曲工位小，只保留必要止损信号；「同一张图反复重抽 / 一个 clip 抽了
     一堆 take 还挑不出」正是积分烧穿的前兆，advisory 提示回看 prompt/参考锚。"""
     events_rel = "生产数据/production_events.jsonl"
     events_path = os.path.join(root, events_rel)

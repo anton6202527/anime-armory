@@ -4492,14 +4492,72 @@ def shared_asset_prompt(
     return "\n".join(parts) + "\n"
 
 
+BODY_BOUND_VFX_MARKERS = (
+    "手臂",
+    "手腕",
+    "手掌",
+    "呼吸",
+    "胸口",
+    "躯干",
+    "肌肉",
+    "皮肤",
+    "血点",
+    "经脉",
+    "脉搏",
+    "震颤",
+    "抽搐",
+)
+
+
+def asset_is_body_bound_vfx(cfg: Mapping[str, Any]) -> bool:
+    """Whether a VFX contract must be demonstrated on faceless anatomy.
+
+    Standalone VFX such as ink, smoke or light trails should remain person-free,
+    while physiological effects need a below-chin torso/limb reference.  Treating
+    both as the same generic prop used to emit self-contradictory prompts such as
+    ``无人、无手`` together with ``手臂震颤``.
+    """
+    if str(cfg.get("type") or "").strip().lower() != "vfx":
+        return False
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    evidence = " ".join(
+        prompt_value_text(value)
+        for value in (
+            cfg.get("positive"),
+            cfg.get("current_state"),
+            constraints.get("structure"),
+            constraints.get("vfx_boundary"),
+        )
+        if value
+    )
+    return any(marker in evidence for marker in BODY_BOUND_VFX_MARKERS)
+
+
 def shared_asset_positive(cfg: Mapping[str, Any]) -> str:
     constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
     scene_dna = cfg.get("scene_dna") if isinstance(cfg.get("scene_dna"), Mapping) else {}
     lifecycle = cfg.get("lifecycle") if isinstance(cfg.get("lifecycle"), Mapping) else {}
     asset_type = str(cfg.get("type") or "").strip().lower()
     is_scene = asset_type in {"scene", "location", "environment"}
+    is_vfx = asset_type == "vfx"
+    body_bound_vfx = asset_is_body_bound_vfx(cfg)
+    if is_scene:
+        dossier = ""
+    elif body_bound_vfx:
+        dossier = (
+            "独立身体绑定特效档案：中性浅灰干净背景与均匀柔光；允许下巴以下躯干、手臂或手部作为生理反应载体，"
+            "但不得出现头部、清晰人脸、头发或未绑定身份；只展示合同要求的震颤、呼吸、肌肉牵拉、血点或能量反应，"
+            "不扩写成完整剧情场景，不新增服装形态、兽化特征或无关道具。"
+        )
+    elif is_vfx:
+        dossier = (
+            "独立特效资产档案：中性浅灰干净背景与均匀柔光，无剧情场景、无人、无手、无脸、无持握动作；"
+            "允许且只允许合同声明的受控特效形态，必须有清楚边界、流向、材质和强度层级。"
+        )
+    else:
+        dossier = "独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨。"
     parts = [
-        "独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨。" if not is_scene else "",
+        dossier,
         prompt_value_text(cfg.get("positive") or cfg.get("name")),
         f"武器拓扑: {prompt_value_text(flatten_contract_value(constraints.get('blade_topology')))}" if constraints.get("blade_topology") else "",
         f"特效边界: {prompt_value_text(flatten_contract_value(constraints.get('vfx_boundary')))}" if constraints.get("vfx_boundary") else "",

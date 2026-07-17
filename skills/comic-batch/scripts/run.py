@@ -123,6 +123,14 @@ def chapter_images_ready(root: Path, chapter: str) -> bool:
     return True
 
 
+def image_runner_script(root: Path) -> str:
+    channel = read_setting(root, "生图渠道", "").lower()
+    model = read_setting(root, "生图模型", "").lower()
+    if "dreamina" in channel or "即梦" in channel or "dreamina" in model or "即梦" in model:
+        return "skills/comic-image/scripts/dreamina_panel_runner.py"
+    return "skills/comic-image/scripts/codex_panel_runner.py"
+
+
 def load_json_file(path: Path) -> dict:
     if not path.is_file():
         return {}
@@ -214,7 +222,7 @@ def run_image_stage(repo: Path, root: Path, args: argparse.Namespace) -> int:
         return rc
     cmd = [
         sys.executable,
-        "skills/comic-image/scripts/codex_panel_runner.py",
+        image_runner_script(root),
         str(root),
         "--chapter",
         args.chapter,

@@ -4,10 +4,10 @@
 
 ad 的一致性套件（product_qc / asset_drift_report / reference_planner）全是在**保持资产一致**
 （同一产品/logo/品牌色跨镜零漂移），没有任何东西查**镜头设计是否重复单调**——同一景别机位反复、
-整片一个场景、两镜画面描述几乎一样。参照 n2d `audit_shot_variety` + `redundancy_audit`：n2d 在视频里
-把"构图重复/景别单调/静态长镜"做成机检；ad 缺的正是这条**视觉不重复**轴。
+整片一个场景、两镜画面描述几乎一样。本脚本把"构图重复/景别单调/静态长镜"做成广告线自己的
+**视觉不重复**机检。
 
-**广告口径与 n2d/MV 不同，必须收着报**：
+**广告口径必须收着报**：
   ① 广告很短（6–30s，常 4–10 镜），"连续 5 镜同景别"这类阈值几乎用不上——只查**构图/描述重复对**
      和**长片才成立的单调**。
   ② 广告里**有意重复是常态**：产品特写 beauty shot、片尾 endcard/logo/CTA、slogan 板会刻意反复出现
@@ -73,7 +73,7 @@ def clean(text: str) -> str:
 
 
 def shingles(text: str, n: int = NGRAM) -> Set[str]:
-    """去噪后的 char n-gram 集合（与 copy_quality/n2d 同法·本线自包含·复制不 import）。"""
+    """去噪后的 char n-gram 集合（与本线 copy_quality 同法·本线自包含）。"""
     c = clean(text)
     if len(c) < n:
         return {c} if c else set()
@@ -91,7 +91,7 @@ def _norm(value: Any) -> str:
     return re.sub(r"\s+", "", str(value or "").strip().lower())
 
 
-# ── storyboard 解析（字段容忍：广告 storyboard schema 比 n2d/mv 薄） ──────────────
+# ── storyboard 解析（字段容忍：广告 storyboard schema 较薄） ──────────────────────
 
 def load_storyboard(root: Path) -> Optional[dict]:
     path = root / STORYBOARD_REL

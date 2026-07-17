@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "MON_SNOW_SERPENT",
+  "tier": "recurring_standard",
+  "model_pack_fingerprint": "60adc15efbcb36623059472fc8eeb59c6fd329c0b546eff4105e5f2bbcd74b3d",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+      "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "front",
+      "derivation": {
+        "method": "generated_from_text_seed",
+        "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+        "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+      "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+        "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/MON_SNOW_SERPENT__face.png",
+      "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "face",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+        "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "已并排复核雪蛇 front、three_quarter、face：同一原创头骨、金色眼、乳白冷灰鳞片和体粗比例连续，视图语义正确且无禁用继承。",
+  "approved_at": "2026-07-16T10:07:59+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

@@ -121,8 +121,37 @@
           "name": "斋戒上山布衣",
           "description": "身份场合:奉天师要求斋戒更衣的官员；以行动便利为主；层次:素色内衣、灰褐交领/斜襟窄袖布衣、必要时短外层；轮廓:收袖、束腰、下摆利于攀行，仍保留成年官员整洁习惯；领襟:克制交领/斜襟，不露现代T恤领；开合:布带系结，方向固定；袖摆:窄袖；腰带:素布带；冠帽:不戴正式幞头；发式整齐固定；鞋履:麻履/便于山行的布鞋语法；材料:麻/粗细适中的布质外观；色域:素灰、土褐、旧麻色；状态:clean_departure、humid_mountain、fall_dust",
           "forbidden": "官袍幞头残留；仙侠飘带；现代汉服影楼层叠；把诏包/银炉固化为衣饰",
-          "reference_images": [],
-          "status": "needs_reference",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+              "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7",
+              "view": "front",
+              "source": {
+                "kind": "generated_outfit_reference",
+                "anchor_path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+                "anchor_kind": "front_view_anchor",
+                "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "primary_attempts_exhausted": 2,
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN_dreamina-fallback__20260716T181048002621.md",
+                "prompt_sha256": "2ce106889b07f448768bb55f974ee7befa30df5c525abcb252ac1cd7423bf5ba",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "ratio": "3:4",
+                "submit_id": "76b56c85-e23c-4736-82b3-ccc1f6303766",
+                "generated_source_path": "出图/共享/candidates/CHAR_HONG_XIN/OUTFIT_MOUNTAIN_PLAIN/20260716T181134094729__dreamina5.png",
+                "visual_review": "passed_by_authorized_production_agent",
+                "visual_review_notes": "洪信斋戒上山布衣通过：与正式front同一中年原创面孔和体态；去幞头官袍，灰褐交领素布、布带、麻履、全身手脚完整，无诏包银炉固化、仙侠飘带、文字水印。"
+              },
+              "updated_at": "2026-07-16T18:29:58"
+            }
+          ],
+          "status": "ready",
           "wardrobe_standard": {
             "character_id": "CHAR_HONG_XIN",
             "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
@@ -190,7 +219,8 @@
               "SRC_SHUIHU_SOURCE"
             ],
             "status": "confirmed"
-          }
+          },
+          "updated_at": "2026-07-16T18:29:58"
         }
       },
       "expressions": {
@@ -207,8 +237,37 @@
           "name": "惊恐失态",
           "emotion": "terrified",
           "intensity": "high",
-          "reference_images": [],
-          "status": "needs_reference"
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+              "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_HONG_XIN",
+                "expression_id": "EXPR_TERRIFIED",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+                "identity_anchor_sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__expression_EXPR_TERRIFIED_dreamina__20260717T175558046459.md",
+                "prompt_sha256": "8ae0fac65ff964cf9168c99fa9036b184a4cabce6156b7b83ed89fdb735856f5",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "7bed8d2a-7e4f-4100-aa36-90a96cc47f09"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-17T17:56:57"
+            }
+          ],
+          "status": "ready"
         },
         "EXPR_DEFIANT": {
           "id": "EXPR_DEFIANT",
@@ -223,8 +282,37 @@
           "name": "面色如土",
           "emotion": "stunned",
           "intensity": "high",
-          "reference_images": [],
-          "status": "needs_reference"
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+              "sha256": "1fa172b10d5c96aaa234a75ca78a6dbf6d9b9db0c70cc6d34700d35047a58ac4",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_HONG_XIN",
+                "expression_id": "EXPR_STUNNED",
+                "chapter": "第2话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+                "identity_anchor_sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d",
+                "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__expression_EXPR_STUNNED_dreamina__20260717T140451058118.md",
+                "prompt_sha256": "d632411344e4c362a091756031514ba2fd97b3e0ecee5c48296fe51022b94634",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "addc53c0-1d7c-499c-a6b8-cf607ad05497"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-17T14:06:22"
+            }
+          ],
+          "status": "ready"
         }
       },
       "states": {
@@ -272,6 +360,15 @@
           "expression_id": "EXPR_STUNNED",
           "transient": true,
           "continuity_contract": "黑气冲出后衣袍沾尘、幞头尚在，面色如土；下话必须继承"
+        },
+        "STATE_FUMO_COVERUP": {
+          "id": "STATE_FUMO_COVERUP",
+          "name": "伏魔殿·强装镇定封口",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "transient": true,
+          "continuity_contract": "承接面色如土状态，衣袍沾尘与幞头保持；神情由惊惧转为压低声音、强装镇定并主动封口"
         }
       },
       "default_binding": {
@@ -374,10 +471,100 @@
             "height": 1448
           },
           "updated_at": "2026-07-15T14:04:23"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
+          "sha256": "712637d9296c5af739354cbfab30eb38edae81d461e68b71e2dcaa082de62b4c",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第2话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__side_dreamina__20260717T141441461337.md",
+            "prompt_sha256": "020f823adf313556e66648b5b18628cbaffbbde75fbb994518f0c020d1399b11",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "5c7fffcc-742e-4f67-b554-447362075b5a",
+            "raw_canvas_path": "出图/共享/candidates/CHAR_HONG_XIN/side/20260717T141614242228__raw_canvas.png",
+            "raw_canvas_sha256": "813c351bb50beea7a3666a2dd6721a6b8cc2917347a1d16edeef6bfa0bb7d657",
+            "raw_canvas_dimensions": [
+              1728,
+              2304
+            ],
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "target_width": 1086,
+              "target_height": 1448
+            }
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "source_sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-17T14:16:14"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_HONG_XIN__back.png",
+          "sha256": "f99fc8667d233a9ea351e87690924608d82cb75a4f7b1278ed30131829ac6b1b",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第2话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__back_dreamina__20260717T141614407670.md",
+            "prompt_sha256": "d2209b03a02a103d9aab8cbd64b90ec6f1255e285b78a9ca5bca7d16fe2e30dc",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "e9c340bd-3a68-491a-bbd5-2b9b6badd7e4",
+            "raw_canvas_path": "出图/共享/candidates/CHAR_HONG_XIN/back/20260717T141708370952__raw_canvas.png",
+            "raw_canvas_sha256": "3a88b9969973184c8637a20e8ef1708ac7096c49ff7b4189ac87bba14e592b92",
+            "raw_canvas_dimensions": [
+              1728,
+              2304
+            ],
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "target_width": 1086,
+              "target_height": 1448
+            }
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "source_sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-17T14:17:08"
         }
       ],
       "status": "ready",
-      "updated_at": "2026-07-15T14:04:23",
+      "updated_at": "2026-07-17T14:17:08",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
@@ -394,7 +581,9 @@
       "views": {
         "front": "出图/共享/图片/CHAR_HONG_XIN__front.png",
         "three_quarter": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-        "face": "出图/共享/图片/CHAR_HONG_XIN__face.png"
+        "face": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+        "side": "出图/共享/图片/CHAR_HONG_XIN__side.png",
+        "back": "出图/共享/图片/CHAR_HONG_XIN__back.png"
       },
       "view_readiness": {
         "required": [
@@ -704,8 +893,19 @@
           "name": "基础服装",
           "description": "身份场合:年长宫观住持；日常会客、劝阻与主持宫观秩序，非大型斋醮法事；层次:素色中衣、青灰交领道袍/大衫语法、必要时加深色素褐帔式外层；轮廓:高瘦背直，直身长衣、肩线平稳；袖量可读仪法感但不做舞台化拖袖；领襟:交领方向固定，领缘窄而整洁；开合:右衽内系/布带系结，结位固定；袖摆:中等偏宽，腕处不过度堆积；腰带:素布绦或深色细带；冠帽:灰黑巾帽/素冠的原创保守方案；由front锁定轮廓，不套现代道教制服；鞋履:深色履，鞋头与底厚固定；材料:哑光细布/绢质外观、素布带；色域:青灰、烟墨、少量旧麻；佩饰:克制发须与巾帽轮廓；状态:palace_formal、warning_tense、hall_dust",
           "forbidden": "金绣法衣常服化；现代统一制式道装直接照搬；仙侠披风飘带；影视版特定道长造型；明清宗教礼服混搭",
-          "reference_images": [],
-          "status": "needs_reference",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+              "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_ABBOT_SHANGQING"
+              },
+              "updated_at": "2026-07-16T18:35:28"
+            }
+          ],
+          "status": "ready",
           "wardrobe_standard": {
             "character_id": "CHAR_ABBOT_SHANGQING",
             "outfit_id": "OUTFIT_BASE",
@@ -810,21 +1010,257 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+          "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "primary_attempts_exhausted": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__front_dreamina-fallback-corrective__20260716T182834460473.md",
+            "prompt_sha256": "4298ce3486de27a8e88c931fc7fe11fd3b92fc790669a2571e09b110e7134921",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "f3fb9d15-5df7-4097-a9a4-8d60d60aac48",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/front/20260716T182834497189__dreamina5_attempt2.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "住持front采用纠偏候选：六十岁左右、高瘦背直、高额清瘦颊、灰黑修整须、稳定眼神、青灰交领道袍、巾帽、全身手脚完整；无金绣法衣、仙侠飘带、文字水印。"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:35:28"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+          "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__three_quarter_dreamina-fallback__20260716T183640032555.md",
+            "prompt_sha256": "84ed314fcf0fbacfec0018e2196d3bc37830eec7d273b17125c5a6583dece38d",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "20a9d2e0-8034-4494-9e1d-8d709f78dc5f",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/three_quarter/20260716T183640054236__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "住持three_quarter通过：与front同一高额清瘦年长面孔、灰黑须、巾帽和青灰交领道袍，真实45度全身，手脚完整。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:08"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+          "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__face_dreamina-fallback__20260716T183640033668.md",
+            "prompt_sha256": "c7090edde96b35cc720937d3ae2f1611856e47a09b77c1c55316f7e272859f0f",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "d01f210a-76a3-4153-a19a-a89b5ad18c62",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/face/20260716T183640054318__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "住持face通过：与front同一高额、沉稳眼神、灰黑须和巾帽，正面头肩近景，中性克制。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:08"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__side.png",
+          "sha256": "663578048a2ce49fd65ffd43e10252d85ad38d888403e4ca00916f293c3e805f",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第2话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_ABBOT_SHANGQING__side_dreamina__20260717T141708539282.md",
+            "prompt_sha256": "7d95bc4c47ca578026c69f011017e1137e4bcb80aec4cabf34c6c1fcd650f0ec",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "00fd3ae5-61a8-4b01-ab42-39a1aa9404c5",
+            "raw_canvas_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/side/20260717T141838146448__raw_canvas.png",
+            "raw_canvas_sha256": "f41d7843226fb15e85f2e357796add9be90b51cea14db5c130b930165fb07cda",
+            "raw_canvas_dimensions": [
+              1728,
+              2304
+            ],
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "target_width": 1086,
+              "target_height": 1448
+            }
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-17T14:18:38"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__back.png",
+          "sha256": "5086c9cbc8f0f9bd6f4a4f51c540f98823ee47fcebe6869d45d850476f68dac5",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第2话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_ABBOT_SHANGQING__back_dreamina__20260717T141838323888.md",
+            "prompt_sha256": "e91ce56b82341687a8036020cc083b0c242645c3e68acc7af71d85b8f246d8e6",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "63a9d55e-83da-4a1d-8785-72efacf0acc7",
+            "raw_canvas_path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/back/20260717T141957317790__raw_canvas.png",
+            "raw_canvas_sha256": "9725963b73518e4c42c5b2cc72d2aa2364bb97c94a731ba0514c1d826ea763a5",
+            "raw_canvas_dimensions": [
+              1728,
+              2304
+            ],
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "target_width": 1086,
+              "target_height": 1448
+            }
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+            "source_sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-17T14:19:57"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-17T14:19:57",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "14454572127399b711d73a463af605a877960f360ba0054a74ef5afc3df734e5",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "7cb47ee4a6f7aeb03c72fd2b3feb07e344ecb48880e01d794d1d76d2d765942d",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
           "face"
         ],
-        "updated_at": "2026-07-15T07:18:27+00:00"
+        "updated_at": "2026-07-16T10:50:03+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+        "side": "出图/共享/图片/CHAR_ABBOT_SHANGQING__side.png",
+        "back": "出图/共享/图片/CHAR_ABBOT_SHANGQING__back.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "CHAR_EMPEROR_RENZONG": {
@@ -1039,10 +1475,100 @@
             "height": 1448
           },
           "updated_at": "2026-07-16T14:22:53"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+          "sha256": "62a96c9c4166bae73c6d2b4c1161d9f4c791a34a904de1f7bca7b5c9001d45b0",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第2话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_EMPEROR_RENZONG__three_quarter_dreamina__20260717T141957694230.md",
+            "prompt_sha256": "4f5e00b554d5768df90dc676479a61b45fa840747fa784bd5e4f542e9c475d38",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "a153f2fa-34ff-42d1-a770-4b3e0daba74c",
+            "raw_canvas_path": "出图/共享/candidates/CHAR_EMPEROR_RENZONG/three_quarter/20260717T142052347796__raw_canvas.png",
+            "raw_canvas_sha256": "3a046e24ec0a116819b9fb34c8cd4886013c46ea261c279042ced7c064d38be7",
+            "raw_canvas_dimensions": [
+              1728,
+              2304
+            ],
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "target_width": 1086,
+              "target_height": 1448
+            }
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "source_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-17T14:20:52"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__side.png",
+          "sha256": "a184a5a3f547a52f925e770c8a4fbfdc1dc0c355d8b94ad745eeee60ddf767ad",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第2话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第2话/CHAR_EMPEROR_RENZONG__side_dreamina__20260717T142052542969.md",
+            "prompt_sha256": "8b1a646efc0e080673d749a6a9eb3295a832a3c90473d84b53e9e938485ac7fc",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina image2image",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "0075a164-2e7d-4aa8-9b5d-0b2f41801a1b",
+            "raw_canvas_path": "出图/共享/candidates/CHAR_EMPEROR_RENZONG/side/20260717T142218522731__raw_canvas.png",
+            "raw_canvas_sha256": "2cbba4189c1763a2e4ade12183fa8a732871d8e32074e28e36b1f362562374e4",
+            "raw_canvas_dimensions": [
+              1728,
+              2304
+            ],
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "target_width": 1086,
+              "target_height": 1448
+            }
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "source_sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-17T14:22:18"
         }
       ],
       "status": "ready",
-      "updated_at": "2026-07-16T14:22:53",
+      "updated_at": "2026-07-17T14:22:18",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
@@ -1057,7 +1583,9 @@
       },
       "views": {
         "front": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
-        "face": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png"
+        "face": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+        "three_quarter": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_EMPEROR_RENZONG__side.png"
       },
       "view_readiness": {
         "required": [
@@ -1098,8 +1626,19 @@
           "name": "基础服装",
           "description": "身份场合:资深文臣；紫宸殿奏对；层次:素中衣、深绛红圆领长袍；轮廓:瘦长体态、肩颈稳定，与仁宗的材质和体量层级分开；领襟:窄而整齐的圆领；开合:内隐系结，不出现现代扣排；袖摆:中等袖量，持笏时袖口稳定；腰带:深色细带具；冠帽:黑色展脚幞头，与其他官员以脚长/冠体细差区分；鞋履:深色靴；材料:哑光细织物、皮革带靴；色域:深绛红、墨黑、烟褐；佩饰:幞头、细带具；状态:court_address",
           "forbidden": "明代补服；清代顶戴；影视演员脸；与仁宗使用同等材质层级；随机官阶纹样",
-          "reference_images": [],
-          "status": "needs_reference",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+              "sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_FAN_ZHONGYAN"
+              },
+              "updated_at": "2026-07-16T18:43:09"
+            }
+          ],
+          "status": "ready",
           "wardrobe_standard": {
             "character_id": "CHAR_FAN_ZHONGYAN",
             "outfit_id": "OUTFIT_BASE",
@@ -1201,20 +1740,117 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+          "sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__front_dreamina-fallback__20260716T183640038789.md",
+            "prompt_sha256": "db75a5a2d40043cc2f2f07311b63169e7298a0c734bf2b4b06f6ca889ff27ae2",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "e68fea18-540b-4e43-960e-b6263d2f2a3e",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/front/20260716T183640055350__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "范仲淹front通过：五十岁左右瘦长脸、眼下疲色、稳重肩颈、深绛红圆领官袍与展脚幞头，全身完整。"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+            "source_sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:09"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__face.png",
+          "sha256": "08df4832416ce0989409d29da16f79babfbfe855de35b03b60d038e68ad0f135",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__face_dreamina-fallback__20260716T184600329287.md",
+            "prompt_sha256": "3615d190e3c747764cf7539d587baee0733454c12bb00e2609407f352a2e1355",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "c535cb30-f909-4c19-9446-c90b5fd0aaf5",
+            "generated_source_path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/face/20260716T184600338401__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "范仲淹face与front同一瘦长脸、眼下疲色、黑须与深绛红官袍，正面头肩稳重，非影视演员脸。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+            "source_sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:50:03"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:50:03",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "edf94fdf802be7d2001fc5e915a24aa81b976df36eb799e7f630d1ba9ec49c3e",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "af410242994f125841d446f6c8b2995bca83ac7c0b172598cfc38738edd1de02",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "face"
         ],
-        "updated_at": "2026-07-14T04:07:32+00:00"
+        "updated_at": "2026-07-16T10:50:04+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+        "face": "出图/共享/图片/CHAR_FAN_ZHONGYAN__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "CHAR_ZHAO_ZHE": {
@@ -1242,8 +1878,19 @@
           "name": "基础服装",
           "description": "身份场合:年长宰执；紫宸殿奏对；层次:素中衣、低饱和紫褐圆领长袍；轮廓:端方略厚体态，衣身垂直稳重，与文彦博偏瘦轮廓互斥；领襟:圆领；开合:内隐系结；袖摆:中等偏宽，不堆积；腰带:深褐细带具；冠帽:黑色展脚幞头，冠体稍低稳；鞋履:深色靴；材料:哑光细织物、皮革带靴；色域:紫褐、墨黑、暗棕；佩饰:幞头、细带具；状态:court_concerned",
           "forbidden": "明代补服；清代顶戴；与文彦博/范仲淹换色换体态；夸张金玉带；影视定型造型",
-          "reference_images": [],
-          "status": "needs_reference",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+              "sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_ZHAO_ZHE"
+              },
+              "updated_at": "2026-07-16T18:43:09"
+            }
+          ],
+          "status": "ready",
           "wardrobe_standard": {
             "character_id": "CHAR_ZHAO_ZHE",
             "outfit_id": "OUTFIT_BASE",
@@ -1345,20 +1992,117 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+          "sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__front_dreamina-fallback__20260716T183640037595.md",
+            "prompt_sha256": "34e5c4250428e4634ae579cb64ff4c088f74f637ad1f73eb0df8384d6f09ee1c",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "82951e77-429e-4a7d-ad9a-72c3f576d828",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/CHAR_ZHAO_ZHE/front/20260716T183640055084__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "赵哲front通过：年长花白发须、端方略厚体态、紫褐圆领官袍与低稳展脚幞头，全身手脚完整。"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+            "source_sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:09"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_ZHAO_ZHE__face.png",
+          "sha256": "8588ebc6dd698db1d942e0ee94069d54b7021d69000cfbf050a84b788a58f6cc",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__face_dreamina-fallback__20260716T184600326690.md",
+            "prompt_sha256": "d6bf786e55cd1841c15fd55cf97e7cbef83b9ff4d71f162ac60769b56de186bd",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "c8b30424-caf3-4e0a-8331-6fb1455ced46",
+            "generated_source_path": "出图/共享/candidates/CHAR_ZHAO_ZHE/face/20260716T184600338302__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "赵哲face与front同一花白眉须、端方略厚年长脸和紫褐官袍，正面头肩中性忧民。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+            "source_sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:50:02"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:50:02",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "a73c7ce946afc646bf4ef8fcd64a6a4aeedbfbb6e04813ce7bf75d5b4a3c6419",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "1f6a2a5d4f2cc862e9e1f36af4409a1ec4663f7fdc19618804e08b8c48d9ff06",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "face"
         ],
-        "updated_at": "2026-07-14T04:07:32+00:00"
+        "updated_at": "2026-07-16T10:50:04+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+        "face": "出图/共享/图片/CHAR_ZHAO_ZHE__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "CHAR_WEN_YANBO": {
@@ -1386,8 +2130,19 @@
           "name": "基础服装",
           "description": "身份场合:中年文臣；紫宸殿奏对；层次:素中衣、深青绿褐圆领长袍；轮廓:偏瘦、窄下颌，肩线较窄，与赵哲的年龄体量互斥；领襟:圆领，领宽稍窄；开合:内隐系结；袖摆:中等偏收，持笏动作利落；腰带:墨褐细带具；冠帽:黑色展脚幞头，冠体比赵哲略挺；鞋履:深色靴；材料:哑光细织物、皮革带靴；色域:深青绿褐、墨黑、旧竹灰；佩饰:幞头、细带具；状态:court_steady",
           "forbidden": "明代补服；清代顶戴；与赵哲/范仲淹换脸换色；高饱和翠绿；影视定型造型",
-          "reference_images": [],
-          "status": "needs_reference",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+              "sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WEN_YANBO"
+              },
+              "updated_at": "2026-07-16T18:43:09"
+            }
+          ],
+          "status": "ready",
           "wardrobe_standard": {
             "character_id": "CHAR_WEN_YANBO",
             "outfit_id": "OUTFIT_BASE",
@@ -1489,20 +2244,117 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+          "sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__front_dreamina-fallback__20260716T183640038189.md",
+            "prompt_sha256": "55608ec9f763c50eccd80c20eb7854425e4dcaa93c3150ea0b657387aea92884",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "b88511be-80a8-41b6-8980-eb9c832a3d7b",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/CHAR_WEN_YANBO/front/20260716T183640055260__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "文彦博front通过：四十余岁偏瘦窄下颌、黑须、深青绿褐圆领官袍与挺直展脚幞头，全身完整。"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+            "source_sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:09"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WEN_YANBO__face.png",
+          "sha256": "1019f7641e6763576795c7a22eae96d390e661a3fca3b00584f66313c5afe9e5",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__face_dreamina-fallback__20260716T184600328360.md",
+            "prompt_sha256": "fac0dac1748fec94ca306986c9e38db188a00e0146ff33a0e447b79ecd9693d1",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "25fa16c2-595c-4a62-a2bc-66ef05dd85d8",
+            "generated_source_path": "出图/共享/candidates/CHAR_WEN_YANBO/face/20260716T184600338362__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "文彦博face与front同一窄下颌、黑须、偏瘦中年脸和深青绿褐官袍，正面头肩稳健。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+            "source_sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:50:03"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:50:03",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "2a6516fecf373286bb1445e14a63a7f4e6ad0de56a8760fff22d4d1c3ea61e71",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "abdd35df7616e30c3d41bd9bcf831dae7ecf42ac9a5eefe202649b38e3320207",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "face"
         ],
-        "updated_at": "2026-07-14T04:07:32+00:00"
+        "updated_at": "2026-07-16T10:50:04+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+        "face": "出图/共享/图片/CHAR_WEN_YANBO__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "MON_WHITE_TIGER": {
@@ -1562,21 +2414,165 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+          "sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_attempts_exhausted": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_dreamina-fallback__20260716T182434209543.md",
+            "prompt_sha256": "40c79fc00af2628f24c2cc339e67023a76493d1ddd675c19bcf4b55ef47b7ed4",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "059e8b0e-3281-459a-b14b-5efa61576d6f",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/MON_WHITE_TIGER/front/20260716T182434213467__dreamina5.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "白额锦毛大虫front通过：真实虎类四足承重、黄金褐毛、白额黑纹、肩胛与四爪尾端完整，闭口克制；无剑齿、骨刺、血腥攻击、文字水印。"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "source_sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:29:58"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_WHITE_TIGER__three_quarter.png",
+          "sha256": "93ae3b93a742db5ea825c8937bb3f14be7c1241bcaacc203970986bbe9128d07",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__three_quarter_dreamina-fallback__20260716T183640034379.md",
+            "prompt_sha256": "d036519446cab85ef522100bea3fcad82733dee451b1533db702a2a0ba616f87",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "257761c8-7097-476c-9c5b-24519bc98b2b",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/MON_WHITE_TIGER/three_quarter/20260716T183640054384__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "白额锦毛大虫three_quarter通过：与front同一额纹、金褐毛、肩胛、四肢与尾长，四足承重45度结构完整。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "source_sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:08"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_WHITE_TIGER__face.png",
+          "sha256": "3fa67b59c7e736bf7413fbb1997e4c5d52f908f01f4a70c3e397916095502d59",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__face_dreamina-fallback__20260716T183640035043.md",
+            "prompt_sha256": "c51f4ef6d9e0360b70d30d78bfc569b95f064fe3aee19c8f685f6b784a3bd38f",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "b44095aa-b0f5-4342-bbd4-b2ebd2ec6b8b",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/MON_WHITE_TIGER/face/20260716T183640054439__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "白额锦毛大虫face通过：正面头颈近景，额纹、眼型、鼻口和金褐黑白毛色与front连续，闭口克制。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+            "source_sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:43:08"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:43:08",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "cf7226e1523b55e3d553c10525cacc08434253324feceb0abc576965ab56c08b",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "5a4cf217537fd9cb86e8b3930115f8336a4b31e9aa127bb0711c340c00ded340",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
           "face"
         ],
-        "updated_at": "2026-07-14T07:00:17+00:00"
+        "updated_at": "2026-07-16T10:50:03+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+        "three_quarter": "出图/共享/图片/MON_WHITE_TIGER__three_quarter.png",
+        "face": "出图/共享/图片/MON_WHITE_TIGER__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "MON_SNOW_SERPENT": {
@@ -1636,21 +2632,153 @@
         "expression_id": "EXPR_NEUTRAL",
         "state_id": "STATE_BASE"
       },
-      "reference_images": [],
-      "status": "partial",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+          "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__front_builtin-imagegen__20260716T153024257496.md",
+            "prompt_sha256": "a625db5d2e5e8b7aaaa0ef60de5d1ab2f5193095230a96eb6d93482e7d0e6dda",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2",
+            "execution_mode": "builtin_imagegen_tool",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_dX5akyqUv91I05S4gZOGBk1J.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "原创雪蛇front通过：真实蛇类头骨与颈部连接、乳白冷灰鳞片、少量金色眼光、完整盘绕路径和尾端；闭口中性警觉，无龙角骨刺、绿色魔法雾、文字水印。"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T17:37:51"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+          "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__three_quarter_builtin-imagegen__20260716T174155892226.md",
+            "prompt_sha256": "6bd89434fbfb502c441d1fc5315469442b626a7209bba02d59a20e1f059f701c",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2",
+            "execution_mode": "builtin_imagegen_tool",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_zEkTedp0PQtZKjubWULs90xf.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "雪蛇three_quarter通过：与front为同一原创头骨、金色眼、乳白冷灰鳞色和体粗比例；真实约45度头颈，闭口中性警觉，完整盘绕及尾端，无龙角骨刺、绿色魔法雾、文字水印。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:00:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_SNOW_SERPENT__face.png",
+          "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__face_builtin-imagegen__20260716T180128465142.md",
+            "prompt_sha256": "aa721088f25d24be20a212db2d25c7a806a27aa69eb1a6d8d306ee316b6de289",
+            "backend": "内置 imagegen",
+            "model": "GPT Image 2",
+            "execution_mode": "builtin_imagegen_tool",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_WQQHeg5ZrfmXkyKmqZec6cGq.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "雪蛇face通过：正面头部与上段躯干近景，与front/three_quarter保持同一乳白冷灰鳞色、金色眼、宽扁真实蛇类头骨和闭口中性警觉；无龙角骨刺、绿雾、攻击姿态、文字水印。"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+            "source_sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1086,
+            "height": 1448
+          },
+          "updated_at": "2026-07-16T18:07:59"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:07:59",
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "a636ae9099bbfa2d8caaa1068894eeccafeb1f1b3f227bf63633ee0157d75b9f",
-        "readiness": "needs_fix",
-        "signoff_status": "missing",
+        "fingerprint": "60adc15efbcb36623059472fc8eeb59c6fd329c0b546eff4105e5f2bbcd74b3d",
+        "readiness": "ready",
+        "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
           "face"
         ],
-        "updated_at": "2026-07-14T07:00:17+00:00"
+        "updated_at": "2026-07-16T10:07:59+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+        "three_quarter": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+        "face": "出图/共享/图片/MON_SNOW_SERPENT__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
       }
     },
     "LOC_ZICHEN_HALL": {
@@ -1659,9 +2787,42 @@
       "display_name": "紫宸殿",
       "description": "北宋中轴深进朝殿，御座后景高台，文武两班分列，朱黑暗金，冷晨光加暖反射",
       "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:20+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
+          "sha256": "7596bb41dca0bab5d6f72dcd87e1a048ef64fdff85269676c211f79681048c3e",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "primary_attempts_exhausted": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_ZICHEN_HALL__anchor_dreamina-fallback-3x4__20260716T182834466121.md",
+            "prompt_sha256": "f92459b4b201723e8d0d9e2c91ba1a357eaa48df73690c2749c37dacb2d66522",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "1f00c514-cc15-45e1-acb4-06e07efd9f52",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/LOC_ZICHEN_HALL/anchor/20260716T182834505442__dreamina5_attempt2.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "紫宸殿锚通过：中轴深进、御座高台、朱黑暗金木构、两侧窗格与冷暖光位清楚，无人物、可读文字、现代物件。",
+            "forbidden_inheritance": ""
+          },
+          "updated_at": "2026-07-16T18:35:28"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:35:28",
+      "anchor_path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
+      "sha256": "7596bb41dca0bab5d6f72dcd87e1a048ef64fdff85269676c211f79681048c3e"
     },
     "LOC_CAPITAL_PLAGUE_STREET": {
       "id": "LOC_CAPITAL_PLAGUE_STREET",
@@ -1669,9 +2830,41 @@
       "display_name": "嘉祐京师瘟疫街巷",
       "description": "北宋京师居民巷道，相邻木门逐扇关闭，药碗、清水桶、布帘和克制的送葬队列形成常驻空间逻辑；不展示尸体特写",
       "notes": "只依据源文、项目原创合同与visual_research.json生成；外部影视图研究-only，不作附件",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T06:00:34+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_CAPITAL_PLAGUE_STREET__anchor.png",
+          "sha256": "eb9f630c05fa4082f2dfbc21f6264d938ddac5b888475010126b58dee63ed042",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_CAPITAL_PLAGUE_STREET__anchor_dreamina-fallback__20260716T183640036423.md",
+            "prompt_sha256": "5dd8ad97a224741fa53a257705088a3786e45044f608c66acf5dd90c49c3edd0",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "1829c0e1-2c6a-4ed8-8568-fab80ad2e401",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/LOC_CAPITAL_PLAGUE_STREET/anchor/20260716T183640054753__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "京城疫街锚通过：北宋市井窄街、木构铺面、收束纵深与低饱和冷清气氛清楚，无现代物件和文字。"
+          },
+          "updated_at": "2026-07-16T18:43:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:43:09",
+      "anchor_path": "出图/共享/图片/LOC_CAPITAL_PLAGUE_STREET__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_CAPITAL_PLAGUE_STREET__anchor.png",
+      "sha256": "eb9f630c05fa4082f2dfbc21f6264d938ddac5b888475010126b58dee63ed042"
     },
     "LOC_ROAD_TO_LONGHUSHAN": {
       "id": "LOC_ROAD_TO_LONGHUSHAN",
@@ -1679,9 +2872,26 @@
       "display_name": "东京至龙虎山驿路",
       "description": "城郊、杨柳驿道、山村野店与信州迎候组成纵向步移景异，土褐柳灰绿与红尘接力",
       "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:20+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png",
+          "sha256": "cfd924682a3c4382806206fcbf49093c0ef829d9af734c944639a47e6cad26e7",
+          "source": {
+            "kind": "adopted_existing_project_anchor",
+            "chapter": "第1话",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "已签收龙虎山驿路/山径共享锚，作为东京至龙虎山步移景异道路合同的可复用场景参考。",
+            "alias_asset_id": "LOC_LONGHUSHAN_PATH"
+          },
+          "updated_at": "2026-07-16T18:35:29"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:35:29",
+      "anchor_path": "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png",
+      "sha256": "cfd924682a3c4382806206fcbf49093c0ef829d9af734c944639a47e6cad26e7"
     },
     "LOC_SHANGQING_PALACE": {
       "id": "LOC_SHANGQING_PALACE",
@@ -1689,9 +2899,42 @@
       "display_name": "上清宫",
       "description": "山门、三清殿、方丈、左右廊与右廊后伏魔殿空间连续，松柏、炼药炉、石阶、山涧常驻",
       "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:20+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_SHANGQING_PALACE__anchor.png",
+          "sha256": "cfdabe60dc88efa15bcb97d1c9fb5c19c6ed2f697e1134283c29ade0f9f4a539",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "primary_attempts_exhausted": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_SHANGQING_PALACE__anchor_dreamina-fallback-3x4__20260716T182834464742.md",
+            "prompt_sha256": "20ffddf56ce523ea024e453113ef56272c956a2b849f1e5689e47adff95983e4",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "e6f09550-cee2-444a-8aa4-b0d75c4c40e6",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/LOC_SHANGQING_PALACE/anchor/20260716T182834503800__dreamina5_attempt2.png",
+            "visual_review": "conditional_pass_by_authorized_production_agent",
+            "visual_review_notes": "条件通过：宫观山门、石阶、院落、主殿与山体轴线清楚；候选牌匾含生成字，仅作为reference-only禁继承区，逐格prompt强制无可读文字。",
+            "forbidden_inheritance": "不得继承候选中的任何牌匾/可读生成字；逐格保持无文字，文字后期嵌入。"
+          },
+          "updated_at": "2026-07-16T18:35:28"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:35:28",
+      "anchor_path": "出图/共享/图片/LOC_SHANGQING_PALACE__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_SHANGQING_PALACE__anchor.png",
+      "sha256": "cfdabe60dc88efa15bcb97d1c9fb5c19c6ed2f697e1134283c29ade0f9f4a539"
     },
     "LOC_LONGHUSHAN_PATH": {
       "id": "LOC_LONGHUSHAN_PATH",
@@ -1743,9 +2986,41 @@
       "display_name": "伏魔殿外",
       "description": "右廊尽头独立封闭小殿，红泥墙、朱门、灌铸锁、十数封皮与牌额常驻",
       "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:20+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_FUMO_HALL_EXTERIOR__anchor.png",
+          "sha256": "ccd358cb0812002d2e39466ef14dec4f5ef8f6d323bc5650fdae44be28261ed3",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_EXTERIOR__anchor_dreamina-fallback__20260716T183640035547.md",
+            "prompt_sha256": "215d8fa36742a867a2d2c691d82af87f73a413d330b99abc61ff6f0a23ae81e9",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "7a4025c5-39ac-48ab-bbcb-0794a1812e2f",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/LOC_FUMO_HALL_EXTERIOR/anchor/20260716T183640054546__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "伏魔殿外锚通过：右廊尽头独立小殿、红泥墙、朱门、铜锁与多层白封皮结构清楚，无人物和可读文字。"
+          },
+          "updated_at": "2026-07-16T18:43:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:43:09",
+      "anchor_path": "出图/共享/图片/LOC_FUMO_HALL_EXTERIOR__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_FUMO_HALL_EXTERIOR__anchor.png",
+      "sha256": "ccd358cb0812002d2e39466ef14dec4f5ef8f6d323bc5650fdae44be28261ed3"
     },
     "LOC_FUMO_HALL_INTERIOR": {
       "id": "LOC_FUMO_HALL_INTERIOR",
@@ -1753,9 +3028,41 @@
       "display_name": "伏魔殿内",
       "description": "无窗窄长黑殿，入口后方，中心石碑龟趺大半没泥，先冷门光后统一火把暖光",
       "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:20+00:00"
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_FUMO_HALL_INTERIOR__anchor.png",
+          "sha256": "04bc3d47d2cde98090847fb049b6814264cb5060a45deda953460b4b5900d6cd",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_INTERIOR__anchor_dreamina-fallback-corrective__20260716T184600329806.md",
+            "prompt_sha256": "ca9d871250f93dc6b20fcee12a554bc70058ced4da8719e65fabb918339c2bbd",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "e7fef5db-1831-4095-9015-318a154123be",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/LOC_FUMO_HALL_INTERIOR/anchor/20260716T184600338433__dreamina5_attempt2.png",
+            "visual_review": "conditional_pass_by_authorized_production_agent",
+            "visual_review_notes": "伏魔殿内纠偏候选采用：无窗窄长黑殿，入口冷光与火把暖光并存；中央五六尺碑身与龟趺同为灰石雕刻、静止无生命。龟首造型偏写实，逐格必须保持石质、无呼吸无动作。"
+          },
+          "updated_at": "2026-07-16T18:50:03"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:50:03",
+      "anchor_path": "出图/共享/图片/LOC_FUMO_HALL_INTERIOR__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_FUMO_HALL_INTERIOR__anchor.png",
+      "sha256": "04bc3d47d2cde98090847fb049b6814264cb5060a45deda953460b4b5900d6cd"
     },
     "PROP_IMPERIAL_EDICT": {
       "id": "PROP_IMPERIAL_EDICT",
@@ -1763,9 +3070,39 @@
       "display_name": "丹诏与御香",
       "description": "黄罗包裹的丹诏；文字后期嵌入，不生成随机可读字",
       "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:20+00:00",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+          "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "primary_attempts_exhausted": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_IMPERIAL_EDICT__anchor_dreamina-fallback-3x4__20260716T182834467372.md",
+            "prompt_sha256": "670c923d776afa10b9a9313b666e1a0375ffcc1ce7c14b4229745f391385fab5",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "a0c27ab6-9a9e-4966-b65e-e27bae8848c5",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/PROP_IMPERIAL_EDICT/anchor/20260716T182834528448__dreamina5_attempt2.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "丹诏御香黄罗包锚通过：前臂长黄罗包、分隔卷件、系带与背负/奉持结构清楚，无清代圣旨定型和可读随机文字。",
+            "forbidden_inheritance": ""
+          },
+          "updated_at": "2026-07-16T18:35:28"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:35:28",
       "prop_contract": "功能:证明皇命并携御香请天师；尺度:包裹约前臂长，可背负并可双手奉持；结构:诏书卷/折件与御香分隔后由黄罗包裹、系带固定；材料:织物包裹、纸/绢质诏书、香料；交互:正式场合双手奉持；登山背负，手侧与系带走向连续；题字:正文与印记后期嵌入；锚图不生成随机字；状态:sealed_court、travel_wrapped、presented_at_palace；版本:hero、stunt、duplicate",
       "forbidden_inheritance": "清代圣旨卷轴定型；随机可读字；无结构发光卷轴",
       "wardrobe_prop_standard": {
@@ -1818,7 +3155,10 @@
           "SRC_SHUIHU_SOURCE"
         ],
         "status": "confirmed"
-      }
+      },
+      "anchor_path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+      "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d"
     },
     "PROP_SILVER_CENSER": {
       "id": "PROP_SILVER_CENSER",
@@ -1826,9 +3166,39 @@
       "display_name": "银手炉",
       "description": "带提梁银手炉，持续燃龙香；跌落、拾回、持有手侧跨格连续",
       "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:21+00:00",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+          "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "primary_attempts_exhausted": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_SILVER_CENSER__anchor_dreamina-fallback-3x4__20260716T182834468701.md",
+            "prompt_sha256": "f9d8b9c2fd076c3fe26bf9db157c5119872cdbe8a72185d71b8dae3569fef657",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "5bc3145e-30d9-48ff-aeeb-dcae17097f1f",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/PROP_SILVER_CENSER/anchor/20260716T182834545795__dreamina5_attempt2.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "银手炉锚通过：单手尺度、提梁、透气炉盖、炉身内胆与低量白烟清楚，无大型鼎炉、现代暖手炉、铭文或人物。",
+            "forbidden_inheritance": ""
+          },
+          "updated_at": "2026-07-16T18:35:29"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:35:29",
       "prop_contract": "功能:携龙香登山并在惊险场面跌落拾回；尺度:单手可提，炉身约掌幅至两掌幅，不能大成落地香炉；结构:稳定炉身、透气炉盖、提梁和内胆；跌落时部件关系仍可读；材料:银色金属、香灰/香料；交互:手握提梁；登记左右手、跌落格、落点、拾回格与此后持有手；题字:无随机铭文；状态:lit、dropped、recovered；版本:hero、stunt、duplicate",
       "forbidden_inheritance": "现代暖手炉；大型落地鼎炉；悬空无握持；随机铭文",
       "wardrobe_prop_standard": {
@@ -1881,7 +3251,10 @@
           "SRC_SHUIHU_SOURCE"
         ],
         "status": "confirmed"
-      }
+      },
+      "anchor_path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+      "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8"
     },
     "PROP_FUMO_SEALS": {
       "id": "PROP_FUMO_SEALS",
@@ -1994,9 +3367,38 @@
       "display_name": "遇洪石碑",
       "description": "五六尺石碑、龟趺、正面符箓安全区、背面四字安全区；文字后期嵌入",
       "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
-      "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-14T04:04:21+00:00",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_STONE_STELE__anchor.png",
+          "sha256": "5addda0baaee81e10065a0f6f4b2ae67b489f859b5b9aaa4f933d79ca6a03776",
+          "source": {
+            "kind": "generated_asset_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "primary_backend_status": "explicitly_unavailable",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_STONE_STELE__anchor_dreamina-fallback__20260716T183640036947.md",
+            "prompt_sha256": "52b7f08d45cf1bc5768f294b213755c9e585a61d4601da8c4876afb5297a4fd6",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4_normalized_to_4:5",
+            "submit_id": "ab2e1b1b-58c8-484c-bca1-9994d0bb161e",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "generated_source_path": "出图/共享/candidates/PROP_STONE_STELE/anchor/20260716T183640054958__dreamina5_attempt1.png",
+            "visual_review": "passed_by_authorized_production_agent",
+            "visual_review_notes": "遇洪石碑锚通过：五六尺风化石碑、龟趺为明确石雕、正面大面积文字安全区，结构完整，无随机字。"
+          },
+          "updated_at": "2026-07-16T18:43:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-16T18:43:09",
       "prop_contract": "功能:揭示封印警告并触发百星出世；尺度:依原文五六尺；与洪信站姿保持固定比例；结构:碑身、碑额/边缘、龟趺分件逻辑明确，埋藏与显露状态可连续；材料:风化石材、土尘；交互:不可手持；人物围绕、清土和阅读，视线落点固定；题字:正面符箓和背面‘遇洪而开’均预留安全区并后期嵌字；状态:buried、excavated、revealed、burst_aftermath；版本:hero、background、duplicate",
       "forbidden_inheritance": "随机乱码；正背文字互换；尺寸跨格缩放；现代墓碑",
       "wardrobe_prop_standard": {
@@ -2047,7 +3449,10 @@
           "SRC_SHUIHU_SOURCE"
         ],
         "status": "confirmed"
-      }
+      },
+      "anchor_path": "出图/共享/图片/PROP_STONE_STELE__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_STONE_STELE__anchor.png",
+      "sha256": "5addda0baaee81e10065a0f6f4b2ae67b489f859b5b9aaa4f933d79ca6a03776"
     },
     "VFX_108_STARLIGHTS": {
       "id": "VFX_108_STARLIGHTS",

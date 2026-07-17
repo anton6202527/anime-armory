@@ -24,7 +24,7 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 ## 怎么跑
 
-从当前进度自动判断阶段；当前前沿为 `出图` 时，会调用 `comic-image` 的 Codex runner：
+从当前进度自动判断阶段；当前前沿为 `出图` 时，会读取本项目 `_设置.md`，按已选 `生图渠道` 调用 `comic-image` 的 Codex 或 Dreamina 官方 CLI runner：
 
 ```bash
 python3 skills/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chapter 第1话 --image-max-attempts 3

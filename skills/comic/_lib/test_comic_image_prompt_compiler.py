@@ -60,3 +60,12 @@ def test_semicolon_structured_contract_does_not_trigger_fragmentation_warning():
     data["scene_continuity"] = "；".join(f"约束{index}" for index in range(30))
     payload = compile_prompt(data)
     assert "submit_prompt_many_clauses" not in payload["lint"]["warnings"]
+
+
+def test_vfx_registry_token_is_converted_to_public_visual_language():
+    data = contract("Dreamina 5.0 Dreamina/即梦官方 CLI")
+    data["visible_facts"] = "黑气在殿顶分解为 VFX_108_STARLIGHTS 的暖金光迹"
+    payload = compile_prompt(data)
+    assert payload["lint"]["errors"] == []
+    assert "VFX_108_STARLIGHTS" not in payload["prompt"]
+    assert "已登记效果参考" in payload["prompt"]

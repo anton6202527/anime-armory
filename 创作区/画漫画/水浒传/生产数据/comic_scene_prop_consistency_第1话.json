@@ -1,0 +1,973 @@
+{
+  "schema_version": 1,
+  "kind": "comic_scene_prop_consistency",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
+  "chapter": "第1话",
+  "created_at": "2026-07-17T10:52:44",
+  "available": true,
+  "verdict": "warn",
+  "summary": {
+    "scene_anchor_count": 7,
+    "prop_count": 9,
+    "finding_count": 5,
+    "block_count": 0,
+    "warn_count": 5,
+    "info_count": 0
+  },
+  "scenes": [
+    {
+      "scene_anchor_id": "LOC_CAPITAL_PLAGUE_STREET",
+      "references": [
+        "出图/共享/图片/LOC_CAPITAL_PLAGUE_STREET__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "path": "出图/第1话/panels/P007.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_CAPITAL_PLAGUE_STREET_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_FUMO_HALL_EXTERIOR",
+      "references": [
+        "出图/共享/图片/LOC_FUMO_HALL_EXTERIOR__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P043",
+          "path": "出图/第1话/panels/P043.png"
+        },
+        {
+          "panel_id": "P044",
+          "path": "出图/第1话/panels/P044.png"
+        },
+        {
+          "panel_id": "P045",
+          "path": "出图/第1话/panels/P045.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9959,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_FUMO_HALL_EXTERIOR_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_FUMO_HALL_INTERIOR",
+      "references": [
+        "出图/共享/图片/LOC_FUMO_HALL_INTERIOR__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P046",
+          "path": "出图/第1话/panels/P046.png"
+        },
+        {
+          "panel_id": "P047",
+          "path": "出图/第1话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第1话/panels/P048.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9509,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_FUMO_HALL_INTERIOR_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "references": [
+        "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第1话/panels/P029.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第1话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第1话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第1话/panels/P032.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第1话/panels/P033.png"
+        },
+        {
+          "panel_id": "P034",
+          "path": "出图/第1话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第1话/panels/P035.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第1话/panels/P036.png"
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第1话/panels/P037.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第1话/panels/P038.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9728,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_LONGHUSHAN_PATH_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_ROAD_TO_LONGHUSHAN",
+      "references": [
+        "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_ROAD_TO_LONGHUSHAN_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "references": [
+        "出图/共享/图片/LOC_SHANGQING_PALACE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第1话/panels/P013.png"
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第1话/panels/P014.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第1话/panels/P015.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第1话/panels/P039.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第1话/panels/P040.png"
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第1话/panels/P041.png"
+        },
+        {
+          "panel_id": "P042",
+          "path": "出图/第1话/panels/P042.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9441,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_SHANGQING_PALACE_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "references": [
+        "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第1话/panels/P001.png"
+        },
+        {
+          "panel_id": "P002",
+          "path": "出图/第1话/panels/P002.png"
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第1话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第1话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9543,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_ZICHEN_HALL_sheet.jpg"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "OUTFIT_BASE",
+      "references": [],
+      "panels": [
+        {
+          "panel_id": "P003",
+          "path": "出图/第1话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第1话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第1话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第1话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第1话/panels/P032.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第1话/panels/P033.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第1话/panels/P039.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第1话/panels/P040.png"
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第1话/panels/P041.png"
+        },
+        {
+          "panel_id": "P042",
+          "path": "出图/第1话/panels/P042.png"
+        },
+        {
+          "panel_id": "P043",
+          "path": "出图/第1话/panels/P043.png"
+        },
+        {
+          "panel_id": "P044",
+          "path": "出图/第1话/panels/P044.png"
+        },
+        {
+          "panel_id": "P045",
+          "path": "出图/第1话/panels/P045.png"
+        },
+        {
+          "panel_id": "P046",
+          "path": "出图/第1话/panels/P046.png"
+        },
+        {
+          "panel_id": "P047",
+          "path": "出图/第1话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第1话/panels/P048.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_OUTFIT_BASE_sheet.jpg"
+    },
+    {
+      "prop_id": "OUTFIT_COURT_ENVOY",
+      "references": [],
+      "panels": [
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P042",
+          "path": "出图/第1话/panels/P042.png"
+        },
+        {
+          "panel_id": "P043",
+          "path": "出图/第1话/panels/P043.png"
+        },
+        {
+          "panel_id": "P044",
+          "path": "出图/第1话/panels/P044.png"
+        },
+        {
+          "panel_id": "P045",
+          "path": "出图/第1话/panels/P045.png"
+        },
+        {
+          "panel_id": "P046",
+          "path": "出图/第1话/panels/P046.png"
+        },
+        {
+          "panel_id": "P047",
+          "path": "出图/第1话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第1话/panels/P048.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_OUTFIT_COURT_ENVOY_sheet.jpg"
+    },
+    {
+      "prop_id": "OUTFIT_HERDBOY",
+      "references": [],
+      "panels": [
+        {
+          "panel_id": "P034",
+          "path": "出图/第1话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第1话/panels/P035.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第1话/panels/P036.png"
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第1话/panels/P037.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第1话/panels/P038.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_OUTFIT_HERDBOY_sheet.jpg"
+    },
+    {
+      "prop_id": "OUTFIT_MOUNTAIN_PLAIN",
+      "references": [],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第1话/panels/P029.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第1话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第1话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第1话/panels/P032.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第1话/panels/P033.png"
+        },
+        {
+          "panel_id": "P034",
+          "path": "出图/第1话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第1话/panels/P035.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第1话/panels/P036.png"
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第1话/panels/P037.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第1话/panels/P038.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第1话/panels/P039.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第1话/panels/P040.png"
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第1话/panels/P041.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_OUTFIT_MOUNTAIN_PLAIN_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_FUMO_SEALS",
+      "references": [
+        "出图/共享/图片/PROP_FUMO_SEALS__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P042",
+          "path": "出图/第1话/panels/P042.png"
+        },
+        {
+          "panel_id": "P043",
+          "path": "出图/第1话/panels/P043.png"
+        },
+        {
+          "panel_id": "P044",
+          "path": "出图/第1话/panels/P044.png"
+        },
+        {
+          "panel_id": "P045",
+          "path": "出图/第1话/panels/P045.png"
+        },
+        {
+          "panel_id": "P046",
+          "path": "出图/第1话/panels/P046.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_FUMO_SEALS_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_IMPERIAL_EDICT",
+      "references": [
+        "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第1话/panels/P029.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第1话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第1话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第1话/panels/P032.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第1话/panels/P033.png"
+        },
+        {
+          "panel_id": "P034",
+          "path": "出图/第1话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第1话/panels/P035.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第1话/panels/P036.png"
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第1话/panels/P037.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第1话/panels/P038.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第1话/panels/P039.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第1话/panels/P040.png"
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第1话/panels/P041.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_IMPERIAL_EDICT_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_SILVER_CENSER",
+      "references": [
+        "出图/共享/图片/PROP_SILVER_CENSER__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第1话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第1话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第1话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第1话/panels/P028.png"
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第1话/panels/P029.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第1话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第1话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第1话/panels/P032.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第1话/panels/P033.png"
+        },
+        {
+          "panel_id": "P034",
+          "path": "出图/第1话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第1话/panels/P035.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第1话/panels/P036.png"
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第1话/panels/P037.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第1话/panels/P038.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第1话/panels/P039.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第1话/panels/P040.png"
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第1话/panels/P041.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_SILVER_CENSER_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_STONE_STELE",
+      "references": [
+        "出图/共享/图片/PROP_STONE_STELE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P046",
+          "path": "出图/第1话/panels/P046.png"
+        },
+        {
+          "panel_id": "P047",
+          "path": "出图/第1话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第1话/panels/P048.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_STONE_STELE_sheet.jpg"
+    },
+    {
+      "prop_id": "VFX_108_STARLIGHTS",
+      "references": [],
+      "panels": [
+        {
+          "panel_id": "P047",
+          "path": "出图/第1话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第1话/panels/P048.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_VFX_108_STARLIGHTS_sheet.jpg"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "prop_reference_missing",
+      "subject": "OUTFIT_BASE",
+      "panel_id": "",
+      "artifact": "出图/共享/identity_registry.json",
+      "reason": "OUTFIT_BASE 在本话出场（P003,P004,P005,P006,P008,P009,P010,P012）但没有参考图，无法并排核对同一物。",
+      "return_to_stage": "image",
+      "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
+      "evidence_family": "reference_presence"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "prop_reference_missing",
+      "subject": "OUTFIT_COURT_ENVOY",
+      "panel_id": "",
+      "artifact": "出图/共享/identity_registry.json",
+      "reason": "OUTFIT_COURT_ENVOY 在本话出场（P010,P011,P012,P016,P017,P018,P042,P043）但没有参考图，无法并排核对同一物。",
+      "return_to_stage": "image",
+      "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
+      "evidence_family": "reference_presence"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "prop_reference_missing",
+      "subject": "OUTFIT_HERDBOY",
+      "panel_id": "",
+      "artifact": "出图/共享/identity_registry.json",
+      "reason": "OUTFIT_HERDBOY 在本话出场（P034,P035,P036,P037,P038）但没有参考图，无法并排核对同一物。",
+      "return_to_stage": "image",
+      "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
+      "evidence_family": "reference_presence"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "prop_reference_missing",
+      "subject": "OUTFIT_MOUNTAIN_PLAIN",
+      "panel_id": "",
+      "artifact": "出图/共享/identity_registry.json",
+      "reason": "OUTFIT_MOUNTAIN_PLAIN 在本话出场（P019,P020,P021,P022,P023,P024,P025,P026）但没有参考图，无法并排核对同一物。",
+      "return_to_stage": "image",
+      "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
+      "evidence_family": "reference_presence"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "prop_reference_missing",
+      "subject": "VFX_108_STARLIGHTS",
+      "panel_id": "",
+      "artifact": "出图/共享/identity_registry.json",
+      "reason": "VFX_108_STARLIGHTS 在本话出场（P047,P048）但没有参考图，无法并排核对同一物。",
+      "return_to_stage": "image",
+      "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
+      "evidence_family": "reference_presence"
+    }
+  ],
+  "notes": [
+    "VLM 三轴裁决进度：0/183（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
+  ]
+}

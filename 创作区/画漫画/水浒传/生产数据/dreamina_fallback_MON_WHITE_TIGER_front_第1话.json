@@ -1,0 +1,15 @@
+{
+  "asset_id": "MON_WHITE_TIGER",
+  "variant": "front",
+  "status": "generated_candidate",
+  "attempt_id": "92d7866b8e57dfcb3106",
+  "attempt": 1,
+  "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_dreamina-fallback__20260716T182434209543.md",
+  "prompt_sha256": "40c79fc00af2628f24c2cc339e67023a76493d1ddd675c19bcf4b55ef47b7ed4",
+  "anchor": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+  "ratio": "3:4",
+  "submit_id": "059e8b0e-3281-459a-b14b-5efa61576d6f",
+  "candidate_path": "出图/共享/candidates/MON_WHITE_TIGER/front/20260716T182434213467__dreamina5.png",
+  "candidate_sha256": "393545ea27f365422a9467b88187338f3df7b5e37a62fbc12ef1072d0727603e",
+  "error": ""
+}

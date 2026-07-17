@@ -108,6 +108,15 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
   --bindings CHAR_JYC=OUTFIT_TRAVEL,CHAR_PEI=OUTFIT_COURT --ratio 3:4 --max-attempts 2
 ```
 
+强情绪格已绑定结构化 `EXPR_` 但该表情还没有真实锚图时，以已采纳
+`face`/ `front` 锁定身份，只生成对应表情参考。`auto` 严格沿用项目已选渠道，
+不会因为某 CLI 缺失而静默换后端；开始请求前同样写累计 attempt ledger：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 expressions \
+  --bindings CHAR_JYC=EXPR_TERRIFIED --backend auto --ratio 1:1 --max-attempts 2
+```
+
 `outfits` 强制消费 `wardrobe_standard`，用 front 锁脸/年龄/体态，原始画幅偏离时同样只做 `contain_and_pad_no_crop`；产物记入该角色 `outfits[OUTFIT_ID].reference_images`。生成或采纳角色 `front` 时，流程也会自动把它登记为 `default_binding.outfit_id` 的首张真实服装参考；非默认换装不能偷用这张图。恢复运行时从不可覆盖的 attempt ledger 读取累计尝试数；旧版 manifest 的已用次数会一次性迁入总账。`--max-attempts` 始终是跨运行、跨后续批次的总上限；覆盖 manifest 前先归档旧快照，不能因重启、换一组 binding 或生成其它服装而重置预算或丢失失败证据。
 
 生成完先做确定性技术检查，再由人或用户明确授权的制作代理并排确认角色、视图标签、比例、基线、服装标志与中性姿态。签收绑定当前全部视图 SHA，不能用旧 receipt 放行新图片：

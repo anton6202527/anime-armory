@@ -240,6 +240,72 @@ def test_asset_shape_review_covers_weapon_and_clip_without_underscore(tmp_path: 
     assert targets[0]["confirmed"] is False
 
 
+def test_prop_shape_review_requires_shared_high_risk_primary_confirmation(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    img = reg / "图片"
+    img.mkdir(parents=True)
+    primary = img / "定妆_武器_横刀.png"
+    primary.write_bytes(b"single-edge-candidate")
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [
+            {
+                "id": "WEAPON_01",
+                "type": "weapon",
+                "name": "横刀",
+                "reference_group": {
+                    "primary": {"path": "出图/共享/图片/定妆_武器_横刀.png", "status": "ready"},
+                },
+                "constraints": {
+                    "blade_topology": "single_blade=1；cutting_edge_count=1；一侧厚钝刀背，一侧唯一锋刃",
+                    "must_not_have": ["双刃", "第二把刀刃"],
+                    "scale": "约成人臂展的三分之二",
+                },
+            },
+            {
+                "id": "PROP_横刀",
+                "type": "prop",
+                "name": "横刀别名",
+                "alias_of": "WEAPON_01",
+                "reference_group": {
+                    "primary": {"path": "出图/共享/图片/定妆_武器_横刀.png", "status": "ready"},
+                },
+                "constraints": {"must_not_have": ["双刃"]},
+            },
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+
+    assert len(targets) == 1
+    assert targets[0]["asset"] == "WEAPON_01"
+    assert targets[0]["png"] == "出图/共享/图片/定妆_武器_横刀.png"
+    assert targets[0]["shot"] == "shared_primary"
+    assert targets[0]["scope"] == "shared_primary"
+    assert targets[0]["shape_contract"] == [
+        "single_blade=1",
+        "cutting_edge_count=1",
+        "一侧厚钝刀背",
+        "一侧唯一锋刃",
+        "约成人臂展的三分之二",
+    ]
+    assert targets[0]["confirmed"] is False
+
+    image_qc.confirm_prop_shape_targets(
+        tmp_path,
+        "第1集",
+        "all",
+        reviewer="道具美术复核员",
+        reason="原像素确认单刃厚背，无双刃或第二把刀刃",
+        review_kind="human",
+    )
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets[0]["confirmed"] is True
+
+    primary.write_bytes(b"changed-pixels")
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
+    assert targets[0]["confirmed"] is False
+
+
 def test_prop_shape_review_ignores_future_asset_guard_ids(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -420,6 +486,39 @@ def test_prop_shape_review_confirmations_require_current_png_hash(tmp_path: Path
     (img / "Clip_01.png").write_bytes(b"new-image")
     targets = image_qc.prop_shape_review_targets(tmp_path, "第1集")
     assert targets and targets[0]["confirmed"] is False
+
+
+def test_prop_shape_review_confirmation_invalidates_when_contract_changes(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    registry_path = reg / "asset_registry.json"
+    registry = {
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "双轮木车",
+            "constraints": {
+                "must_not_have": ["第三轮"],
+                "structure": "总轮数恰好两只",
+            },
+        }],
+    }
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 双轮木车。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"same-current-pixels")
+
+    image_qc.confirm_prop_shape_targets(tmp_path, "第1集", "all", reviewer="qa")
+    assert image_qc.prop_shape_review_targets(tmp_path, "第1集")[0]["confirmed"] is True
+
+    registry["assets"][0]["constraints"]["structure"] = "总轮数恰好两只；只允许一根横轴"
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+
+    target = image_qc.prop_shape_review_targets(tmp_path, "第1集")[0]
+    assert target["confirmed"] is False
 
 
 def test_face_confirmations_require_current_png_hash_and_convert_rows(tmp_path: Path) -> None:
@@ -2690,7 +2789,7 @@ def test_audit_face_anchor_quality_ignores_base_expression_alias_to_front(tmp_pa
     assert not [f for f in res["findings"] if "定妆_沈念.png" in f["msg"]]
 
 
-def test_face_anchor_quality_excludes_expression_contact_sheet_from_single_face_floor(tmp_path, monkeypatch):
+def test_face_anchor_quality_audits_expression_contact_sheet_instead_of_skipping_it(tmp_path, monkeypatch):
     import pytest
     Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
     root = tmp_path / "剧"
@@ -2725,8 +2824,11 @@ def test_face_anchor_quality_excludes_expression_contact_sheet_from_single_face_
 
     res = image_qc.audit_face_anchor_quality(root, "第1集")
 
-    assert res["checked"] == 1
-    assert res["findings"] == []
+    assert res["checked"] == 2
+    assert any(
+        finding["level"] == "block" and finding["code"] == "expression_sheet_face_count"
+        for finding in res["findings"]
+    )
 
 
 def test_audit_face_anchor_quality_flags_low_res(tmp_path):
@@ -2800,6 +2902,65 @@ def test_audit_face_anchor_quality_blocks_core_low_res(tmp_path):
     assert any(f["level"] == "block" and f["code"] == "weak_face_anchor_core" for f in res["findings"])
     payload = {"checks": {}, "lint": {"findings": res["findings"]}}
     assert image_qc.summarize(payload)["verdict"] == "block"
+
+
+def test_audit_face_anchor_quality_normalizes_six_panel_expression_sheet(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    rel = "出图/共享/图片/定妆_沈念_表情_六联表.png"
+    (root / rel).parent.mkdir(parents=True)
+    Image.new("RGB", (1200, 1800), (128, 128, 128)).save(root / rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(_path):
+            # Each face is only 3% of the complete sheet, but 18% of one 2x3 panel.
+            return [(0, 0, 180, 360)] * 6
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": "长线女主·全篇", "forms": [{
+            "form": "常态",
+            "reference_group": {"expressions": [{"emotion": "六联表", "path": rel}]},
+            "reference_atlas": {"expression_refs": [{"emotion": "六联表", "path": rel}]},
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert res["checked"] == 1
+    assert not [f for f in res["findings"] if f["code"] == "weak_face_anchor_core"]
+    assert not [f for f in res["findings"] if f["code"] == "expression_sheet_face_count"]
+
+
+def test_audit_face_anchor_quality_blocks_incomplete_six_panel_expression_sheet(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    rel = "出图/共享/图片/定妆_沈念_表情_六联表.png"
+    (root / rel).parent.mkdir(parents=True)
+    Image.new("RGB", (1200, 1800), (128, 128, 128)).save(root / rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(_path):
+            return [(0, 0, 180, 360)] * 5
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": "长线女主·全篇", "forms": [{
+            "form": "常态",
+            "reference_atlas": {"expression_refs": [{"emotion": "六联表", "path": rel}]},
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert any(
+        finding["level"] == "block" and finding["code"] == "expression_sheet_face_count"
+        for finding in res["findings"]
+    )
 
 
 def test_native_multiref_tiers_by_persistent_subject():
@@ -2935,12 +3096,18 @@ def test_mark_finalized_asset(tmp_path: Path) -> None:
     (tmp_path / "出图" / "共享").mkdir(parents=True)
     img = tmp_path / "出图" / "共享" / "图片"
     img.mkdir(parents=True)
+    (img / "定妆_毒酒壶.png").write_bytes(b"\x89PNG-prop-bytes")
     (img / "定妆_马队.png").write_bytes(b"\x89PNG-mount-bytes")
+    prop_rel = "出图/共享/图片/定妆_毒酒壶.png"
     mount_rel = "出图/共享/图片/定妆_马队.png"
     (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
         json.dumps({
             "assets": [
-                {"id": "PROP_01", "name": "毒酒壶"},
+                {
+                    "id": "PROP_01",
+                    "name": "毒酒壶",
+                    "reference_group": {"primary": {"path": prop_rel, "status": "review_pending"}},
+                },
                 {
                     "id": "MOUNT_GROUP_01",
                     "name": "马队",
@@ -2961,8 +3128,15 @@ def test_mark_finalized_asset(tmp_path: Path) -> None:
 
 def test_mark_finalized_asset_uses_project_write_lock(tmp_path: Path) -> None:
     (tmp_path / "出图" / "共享").mkdir(parents=True)
+    rel = "出图/共享/图片/定妆_断碑.png"
+    (tmp_path / rel).parent.mkdir(parents=True)
+    (tmp_path / rel).write_bytes(b"\x89PNG-prop-bytes")
     (tmp_path / "出图" / "共享" / "asset_registry.json").write_text(
-        json.dumps({"assets": [{"id": "PROP_01", "name": "断碑"}]}), encoding="utf-8")
+        json.dumps({"assets": [{
+            "id": "PROP_01",
+            "name": "断碑",
+            "reference_group": {"primary": {"path": rel, "status": "review_pending"}},
+        }]}), encoding="utf-8")
     entered = []
 
     @contextlib.contextmanager

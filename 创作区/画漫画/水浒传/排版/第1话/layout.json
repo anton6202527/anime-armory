@@ -5550,22 +5550,22 @@
     "panel_script": "脚本/第1话/panel_script.json",
     "panel_script_sha256": "14a3806b3ebc974c23a75da5075e5c705e3eb92ab570564223a66a6274024a26",
     "name_board": "排版/第1话/name_board.json",
-    "name_board_sha256": "2b8dade80658535910af832001c92a78e9dc4fd17c230d46ab27df234a48173c",
-    "name_approval_subject_sha256": "ca31b1b8f7b4d4528edd43303f7853068ea3f03002bf4437cee86e2c5eb7a7aa",
+    "name_board_sha256": "630f86d5e7f8178f060b7cd7ba1372dc8fd2abf22f0af3354828504887624de5",
+    "name_approval_subject_sha256": "e35a29673227f9e4e527bd4f5dd5139af100ee10e7dfb793fbe2ab8bb476532d",
     "settings": "_设置.md",
-    "settings_sha256": "855100f5a740184377051f3919d544f9fde19660a77145e10c7f33a6dee79429",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
     "legacy_name_waiver": false
   },
   "approval": {
     "kind": "comic_layout_approval",
     "status": "approved",
-    "reviewed_by": "Codex制作代理（用户授权）",
-    "reviewed_at": "2026-07-15T04:19:38.130981+00:00",
-    "note": "依据设定库/approval_delegation.json及comic-layout/references/条漫排版与代理审阅.md代行；1440px母版、手机窗口、48格同序覆盖、矩形边界、气泡/SFX槽位、8段滚动节奏与钩子复核通过；发布时再派生平台宽度和纵向切片",
-    "subject_sha256": "2bc97cc4d922c4c53439c68165218db404f69dc277a666f99896da7c725d822e",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-16T11:22:08.643524+00:00",
+    "note": "同步已授权出图设置指纹；逐格几何、阅读顺序与48格覆盖复核无变化。",
+    "subject_sha256": "75ae27fdf7a8958436cc4e31983cf062dfac2166f773108062c097b7f9807fba",
     "panel_script_sha256": "14a3806b3ebc974c23a75da5075e5c705e3eb92ab570564223a66a6274024a26",
-    "name_board_sha256": "2b8dade80658535910af832001c92a78e9dc4fd17c230d46ab27df234a48173c",
-    "settings_sha256": "855100f5a740184377051f3919d544f9fde19660a77145e10c7f33a6dee79429"
+    "name_board_sha256": "630f86d5e7f8178f060b7cd7ba1372dc8fd2abf22f0af3354828504887624de5",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
   },
   "validation": {
     "status": "pass",

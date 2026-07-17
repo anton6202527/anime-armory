@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "kind": "comic_style_consistency_acceptance",
+  "chapter": "第1话",
+  "accepted_by": "Codex制作代理",
+  "accepted_at": "2026-07-17T10:50:09+08:00",
+  "scope": "仅签收接触表已复核的启发式风格、调色与黑白灰代理告警；图片变化后按 SHA 自动失效",
+  "accepted_findings": [
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P003",
+      "artifact_sha256": "cf3d729307dc1f13ba5c3f69fc3db316c259d05728fe603643bf77e6bbc4af5d",
+      "reason": "正殿中轴与对称留白造成低频指纹差异；宋画工笔淡彩、低饱和矿物色和人物线法与朝堂段一致。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P007",
+      "artifact_sha256": "393cc70ed74a482a1177e315b050fd173f2945bc726623ae31a1424093d0ee15",
+      "reason": "疫街黑白建筑占比高于朝堂段，属于有意的场景与情绪切换；线条、淡彩和材质语言连续。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P009",
+      "artifact_sha256": "59798256e448f75c252a8edfa078b91b343d37db8ac6b39f0818bd188e3288fb",
+      "reason": "近景案面和大面积素纸改变了色彩分布；人物、宫殿与工笔淡彩基线一致。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P011",
+      "artifact_sha256": "cac65ae25d20490afa22406e02ba823f3a3a85dfb3090392e0c9c542768e3b93",
+      "reason": "山水远景和队伍密度造成构图指纹变化，属于从朝堂到龙虎山的有意段落转场。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P014",
+      "artifact_sha256": "bfe0f4739fec542c9a5a5964473c58f6217f04cb2b484b06577213af8e394e65",
+      "reason": "壁画廊采用大面积浅墙与透视纵深，导致像素代理偏离；画面仍服从同一工笔淡彩与低饱和基线。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P018",
+      "artifact_sha256": "ad29009df60f431bd5662a3397470d4f7bad8c6ce8c3813ed9504592dc56e1d7",
+      "reason": "室内窗侧暖光用于斋戒更衣前的安定停顿，属于计划内光色变化；人物和材质语言连续。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "location_color_grade_shift",
+      "panel_id": "P018",
+      "artifact_sha256": "ad29009df60f431bd5662a3397470d4f7bad8c6ce8c3813ed9504592dc56e1d7",
+      "reason": "同场景由廊下冷光切入室内窗侧暖光，服务仪式前停顿，非无意白平衡漂移。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P021",
+      "artifact_sha256": "94f01bd9158d72acbc1361c35a881d48ff2335084d8ded353b6928a82840863e",
+      "reason": "丹霞岩壁与人物全身比例改变了色彩/边缘分布；山路段线法、服色与空气透视保持连续。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P034",
+      "artifact_sha256": "5c7f4c7f6401547c3a6703323c70ad077b21ca83e8ce63daf2650077bffb538a",
+      "reason": "薄雾逆光和人物剪影式初见造成低对比代理偏差，属于虚靖登场的有意视觉停顿。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P046",
+      "artifact_sha256": "456976f1955207c383604a449626a2c50d1f47632645d6314c2c83e4b67fe29a",
+      "reason": "伏魔殿内部以火把、黑场和石碑构成高潮前压暗，属于 finishing 计划内的黑场升级。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "tone_value_outlier",
+      "panel_id": "P046",
+      "artifact_sha256": "456976f1955207c383604a449626a2c50d1f47632645d6314c2c83e4b67fe29a",
+      "reason": "黑场比例提升用于从封闭殿门切入地穴空间，轮廓和关键道具仍可读，属于有意高潮调度。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P047",
+      "artifact_sha256": "a848a263c23228b80e9d3df06d0f502f0581899638552cedca4fcce00392f40a",
+      "reason": "黑气与金色流光首次爆发造成亮暗极差上升，属于故事高潮特效，不是画风更换。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    }
+  ]
+}

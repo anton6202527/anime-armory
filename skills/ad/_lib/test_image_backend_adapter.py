@@ -88,7 +88,7 @@ def test_openai_gpt_image_2_has_no_persistent_subject_library():
     profile = profile_for("GPT Image 2", "Codex CLI")
     assert profile["backend"] == "openai"
     assert profile["known"] is True
-    # 结论见 n2d-identity/SKILL.md：Codex/OpenAI 无持久主体，自动回退 reference_group 兜底。
+    # Codex/OpenAI 无持久主体，自动回退 reference_group 兜底。
     # 这里必须是 unavailable（明确不支持），不是 unknown——否则会被误读成「也许能升档」。
     assert capability_state(profile, CAP_SUBJECT_LIBRARY) == CAP_UNAVAILABLE
     assert capability_state(profile, CAP_LORA) == CAP_UNAVAILABLE

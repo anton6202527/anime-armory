@@ -219,7 +219,16 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec(
         "生图模型",
         ("comic",),
-        ("GPT Image 2", "Seedream 5.0", "Seedream 4.5", "Nano Banana Pro", "Gemini 3 Pro Image", "Flux 2 Pro", "自定义"),
+        (
+            "GPT Image 2",
+            "Dreamina 5.0",
+            "Seedream 5.0",
+            "Seedream 4.5",
+            "Nano Banana Pro",
+            "Gemini 3 Pro Image",
+            "Flux 2 Pro",
+            "自定义",
+        ),
         key_aliases=("image_model",),
         parameterized=True,
     ),

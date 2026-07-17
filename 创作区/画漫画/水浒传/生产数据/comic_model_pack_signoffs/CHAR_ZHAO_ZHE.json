@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_ZHAO_ZHE",
+  "tier": "named_minimal",
+  "model_pack_fingerprint": "1f6a2a5d4f2cc862e9e1f36af4409a1ec4663f7fdc19618804e08b8c48d9ff06",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+      "sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "front",
+      "derivation": {
+        "method": "generated_from_text_seed",
+        "source_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+        "source_sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_ZHAO_ZHE__face.png",
+      "sha256": "8588ebc6dd698db1d942e0ee94069d54b7021d69000cfbf050a84b788a58f6cc",
+      "width": 1086,
+      "height": 1448,
+      "source_view": "face",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+        "source_sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "已并排复核当前必需视图：同一原创身份、年龄体态、脸型/头骨、服饰或毛纹结构连续，视图语义正确，无确定性技术缺件。",
+  "approved_at": "2026-07-16T10:50:04+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_waiver",
+  "stage": "image_preflight",
+  "chapter": "第1话",
+  "decision": "waive_for_this_runner_invocation",
+  "reason": "第二轮纠偏请求网络失败或服务端超时；复核并恢复未被覆盖的首稿，不发起模型请求",
+  "created_at": "2026-07-17T02:20:33+00:00",
+  "panel_jobs_path": "出图/第1话/prompt/panel_jobs.json",
+  "panel_jobs_sha256": "8145410ae5e559b6fac5f35566d140c5f5931b9f0cd6301a5e0f55b9bcfd698f",
+  "targets": [
+    "P032",
+    "P033",
+    "P035",
+    "P036"
+  ],
+  "prior_gate_receipt": {
+    "status": "stale_or_not_passed",
+    "path": "生产数据/gate_receipts/image_preflight_第1话.json",
+    "receipt_sha256": "b997a15e2bc2e16728b820c4f50d796d389c26e58520a33435580abcce75dda0",
+    "panel_jobs_sha256": "8145410ae5e559b6fac5f35566d140c5f5931b9f0cd6301a5e0f55b9bcfd698f",
+    "recorded_panel_jobs_sha256": "b5e7f2fdc5ccb4581c57bbdea02a24664c62d45cf516740e9cbf128efdccdc84",
+    "inputs_fingerprint_sha256": "52abdb41b59d416ad5c0cb587db23d37e250a92bdf51e1bd0388a87f35f03e5a",
+    "recorded_inputs_fingerprint_sha256": "72b26f50020c1c7c9e5fec83f07320078131c7d96bec5c0e8daead47bcd2bad4",
+    "report_path": "生产数据/comic_gate_image_preflight_第1话.json",
+    "verdict": "warn",
+    "reason": "receipt/report must be authentic, have no block, explicitly authorize execution, and bind the current full preflight fingerprint plus panel_jobs SHA"
+  },
+  "scope": "current panel_jobs SHA only; any rebuild invalidates this waiver"
+}
