@@ -1,0 +1,144 @@
+{
+  "kind": "comic_identity_drift_report",
+  "version": 1,
+  "generated_at": "2026-07-17T02:53:19+00:00",
+  "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
+  "summary": {
+    "chapters_scanned": 1,
+    "characters_tracked": 9,
+    "characters_with_drift": 0,
+    "characters_block": 0
+  },
+  "chapters": [
+    "第1话"
+  ],
+  "characters": [
+    {
+      "char_id": "CHAR_ABBOT_SHANGQING",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_EMPEROR_RENZONG",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_FAN_ZHONGYAN",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_HONG_XIN",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_MASTER_XUJING",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_WEN_YANBO",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_ZHAO_ZHE",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "MON_SNOW_SERPENT",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "MON_WHITE_TIGER",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    }
+  ],
+  "notes": []
+}

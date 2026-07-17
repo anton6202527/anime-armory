@@ -17,8 +17,7 @@
     - 能力是**三态**：available / unknown / unavailable。厂商没有公开证据的能力一律标
       `unknown`，**绝不猜 True**。`has_capability()` 只认 available——未知即不可用于路由决策，
       但会在报告里显性写「未知」而不是伪装成「不支持」。
-    - Codex / OpenAI(GPT Image 2) **没有可注册的持久主体库**（结论见 `n2d-identity/SKILL.md`
-      「Codex/OpenAI 无持久主体，自动回退 reference_group 兜底」）。本表据此把 subject_library
+    - Codex / OpenAI(GPT Image 2) **没有可注册的持久主体库**。本表据此把 subject_library
       标 unavailable，梯子封顶在「指定参考图」档——这是 ad 线默认路线的真实天花板。
 
 档位口径：
@@ -147,8 +146,7 @@ def _profile(backend: str, label: str, *, available: Sequence[str], unknown: Seq
 # ── 后端能力档表（单一真值源·换厂只改这里） ──────────────────────────────────────
 IMAGE_BACKEND_PROFILES: Dict[str, Dict[str, Any]] = {
     # ad 线默认路线（生图模型=GPT Image 2 / 生图渠道=Codex CLI 或 OpenAI Images API）。
-    # 诚实点：**无持久主体库**。n2d-identity/SKILL.md 明确结论「Codex/OpenAI 无持久主体，
-    # 自动回退 reference_group 兜底」——所以梯子在这条默认路线上封顶 multi_reference，
+    # 诚实点：**无持久主体库**，所以梯子在这条默认路线上封顶 multi_reference，
     # 产品身份只能靠「多张真实参考图 + 身份锁定句」硬堆，这正是产品镜必须多喂参考的原因。
     "openai": _profile(
         "openai", "GPT Image 2（Codex CLI / OpenAI Images API）",

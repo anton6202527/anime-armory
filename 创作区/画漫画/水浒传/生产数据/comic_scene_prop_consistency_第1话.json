@@ -3,7 +3,7 @@
   "kind": "comic_scene_prop_consistency",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第1话",
-  "created_at": "2026-07-16T20:35:53",
+  "created_at": "2026-07-17T10:52:44",
   "available": true,
   "verdict": "warn",
   "summary": {
@@ -151,7 +151,7 @@
           "path": "出图/第1话/panels/P038.png"
         }
       ],
-      "layout_cohesion_floor": 0.9677,
+      "layout_cohesion_floor": 0.9728,
       "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_LONGHUSHAN_PATH_sheet.jpg"
     },
     {
@@ -226,7 +226,7 @@
           "path": "出图/第1话/panels/P042.png"
         }
       ],
-      "layout_cohesion_floor": 0.9424,
+      "layout_cohesion_floor": 0.9441,
       "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_SHANGQING_PALACE_sheet.jpg"
     },
     {
@@ -272,7 +272,7 @@
           "path": "出图/第1话/panels/P010.png"
         }
       ],
-      "layout_cohesion_floor": 0.9568,
+      "layout_cohesion_floor": 0.9543,
       "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_ZICHEN_HALL_sheet.jpg"
     }
   ],

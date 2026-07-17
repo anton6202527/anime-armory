@@ -107,7 +107,7 @@ python3 skills/mv-image/scripts/cover_pack.py set-cover <作品根>
 |---|---|---|---|---|
 | 主角脸漂移 `G1` | **脸栈** | insightface/cv2/onnxruntime + buffalo_l | **hard（block=崩脸必重抽）** | 主角共享定妆组内部互相余弦自标定「同人下限」floor，每个 clip 首/尾帧脸 vs 主角主参考落 ok/warn/block。风格化 MV 脸跨图余弦偏低，**不写死阈值**，用本曲定妆组做地板 |
 | 主色漂移 `palette` | **确定性** | 仅 Pillow（无需脸栈） | advisory（warn） | 从 `视觉蓝图.md` 抽 `palette_anchor`（`#rrggbb`/`rgb()`/中文色名），每个 clip 首帧主色 vs anchor 取最近距离，超阈值→warn。MV 段落允许加亮/变暗，故只人判不硬拦 |
-| 帧级视觉多样性 `dHash` | **确定性** | 仅 Pillow | advisory（warn） | 感知哈希跨 clip 首帧比对：两 clip 首帧 dHash≤10=构图重复（画面撞脸）；某 clip 首↔尾帧 dHash≤10 且时长≥6s=静态长镜（画面不动却拖）。补 `shot_variety_audit` 计划期机检的盲区——计划换了景别但图实际出得一样，只有像素能看出来。参照 n2d `audit_shot_variety`；MV 筛选宽容+recurring hook 可能刻意，故只 warn 不硬拦 |
+| 帧级视觉多样性 `dHash` | **确定性** | 仅 Pillow | advisory（warn） | 感知哈希跨 clip 首帧比对：两 clip 首帧 dHash≤10=构图重复（画面撞脸）；某 clip 首↔尾帧 dHash≤10 且时长≥6s=静态长镜（画面不动却拖）。补 `shot_variety_audit` 计划期机检的盲区——计划换了景别但图实际出得一样，只有像素能看出来。MV 筛选宽容+recurring hook 可能刻意，故只 warn 不硬拦 |
 | 锚点句落地 lint | **确定性** | 无（纯文本） | advisory（warn） | 按 `clip_plan.json` 逐 clip 读其 `image_prompt_path` 指向的 prompt，校验 `visual_consistency` 规定的『身份锚点 / 参考输入 / 视觉锚点 / 禁止漂移』锚点块是否真抄进了 prompt（此前**没有任何东西**校验锚点句落地） |
 | 禁本地贴脸修复 | **确定性** | `生产数据/production_events.jsonl`（存在时） | **hard** | 最新 image 落档事件若记录 `local_face_patch` / facefix / faceswap / alpha_blend / pasteback 等本地身份像素贴回操作，该 PNG 不得进入 mv-video；必须回 mv-image 用真实参考输入重抽 |
 | 生成来源链 | **确定性** | `record_generation.py` 事件 | 正式 **hard** | 每个计划首/尾帧绑定具体 model、channel、source prompt/asset SHA-256、真实参考图/后端主体 ID；计划要求的参考未实际提交、换文件、设置不符或 model+channel 混用即回出图 |

@@ -1,8 +1,8 @@
 # 漫画 Gate — image — 第1话
 
-- 生成时间：2026-07-16T20:35:53
+- 生成时间：2026-07-17T10:43:10
 - 结论：warn
-- block/warn/info：0 / 57 / 1
+- block/warn/info：0 / 59 / 1
 
 ## 记录
 
@@ -68,17 +68,19 @@
 | warn | strong_emotion_expression_reference_missing | 生产数据/comic_reference_plan_第1话.json | P048·上清宫住持：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | missing_reference | 生产数据/comic_reference_plan_第1话.json | P048·上清宫住持：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | panel_post_qc_warn | 出图/第1话/panels/P002.png | P002 的落盘 post_qc=warn，需要人审签收或重抽。 | image | 放大查看 panel_qc 与原图；确认误报时在审查报告保留签收证据。 |
-| warn | panel_post_qc_warn | 出图/第1话/panels/P006.png | P006 的落盘 post_qc=warn，需要人审签收或重抽。 | image | 放大查看 panel_qc 与原图；确认误报时在审查报告保留签收证据。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P003.png | 风格指纹内聚度 0.7279 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P007.png | 风格指纹内聚度 0.7831 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P012.png | 风格指纹内聚度 0.7964 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P018.png | 风格指纹内聚度 0.6771 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P021.png | 风格指纹内聚度 0.7621 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P030.png | 风格指纹内聚度 0.7958 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P046.png | 风格指纹内聚度 0.7080 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | 出图/第1话/panels/P047.png | 风格指纹内聚度 0.7141 明显低于本话中位 0.8376，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_post_qc_warn | 出图/第1话/panels/P015.png | P015 的落盘 post_qc=warn，需要人审签收或重抽。 | image | 放大查看 panel_qc 与原图；确认误报时在审查报告保留签收证据。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P003.png | 风格指纹内聚度 0.7337 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P007.png | 风格指纹内聚度 0.7942 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P009.png | 风格指纹内聚度 0.6932 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P011.png | 风格指纹内聚度 0.7872 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P014.png | 风格指纹内聚度 0.7606 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P018.png | 风格指纹内聚度 0.6841 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P021.png | 风格指纹内聚度 0.7690 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P034.png | 风格指纹内聚度 0.7472 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P046.png | 风格指纹内聚度 0.7125 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
+| warn | panel_style_outlier | 出图/第1话/panels/P047.png | 风格指纹内聚度 0.7204 明显低于本话中位 0.8360，疑似画风、细节密度或照片感跳变。 | image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
 | warn | location_color_grade_shift | 出图/第1话/panels/P018.png | 同场景“上清宫方丈”内调色代理偏离组中位：warmth_dev=0.244, tint_dev=0.031。 | image | 人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。 |
-| warn | tone_value_outlier | 出图/第1话/panels/P046.png | 黑白灰量化偏离话内中位：black_ratio=0.2547（中位 0.008），线宽代理 edge_density=0.0792（中位 0.123）。疑似网点密度/黑场/线宽口径不统一。 | image | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
+| warn | tone_value_outlier | 出图/第1话/panels/P046.png | 黑白灰量化偏离话内中位：black_ratio=0.2547（中位 0.009），线宽代理 edge_density=0.0792（中位 0.122）。疑似网点密度/黑场/线宽口径不统一。 | image | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
 | warn | face_fingerprint_low | 出图/第1话/panels/P004.png | CHAR_WEN_YANBO face 指纹与参考图相似度偏低：score=0.451。这是色彩分布代理，需并排人审。 | image | 查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。 |
 | warn | hair_fingerprint_low | 出图/第1话/panels/P004.png | CHAR_WEN_YANBO hair 指纹与参考图相似度偏低：score=0.168。这是色彩分布代理，需并排人审。 | image | 查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。 |
 | warn | outfit_fingerprint_low | 出图/第1话/panels/P004.png | CHAR_WEN_YANBO outfit 指纹与参考图相似度偏低：score=0.329。这是色彩分布代理，需并排人审。 | image | 查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。 |

@@ -1502,6 +1502,43 @@ def test_mark_shared_reference_status_does_not_nest_existing_path_dict(tmp_path:
     assert front == {"path": rel, "status": "ready"}
 
 
+def test_mark_shared_reference_status_does_not_rewrite_derivation_source_refs(tmp_path: Path) -> None:
+    rel = "出图/共享/图片/定妆_VFX_TEST.png"
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text('{"characters":[]}', encoding="utf-8")
+    (shared / "asset_registry.json").write_text(
+        json.dumps(
+            {
+                "assets": [
+                    {
+                        "id": "VFX_TEST",
+                        "type": "vfx",
+                        "reference_group": {
+                            "primary": {"path": rel, "status": "planned"}
+                        },
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    derivation = {
+        "method": "image2image",
+        "source_refs": [rel, "出图/共享/图片/定妆_武器_TEST.png"],
+    }
+
+    codex_image_runner.mark_shared_reference_status(
+        tmp_path, rel, "ready", derivation=derivation
+    )
+
+    data = json.loads((shared / "asset_registry.json").read_text(encoding="utf-8"))
+    primary = data["assets"][0]["reference_group"]["primary"]
+    assert primary["status"] == "ready"
+    assert primary["derivation"] == derivation
+
+
 def test_reference_inputs_do_not_self_reference_target_being_regenerated(tmp_path: Path) -> None:
     rel = "出图/共享/图片/定妆_VFX_TEST.png"
     lineage_rel = "出图/共享/图片/旧_血统来源.png"

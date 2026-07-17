@@ -788,7 +788,19 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "status": "ready"
+          "status": "ready",
+          "derivation": {
+            "provider": "dreamina_official_cli",
+            "model": "Seedream 5.0",
+            "generation_mode": "text2image",
+            "resolution_type": "4k",
+            "credit_count": 4,
+            "session_id": "16347084811532",
+            "submit_id": "db926dc2-177a-4931-b2e7-07066d2b044a",
+            "qc_precision": "full",
+            "review_kind": "executor_visual",
+            "visual_review": "pass"
+          }
         }
       },
       "reference_slots": [
@@ -802,7 +814,19 @@
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
           "status": "ready",
-          "sha256": "4a08aa8552fecafbe2950d784b7f113fff3f0b4e92a1d97229c9976c42cafe7b"
+          "sha256": "4a08aa8552fecafbe2950d784b7f113fff3f0b4e92a1d97229c9976c42cafe7b",
+          "derivation": {
+            "provider": "dreamina_official_cli",
+            "model": "Seedream 5.0",
+            "generation_mode": "text2image",
+            "resolution_type": "4k",
+            "credit_count": 4,
+            "session_id": "16347084811532",
+            "submit_id": "db926dc2-177a-4931-b2e7-07066d2b044a",
+            "qc_precision": "full",
+            "review_kind": "executor_visual",
+            "visual_review": "pass"
+          }
         }
       ],
       "constraints": {
@@ -931,7 +955,23 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_特效_道行灌注.png",
-          "status": "ready"
+          "status": "ready",
+          "derivation": {
+            "provider": "dreamina_official_cli",
+            "model": "Seedream 5.0",
+            "generation_mode": "image2image",
+            "resolution_type": "4k",
+            "credit_count": 4,
+            "session_id": "16349632582668",
+            "submit_id": "d60bbb91-aa55-4298-9b45-0e11024951a4",
+            "qc_precision": "full",
+            "review_kind": "executor_visual",
+            "visual_review": "pass",
+            "source_refs": [
+              "出图/共享/图片/定妆_武器_横刀.png",
+              "废料/出图/共享/图片/infusion_replaced_20260717/定妆_特效_道行灌注__旧版__双刃剑化.png"
+            ]
+          }
         }
       },
       "reference_slots": [
@@ -945,7 +985,23 @@
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_道行灌注.png",
           "status": "ready",
-          "sha256": "c40398ff99925c6f0f8ab018168e1beb7745567a0561e1b89ed0c71a10ccca3f"
+          "sha256": "c40398ff99925c6f0f8ab018168e1beb7745567a0561e1b89ed0c71a10ccca3f",
+          "derivation": {
+            "provider": "dreamina_official_cli",
+            "model": "Seedream 5.0",
+            "generation_mode": "image2image",
+            "resolution_type": "4k",
+            "credit_count": 4,
+            "session_id": "16349632582668",
+            "submit_id": "d60bbb91-aa55-4298-9b45-0e11024951a4",
+            "qc_precision": "full",
+            "review_kind": "executor_visual",
+            "visual_review": "pass",
+            "source_refs": [
+              "出图/共享/图片/定妆_武器_横刀.png",
+              "废料/出图/共享/图片/infusion_replaced_20260717/定妆_特效_道行灌注__旧版__双刃剑化.png"
+            ]
+          }
         }
       ],
       "constraints": {
@@ -991,7 +1047,26 @@
         "checker": "face_consistency.verify_faceless",
         "records": [
           {
-            "png": "出图/共享/图片/定妆_特效_道行灌注.png",
+            "png": {
+              "path": "出图/共享/图片/定妆_特效_道行灌注.png",
+              "status": "ready",
+              "derivation": {
+                "provider": "dreamina_official_cli",
+                "model": "Seedream 5.0",
+                "generation_mode": "image2image",
+                "resolution_type": "4k",
+                "credit_count": 4,
+                "session_id": "16349632582668",
+                "submit_id": "d60bbb91-aa55-4298-9b45-0e11024951a4",
+                "qc_precision": "full",
+                "review_kind": "executor_visual",
+                "visual_review": "pass",
+                "source_refs": [
+                  "出图/共享/图片/定妆_武器_横刀.png",
+                  "废料/出图/共享/图片/infusion_replaced_20260717/定妆_特效_道行灌注__旧版__双刃剑化.png"
+                ]
+              }
+            },
             "png_sha256": "c40398ff99925c6f0f8ab018168e1beb7745567a0561e1b89ed0c71a10ccca3f",
             "verdict": "ok",
             "clear_faces": 0,

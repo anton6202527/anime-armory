@@ -219,7 +219,7 @@ COLOR_NAME_RGB: Dict[str, Tuple[int, int, int]] = {
 }
 PALETTE_DRIFT_THRESHOLD = 110.0  # 最近主色欧氏距离阈值（0-441），超过=该 clip 主色离 anchor 太远。
 
-# —— 帧级视觉多样性 dHash 阈值（对齐 n2d audit_shot_variety 的量级；全 advisory）——
+# —— 帧级视觉多样性 dHash 阈值（全 advisory）——
 def _int_env_iqc(name: str, default: int) -> int:
     try:
         return int(os.environ.get(name, "").strip() or default)

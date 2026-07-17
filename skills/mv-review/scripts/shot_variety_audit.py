@@ -7,9 +7,9 @@ MV 的命门是**卡点节奏**与**视觉不重复**。`mv-score`/`pacing.py` �
 画面字段。于是"同一景别机位反复用""副歌镜头运镜静止""全曲挤在一个场景""大变化镜头没参考锚易漂"
 这些**视觉单调**问题在出图/出视频花掉积分前无人拦。
 
-本脚本把 n2d 的 `audit_shot_variety`（静态长镜/构图重复/景别单调）+ `redundancy_audit`
-（构图计划重复）里**对 MV 适用的视觉信号**，前移到 `分镜/clip_plan.json` 的计划阶段（无需出图、
-纯 stdlib）。MV 没有台词/旁白，故 n2d 的同义反复/旁白占比/事实复现三个文本信号**不适用、不移植**。
+本脚本把静态长镜、构图重复、景别单调等**对 MV 适用的视觉信号**前移到
+`分镜/clip_plan.json` 的计划阶段（无需出图、纯 stdlib）。MV 没有台词/旁白，
+因此不引入同义反复、旁白占比、事实复现等文本信号。
 
 产物：`生产数据/shot_variety/shot_variety.{json,md}`。全部 advisory（最高 warn，永不 block）——
 出图/出视频闸把它当 warning 抬进报告，绝不新增假阻断。
@@ -33,7 +33,7 @@ VERSION = 1
 KIND = "mv_shot_variety_audit"
 SEVERITIES = ("block", "warn", "info")
 
-# —— 阈值（可按 env 覆盖，默认对齐 n2d/comic 的量级）——
+# —— 阈值（可按 env 覆盖）——
 def _int_env(name: str, default: int) -> int:
     try:
         return int(os.environ.get(name, "").strip() or default)
@@ -46,9 +46,9 @@ def _float_env(name: str, default: float) -> float:
     except ValueError:
         return default
 
-# 同一 (场景,景别,机位,运镜) 计划在 ≥ 此 clip 数上出现 → 构图重复（n2d redundancy len≥2）。
+# 同一 (场景,景别,机位,运镜) 计划在 ≥ 此 clip 数上出现 → 构图重复。
 DUP_MIN_CLIPS = _int_env("MV_DUP_MIN_CLIPS", 2)
-# 一段连续同场景的 run 长度 ≥ 此值、且景别种类 < LENS_MIN_KINDS → 景别单调（n2d lens_variety RUN=5/KINDS=3）。
+# 一段连续同场景的 run 长度 ≥ 此值、且景别种类 < LENS_MIN_KINDS → 景别单调。
 LENS_RUN_MIN = _int_env("MV_LENS_RUN_MIN", 5)
 LENS_MIN_KINDS = _int_env("MV_LENS_MIN_KINDS", 3)
 # 连续同场景 run ≥ 此值 → 场景滞留 warn。
@@ -280,7 +280,7 @@ def audit_motif_overuse(clips: list[dict[str, Any]], findings: list[dict[str, An
 
 
 def audit_reference_gap(clips: list[dict[str, Any]], findings: list[dict[str, Any]]) -> int:
-    """大变化镜头（近景/换装/极端角度）却没规划参考输入 → 跨 clip 一致性易漂（事前处方 · 参照 comic reference_planner 的升档信号）。"""
+    """大变化镜头（近景/换装/极端角度）却没规划参考输入 → 跨 clip 一致性易漂。"""
     hits = 0
     prev_state = None
     gap_ids: list[str] = []

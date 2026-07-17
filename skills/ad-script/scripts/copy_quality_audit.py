@@ -13,12 +13,12 @@
     「30 秒的预算被复读和套话吃掉」——广告不像剧集有 20 分钟摊薄冗余，一句废话
     ≈ 丢掉一个卖点的展示位。本脚本在**配音前**把浪费的秒数标出来，改文案比改成片便宜。
 
-⚠️ 三条与漫剧版（n2d/comic）的领域差异——本脚本据此重新定义判据，**不是移植**：
+⚠️ 三条广告领域特有差异——本脚本据此重新定义判据：
     ① **广告里的重复是刻意手法**。品牌名/slogan/CTA/法律声明反复出现 = 提升 recall 的
        正当设计，不是缺陷。所以冗余检测**先把这些片段从文本里抠掉再比**（见 `mask_exempt`），
        排除表取自 `需求/brief.json` 的 mandatories 与 `设定库/asset_registry.json` 的
        brand.name/slogan/text_logo。不抠 = 每条广告的片尾都被报一遍 = 本脚本直接不可用。
-    ② **广告 VO 本来就要直给卖点**。n2d 的「信息直给/自陈情绪」口径搬过来会全线误报
+    ② **广告 VO 本来就要直给卖点**。把叙事内容的「信息直给/自陈情绪」口径搬过来会全线误报
        （「0 糖 0 卡，一天一盒」正是好广告文案）。ad 版把它重定义为
        **套话/空洞形容词堆砌**：无实证的赞美词密集出现（匠心·卓越·非凡·尊享…）。
        同一行里有数字/单位等实证时降为 info——有支撑的形容词不是套话。
@@ -40,7 +40,7 @@
     - 缺 `脚本/voiceover.txt` → `available=false` + warn，不崩、不臆造通过。
     - 广告不拆集：粒度是整支片，无集/话参数。
 
-VO 解析：广告 VO 是**逐句纯文本**，没有 n2d 的 `[镜头N·角色·情绪]` 前缀（那是漫剧格式），
+VO 解析：广告 VO 是**逐句纯文本**，没有叙事脚本常见的 `[镜头N·角色·情绪]` 前缀，
     所以自带解析器：一行一句，跳空行与 `#` 注释，保留**原始行号**（供与广告法报告的
     line 对齐去重）。允许可选的 `旁白：`/`VO:`/`0-3s` 之类前缀，剥掉后再比。
 
@@ -65,8 +65,8 @@ REPORT_REL = os.path.join("生产数据", "ad_copy_quality_audit.json")
 LAW_REPORT_REL = os.path.join("脚本", "广告法机检报告.json")
 
 # ── 阈值（内部启发式·env 可标定·confidence=low） ───────────────────────────────
-# char-2gram Jaccard：参考 n2d/redundancy_audit 的 0.6/0.75 口径（对中文短句 0.6 ≈ 大半重合）。
-# 但**严重度不跟着抄**：n2d 在 ≥0.75 升 block，ad 线一律 warn（advisory 纪律，见 docstring）。
+# char-2gram Jaccard：0.6/0.75 口径对中文短句分别近似大半重合/高度重合。
+# 广告线一律只报 warn（advisory 纪律，见 docstring）。
 PAIR_SIM_WARN = float(os.environ.get("AD_COPY_SIM_WARN", "0.6"))
 PAIR_SIM_HIGH = float(os.environ.get("AD_COPY_SIM_HIGH", "0.75"))
 MIN_LINE_CHARS = int(os.environ.get("AD_COPY_MIN_CHARS", "8"))
@@ -120,7 +120,7 @@ def clean(text: str) -> str:
 
 
 def shingles(text: str, n: int = NGRAM) -> Set[str]:
-    """去噪后的 char n-gram 集合。纯函数·可测（与 n2d 同法，本线自包含·复制不 import）。"""
+    """去噪后的 char n-gram 集合。纯函数·可测，本线自包含。"""
     c = clean(text)
     if len(c) < n:
         return {c} if c else set()
@@ -137,7 +137,7 @@ def jaccard(a: Set[str], b: Set[str]) -> float:
 def parse_voiceover(text: str) -> List[Dict[str, Any]]:
     """广告 VO 纯文本 → [{line, text}]（line = **原始行号**，1-based）。纯函数·可测。
 
-    广告 VO 没有 `[镜头N·角色·情绪]` 前缀（那是 n2d 格式）——一行一句。保留原始行号是为了
+    广告 VO 没有 `[镜头N·角色·情绪]` 前缀——一行一句。保留原始行号是为了
     与 `脚本/广告法机检报告.json` 的 `line` 对齐做去重（见 `law_flagged_lines`）。"""
     out: List[Dict[str, Any]] = []
     for lineno, raw in enumerate(str(text or "").splitlines(), 1):

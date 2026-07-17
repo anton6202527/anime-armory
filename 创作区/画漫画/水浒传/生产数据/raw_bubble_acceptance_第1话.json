@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "comic_raw_bubble_acceptance",
+  "chapter": "第1话",
+  "accepted_by": "Codex制作代理",
+  "accepted_at": "2026-07-17T10:50:09+08:00",
+  "scope": "仅签收启发式空白区域误报；图片变化后按 SHA 自动失效",
+  "accepted_findings": [
+    {
+      "code": "raw_bubble_candidate",
+      "panel_id": "P002",
+      "artifact_sha256": "fca97545590fd019513802288317cbc2a1704bda7e46fddef32ee006858f5223",
+      "reason": "接触表复核为紫宸殿地面受光与建筑留白，不是烘焙气泡或文字框。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "raw_bubble_candidate",
+      "panel_id": "P015",
+      "artifact_sha256": "1e7f4643029332f7395dc5c27f8ef78b8947892849310449d7711a56dc7c3abb",
+      "reason": "接触表复核为庭院天空、铺地与钟磬周边的自然负空间，不是烘焙气泡或文字框。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    }
+  ]
+}

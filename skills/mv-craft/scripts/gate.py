@@ -410,7 +410,7 @@ def _image_qc_errors_warnings(root, stage):
 
 
 def _identity_readiness(root, stage, meta):
-    """主角定妆包 readiness 闸（参照 n2d image_preflight 对核心角色缺锚直接 BLOCK）。
+    """主角定妆包 readiness 闸：核心角色缺锚直接 BLOCK。
 
     此前定妆包不全只在 mv-review 汇总为 warn，付费 gate 不拦——定妆不 ready 时
     image_qc 的脸检 floor 无法自标定，出视频后主角漂移无人拦。image 期共享定妆

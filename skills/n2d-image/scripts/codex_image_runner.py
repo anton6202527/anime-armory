@@ -3275,13 +3275,13 @@ def model_facing_policy_guards(
     if target.mode != "shared" and face_qc_visibility_guidance(target):
         guards.append(
             "脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，"
-            "不得被头发、暗影或强烈光效完全遮住，也不转成看镜头肖像"
+            "不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像"
         )
     if target.mode != "shared" and hand_limb_anatomy_guidance(target):
         guards.extend([
             "手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；"
-            "保持左右手方向正确、手腕连接连续，每只手只出现一次，人体与手部结构自然完整",
-            "若一只手接触道具，另一只手与其他物件的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
+            "保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整",
+            "若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
         ])
 
     if target.mode == "shared" and not shared_scene_target and _target_has_character_alias(target):
@@ -4536,6 +4536,17 @@ def mark_shared_reference_status(
                             node["human_review"] = review
                             changed = True
                 for key, child in list(node.items()):
+                    # Lineage / audit metadata may legitimately contain the same
+                    # target path (for example ``derivation.source_refs`` when a
+                    # prior candidate is recorded).  Those values are evidence,
+                    # not registry reference slots.  Descending into them can
+                    # repeatedly expand the target string into ``ready_entry``
+                    # objects that themselves contain the same derivation and
+                    # eventually hit RecursionError.  The existing key deny-list
+                    # already defines metadata-only fields; apply it to nested
+                    # containers as well as direct strings.
+                    if key in skip_string_keys:
+                        continue
                     if isinstance(child, str) and key not in skip_string_keys and child == rel_path:
                         node[key] = ready_entry()
                         changed = True
