@@ -137,6 +137,131 @@
         }
       },
       "status": "confirmed"
+    },
+    {
+      "chapter": "第2话",
+      "working_title": "天罡地煞",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_CH002",
+          "source_path": "源本/水浒传.docx",
+          "start": "第2章",
+          "end": "第2章"
+        }
+      ],
+      "reader_promise": "回答第1话释放的一百零八道星光究竟是什么，并看洪信如何处置自己闯下的大祸。",
+      "core_conflict": "住持要迫使洪信正视放走一百零八魔君的后果，洪信却要在承担责任与保住官位之间选择。",
+      "turning_point": "洪信听完天罡地煞真相后没有请罪，反而当场决定命从人封口。",
+      "payoff": "洪信将放魔之事隐去，只奏天师已先至京师，不但未受责罚，反而获赏复职。",
+      "ending_mode": "reveal",
+      "budget": {
+        "unit": "panels",
+        "target": 42,
+        "soft_range": [
+          38,
+          46
+        ]
+      },
+      "entry_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "伏魔殿半角掀塌，一百零八星已散，住持即将说出天罡地煞的真相。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "擅开封印、面对灾变且尚未承认责任的当事人。",
+            "visual_state": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "化为百十道金光散入人间。"
+          },
+          "WORLD_ORDER": {
+            "state": "神话序章从封闭宫观转入全国性群像时空。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "STORY_CHAPTER",
+          "field": "state",
+          "from": "伏魔殿半角掀塌，一百零八星已散，住持即将说出天罡地煞的真相。",
+          "to": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。",
+          "panel_id": "P042",
+          "reason": "结尾以散落人间的星辰与汴京表面安定对照，把读者推向星辰对应何人的新悬念。"
+        },
+        {
+          "entity_id": "CHAR_HONG_XIN",
+          "field": "story_state",
+          "from": "擅开封印、面对灾变且尚未承认责任的当事人。",
+          "to": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+          "panel_id": "P040",
+          "reason": "他在朝堂只奏天师早已赴京，隐去伏魔殿灾变，并接受赏赐。"
+        },
+        {
+          "entity_id": "CHAR_HONG_XIN",
+          "field": "visual_state",
+          "from": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。",
+          "to": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。",
+          "panel_id": "P038",
+          "reason": "旅途沾尘被官仪遮蔽，画面以衣着恢复与身体紧张形成反差。"
+        },
+        {
+          "entity_id": "CHAR_ABBOT_SHANGQING",
+          "field": "story_state",
+          "from": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。",
+          "to": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。",
+          "panel_id": "P029",
+          "reason": "送别洪信后，住持与道众开始修复已失去实际封禁意义的伏魔殿。"
+        },
+        {
+          "entity_id": "WORLD_108_STARS",
+          "field": "seal_state",
+          "from": "化为百十道金光散入人间。",
+          "to": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。",
+          "panel_id": "P042",
+          "reason": "住持说明数目与性质，结尾只给出星落人间的剪影，不抢先公布梁山身份。"
+        },
+        {
+          "entity_id": "WORLD_ORDER",
+          "field": "state",
+          "from": "神话序章从封闭宫观转入全国性群像时空。",
+          "to": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。",
+          "panel_id": "P041",
+          "reason": "天师作醮治愈眼前瘟疫，朝廷却未察觉洪信创造的更长远危机。"
+        }
+      ],
+      "exit_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        }
+      },
+      "status": "confirmed"
     }
   ],
   "human_review": {
