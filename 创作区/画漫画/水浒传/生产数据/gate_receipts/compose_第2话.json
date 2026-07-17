@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_receipt",
+  "receipt_id": "060bc8153eb7bebba05bb4b0bc5c4434811fdf542948a006bb9866d55b641600",
+  "chapter": "第2话",
+  "stage": "compose",
+  "created_at": "2026-07-17T16:58:06",
+  "verdict": "warn",
+  "execution_authorized": true,
+  "inputs_fingerprint_sha256": "fcbb95095238f39f9afefb47fc43bcfc68a6ff2562959153072ef8cd9eea7b29",
+  "panel_jobs_sha256": "acf64155c40ef0cabea43c11d82fc5af450d940f888558de8f4dd6114cfcf545",
+  "artifacts": {
+    "panel_jobs_path": "出图/第2话/prompt/panel_jobs.json",
+    "panel_jobs_sha256": "acf64155c40ef0cabea43c11d82fc5af450d940f888558de8f4dd6114cfcf545"
+  },
+  "report_path": "生产数据/comic_gate_compose_第2话.json",
+  "report_sha256": "3382d929c2174f4a3b513f090c76eef2541d42a4e4c2ce463ef929fa6ac4d8d5"
+}

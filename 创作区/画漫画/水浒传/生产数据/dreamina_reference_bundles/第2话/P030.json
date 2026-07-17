@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第2话",
+  "panel_id": "P030",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+      "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_FUMO_HALL_INTERIOR",
+      "path": "出图/共享/图片/LOC_FUMO_HALL_INTERIOR__anchor.png",
+      "sha256": "04bc3d47d2cde98090847fb049b6814264cb5060a45deda953460b4b5900d6cd",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+      "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+      "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-17T15:50:37"
+}

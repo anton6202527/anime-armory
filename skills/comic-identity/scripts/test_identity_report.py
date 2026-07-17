@@ -255,6 +255,54 @@ def test_bind_job_references_preserves_registered_outfit_reference(tmp_path: Pat
     assert jobs["jobs"][0]["references"][0]["path"] == outfit_rel
 
 
+def test_bind_job_references_preserves_registered_expression_reference(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    shared = root / "出图" / "共享" / "图片"
+    shared.mkdir(parents=True)
+    face_rel = "出图/共享/图片/CHAR_A__face.png"
+    expression_rel = "出图/共享/图片/CHAR_A__EXPR_STUNNED.png"
+    (root / face_rel).write_bytes(PNG_1X1)
+    (root / expression_rel).write_bytes(PNG_1X1)
+    registry = {
+        "assets": {
+            "CHAR_A": {
+                "id": "CHAR_A",
+                "reference_images": [{"view": "face", "path": face_rel}],
+                "expressions": {
+                    "EXPR_STUNNED": {
+                        "id": "EXPR_STUNNED",
+                        "reference_images": [{"path": expression_rel}],
+                    }
+                },
+            }
+        }
+    }
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P001",
+                "character_bindings": [
+                    {"character_id": "CHAR_A", "expression_id": "EXPR_STUNNED"}
+                ],
+                "references": [
+                    {
+                        "id": "CHAR_A",
+                        "role": "expression",
+                        "view": "expression",
+                        "contract_id": "EXPR_STUNNED",
+                        "path": face_rel,
+                    }
+                ],
+            }
+        ]
+    }
+
+    changed = identity.bind_job_references(root, jobs, registry)
+
+    assert changed == 1
+    assert jobs["jobs"][0]["references"][0]["path"] == expression_rel
+
+
 def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     shared = root / "出图" / "共享" / "图片"
