@@ -3,12 +3,12 @@
   "kind": "comic_gate_findings",
   "chapter": "第2话",
   "stage": "image_preflight",
-  "created_at": "2026-07-17T09:11:36",
+  "created_at": "2026-07-17T19:32:50",
   "summary": {
-    "finding_count": 60,
+    "finding_count": 34,
     "block_count": 0,
     "warn_count": 32,
-    "info_count": 28
+    "info_count": 2
   },
   "findings": [
     {
@@ -78,17 +78,6 @@
       "confidence": "deterministic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P001·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "multi_character_closeup",
@@ -100,55 +89,11 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P002·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "multi_character_closeup",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P002 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P003·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P004·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P005·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -177,17 +122,6 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P006·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "strong_emotion_expression_reference_missing",
@@ -204,28 +138,6 @@
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P006 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P007·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P008·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -254,33 +166,11 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P010·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P010 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P011·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -298,33 +188,11 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P012·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P012 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P013·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -364,17 +232,6 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P015·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "same_frame_color_collision",
@@ -386,55 +243,11 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P016·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P016 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P017·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P018·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P020·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -463,44 +276,11 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P022·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P023·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P023 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P024·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -523,17 +303,6 @@
       "code": "multi_character_closeup",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P024 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P025·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -573,17 +342,6 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P026·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "missing_reference",
@@ -606,55 +364,11 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P027·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P028·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
       "severity": "warn",
       "dimension": "comic_gate",
       "code": "multi_character_closeup",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P028 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P029·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "escalation_suggested",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P030·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",

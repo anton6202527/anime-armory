@@ -6,7 +6,7 @@
     {
       "scope": "出图",
       "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
-      "prompt_sha256": "1ad21b49696af15ef19bfeb45c14879af2cee8569553013bd6176781ad834422",
+      "prompt_sha256": "fe568e4752c0338d5aad0aedf08df5895e38214e376f976847446305e429cefb",
       "contract_path": "生产数据/script_quality_contract_第1集.json",
       "contract_content_hash": "0ae0dfd5e69f20e5",
       "contract_file_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",
@@ -34,11 +34,11 @@
         "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
         "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
       ],
-      "reviewed_at": "2026-07-17T01:21:33+00:00"
+      "reviewed_at": "2026-07-17T11:33:20+00:00"
     }
   ],
   "reviewer": "Codex n2d-image prompt pack",
-  "reviewed_at": "2026-07-17T01:21:33+00:00",
+  "reviewed_at": "2026-07-17T11:33:20+00:00",
   "contract_path": "生产数据/script_quality_contract_第1集.json",
   "contract_content_hash": "0ae0dfd5e69f20e5",
   "contract_file_sha256": "2029a00f37dc7e7d547a2af182a882a25f0c0fcc5feb89004918cd854e0c9d4d",

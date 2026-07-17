@@ -1,0 +1,244 @@
+{
+  "adapter": {
+    "adapter_kind": "dreamina_official_cli",
+    "api_surface": "official logged-in CLI",
+    "auto_runnable": true,
+    "best_for": [
+      "same_ecosystem_with_seedance",
+      "fast_iteration"
+    ],
+    "canonical": "dreamina",
+    "channel": "Dreamina/即梦官方 CLI",
+    "classification": "approved",
+    "cost_tier": "credits",
+    "env_keys": [],
+    "evidence": {
+      "source": "refresh before paid use",
+      "verified_at": "manual_required"
+    },
+    "exact_model_evidence_required": false,
+    "exact_model_id": "",
+    "generation_modes": [
+      "text2image",
+      "image_reference"
+    ],
+    "identity_profile": {
+      "canonical": "dreamina",
+      "channel": "Dreamina/即梦官方 CLI",
+      "in_context_consistency": "moderate",
+      "ingests_video": false,
+      "label": "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI）",
+      "max_reference_images": null,
+      "model": "即梦图像模型（Seedream 系·版本以 per-run 官方证据为准）",
+      "multi_reference": true,
+      "native_modes": [],
+      "notes": "生成者=Seedream 系图像模型（即梦是 ByteDance 消费端渠道壳，≠模型本身）。官方 CLI 可多参考/图生图；按无持久角色 ID 处理，切角色前必须清空参考框。",
+      "persistent_subject": false,
+      "recommended_diverse_reference_min": null,
+      "strategy": "multi_reference_sticky_reference"
+    },
+    "label": "Dreamina/即梦官方 CLI (访问入口)",
+    "limitations": [
+      "no_persistent_subject_id",
+      "official_cli_must_be_logged_in"
+    ],
+    "model": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)",
+    "model_precision": "provider_model",
+    "multi_reference": true,
+    "native_subject": false,
+    "official": true,
+    "output": "png_file",
+    "persistent_subject": false,
+    "probe_backend": "dreamina",
+    "prompt_profile": {
+      "advisory_char_limit": 1200,
+      "backend": "dreamina",
+      "embed_aspect": true,
+      "language": "zh",
+      "name": "seedream_concise_natural_language",
+      "negative_strategy": "inline_constraints",
+      "request_fields": [
+        "aspect_ratio",
+        "size",
+        "quality",
+        "output_format",
+        "model_version",
+        "resolution_type"
+      ]
+    },
+    "reference_input": {
+      "max_total": null,
+      "mode": "official_cli_references"
+    },
+    "subject_registration": false,
+    "supports_edit": true,
+    "supports_high_fidelity_reference": true,
+    "supports_mask": false,
+    "supports_text_rendering": "medium",
+    "transport": "official_cli_assets"
+  },
+  "backend": "dreamina",
+  "capability_assertions": {
+    "auto_runnable": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": true
+    },
+    "channel": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "Dreamina/即梦官方 CLI"
+    },
+    "exact_model_evidence_required": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": false
+    },
+    "exact_model_id": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "Seedream 5.0"
+    },
+    "max_reference_images": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": null
+    },
+    "model": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)"
+    },
+    "model_precision": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "provider_model"
+    },
+    "negative_strategy": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "inline_constraints"
+    },
+    "official": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": true
+    },
+    "output": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "png_file"
+    },
+    "persistent_subject": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": false
+    },
+    "prompt_language": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "zh"
+    },
+    "prompt_profile": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "seedream_concise_natural_language"
+    },
+    "prompt_request_fields": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": [
+        "aspect_ratio",
+        "size",
+        "quality",
+        "output_format",
+        "model_version",
+        "resolution_type"
+      ]
+    },
+    "reference_mode": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": "official_cli_references"
+    },
+    "supports_edit": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": true
+    },
+    "supports_high_fidelity_reference": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": true
+    },
+    "supports_image_reference": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": true
+    },
+    "supports_mask": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": false
+    },
+    "supports_text2image": {
+      "evidence_kind": "cli_help",
+      "observed_text": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+      "source": "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)",
+      "source_url": "",
+      "value": true
+    }
+  },
+  "evidence_kind": "cli_help",
+  "kind": "n2d_image_backend_refresh_evidence",
+  "model_evidence": {
+    "exact_model_id": "Seedream 5.0",
+    "normalized_model_label": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)",
+    "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
+    "precision": "provider_model"
+  },
+  "note": "官方CLI支持 model_version=5.0、ratio=9:16、2k/4k 输出；当前已登录 maestro，余额8045 credits；Codex 有界网络重试耗尽后按签核单向切换。",
+  "source_urls": [],
+  "sources": [
+    "dreamina official CLI text2image --help (2026-07-17 local authenticated CLI)"
+  ],
+  "verified_at": "2026-07-17"
+}

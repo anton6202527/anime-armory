@@ -2,7 +2,7 @@
   "episode": "第1集",
   "generated_at": "2026-07-14T15:51:44+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-17T01:21:33+00:00",
+  "last_confirmed_at": "2026-07-17T11:33:20+00:00",
   "last_confirmed_by": "executor:codex",
   "last_confirmed_lock_ids": [
     "style_identity_lock"
@@ -152,15 +152,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-17T01:21:33+00:00",
+      "approved_at": "2026-07-17T11:33:20+00:00",
       "approver": "executor:codex",
       "artifact_count": 4,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-15T15:38:22+00:00",
+          "mtime": "2026-07-17T11:33:19+00:00",
           "path": "_设置.md",
-          "sha256": "85a39090c152a79b2cb9665271691ec874094b91072cacc5c2dd86da27872afd"
+          "sha256": "a71ed940a7f3ba0a62bf3a2b2a85ee83ca4dd7eb6dfc447dacafd35fba50557e"
         },
         {
           "exists": true,
@@ -170,7 +170,7 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-17T01:21:32+00:00",
+          "mtime": "2026-07-17T11:33:20+00:00",
           "path": "出图/共享/identity_registry.json",
           "sha256": "a55e159934adf0481c03b57524cf5dad86c8c9924fc0413c47588532ad1aae4f"
         },
@@ -447,6 +447,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-17T01:21:33+00:00",
+  "updated_at": "2026-07-17T11:33:20+00:00",
   "version": 1
 }

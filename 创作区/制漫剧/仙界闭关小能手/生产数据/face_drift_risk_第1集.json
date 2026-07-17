@@ -1,18 +1,18 @@
 {
   "backend_profile": {
-    "canonical": "codex",
-    "channel": "Codex CLI",
-    "in_context_consistency": "strong",
+    "canonical": "dreamina",
+    "channel": "Dreamina/即梦官方 CLI",
+    "in_context_consistency": "moderate",
     "ingests_video": false,
-    "label": "GPT Image 2（渠道 Codex CLI）",
+    "label": "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI）",
     "max_reference_images": null,
-    "model": "GPT Image 2",
+    "model": "即梦图像模型（Seedream 系·版本以 per-run 官方证据为准）",
     "multi_reference": true,
     "native_modes": [],
-    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "notes": "生成者=Seedream 系图像模型（即梦是 ByteDance 消费端渠道壳，≠模型本身）。官方 CLI 可多参考/图生图；按无持久角色 ID 处理，切角色前必须清空参考框。",
     "persistent_subject": false,
     "recommended_diverse_reference_min": null,
-    "strategy": "multi_reference"
+    "strategy": "multi_reference_sticky_reference"
   },
   "block": 0,
   "blocking": false,
@@ -44,10 +44,6 @@
         {
           "factor": "极端角度 2 镜",
           "points": 12
-        },
-        {
-          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
-          "points": -6
         }
       ],
       "form": "常态",
@@ -55,7 +51,7 @@
       "name": "张老大",
       "reference_gaps": [],
       "scope": "秀竹峰杂役班班长",
-      "score": 78.0,
+      "score": 84.0,
       "signals": {
         "angle": 2,
         "appear": 3,
@@ -65,7 +61,8 @@
         "recurrence_gap": 0
       },
       "suggestions": [
-        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。",
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
@@ -104,10 +101,6 @@
         {
           "factor": "多人同框 3/7",
           "points": 8.6
-        },
-        {
-          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
-          "points": -6
         }
       ],
       "form": "本集为14岁杂役常态",
@@ -116,7 +109,7 @@
       "predicted_block_mitigated_by": "same_source_expression_refs",
       "reference_gaps": [],
       "scope": "核心主角/全篇长线；太虚门秀竹峰新入杂役弟子，五行灵根",
-      "score": 62.3,
+      "score": 68.3,
       "signals": {
         "angle": 2,
         "appear": 7,
@@ -127,7 +120,8 @@
       },
       "suggestions": [
         "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
-        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。",
         "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
         "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
         "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
@@ -136,7 +130,7 @@
       "tier": "multi_reference"
     }
   ],
-  "default_backend": "codex",
+  "default_backend": "dreamina",
   "episode": "第1集",
   "high": 2,
   "kind": "n2d_face_drift_risk",

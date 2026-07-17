@@ -153,13 +153,13 @@
     "panel_script": "脚本/第2话/panel_script.json",
     "panel_script_sha256": "51d7c971c1622b6306a0be862eac7de13b9c41792ea1fa4aac1f650327aa82a1",
     "name_board": "排版/第2话/name_board.json",
-    "name_board_sha256": "0a10153ec0e3ed4d452493083a5b1d25fe687a43decfe9eeecc35ad112839c45",
+    "name_board_sha256": "eb9a0b0a8f26d0f8a9243fc2309f257d0fc055623b4dbaf88651ac955753e561",
     "layout": "排版/第2话/layout.json",
-    "layout_sha256": "99764152fc08060fc862ff2ee4c3388993363c3b0bd1c2961507967e3e5a0087",
+    "layout_sha256": "725c04bdc798bacde84c5a17e04455d1569307620aac2eec766c4e2a6139070c",
     "settings": "_设置.md",
-    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4",
-    "name_approval_subject_sha256": "6f722975d7e8304be0ae6234d4df518584bd2336feea12487272a32230c46b38",
-    "layout_approval_subject_sha256": "43b5dbc42a9b29e5b2c29ea39042f65e29fbd6caea343e29120989103b24be5a"
+    "settings_sha256": "9ce7deac17d844b0bfd7528125439200ff2bfd7f482f0bdac76fde9d620ecb42",
+    "name_approval_subject_sha256": "0a551f2b4628cdbb870fb45b3be0aea8c92036e522bfdc187dfcaa6740a73843",
+    "layout_approval_subject_sha256": "5673b00560662d0750ccc6c5d7dc1c7cc76212420a80ca8089fae035766c2b65"
   },
   "panels": [
     {

@@ -128,6 +128,20 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P003,P007 --force --max-attempts 3
 ```
 
+当适配层已把项目切到 `Seedream 5.0 + Dreamina/即梦官方 CLI` 并重建任务包后，使用即梦 runner；它直接消费即梦 profile 编译的 `submit_prompt`，将任务包选中的 1–10 张真实参考图作为官方 `image2image` 入参，按 panel 画布选择最近的即梦比例，记录 submit_id/credit/reference manifest/post-QC。不要拿它执行仍标为 Codex 的旧任务包：
+
+```bash
+# 单格 smoke test；若已有旧后端正式图，--force 会先归档到 candidates/
+python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
+  --targets P001 --limit 1 --force --model-version 5.0 --resolution-type 2k
+
+# smoke test 人审通过后继续全部未完成格
+python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
+  --model-version 5.0 --resolution-type 2k
+```
+
+即梦 runner 与 Codex runner 使用同一个 `image_preflight`、编译合同校验、旧图归档、逐格 QC 和进度条件，但各自写独立 reference bundle；切后端后必须整话保持单一生成配方，旧后端成功图只能保留为候选/视觉复核材料，不能混在最终 ready 集合里。
+
 需要从“当前进度”自动推进一话、按预算多抽并衔接合成/审查时，使用 `comic-batch`；`comic-image` 仍只负责出图阶段本身。
 
 ## 工作流

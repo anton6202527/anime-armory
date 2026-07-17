@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第2话",
-  "generated_at": "2026-07-16T15:59:50+00:00",
+  "generated_at": "2026-07-17T11:26:05+00:00",
   "inputs": {
     "files": [
       {
@@ -23,21 +23,21 @@
       {
         "path": "_设置.md",
         "exists": true,
-        "sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4"
+        "sha256": "9ce7deac17d844b0bfd7528125439200ff2bfd7f482f0bdac76fde9d620ecb42"
       }
     ],
     "backend": {
-      "adapter_id": "openai_gpt_image_project_memory",
-      "model": "GPT Image 2",
-      "channel": "Codex CLI",
+      "adapter_id": "native_subject_capable",
+      "model": "Seedream 5.0",
+      "channel": "Dreamina/即梦官方 CLI",
       "supports_image_inputs": true,
-      "persistent_subject": false,
-      "reference_image_limit": 16,
-      "single_character_reference_limit": 5,
+      "persistent_subject": true,
+      "reference_image_limit": 10,
+      "single_character_reference_limit": 4,
       "multi_character_reference_limit": 3,
       "non_character_reference_limit": 2,
-      "style_reference_limit": 2,
-      "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      "style_reference_limit": 1,
+      "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
     },
     "memory_anchor_status": {
       "status": "stale",
@@ -46,28 +46,28 @@
       "inputs_fingerprint": "660f6e259f620fe3c2d5034e8389be154e7d7f436aca55d6494afe19c67d6374"
     }
   },
-  "inputs_fingerprint": "a3aa70a7b2044fb4e8af72a0ce6a3aa301bc931d121deaee2b9ee84c106e13df",
+  "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
   "backend": {
-    "adapter_id": "openai_gpt_image_project_memory",
-    "model": "GPT Image 2",
-    "channel": "Codex CLI",
+    "adapter_id": "native_subject_capable",
+    "model": "Seedream 5.0",
+    "channel": "Dreamina/即梦官方 CLI",
     "supports_image_inputs": true,
-    "persistent_subject": false,
-    "reference_image_limit": 16,
-    "single_character_reference_limit": 5,
+    "persistent_subject": true,
+    "reference_image_limit": 10,
+    "single_character_reference_limit": 4,
     "multi_character_reference_limit": 3,
     "non_character_reference_limit": 2,
-    "style_reference_limit": 2,
-    "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+    "style_reference_limit": 1,
+    "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
   },
   "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
   "summary": {
     "panels_with_characters": 30,
-    "panels_needing_action": 26,
+    "panels_needing_action": 23,
     "panels_blocked": 0,
     "block": 0,
     "warn": 28,
-    "info": 26
+    "info": 0
   },
   "panel_plans": [
     {
@@ -131,12 +131,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -190,9 +190,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -215,13 +215,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -261,6 +261,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           }
         ],
         "missing_required": [],
@@ -270,7 +306,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "f343c27042fefe997331feb6aa779c2295b4de7012383c4fe26c28d988e3d8e7"
+      "panel_plan_sha256": "ea444c9a0c2c4481ef77194cdbfcaca06e44cec89a9b56d48341b7da7b8f5bb4"
     },
     {
       "panel_id": "P002",
@@ -378,17 +414,17 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -411,13 +447,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -459,6 +495,33 @@
             "character_id": "CHAR_PEI_CHANGQING",
             "required": false,
             "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -468,7 +531,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "e57cdbea2d58499954f0ca55f4a56af77fee4da4ef418c54508b536615f092da"
+      "panel_plan_sha256": "8c78028990a8a7c56eb80cb199a9ece2651da4e74dbfbc7029a469e6647c095b"
     },
     {
       "panel_id": "P003",
@@ -513,7 +576,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -521,17 +584,17 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
             "role": "front",
@@ -571,6 +634,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -579,8 +651,8 @@
       },
       "blocked": false,
       "blocking_codes": [],
-      "needs_action": true,
-      "panel_plan_sha256": "7c407c6ee17feb5ffe9aa42b0292eb825dad16a974dcefe3b5d2f465f4f6b18e"
+      "needs_action": false,
+      "panel_plan_sha256": "7ef69c709b0b8ac834b9c1d033afad3c649acb71c12d74824454acfc39e7946a"
     },
     {
       "panel_id": "P004",
@@ -641,12 +713,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -698,9 +770,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -723,13 +795,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "three_quarter",
@@ -771,6 +843,33 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           }
         ],
         "missing_required": [],
@@ -780,7 +879,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4d4f969c1ebd94a57f46d27acad6c9b23975d3b3baf5b6f1515a21bcec695c74"
+      "panel_plan_sha256": "486064051bf97d9df570527dfeaf8ce040e348aec12e6f29e15d9e32d9b5886b"
     },
     {
       "panel_id": "P005",
@@ -893,10 +992,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -946,9 +1045,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -979,13 +1078,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 10,
         "selected": [
           {
             "role": "front",
@@ -1027,6 +1126,51 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -1036,7 +1180,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "fa72b8b289fc9c8e32e064f77633c987c6319f675dac1e1a466e0a87aac0fd61"
+      "panel_plan_sha256": "d392d2b35f72f70aba0cba1065870e19e653cdeda9b9d24f0739af0f2362901e"
     },
     {
       "panel_id": "P006",
@@ -1097,10 +1241,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -1152,9 +1296,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -1179,13 +1323,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -1227,6 +1371,33 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
           }
         ],
         "missing_required": [],
@@ -1236,7 +1407,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "6391cb83221ba5f84c76d521433ab8f009c144b110b8c350a3ace644b884d53d"
+      "panel_plan_sha256": "cfbf38a241cbcd32e117d296562c7c76d9648e2053eb2421ab71729f66b68584"
     },
     {
       "panel_id": "P007",
@@ -1297,12 +1468,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -1354,9 +1525,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -1379,13 +1550,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -1425,6 +1596,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           }
         ],
         "missing_required": [],
@@ -1434,7 +1641,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "18446c017bfa31767d2e5634205b4efbd36bd871a5643d129c8a130f3bab02c6"
+      "panel_plan_sha256": "44d1f2cda09c9d0efc5dc8ca7e87ab3a0e44e343735d1f09d52960f2d3725bbd"
     },
     {
       "panel_id": "P008",
@@ -1495,10 +1702,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -1548,9 +1755,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -1575,13 +1782,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -1621,6 +1828,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
           }
         ],
         "missing_required": [],
@@ -1630,7 +1873,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "2e1337f611fe8f0018c56df0c627f652656fc71028ec03c83eb6c5592d190d84"
+      "panel_plan_sha256": "48fdd5c9b6c1ffb9d79c1468811d8696942a3aed83232d42d8ac5f243c7c70a8"
     },
     {
       "panel_id": "P009",
@@ -1673,7 +1916,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -1689,9 +1932,9 @@
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
             "role": "front",
@@ -1731,6 +1974,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -1740,7 +1992,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "9a6c75b69a5e71745888ad0a5d4fc58886c800f6ef0e5a31224ac15c34c70eb4"
+      "panel_plan_sha256": "2a4d74453428412601b5a075af534056cb3a3772b4656ebb7f99ce1096ec7a93"
     },
     {
       "panel_id": "P010",
@@ -1852,19 +2104,19 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -1889,13 +2141,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "three_quarter",
@@ -1937,6 +2189,33 @@
             "character_id": "MON_TIGER_SHANSHEN",
             "required": false,
             "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
           }
         ],
         "missing_required": [],
@@ -1946,7 +2225,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "bd5bfa131aa704b8903dd03aacf50390e6d344dbe1fe4f41186c79f1ccdc814c"
+      "panel_plan_sha256": "e57f7776e6a88ea6108afc0c8833428c0a3dab84d937b63990c8a0b4e98cfe9a"
     },
     {
       "panel_id": "P011",
@@ -2054,19 +2333,19 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -2091,13 +2370,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -2137,6 +2416,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "strength_hint": 0.55,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
           }
         ],
         "missing_required": [],
@@ -2146,7 +2461,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "e5e3f15e1be80cf7d172369a8cd89d449376d18a9ef126fb674a51777383f96b"
+      "panel_plan_sha256": "4cd4fb3d2f3873f9ac83f4e7b09e9fd295b6cd1976c611a4b9c64c57954f127c"
     },
     {
       "panel_id": "P012",
@@ -2207,12 +2522,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -2264,9 +2579,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -2291,13 +2606,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -2337,6 +2652,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "strength_hint": 0.55,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
           }
         ],
         "missing_required": [],
@@ -2346,7 +2697,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "acb456067eb81d8e27fee354628ff5e27e6bd936aeca10531ca01a9d931054ec"
+      "panel_plan_sha256": "9a81677ba13c8a5cb02a669d547c6dd459a2ca6e5bf6f58b700b50154b95f303"
     },
     {
       "panel_id": "P013",
@@ -2407,12 +2758,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -2464,9 +2815,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -2491,13 +2842,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -2537,6 +2888,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "strength_hint": 0.55,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
           }
         ],
         "missing_required": [],
@@ -2546,7 +2933,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "66aab1f865c62416463b676bee1f30e3746a6ee3fa3a011de9383703bd56c8e1"
+      "panel_plan_sha256": "029d8427accdf220a684fd7484a144371f540ffa3106ce75aa213365bf5c2f5a"
     },
     {
       "panel_id": "P014",
@@ -2589,7 +2976,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -2605,9 +2992,9 @@
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
             "role": "front",
@@ -2647,6 +3034,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -2656,7 +3052,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "91e59363681bab2425c0b2527bc848b7560923d5300df1e822117b4669dcffda"
+      "panel_plan_sha256": "198558df2dd5b42a89bbfa07987be88ef1091e5cce14eef21c0d58bf820067f9"
     },
     {
       "panel_id": "P015",
@@ -2792,7 +3188,7 @@
             "参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
@@ -2802,9 +3198,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -2829,13 +3225,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "three_quarter",
@@ -2877,6 +3273,33 @@
             "character_id": "MON_TIGER_SHANSHEN",
             "required": false,
             "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
           }
         ],
         "missing_required": [],
@@ -2886,7 +3309,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "e14bfd4084de499e57b19d673e6043032fa4a9ccc71a15d0c95e759306efa9da"
+      "panel_plan_sha256": "ef32f9a1cc98fa01bc55a21e50662690d4d27253f6667722336741281b1a5007"
     },
     {
       "panel_id": "P016",
@@ -2990,17 +3413,17 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -3025,13 +3448,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -3073,6 +3496,33 @@
             "character_id": "MON_TIGER_SHANSHEN",
             "required": false,
             "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -3082,7 +3532,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "97e612a716bf25342c984b8362edd22516ec98eb2c2543f0349c510f0400d812"
+      "panel_plan_sha256": "358d8a39eb725b0b47cee60fab2c3c3b1d2e03b22b386c8fde4ed9a7a9b5f31b"
     },
     {
       "panel_id": "P017",
@@ -3132,7 +3582,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 4,
             "selected": 4,
             "dropped": 0
@@ -3140,17 +3590,17 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 3,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
             "role": "front",
@@ -3192,6 +3642,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "side",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491"
           }
         ],
         "missing_required": [],
@@ -3200,8 +3659,8 @@
       },
       "blocked": false,
       "blocking_codes": [],
-      "needs_action": true,
-      "panel_plan_sha256": "70c030d9b33889cc3577c9590cf3f48518df2e7d8ae8f662967ed3fde78975b8"
+      "needs_action": false,
+      "panel_plan_sha256": "290285cdea1d858e6897cae4aaf85cdc18b124e856d47c2d98bfe5aa94766109"
     },
     {
       "panel_id": "P018",
@@ -3246,7 +3705,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -3254,15 +3713,15 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 3,
         "selected_count": 5,
         "selected": [
@@ -3314,8 +3773,8 @@
       },
       "blocked": false,
       "blocking_codes": [],
-      "needs_action": true,
-      "panel_plan_sha256": "babbed93b50d89cb61197538fc9a15525f49edfb690b8e3f3b11ddbdf7b9f201"
+      "needs_action": false,
+      "panel_plan_sha256": "5e7522d71737a6b7745c66d33873bec2a9d80eed06990872005e8aa77a5f1c83"
     },
     {
       "panel_id": "P019",
@@ -3360,7 +3819,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -3376,7 +3835,7 @@
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 3,
         "selected_count": 5,
         "selected": [
@@ -3429,7 +3888,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "f9b00620f080438f4c6de7ed1901663e3c863c7154bab9b19d61ab35cf16bcbc"
+      "panel_plan_sha256": "2759432935ea2a6113e2bd98cf4d6551c90d02b02a23f6db11f15fd60d310d96"
     },
     {
       "panel_id": "P020",
@@ -3533,17 +3992,17 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -3568,13 +4027,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -3616,6 +4075,33 @@
             "character_id": "MON_TIGER_SHANSHEN",
             "required": false,
             "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -3625,7 +4111,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "0a5d6ecf9973bb5b416495089fcdad5b42afa446247d4238a3fa7a704ce41edd"
+      "panel_plan_sha256": "a46ff46366ebccf973dfbcbab0c277ca8c7be49656aba4362c4e8d87c6298cde"
     },
     {
       "panel_id": "P021",
@@ -3670,7 +4156,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -3688,9 +4174,9 @@
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
             "role": "three_quarter",
@@ -3730,6 +4216,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
           }
         ],
         "missing_required": [],
@@ -3739,7 +4234,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "078278ff21035549eb225be06d581ad17fdf57075f88cb44211df649c6fd5d34"
+      "panel_plan_sha256": "52dfcd4cdd2ab0d6ba9693203458b83e140f18edddffcc7ab30affd7dfa477ba"
     },
     {
       "panel_id": "P022",
@@ -3784,7 +4279,7 @@
             }
           ],
           "reference_budget": {
-            "limit": 5,
+            "limit": 4,
             "requested": 3,
             "selected": 3,
             "dropped": 0
@@ -3794,7 +4289,7 @@
             "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
           ],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
           "needs_action": true
@@ -3802,9 +4297,9 @@
       ],
       "multi_subject": null,
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
             "role": "front",
@@ -3844,6 +4339,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -3853,7 +4357,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4499593d9219b6d737bafa0f0dd08371aea138323546a318d9a833f9e00d7938"
+      "panel_plan_sha256": "61af737986c99d8432b70887e3a8e10503279526c36e5a487bf059f44b9ede02"
     },
     {
       "panel_id": "P023",
@@ -3914,12 +4418,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -3971,9 +4475,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -3998,13 +4502,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -4044,6 +4548,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "strength_hint": 0.55,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
           }
         ],
         "missing_required": [],
@@ -4053,7 +4593,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "f861617b84d5d96fe8ff29e137573aabac32a4c617be89d8d9ea0bdc388a6abf"
+      "panel_plan_sha256": "7acc81cb0f3291974e2790ba7a7c1d4241aa8db609416411c9adc0cdbd3124fc"
     },
     {
       "panel_id": "P024",
@@ -4114,10 +4654,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -4167,9 +4707,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -4194,13 +4734,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -4242,6 +4782,33 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
           }
         ],
         "missing_required": [],
@@ -4251,7 +4818,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "1c5093d53d602f3b0bd2641df8ecbf9ac14dddb768a052da2268d8a9bc3c878c"
+      "panel_plan_sha256": "cf04e814677ccbf603e1ea2d9237a7e345dd99ddb992f9c516693129073481e2"
     },
     {
       "panel_id": "P025",
@@ -4312,10 +4879,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "MON_TIGER_SHANSHEN",
@@ -4365,9 +4932,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -4392,13 +4959,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -4440,6 +5007,33 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91"
           }
         ],
         "missing_required": [],
@@ -4449,7 +5043,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "64a928322941ae856a61ab4662d1f7f56c4159a49947b56184ebae69d899b813"
+      "panel_plan_sha256": "63a47a90cabe63e918df61b8f7a7896f0e8685ea796abbf7107f57595809ebd6"
     },
     {
       "panel_id": "P026",
@@ -4523,7 +5117,7 @@
             "参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
           "needs_action": true
@@ -4579,9 +5173,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -4604,13 +5198,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -4650,6 +5244,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
           }
         ],
         "missing_required": [],
@@ -4659,7 +5289,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "95f07108a8f749a2f8a4055a44b627b030c3c894ca716913969a21d493f76e56"
+      "panel_plan_sha256": "230b7c4417459c1dabf763e7c871373fabd68e4aff4391cd6300dd4b990e87e9"
     },
     {
       "panel_id": "P027",
@@ -4720,12 +5350,12 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -4777,9 +5407,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -4802,13 +5432,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "three_quarter",
@@ -4848,6 +5478,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           }
         ],
         "missing_required": [],
@@ -4857,7 +5523,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "d3cb093a642611f7a85d9ea9974a62e5dbcf3f9c5496bf2a03a346684b9cbcd6"
+      "panel_plan_sha256": "01610917efaa74bc174b72331318189e64a52bd9d05192965e7b6f359410da2b"
     },
     {
       "panel_id": "P028",
@@ -4919,10 +5585,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -4973,9 +5639,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -4998,13 +5664,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 8,
         "selected": [
           {
             "role": "front",
@@ -5046,6 +5712,33 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
           }
         ],
         "missing_required": [],
@@ -5055,7 +5748,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "15a4ddbd0c0d9e574353a0c97218b60030d3a9e75bc97b77ff1057300474b3a1"
+      "panel_plan_sha256": "4f24044d07ef225b9fb92ebbbe20581802cb456fa96ef481f0dcfd71c382e4a9"
     },
     {
       "panel_id": "P029",
@@ -5115,10 +5808,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -5167,9 +5860,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -5192,13 +5885,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -5238,6 +5931,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
           }
         ],
         "missing_required": [],
@@ -5247,7 +5976,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "b475450c8ed84a5576a64e32b589d37129223131b068fb2777b67f9b71cf7ccc"
+      "panel_plan_sha256": "972c0ae80ff3bc6a850b5dfb3b4c24f482d4c81734357242cfff2c6f535e64ed"
     },
     {
       "panel_id": "P030",
@@ -5308,10 +6037,10 @@
           "dropped_references": [],
           "missing_references": [],
           "memory_anchor_reinjected": false,
-          "escalation": "弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。",
+          "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -5363,9 +6092,9 @@
       ],
       "multi_subject": {
         "applies": true,
-        "mode": "per_character_reference_slots",
-        "backend": "openai_gpt_image_project_memory",
-        "persistent_subject": false,
+        "mode": "native_subject_slots",
+        "backend": "native_subject_capable",
+        "persistent_subject": true,
         "slots": [
           {
             "slot": "画左槽位",
@@ -5388,13 +6117,13 @@
           "区分锚点（互斥发色/服装主色/配饰）"
         ],
         "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
-        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "execution": "后端支持持久主体：按注册主体 ID 逐槽位引用 + 各自参考做双保险。",
         "needs_action": true
       },
       "attachment_plan": {
-        "limit": 5,
+        "limit": 10,
         "required_count": 5,
-        "selected_count": 5,
+        "selected_count": 9,
         "selected": [
           {
             "role": "front",
@@ -5434,6 +6163,42 @@
             "path": "出图/共享/图片/user_reference_clean_source.png",
             "required": false,
             "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_PEI_CHANGQING",
+            "character_id": "CHAR_PEI_CHANGQING",
+            "required": false,
+            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
           }
         ],
         "missing_required": [],
@@ -5443,16 +6208,10 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "be09e8f5ec7030b52480bb6a7a6c9e21952b54b1618fea64557b7599a1f8ca9f"
+      "panel_plan_sha256": "f17e9f1850c0634480b047a1cb847ad7327601074a8ac887f66e2c5b140fc13a"
     }
   ],
   "findings": [
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P001",
-      "message": "P001·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
     {
       "severity": "warn",
       "code": "multi_character_closeup",
@@ -5460,34 +6219,10 @@
       "message": "P001 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P002",
-      "message": "P002·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "multi_character_closeup",
       "panel": "P002",
       "message": "P002 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P003",
-      "message": "P003·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P004",
-      "message": "P004·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P005",
-      "message": "P005·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5500,12 +6235,6 @@
       "code": "multi_character_closeup",
       "panel": "P005",
       "message": "P005 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P006",
-      "message": "P006·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5522,18 +6251,6 @@
       "message": "P006 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P007",
-      "message": "P007·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P008",
-      "message": "P008·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P008",
@@ -5548,22 +6265,10 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P010",
-      "message": "P010·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P010",
       "message": "P010 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P011",
-      "message": "P011·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5572,22 +6277,10 @@
       "message": "P011 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P012",
-      "message": "P012·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P012",
       "message": "P012 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P013",
-      "message": "P013·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5610,46 +6303,16 @@
       "message": "P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P015",
-      "message": "P015·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P015",
       "message": "P015 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P016",
-      "message": "P016·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P016",
       "message": "P016 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P017",
-      "message": "P017·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P018",
-      "message": "P018·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P020",
-      "message": "P020·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5666,28 +6329,10 @@
       "confidence": "heuristic"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P022",
-      "message": "P022·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P023",
-      "message": "P023·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P023",
       "message": "P023 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P024",
-      "message": "P024·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5700,12 +6345,6 @@
       "code": "multi_character_closeup",
       "panel": "P024",
       "message": "P024 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P025",
-      "message": "P025·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5727,12 +6366,6 @@
       "message": "P026·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P026",
-      "message": "P026·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "missing_reference",
       "panel": "P026",
@@ -5747,34 +6380,10 @@
       "message": "P026·裴长青：缺 背身参考（背影/过肩格）"
     },
     {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P027",
-      "message": "P027·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P028",
-      "message": "P028·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
       "severity": "warn",
       "code": "multi_character_closeup",
       "panel": "P028",
       "message": "P028 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P029",
-      "message": "P029·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
-    },
-    {
-      "severity": "info",
-      "code": "escalation_suggested",
-      "panel": "P030",
-      "message": "P030·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。"
     },
     {
       "severity": "warn",
@@ -5785,5 +6394,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "b72eb85454c60f998681cd3f54016461f491833846bfcc59f8ec9fe4f68d1695"
+  "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3"
 }

@@ -2499,17 +2499,17 @@
     "panel_script": "脚本/第2话/panel_script.json",
     "panel_script_sha256": "51d7c971c1622b6306a0be862eac7de13b9c41792ea1fa4aac1f650327aa82a1",
     "settings": "_设置.md",
-    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4"
+    "settings_sha256": "9ce7deac17d844b0bfd7528125439200ff2bfd7f482f0bdac76fde9d620ecb42"
   },
   "approval": {
     "kind": "comic_name_board_approval",
     "status": "approved",
     "reviewed_by": "Codex制作代理（用户授权连续执行）",
-    "reviewed_at": "2026-07-16T15:59:45.043778+00:00",
-    "note": "重建：P20/P23为系统信息高潮，P28为道德兑现；P026/P030的虎形仅作环境墨影，不占独立主体槽。",
-    "subject_sha256": "6f722975d7e8304be0ae6234d4df518584bd2336feea12487272a32230c46b38",
+    "reviewed_at": "2026-07-17T11:25:54.710726+00:00",
+    "note": "生图后端切换仅改变设置SHA；30格NAME几何、节拍与阅读顺序复核不变。",
+    "subject_sha256": "0a551f2b4628cdbb870fb45b3be0aea8c92036e522bfdc187dfcaa6740a73843",
     "panel_script_sha256": "51d7c971c1622b6306a0be862eac7de13b9c41792ea1fa4aac1f650327aa82a1",
-    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4"
+    "settings_sha256": "9ce7deac17d844b0bfd7528125439200ff2bfd7f482f0bdac76fde9d620ecb42"
   },
   "validation": {
     "status": "pass",
