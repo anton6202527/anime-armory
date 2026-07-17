@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_waiver",
+  "stage": "image_preflight",
+  "chapter": "第1话",
+  "decision": "waive_for_this_runner_invocation",
+  "reason": "用户批准的suspect格重抽收尾：P019裴长青缺席补正、P025/P026绑定虎妖参考后重出；gate block为历史设置SHA审批合同待人工重审批",
+  "created_at": "2026-07-17T14:17:54+00:00",
+  "panel_jobs_path": "出图/第1话/prompt/panel_jobs.json",
+  "panel_jobs_sha256": "427a796014bff0b7b1ef5d5713e2cc2bc9b534c9cbc92481b1329f4e0631677e",
+  "targets": [
+    "P019"
+  ],
+  "prior_gate_receipt": {
+    "status": "stale_or_not_passed",
+    "path": "生产数据/gate_receipts/image_preflight_第1话.json",
+    "receipt_sha256": "3434c6b69944075a728fcd8a7d250f1c48c73fe78c742a2ab17f9a7724171cd7",
+    "panel_jobs_sha256": "427a796014bff0b7b1ef5d5713e2cc2bc9b534c9cbc92481b1329f4e0631677e",
+    "recorded_panel_jobs_sha256": "56e596eb88b091744f00fd639774cfcb0716a0bf49f83649302caa0067b81dfa",
+    "inputs_fingerprint_sha256": "cb9a60f21b34c95a7b5f18ff5246033493e8209d4e9f98d0cb59775a9f79eb6c",
+    "recorded_inputs_fingerprint_sha256": "6d856e8e86ed21db90468d040ba8bed61a5d861661e83ee5c52effa4263275d4",
+    "report_path": "生产数据/comic_gate_image_preflight_第1话.json",
+    "verdict": "block",
+    "reason": "receipt/report must be authentic, have no block, explicitly authorize execution, and bind the current full preflight fingerprint plus panel_jobs SHA"
+  },
+  "scope": "current panel_jobs SHA only; any rebuild invalidates this waiver"
+}

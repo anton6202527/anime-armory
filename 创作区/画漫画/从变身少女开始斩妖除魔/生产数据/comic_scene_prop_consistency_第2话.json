@@ -3,15 +3,15 @@
   "kind": "comic_scene_prop_consistency",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第2话",
-  "created_at": "2026-07-17T05:28:21",
+  "created_at": "2026-07-17T07:44:16",
   "available": true,
   "verdict": "warn",
   "summary": {
     "scene_anchor_count": 1,
     "prop_count": 2,
-    "finding_count": 2,
+    "finding_count": 1,
     "block_count": 0,
-    "warn_count": 2,
+    "warn_count": 1,
     "info_count": 0
   },
   "scenes": [
@@ -46,7 +46,7 @@
           "path": "出图/第2话/panels/P006.png"
         }
       ],
-      "layout_cohesion_floor": 0.9199,
+      "layout_cohesion_floor": 0.9458,
       "contact_sheet": "生产数据/qa_previews/第2话_scene_LOC_DESOLATE_WILDERNESS_sheet.jpg"
     }
   ],
@@ -112,18 +112,6 @@
       "return_to_stage": "image",
       "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
       "evidence_family": "reference_presence"
-    },
-    {
-      "severity": "warn",
-      "dimension": "scene_prop_consistency",
-      "code": "vlm_judge_background_suspect",
-      "subject": "LOC_DESOLATE_WILDERNESS",
-      "panel_id": "P006",
-      "artifact": "出图/第2话/panels/P006.png",
-      "reason": "VLM 并排判定低分/存疑：verdict=suspect；姜左/虎右的轴线继承，但主光源从 P005 的画面左侧低日移到 P006 的中央偏左，且中部倒卧者由黑红绣袍变成粗麻褐袍，场景要素有实质变化需人工确认。",
-      "return_to_stage": "image",
-      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
-      "evidence_family": "vlm_judge"
     }
   ],
   "notes": [

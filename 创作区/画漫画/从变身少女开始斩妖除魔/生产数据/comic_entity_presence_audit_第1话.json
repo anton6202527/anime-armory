@@ -1,14 +1,14 @@
 {
   "kind": "comic_entity_presence_audit",
   "version": 1,
-  "generated_at": "2026-07-17T12:35:50+00:00",
+  "generated_at": "2026-07-17T14:16:21+00:00",
   "chapter": "第1话",
   "summary": {
     "panels": 28,
     "registry_entities": 5,
-    "panels_with_schedule": 0,
+    "panels_with_schedule": 2,
     "must": 0,
-    "warn": 4,
+    "warn": 2,
     "info": 0
   },
   "findings": [
@@ -25,20 +25,6 @@
       "panel_id": "P020",
       "entity": "PROP_HENGDAO_BROKEN",
       "message": "P020 画面描述提到「横刀」（registry 实体 PROP_HENGDAO_BROKEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
-    },
-    {
-      "severity": "warn",
-      "code": "mentioned_not_bound",
-      "panel_id": "P025",
-      "entity": "MON_TIGER_SHANSHEN",
-      "message": "P025 画面描述提到「虎妖」（registry 实体 MON_TIGER_SHANSHEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
-    },
-    {
-      "severity": "warn",
-      "code": "mentioned_not_bound",
-      "panel_id": "P026",
-      "entity": "MON_TIGER_SHANSHEN",
-      "message": "P026 画面描述提到「虎妖」（registry 实体 MON_TIGER_SHANSHEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
     }
   ],
   "derived_schedule": {
@@ -166,18 +152,6 @@
       "CHAR_PEI_CHANGQING",
       "LOC_DESOLATE_WILDERNESS",
       "MON_TIGER_SHANSHEN",
-      "PROP_HENGDAO_BROKEN"
-    ],
-    "P025": [
-      "CHAR_JIANG_YUECHU",
-      "CHAR_PEI_CHANGQING",
-      "LOC_DESOLATE_WILDERNESS",
-      "PROP_HENGDAO_BROKEN"
-    ],
-    "P026": [
-      "CHAR_JIANG_YUECHU",
-      "CHAR_PEI_CHANGQING",
-      "LOC_DESOLATE_WILDERNESS",
       "PROP_HENGDAO_BROKEN"
     ],
     "P027": [

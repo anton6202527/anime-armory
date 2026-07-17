@@ -2050,9 +2050,9 @@
       "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P006.json",
       "model": "Seedream 5.0",
       "generated_from_contract_sha256": "b2e87b2f92723e5ba00bcfbf92318e961f896151466ca1f73b79c4afec8e87fc",
-      "generated_at": "2026-07-17T19:50:26",
+      "generated_at": "2026-07-17T07:03:38",
       "reference_input_mode": "dreamina_image2image_images",
-      "artifact_sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb",
+      "artifact_sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5",
       "reference_input_count": 8,
       "attempt": 1,
       "post_qc": {
@@ -2060,8 +2060,8 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第2话",
         "panel_id": "P006",
-        "created_at": "2026-07-17T19:50:26",
-        "verdict": "warn",
+        "created_at": "2026-07-17T07:03:38",
+        "verdict": "pass",
         "path": "出图/第2话/panels/P006.png",
         "size": {
           "width": 1296,
@@ -2075,27 +2075,37 @@
         "reference_input_count": 8,
         "omitted_attachment_count": 0,
         "omitted_attachment_ids": [],
-        "blank_region_candidates": [
-          {
-            "x": 573,
-            "y": 361,
-            "w": 237,
-            "h": 77,
-            "area": 6474
-          }
-        ],
-        "issues": [
-          {
-            "severity": "warn",
-            "category": "baked_text_container",
-            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
-          }
-        ],
-        "manual_review_required": true
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
       },
       "backend_version": "{",
       "generated_from_execution_input_sha256": "eac87be303c1130053bc5baf1dc5af4fb25cb1492dba9be7bbaa65fa99ea38fe",
-      "generated_from_submit_prompt_sha256": "bf779f2aa1537c3ea18c31188b6e99901c1cd43915ccf3d3864bc7bee74d2d91"
+      "generated_from_submit_prompt_sha256": "bf779f2aa1537c3ea18c31188b6e99901c1cd43915ccf3d3864bc7bee74d2d91",
+      "model_version": "5.0",
+      "submit_id": "b6c8f580-1a86-4bec-9043-c39ea0670218",
+      "service_ratio": "1:1",
+      "resolution_type": "2k",
+      "prompt_snapshot": "出图/第2话/prompt/dreamina/P006.txt",
+      "prompt_snapshot_sha256": "ea5fae7eeff1517b8c1d2f9297b68c3c591ca9ec0bfacd943b24c1eec20fe451",
+      "raw_candidate_path": "出图/第2话/candidates/P006/20260717T070208_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2048,
+          "height": 2048
+        },
+        "target_size": {
+          "width": 1296,
+          "height": 1156
+        }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔/出图/第2话/candidates/P006/P006_20260717_070338_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P007",

@@ -3,8 +3,8 @@
   "kind": "comic_panel_post_qc",
   "chapter": "第2话",
   "panel_id": "P006",
-  "created_at": "2026-07-17T19:50:26",
-  "verdict": "warn",
+  "created_at": "2026-07-17T07:03:38",
+  "verdict": "pass",
   "path": "出图/第2话/panels/P006.png",
   "size": {
     "width": 1296,
@@ -18,21 +18,7 @@
   "reference_input_count": 8,
   "omitted_attachment_count": 0,
   "omitted_attachment_ids": [],
-  "blank_region_candidates": [
-    {
-      "x": 573,
-      "y": 361,
-      "w": 237,
-      "h": 77,
-      "area": 6474
-    }
-  ],
-  "issues": [
-    {
-      "severity": "warn",
-      "category": "baked_text_container",
-      "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
-    }
-  ],
-  "manual_review_required": true
+  "blank_region_candidates": [],
+  "issues": [],
+  "manual_review_required": false
 }

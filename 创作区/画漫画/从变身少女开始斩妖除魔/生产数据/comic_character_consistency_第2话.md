@@ -1,15 +1,14 @@
 # 漫画角色一致性报告 — 第2话
 
-- 生成时间：2026-07-17T05:28:21
+- 生成时间：2026-07-17T07:44:15
 - 结论：block
 - 角色数：3
 - 出场绑定：12
-- block/warn/info：41 / 0 / 0
+- block/warn/info：41 / 2 / 0
 - 并排复核图：`生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg`
 
 ## 记录
 
-- CCIP 动漫身份 embedding 不可用（色彩指纹只是代理，换脸同色调会漏报）。建议在独立 venv 安装 dghs-imgutils（pip install dghs-imgutils）后重跑，获得阈值化的同角色判定（threshold=0.178）。
 - VLM 并排判定任务包已刷新：生产数据/comic_vlm_judge_tasks_第2话.json（裁决 19/19）；由多模态 agent 看图执行并写回 verdict 文件。
 - 已生成角色一致性并排复核图：生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg
 
@@ -66,3 +65,5 @@
 | block | character_panel_missing | CHAR_PEI_CHANGQING | P029 | 出图/第2话/panels/P029.png | 角色出场格缺少面板图，无法做角色一致性复核。 |
 | block | character_panel_missing | CHAR_JIANG_YUECHU | P030 | 出图/第2话/panels/P030.png | 角色出场格缺少面板图，无法做角色一致性复核。 |
 | block | character_panel_missing | CHAR_PEI_CHANGQING | P030 | 出图/第2话/panels/P030.png | 角色出场格缺少面板图，无法做角色一致性复核。 |
+| warn | ccip_identity_low | MON_TIGER_SHANSHEN | P005 | 出图/第2话/panels/P005.png | MON_TIGER_SHANSHEN CCIP 身份距离 0.3568 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认） |
+| warn | ccip_identity_low | MON_TIGER_SHANSHEN | P006 | 出图/第2话/panels/P006.png | MON_TIGER_SHANSHEN CCIP 身份距离 0.2362 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认） |

@@ -3,7 +3,7 @@
   "kind": "comic_vlm_judge_tasks",
   "protocol": "CANVAS-ContinuityEval-3axis",
   "chapter": "第2话",
-  "created_at": "2026-07-17T05:28:20",
+  "created_at": "2026-07-17T07:44:15",
   "axes": [
     "character_identity",
     "background_continuity",
@@ -273,7 +273,7 @@
       "panel": {
         "panel_id": "P006",
         "path": "出图/第2话/panels/P006.png",
-        "sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb"
+        "sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -289,7 +289,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "731f07bd1ad16c0ceb341121671b80d0f54955a45d14d8f75e50a7dc32c66c10"
+      "task_sha256": "107ab9a08f3c238a700fd11f5c327a212dde404f8f9c9db723debe4e6cefa2d4"
     },
     {
       "task_id": "P006__MON_TIGER_SHANSHEN__character",
@@ -297,7 +297,7 @@
       "panel": {
         "panel_id": "P006",
         "path": "出图/第2话/panels/P006.png",
-        "sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb"
+        "sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -313,7 +313,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "1b343a2af4441ec86258717863e9964d7c6a20fa3c9f1606a8ed846fde096797"
+      "task_sha256": "8eb0f6078e694ef62d7ae01381f4ce9eb5fb9d2049a0ab56f03629af8a96eec5"
     },
     {
       "task_id": "P001__P002__background",
@@ -397,7 +397,7 @@
       "panel": {
         "panel_id": "P006",
         "path": "出图/第2话/panels/P006.png",
-        "sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb"
+        "sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
@@ -408,7 +408,7 @@
       "references_sha256": {
         "出图/第2话/panels/P005.png": "626e99596ea82d1ec799b71f94d3eef6478fa2f016cecc1b2ae819a804f5f7ad"
       },
-      "task_sha256": "997be779eb61ff64d56b26ee350d984c1c21a94cc07d74603bdeaad39ffdaf6f"
+      "task_sha256": "f11140ed8dc87ccbd427447dd664cd5bf54e3b1dd67409f245fc51c9cdf46b0b"
     },
     {
       "task_id": "P001__PROP_HENGDAO_BROKEN__prop",

@@ -230,52 +230,6 @@
       "notes": "前景倒卧者黑底红云纹袍、腰带同定妆；脸偏柔和年轻与定妆有可见差距（face 记3需人工确认），衣装身份明确。"
     },
     {
-      "task_id": "P006__CHAR_JIANG_YUECHU__character",
-      "panel_sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb",
-      "task_sha256": "731f07bd1ad16c0ceb341121671b80d0f54955a45d14d8f75e50a7dc32c66c10",
-      "references_sha256": {
-        "出图/共享/图片/user_reference_clean_source.png": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
-        "出图/共享/图片/CHAR_JIANG_YUECHU__face.png": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321",
-        "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
-        "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
-      },
-      "evaluator": {
-        "model": "claude-fable-5",
-        "version": "2026-07-17",
-        "reviewed_at": "2026-07-17T05:22:41-07:00"
-      },
-      "scores": {
-        "face": 4,
-        "outfit": 4,
-        "build": 4
-      },
-      "verdict": "pass",
-      "notes": "前景仰头女子高马尾+垂发、深棕眼、带血渍灰白破袍束腰与定妆一致，表情张口但五官结构未漂移。"
-    },
-    {
-      "task_id": "P006__MON_TIGER_SHANSHEN__character",
-      "panel_sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb",
-      "task_sha256": "1b343a2af4441ec86258717863e9964d7c6a20fa3c9f1606a8ed846fde096797",
-      "references_sha256": {
-        "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
-        "出图/共享/图片/MON_TIGER_SHANSHEN__face.png": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
-        "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
-        "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
-      },
-      "evaluator": {
-        "model": "claude-fable-5",
-        "version": "2026-07-17",
-        "reviewed_at": "2026-07-17T05:22:41-07:00"
-      },
-      "scores": {
-        "face": 4,
-        "outfit": 4,
-        "build": 4
-      },
-      "verdict": "pass",
-      "notes": "背景妖怪虎首人身直立、灰黑鳞甲、胸口黑洞金纹清晰可见，与定妆锚同一形态，无四足化/无甲化漂移。"
-    },
-    {
       "task_id": "P001__P002__background",
       "panel_sha256": "d4fe959cc67c23785112dc9527272a4b0514992446ded2086cb7ee9bfdd0a091",
       "task_sha256": "73969067bf200edbd470e282158169e8c51a2b3148ed8bae5c7ee40e8093e50b",
@@ -356,26 +310,6 @@
       "notes": "太阳左侧、破车右侧、裴倒卧中部、姜居左的空间关系两格完全继承，暖光方向一致，轴线未跳。"
     },
     {
-      "task_id": "P005__P006__background",
-      "panel_sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb",
-      "task_sha256": "997be779eb61ff64d56b26ee350d984c1c21a94cc07d74603bdeaad39ffdaf6f",
-      "references_sha256": {
-        "出图/第2话/panels/P005.png": "626e99596ea82d1ec799b71f94d3eef6478fa2f016cecc1b2ae819a804f5f7ad"
-      },
-      "evaluator": {
-        "model": "claude-fable-5",
-        "version": "2026-07-17",
-        "reviewed_at": "2026-07-17T05:22:41-07:00"
-      },
-      "scores": {
-        "layout": 3,
-        "lighting": 3,
-        "axis": 4
-      },
-      "verdict": "suspect",
-      "notes": "姜左/虎右的轴线继承，但主光源从 P005 的画面左侧低日移到 P006 的中央偏左，且中部倒卧者由黑红绣袍变成粗麻褐袍，场景要素有实质变化需人工确认。"
-    },
-    {
       "task_id": "P001__PROP_HENGDAO_BROKEN__prop",
       "panel_sha256": "92c851108a4ddf47a50215ac49a8a405862bdd513f80ea9d2e53e89cc30bdd3f",
       "task_sha256": "b5ab29e6ee2450373953fdffe90076700bd853c2c90d0af1cc0aebffcfe7bf77",
@@ -414,6 +348,72 @@
       },
       "verdict": "pass",
       "notes": "姜俯身双手握持的刀白红缠布柄、铜色圆护手、带血锯齿断尖与锚图一致，持握关系合理；地上另插的完整刀为战场残兵不与该道具混淆。"
+    },
+    {
+      "task_id": "P006__CHAR_JIANG_YUECHU__character",
+      "panel_sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5",
+      "task_sha256": "107ab9a08f3c238a700fd11f5c327a212dde404f8f9c9db723debe4e6cefa2d4",
+      "references_sha256": {
+        "出图/共享/图片/user_reference_clean_source.png": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+        "出图/共享/图片/CHAR_JIANG_YUECHU__face.png": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321",
+        "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+        "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+      },
+      "evaluator": {
+        "model": "claude-fable-5",
+        "version": "2026-07-17",
+        "reviewed_at": "2026-07-17T07:08:53-07:00"
+      },
+      "scores": {
+        "face": 5,
+        "outfit": 4,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "脸型/黑高马尾/刘海与定妆完全一致，灰白破损交领布袍+腰间系带同款，仅衣摆撕裂细节与血渍分布有小偏差，体型比例一致。"
+    },
+    {
+      "task_id": "P006__MON_TIGER_SHANSHEN__character",
+      "panel_sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5",
+      "task_sha256": "8eb0f6078e694ef62d7ae01381f4ce9eb5fb9d2049a0ab56f03629af8a96eec5",
+      "references_sha256": {
+        "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__face.png": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
+      },
+      "evaluator": {
+        "model": "claude-fable-5",
+        "version": "2026-07-17",
+        "reviewed_at": "2026-07-17T07:08:53-07:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 5,
+        "build": 5
+      },
+      "verdict": "pass",
+      "notes": "白虎首（黑纹白毛，画幅上缘略裁切）+人身双足直立+灰黑鳞甲+胸口黑洞金纹+腰部虎面兽首均与定妆参考一致，金色裂纹走向相符。"
+    },
+    {
+      "task_id": "P005__P006__background",
+      "panel_sha256": "98a70c738004ac42acf286bf1b5375d87117491bab8f698667ff8c27c9363dd5",
+      "task_sha256": "f11140ed8dc87ccbd427447dd664cd5bf54e3b1dd67409f245fc51c9cdf46b0b",
+      "references_sha256": {
+        "出图/第2话/panels/P005.png": "626e99596ea82d1ec799b71f94d3eef6478fa2f016cecc1b2ae819a804f5f7ad"
+      },
+      "evaluator": {
+        "model": "claude-fable-5",
+        "version": "2026-07-17",
+        "reviewed_at": "2026-07-17T07:08:53-07:00"
+      },
+      "scores": {
+        "layout": 4,
+        "lighting": 5,
+        "axis": 4
+      },
+      "verdict": "pass",
+      "notes": "倒卧裴长青仍穿黑底暗红云纹锦袍与P005一致，主光维持画面左侧低位夕阳暖光，右侧破木车/远山布局与轴线继承，仅木车形态与中景岩石有小偏差。"
     }
   ]
 }

@@ -21,8 +21,8 @@
   "render_stage": "完成稿",
   "reference_plan": {
     "path": "生产数据/comic_reference_plan_第1话.json",
-    "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-    "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b"
+    "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+    "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28"
   },
   "finishing_plan": "出图/第1话/finishing/finishing_plan.json",
   "jobs": [
@@ -54,8 +54,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "ecd3c05740f2f4092e1de5dfeee75454766b4100973e3e069f6d1d93d5c1c1d4"
         },
         "identity_registry": {
@@ -65,7 +65,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -215,7 +215,6 @@
       "result_path": "出图/第1话/panels/P001.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "69e0e2268635d0a79736c39644d81de6122a2234f2d90ae6210d3ecb4c225b6c",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P001.json",
       "reference_input_count": 2,
       "post_qc": {
         "schema_version": 1,
@@ -241,7 +240,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P001.json"
     },
     {
       "panel_id": "P002",
@@ -271,8 +270,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "60ff16ff97dacafe939d4004f7f8c52f169bcbabbbabad09db6facf4b497a4e3"
         },
         "identity_registry": {
@@ -282,7 +281,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -489,7 +488,6 @@
       "result_path": "出图/第1话/panels/P002.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "948ee481080599a7d0ef3e9f320f1095c204bcca02266fd1a795ecfab03d794a",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P002.json",
       "reference_input_count": 5,
       "post_qc": {
         "schema_version": 1,
@@ -515,7 +513,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P002.json"
     },
     {
       "panel_id": "P003",
@@ -545,8 +543,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "b66d87128158e5b6025e44af2a658e966bec962c38c36e613ddcfbcf0412a23f"
         },
         "identity_registry": {
@@ -556,7 +554,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -763,7 +761,6 @@
       "result_path": "出图/第1话/panels/P003.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "28d6c458732cd4c3c016c49e4d19ded6e5c79ca40e436807f73f4126a79756bd",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P003.json",
       "reference_input_count": 5,
       "post_qc": {
         "schema_version": 1,
@@ -789,7 +786,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P003.json"
     },
     {
       "panel_id": "P004",
@@ -819,8 +816,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "383987b5dfedd802d67aed278fb69c326a27f23bef79a4dab006e1db5e47ba60"
         },
         "identity_registry": {
@@ -830,7 +827,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -1094,7 +1091,6 @@
       "result_path": "出图/第1话/panels/P004.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "f7921f185cd9216b5f66ea6078d8bcb9830fc7f82a5c268ac9fd563bb7b73a94",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P004.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -1120,7 +1116,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P004.json"
     },
     {
       "panel_id": "P005",
@@ -1150,8 +1146,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "4df8f18df69e5df90b3834fd6bda9701a2efaea112d0cab28ca71e8a1a80a470"
         },
         "identity_registry": {
@@ -1161,7 +1157,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -1434,7 +1430,6 @@
       "result_path": "出图/第1话/panels/P005.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "707658a0593152051b1c173a01da36281aad29de45d05707f33a8ec0c87c8cd4",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P005.json",
       "reference_input_count": 9,
       "post_qc": {
         "schema_version": 1,
@@ -1460,7 +1455,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P005.json"
     },
     {
       "panel_id": "P006",
@@ -1490,8 +1485,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "94c895aad745689f30d2cf95a78c85ce438aec579da4a1c9ff2a02bf2b41011d"
         },
         "identity_registry": {
@@ -1501,7 +1496,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -1765,7 +1760,6 @@
       "result_path": "出图/第1话/panels/P006.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "795ea5f6c88aa5ed9ee11755aab3e7a63703d38c84b0a37206b4296fe4ffde8c",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P006.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -1791,7 +1785,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P006.json"
     },
     {
       "panel_id": "P007",
@@ -1821,8 +1815,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "8f824e1badb7ce717596dcd44b79864fa85d6a3147dc0b90d43571daa1fd0dba"
         },
         "identity_registry": {
@@ -1832,7 +1826,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -2096,7 +2090,6 @@
       "result_path": "出图/第1话/panels/P007.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "120cd25e69c2de0b5a0261c47f7462b4f186e46b51ca57b57c03ff290787c674",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P007.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -2122,7 +2115,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P007.json"
     },
     {
       "panel_id": "P008",
@@ -2152,8 +2145,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "46c891b710e9b39b2fd9605a94b57d654f8b8376ff0415cb7efb047eca905a6a"
         },
         "identity_registry": {
@@ -2163,7 +2156,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -2456,7 +2449,6 @@
       "result_path": "出图/第1话/panels/P008.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "8309c1d4eba475c56d5527501ca5ba23e69cc74376e79093382551c3a19a2fd4",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P008.json",
       "reference_input_count": 9,
       "post_qc": {
         "schema_version": 1,
@@ -2482,7 +2474,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P008.json"
     },
     {
       "panel_id": "P009",
@@ -2512,8 +2504,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "51b3500be27d26d48b0be347e7036781bb233273ee8eba638088dc2d8697ef10"
         },
         "identity_registry": {
@@ -2523,7 +2515,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -2739,7 +2731,6 @@
       "result_path": "出图/第1话/panels/P009.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "8db27603a0c6b0e11979a755dad423e2b9e8c184cdc9e5be91fe07635cbc5ebd",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P009.json",
       "reference_input_count": 6,
       "post_qc": {
         "schema_version": 1,
@@ -2765,7 +2756,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P009.json"
     },
     {
       "panel_id": "P010",
@@ -2795,8 +2786,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "5cd2ebafe0720a8773e232e9dd113d753b2052ed84bda479b984170860af61ce"
         },
         "identity_registry": {
@@ -2806,7 +2797,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -3070,7 +3061,6 @@
       "result_path": "出图/第1话/panels/P010.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "e63ac734304ed09e78ef5c14efa4ab31ad363b53616290894f55552a1037e3c0",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P010.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -3096,7 +3086,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P010.json"
     },
     {
       "panel_id": "P011",
@@ -3126,8 +3116,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "c6d6125622c6a107f49f41901f3da97e29a14890211d09c8277e68b78d2700d0"
         },
         "identity_registry": {
@@ -3137,7 +3127,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -3401,7 +3391,6 @@
       "result_path": "出图/第1话/panels/P011.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "fb144a9f6c2b2c891a609d132b0023c1aef139c4529a960a63e6801ff635d628",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P011.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -3427,7 +3416,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:53"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P011.json"
     },
     {
       "panel_id": "P012",
@@ -3457,8 +3446,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "d1d2f6b83d8593c1cda2ab24c8934efab931916ee2a304baf99be00309913e19"
         },
         "identity_registry": {
@@ -3468,7 +3457,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -3732,7 +3721,6 @@
       "result_path": "出图/第1话/panels/P012.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "cc5d2d218d3993ee455d5f16eccc4da402ee3c49df65e8c1b95992ec6b2a98e2",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P012.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -3758,7 +3746,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P012.json"
     },
     {
       "panel_id": "P013",
@@ -3788,8 +3776,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "404cdec2d26c1833183d2e5e44a0ca5ca4f4ec861c2af9bf249a3e4446a3eff4"
         },
         "identity_registry": {
@@ -3799,7 +3787,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -4063,7 +4051,6 @@
       "result_path": "出图/第1话/panels/P013.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "54a875412db5572bb4a59c9d20500b7b9d13bf1d822651451a8223c060d3d53a",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P013.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -4089,7 +4076,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P013.json"
     },
     {
       "panel_id": "P014",
@@ -4119,8 +4106,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "c6f8570fef4c0cea1bfadaaf490e9f7636eadb29e7a05397879ded661563bb83"
         },
         "identity_registry": {
@@ -4130,7 +4117,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -4405,7 +4392,6 @@
       "result_path": "出图/第1话/panels/P014.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "4e907f85b04657ab9daa58cc2ce22b47fd7039504fb3b6877032218d66cc1fc5",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P014.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -4431,7 +4417,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P014.json"
     },
     {
       "panel_id": "P015",
@@ -4461,8 +4447,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "43bc6f7f284a009c0b1dc4b5ed6cb11afd8b16b482c1204c66b0df2b6fcfbe8a"
         },
         "identity_registry": {
@@ -4472,7 +4458,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -4807,15 +4793,16 @@
       },
       "result_path": "出图/第1话/panels/P015.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P015.json",
+      "generated_at": "2026-07-17T06:47:55",
+      "artifact_sha256": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5",
       "reference_input_count": 10,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P015",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T06:47:55",
         "verdict": "pass",
         "path": "出图/第1话/panels/P015.png",
         "size": {
@@ -4834,7 +4821,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "10807be4687281175439d86a8b80274aeb6c784f57d6c1446fbbd5a437752d8d",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "8498123d3e4cdb622fa196b3c0a01184579bd1961ab85dd1b859ea454552843c",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P015.json",
+      "generated_from_execution_input_sha256": "ef20a509e988a87cbe3d8d67dff877ed494f0059f1d1a7dbb58ddda72a0ba8fc"
     },
     {
       "panel_id": "P016",
@@ -4864,8 +4857,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "8e04c5e65dd8c9f37ca8334a45c802ef89ca365a79e851802fd8d3c24b2b6205"
         },
         "identity_registry": {
@@ -4875,7 +4868,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -5202,7 +5195,6 @@
       "result_path": "出图/第1话/panels/P016.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "349f08929296f2ba6213e81b061e156de6aa6989f336748b25b674e67296033e",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P016.json",
       "reference_input_count": 10,
       "post_qc": {
         "schema_version": 1,
@@ -5228,7 +5220,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P016.json"
     },
     {
       "panel_id": "P017",
@@ -5258,8 +5250,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "acc05bda53932f4f7fc93a197e8a296bb94838b2fb089ace3ad76cd8685a3745"
         },
         "identity_registry": {
@@ -5269,7 +5261,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -5533,7 +5525,6 @@
       "result_path": "出图/第1话/panels/P017.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "c1b6d0d3e4e416f170e8cba54bedd5c3f6db9301f854876c5bd4e0e09f020199",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P017.json",
       "reference_input_count": 8,
       "post_qc": {
         "schema_version": 1,
@@ -5559,7 +5550,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P017.json"
     },
     {
       "panel_id": "P018",
@@ -5589,8 +5580,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "dcd154736c5b3443991a4ab8059a4368d792ab36d6185afb26167f94833ed21c"
         },
         "identity_registry": {
@@ -5600,7 +5591,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -5883,15 +5874,16 @@
       },
       "result_path": "出图/第1话/panels/P018.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P018.json",
+      "generated_at": "2026-07-17T06:54:01",
+      "artifact_sha256": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7",
       "reference_input_count": 9,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P018",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T06:54:01",
         "verdict": "pass",
         "path": "出图/第1话/panels/P018.png",
         "size": {
@@ -5910,7 +5902,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "1916706fb994bcb84c6c4fd63da4ed1149b2d25904815507cd6eb77986797ea5",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "0c1cdebdb2844e977e8f8fbc492eccbd0d417dea66a5eede6287d08a671fe5b4",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P018.json",
+      "generated_from_execution_input_sha256": "c9b9d6f4027b7f24ef136554c67d6424981143340d0896979f6bab0d881a97dd"
     },
     {
       "panel_id": "P019",
@@ -5940,8 +5938,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "64b71e00322d4f9944efb81804c6a26075f4788d709c2ce6c5f430b99e04dd86"
         },
         "identity_registry": {
@@ -5951,7 +5949,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -6277,16 +6275,17 @@
       },
       "result_path": "出图/第1话/panels/P019.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P019.json",
+      "generated_at": "2026-07-17T07:19:18",
+      "artifact_sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f",
       "reference_input_count": 10,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P019",
-        "created_at": "2026-07-17T05:34:54",
-        "verdict": "pass",
+        "created_at": "2026-07-17T07:19:18",
+        "verdict": "warn",
         "path": "出图/第1话/panels/P019.png",
         "size": {
           "width": 1296,
@@ -6300,11 +6299,55 @@
         "reference_input_count": 10,
         "omitted_attachment_count": 0,
         "omitted_attachment_ids": [],
-        "blank_region_candidates": [],
-        "issues": [],
-        "manual_review_required": false
+        "blank_region_candidates": [
+          {
+            "x": 24,
+            "y": 314,
+            "w": 108,
+            "h": 74,
+            "area": 4360
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": true
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "8e9d554a276616f2783df9b86bbac6f972373d206850fd1269bb283940798c5d",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "47f8e3467d24e6f06eb45f092062f8fc67c18a5e9d64b58332066153b168a45b",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P019.json",
+      "generated_from_execution_input_sha256": "21197f70a19de04a2eeb85cb9563e4264404629149d71c84f50142b4e049ab65",
+      "model_version": "5.0",
+      "submit_id": "c775b53e-a96b-4105-970e-97c8059942bb",
+      "service_ratio": "4:3",
+      "resolution_type": "2k",
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P019.txt",
+      "prompt_snapshot_sha256": "151abf222bde053cc35845e8d04eb551080360abcdc45ccafc63d1555cda35bc",
+      "raw_candidate_path": "出图/第1话/candidates/P019/20260717T071755_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2304,
+          "height": 1728
+        },
+        "target_size": {
+          "width": 1296,
+          "height": 1040
+        }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔/出图/第1话/candidates/P019/P019_20260717_071918_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P020",
@@ -6334,8 +6377,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "549e7e1bda8e242b6d6aa255307413d54b540d2c644d682a5542fb515337f5cb"
         },
         "identity_registry": {
@@ -6345,7 +6388,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -6660,15 +6703,16 @@
       },
       "result_path": "出图/第1话/panels/P020.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P020.json",
+      "generated_at": "2026-07-17T06:50:56",
+      "artifact_sha256": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc",
       "reference_input_count": 10,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P020",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T06:50:56",
         "verdict": "pass",
         "path": "出图/第1话/panels/P020.png",
         "size": {
@@ -6687,7 +6731,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "5e666a84a8da06aca16a938ee2273e7582e44e779391d3e06aaefcdc161e04fc",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "b81aee84361f13e92a679d5bb5f887f5758f1fa22de1ede60a351abeffa85d3d",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P020.json",
+      "generated_from_execution_input_sha256": "f497bc591ad5845f7a8c79ed08e92cabd0fadac309c6205033b860f293e64bdf"
     },
     {
       "panel_id": "P021",
@@ -6717,8 +6767,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "48c5a78d78e307e196768309793179ac7de1262f1914ec8b7d1325c26f47c9c1"
         },
         "identity_registry": {
@@ -6728,7 +6778,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -6935,7 +6985,6 @@
       "result_path": "出图/第1话/panels/P021.png",
       "source": "Dreamina/即梦官方 CLI",
       "artifact_sha256": "a06db0cbe9514c2b26c9b53661681678a1246cf14e1cf8bb1667fea023753863",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P021.json",
       "reference_input_count": 5,
       "post_qc": {
         "schema_version": 1,
@@ -6961,7 +7010,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P021.json"
     },
     {
       "panel_id": "P022",
@@ -6991,8 +7040,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "7954b4b098ddb127da350ab1e00c43a05c2689ef1decc10a511f565476364660"
         },
         "identity_registry": {
@@ -7002,7 +7051,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -7265,15 +7314,16 @@
       },
       "result_path": "出图/第1话/panels/P022.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "4aff1ab52a49d4c225fffaba5798988341449a6111842d70758e99b8dfe16f06",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P022.json",
+      "generated_at": "2026-07-17T06:52:20",
+      "artifact_sha256": "0a3c48f22f9dbd76208af25b9a2e1879091d9e78faaecbe5ed31ae34a20b016c",
       "reference_input_count": 8,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P022",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T06:52:20",
         "verdict": "pass",
         "path": "出图/第1话/panels/P022.png",
         "size": {
@@ -7292,7 +7342,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "681a3311a6791e0d23866160ba8618bdbf6978e676380a062d16e9fdcc75fb6d",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "3b2017596adcb3eeb2fb4ffadab7b6740a7624b6cab956dd88d701e9b189d5b2",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P022.json",
+      "generated_from_execution_input_sha256": "8c14d60094fae341cc6e1a06ad591167ab61311dd5a9e4d945ad7aa9bb798f53"
     },
     {
       "panel_id": "P023",
@@ -7322,8 +7378,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "0197dde03a2f0da1905948a66395e2d7a5e66ba19267ad3a70293db96b29a3bc"
         },
         "identity_registry": {
@@ -7333,7 +7389,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -7605,15 +7661,16 @@
       },
       "result_path": "出图/第1话/panels/P023.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P023.json",
+      "generated_at": "2026-07-17T06:56:09",
+      "artifact_sha256": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0",
       "reference_input_count": 9,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P023",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T06:56:09",
         "verdict": "pass",
         "path": "出图/第1话/panels/P023.png",
         "size": {
@@ -7632,7 +7689,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "5df829e75df4a9479d13219d4aef959c41ee0a7013fb045d87dff0f05d414a2b",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "7a16f88abf5ff940d49a21f6067290875bc3a4afb90560f4d8ef3a4363dc94e6",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P023.json",
+      "generated_from_execution_input_sha256": "982e53b6a1d0b1a604717db685c78cc8119e1e5633ce085a622f1352bb977535"
     },
     {
       "panel_id": "P024",
@@ -7662,8 +7725,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "f61c394633889e1049fc35f9230f0a96e435170420342b23f82250a46777ca00"
         },
         "identity_registry": {
@@ -7673,7 +7736,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -7988,15 +8051,16 @@
       },
       "result_path": "出图/第1话/panels/P024.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P024.json",
+      "generated_at": "2026-07-17T07:06:03",
+      "artifact_sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f",
       "reference_input_count": 10,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P024",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T07:06:03",
         "verdict": "pass",
         "path": "出图/第1话/panels/P024.png",
         "size": {
@@ -8015,7 +8079,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "6de23177c3d462a9e307f7b00663d78e26b5956b0fc3cbe00e5ad73774ab2e44",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "af752bf298f4b2d0c02b9b19da0e809d3e8c06f3078938f7f6fcedc4dc060cac",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P024.json",
+      "generated_from_execution_input_sha256": "25a1e09563b1d90781ae281563bd3d10cf646d4474aa18c344f8c1fa3db94506"
     },
     {
       "panel_id": "P025",
@@ -8024,7 +8094,7 @@
         "width": 1188,
         "height": 920
       },
-      "production_contract_prompt": "无字漫画分格画面，国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；画面事实：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。；角色：CHAR_JIANG_YUECHU、CHAR_PEI_CHANGQING；场景：尸骸荒野；场景一致性契约：场景锚:LOC_DESOLATE_WILDERNESS；空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；尸骸、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，血色轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:PROP_HENGDAO_BROKEN；枯草；尸骸；巨岩；黑色妖血；承接上一格:P024；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线/眼神契约：目标=对话对象或当前关键道具；方向=画面内侧；人物完整性契约：姜月初锁定偏窄鹅蛋脸、冷锐杏眼、黑色高马尾与破损灰白囚服；裴长青锁定黑衣赤云纹、左臂重伤；虎妖锁定人身虎头与胸口巨大血窟窿。手脚、刀柄、刀锋和受力接触点必须完整可读。；构图与表演：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场计划:以虎妖、尸骸缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶计划:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰可读性:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符计划:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIANG_YUECHU=姜月初；角色DNA:年轻东方少女；鹅蛋脸偏窄，下颌利落；冷锐杏眼、深色瞳仁、眉形纤长；黑色浓密长发高束马尾，额前自然碎发与两缕鬓发；身形纤细但姿态有韧性；核心气质是冷静、警觉、决绝，不媚俗；年龄/形态继承:囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化；禁继承:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI_CHANGQING=裴长青；角色DNA:二十出头的大唐镇魔司武者；高大挺拔；硬朗年轻面孔；黑衣赤云纹劲装；重伤仍有压迫感；年龄/形态继承:所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯；禁继承:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_DESOLATE_WILDERNESS=尸骸荒野 || STYLE_USER_JIANG_YUECHU_REF=用户主角视觉参考与水墨电影感风格锚 || PROP_HENGDAO_BROKEN=镇魔司断横刀；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIANG_YUECHU：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=惊惧压抑；state=惊惧与抉择(仅在威胁逼近或内心抉择格使用) || CHAR_PEI_CHANGQING：form=基础形态(所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯)；不得:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=濒死痛楚；state=濒死痛楚(重伤场景持续，身份与制服结构不变)",
+      "production_contract_prompt": "无字漫画分格画面，国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；画面事实：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。；角色：CHAR_JIANG_YUECHU、CHAR_PEI_CHANGQING、MON_TIGER_SHANSHEN；场景：尸骸荒野；场景一致性契约：场景锚:LOC_DESOLATE_WILDERNESS；空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；尸骸、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，血色轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:PROP_HENGDAO_BROKEN；枯草；尸骸；巨岩；黑色妖血；承接上一格:P024；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线/眼神契约：目标=对话对象或当前关键道具；方向=画面内侧；人物完整性契约：姜月初锁定偏窄鹅蛋脸、冷锐杏眼、黑色高马尾与破损灰白囚服；裴长青锁定黑衣赤云纹、左臂重伤；虎妖锁定人身虎头与胸口巨大血窟窿。手脚、刀柄、刀锋和受力接触点必须完整可读。；构图与表演：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场计划:以虎妖、尸骸缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶计划:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰可读性:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符计划:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIANG_YUECHU=姜月初；角色DNA:年轻东方少女；鹅蛋脸偏窄，下颌利落；冷锐杏眼、深色瞳仁、眉形纤长；黑色浓密长发高束马尾，额前自然碎发与两缕鬓发；身形纤细但姿态有韧性；核心气质是冷静、警觉、决绝，不媚俗；年龄/形态继承:囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化；禁继承:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI_CHANGQING=裴长青；角色DNA:二十出头的大唐镇魔司武者；高大挺拔；硬朗年轻面孔；黑衣赤云纹劲装；重伤仍有压迫感；年龄/形态继承:所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯；禁继承:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER_SHANSHEN=虎山神；角色DNA:严格的直立双足妖将：完整人类男性巨人身体、两条人形手臂、两条人形腿，双足站立，只有头部是凶煞虎首；仅前胸正中心有圆形暗黑空洞，以墨色妖气和破碎甲片遮挡内部，不展示组织或血腥细节；后背必须完整、绝无洞口；禁止四足老虎、普通虎躯、兽类前爪落地、长尾或萌宠比例；年龄/形态继承:死亡假象、复苏与战斗状态始终保留虎首、人形巨躯和仅位于前胸的暗黑空洞；背视图不得出现洞口，前胸标志在正面与侧前角度不可消失；禁继承:不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志 || LOC_DESOLATE_WILDERNESS=尸骸荒野 || STYLE_USER_JIANG_YUECHU_REF=用户主角视觉参考与水墨电影感风格锚 || PROP_HENGDAO_BROKEN=镇魔司断横刀；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIANG_YUECHU：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=惊惧压抑；state=惊惧与抉择(仅在威胁逼近或内心抉择格使用) || CHAR_PEI_CHANGQING：form=基础形态(所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯)；不得:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=濒死痛楚；state=濒死痛楚(重伤场景持续，身份与制服结构不变) || MON_TIGER_SHANSHEN：form=基础形态(始终保留虎首、人形巨躯与仅位于前胸正中的暗黑空洞；背部皮肤和护甲结构完整，不得复制洞口)；不得:不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -8038,16 +8108,16 @@
       "submit_prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。 构图与表演：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；被破布覆盖的静止无面剪影、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，暗红轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P024；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线目标:对话对象或当前关键道具；视线方向:画面内侧。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=惊惧压抑…。 线稿、黑场、网点与效果：墨线:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场:以虎妖、破布与枯草缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰层级:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。 文字处理：不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。 构图与表演：姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；被破布覆盖的静止无面剪影、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，暗红轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P024；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线目标:对话对象或当前关键道具；视线方向:画面内侧。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=惊惧压抑…。 线稿、黑场、网点与效果：墨线:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场:以虎妖、破布与枯草缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰层级:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。 文字处理：不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "negative_prompt": "",
-      "source_contract_sha256": "c7ad8bac44001bea775d296409ab015a851a78f9647a592b19fb69aa113afc2c",
+      "source_contract_sha256": "4dd5c47a993ef781d474b6002d56ec4a97134f0cbf7adf69fa86c8455fd0d66c",
       "submit_prompt_sha256": "ae659f4e52d43a4bfd7eec2aa117f4cd2bc8e17ea490291e9e737939ba631a4a",
       "submit_prompt_chars": 1187,
-      "execution_input_sha256": "80ab49d6844127c5899e304a9454aaffd08e0ee146012cd4b46bc9da3ccae2dc",
+      "execution_input_sha256": "9799e03269da4bb535206eb86616c6013cdec55678eb35febb957c1d84697924",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
-          "panel_plan_sha256": "59dd7ddb0f72463483f5970daf11209036585e10f4197555669b4599332600d7"
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
+          "panel_plan_sha256": "038cc7b0668077464cb6b265b54329f53bcb916cf7842536b47ed1b272c6358d"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -8056,7 +8126,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -8228,6 +8298,40 @@
               "forbidden": ""
             }
           }
+        },
+        {
+          "character_id": "MON_TIGER_SHANSHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE",
+          "display_name": "虎山神",
+          "resolved_contracts": {
+            "form": {
+              "id": "FORM_BASE",
+              "name": "基础形态",
+              "description": "始终保留虎首、人形巨躯与仅位于前胸正中的暗黑空洞；背部皮肤和护甲结构完整，不得复制洞口",
+              "forbidden": "不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志"
+            },
+            "outfit": {
+              "id": "OUTFIT_BASE",
+              "name": "基础服装",
+              "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+              "forbidden": "不得改变领型、配饰、主色或标志纹样"
+            },
+            "expression": {
+              "id": "EXPR_NEUTRAL",
+              "name": "中性表情",
+              "description": "",
+              "forbidden": ""
+            },
+            "state": {
+              "id": "STATE_BASE",
+              "name": "基础状态",
+              "description": "除非剧情状态账明确变更，否则延续此状态",
+              "forbidden": ""
+            }
+          }
         }
       ],
       "references": [
@@ -8246,6 +8350,15 @@
           "view": "front",
           "role": "front",
           "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+          "contract_id": "",
+          "required": true
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "view": "front",
+          "role": "front",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
           "contract_id": "",
           "required": true
         },
@@ -8295,20 +8408,20 @@
           "required": false
         },
         {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "view": "face",
+          "role": "face",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+          "contract_id": "",
+          "required": false
+        },
+        {
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
           "view": "three_quarter",
           "role": "three_quarter",
           "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e",
-          "contract_id": "",
-          "required": false
-        },
-        {
-          "id": "CHAR_PEI_CHANGQING",
-          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-          "view": "three_quarter",
-          "role": "three_quarter",
-          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e",
           "contract_id": "",
           "required": false
         }
@@ -8328,15 +8441,41 @@
       },
       "result_path": "出图/第1话/panels/P025.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380",
+      "model": "Seedream 5.0",
+      "model_version": "5.0",
+      "generated_at": "2026-07-17T07:20:52",
+      "backend_version": "{",
+      "artifact_sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639",
+      "attempt": 1,
+      "submit_id": "2c4a3f9a-4936-4c24-85fd-6f3bf337b42f",
+      "service_ratio": "4:3",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P025.json",
-      "reference_input_count": 9,
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P025.txt",
+      "prompt_snapshot_sha256": "673d1c292af73641af16e5c64dbb3ef3673c52983da0ee2cb614f416940e3bcc",
+      "raw_candidate_path": "出图/第1话/candidates/P025/20260717T071918_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2304,
+          "height": 1728
+        },
+        "target_size": {
+          "width": 1188,
+          "height": 920
+        }
+      },
+      "generated_from_contract_sha256": "4dd5c47a993ef781d474b6002d56ec4a97134f0cbf7adf69fa86c8455fd0d66c",
+      "generated_from_submit_prompt_sha256": "ae659f4e52d43a4bfd7eec2aa117f4cd2bc8e17ea490291e9e737939ba631a4a",
+      "generated_from_execution_input_sha256": "9799e03269da4bb535206eb86616c6013cdec55678eb35febb957c1d84697924",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P025",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T07:20:52",
         "verdict": "pass",
         "path": "出图/第1话/panels/P025.png",
         "size": {
@@ -8347,15 +8486,20 @@
           "width": 1188,
           "height": 920
         },
-        "declared_reference_count": 9,
-        "reference_input_count": 9,
+        "declared_reference_count": 10,
+        "reference_input_count": 10,
         "omitted_attachment_count": 0,
         "omitted_attachment_ids": [],
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔/出图/第1话/candidates/P025/P025_20260717_072051_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P026",
@@ -8364,7 +8508,7 @@
         "width": 1296,
         "height": 1197
       },
-      "production_contract_prompt": "无字漫画分格画面，国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；画面事实：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。；角色：CHAR_JIANG_YUECHU、CHAR_PEI_CHANGQING；场景：尸骸荒野；场景一致性契约：场景锚:LOC_DESOLATE_WILDERNESS；空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；尸骸、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，血色轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:PROP_HENGDAO_BROKEN；枯草；尸骸；巨岩；黑色妖血；承接上一格:P025；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线/眼神契约：目标=脚边裴长青的胸口与眼睛；方向=画下；人物完整性契约：姜月初锁定偏窄鹅蛋脸、冷锐杏眼、黑色高马尾与破损灰白囚服；裴长青锁定黑衣赤云纹、左臂重伤；虎妖锁定人身虎头与胸口巨大血窟窿。手脚、刀柄、刀锋和受力接触点必须完整可读。；构图与表演：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场计划:以虎妖、尸骸缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶计划:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰可读性:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符计划:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIANG_YUECHU=姜月初；角色DNA:年轻东方少女；鹅蛋脸偏窄，下颌利落；冷锐杏眼、深色瞳仁、眉形纤长；黑色浓密长发高束马尾，额前自然碎发与两缕鬓发；身形纤细但姿态有韧性；核心气质是冷静、警觉、决绝，不媚俗；年龄/形态继承:囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化；禁继承:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI_CHANGQING=裴长青；角色DNA:二十出头的大唐镇魔司武者；高大挺拔；硬朗年轻面孔；黑衣赤云纹劲装；重伤仍有压迫感；年龄/形态继承:所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯；禁继承:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_DESOLATE_WILDERNESS=尸骸荒野 || STYLE_USER_JIANG_YUECHU_REF=用户主角视觉参考与水墨电影感风格锚 || PROP_HENGDAO_BROKEN=镇魔司断横刀；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIANG_YUECHU：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || CHAR_PEI_CHANGQING：form=基础形态(所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯)；不得:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
+      "production_contract_prompt": "无字漫画分格画面，国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；画面事实：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。；角色：CHAR_JIANG_YUECHU、CHAR_PEI_CHANGQING、MON_TIGER_SHANSHEN；场景：尸骸荒野；场景一致性契约：场景锚:LOC_DESOLATE_WILDERNESS；空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；尸骸、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，血色轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:PROP_HENGDAO_BROKEN；枯草；尸骸；巨岩；黑色妖血；承接上一格:P025；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线/眼神契约：目标=脚边裴长青的胸口与眼睛；方向=画下；人物完整性契约：姜月初锁定偏窄鹅蛋脸、冷锐杏眼、黑色高马尾与破损灰白囚服；裴长青锁定黑衣赤云纹、左臂重伤；虎妖锁定人身虎头与胸口巨大血窟窿。手脚、刀柄、刀锋和受力接触点必须完整可读。；构图与表演：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场计划:以虎妖、尸骸缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶计划:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰可读性:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符计划:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIANG_YUECHU=姜月初；角色DNA:年轻东方少女；鹅蛋脸偏窄，下颌利落；冷锐杏眼、深色瞳仁、眉形纤长；黑色浓密长发高束马尾，额前自然碎发与两缕鬓发；身形纤细但姿态有韧性；核心气质是冷静、警觉、决绝，不媚俗；年龄/形态继承:囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化；禁继承:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI_CHANGQING=裴长青；角色DNA:二十出头的大唐镇魔司武者；高大挺拔；硬朗年轻面孔；黑衣赤云纹劲装；重伤仍有压迫感；年龄/形态继承:所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯；禁继承:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER_SHANSHEN=虎山神；角色DNA:严格的直立双足妖将：完整人类男性巨人身体、两条人形手臂、两条人形腿，双足站立，只有头部是凶煞虎首；仅前胸正中心有圆形暗黑空洞，以墨色妖气和破碎甲片遮挡内部，不展示组织或血腥细节；后背必须完整、绝无洞口；禁止四足老虎、普通虎躯、兽类前爪落地、长尾或萌宠比例；年龄/形态继承:死亡假象、复苏与战斗状态始终保留虎首、人形巨躯和仅位于前胸的暗黑空洞；背视图不得出现洞口，前胸标志在正面与侧前角度不可消失；禁继承:不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志 || LOC_DESOLATE_WILDERNESS=尸骸荒野 || STYLE_USER_JIANG_YUECHU_REF=用户主角视觉参考与水墨电影感风格锚 || PROP_HENGDAO_BROKEN=镇魔司断横刀；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIANG_YUECHU：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || CHAR_PEI_CHANGQING：form=基础形态(所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯)；不得:不得继承主角女性面孔、参考图白衣与毛笔；不得现代化；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_TIGER_SHANSHEN：form=基础形态(始终保留虎首、人形巨躯与仅位于前胸正中的暗黑空洞；背部皮肤和护甲结构完整，不得复制洞口)；不得:不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -8378,16 +8522,16 @@
       "submit_prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。 构图与表演：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；被破布覆盖的静止无面剪影、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，暗红轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P025；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线目标:脚边裴长青的胸口与眼睛；视线方向:画下。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情…。 线稿、黑场、网点与效果：墨线:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场:以虎妖、破布与枯草缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰层级:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。 文字处理：不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。 构图与表演：主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:南北向荒野；巨岩和虎妖初始在画右后景，裴长青在中景，姜月初从画左前景醒来；被破布覆盖的静止无面剪影、断刀、枯草与囚服是常驻视觉信息。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体，暗红轮廓光与百妖谱金光只在剧情节点加强。；轴线/视线:基本轴线是姜月初画左、裴长青居中、虎妖画右；反打可换景别但不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P025；人物站位/前后景:姜月初基本在画左或前景，裴长青在中景，虎妖在画右或后景；动作格的手脚、横刀与命中点不得被遮挡。；视线目标:脚边裴长青的胸口与眼睛；视线方向:画下。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情…。 线稿、黑场、网点与效果：墨线:干净主轮廓与半厚涂细化，脸、手脚、横刀及接触点优先清晰。；黑场:以虎妖、破布与枯草缝隙和墨气作局部黑场，不遮挡五官与道具。；网点/灰阶:彩色条漫使用低饱和冷灰层次，夕阳暗红与系统金光仅作叙事强调。；黑白灰层级:三值清晰：脸与主动作最亮，服装中值，虎妖与荒野深值。；效果线/漫符:风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。 文字处理：不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "negative_prompt": "",
-      "source_contract_sha256": "b649853d7a9034f2eaf040c764bc6ab5c913829e0a9c5989c8d718b5a45a640e",
+      "source_contract_sha256": "b22c830a1aedae2582701fd3c6f9de925972dad35f189f8706d966d0181a218e",
       "submit_prompt_sha256": "d6e2668bf34f7c64cc1ccb7d227fb74af5c39c56097a94d97e81fdfe449fb260",
       "submit_prompt_chars": 1177,
-      "execution_input_sha256": "371501e762e05e15f86b1cd7777c40abe81e0d3b60d041df8f02609013883c23",
+      "execution_input_sha256": "fb90d471279868a2eb38b75f9f1781eeca8d2fd9b31660ea7e3380e81ff20fd4",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
-          "panel_plan_sha256": "5f504f3d6755c78dbe47dbedf745fa35bca3e0783815a7c87cbb6627b806dee2"
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
+          "panel_plan_sha256": "d1318555e18598706f5ec8ed83b548830cb49fb5a8ec221246393047c053106a"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -8396,7 +8540,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -8568,6 +8712,40 @@
               "forbidden": ""
             }
           }
+        },
+        {
+          "character_id": "MON_TIGER_SHANSHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE",
+          "display_name": "虎山神",
+          "resolved_contracts": {
+            "form": {
+              "id": "FORM_BASE",
+              "name": "基础形态",
+              "description": "始终保留虎首、人形巨躯与仅位于前胸正中的暗黑空洞；背部皮肤和护甲结构完整，不得复制洞口",
+              "forbidden": "不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志"
+            },
+            "outfit": {
+              "id": "OUTFIT_BASE",
+              "name": "基础服装",
+              "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+              "forbidden": "不得改变领型、配饰、主色或标志纹样"
+            },
+            "expression": {
+              "id": "EXPR_NEUTRAL",
+              "name": "中性表情",
+              "description": "",
+              "forbidden": ""
+            },
+            "state": {
+              "id": "STATE_BASE",
+              "name": "基础状态",
+              "description": "除非剧情状态账明确变更，否则延续此状态",
+              "forbidden": ""
+            }
+          }
         }
       ],
       "references": [
@@ -8586,6 +8764,15 @@
           "view": "front",
           "role": "front",
           "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+          "contract_id": "",
+          "required": true
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "view": "front",
+          "role": "front",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
           "contract_id": "",
           "required": true
         },
@@ -8635,20 +8822,20 @@
           "required": false
         },
         {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "view": "face",
+          "role": "face",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+          "contract_id": "",
+          "required": false
+        },
+        {
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
           "view": "side",
           "role": "side",
           "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491",
-          "contract_id": "",
-          "required": false
-        },
-        {
-          "id": "CHAR_PEI_CHANGQING",
-          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-          "view": "three_quarter",
-          "role": "three_quarter",
-          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e",
           "contract_id": "",
           "required": false
         }
@@ -8668,15 +8855,41 @@
       },
       "result_path": "出图/第1话/panels/P026.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393",
+      "model": "Seedream 5.0",
+      "model_version": "5.0",
+      "generated_at": "2026-07-17T07:22:25",
+      "backend_version": "{",
+      "artifact_sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136",
+      "attempt": 1,
+      "submit_id": "d178ab0f-805e-4049-88cb-30a6d3bca312",
+      "service_ratio": "1:1",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P026.json",
-      "reference_input_count": 9,
+      "prompt_snapshot": "出图/第1话/prompt/dreamina/P026.txt",
+      "prompt_snapshot_sha256": "340201f7583d5ca3af91ac1bbccb074fe71b79d9e92c881fa26ef63cbff2cd62",
+      "raw_candidate_path": "出图/第1话/candidates/P026/20260717T072052_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2048,
+          "height": 2048
+        },
+        "target_size": {
+          "width": 1296,
+          "height": 1197
+        }
+      },
+      "generated_from_contract_sha256": "b22c830a1aedae2582701fd3c6f9de925972dad35f189f8706d966d0181a218e",
+      "generated_from_submit_prompt_sha256": "d6e2668bf34f7c64cc1ccb7d227fb74af5c39c56097a94d97e81fdfe449fb260",
+      "generated_from_execution_input_sha256": "fb90d471279868a2eb38b75f9f1781eeca8d2fd9b31660ea7e3380e81ff20fd4",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P026",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T07:22:25",
         "verdict": "pass",
         "path": "出图/第1话/panels/P026.png",
         "size": {
@@ -8687,15 +8900,20 @@
           "width": 1296,
           "height": 1197
         },
-        "declared_reference_count": 9,
-        "reference_input_count": 9,
+        "declared_reference_count": 10,
+        "reference_input_count": 10,
         "omitted_attachment_count": 0,
         "omitted_attachment_ids": [],
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔/出图/第1话/candidates/P026/P026_20260717_072225_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P027",
@@ -8725,8 +8943,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "a9e412a55fe5cedf3739fa20e92a36c2781413c4d4dd1aacfaaf44694dff98ee"
         },
         "identity_registry": {
@@ -8736,7 +8954,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -9008,15 +9226,16 @@
       },
       "result_path": "出图/第1话/panels/P027.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P027.json",
+      "generated_at": "2026-07-17T07:00:39",
+      "artifact_sha256": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb",
       "reference_input_count": 9,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P027",
-        "created_at": "2026-07-17T05:34:54",
+        "created_at": "2026-07-17T07:00:39",
         "verdict": "pass",
         "path": "出图/第1话/panels/P027.png",
         "size": {
@@ -9035,7 +9254,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "1529e44a077e3269ff230a3caf10bda8faac1a9844cc7ec995a8337f52d881ca",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "5c9d8d8927b3d771bb23be02e3200caa3ea003bf2d202cfa6332f9ccad15bb92",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P027.json",
+      "generated_from_execution_input_sha256": "fba3a6879e4ca65a3940f3252e463a154ebaf86a503c6f4b2fa95ba8cfab4e9f"
     },
     {
       "panel_id": "P028",
@@ -9065,8 +9290,8 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第1话.json",
-          "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325",
-          "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+          "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a",
+          "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
           "panel_plan_sha256": "5e2cf982d7a9cc54023d588726d9b07b621d2e7ced1615f3a7c187390317d848"
         },
         "identity_registry": {
@@ -9076,7 +9301,7 @@
         },
         "panel_script": {
           "path": "脚本/第1话/panel_script.json",
-          "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+          "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
         },
         "layout": {
           "path": "排版/第1话/layout.json",
@@ -9359,16 +9584,17 @@
       },
       "result_path": "出图/第1话/panels/P028.png",
       "source": "Dreamina/即梦官方 CLI",
-      "artifact_sha256": "6c7b0b713636fbcaa0ccdeefae98dc434a9b2011928d2f4414e37a1eae860daf",
-      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P028.json",
+      "generated_at": "2026-07-17T07:02:08",
+      "artifact_sha256": "5e33c8c2bc694b4a0294c779cdd4bc354954e0da24a874a5fc83e9a11228bc3b",
       "reference_input_count": 9,
+      "model": "Seedream 5.0",
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P028",
-        "created_at": "2026-07-17T05:34:54",
-        "verdict": "warn",
+        "created_at": "2026-07-17T07:02:08",
+        "verdict": "pass",
         "path": "出图/第1话/panels/P028.png",
         "size": {
           "width": 1296,
@@ -9382,25 +9608,17 @@
         "reference_input_count": 9,
         "omitted_attachment_count": 0,
         "omitted_attachment_ids": [],
-        "blank_region_candidates": [
-          {
-            "x": 1184,
-            "y": 438,
-            "w": 111,
-            "h": 111,
-            "area": 4989
-          }
-        ],
-        "issues": [
-          {
-            "severity": "warn",
-            "category": "baked_text_container",
-            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
-          }
-        ],
-        "manual_review_required": true
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
       },
-      "rechecked_at": "2026-07-17T05:34:54"
+      "generated_from_submit_prompt_sha256": "9e03f045f7269c2102864e7a647875ae6c9c23cbcebf0e6d864ba03a2c9b4163",
+      "reference_input_mode": "dreamina_image2image_images",
+      "backend_version": "{",
+      "generated_from_contract_sha256": "a1983f5c48c2d8cdd78910c5c4f26efa4cd890c4d5e235e13414a06abe0b02ce",
+      "attempt": 1,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P028.json",
+      "generated_from_execution_input_sha256": "e2b14104cc036d4984a2c21bc7d389d8490827f79843d77142f6079932254889"
     }
   ]
 }

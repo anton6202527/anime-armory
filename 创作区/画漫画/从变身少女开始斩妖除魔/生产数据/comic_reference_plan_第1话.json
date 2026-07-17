@@ -2,13 +2,13 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第1话",
-  "generated_at": "2026-07-17T12:32:04+00:00",
+  "generated_at": "2026-07-17T14:17:22+00:00",
   "inputs": {
     "files": [
       {
         "path": "脚本/第1话/panel_script.json",
         "exists": true,
-        "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155"
+        "sha256": "5ddbba2fe895e54818b3d9f37996c60da9f908f8480df5f7a600e26460abdf5f"
       },
       {
         "path": "出图/共享/identity_registry.json",
@@ -46,7 +46,7 @@
       "inputs_fingerprint": "d3a217d72925d8965ed3a990386820a1389b91d036e956259c8ef05b2f7c2864"
     }
   },
-  "inputs_fingerprint": "b6fc5a319215f7f1c6ca2358467dcf8eb51ea5986a61cfc8c724db3a4348692b",
+  "inputs_fingerprint": "2f671217a4511bd653c54100898fe59f82e57bd9618779db9f82b139c3badb28",
   "backend": {
     "adapter_id": "native_subject_capable",
     "model": "Seedream 5.0",
@@ -66,7 +66,7 @@
     "panels_needing_action": 23,
     "panels_blocked": 0,
     "block": 0,
-    "warn": 14,
+    "warn": 16,
     "info": 0
   },
   "panel_plans": [
@@ -5313,6 +5313,13 @@
           "outfit_id": "OUTFIT_BASE",
           "expression_id": "EXPR_PAIN",
           "state_id": "STATE_PAIN"
+        },
+        {
+          "character_id": "MON_TIGER_SHANSHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
         }
       ],
       "characters": [
@@ -5405,6 +5412,50 @@
           "pose_gaze_directive": null,
           "prompt_required": [],
           "needs_action": false
+        },
+        {
+          "char_id": "MON_TIGER_SHANSHEN",
+          "name": "虎山神",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+              "strength_hint": 0.72
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+              "strength_hint": 0.65
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -5424,9 +5475,17 @@
             "char_id": "CHAR_PEI_CHANGQING",
             "face_priority": "secondary",
             "required_binding": "CHAR_PEI_CHANGQING 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "前景槽位",
+            "char_id": "MON_TIGER_SHANSHEN",
+            "face_priority": "secondary",
+            "required_binding": "MON_TIGER_SHANSHEN 自己的 front/face/¾ 参考"
           }
         ],
-        "color_collisions": [],
+        "color_collisions": [
+          "CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）"
+        ],
         "required_prompt_fields": [
           "多人同框身份槽位",
           "画左/画右/前后景 blocking",
@@ -5439,8 +5498,8 @@
       },
       "attachment_plan": {
         "limit": 10,
-        "required_count": 5,
-        "selected_count": 9,
+        "required_count": 6,
+        "selected_count": 10,
         "selected": [
           {
             "role": "front",
@@ -5459,6 +5518,15 @@
             "character_id": "CHAR_PEI_CHANGQING",
             "required": true,
             "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "strength_hint": 0.8,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": true,
+            "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
           },
           {
             "id": "LOC_DESOLATE_WILDERNESS",
@@ -5500,6 +5568,15 @@
             "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           },
           {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
             "role": "three_quarter",
             "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
             "strength_hint": 0.65,
@@ -5507,15 +5584,6 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
-          },
-          {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_PEI_CHANGQING",
-            "character_id": "CHAR_PEI_CHANGQING",
-            "required": false,
-            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
           }
         ],
         "missing_required": [],
@@ -5525,7 +5593,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "59dd7ddb0f72463483f5970daf11209036585e10f4197555669b4599332600d7"
+      "panel_plan_sha256": "038cc7b0668077464cb6b265b54329f53bcb916cf7842536b47ed1b272c6358d"
     },
     {
       "panel_id": "P026",
@@ -5539,6 +5607,13 @@
         },
         {
           "character_id": "CHAR_PEI_CHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER_SHANSHEN",
           "form_id": "FORM_BASE",
           "outfit_id": "OUTFIT_BASE",
           "expression_id": "EXPR_NEUTRAL",
@@ -5643,6 +5718,57 @@
           "pose_gaze_directive": null,
           "prompt_required": [],
           "needs_action": true
+        },
+        {
+          "char_id": "MON_TIGER_SHANSHEN",
+          "name": "虎山神",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "extreme_angle",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+              "strength_hint": 0.72
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 4,
+            "selected": 3,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+              "strength_hint": 0.65
+            }
+          ],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -5662,9 +5788,17 @@
             "char_id": "CHAR_PEI_CHANGQING",
             "face_priority": "secondary",
             "required_binding": "CHAR_PEI_CHANGQING 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "前景槽位",
+            "char_id": "MON_TIGER_SHANSHEN",
+            "face_priority": "secondary",
+            "required_binding": "MON_TIGER_SHANSHEN 自己的 front/face/¾ 参考"
           }
         ],
-        "color_collisions": [],
+        "color_collisions": [
+          "CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）"
+        ],
         "required_prompt_fields": [
           "多人同框身份槽位",
           "画左/画右/前后景 blocking",
@@ -5677,8 +5811,8 @@
       },
       "attachment_plan": {
         "limit": 10,
-        "required_count": 5,
-        "selected_count": 9,
+        "required_count": 6,
+        "selected_count": 10,
         "selected": [
           {
             "role": "front",
@@ -5697,6 +5831,15 @@
             "character_id": "CHAR_PEI_CHANGQING",
             "required": true,
             "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "strength_hint": 0.8,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": true,
+            "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
           },
           {
             "id": "LOC_DESOLATE_WILDERNESS",
@@ -5738,6 +5881,15 @@
             "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           },
           {
+            "role": "face",
+            "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+            "strength_hint": 0.72,
+            "id": "MON_TIGER_SHANSHEN",
+            "character_id": "MON_TIGER_SHANSHEN",
+            "required": false,
+            "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+          },
+          {
             "role": "side",
             "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
             "strength_hint": 0.55,
@@ -5745,15 +5897,6 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491"
-          },
-          {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_PEI_CHANGQING",
-            "character_id": "CHAR_PEI_CHANGQING",
-            "required": false,
-            "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
           }
         ],
         "missing_required": [],
@@ -5763,7 +5906,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "5f504f3d6755c78dbe47dbedf745fa35bca3e0783815a7c87cbb6627b806dee2"
+      "panel_plan_sha256": "d1318555e18598706f5ec8ed83b548830cb49fb5a8ec221246393047c053106a"
     },
     {
       "panel_id": "P027",
@@ -6310,10 +6453,22 @@
     },
     {
       "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P025",
+      "message": "P025 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
       "code": "missing_reference",
       "panel": "P026",
       "character_id": "CHAR_PEI_CHANGQING",
       "message": "P026·裴长青：缺 侧脸参考（极端角度/转头格）"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P026",
+      "message": "P026 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
     },
     {
       "severity": "warn",
@@ -6323,5 +6478,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "ace1cef11709b22e16d708ef761b3db0e90c3643a169e0367b86695853be6325"
+  "plan_sha256": "be03269af48e01f7f4326e56c413178ef2822ea7e7ade45b0dc88e2848a7c82a"
 }

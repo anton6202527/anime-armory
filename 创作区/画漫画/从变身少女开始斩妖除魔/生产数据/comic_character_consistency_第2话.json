@@ -3,19 +3,19 @@
   "kind": "comic_character_consistency",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第2话",
-  "created_at": "2026-07-17T05:28:21",
+  "created_at": "2026-07-17T07:44:15",
   "available": true,
   "capabilities": {
     "pillow": true,
-    "ccip": false
+    "ccip": true
   },
   "verdict": "block",
   "summary": {
     "character_count": 3,
     "panel_binding_count": 12,
-    "finding_count": 41,
+    "finding_count": 43,
     "block_count": 41,
-    "warn_count": 0,
+    "warn_count": 2,
     "info_count": 0
   },
   "contact_sheet": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
@@ -95,6 +95,17 @@
       "metrics": [
         {
           "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.075,
+            "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8023,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -119,6 +130,17 @@
         },
         {
           "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.0928,
+            "reference": "出图/共享/图片/user_reference_clean_source.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8047,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
@@ -143,6 +165,17 @@
         },
         {
           "panel_id": "P003",
+          "ccip": {
+            "available": true,
+            "difference": 0.0371,
+            "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8718,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -167,6 +200,17 @@
         },
         {
           "panel_id": "P004",
+          "ccip": {
+            "available": true,
+            "difference": 0.0416,
+            "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9094,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
@@ -191,6 +235,17 @@
         },
         {
           "panel_id": "P005",
+          "ccip": {
+            "available": true,
+            "difference": 0.1039,
+            "reference": "出图/共享/图片/user_reference_clean_source.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9266,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -215,22 +270,33 @@
         },
         {
           "panel_id": "P006",
+          "ccip": {
+            "available": true,
+            "difference": 0.0665,
+            "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
-            "score": 0.856,
+            "score": 0.9144,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.9027,
+            "score": 0.9229,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.8617,
+            "score": 0.8661,
             "reference": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
             "available": true,
             "floor": 0.42,
@@ -286,6 +352,17 @@
       "metrics": [
         {
           "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.0418,
+            "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8484,
             "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
@@ -310,6 +387,17 @@
         },
         {
           "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.0443,
+            "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.857,
             "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
@@ -334,6 +422,17 @@
         },
         {
           "panel_id": "P004",
+          "ccip": {
+            "available": true,
+            "difference": 0.0671,
+            "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9006,
             "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
@@ -358,6 +457,17 @@
         },
         {
           "panel_id": "P005",
+          "ccip": {
+            "available": true,
+            "difference": 0.1714,
+            "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9144,
             "reference": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
@@ -431,6 +541,17 @@
       "metrics": [
         {
           "panel_id": "P005",
+          "ccip": {
+            "available": true,
+            "difference": 0.3568,
+            "reference": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.955,
             "reference": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
@@ -455,22 +576,33 @@
         },
         {
           "panel_id": "P006",
+          "ccip": {
+            "available": true,
+            "difference": 0.2362,
+            "reference": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
-            "score": 0.8925,
+            "score": 0.9562,
             "reference": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.9229,
+            "score": 0.9725,
             "reference": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.9328,
+            "score": 0.9692,
             "reference": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
             "available": true,
             "floor": 0.42,
@@ -931,10 +1063,31 @@
       "reason": "角色出场格缺少面板图，无法做角色一致性复核。",
       "return_to_stage": "image",
       "suggested_fix": "回 comic-image 补齐该 panel 图。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P005",
+      "artifact": "出图/第2话/panels/P005.png",
+      "reason": "MON_TIGER_SHANSHEN CCIP 身份距离 0.3568 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P006",
+      "artifact": "出图/第2话/panels/P006.png",
+      "reason": "MON_TIGER_SHANSHEN CCIP 身份距离 0.2362 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
     }
   ],
   "notes": [
-    "CCIP 动漫身份 embedding 不可用（色彩指纹只是代理，换脸同色调会漏报）。建议在独立 venv 安装 dghs-imgutils（pip install dghs-imgutils）后重跑，获得阈值化的同角色判定（threshold=0.178）。",
     "VLM 并排判定任务包已刷新：生产数据/comic_vlm_judge_tasks_第2话.json（裁决 19/19）；由多模态 agent 看图执行并写回 verdict 文件。",
     "已生成角色一致性并排复核图：生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"
   ]

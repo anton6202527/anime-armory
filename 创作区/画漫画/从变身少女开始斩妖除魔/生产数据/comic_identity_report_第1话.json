@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第1话",
-  "created_at": "2026-07-17T05:35:50",
+  "created_at": "2026-07-17T07:30:20",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -1608,7 +1608,7 @@
     {
       "panel_id": "P025",
       "status": "ready",
-      "valid_reference_count": 9,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1619,6 +1619,11 @@
           "id": "CHAR_PEI_CHANGQING",
           "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
           "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
         },
         {
           "id": "LOC_DESOLATE_WILDERNESS",
@@ -1646,18 +1651,18 @@
           "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
         },
         {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        },
+        {
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
           "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
-        },
-        {
-          "id": "CHAR_PEI_CHANGQING",
-          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 9,
+      "generated_reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P025.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
@@ -1667,7 +1672,7 @@
     {
       "panel_id": "P026",
       "status": "ready",
-      "valid_reference_count": 9,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1678,6 +1683,11 @@
           "id": "CHAR_PEI_CHANGQING",
           "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
           "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
         },
         {
           "id": "LOC_DESOLATE_WILDERNESS",
@@ -1705,18 +1715,18 @@
           "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
         },
         {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        },
+        {
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
           "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491"
-        },
-        {
-          "id": "CHAR_PEI_CHANGQING",
-          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 9,
+      "generated_reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P026.json",
       "stale_generated_refs": [],
       "needs_rerun": false,

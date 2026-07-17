@@ -3,13 +3,13 @@
   "kind": "comic_consistency_findings",
   "dimension": "character_consistency",
   "chapter": "第2话",
-  "created_at": "2026-07-17T05:28:21",
+  "created_at": "2026-07-17T07:44:15",
   "summary": {
     "character_count": 3,
     "panel_binding_count": 12,
-    "finding_count": 41,
+    "finding_count": 43,
     "block_count": 41,
-    "warn_count": 0,
+    "warn_count": 2,
     "info_count": 0
   },
   "findings": [
@@ -463,6 +463,28 @@
       "reason": "角色出场格缺少面板图，无法做角色一致性复核。",
       "return_to_stage": "image",
       "suggested_fix": "回 comic-image 补齐该 panel 图。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P005",
+      "artifact": "出图/第2话/panels/P005.png",
+      "reason": "MON_TIGER_SHANSHEN CCIP 身份距离 0.3568 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P006",
+      "artifact": "出图/第2话/panels/P006.png",
+      "reason": "MON_TIGER_SHANSHEN CCIP 身份距离 0.2362 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
     }
   ]
 }

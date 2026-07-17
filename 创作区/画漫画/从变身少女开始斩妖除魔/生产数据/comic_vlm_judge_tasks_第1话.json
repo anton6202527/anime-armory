@@ -3,7 +3,7 @@
   "kind": "comic_vlm_judge_tasks",
   "protocol": "CANVAS-ContinuityEval-3axis",
   "chapter": "第1话",
-  "created_at": "2026-07-17T05:36:13",
+  "created_at": "2026-07-17T07:41:55",
   "axes": [
     "character_identity",
     "background_continuity",
@@ -33,7 +33,7 @@
       }
     ]
   },
-  "task_count": 93,
+  "task_count": 95,
   "tasks": [
     {
       "task_id": "P002__CHAR_JIANG_YUECHU__character",
@@ -575,7 +575,7 @@
       "panel": {
         "panel_id": "P015",
         "path": "出图/第1话/panels/P015.png",
-        "sha256": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00"
+        "sha256": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -591,7 +591,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "a1cc171ff60116b88c750d348895af249b84f5d6fb516685c504ca9e0d5d5ac5"
+      "task_sha256": "2710b7209a89c07ded02d2c7d20c03ea1ad218e3b10f1212cccf23b94e26a590"
     },
     {
       "task_id": "P015__CHAR_PEI_CHANGQING__character",
@@ -599,7 +599,7 @@
       "panel": {
         "panel_id": "P015",
         "path": "出图/第1话/panels/P015.png",
-        "sha256": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00"
+        "sha256": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -613,7 +613,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "33a0a6b03c16c928e94b57bd085e3e9a5e52cdb058a2d62e1860768b8e510977"
+      "task_sha256": "15100b2e8be52c88d34bbc21408805df80d333088fa9afef69b5e81f0abebd54"
     },
     {
       "task_id": "P015__MON_TIGER_SHANSHEN__character",
@@ -621,7 +621,7 @@
       "panel": {
         "panel_id": "P015",
         "path": "出图/第1话/panels/P015.png",
-        "sha256": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00"
+        "sha256": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -637,7 +637,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "8cb00b6635bf012c641b057a96d550ea518274eaf8986070f277515e8d3ba605"
+      "task_sha256": "7cd1db81323f10bdc82c2a18c35c96ddc75eacde94cc7da369120af3747d69e3"
     },
     {
       "task_id": "P016__CHAR_JIANG_YUECHU__character",
@@ -761,7 +761,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第1话/panels/P018.png",
-        "sha256": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7"
+        "sha256": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -775,7 +775,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "ad835912c6a3a6da8e9dbc12c5d29b1b277d1f138ba74dd135054570795ed85a"
+      "task_sha256": "914d5d39714ba6f55fd8acb5f75bef831d7a6a2a326b71a5a8da1bc62c10c662"
     },
     {
       "task_id": "P018__MON_TIGER_SHANSHEN__character",
@@ -783,7 +783,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第1话/panels/P018.png",
-        "sha256": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7"
+        "sha256": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -799,7 +799,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "f8ae35349a10d63b8136d68fe85e45f5808c7b1669c7f322ae941950ae4ebe95"
+      "task_sha256": "c43f877c81f79bc21f5b9844a3b13719c742337db30e0ffc2403ef59d0f82210"
     },
     {
       "task_id": "P019__CHAR_JIANG_YUECHU__character",
@@ -807,7 +807,7 @@
       "panel": {
         "panel_id": "P019",
         "path": "出图/第1话/panels/P019.png",
-        "sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2"
+        "sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -823,7 +823,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "241b5cd4c18c971192f0d35e6d9cc2f97b14c12b046332e280822162868065a1"
+      "task_sha256": "9e863ff140a4c0e7a6695dc41a11235c6f3fe63971e365bf3b4e5121655482d9"
     },
     {
       "task_id": "P019__CHAR_PEI_CHANGQING__character",
@@ -831,7 +831,7 @@
       "panel": {
         "panel_id": "P019",
         "path": "出图/第1话/panels/P019.png",
-        "sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2"
+        "sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -845,7 +845,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "bb9cf38ceb64fc64c4379d8f88a4abe7bdd627fec0e46bd5b5d78331c48000fa"
+      "task_sha256": "1fec52d3c4342a99e466bbff4599ab28c9b85dffab9acc02fa29be362f984849"
     },
     {
       "task_id": "P019__MON_TIGER_SHANSHEN__character",
@@ -853,7 +853,7 @@
       "panel": {
         "panel_id": "P019",
         "path": "出图/第1话/panels/P019.png",
-        "sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2"
+        "sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -869,7 +869,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "1a079ad521856d3643df3108a452ac6f902aa30077800684cde1010ef289a980"
+      "task_sha256": "aa82fe0ebd7551062bc6e2e857607ae49f9611461a0d980b87b42ceae25abf77"
     },
     {
       "task_id": "P020__CHAR_JIANG_YUECHU__character",
@@ -877,7 +877,7 @@
       "panel": {
         "panel_id": "P020",
         "path": "出图/第1话/panels/P020.png",
-        "sha256": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899"
+        "sha256": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -893,7 +893,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "58ffeac25cb07b0273d52c3a5a2d09842fe07e61249981f6ce19a7c4b9b46f6d"
+      "task_sha256": "5a6b6adb6e6d51621c5262c3e6711492000910bfe3f9f6d8416f82ef990fe222"
     },
     {
       "task_id": "P020__CHAR_PEI_CHANGQING__character",
@@ -901,7 +901,7 @@
       "panel": {
         "panel_id": "P020",
         "path": "出图/第1话/panels/P020.png",
-        "sha256": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899"
+        "sha256": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -915,7 +915,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "2fb812473854fe9875db8b78b8d3ec6b64ccbb2f86361a2d414a6a9ae797abce"
+      "task_sha256": "41f8b9969b2f030855913557ef1808792e1e1da7093bd346d3e31fbfadfa2ea1"
     },
     {
       "task_id": "P020__MON_TIGER_SHANSHEN__character",
@@ -923,7 +923,7 @@
       "panel": {
         "panel_id": "P020",
         "path": "出图/第1话/panels/P020.png",
-        "sha256": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899"
+        "sha256": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -939,7 +939,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "35d7714d0d79d1bdb8447a4ae50f8d68a2e49af37aa829110120b97a268de829"
+      "task_sha256": "656355ba70244bc11270761344870b718f10225949f2d7c8f6297659c954125e"
     },
     {
       "task_id": "P021__CHAR_JIANG_YUECHU__character",
@@ -971,7 +971,7 @@
       "panel": {
         "panel_id": "P022",
         "path": "出图/第1话/panels/P022.png",
-        "sha256": "4aff1ab52a49d4c225fffaba5798988341449a6111842d70758e99b8dfe16f06"
+        "sha256": "0a3c48f22f9dbd76208af25b9a2e1879091d9e78faaecbe5ed31ae34a20b016c"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -987,7 +987,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "7bb751920e325a1a48dbdd1aac44cac3fd692d62eed3da1a1aca2f152f7fe3f3"
+      "task_sha256": "4d480bd6d2be82637e7d647e7825471977b6ceda966207114749623e05d0525e"
     },
     {
       "task_id": "P022__MON_TIGER_SHANSHEN__character",
@@ -995,7 +995,7 @@
       "panel": {
         "panel_id": "P022",
         "path": "出图/第1话/panels/P022.png",
-        "sha256": "4aff1ab52a49d4c225fffaba5798988341449a6111842d70758e99b8dfe16f06"
+        "sha256": "0a3c48f22f9dbd76208af25b9a2e1879091d9e78faaecbe5ed31ae34a20b016c"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -1011,7 +1011,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "3dfb2fe384b2650783f81778d8db094e76b6c001756bff3fb64392f6d1c5344d"
+      "task_sha256": "57a9c92d27e8431ac1ae68fffc1ac304597df2fd89ede7ff218385227bf6c277"
     },
     {
       "task_id": "P023__CHAR_JIANG_YUECHU__character",
@@ -1019,7 +1019,7 @@
       "panel": {
         "panel_id": "P023",
         "path": "出图/第1话/panels/P023.png",
-        "sha256": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00"
+        "sha256": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -1035,7 +1035,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "f5aeeba719dbb1c31f9850b25dbfee4335c276c2464a7d6ac8595a7a42aeccc9"
+      "task_sha256": "6f6d6598f179c25b504c5db5fc76e1c6d8d8ae5b4f91186b67ec301a09e26941"
     },
     {
       "task_id": "P023__CHAR_PEI_CHANGQING__character",
@@ -1043,7 +1043,7 @@
       "panel": {
         "panel_id": "P023",
         "path": "出图/第1话/panels/P023.png",
-        "sha256": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00"
+        "sha256": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -1057,7 +1057,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "90572aa8d32c3b105da63b02e658a307f7c53cf87460e8d4c4a90b3908c7a900"
+      "task_sha256": "c09a1c583dc6866664dc26220af71a1159ecec18ddf7fdf3dc0e5e42585afc60"
     },
     {
       "task_id": "P024__CHAR_JIANG_YUECHU__character",
@@ -1065,7 +1065,7 @@
       "panel": {
         "panel_id": "P024",
         "path": "出图/第1话/panels/P024.png",
-        "sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49"
+        "sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -1081,7 +1081,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "e472d1318d2e5571ac4934c592beb3491435d2a69b2602c2c556c98476429e93"
+      "task_sha256": "94876d38d477fe358feeec5df38af466d219bb6d08cf5e33ad5630d99149791e"
     },
     {
       "task_id": "P024__CHAR_PEI_CHANGQING__character",
@@ -1089,7 +1089,7 @@
       "panel": {
         "panel_id": "P024",
         "path": "出图/第1话/panels/P024.png",
-        "sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49"
+        "sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -1103,7 +1103,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "8633064d1d6ac406a1c2eea30f21b569aadb46c5901b2152228716afd3a276cd"
+      "task_sha256": "2d1adfd9f028bb435a06e722d4a445c99a79c9c4c1ff2423d295196fee1ee71d"
     },
     {
       "task_id": "P024__MON_TIGER_SHANSHEN__character",
@@ -1111,7 +1111,7 @@
       "panel": {
         "panel_id": "P024",
         "path": "出图/第1话/panels/P024.png",
-        "sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49"
+        "sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f"
       },
       "subject": "MON_TIGER_SHANSHEN",
       "references": [
@@ -1127,7 +1127,7 @@
         "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
         "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
       },
-      "task_sha256": "cb5630995ad22b471f91eb8e8f08788b039bea13f12e43f165844e971405bbd0"
+      "task_sha256": "52b4bf97edfc1294d57f18f1f01a4614452eb336ef0303a29f9651a243b0a6f9"
     },
     {
       "task_id": "P025__CHAR_JIANG_YUECHU__character",
@@ -1135,7 +1135,7 @@
       "panel": {
         "panel_id": "P025",
         "path": "出图/第1话/panels/P025.png",
-        "sha256": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380"
+        "sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -1151,7 +1151,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "2b07b9d8f95a9b8241e26c6c1732eef585a46287291104b83e64efea391e0efc"
+      "task_sha256": "2dd043b18eba4a9291d7425f287c18e3354370165add9e43b700989790bbe6f3"
     },
     {
       "task_id": "P025__CHAR_PEI_CHANGQING__character",
@@ -1159,7 +1159,7 @@
       "panel": {
         "panel_id": "P025",
         "path": "出图/第1话/panels/P025.png",
-        "sha256": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380"
+        "sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -1173,7 +1173,31 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "8831aa024da996b7f949bf35667bd617931185db5f56b6bb17848cb01b75a78b"
+      "task_sha256": "a26a08a07572d9f12eb41c0eae09f3e90643f06208e19f4e786573ab91c71983"
+    },
+    {
+      "task_id": "P025__MON_TIGER_SHANSHEN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P025",
+        "path": "出图/第1话/panels/P025.png",
+        "sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639"
+      },
+      "subject": "MON_TIGER_SHANSHEN",
+      "references": [
+        "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__side.png"
+      ],
+      "question": "并排对比 panel 图与 MON_TIGER_SHANSHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__face.png": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
+      },
+      "task_sha256": "1afa186b59a9c18da4349124f72c37376d1dfc71b58959a99ef3cb05e765a19d"
     },
     {
       "task_id": "P026__CHAR_JIANG_YUECHU__character",
@@ -1181,7 +1205,7 @@
       "panel": {
         "panel_id": "P026",
         "path": "出图/第1话/panels/P026.png",
-        "sha256": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393"
+        "sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -1197,7 +1221,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "46d2ac0442aab758262063ce40baa4384f6ccd9c45c9a6fcdecd07a0e001f87d"
+      "task_sha256": "1f9f8069c3d09fcddacca62756b5ffe029a7ca36ec661a3047e3dd397384ef30"
     },
     {
       "task_id": "P026__CHAR_PEI_CHANGQING__character",
@@ -1205,7 +1229,7 @@
       "panel": {
         "panel_id": "P026",
         "path": "出图/第1话/panels/P026.png",
-        "sha256": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393"
+        "sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -1219,7 +1243,31 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "1013a947b76d8aa74556b1882ef309e700b585d1c31f3ec87a056676079b9b15"
+      "task_sha256": "6325172fc72f1203f149168c629adc3c44681d1417a5cf94e01516985e014294"
+    },
+    {
+      "task_id": "P026__MON_TIGER_SHANSHEN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P026",
+        "path": "出图/第1话/panels/P026.png",
+        "sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136"
+      },
+      "subject": "MON_TIGER_SHANSHEN",
+      "references": [
+        "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__side.png"
+      ],
+      "question": "并排对比 panel 图与 MON_TIGER_SHANSHEN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__face.png": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+        "出图/共享/图片/MON_TIGER_SHANSHEN__side.png": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501"
+      },
+      "task_sha256": "e913fdd30e38f26d68fde2d4cfde280153301238d35e7619c03cb39e413c3638"
     },
     {
       "task_id": "P027__CHAR_JIANG_YUECHU__character",
@@ -1227,7 +1275,7 @@
       "panel": {
         "panel_id": "P027",
         "path": "出图/第1话/panels/P027.png",
-        "sha256": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d"
+        "sha256": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -1243,7 +1291,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "d8eac4dff7655083a93e87d58491097396284b07ba0a137e591ca324994dbd31"
+      "task_sha256": "f25441e1af0b3a3a3171ba3a10c5353909c9f08de559a94614dc7684b91eae72"
     },
     {
       "task_id": "P027__CHAR_PEI_CHANGQING__character",
@@ -1251,7 +1299,7 @@
       "panel": {
         "panel_id": "P027",
         "path": "出图/第1话/panels/P027.png",
-        "sha256": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d"
+        "sha256": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -1265,7 +1313,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "80a0aab7171d4a065b9aac6439787e0798a0f6af804fb93592decfc561b6c9b4"
+      "task_sha256": "211a3e29c5f5ae3aab6894b17ebbca74534cabfbd3652eea2744a6475e2d49e1"
     },
     {
       "task_id": "P028__CHAR_JIANG_YUECHU__character",
@@ -1273,7 +1321,7 @@
       "panel": {
         "panel_id": "P028",
         "path": "出图/第1话/panels/P028.png",
-        "sha256": "6c7b0b713636fbcaa0ccdeefae98dc434a9b2011928d2f4414e37a1eae860daf"
+        "sha256": "5e33c8c2bc694b4a0294c779cdd4bc354954e0da24a874a5fc83e9a11228bc3b"
       },
       "subject": "CHAR_JIANG_YUECHU",
       "references": [
@@ -1289,7 +1337,7 @@
         "出图/共享/图片/CHAR_JIANG_YUECHU__front.png": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
         "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
       },
-      "task_sha256": "9f361808fdb882095b15c74f0912727b28e7479428592bcca13de9bf6c1644c4"
+      "task_sha256": "f2dffdfafa58c726e50970248138b4211446b1f06fab4aff7ee371003bb6d450"
     },
     {
       "task_id": "P028__CHAR_PEI_CHANGQING__character",
@@ -1297,7 +1345,7 @@
       "panel": {
         "panel_id": "P028",
         "path": "出图/第1话/panels/P028.png",
-        "sha256": "6c7b0b713636fbcaa0ccdeefae98dc434a9b2011928d2f4414e37a1eae860daf"
+        "sha256": "5e33c8c2bc694b4a0294c779cdd4bc354954e0da24a874a5fc83e9a11228bc3b"
       },
       "subject": "CHAR_PEI_CHANGQING",
       "references": [
@@ -1311,7 +1359,7 @@
         "出图/共享/图片/CHAR_PEI_CHANGQING__front.png": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
         "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
       },
-      "task_sha256": "59427b05c3b3229d5070685ed7a1fcca3070565a5f65f314f53954a58886d1fd"
+      "task_sha256": "1bae7f31461754621dc65c6518406a3efa30c2b4c1332feb878827a05dbe083b"
     },
     {
       "task_id": "P001__P002__background",
@@ -1566,7 +1614,7 @@
       "panel": {
         "panel_id": "P015",
         "path": "出图/第1话/panels/P015.png",
-        "sha256": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00"
+        "sha256": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
@@ -1577,7 +1625,7 @@
       "references_sha256": {
         "出图/第1话/panels/P014.png": "4e907f85b04657ab9daa58cc2ce22b47fd7039504fb3b6877032218d66cc1fc5"
       },
-      "task_sha256": "e878cb94b7930be951dea85bcb318d5e4acc5c0db64420f01803ca1fbfea6e2e"
+      "task_sha256": "bb240c8a0af580db170cb6bdc3eb86102e29cad209f19280cec2af3ca66c789d"
     },
     {
       "task_id": "P015__P016__background",
@@ -1591,12 +1639,12 @@
       "references": [
         "出图/第1话/panels/P015.png"
       ],
-      "reference_sha256": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00",
+      "reference_sha256": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P015 → 本格 P016）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P015.png": "a6c0470d2ed5d92eac813f12725c5560171c878d9dfc0b7c67617b8bf7d9be00"
+        "出图/第1话/panels/P015.png": "5e099fe966eb58c72513182d17cb23a52c4497d7da860038e9f0913ad3cb30b5"
       },
-      "task_sha256": "d5f6b1cfc45fb6c45ccdcf93d78ef09398bfffe973e1cb2b3f1bc73ed0c9499b"
+      "task_sha256": "45bb16a5afe0740b5b5249d01e213ff2d5a202e100253a9e23ed7451ad32c257"
     },
     {
       "task_id": "P016__P017__background",
@@ -1623,7 +1671,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第1话/panels/P018.png",
-        "sha256": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7"
+        "sha256": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
@@ -1634,7 +1682,7 @@
       "references_sha256": {
         "出图/第1话/panels/P017.png": "c1b6d0d3e4e416f170e8cba54bedd5c3f6db9301f854876c5bd4e0e09f020199"
       },
-      "task_sha256": "6106d8fe6e421bf2b903514317bef62a9045c258c74701ad202f87620c8db348"
+      "task_sha256": "53476de9c11ca27d55f8fb3f6074c31ee9571e7974716a6fc467356f113ebc5f"
     },
     {
       "task_id": "P018__P019__background",
@@ -1642,18 +1690,18 @@
       "panel": {
         "panel_id": "P019",
         "path": "出图/第1话/panels/P019.png",
-        "sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2"
+        "sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P018.png"
       ],
-      "reference_sha256": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7",
+      "reference_sha256": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P018 → 本格 P019）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P018.png": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7"
+        "出图/第1话/panels/P018.png": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7"
       },
-      "task_sha256": "9c572159905a115a3d10384da15a3b5874bdc6a7219eabfadae1f6e3d8cbc5c0"
+      "task_sha256": "9face6f13ff8980341e402ddf5cc19511e9514c6868fb9e87e00a42f5371803b"
     },
     {
       "task_id": "P019__P020__background",
@@ -1661,18 +1709,18 @@
       "panel": {
         "panel_id": "P020",
         "path": "出图/第1话/panels/P020.png",
-        "sha256": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899"
+        "sha256": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P019.png"
       ],
-      "reference_sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2",
+      "reference_sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P019 → 本格 P020）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P019.png": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2"
+        "出图/第1话/panels/P019.png": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f"
       },
-      "task_sha256": "f0a1de5193bfa6a030afe39e9d9d2d0656174a5fd88cc80cfac2f5646e09505d"
+      "task_sha256": "1a0a66ee9409c261cf0a7412ee2beb4f1b5e1613c31409c3e5b77a3d27e31b25"
     },
     {
       "task_id": "P020__P021__background",
@@ -1686,12 +1734,12 @@
       "references": [
         "出图/第1话/panels/P020.png"
       ],
-      "reference_sha256": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899",
+      "reference_sha256": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P020 → 本格 P021）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P020.png": "bf8e11b3d0063fcfb4bfb7d75a66bd9d0178f772c9900525266837f17373a899"
+        "出图/第1话/panels/P020.png": "c6594af0e875295df17fcb85450f834bb5a0bf787e80123d7e71e9be2fd2d2fc"
       },
-      "task_sha256": "88ba72dc3f42609fee8d0ff184a5e3572d735bccb28d9002689a41ceca7859d2"
+      "task_sha256": "ac688b926bcd32aa7219b31945b51148e1aeeddb348fde07e74cfc2ebe7ad69c"
     },
     {
       "task_id": "P021__P022__background",
@@ -1699,7 +1747,7 @@
       "panel": {
         "panel_id": "P022",
         "path": "出图/第1话/panels/P022.png",
-        "sha256": "4aff1ab52a49d4c225fffaba5798988341449a6111842d70758e99b8dfe16f06"
+        "sha256": "0a3c48f22f9dbd76208af25b9a2e1879091d9e78faaecbe5ed31ae34a20b016c"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
@@ -1710,7 +1758,7 @@
       "references_sha256": {
         "出图/第1话/panels/P021.png": "a06db0cbe9514c2b26c9b53661681678a1246cf14e1cf8bb1667fea023753863"
       },
-      "task_sha256": "adbbb1d2f531afc27697c637c58dd130641f7840ccedb60379640e9717030ad0"
+      "task_sha256": "bba4da096ddedf2a58a1e886b351cd484177bb901b91ab82e0c8dfca4d82d3ec"
     },
     {
       "task_id": "P022__P023__background",
@@ -1718,18 +1766,18 @@
       "panel": {
         "panel_id": "P023",
         "path": "出图/第1话/panels/P023.png",
-        "sha256": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00"
+        "sha256": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P022.png"
       ],
-      "reference_sha256": "4aff1ab52a49d4c225fffaba5798988341449a6111842d70758e99b8dfe16f06",
+      "reference_sha256": "0a3c48f22f9dbd76208af25b9a2e1879091d9e78faaecbe5ed31ae34a20b016c",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P022 → 本格 P023）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P022.png": "4aff1ab52a49d4c225fffaba5798988341449a6111842d70758e99b8dfe16f06"
+        "出图/第1话/panels/P022.png": "0a3c48f22f9dbd76208af25b9a2e1879091d9e78faaecbe5ed31ae34a20b016c"
       },
-      "task_sha256": "b3ab9b0021747315a97bc5893b10f8c7d7a1c8cadea7fccea7f94317ffccb0e4"
+      "task_sha256": "316d842bfe5ff12713963105b9904f4e6d3ae9f07336a29b79a470850e18c9c4"
     },
     {
       "task_id": "P023__P024__background",
@@ -1737,18 +1785,18 @@
       "panel": {
         "panel_id": "P024",
         "path": "出图/第1话/panels/P024.png",
-        "sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49"
+        "sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P023.png"
       ],
-      "reference_sha256": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00",
+      "reference_sha256": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P023 → 本格 P024）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P023.png": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00"
+        "出图/第1话/panels/P023.png": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0"
       },
-      "task_sha256": "ebf23da22fb77db3ed25835eb9101746ffc158a3e1451e31b70c6510fd1886a8"
+      "task_sha256": "349f334d024ff0c79d784d7e361c17ebb2e82beabab1549eccd97be6c653858b"
     },
     {
       "task_id": "P024__P025__background",
@@ -1756,18 +1804,18 @@
       "panel": {
         "panel_id": "P025",
         "path": "出图/第1话/panels/P025.png",
-        "sha256": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380"
+        "sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P024.png"
       ],
-      "reference_sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49",
+      "reference_sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P024 → 本格 P025）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P024.png": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49"
+        "出图/第1话/panels/P024.png": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f"
       },
-      "task_sha256": "a64cb03f66e038f64cf154b1a9c3ba0a36fddce91cad1013221ccc2230d6f19d"
+      "task_sha256": "6efb6450244b0069d17d4dab5d3664bb5b084686ecbfe19269573fa9afb933a7"
     },
     {
       "task_id": "P025__P026__background",
@@ -1775,18 +1823,18 @@
       "panel": {
         "panel_id": "P026",
         "path": "出图/第1话/panels/P026.png",
-        "sha256": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393"
+        "sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P025.png"
       ],
-      "reference_sha256": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380",
+      "reference_sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P025 → 本格 P026）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P025.png": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380"
+        "出图/第1话/panels/P025.png": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639"
       },
-      "task_sha256": "8c1004ac8cc0300f7f3107e5f7288488f7c376d428d355ce4255b353b97371e1"
+      "task_sha256": "5e0fee604b3a5c8a7282bf2b85076717662a2ae604c24deb5c01ec71d1d31b7d"
     },
     {
       "task_id": "P026__P027__background",
@@ -1794,18 +1842,18 @@
       "panel": {
         "panel_id": "P027",
         "path": "出图/第1话/panels/P027.png",
-        "sha256": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d"
+        "sha256": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P026.png"
       ],
-      "reference_sha256": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393",
+      "reference_sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P026 → 本格 P027）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P026.png": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393"
+        "出图/第1话/panels/P026.png": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136"
       },
-      "task_sha256": "391c9154f488ef93a4b493a3f11e9877ea81925846fac23132a7802c3890e648"
+      "task_sha256": "f6097dd1c5be44ec1cc6b7b6295ee0655498034d5cd522f04edc5c798ec043f9"
     },
     {
       "task_id": "P027__P028__background",
@@ -1813,18 +1861,18 @@
       "panel": {
         "panel_id": "P028",
         "path": "出图/第1话/panels/P028.png",
-        "sha256": "6c7b0b713636fbcaa0ccdeefae98dc434a9b2011928d2f4414e37a1eae860daf"
+        "sha256": "5e33c8c2bc694b4a0294c779cdd4bc354954e0da24a874a5fc83e9a11228bc3b"
       },
       "subject": "LOC_DESOLATE_WILDERNESS",
       "references": [
         "出图/第1话/panels/P027.png"
       ],
-      "reference_sha256": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d",
+      "reference_sha256": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb",
       "question": "这两格同属场景锚 LOC_DESOLATE_WILDERNESS（前格 P027 → 本格 P028）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第1话/panels/P027.png": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d"
+        "出图/第1话/panels/P027.png": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb"
       },
-      "task_sha256": "d2f54b252e3b1b233a1f953a232f42666434df2de743f6ec30574b799c2e2afb"
+      "task_sha256": "117e284de39ca2778b395b69ce448d17ef79cf95407f457988c604f9407c9c57"
     },
     {
       "task_id": "P005__PROP_HENGDAO_BROKEN__prop",
@@ -1886,7 +1934,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第1话/panels/P018.png",
-        "sha256": "97c86c2683cbab8c27e18959b559401ed23ffe917d55220a5262c364464622b7"
+        "sha256": "4bef937ecdd9af39390dae26a15363a6c2de1951a507085857eaf8d73d777eb7"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -1896,7 +1944,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "9699e5f8017c9b221e576dbb03dc9175e501b996470872486e46d8b7ed8d83ca"
+      "task_sha256": "66d8bd3185ff52a2aa71ba5677118d8e65dc36f389350ec3361392d41011866b"
     },
     {
       "task_id": "P019__PROP_HENGDAO_BROKEN__prop",
@@ -1904,7 +1952,7 @@
       "panel": {
         "panel_id": "P019",
         "path": "出图/第1话/panels/P019.png",
-        "sha256": "1b2b183ed69520c21dd8efa259ed3b969c37798608fe442c598ab770647dbcc2"
+        "sha256": "12034e134b6b2e5d750b59566c768bf4c41d7bba43fd2af5aaa40386457e256f"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -1914,7 +1962,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "690bcbe5e5906f18419f2a950cc6c3903d3f5b62669aa5875d176b543c1a7758"
+      "task_sha256": "ec231ebaba41377f64fd93b3df7b2093410d1c13419c655b18a02193d3bfff62"
     },
     {
       "task_id": "P023__PROP_HENGDAO_BROKEN__prop",
@@ -1922,7 +1970,7 @@
       "panel": {
         "panel_id": "P023",
         "path": "出图/第1话/panels/P023.png",
-        "sha256": "05a9f440581c2af62ce55fb8ee66e35a8fa5ffcf2ab1372f7ec1843a5f47fd00"
+        "sha256": "ba3a49431d3857650c95d7a4446b5e96e139f219f2f17ab7317876aeb0da88d0"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -1932,7 +1980,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "2f0c2e944b50755759eabef0116dc48a362b90ef2fa2c9af86297dd982a6f689"
+      "task_sha256": "98c266a529fbd56f924a9c0d9589664ea38b878125ed579d3636cf8b0e194717"
     },
     {
       "task_id": "P024__PROP_HENGDAO_BROKEN__prop",
@@ -1940,7 +1988,7 @@
       "panel": {
         "panel_id": "P024",
         "path": "出图/第1话/panels/P024.png",
-        "sha256": "fb43ce4b889fccc226e62ed5d78aed411dfdac64abf192fe894d290573ed6a49"
+        "sha256": "4d3bb8dc7a28b61bf4ac859e7c9cf0e331d5a71c075de008476dc4abec7c6f0f"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -1950,7 +1998,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "07e3bb580f9f27a866a2ba1e91800cfe4ec219699e4035bc95066dee7b73364f"
+      "task_sha256": "f3e028580e75314bede97ba7c62fe2c5edefa3f1999576c179a2182eeec8ff5a"
     },
     {
       "task_id": "P025__PROP_HENGDAO_BROKEN__prop",
@@ -1958,7 +2006,7 @@
       "panel": {
         "panel_id": "P025",
         "path": "出图/第1话/panels/P025.png",
-        "sha256": "f3c96a0cc3107ef24f4b90dc5d0227711b09a2165073049293730f43af448380"
+        "sha256": "81a305c0ef87955d723cfd3d17d0a9273e5b91d9b10e7d917cbcaa8f1f94e639"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -1968,7 +2016,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "56da226ac67c27dc5f575ecac594b73f0c6b585656a7c3cc239ff86c397e374c"
+      "task_sha256": "b8466a63605556854e39600277aa89dc25fee93e17b73bc2adc6a9b67825c15c"
     },
     {
       "task_id": "P026__PROP_HENGDAO_BROKEN__prop",
@@ -1976,7 +2024,7 @@
       "panel": {
         "panel_id": "P026",
         "path": "出图/第1话/panels/P026.png",
-        "sha256": "9f77b5fab15f3a9edd3b7fed92d6e55ab107455802f838fbe261997f124e3393"
+        "sha256": "924354d6ae9878b8a2475e18e061d2f9f22ea0dc0bbd4d9dee71c32a39a63136"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -1986,7 +2034,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "26afa9c407ac235eb60cbd94f9f160fb9b626a3710744dadde343c2dccef6517"
+      "task_sha256": "45a8eb6d35a0c7ee377487d75b314f119078b0645dc69bf1eb0c8589f9240661"
     },
     {
       "task_id": "P027__PROP_HENGDAO_BROKEN__prop",
@@ -1994,7 +2042,7 @@
       "panel": {
         "panel_id": "P027",
         "path": "出图/第1话/panels/P027.png",
-        "sha256": "3f34464a1eefb5c32ae9f681975a477070e092538108de60b5d376e387bbdd4d"
+        "sha256": "09987eb6081b48e149ac5980885bff9b82d920cccb2da1af7178adab3e10e2bb"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -2004,7 +2052,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "b3acea1003818629eadc5861cde83b156149277abc23639054a682936e1f2cd9"
+      "task_sha256": "833eecdbae8bd65953112467682d5e803c6c1909650dce3e618cd250566ae108"
     },
     {
       "task_id": "P028__PROP_HENGDAO_BROKEN__prop",
@@ -2012,7 +2060,7 @@
       "panel": {
         "panel_id": "P028",
         "path": "出图/第1话/panels/P028.png",
-        "sha256": "6c7b0b713636fbcaa0ccdeefae98dc434a9b2011928d2f4414e37a1eae860daf"
+        "sha256": "5e33c8c2bc694b4a0294c779cdd4bc354954e0da24a874a5fc83e9a11228bc3b"
       },
       "subject": "PROP_HENGDAO_BROKEN",
       "references": [
@@ -2022,7 +2070,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
       },
-      "task_sha256": "2eac0929a738218a55c1b5e768190a9f856c0224eeb37d551e86729651bc595b"
+      "task_sha256": "3ac5c7f26554c66a8799d01fa0c93ed77b6cefc54ced63bc81a64a6ff38b88c9"
     }
   ]
 }

@@ -5,7 +5,7 @@
   "panel_id": "P026",
   "reference_input_mode": "dreamina_image2image_images",
   "reference_attachment_limit": 10,
-  "cli_image_input_count": 9,
+  "cli_image_input_count": 10,
   "references": [
     {
       "id": "CHAR_JIANG_YUECHU",
@@ -18,6 +18,13 @@
       "id": "CHAR_PEI_CHANGQING",
       "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
       "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "MON_TIGER_SHANSHEN",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
       "role": "front",
       "required": true
     },
@@ -57,21 +64,21 @@
       "required": false
     },
     {
+      "id": "MON_TIGER_SHANSHEN",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+      "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+      "role": "face",
+      "required": false
+    },
+    {
       "id": "CHAR_JIANG_YUECHU",
       "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
       "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491",
       "role": "side",
       "required": false
-    },
-    {
-      "id": "CHAR_PEI_CHANGQING",
-      "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
-      "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e",
-      "role": "three_quarter",
-      "required": false
     }
   ],
   "omitted_attachment_count": 0,
   "omitted_attachments": [],
-  "created_at": "2026-07-17T05:34:54"
+  "created_at": "2026-07-17T07:20:52"
 }

@@ -126,7 +126,7 @@
       "scene_family": "LOC_DESOLATE_WILDERNESS"
     },
     {
-  "panel_id": "P002",
+      "panel_id": "P002",
       "story_function": "protagonist_reveal",
       "source_segment_refs": [
         "S005",
@@ -146,7 +146,7 @@
           "character_id": "CHAR_JIANG_YUECHU",
           "form_id": "FORM_BASE",
           "outfit_id": "OUTFIT_BASE",
-      "expression_id": "EXPR_NEUTRAL",
+          "expression_id": "EXPR_NEUTRAL",
           "state_id": "STATE_BASE"
         }
       ],
@@ -596,7 +596,7 @@
       "scene_family": "LOC_DESOLATE_WILDERNESS"
     },
     {
-  "panel_id": "P009",
+      "panel_id": "P009",
       "story_function": "reaction",
       "source_segment_refs": [
         "S049",
@@ -619,8 +619,8 @@
           "character_id": "CHAR_JIANG_YUECHU",
           "form_id": "FORM_BASE",
           "outfit_id": "OUTFIT_BASE",
-      "expression_id": "EXPR_DREAD",
-      "state_id": "STATE_DREAD"
+          "expression_id": "EXPR_DREAD",
+          "state_id": "STATE_DREAD"
         }
       ],
       "location": "尸骸荒野",
@@ -1373,7 +1373,7 @@
       "scene_family": "LOC_DESOLATE_WILDERNESS"
     },
     {
-  "panel_id": "P019",
+      "panel_id": "P019",
       "story_function": "action_peak",
       "source_segment_refs": [
         "S116",
@@ -1729,7 +1729,7 @@
       "scene_family": "LOC_DESOLATE_WILDERNESS"
     },
     {
-  "panel_id": "P024",
+      "panel_id": "P024",
       "story_function": "misdirection",
       "source_segment_refs": [
         "S144",
@@ -1813,7 +1813,7 @@
       "scene_family": "LOC_DESOLATE_WILDERNESS"
     },
     {
-  "panel_id": "P025",
+      "panel_id": "P025",
       "story_function": "internal_turn",
       "source_segment_refs": [
         "S149",
@@ -1825,22 +1825,30 @@
       "description": "姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。",
       "characters": [
         "CHAR_JIANG_YUECHU",
-        "CHAR_PEI_CHANGQING"
+        "CHAR_PEI_CHANGQING",
+        "MON_TIGER_SHANSHEN"
       ],
       "character_bindings": [
         {
           "character_id": "CHAR_JIANG_YUECHU",
           "form_id": "FORM_BASE",
           "outfit_id": "OUTFIT_BASE",
-      "expression_id": "EXPR_DREAD",
-      "state_id": "STATE_DREAD"
+          "expression_id": "EXPR_DREAD",
+          "state_id": "STATE_DREAD"
         },
         {
           "character_id": "CHAR_PEI_CHANGQING",
           "form_id": "FORM_BASE",
           "outfit_id": "OUTFIT_BASE",
-      "expression_id": "EXPR_PAIN",
-      "state_id": "STATE_PAIN"
+          "expression_id": "EXPR_PAIN",
+          "state_id": "STATE_PAIN"
+        },
+        {
+          "character_id": "MON_TIGER_SHANSHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
         }
       ],
       "location": "尸骸荒野",
@@ -1873,10 +1881,18 @@
         "CHAR_PEI_CHANGQING",
         "LOC_DESOLATE_WILDERNESS",
         "STYLE_USER_JIANG_YUECHU_REF",
-        "PROP_HENGDAO_BROKEN"
+        "PROP_HENGDAO_BROKEN",
+        "MON_TIGER_SHANSHEN"
       ],
       "style_bucket": "wilderness_cold_dusk",
-      "scene_family": "LOC_DESOLATE_WILDERNESS"
+      "scene_family": "LOC_DESOLATE_WILDERNESS",
+      "entity_schedule": {
+        "required_presence": [
+          "MON_TIGER_SHANSHEN"
+        ],
+        "offscreen_presence": [],
+        "forbidden_presence": []
+      }
     },
     {
       "panel_id": "P026",
@@ -1888,7 +1904,8 @@
       "description": "主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。",
       "characters": [
         "CHAR_JIANG_YUECHU",
-        "CHAR_PEI_CHANGQING"
+        "CHAR_PEI_CHANGQING",
+        "MON_TIGER_SHANSHEN"
       ],
       "character_bindings": [
         {
@@ -1900,6 +1917,13 @@
         },
         {
           "character_id": "CHAR_PEI_CHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_TIGER_SHANSHEN",
           "form_id": "FORM_BASE",
           "outfit_id": "OUTFIT_BASE",
           "expression_id": "EXPR_NEUTRAL",
@@ -1936,10 +1960,18 @@
         "CHAR_PEI_CHANGQING",
         "LOC_DESOLATE_WILDERNESS",
         "STYLE_USER_JIANG_YUECHU_REF",
-        "PROP_HENGDAO_BROKEN"
+        "PROP_HENGDAO_BROKEN",
+        "MON_TIGER_SHANSHEN"
       ],
       "style_bucket": "wilderness_cold_dusk",
-      "scene_family": "LOC_DESOLATE_WILDERNESS"
+      "scene_family": "LOC_DESOLATE_WILDERNESS",
+      "entity_schedule": {
+        "required_presence": [
+          "MON_TIGER_SHANSHEN"
+        ],
+        "offscreen_presence": [],
+        "forbidden_presence": []
+      }
     },
     {
       "panel_id": "P027",
