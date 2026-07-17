@@ -4,7 +4,7 @@
   "project_root": ".",
   "chapter": "第2话",
   "stage": "image_preflight",
-  "created_at": "2026-07-17T19:32:50",
+  "created_at": "2026-07-17T19:33:43",
   "verdict": "warn",
   "summary": {
     "finding_count": 34,
@@ -454,7 +454,7 @@
       {
         "path": "脚本/第2话/source_semantics.json",
         "exists": true,
-        "sha256": "47651eee549f22e7096cfe455b7c7601d0930cf899e4135689283882be41291f",
+        "sha256": "7af3ba3f47b853d6b0cc43c14a6c43bbb53bc4232c82e0b1b292de865f151285",
         "size": 65149
       },
       {
@@ -484,7 +484,7 @@
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "b644bd9166fccdb4b7819a461940b7fb6e9a071bf26338877eba60f3df046441",
+        "sha256": "b4528a7f591bdec71ed5bbe76ff1ec6a9e41c144ecf14f56ef506750f1c68bc8",
         "size": 6894
       },
       {
@@ -514,8 +514,8 @@
       {
         "path": "出图/第2话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "324d80272c2d078a49550fe33a4d87d804ab2a68d2c5790937b754538f8b7718",
-        "size": 773752
+        "sha256": "c3deb14b37685dc9ff063ab3acf60d48b3fceeba5c77a776b3c39be5ce0c716e",
+        "size": 773794
       },
       {
         "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -722,7 +722,7 @@
         "size": 105628
       }
     ],
-    "sha256": "19a8f69c39a8f937c2504e285e2dcc94e96a3c9214673175b4f2a17cd10abe62"
+    "sha256": "705d1791529f3c7681d0e19f6fc0123aa6d1b1fc8ed9d3b60a37dddbbb0eb679"
   },
-  "receipt_id": "7d332b7d429d26bcf90ca61c2b4be178094eb29c41f6ab735c8eb51ff26a8213"
+  "receipt_id": "0c30babaf659f49de8144ffb2fb8ac0fe5f27611a90504b9eadf82ac2543b807"
 }

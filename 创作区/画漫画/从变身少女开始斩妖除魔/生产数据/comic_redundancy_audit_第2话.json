@@ -2,7 +2,7 @@
   "kind": "comic_redundancy_audit",
   "version": 1,
   "chapter": "第2话",
-  "generated_at": "2026-07-17T11:32:50+00:00",
+  "generated_at": "2026-07-17T11:33:43+00:00",
   "thresholds": {
     "pair_sim_warn": 0.6,
     "strict_sim": 0.75,
