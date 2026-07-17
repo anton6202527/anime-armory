@@ -662,24 +662,8 @@
         "checker": "face_consistency.verify_faceless",
         "records": [
           {
-            "png": {
-              "path": "出图/共享/图片/定妆_道具_断刀.png",
-              "status": "ready",
-              "derivation": {
-                "method": "dreamina_seedream5_regeneration_from_corrected_weapon_topology",
-                "provider": "Dreamina/即梦官方 CLI",
-                "model": "Seedream 5.0",
-                "submit_id": "4a0150ac-6d22-4b33-a9d9-c3aa0545a933",
-                "source_path": "出图/共享/图片/定妆_武器_横刀.png",
-                "review_focus": [
-                  "single_cutting_edge",
-                  "continuous_thick_spine",
-                  "jagged_break_terminates",
-                  "no_continuation_after_break"
-                ]
-              }
-            },
-            "png_sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff",
+            "png": "出图/共享/图片/定妆_道具_断刀.png",
+            "png_sha256": "f4b13beb0be97ea09d1753f62ac0568006ddc9c6b20cc330aa6b720c57c22bd6",
             "verdict": "ok",
             "clear_faces": 0,
             "max_ratio": 0.0
@@ -694,7 +678,22 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "a713ed3594cc81b7484e4d40c89d7fdbc03fb3bf35540431316c05eb93bb866b",
+          "width": 3040,
+          "height": 5404,
+          "derivation": {
+            "provider": "dreamina_official_cli",
+            "model": "Seedream 5.0",
+            "generation_mode": "text2image",
+            "resolution_type": "4k",
+            "credit_count": 4,
+            "session_id": "16396260989708",
+            "submit_id": "fe5451c9-6f5c-4b7c-8f19-aa40259f87a3",
+            "qc_precision": "full",
+            "review_kind": "executor_visual",
+            "visual_review": "pass"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_翻覆囚车_比例.png",
@@ -716,7 +715,21 @@
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
           "status": "ready",
-          "sha256": "b3094d28ef7bf5e27f2b8ae6cee3bc647ad6836f2375999ea5dd5e6e9fbff58f"
+          "sha256": "a713ed3594cc81b7484e4d40c89d7fdbc03fb3bf35540431316c05eb93bb866b",
+          "width": 3040,
+          "height": 5404,
+          "derivation": {
+            "provider": "dreamina_official_cli",
+            "model": "Seedream 5.0",
+            "generation_mode": "text2image",
+            "resolution_type": "4k",
+            "credit_count": 4,
+            "session_id": "16396260989708",
+            "submit_id": "fe5451c9-6f5c-4b7c-8f19-aa40259f87a3",
+            "qc_precision": "full",
+            "review_kind": "executor_visual",
+            "visual_review": "pass"
+          }
         }
       ],
       "constraints": {
@@ -773,7 +786,7 @@
         "records": [
           {
             "png": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-            "png_sha256": "b3094d28ef7bf5e27f2b8ae6cee3bc647ad6836f2375999ea5dd5e6e9fbff58f",
+            "png_sha256": "a713ed3594cc81b7484e4d40c89d7fdbc03fb3bf35540431316c05eb93bb866b",
             "verdict": "ok",
             "clear_faces": 0,
             "max_ratio": 0.0
@@ -800,7 +813,10 @@
             "qc_precision": "full",
             "review_kind": "executor_visual",
             "visual_review": "pass"
-          }
+          },
+          "sha256": "be948d1aa5595956ed2b46910370eb4a217d453e1fedf657f10f23438d1c4b8f",
+          "width": 3040,
+          "height": 5404
         }
       },
       "reference_slots": [
@@ -814,7 +830,7 @@
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
           "status": "ready",
-          "sha256": "4a08aa8552fecafbe2950d784b7f113fff3f0b4e92a1d97229c9976c42cafe7b",
+          "sha256": "be948d1aa5595956ed2b46910370eb4a217d453e1fedf657f10f23438d1c4b8f",
           "derivation": {
             "provider": "dreamina_official_cli",
             "model": "Seedream 5.0",
@@ -826,7 +842,9 @@
             "qc_precision": "full",
             "review_kind": "executor_visual",
             "visual_review": "pass"
-          }
+          },
+          "width": 3040,
+          "height": 5404
         }
       ],
       "constraints": {
@@ -971,7 +989,10 @@
               "出图/共享/图片/定妆_武器_横刀.png",
               "废料/出图/共享/图片/infusion_replaced_20260717/定妆_特效_道行灌注__旧版__双刃剑化.png"
             ]
-          }
+          },
+          "sha256": "eabc65798d316145219d20e1af75a39c0e80e7d8993a3db28e31a5c17507c91d",
+          "width": 3040,
+          "height": 5404
         }
       },
       "reference_slots": [
@@ -985,7 +1006,7 @@
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_特效_道行灌注.png",
           "status": "ready",
-          "sha256": "c40398ff99925c6f0f8ab018168e1beb7745567a0561e1b89ed0c71a10ccca3f",
+          "sha256": "eabc65798d316145219d20e1af75a39c0e80e7d8993a3db28e31a5c17507c91d",
           "derivation": {
             "provider": "dreamina_official_cli",
             "model": "Seedream 5.0",
@@ -1001,7 +1022,9 @@
               "出图/共享/图片/定妆_武器_横刀.png",
               "废料/出图/共享/图片/infusion_replaced_20260717/定妆_特效_道行灌注__旧版__双刃剑化.png"
             ]
-          }
+          },
+          "width": 3040,
+          "height": 5404
         }
       ],
       "constraints": {
@@ -1010,9 +1033,14 @@
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
-          "过度血腥猎奇"
+          "过度血腥猎奇",
+          "双刃剑轮廓",
+          "第二条锋刃",
+          "中心对称剑脊",
+          "第二把实体武器"
         ],
-        "structure": "以刀身重量、尘土、轻微空气扰动和手臂受力表现；不用满屏金焰。"
+        "structure": "以刀身重量、尘土、轻微空气扰动和手臂受力表现；不用满屏金焰。",
+        "cross_asset_lock": "画面中的实体武器必须继承 WEAPON_01 横刀：一侧连续厚钝刀背、另一侧唯一锋刃、偏刃刀尖；不得剑化、双刃化或新增第二把武器。"
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -1020,7 +1048,8 @@
         "不要随机改色",
         "不要遮挡主体脸",
         "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要过度血腥猎奇",
+        "不要让灌注特效中的横刀偏离 WEAPON_01 单刃拓扑"
       ],
       "scene_dna": {
         "belonging_anchor": "道行灌注 属于本集剧情资产，不是独立场景。",
@@ -1047,27 +1076,8 @@
         "checker": "face_consistency.verify_faceless",
         "records": [
           {
-            "png": {
-              "path": "出图/共享/图片/定妆_特效_道行灌注.png",
-              "status": "ready",
-              "derivation": {
-                "provider": "dreamina_official_cli",
-                "model": "Seedream 5.0",
-                "generation_mode": "image2image",
-                "resolution_type": "4k",
-                "credit_count": 4,
-                "session_id": "16349632582668",
-                "submit_id": "d60bbb91-aa55-4298-9b45-0e11024951a4",
-                "qc_precision": "full",
-                "review_kind": "executor_visual",
-                "visual_review": "pass",
-                "source_refs": [
-                  "出图/共享/图片/定妆_武器_横刀.png",
-                  "废料/出图/共享/图片/infusion_replaced_20260717/定妆_特效_道行灌注__旧版__双刃剑化.png"
-                ]
-              }
-            },
-            "png_sha256": "c40398ff99925c6f0f8ab018168e1beb7745567a0561e1b89ed0c71a10ccca3f",
+            "png": "出图/共享/图片/定妆_特效_道行灌注.png",
+            "png_sha256": "eabc65798d316145219d20e1af75a39c0e80e7d8993a3db28e31a5c17507c91d",
             "verdict": "ok",
             "clear_faces": 0,
             "max_ratio": 0.0

@@ -286,7 +286,7 @@ def _asset_shape_contract_terms(asset: Mapping[str, Any]) -> List[str]:
     """Required topology/structure clauses that pixel review must prove."""
     constraints = asset.get("constraints") if isinstance(asset.get("constraints"), Mapping) else {}
     terms: List[str] = []
-    for key in ("blade_topology", "structure", "vfx_boundary", "scale"):
+    for key in ("blade_topology", "structure", "vfx_boundary", "cross_asset_lock", "scale"):
         if isinstance(constraints, Mapping):
             terms.extend(_flatten_terms(constraints.get(key)))
         terms.extend(_flatten_terms(asset.get(key)))
@@ -2946,6 +2946,62 @@ def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
     return out
 
 
+def _prop_shape_contract_fingerprint(*, must_not_have: Any, shape_contract: Any,
+                                     scale: Any) -> str:
+    """Bind a visual receipt to the exact registry clauses it reviewed."""
+    payload = {
+        "must_not_have": [str(x).strip() for x in (must_not_have or []) if str(x).strip()],
+        "shape_contract": [str(x).strip() for x in (shape_contract or []) if str(x).strip()],
+        "scale": str(scale or "").strip(),
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _prop_shape_confirmation_rows(root: Path, ep: str) -> Dict[Tuple[str, str], Dict[str, Any]]:
+    path = _prop_shape_confirmation_path(root, ep)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    rows = data.get("confirmations") if isinstance(data, Mapping) else None
+    if rows is None and isinstance(data, list):
+        rows = data
+    out: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for row in rows or []:
+        if not isinstance(row, Mapping):
+            continue
+        key = (
+            str(row.get("asset") or row.get("id") or "").strip(),
+            str(row.get("png") or row.get("image") or "").strip(),
+        )
+        if key[0] and key[1]:
+            out[key] = dict(row)
+    return out
+
+
+def _prop_shape_confirmation_matches(root: Path, ep: str, target: Mapping[str, Any],
+                                     row: Optional[Mapping[str, Any]]) -> bool:
+    if not isinstance(row, Mapping):
+        return False
+    ok_values = {"ok", "pass", "confirmed", "true", "yes", "通过", "合格", "确认"}
+    verdict = str(row.get("verdict") or row.get("status") or "").strip().lower()
+    row_sha = str(row.get("png_sha256") or row.get("png_sha") or row.get("sha256") or "").strip()
+    current_sha = _prop_shape_png_sha(root, ep, target.get("png"))
+    current_contract = _prop_shape_contract_fingerprint(
+        must_not_have=target.get("must_not_have"),
+        shape_contract=target.get("shape_contract"),
+        scale=target.get("scale"),
+    )
+    return bool(
+        verdict in ok_values
+        and row_sha
+        and current_sha
+        and row_sha == current_sha
+        and str(row.get("contract_fingerprint") or "").strip() == current_contract
+    )
+
+
 def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optional[str] = None) -> List[str]:
     """返回某 Clip 已落档 PNG（相对 出图/<ep>），用于资产逐图复核。
 
@@ -3009,7 +3065,7 @@ def prop_shape_review_targets(root: Path, ep: str,
     if not idx:
         return []
     entries: Dict[str, Dict[str, Any]] = idx.get("entries") or {}
-    confirmations = load_prop_shape_confirmations(root, ep)
+    confirmation_rows = _prop_shape_confirmation_rows(root, ep)
     pm = _asset_primary_map(root)
     out: List[Dict[str, Any]] = []
     seen: Set[Tuple[str, str]] = set()
@@ -3037,7 +3093,7 @@ def prop_shape_review_targets(root: Path, ep: str,
         if key in seen:
             continue
         seen.add(key)
-        out.append({
+        target = {
             "asset": aid,
             "asset_name": entry.get("name") or aid,
             "asset_type": asset_type,
@@ -3049,11 +3105,19 @@ def prop_shape_review_targets(root: Path, ep: str,
             "must_not_have": must_not,
             "shape_contract": entry.get("shape_contract") or [],
             "scale": entry.get("scale") or "",
-            "confirmed": key in confirmations,
             "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
             "reason": "shared_primary_registered_asset_must_not_have",
             "scope": "shared_primary",
-        })
+        }
+        target["contract_fingerprint"] = _prop_shape_contract_fingerprint(
+            must_not_have=target.get("must_not_have"),
+            shape_contract=target.get("shape_contract"),
+            scale=target.get("scale"),
+        )
+        target["confirmed"] = _prop_shape_confirmation_matches(
+            root, ep, target, confirmation_rows.get(key)
+        )
+        out.append(target)
 
     try:
         text = (root / "出图" / ep / "prompt" / "01_分镜出图.md").read_text(encoding="utf-8")
@@ -3078,8 +3142,7 @@ def prop_shape_review_targets(root: Path, ep: str,
                 if key in seen:
                     continue
                 seen.add(key)
-                confirmed = key in confirmations
-                out.append({
+                target = {
                     "asset": aid,
                     "asset_name": entry.get("name") or aid,
                     "asset_type": asset_type,
@@ -3091,11 +3154,19 @@ def prop_shape_review_targets(root: Path, ep: str,
                     "must_not_have": must_not,
                     "shape_contract": entry.get("shape_contract") or [],
                     "scale": entry.get("scale") or "",
-                    "confirmed": confirmed,
                     "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
                     "reason": "registered_asset_must_not_have",
                     "scope": "episode_shot",
-                })
+                }
+                target["contract_fingerprint"] = _prop_shape_contract_fingerprint(
+                    must_not_have=target.get("must_not_have"),
+                    shape_contract=target.get("shape_contract"),
+                    scale=target.get("scale"),
+                )
+                target["confirmed"] = _prop_shape_confirmation_matches(
+                    root, ep, target, confirmation_rows.get(key)
+                )
+                out.append(target)
     return out
 
 
@@ -3238,6 +3309,7 @@ def write_prop_shape_skeleton(root: Path, ep: str, *, include_confirmed: bool = 
             "reason": "待人工或 VLM 确认：禁形/尺寸是否符合 asset_registry",
             "must_not_have": t.get("must_not_have") or [],
             "shape_contract": t.get("shape_contract") or [],
+            "contract_fingerprint": t.get("contract_fingerprint") or "",
             "scale": t.get("scale") or "",
             "stitch": t.get("stitch") or "",
         })
@@ -3289,6 +3361,7 @@ def confirm_prop_shape_targets(root: Path, ep: str, selector: str,
             "reason": reason or "人工确认无禁形且尺寸符合设定",
             "must_not_have": t.get("must_not_have") or [],
             "shape_contract": t.get("shape_contract") or [],
+            "contract_fingerprint": t.get("contract_fingerprint") or "",
             "scale": t.get("scale") or "",
             "stitch": t.get("stitch") or "",
         })
@@ -3357,6 +3430,8 @@ def vlm_confirm_prop_shape_targets(root: Path, ep: str, *,
                 "confidence": conf,
                 "reason": verdict.get("reason") or "VLM 高置信确认无禁形且尺寸符合设定",
                 "must_not_have": t.get("must_not_have") or [],
+                "shape_contract": t.get("shape_contract") or [],
+                "contract_fingerprint": t.get("contract_fingerprint") or "",
                 "scale": t.get("scale") or "",
                 "stitch": t.get("stitch") or "",
             })
@@ -4830,11 +4905,11 @@ def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
                         "六联表", "九宫格", "拼表", "expression_sheet", "expression sheet",
                         "two_by_three_expression_sheet", "contact_sheet",
                     )):
-                        # A multi-cell expression sheet is identity/performance
-                        # evidence, not one tight face crop.  Applying the
-                        # single-face 20–30% bbox floor to the whole mosaic is a
-                        # deterministic false block; its per-cell identity is
-                        # covered by the expression visual receipt and shot QC.
+                        # Keep the sheet in the audit queue.  The caller detects
+                        # its panel count and normalizes face area per cell, so it
+                        # can catch missing/duplicated panels without applying a
+                        # single-face ratio to the complete mosaic.
+                        out.append((label, rel))
                         continue
                     # 「基础」表情经常只是正面/半身主参考的别名，不是紧裁脸锚；宽身位脸小是合理的。
                     # 真正的表情库仍会因路径/标签含“脸/表情/face/expression”等信号而进入本门。

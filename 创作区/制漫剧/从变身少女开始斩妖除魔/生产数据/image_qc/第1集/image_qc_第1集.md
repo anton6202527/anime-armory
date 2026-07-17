@@ -36,4 +36,17 @@
 - 🟡 13 镜已 lint · block 0 · warn 1
   - 🟡 多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。
 
+## 高风险道具禁形/尺寸逐图复核（硬闸）
+- total 9 · pending 0 · confirmed 9
+- 确认文件: `/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json`
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_断刀.png（PROP_断刀 断刀） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_断刀_shared_primary_定妆_道具_断刀_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_翻覆囚车.png（PROP_翻覆囚车 翻覆囚车） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_翻覆囚车_shared_primary_定妆_道具_翻覆囚车_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_道具_虎首.png（PROP_虎首 虎首） 禁形=现代物件、文字水印、结构漂移、数量漂移；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_虎首_shared_primary_定妆_道具_虎首_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_特效_百妖谱.png（VFX_百妖谱 百妖谱） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_百妖谱_shared_primary_定妆_特效_百妖谱_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png（VFX_系统面板 百妖谱金色古卷面板） 禁形=AI生成可读文字、现代手机UI、随机蓝色科幻屏、乱码文字；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_系统面板_shared_primary_定妆_特效_百妖谱金色古卷面板_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_特效_道行反噬.png（VFX_道行反噬 道行反噬） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_道行反噬_shared_primary_定妆_特效_道行反噬_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_特效_道行灌注.png（VFX_道行灌注 道行灌注） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇、双刃剑轮廓、第二条锋刃、中心对称剑脊、第二把实体武器；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_道行灌注_shared_primary_定妆_特效_道行灌注_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_特效_黑妖血.png（VFX_黑妖血 黑妖血） 禁形=随机改色、遮挡主体脸、现代科幻UI、过度血腥猎奇；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_黑妖血_shared_primary_定妆_特效_黑妖血_compare.png
+  - 🟢 shared_primary 出图/共享/图片/定妆_武器_横刀.png（WEAPON_01 横刀） 禁形=变成长剑、华丽仙剑、现代军刀、多把复制、副刀、短刃、匕首、右手第二把刀；尺寸=None；/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_shared_primary_定妆_武器_横刀_compare.png
+
 落档判定：**verdict=block** → 有硬阻断（崩脸/人体解剖N5铁证/纯文生图/非法 CHAR_id/缺高风险人体合约），必须修复后重跑；**verdict=review** → 只有非阻断初筛时不挡 video；若是视觉机检降级/依赖缺失，按阶段跳转先补依赖或复核；**verdict=ok** → 放行。本地贴脸/换脸/裁脸贴回画面是独立硬禁项，不能靠 embedding 分数洗白。初筛项是像素直方图/dHash 机检初筛，非硬失败（同 video_qc 哲学）。

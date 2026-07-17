@@ -488,6 +488,39 @@ def test_prop_shape_review_confirmations_require_current_png_hash(tmp_path: Path
     assert targets and targets[0]["confirmed"] is False
 
 
+def test_prop_shape_review_confirmation_invalidates_when_contract_changes(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    registry_path = reg / "asset_registry.json"
+    registry = {
+        "assets": [{
+            "id": "PROP_01",
+            "type": "prop",
+            "name": "双轮木车",
+            "constraints": {
+                "must_not_have": ["第三轮"],
+                "structure": "总轮数恰好两只",
+            },
+        }],
+    }
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第1集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text("## Clip 01\n`PROP_01` 双轮木车。\n", encoding="utf-8")
+    img = tmp_path / "出图" / "第1集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip_01.png").write_bytes(b"same-current-pixels")
+
+    image_qc.confirm_prop_shape_targets(tmp_path, "第1集", "all", reviewer="qa")
+    assert image_qc.prop_shape_review_targets(tmp_path, "第1集")[0]["confirmed"] is True
+
+    registry["assets"][0]["constraints"]["structure"] = "总轮数恰好两只；只允许一根横轴"
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+
+    target = image_qc.prop_shape_review_targets(tmp_path, "第1集")[0]
+    assert target["confirmed"] is False
+
+
 def test_face_confirmations_require_current_png_hash_and_convert_rows(tmp_path: Path) -> None:
     img = tmp_path / "出图" / "第1集" / "图片"
     img.mkdir(parents=True)
@@ -2756,7 +2789,7 @@ def test_audit_face_anchor_quality_ignores_base_expression_alias_to_front(tmp_pa
     assert not [f for f in res["findings"] if "定妆_沈念.png" in f["msg"]]
 
 
-def test_face_anchor_quality_excludes_expression_contact_sheet_from_single_face_floor(tmp_path, monkeypatch):
+def test_face_anchor_quality_audits_expression_contact_sheet_instead_of_skipping_it(tmp_path, monkeypatch):
     import pytest
     Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
     root = tmp_path / "剧"
@@ -2791,8 +2824,11 @@ def test_face_anchor_quality_excludes_expression_contact_sheet_from_single_face_
 
     res = image_qc.audit_face_anchor_quality(root, "第1集")
 
-    assert res["checked"] == 1
-    assert res["findings"] == []
+    assert res["checked"] == 2
+    assert any(
+        finding["level"] == "block" and finding["code"] == "expression_sheet_face_count"
+        for finding in res["findings"]
+    )
 
 
 def test_audit_face_anchor_quality_flags_low_res(tmp_path):

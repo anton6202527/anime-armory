@@ -4469,6 +4469,16 @@ def mark_shared_reference_status(
     derivation: Optional[Dict[str, Any]] = None,
 ) -> None:
     """Mark matching shared reference registry entries after a real PNG exists."""
+    asset_path = root / rel_path
+    pixel_meta: Dict[str, Any] = {}
+    if status == "ready" and asset_path.is_file():
+        current_sha = optional_file_sha256(asset_path)
+        current_size = _open_image_size(asset_path)
+        if current_sha:
+            pixel_meta["sha256"] = current_sha
+        if current_size:
+            pixel_meta["width"], pixel_meta["height"] = current_size
+
     skip_string_keys = {
         "path",
         "rel_path",
@@ -4488,6 +4498,7 @@ def mark_shared_reference_status(
         entry = dict(existing) if isinstance(existing, dict) else {}
         entry["path"] = rel_path
         entry["status"] = status
+        entry.update(pixel_meta)
         if derivation:
             entry["derivation"] = derivation
         return entry
@@ -4514,6 +4525,10 @@ def mark_shared_reference_status(
                     if node.get("status") != status:
                         node["status"] = status
                         changed = True
+                    for meta_key, meta_value in pixel_meta.items():
+                        if node.get(meta_key) != meta_value:
+                            node[meta_key] = meta_value
+                            changed = True
                     if derivation and node.get("derivation") != derivation:
                         node["derivation"] = derivation
                         changed = True
