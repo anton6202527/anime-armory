@@ -2690,6 +2690,45 @@ def test_audit_face_anchor_quality_ignores_base_expression_alias_to_front(tmp_pa
     assert not [f for f in res["findings"] if "定妆_沈念.png" in f["msg"]]
 
 
+def test_face_anchor_quality_excludes_expression_contact_sheet_from_single_face_floor(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    tight_rel = "出图/共享/图片/定妆_少年_脸部特写.png"
+    sheet_rel = "出图/共享/图片/定妆_少年_表情_六联表.png"
+    (root / "出图" / "共享" / "图片").mkdir(parents=True)
+    Image.new("RGB", (1024, 1024), (128, 128, 128)).save(root / tight_rel)
+    Image.new("RGB", (1672, 941), (128, 128, 128)).save(root / sheet_rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(path):
+            if str(path).endswith("六联表.png"):
+                return [(0, 0, 120, 120)]
+            return [(100, 100, 700, 700)]
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "少年", "scope": "核心长线主角", "forms": [{
+            "form": "常态",
+            "reference_group": {"face_anchor_refs": [{"path": tight_rel}]},
+            "reference_atlas": {
+                "face_anchor_refs": [{"path": tight_rel}],
+                "expression_refs": [{
+                    "emotion": "六联表",
+                    "path": sheet_rel,
+                    "layout": "two_by_three_expression_sheet_v1",
+                }],
+            },
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert res["checked"] == 1
+    assert res["findings"] == []
+
+
 def test_audit_face_anchor_quality_flags_low_res(tmp_path):
     import pytest
     Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")

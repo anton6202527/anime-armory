@@ -4753,6 +4753,18 @@ def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
             rel = str(path or "").strip()
             if rel and rel.lower().endswith(".png"):
                 if kind == "expression":
+                    layout = str(item.get("layout") or "") if isinstance(item, Mapping) else ""
+                    sheet_text = f"{label} {Path(rel).stem} {layout}".lower()
+                    if any(token in sheet_text for token in (
+                        "六联表", "九宫格", "拼表", "expression_sheet", "expression sheet",
+                        "two_by_three_expression_sheet", "contact_sheet",
+                    )):
+                        # A multi-cell expression sheet is identity/performance
+                        # evidence, not one tight face crop.  Applying the
+                        # single-face 20–30% bbox floor to the whole mosaic is a
+                        # deterministic false block; its per-cell identity is
+                        # covered by the expression visual receipt and shot QC.
+                        continue
                     # 「基础」表情经常只是正面/半身主参考的别名，不是紧裁脸锚；宽身位脸小是合理的。
                     # 真正的表情库仍会因路径/标签含“脸/表情/face/expression”等信号而进入本门。
                     same_as_wide_ref = norm(rel) in wide_refs

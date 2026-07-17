@@ -540,6 +540,55 @@ def test_derive_project_can_make_independent_base_expression_from_front(tmp_path
     assert rg_item["derivation"]["crop_box"] != form["reference_group"]["face_anchor_refs"][0]["derivation"]["crop_box"]
 
 
+def test_force_face_anchor_does_not_overwrite_expression_sheet_alias(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    image_dir = root / "出图" / "共享" / "图片"
+    front = image_dir / "CHAR_BOY_常态.png"
+    expression = image_dir / "CHAR_BOY_常态_表情_六联表.png"
+    _png(front, (110, 90, 70), size=(941, 1672))
+    _png(expression, (30, 120, 210), size=(1672, 941))
+    original_expression = expression.read_bytes()
+    shared_rel = "出图/共享/图片/CHAR_BOY_常态_表情_六联表.png"
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(json.dumps({
+        "characters": [{"id": "CHAR_BOY", "forms": [{
+            "form": "常态", "asset_key": "CHAR_BOY__常态",
+            "reference_group": {
+                "front": {"path": "出图/共享/图片/CHAR_BOY_常态.png", "status": "ready"},
+                "face_anchor_refs": [{"path": shared_rel, "status": "ready"}],
+                "expressions": [{"emotion": "六联表", "path": shared_rel, "status": "ready"}],
+            },
+            "reference_atlas": {
+                "face_anchor_refs": [{"path": shared_rel, "status": "ready"}],
+                "expression_refs": [{"emotion": "六联表", "path": shared_rel, "status": "ready"}],
+            },
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    summary = derive_makeup_pack.derive_project(
+        root,
+        write=True,
+        force=True,
+        asset_keys={"CHAR_BOY__常态"},
+        face_anchor_only=True,
+        views={"face_anchor_refs"},
+    )
+
+    assert expression.read_bytes() == original_expression
+    assert summary["derived"][0]["path"].endswith("CHAR_BOY_常态_脸部特写.png")
+    data = json.loads(registry_path.read_text(encoding="utf-8"))
+    form = data["characters"][0]["forms"][0]
+    anchor = form["reference_group"]["face_anchor_refs"]
+    atlas_anchor = form["reference_atlas"]["face_anchor_refs"]
+    assert [item["path"] for item in anchor] == ["出图/共享/图片/CHAR_BOY_常态_脸部特写.png"]
+    assert [item["path"] for item in atlas_anchor] == ["出图/共享/图片/CHAR_BOY_常态_脸部特写.png"]
+    assert form["reference_group"]["expressions"][0]["path"] == shared_rel
+    assert form["reference_atlas"]["expression_refs"][0]["path"] == shared_rel
+    assert Image.open(root / anchor[0]["path"]).size == (1024, 1024)
+
+
 def test_derive_project_can_tighten_expression_refs_without_overwriting_source(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     image_dir = root / "出图" / "共享" / "图片"

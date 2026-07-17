@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第2话",
-  "created_at": "2026-07-17T07:31:19",
+  "created_at": "2026-07-17T09:11:36",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -249,7 +249,7 @@
   "panels": [
     {
       "panel_id": "P001",
-      "status": "failed",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
@@ -279,8 +279,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P001.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",

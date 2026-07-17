@@ -91,6 +91,7 @@
       ],
       "shots": [
         {
+          "anchor": "best_of_variants",
           "char": "CHAR_01__本集为14岁杂役常态",
           "face_idx": 1,
           "face_swap": {
@@ -103,12 +104,12 @@
               {
                 "char": "CHAR_01__本集为14岁杂役常态",
                 "face_idx": 1,
-                "score": 0.548
+                "score": 0.552
               },
               {
                 "char": "CHAR_01__本集为14岁杂役常态",
                 "face_idx": 2,
-                "score": 0.2095
+                "score": 0.225
               },
               {
                 "char": "CHAR_02__常态",
@@ -142,7 +143,8 @@
           "manual_reason": "执行者已实际查看当前 EP01_CLIP01 像素并与 CHAR_01、CHAR_02 定妆正面并排核对：脸型、眉眼鼻口比例、发际线、发髻、年龄和服装一致；embedding warn 为低头三分之二侧角度与场景光照误报。",
           "manual_reviewer": "executor:codex",
           "png": "图片/EP01_CLIP01.png",
-          "score": 0.548,
+          "score": 0.552,
+          "score_vs_main": 0.548,
           "verdict": "ok"
         },
         {
@@ -159,12 +161,12 @@
               {
                 "char": "CHAR_01__本集为14岁杂役常态",
                 "face_idx": 1,
-                "score": 0.5281
+                "score": 0.531
               },
               {
                 "char": "CHAR_01__本集为14岁杂役常态",
                 "face_idx": 2,
-                "score": 0.0283
+                "score": 0.0329
               },
               {
                 "char": "CHAR_01__本集为14岁杂役常态",
@@ -192,12 +194,14 @@
           "verdict": "ok"
         },
         {
+          "anchor": "best_of_variants",
           "char": "CHAR_01__本集为14岁杂役常态",
           "face_idx": 1,
           "floor": 0.4747,
           "floor_calibrated": true,
           "png": "图片/EP01_CLIP02.png",
-          "score": 0.515,
+          "score": 0.521,
+          "score_vs_main": 0.515,
           "verdict": "ok"
         }
       ]
@@ -206,7 +210,7 @@
       "available": true,
       "characters": {
         "CHAR_01__本集为14岁杂役常态": {
-          "floor": 0.8728,
+          "floor": 0.83,
           "intra_pairs": 6
         },
         "CHAR_02__常态": {
@@ -230,7 +234,7 @@
         {
           "abs_verdict": "block",
           "char": "CHAR_01__本集为14岁杂役常态",
-          "floor": 0.8728,
+          "floor": 0.83,
           "png": "图片/EP01_CLIP01.png",
           "score": 0.7424,
           "verdict": "ok"
@@ -238,7 +242,7 @@
         {
           "abs_verdict": "block",
           "char": "CHAR_01__本集为14岁杂役常态",
-          "floor": 0.8728,
+          "floor": 0.83,
           "png": "图片/EP01_CLIP01_a1.png",
           "score": 0.7049,
           "verdict": "ok"
@@ -246,7 +250,7 @@
         {
           "abs_verdict": "warn",
           "char": "CHAR_01__本集为14岁杂役常态",
-          "floor": 0.8728,
+          "floor": 0.83,
           "png": "图片/EP01_CLIP02.png",
           "score": 0.83,
           "verdict": "ok"
@@ -312,6 +316,7 @@
         "贺平生",
         "CHAR_01",
         "CHAR_01__本集为14岁杂役常态",
+        "CHAR_01__本集为14岁杂役常态_脸部特写",
         "CHAR_01__本集为14岁杂役常态_表情_六联表",
         "CHAR_01__本集为14岁杂役常态_45度",
         "CHAR_01__本集为14岁杂役常态_后45度",
@@ -371,7 +376,7 @@
       "available": true,
       "characters": {
         "CHAR_01__本集为14岁杂役常态": {
-          "floor": 0.7384,
+          "floor": 0.5848,
           "intra_pairs": 6
         },
         "CHAR_02__常态": {
@@ -393,25 +398,24 @@
       "rel_margin": 0.15,
       "shots": [
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__本集为14岁杂役常态",
-          "floor": 0.7384,
+          "floor": 0.5848,
           "png": "图片/EP01_CLIP01.png",
           "score": 0.5057,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
+          "abs_verdict": "warn",
           "char": "CHAR_01__本集为14岁杂役常态",
-          "floor": 0.7384,
+          "floor": 0.5848,
           "png": "图片/EP01_CLIP01_a1.png",
           "score": 0.5056,
           "verdict": "ok"
         },
         {
-          "abs_verdict": "block",
           "char": "CHAR_01__本集为14岁杂役常态",
-          "floor": 0.7384,
+          "floor": 0.5848,
           "png": "图片/EP01_CLIP02.png",
           "score": 0.6237,
           "verdict": "ok"
@@ -480,12 +484,6 @@
     "checked": 3,
     "findings": [
       {
-        "asset": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
-        "code": "weak_face_anchor_core",
-        "level": "block",
-        "msg": "脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
         "asset": "出图/共享/图片/定妆_CHAR_03__常态.png",
         "code": "weak_face_anchor",
         "level": "warn",
@@ -507,7 +505,7 @@
         "png": "图片/EP01_CLIP01.png",
         "reason": "执行者已实际查看当前 EP01_CLIP01 像素并与 CHAR_01、CHAR_02 定妆正面并排核对：脸型、眉眼鼻口比例、发际线、发髻、年龄和服装一致；embedding warn 为低头三分之二侧角度与场景光照误报。",
         "reviewer": "executor:codex",
-        "score": 0.548
+        "score": 0.552
       },
       {
         "char": "CHAR_02__常态",
@@ -650,11 +648,11 @@
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "d3cddf734216112a3c57c94fb27c8a068baff36bc80e0ecef57bcb13bdc90d55",
-      "出图/共享/identity_registry.json": "861e41fea3f0bea74bb708be7c42751f70bb732476408c6454ceeb6f8bc9bb50",
+      "出图/共享/identity_registry.json": "a55e159934adf0481c03b57524cf5dad86c8c9924fc0413c47588532ad1aae4f",
       "出图/共享/style_anchor_registry.json": "d5699112a0f4176bc8a16afd97500383c66b66fac919c44700792952db1ce9c3",
       "出图/共享/图片/风格锚_国漫写实.png": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
       "出图/第1集/prompt/00_总览.md": "3b6aac0ec28432bf6c3eef756ca28725a9e4c8b34fd06f13498b5bbf6a84db20",
-      "出图/第1集/prompt/01_分镜出图.md": "39e9134c7d0181725c08d3dff568a91b4ffcbaea8c859bc2a9c015ade84c0624",
+      "出图/第1集/prompt/01_分镜出图.md": "4327808bcdb8e8a21638ebd2c299e59e80b480db3ef65f3868f18e767ed7c303",
       "出图/第1集/图片/EP01_CLIP01.png": "7f1cd3a60ce98b721e492b61b50487339346eed2af39ebb64efea93c6b032230",
       "出图/第1集/图片/EP01_CLIP01_a1.png": "ef194654abd2d9114fb5a689e98450bfcea5128e6d871267053554d0557db5ae",
       "出图/第1集/图片/EP01_CLIP02.png": "971950b1163faedab24e70c20841168896f1a564fc85cbbfcab0f0231d57e330",
@@ -662,7 +660,7 @@
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "8b5aa59cdface9bdc41c7fdf09678a67a7303746c6852d20d8066d7032e1ba90"
     },
-    "sha": "34ab5cd76f096ec0622ef2e4f9e1bd00028856803ad0270c7cedd3e06337945d"
+    "sha": "fdd248f8f1ae9d9fb003259208149a3605f76837edb8d7ecf23d448c73644d3a"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -829,11 +827,6 @@
     ],
     "findings": [
       {
-        "code": "weak_face_anchor_core",
-        "level": "block",
-        "msg": "脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「face_anchor」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：脸占画面仅 2%（建议 ≥30%，核心角教头线 ≥20%）；裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
-      },
-      {
         "code": "weak_face_anchor",
         "level": "warn",
         "msg": "脸部锚弱信噪比 CHAR_03/常态「face_anchor」（出图/共享/图片/定妆_CHAR_03__常态.png）：脸占画面仅 1%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
@@ -920,13 +913,13 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-    "jump_to_stage": "image",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
   },
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
@@ -1027,7 +1020,7 @@
         "warn": 0
       },
       "lint": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
         "ok": 0,
         "warn": 4
@@ -1076,9 +1069,9 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 1,
+    "hard_blocks": 0,
     "unavailable_visual_checks": [],
-    "verdict": "block"
+    "verdict": "review"
   },
   "tone_light_contract": {
     "available": true,
@@ -1363,6 +1356,21 @@
               },
               "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
               "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "ad95ccf68689506a45044d431479c0baf396875ba392c28be3d838f3f2465c4d",
+                "png_sha256": "70d7e15850ae15c7e93af72714e28c96b043053047732f7f8a92be480f99431e",
+                "reasons": [],
+                "registry_binding_fingerprint": "ad95ccf68689506a45044d431479c0baf396875ba392c28be3d838f3f2465c4d",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-07-17T01:05:40+00:00",
+                "reviewer": "executor:codex",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
+              "png_sha256": "70d7e15850ae15c7e93af72714e28c96b043053047732f7f8a92be480f99431e"
             }
           ],
           "valid": true

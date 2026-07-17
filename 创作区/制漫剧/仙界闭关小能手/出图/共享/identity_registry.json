@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-16T01:27:46+00:00",
+  "generated_at": "2026-07-17T01:07:05+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -115,18 +115,20 @@
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "controlled_multiref_generation",
+                  "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
                   "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    358,
+                    140,
+                    582,
+                    364
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-17T01:04:27+00:00"
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -135,14 +137,14 @@
                   "form": "本集为14岁杂役常态",
                   "library_tier": "core_full",
                   "view": "expression",
-                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
                   "reviewer": "executor:codex",
                   "review_kind": "executor_visual",
                   "reviewer_role": "ai_visual_executor",
                   "human_signoff": false,
-                  "reviewed_at": "2026-07-15T15:50:28+00:00",
-                  "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e",
-                  "registry_binding_fingerprint": "fbaad911e201342f73ffb9f482ad4649c0a7e11c0544a4fdab93c154e7eeabfb",
+                  "reviewed_at": "2026-07-17T01:05:40+00:00",
+                  "png_sha256": "70d7e15850ae15c7e93af72714e28c96b043053047732f7f8a92be480f99431e",
+                  "registry_binding_fingerprint": "ad95ccf68689506a45044d431479c0baf396875ba392c28be3d838f3f2465c4d",
                   "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
                   "review_contract": "n2d_expression_review_v1",
                   "criteria": [
@@ -155,7 +157,7 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "实际目视：六格同一角色身份、年龄、发髻与服装一致，六种基础剧情表情区分可读。"
+                  "note": "执行者实际查看当前 1024×1024 像素：同源14岁少年脸，眼鼻嘴三角区与完整脸轮廓清晰，脸占画面约70%，灰布发带、低小髻边缘、衣领及中性灰背景一致；无六联拼图、无裁断五官、无水印。"
                 }
               }
             ],
@@ -710,18 +712,20 @@
             },
             "face_anchor_refs": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
                 "status": "ready",
                 "derivation": {
-                  "method": "controlled_multiref_generation",
+                  "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
                   "source_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
                   "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                    358,
+                    140,
+                    582,
+                    364
+                  ],
+                  "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                  "generated_at": "2026-07-17T01:04:27+00:00"
                 },
                 "visual_review": {
                   "status": "accepted",
@@ -730,14 +734,14 @@
                   "form": "本集为14岁杂役常态",
                   "library_tier": "core_full",
                   "view": "expression",
-                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+                  "path": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
                   "reviewer": "executor:codex",
                   "review_kind": "executor_visual",
                   "reviewer_role": "ai_visual_executor",
                   "human_signoff": false,
-                  "reviewed_at": "2026-07-15T15:50:28+00:00",
-                  "png_sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e",
-                  "registry_binding_fingerprint": "fbaad911e201342f73ffb9f482ad4649c0a7e11c0544a4fdab93c154e7eeabfb",
+                  "reviewed_at": "2026-07-17T01:05:40+00:00",
+                  "png_sha256": "70d7e15850ae15c7e93af72714e28c96b043053047732f7f8a92be480f99431e",
+                  "registry_binding_fingerprint": "ad95ccf68689506a45044d431479c0baf396875ba392c28be3d838f3f2465c4d",
                   "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
                   "review_contract": "n2d_expression_review_v1",
                   "criteria": [
@@ -750,7 +754,7 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "实际目视：六格同一角色身份、年龄、发髻与服装一致，六种基础剧情表情区分可读。"
+                  "note": "执行者实际查看当前 1024×1024 像素：同源14岁少年脸，眼鼻嘴三角区与完整脸轮廓清晰，脸占画面约70%，灰布发带、低小髻边缘、衣领及中性灰背景一致；无六联拼图、无裁断五官、无水印。"
                 }
               }
             ],
@@ -955,7 +959,7 @@
           "signature_equipment": [],
           "self_check_passed": true,
           "self_check_note": "PNG exists but requires explicit visual/QC signoff",
-          "self_check_at": "2026-07-15T16:44:19+00:00",
+          "self_check_at": "2026-07-17T01:06:01+00:00",
           "self_check_by": "image_qc.mark_finalized",
           "artifact_sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3",
           "anchor_sha": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3"
