@@ -1060,6 +1060,44 @@ def character_view_prompt(
 """
 
 
+def character_expression_prompt(
+    character_id: str,
+    expression_id: str,
+    expression: dict[str, Any],
+    notes: str,
+    *,
+    visual_style: str,
+    asset_contract: str = "",
+) -> str:
+    """生成可独立喂给后端的表情锚；只改表演，不重画身份。"""
+    name = str(expression.get("name") or expression_id).strip()
+    emotion = str(expression.get("emotion") or name).strip()
+    intensity = str(expression.get("intensity") or "medium").strip()
+    return f"""请基于附件中已采纳的同一虚构角色脸部锚，生成一张独立的漫画表情参考图。
+
+角色 ID：{character_id}
+表情 ID：{expression_id}
+表情名称：{name}
+情绪：{emotion}
+强度：{intensity}
+
+身份锁定：附件是最高优先级身份真值。必须保持同一人的脸型、眼型与眼距、鼻梁、嘴型、下颌、发际线、发型轮廓、年龄、肤色和标志物；只改变面部肌肉与相应眼神，不得换脸、美型化或改变服装阶层。
+
+角色设定摘录：
+{notes or '无额外设定；以附件身份锚为准。'}
+
+项目定妆契约：
+{asset_contract or '- 无额外登记契约；以附件为准。'}
+
+画面要求：
+1. 单人头肩近景，中性浅灰或低饱和纯色背景，柔和均匀光，脸部与两侧轮廓完整。
+2. 准确表现“{name}”（{emotion}, {intensity}），强度到位但不做滑稽变形；眼周、眉形、嘴角、咬肌和呼吸状态必须互相一致。
+3. 保持项目基础视觉风格：{visual_style}；线条、肤色、墨色和上色层级必须与已采纳定妆同源。
+4. 不要场景叙事、其他人、手持道具、对白气泡、文字、字母、数字、logo、水印、平台 UI、角色卡边框或多格拼图。
+5. 只输出这一张表情锚图。
+"""
+
+
 def character_text_anchor_prompt(
     character_id: str,
     notes: str,
@@ -1723,6 +1761,15 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
                 outfit_id = str(binding.get("outfit_id") or "").strip()
                 if outfit_id:
                     lookup_view = f"outfit:{outfit_id}"
+            elif view == "expression" or role == "expression":
+                expression_id = str(ref.get("contract_id") or "").strip()
+                if not expression_id:
+                    for binding in job.get("character_bindings") or []:
+                        if isinstance(binding, dict) and str(binding.get("character_id") or "") == rid:
+                            expression_id = str(binding.get("expression_id") or "").strip()
+                            break
+                if expression_id:
+                    lookup_view = f"expression:{expression_id}"
 
             path = ""
             if lookup_view.startswith("outfit:"):
@@ -1732,6 +1779,24 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
                 outfits = asset.get("outfits") if isinstance(asset, dict) and isinstance(asset.get("outfits"), dict) else {}
                 outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else {}
                 for item in outfit.get("reference_images") or []:
+                    raw = item.get("path") if isinstance(item, dict) else item
+                    if not isinstance(raw, str) or not raw.strip():
+                        continue
+                    candidate = resolve_path(root, raw)
+                    if candidate.is_file():
+                        path = rel_to_root(root, candidate)
+                        break
+            elif lookup_view.startswith("expression:"):
+                expression_id = lookup_view.split(":", 1)[1]
+                assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+                asset = assets.get(rid) if isinstance(assets, dict) else None
+                expressions = (
+                    asset.get("expressions")
+                    if isinstance(asset, dict) and isinstance(asset.get("expressions"), dict)
+                    else {}
+                )
+                expression = expressions.get(expression_id) if isinstance(expressions.get(expression_id), dict) else {}
+                for item in expression.get("reference_images") or []:
                     raw = item.get("path") if isinstance(item, dict) else item
                     if not isinstance(raw, str) or not raw.strip():
                         continue
@@ -2871,6 +2936,254 @@ def parse_outfit_bindings(raw: str) -> list[tuple[str, str]]:
     return bindings
 
 
+def parse_expression_bindings(raw: str) -> list[tuple[str, str]]:
+    bindings: list[tuple[str, str]] = []
+    for item in str(raw or "").split(","):
+        item = item.strip()
+        if not item:
+            continue
+        if "=" not in item:
+            raise SystemExit(f"--bindings 必须是 CHAR_ID=EXPR_ID，当前为 {item}")
+        character_id, expression_id = (part.strip() for part in item.split("=", 1))
+        if not character_id.startswith("CHAR_") or not expression_id.startswith("EXPR_"):
+            raise SystemExit(f"--bindings 必须是 CHAR_ID=EXPR_ID，当前为 {item}")
+        bindings.append((character_id, expression_id))
+    if not bindings:
+        raise SystemExit("至少提供一个 --bindings CHAR_ID=EXPR_ID")
+    return bindings
+
+
+def register_expression_reference(
+    registry: dict[str, Any],
+    root: Path,
+    character_id: str,
+    expression_id: str,
+    path: Path,
+    *,
+    source: dict[str, Any],
+) -> None:
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else None
+    if asset is None:
+        raise SystemExit(f"identity_registry 未登记 {character_id}")
+    expressions = asset.get("expressions") if isinstance(asset.get("expressions"), dict) else {}
+    expression = expressions.get(expression_id) if isinstance(expressions.get(expression_id), dict) else None
+    if expression is None:
+        raise SystemExit(f"identity_registry 未登记表情 {character_id}/{expression_id}")
+    dims = png_dimensions(path)
+    expression["reference_images"] = [
+        {
+            "path": rel_to_root(root, path),
+            "sha256": file_sha256(path),
+            "source": source,
+            "canvas": {"width": dims[0], "height": dims[1]} if dims else {},
+            "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        }
+    ]
+    expression["status"] = "ready"
+
+
+def generate_expression_references(args: argparse.Namespace) -> int:
+    """以已采纳 face/front 为身份锚，生成并登记结构化表情参考图。"""
+    root = Path(args.project_root).expanduser().resolve()
+    repo = repo_root(root)
+    registry = load_registry(root)
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    bindings = parse_expression_bindings(args.bindings)
+    if args.max_attempts < 1:
+        raise SystemExit("--max-attempts 必须 >= 1，且表示跨恢复运行的累计总次数")
+
+    if args.backend == "auto":
+        channel = read_setting(root, "生图渠道", "")
+        backend = "dreamina" if any(token in channel.lower() for token in ("dreamina", "即梦")) else "codex"
+    else:
+        backend = args.backend
+    tool = "dreamina" if backend == "dreamina" else "codex"
+    if not shutil.which(tool):
+        raise SystemExit(f"项目选定的表情锚后端 {tool} 不在 PATH；不会静默切换渠道")
+
+    visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
+    shared_dir = root / "出图" / "共享" / "图片"
+    shared_dir.mkdir(parents=True, exist_ok=True)
+    generated = skipped = failed = 0
+    items: list[dict[str, Any]] = []
+    model = f"Dreamina {args.model_version}" if backend == "dreamina" else CODEX_MODEL
+    channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
+
+    for character_id, expression_id in bindings:
+        asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else None
+        if asset is None:
+            raise SystemExit(f"identity_registry 未登记 {character_id}")
+        expressions = asset.get("expressions") if isinstance(asset.get("expressions"), dict) else {}
+        expression = expressions.get(expression_id) if isinstance(expressions.get(expression_id), dict) else None
+        if expression is None:
+            raise SystemExit(f"identity_registry 未登记表情 {character_id}/{expression_id}")
+        face = shared_dir / f"{character_id}__face.png"
+        front = shared_dir / f"{character_id}__front.png"
+        anchor = face if png_valid(face) else front
+        if not png_valid(anchor):
+            raise SystemExit(f"{character_id} 缺可用 face/front 身份锚")
+        dest = shared_dir / f"{character_id}__{expression_id}.png"
+        if png_valid(dest) and not args.overwrite:
+            source = {
+                "kind": "existing_expression_reference",
+                "character_id": character_id,
+                "expression_id": expression_id,
+                "identity_anchor_path": rel_to_root(root, anchor),
+            }
+            register_expression_reference(registry, root, character_id, expression_id, dest, source=source)
+            skipped += 1
+            items.append({"status": "expression_reference_reused", "character_id": character_id,
+                          "expression_id": expression_id, "path": rel_to_root(root, dest),
+                          "sha256": file_sha256(dest)})
+            print(f"[skip] {character_id}/{expression_id}: {rel_to_root(root, dest)}", flush=True)
+            continue
+
+        prompt = character_expression_prompt(
+            character_id,
+            expression_id,
+            expression,
+            story_bible_character_notes(root, character_id),
+            visual_style=visual_style,
+            asset_contract=character_asset_contract(asset),
+        )
+        prompt_path, prompt_sha = prompt_snapshot(
+            root, args.chapter, character_id, f"expression_{expression_id}_{backend}", prompt
+        )
+        ready = False
+        last_error = ""
+        attempts_used = 0
+        while True:
+            attempt_id, attempt = begin_generation_attempt(
+                root,
+                args.chapter,
+                generation_kind="expression",
+                asset_id=character_id,
+                variant=expression_id,
+                max_attempts_total=args.max_attempts,
+                backend=channel,
+                model=model,
+                prompt_sha256=prompt_sha,
+            )
+            attempts_used = attempt
+            if not attempt_id:
+                last_error = f"累计尝试次数已达授权上限 {attempt}/{args.max_attempts}；未发起新请求"
+                break
+            pending = dest.with_name(f".{dest.stem}__pending.png")
+            pending.unlink(missing_ok=True)
+            submit_id = ""
+            if backend == "dreamina":
+                ok, submit_id, last_error = run_dreamina_image(
+                    prompt,
+                    anchor,
+                    pending,
+                    timeout_sec=args.timeout_sec,
+                    poll_sec=args.poll_sec,
+                    model_version=args.model_version,
+                    resolution_type=args.resolution_type,
+                    ratio=args.ratio,
+                )
+                if not ok:
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {character_id}/{expression_id} {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+            else:
+                try:
+                    proc = run_codex_image(prompt, repo, args.timeout_sec, [anchor])
+                except KeyboardInterrupt:
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                    raise
+                if proc.returncode != 0:
+                    last_error = format_failure(proc)
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {character_id}/{expression_id} {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+                if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
+                    last_error = "codex completed but no valid image_generation PNG was available"
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {character_id}/{expression_id} {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+
+            source: dict[str, Any] = {
+                "kind": "generated_expression_reference",
+                "character_id": character_id,
+                "expression_id": expression_id,
+                "chapter": args.chapter,
+                "attempt": attempt,
+                "attempts_used": attempt,
+                "attempts_authorized": args.max_attempts,
+                "backend": channel,
+                "model": model,
+                "identity_anchor_path": rel_to_root(root, anchor),
+                "identity_anchor_sha256": file_sha256(anchor),
+                "prompt_path": prompt_path,
+                "prompt_sha256": prompt_sha,
+                "ratio": args.ratio,
+            }
+            if backend == "dreamina":
+                source.update({"model_version": args.model_version,
+                               "resolution_type": args.resolution_type, "submit_id": submit_id})
+            else:
+                source["backend_version"] = codex_version()
+            archived = adopt_generated_png(
+                root, pending, dest, asset_id=character_id, variant=f"expression/{expression_id}"
+            )
+            if archived:
+                source["archived_previous_path"] = archived
+            register_expression_reference(registry, root, character_id, expression_id, dest, source=source)
+            write_json(registry_path(root), registry)
+            row = {"ts": dt.datetime.now().isoformat(timespec="seconds"),
+                   "status": "expression_reference_ready", "character_id": character_id,
+                   "expression_id": expression_id, "path": rel_to_root(root, dest),
+                   "sha256": file_sha256(dest), **source}
+            items.append(row)
+            append_event(root, row)
+            finish_generation_attempt(
+                root, args.chapter, attempt_id, status="succeeded",
+                artifact_path=rel_to_root(root, dest), artifact_sha256=file_sha256(dest)
+            )
+            generated += 1
+            ready = True
+            print(f"[ok] {character_id}/{expression_id} -> {rel_to_root(root, dest)}", flush=True)
+            break
+        if not ready:
+            failed += 1
+            row = {"ts": dt.datetime.now().isoformat(timespec="seconds"),
+                   "status": "expression_reference_failed", "character_id": character_id,
+                   "expression_id": expression_id, "attempts_used": attempts_used,
+                   "attempts_authorized": args.max_attempts, "backend": channel,
+                   "model": model, "error": last_error}
+            items.append(row)
+            append_event(root, row)
+            print(f"[fail] {character_id}/{expression_id}: {last_error}", flush=True)
+
+    write_json(registry_path(root), registry)
+    out = root / "生产数据" / f"comic_identity_expressions_{args.chapter}.json"
+    previous_manifest_archive, previous_manifest_sha256 = archive_json_before_replace(root, out)
+    manifest = {
+        "schema_version": 1,
+        "kind": "comic_character_expression_generation",
+        "chapter": args.chapter,
+        "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "bindings": [{"character_id": cid, "expression_id": eid} for cid, eid in bindings],
+        "backend": channel,
+        "model": model,
+        "model_version": args.model_version if backend == "dreamina" else "",
+        "max_attempts_total": args.max_attempts,
+        "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, args.chapter)),
+        "previous_manifest_archive": previous_manifest_archive,
+        "previous_manifest_sha256": previous_manifest_sha256,
+        "generated": generated,
+        "skipped": skipped,
+        "failed": failed,
+        "items": items,
+    }
+    write_json(out, manifest)
+    print(f"[ok] expression manifest: {out}", flush=True)
+    print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
+    return 1 if failed else 0
+
+
 def outfit_attempts_used(manifest: dict[str, Any], character_id: str, outfit_id: str) -> int:
     """读取同一换装在旧 manifest 中已实际消耗的累计尝试次数。"""
     used = 0
@@ -3674,6 +3987,24 @@ def main() -> int:
     p_outfits.add_argument("--max-attempts", type=int, default=1)
     p_outfits.add_argument("--timeout-sec", type=int, default=240)
     p_outfits.set_defaults(func=generate_outfit_references)
+
+    p_expressions = sub.add_parser("expressions", help="基于已采纳 face/front 生成结构化表情锚")
+    p_expressions.add_argument(
+        "--bindings",
+        required=True,
+        help="逗号分隔 CHAR_ID=EXPR_ID，如 CHAR_A=EXPR_TERRIFIED",
+    )
+    p_expressions.add_argument("--backend", choices=("auto", "codex", "dreamina"), default="auto",
+                               help="auto 严格沿用项目已选生图渠道，不静默切换")
+    p_expressions.add_argument("--overwrite", action="store_true", help="覆盖已有表情锚，旧图自动归档")
+    p_expressions.add_argument("--ratio", default="1:1", help="表情头肩锚画幅")
+    p_expressions.add_argument("--max-attempts", type=int, default=1,
+                               help="跨恢复运行的单表情累计尝试上限")
+    p_expressions.add_argument("--timeout-sec", type=int, default=600)
+    p_expressions.add_argument("--poll-sec", type=int, default=600, help="Dreamina 轮询秒数")
+    p_expressions.add_argument("--model-version", default="5.0", help="Dreamina image2image 模型版本")
+    p_expressions.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
+    p_expressions.set_defaults(func=generate_expression_references)
 
     p_views = sub.add_parser("views", help="生成/登记常驻角色专门定妆多视图")
     p_views.add_argument("--characters", default="", help="逗号分隔 CHAR_ID；默认 registry 中全部 CHAR_")

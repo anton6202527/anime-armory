@@ -6,7 +6,7 @@
   "created_at": "2026-07-17T13:11:14",
   "chapter_contract": {
     "enforced": true,
-    "sha256": "11cdf0aa537c60fbf798f4b2d1dd4818630444d45a21d3eff95498c273dbc7b4",
+    "sha256": "7ba1d5614c9272185567773a84ae52d8f268a418a034333e81b89b5055cbe6bb",
     "source_mode": "adapted",
     "format_profile": "vertical_serial",
     "load_status": "loaded"
@@ -1732,7 +1732,7 @@
     "panel_script_path": "脚本/第2话/panel_script.json"
   },
   "panel_coverage": {
-    "status": "pending_panel_script",
+    "status": "pass",
     "required_segment_ids": [
       "S003",
       "S004",
@@ -1742,9 +1742,20 @@
       "S008",
       "S009",
       "S010"
-    ]
+    ],
+    "used_segment_ids": [
+      "S003",
+      "S004",
+      "S005",
+      "S006",
+      "S007",
+      "S008",
+      "S009",
+      "S010"
+    ],
+    "missing_segment_ids": []
   },
-  "checked_at": "2026-07-17T13:18:27",
+  "checked_at": "2026-07-17T17:34:17",
   "issues": [],
   "ambiguities": [
     {

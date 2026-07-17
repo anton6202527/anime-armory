@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_consistency_acceptance",
+  "chapter": "第2话",
+  "accepted_by": "Codex制作代理",
+  "accepted_at": "2026-07-17T17:20:00+08:00",
+  "scope": "仅签收上清宫方丈在暗场中远景中的启发式色彩指纹告警；任一图片变化后按 SHA 自动失效",
+  "accepted_findings": [
+    {"code":"hair_fingerprint_low","character_id":"CHAR_ABBOT_SHANGQING","panel_id":"P029","artifact_sha256":"7896d85c08d013980121bb6f5dec81cc3f17152b5b5f4a2dfb72ef2b09692e7c","reason":"火光暗场、侧向站位和幅巾覆盖压缩头发色彩分布；脸型、长须、青灰道袍与方丈参考可连续识别。","evidence":"生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"},
+    {"code":"face_fingerprint_low","character_id":"CHAR_ABBOT_SHANGQING","panel_id":"P030","artifact_sha256":"243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c","reason":"记忆层黑场、火把侧光和中远景改变了脸部色彩代理；眉眼、脸型、长须与服装层级与 P029 连续。","evidence":"生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"},
+    {"code":"hair_fingerprint_low","character_id":"CHAR_ABBOT_SHANGQING","panel_id":"P030","artifact_sha256":"243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c","reason":"幅巾、暗场和火光使头发色彩代理低分，头部轮廓与方丈多视图一致。","evidence":"生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"}
+  ]
+}

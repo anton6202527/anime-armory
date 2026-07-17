@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">最后几道金色星光从坍塌殿角掠过山脊；碎瓦、翻倒锄锹和尘雾仍在下落</text>
+<rect x="57" y="140" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="155">P002</text>
+<text class="note" x="62" y="170">洪信扶廊柱站起，面色如土、官袍沾尘；住持穿过逃散道众向他走来</text>
+<rect x="57" y="194" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="209">P003</text>
+<text class="note" x="62" y="224">住持停在洪信面前，袖口和灰黑短须落满石粉，坍塌殿角压在他肩后</text>
+<rect x="46" y="248" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="263">P004</text>
+<text class="note" x="51" y="278">无脸的洞玄真人剪影在完整石碑前落下一道朱印法符，龟趺与殿门尚未…</text>
+<rect x="68" y="326" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="341">P005</text>
+<text class="note" x="73" y="345">石碑龙章凤篆与层叠符印极近景，纹理如云雷鸟虫但没有任何可读生成字</text>
+<rect x="46" y="359" width="264" height="70" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="374">P006</text>
+<text class="note" x="51" y="389">黑殿被三十六个高位星点切开，左上形成古代星官式阵列</text>
+<text class="note" x="38" y="448">hook: P006 count_setup</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="374" y="62" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="77">P007</text>
+<text class="note" x="379" y="92">三十六颗星位由暗转亮，石碑前留出后期嵌字安全区</text>
+<rect x="374" y="127" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="142">P008</text>
+<text class="note" x="379" y="157">镜头向下延展，七十二颗更密的地煞星位从龟趺两侧铺向黑暗</text>
+<rect x="374" y="193" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="208">P009</text>
+<text class="note" x="379" y="223">两组星位在石碑周围汇合成一百零八点，中央仍保留石碑与符箓</text>
+<rect x="374" y="258" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="273">P010</text>
+<text class="note" x="379" y="288">星光背后只出现大小各异的无脸人形与兵器剪影，身份不可辨</text>
+<rect x="385" y="324" width="242" height="39" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="339">P011</text>
+<text class="note" x="390" y="354">讲述画面碎回现实，残殿上空已空无一物，洪信仰头寻找消失金光</text>
+<rect x="374" y="369" width="264" height="60" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="384">P012</text>
+<text class="note" x="379" y="399">住持指向坍塌殿门与地穴，洪信僵在原地</text>
+<text class="note" x="366" y="448">hook: P012 accusation_payoff</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="702" y="62" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="77">P013</text>
+<text class="note" x="707" y="92">完整殿门与封条的历史影像被一道裂缝剖开，千年黑暗后第一线星光涌出</text>
+<rect x="713" y="131" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="146">P014</text>
+<text class="note" x="718" y="161">御香余烟与坍塌灰尘叠化，洪信低头看沾灰的双手</text>
+<rect x="702" y="179" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="194">P015</text>
+<text class="note" x="707" y="209">星光越过江西山河，安静村寨上空的云层像被无形兵锋切开</text>
+<rect x="702" y="248" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="263">P016</text>
+<text class="note" x="707" y="278">汴京屋脊、边城烽台与江湖渡口三层叠化，无脸人群在不同方向抬头</text>
+<rect x="713" y="318" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="333">P017</text>
+<text class="note" x="718" y="348">洪信脸部近景，瞳孔映着倒置残殿，冷汗从鬓角滑下</text>
+<rect x="702" y="366" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="381">P018</text>
+<text class="note" x="707" y="396">住持背影与洪信正面形成前后景，上方阴影压住洪信</text>
+<text class="note" x="694" y="448">hook: P018 responsibility_hook</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="57" y="520" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="535">P019</text>
+<text class="note" x="62" y="550">洪信全身发抖，袖口腰带轻颤，想开口却只吐出一口冷气</text>
+<rect x="68" y="578" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="593">P020</text>
+<text class="note" x="73" y="597">洪信攥住官带并抹去冷汗，眼神从残殿转向后景从人</text>
+<rect x="57" y="610" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="625">P021</text>
+<text class="note" x="62" y="640">洪信强行站直，整理歪幞头与圆领，脸色仍白但官员姿态重现</text>
+<rect x="57" y="668" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="683">P022</text>
+<text class="note" x="62" y="698">洪信抬手召集从人，住持在边缘察觉他的选择</text>
+<rect x="46" y="726" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="741">P023</text>
+<text class="note" x="51" y="756">洪信俯身压低声音，手掌横在众人与伏魔殿之间，像一道新封条</text>
+<rect x="46" y="810" width="264" height="77" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="825">P024</text>
+<text class="note" x="51" y="840">从人低头应命，住持站在队列之外沉默看着洪信</text>
+<text class="note" x="38" y="906">hook: P024 moral_witness</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="385" y="520" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="535">P025</text>
+<text class="note" x="390" y="550">天刚亮，箱笼绑上马背；洪信快步穿过山门，不再回头</text>
+<rect x="385" y="578" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="593">P026</text>
+<text class="note" x="390" y="608">山门前住持与道众拱手送官；洪信只略一回礼，身体已朝返京方向</text>
+<rect x="396" y="636" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="651">P027</text>
+<text class="note" x="401" y="655">洪信翻身上马时与住持短暂对视，随即转脸向前路</text>
+<rect x="385" y="668" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="683">P028</text>
+<text class="note" x="390" y="698">马队远去，道众清理碎木石粉，残封条被收进木盘</text>
+<rect x="374" y="726" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="741">P029</text>
+<text class="note" x="379" y="756">道众用绳索扶起石碑，住持亲手校正碑身，龟趺仍陷泥中</text>
+<rect x="374" y="810" width="264" height="77" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="825">P030</text>
+<text class="note" x="379" y="840">石碑重新立起，碑后地穴只剩幽深黑暗；住持独站门口</text>
+<text class="note" x="366" y="906">hook: P030 empty_seal_hook</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="713" y="520" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="535">P031</text>
+<text class="note" x="718" y="550">返京马队沿山路向画左下疾行，龙虎山在云雾中缩小</text>
+<rect x="713" y="574" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="589">P032</text>
+<text class="note" x="718" y="604">洪信在马背回头，向紧随从人抬起一指示警</text>
+<rect x="713" y="628" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="643">P033</text>
+<text class="note" x="718" y="658">马蹄、驿灯与箱笼剪影连续穿过三层驿站，月相显示时间流逝</text>
+<rect x="702" y="682" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="697">P034</text>
+<text class="note" x="707" y="712">汴京城门打开，报信人跑入街巷；紧闭木门后疲惫的脸探出</text>
+<rect x="713" y="760" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="775">P035</text>
+<text class="note" x="718" y="790">家人扶病愈者走到日光下，药碗放到一旁，清水桶重新装满</text>
+<rect x="702" y="815" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="830">P036</text>
+<text class="note" x="707" y="845">宫城上空白鹤剪影远去，禁院屋脊下只留熄下的法灯与收起符箓</text>
+<text class="note" x="694" y="906">hook: P036 taoist_departure</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="57" y="978" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="993">P037</text>
+<text class="note" x="62" y="1008">朝见前偏殿，洪信换回洁净绛褐圆领官袍；袖中掌心仍有冷汗</text>
+<rect x="57" y="1028" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1043">P038</text>
+<text class="note" x="62" y="1058">洪信走上丹墀，官服已恢复稳拿，右手仍藏袖内攥紧</text>
+<rect x="57" y="1079" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1094">P039</text>
+<text class="note" x="62" y="1109">仁宗从御座俯视洪信，洪信跪在丹墀中央，百官安静等待</text>
+<rect x="46" y="1130" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1145">P040</text>
+<text class="note" x="51" y="1160">洪信低头奏报，袖中手攥到指节发白；仁宗只看到完成使命的使臣</text>
+<rect x="46" y="1204" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1219">P041</text>
+<text class="note" x="51" y="1234">内侍捧下赏赐，洪信俯身谢恩；边缘叠出重新打开的汴京街门</text>
+<rect x="46" y="1277" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1292">P042</text>
+<text class="note" x="51" y="1307">同一宫城中轴在四季与数十年中叠化，帝位更替只化作无脸冠冕剪影；…</text>
+<text class="note" x="38" y="1364">hook: P042 reveal</text>
+</svg>

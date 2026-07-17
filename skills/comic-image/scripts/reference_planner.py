@@ -64,6 +64,11 @@ ANGLE_RE = re.compile(r"俯视|仰视|鸟瞰|大俯|大仰|顶视|极端角度|�
 BACK_RE = re.compile(r"背身|背对|背影|过肩|OTS|回眸")
 ACTION_RE = re.compile(r"打斗|动作|冲击|命中|受击|斩|劈|挥|刺|追|扑|格挡|施法|爆|拆招|交锋|武打")
 EMOTION_FUNCS = ("reaction", "emotional_peak", "reveal", "turning_point", "climax", "payoff")
+STRONG_EXPRESSION_INTENSITIES = {"strong", "extreme", "high", "强", "极强"}
+NON_STRONG_EXPRESSION_INTENSITIES = {
+    "neutral", "low", "medium", "subtle", "moderate",
+    "中性", "低", "中", "轻微", "中等",
+}
 CHARACTER_PREFIXES = ("CHAR_", "MON_")
 ASSET_PREFIX_TYPES = {
     "LOC_": "location",
@@ -255,6 +260,26 @@ def variation_deltas(text: str, story_function: str = "") -> List[str]:
     return d
 
 
+def apply_structured_expression_intensity(
+    deltas: Sequence[str],
+    intensity: str,
+    explicit_panel_strong: bool = False,
+) -> List[str]:
+    """结构化表情强度优先于故事功能/文本关键词启发式。
+
+    `turning_point` / `reveal` 只说明叙事功能，不必然要求大表情。已绑定的
+    registry expression 若显式声明 low/medium/neutral，就不应为关键词误报补表情锺；
+    但 panel 显式 `strong_emotion=true` 或顶层强度仍可覆盖。
+    """
+    out = list(deltas)
+    level = str(intensity or "").strip().lower()
+    if level in NON_STRONG_EXPRESSION_INTENSITIES and not explicit_panel_strong:
+        out = [item for item in out if item != "strong_emotion"]
+    elif level in STRONG_EXPRESSION_INTENSITIES and "strong_emotion" not in out:
+        out.append("strong_emotion")
+    return out
+
+
 def required_views_for_tier(tier: str) -> Sequence[str]:
     return TIER_REQUIRED_VIEWS.get(str(tier or "").strip() or "core_full",
                                    TIER_REQUIRED_VIEWS["core_full"])
@@ -330,9 +355,11 @@ def plan_character_in_panel(
     if strong_emotion and (not expression_ref or expression_emotion in {"", "neutral", "中性"}):
         missing.append(f"强情绪格缺对应表情参考（expression_id={expression_id or 'missing'}；不能用中性 face 冒充）")
 
-    # 极端角度 / 过肩背身 → 侧/背视图。
-    if (extreme or back) and not add("side"):
-        missing.append("侧脸参考（极端角度/转头/过肩格）")
+    # 极端角度 / 过肩背身 → 侧/背视图。背身格的 back 是必需，side 只是
+    # 转身过渡的可选增强；不能因为已有 back 仍把缺 side 误报成必需缺口。
+    side_added = add("side") if (extreme or back) else False
+    if extreme and not side_added:
+        missing.append("侧脸参考（极端角度/转头格）")
     if back and not add("back"):
         missing.append("背身参考（背影/过肩格）")
 
@@ -381,14 +408,49 @@ def plan_character_in_panel(
                 r["strength_hint"] = max(float(r["strength_hint"]), 0.78)
             elif r["role"] == "front":
                 r["strength_hint"] = min(float(r["strength_hint"]), 0.55)
-        refs.sort(key=lambda r: 0 if r["role"] in ("memory_anchor", "three_quarter") else 1)
         pose_gaze_directive = ("动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），"
                                "负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。")
         prompt_required.append("动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）")
         if not any(r["role"] == "three_quarter" for r in refs):
             missing.append("45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）")
 
-    # 按后端能力封顶参考张数；溢出显式记账，不静默吞参考。
+    # 在封顶前按“身份核心 → 本镜显式表情/视角/换装 → 可选辅助视图”排序。
+    # 原实现按登记顺序截断，会在背身格先塞 front/face/¾，把真正的 back 裁掉。
+    required_roles = {"anchor"} if tier == "restricted_partial" else {"front", "face"}
+    if strong_emotion:
+        required_roles.add("expression")
+    if back:
+        required_roles.add("back")
+    if extreme:
+        required_roles.add("side")
+    if action:
+        required_roles.add("three_quarter")
+    if panel_outfit and is_wearable_character:
+        required_roles.add("outfit")
+
+    def reference_priority(row: Mapping[str, Any]) -> tuple[int, int]:
+        role = str(row.get("role") or "")
+        if role == "memory_anchor":
+            return (0, 0)
+        if action and role == "three_quarter":
+            return (5, 0)
+        base = {
+            "front": 10,
+            "face": 20,
+            "anchor": 20,
+            "outfit": 24,
+            "expression": 25 if strong_emotion else 58,
+            "back": 26 if back else 54,
+            "side": 27 if extreme else (35 if back else 55),
+            "form": 30,
+            "state": 31,
+            "three_quarter": 40,
+        }.get(role, 70)
+        return (base, 0)
+
+    refs.sort(key=reference_priority)
+
+    # 按后端能力封顶参考张数；所有被丢弃项都记账，只有裁掉本镜必需角色锚才报缺口。
     limit_key = "multi_character_reference_limit" if multi else "single_character_reference_limit"
     max_refs = int(caps.get(limit_key) or 0)
     requested = len(refs)
@@ -396,8 +458,11 @@ def plan_character_in_panel(
     if max_refs > 0 and len(refs) > max_refs:
         dropped = refs[max_refs:]
         refs = refs[:max_refs]
-        missing.append(f"参考预算溢出（后端 {limit_key}={max_refs} 张，已丢 "
-                       + "、".join(str(r["role"]) for r in dropped) + "）；拆格/升档/精选参考包")
+        dropped_required = [r for r in dropped if str(r.get("role") or "") in required_roles]
+        if dropped_required:
+            missing.append(f"参考预算溢出（后端 {limit_key}={max_refs} 张，裁掉必需 "
+                           + "、".join(str(r["role"]) for r in dropped_required)
+                           + "）；拆格/升档/精选参考包")
 
     # 升档建议：弱后端（无持久主体）× 核心长线角 × 大变化格。
     escalation: Optional[str] = None
@@ -556,6 +621,10 @@ def load_characters(registry: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
             "expression_refs": {str(key): first_ref(record) for key, record in expressions.items()},
             "expression_emotions": {
                 str(key): str(record.get("emotion") or record.get("name") or "") if isinstance(record, Mapping) else ""
+                for key, record in expressions.items()
+            },
+            "expression_intensities": {
+                str(key): str(record.get("intensity") or "") if isinstance(record, Mapping) else ""
                 for key, record in expressions.items()
             },
             "states": dict(states),
@@ -795,10 +864,10 @@ def build_plan(root: Path, chapter: str) -> Dict[str, Any]:
         text = panel_text(panel)
         story_function = str(panel.get("story_function") or "").strip().lower()
         deltas_panel = variation_deltas(text, story_function)
-        strong_emotion_contract = bool(
-            story_function in EMOTION_FUNCS
-            or panel.get("strong_emotion") is True
-            or str(panel.get("expression_intensity") or "").strip().lower() in {"strong", "extreme", "high", "强", "极强"}
+        panel_expression_intensity = str(panel.get("expression_intensity") or "").strip().lower()
+        explicit_panel_strong = bool(
+            panel.get("strong_emotion") is True
+            or panel_expression_intensity in STRONG_EXPRESSION_INTENSITIES
         )
         closeup = "closeup" in deltas_panel
         bindings_by_id = {row["character_id"]: row for row in bindings}
@@ -810,9 +879,22 @@ def build_plan(root: Path, chapter: str) -> Dict[str, Any]:
             c["panel_outfit_id"] = binding.get("outfit_id")
             c["panel_expression_id"] = binding.get("expression_id")
             c["panel_state_id"] = binding.get("state_id")
+            bound_expression_intensity = str(
+                (c.get("expression_intensities") or {}).get(binding.get("expression_id")) or ""
+            ).strip().lower()
+            character_deltas = apply_structured_expression_intensity(
+                deltas_panel,
+                bound_expression_intensity,
+                explicit_panel_strong=explicit_panel_strong,
+            )
+            strong_emotion_contract = bool(
+                explicit_panel_strong
+                or bound_expression_intensity in STRONG_EXPRESSION_INTENSITIES
+                or (not bound_expression_intensity and story_function in EMOTION_FUNCS)
+            )
             scope_core = bool(_CORE_SCOPE_RE.search(c.get("scope") or "")
                               or _CORE_SCOPE_RE.search(c.get("dna") or ""))
-            cp = plan_character_in_panel(c, deltas_panel, multi, caps, scope_core,
+            cp = plan_character_in_panel(c, character_deltas, multi, caps, scope_core,
                                          memory_refs.get(cid, []))
             char_plans.append(cp)
             for miss in cp["missing_references"]:

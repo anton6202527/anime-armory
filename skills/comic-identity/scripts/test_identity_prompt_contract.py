@@ -97,6 +97,21 @@ def test_outfit_binding_parser_and_prompt_lock_identity() -> None:
     assert "禁止仙侠飘带" in prompt
 
 
+def test_expression_binding_parser_and_prompt_lock_identity() -> None:
+    assert identity.parse_expression_bindings("CHAR_A=EXPR_TERRIFIED") == [("CHAR_A", "EXPR_TERRIFIED")]
+    prompt = identity.character_expression_prompt(
+        "CHAR_A",
+        "EXPR_TERRIFIED",
+        {"name": "惊恐失态", "emotion": "terrified", "intensity": "high"},
+        "四十岁官员",
+        visual_style="低饱和国漫",
+        asset_contract="长方脸；窄眼；微高发际线",
+    )
+    assert "只改变面部肌肉" in prompt
+    assert "惊恐失态" in prompt and "high" in prompt
+    assert "不得换脸" in prompt and "对白气泡" in prompt
+
+
 def test_target_canvas_for_ratio_expands_without_crop() -> None:
     target = identity.target_canvas_for_ratio((1024, 1536), "4:5")
     assert target[0] * 5 == target[1] * 4

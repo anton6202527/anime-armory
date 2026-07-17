@@ -1,0 +1,22 @@
+{
+  "kind": "comic_reentry_context_audit",
+  "version": 1,
+  "generated_at": "2026-07-17T09:34:19+00:00",
+  "chapter": "第2话",
+  "prior_chapter": "第1话",
+  "skipped_reason": "",
+  "thresholds": {
+    "opening_window": 3
+  },
+  "summary": {
+    "panels": 42,
+    "prior_chapters": 1,
+    "known_entities": 20,
+    "chapter_entities": 3,
+    "must": 0,
+    "warn": 0,
+    "info": 0,
+    "skipped": false
+  },
+  "findings": []
+}
