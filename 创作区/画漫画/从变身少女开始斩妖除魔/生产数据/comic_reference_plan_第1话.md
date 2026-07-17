@@ -1,46 +1,19 @@
 # 逐格参考规划（事前处方）· 第1话
 
-- 后端 openai_gpt_image_project_memory（持久主体 False·单角色参考上限 5）
-- 含角色格 27 · 需处理 24 · warn 19 · info 22
+- 后端 native_subject_capable（持久主体 True·单角色参考上限 4）
+- 含角色格 27 · 需处理 23 · warn 14 · info 0
 
-- ℹ️ `escalation_suggested` P004·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
 - ⚠️ `same_frame_color_collision` P004 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ℹ️ `escalation_suggested` P005·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P006·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P007·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P008·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P009·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P010·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P011·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side）；拆格/升档/精选参考包
-- ℹ️ `escalation_suggested` P011·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P011·裴长青：缺 侧脸参考（极端角度/转头/过肩格）
-- ℹ️ `escalation_suggested` P012·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P013·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P014·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P015·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
+- ⚠️ `missing_reference` P011·裴长青：缺 侧脸参考（极端角度/转头格）
 - ⚠️ `same_frame_color_collision` P015 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ℹ️ `escalation_suggested` P016·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
 - ⚠️ `same_frame_color_collision` P016 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ℹ️ `escalation_suggested` P019·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
 - ⚠️ `same_frame_color_collision` P019 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ⚠️ `missing_reference` P020·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side）；拆格/升档/精选参考包
-- ℹ️ `escalation_suggested` P020·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P020·裴长青：缺 侧脸参考（极端角度/转头/过肩格）
-- ⚠️ `missing_reference` P020·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side）；拆格/升档/精选参考包
+- ⚠️ `missing_reference` P020·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 side）；拆格/升档/精选参考包
+- ⚠️ `missing_reference` P020·裴长青：缺 侧脸参考（极端角度/转头格）
+- ⚠️ `missing_reference` P020·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 side）；拆格/升档/精选参考包
 - ⚠️ `same_frame_color_collision` P020 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ℹ️ `escalation_suggested` P022·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
 - ⚠️ `same_frame_color_collision` P022 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ℹ️ `escalation_suggested` P023·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P024·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包
-- ℹ️ `escalation_suggested` P024·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P024·裴长青：缺 侧脸参考（极端角度/转头/过肩格）
 - ⚠️ `missing_reference` P024·裴长青：缺 背身参考（背影/过肩格）
-- ⚠️ `missing_reference` P024·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包
 - ⚠️ `same_frame_color_collision` P024 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ℹ️ `escalation_suggested` P025·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P026·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side）；拆格/升档/精选参考包
-- ℹ️ `escalation_suggested` P026·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ⚠️ `missing_reference` P026·裴长青：缺 侧脸参考（极端角度/转头/过肩格）
-- ℹ️ `escalation_suggested` P027·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
-- ℹ️ `escalation_suggested` P028·姜月初：弱后端×核心长线角×大变化格：建议升档——补该角色专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可在本线外训练后把产出图登记为 registry 参考，仍走共享参考流程。
+- ⚠️ `missing_reference` P026·裴长青：缺 侧脸参考（极端角度/转头格）
 - ⚠️ `multi_character_closeup` P028 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。

@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第1话",
-  "created_at": "2026-07-16T01:30:51",
+  "created_at": "2026-07-17T05:35:50",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -199,6 +199,76 @@
       "readiness": "ready",
       "technical_block": false,
       "findings": []
+    },
+    "MON_TIGER_SHANSHEN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_TIGER_SHANSHEN",
+      "asset_type": "monster",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+          "width": 941,
+          "height": 1672,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+          "width": 941,
+          "height": 1672,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+          "width": 941,
+          "height": 1672,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "b0c5e3e071548fba8ca9ce8fa3164a21781e3f383d41a51adad962de0e66cd5c",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_TIGER_SHANSHEN.json",
+        "status": "current",
+        "approved_at": "2026-07-17T12:10:38+00:00",
+        "reviewer": "Claude(agent目视复核)"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        }
+      ]
     }
   },
   "model_pack_gaps": {},
@@ -242,6 +312,13 @@
       "front": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
       "three_quarter": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
       "face": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png"
+    },
+    "MON_TIGER_SHANSHEN": {
+      "front": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "three_quarter": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+      "side": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+      "face": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+      "back": "出图/共享/图片/MON_TIGER_SHANSHEN__back.png"
     }
   },
   "missing_character_views": {},
@@ -265,7 +342,7 @@
       ],
       "missing_refs": [],
       "generated_reference_input_count": 2,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P001.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -304,7 +381,7 @@
       ],
       "missing_refs": [],
       "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P002.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -343,7 +420,7 @@
       ],
       "missing_refs": [],
       "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P003.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -352,7 +429,7 @@
     {
       "panel_id": "P004",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -378,11 +455,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
           "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P004.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -391,7 +483,7 @@
     {
       "panel_id": "P005",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -417,11 +509,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P005.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -430,7 +542,7 @@
     {
       "panel_id": "P006",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -456,11 +568,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P006.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -469,7 +596,7 @@
     {
       "panel_id": "P007",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -495,11 +622,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P007.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -508,7 +650,7 @@
     {
       "panel_id": "P008",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -534,11 +676,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P008.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -547,7 +709,7 @@
     {
       "panel_id": "P009",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -573,11 +735,16 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
           "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
+      "generated_reference_input_count": 6,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P009.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -586,7 +753,7 @@
     {
       "panel_id": "P010",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -612,11 +779,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P010.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -625,7 +807,7 @@
     {
       "panel_id": "P011",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -651,11 +833,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+          "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P011.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -664,7 +861,7 @@
     {
       "panel_id": "P012",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -690,11 +887,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P012.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -703,7 +915,7 @@
     {
       "panel_id": "P013",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -729,11 +941,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P013.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -742,7 +969,7 @@
     {
       "panel_id": "P014",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -768,11 +995,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
           "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P014.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -781,7 +1023,7 @@
     {
       "panel_id": "P015",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -807,11 +1049,36 @@
           "id": "STYLE_USER_JIANG_YUECHU_REF",
           "path": "出图/共享/图片/user_reference_clean_source.png",
           "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P015.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -820,7 +1087,7 @@
     {
       "panel_id": "P016",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -846,11 +1113,36 @@
           "id": "STYLE_USER_JIANG_YUECHU_REF",
           "path": "出图/共享/图片/user_reference_clean_source.png",
           "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P016.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -859,7 +1151,7 @@
     {
       "panel_id": "P017",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_PEI_CHANGQING",
@@ -885,11 +1177,26 @@
           "id": "CHAR_PEI_CHANGQING",
           "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
           "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P017.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -898,7 +1205,7 @@
     {
       "panel_id": "P018",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_PEI_CHANGQING",
@@ -924,11 +1231,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P018.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -937,7 +1264,7 @@
     {
       "panel_id": "P019",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -963,11 +1290,36 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P019.json",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P019.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -976,7 +1328,7 @@
     {
       "panel_id": "P020",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1002,11 +1354,36 @@
           "id": "STYLE_USER_JIANG_YUECHU_REF",
           "path": "出图/共享/图片/user_reference_clean_source.png",
           "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P020.json",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P020.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1045,7 +1422,7 @@
       ],
       "missing_refs": [],
       "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P021.json",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P021.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1054,7 +1431,7 @@
     {
       "panel_id": "P022",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 8,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1080,11 +1457,26 @@
           "id": "CHAR_JIANG_YUECHU",
           "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
           "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P022.json",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P022.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1093,7 +1485,7 @@
     {
       "panel_id": "P023",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1119,11 +1511,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P023.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P023.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1132,7 +1544,7 @@
     {
       "panel_id": "P024",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 10,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1158,11 +1570,36 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "MON_TIGER_SHANSHEN",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+          "sha256": "f8a76b244e408caeb8a6225ef4cbfd1ee8c9aff854deffc0140da894a6645ebe"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P024.json",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P024.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1171,7 +1608,7 @@
     {
       "panel_id": "P025",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1197,11 +1634,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P025.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P025.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1210,7 +1667,7 @@
     {
       "panel_id": "P026",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1236,11 +1693,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+          "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P026.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P026.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1249,7 +1726,7 @@
     {
       "panel_id": "P027",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1275,11 +1752,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P027.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P027.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1288,7 +1785,7 @@
     {
       "panel_id": "P028",
       "status": "ready",
-      "valid_reference_count": 5,
+      "valid_reference_count": 9,
       "valid_references": [
         {
           "id": "CHAR_JIANG_YUECHU",
@@ -1314,11 +1811,31 @@
           "id": "PROP_HENGDAO_BROKEN",
           "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
           "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001"
+        },
+        {
+          "id": "CHAR_JIANG_YUECHU",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
+        },
+        {
+          "id": "CHAR_PEI_CHANGQING",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 5,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P028.json",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P028.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",

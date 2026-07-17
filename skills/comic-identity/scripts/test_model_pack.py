@@ -141,3 +141,21 @@ def test_model_pack_signoff_requires_accountable_identity_and_reason(tmp_path: P
         report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
         assert report["signoff"]["status"] == "stale"
         assert report["readiness"] == "needs_approval"
+
+
+def test_monster_default_managed_by_tier_and_opt_out(tmp_path: Path) -> None:
+    # 2026-07-17 虎妖漏管回归：core_full/recurring_standard 生物必须默认进 model-pack 审计；
+    # named_minimal 生物不默认纳管；model_pack_required=False 可显式退出。
+    registry = registry_fixture(tmp_path)
+    registry["assets"]["MON_TIGER"] = {"id": "MON_TIGER", "type": "monster", "library_tier": "recurring_standard"}
+    registry["assets"]["MON_BG"] = {"id": "MON_BG", "type": "monster", "library_tier": "named_minimal"}
+    registry["assets"]["MON_OPTOUT"] = {"id": "MON_OPTOUT", "type": "monster", "library_tier": "core_full", "model_pack_required": False}
+    registry_file = tmp_path / "出图" / "共享" / "identity_registry.json"
+    registry_file.parent.mkdir(parents=True, exist_ok=True)
+    registry_file.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+
+    model_pack.main([str(tmp_path), "check", "--write"])
+    payload = json.loads((tmp_path / "生产数据" / "comic_model_pack_report.json").read_text(encoding="utf-8"))
+    audited = {row["character_id"] for row in payload["characters"]}
+    assert audited == {"CHAR_A", "MON_TIGER"}
+    assert payload["summary"]["monsters"] == 1

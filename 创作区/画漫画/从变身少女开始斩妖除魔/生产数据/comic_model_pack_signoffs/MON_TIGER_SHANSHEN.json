@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "MON_TIGER_SHANSHEN",
+  "tier": "recurring_standard",
+  "model_pack_fingerprint": "b0c5e3e071548fba8ca9ce8fa3164a21781e3f383d41a51adad962de0e66cd5c",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+      "width": 941,
+      "height": 1672,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+      "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+      "width": 941,
+      "height": 1672,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+        "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+      "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+      "width": 941,
+      "height": 1672,
+      "source_view": "face",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+        "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Claude(agent目视复核)",
+  "reason": "五视图并排目视核对：虎首人身双足/灰黑鳞甲/胸口黑洞金纹/腰间虎面甲在 front,three_quarter,side,back,face 全部一致，视图标注与比例基线正确，中性姿态可用；2026-07-17 P015 漂移整改后将 MON_ 纳入同标准管控",
+  "approved_at": "2026-07-17T12:10:38+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

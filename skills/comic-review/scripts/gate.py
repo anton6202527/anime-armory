@@ -37,6 +37,11 @@ try:
 except Exception:  # pragma: no cover
     scene_prop_consistency = None
 try:
+    import vlm_judge
+except Exception:  # pragma: no cover
+    vlm_judge = None
+
+try:
     import continuity_audit
 except Exception:  # pragma: no cover
     continuity_audit = None
@@ -1447,6 +1452,7 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
 
     - 分话节拍：首格开场钩/末格结尾钩/高潮位/格数带/全书拆分蓝图（chapter_beat_audit·comic-script）。
     - 追更再入：N≥2 话开场前情锚是否够、中段是否冒出未交代实体（reentry_context_audit·comic-script）。
+    - 实体在场：画面文本提到已登记实体但该格未绑参考、entity_schedule 必在/禁入契约（entity_presence_audit·comic-script）。
     - 话内冗余：台词同义反复/事实复现/旁白硬转占比/构图重复计划（redundancy_audit·本目录）。
     - 去 AI 味：自陈情绪/旁白概括情绪/动机过度解释/信息直给/集级直白率（subtext_audit·本目录）。
     机检产物落 生产数据/，findings 以 warn/info 并入本 gate（must→warn：advisory 期不阻断付费）。
@@ -1457,6 +1463,7 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
         ("chapter_beat_audit", here.parent.parent / "comic-script" / "scripts" / "chapter_beat_audit.py"),
         ("setup_payoff_ledger", here.parent.parent / "comic-script" / "scripts" / "setup_payoff_ledger.py"),
         ("reentry_context_audit", here.parent.parent / "comic-script" / "scripts" / "reentry_context_audit.py"),
+        ("entity_presence_audit", here.parent.parent / "comic-script" / "scripts" / "entity_presence_audit.py"),
         ("redundancy_audit", here / "redundancy_audit.py"),
         ("subtext_audit", here / "subtext_audit.py"),
     ]
@@ -1597,6 +1604,58 @@ def check_consistency_strategy_support(root: Path, findings: list[dict[str, Any]
         )
 
 
+def check_machine_audit_liveness(root: Path, chapter: str, char_report: dict[str, Any], findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """机检空转显式化（2026-07-17 P015 虎妖漏放整改）。
+
+    第1话实证：VLM 任务包生成 93 条、0 条裁决，CCIP 未装只剩色彩代理指纹，
+    character_consistency 仍 verdict=pass 0 findings——四足虎放行无任何告警。
+    审计引擎降级/裁决未执行必须出 finding，不准降级成 notes 静默过闸。
+    """
+    caps = char_report.get("capabilities") if isinstance(char_report.get("capabilities"), dict) else {}
+    if not caps.get("ccip"):
+        add(
+            findings,
+            "warn",
+            "identity_similarity_engine_degraded",
+            f"生产数据/comic_character_consistency_{chapter}.json",
+            "CCIP 动漫身份 embedding 不可用，角色/生物相似度机检降级为色彩分布代理（同色调换脸/变形会漏报）。",
+            "review",
+            "独立 venv 安装 dghs-imgutils 后重跑 gate；在装好前必须以 VLM 并排裁决兜底身份轴。",
+        )
+    if vlm_judge is None:
+        add(findings, "warn", "vlm_judge_module_missing", "skills/comic-review/scripts/vlm_judge.py", "VLM 并排判定模块不可用，三轴身份机检缺失。", "review", "恢复 vlm_judge.py 后重跑 gate。")
+        return
+    try:
+        status = vlm_judge.judge_status(root, chapter)
+    except Exception as exc:  # pragma: no cover - 状态读取失败按空转告警
+        add(findings, "warn", "vlm_judge_status_unreadable", f"生产数据/comic_vlm_judge_tasks_{chapter}.json", f"无法读取 VLM 裁决状态：{exc}", "review", "检查任务包/裁决文件后重跑 gate。")
+        return
+    task_count = int(status.get("task_count") or 0)
+    verdict_count = int(status.get("verdict_count") or 0)
+    if task_count and verdict_count == 0:
+        add(
+            findings,
+            "warn",
+            "vlm_judge_unadjudicated",
+            str(status.get("tasks_file") or ""),
+            f"VLM 并排判定任务包已生成 {task_count} 条但 0 条裁决——角色/生物身份、背景、道具三轴机检空转，画错生物形态这类漂移不会被拦。",
+            "review",
+            f"由多模态 agent 逐条看图打分并写回 {status.get('verdict_file')} 后重跑 gate。",
+        )
+    elif task_count and verdict_count < task_count:
+        add(
+            findings,
+            "warn",
+            "vlm_judge_partial_coverage",
+            str(status.get("tasks_file") or ""),
+            f"VLM 并排判定仅覆盖 {verdict_count}/{task_count} 条任务，未裁决格仍无身份保障。",
+            "review",
+            f"补齐剩余裁决写回 {status.get('verdict_file')} 后重跑 gate。",
+        )
+    else:
+        notes.append(f"vlm judge coverage: {verdict_count}/{task_count}")
+
+
 def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:
     run_image_preflight(root, chapter, findings, notes, no_refresh=no_refresh)
     jobs = load_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", {})
@@ -1614,6 +1673,7 @@ def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: l
     char_paths = character_consistency.write_outputs(root, chapter, char_report)
     notes.append(f"character consistency refreshed: {char_paths['markdown']}")
     merge_consistency_report(char_report, findings, category="character_consistency")
+    check_machine_audit_liveness(root, chapter, char_report, findings, notes)
     if scene_prop_consistency is not None:
         scene_report = scene_prop_consistency.analyze(root, chapter)
         scene_paths = scene_prop_consistency.write_outputs(root, chapter, scene_report)

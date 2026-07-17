@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P024",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 10,
+  "references": [
+    {
+      "id": "CHAR_JIANG_YUECHU",
+      "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+      "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_PEI_CHANGQING",
+      "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+      "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "MON_TIGER_SHANSHEN",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "LOC_DESOLATE_WILDERNESS",
+      "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+      "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_HENGDAO_BROKEN",
+      "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+      "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_JIANG_YUECHU",
+      "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+      "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_PEI_CHANGQING",
+      "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+      "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "MON_TIGER_SHANSHEN",
+      "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+      "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_JIANG_YUECHU",
+      "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+      "sha256": "f8a76b244e408caeb8a6225ef4cbfd1ee8c9aff854deffc0140da894a6645ebe",
+      "role": "back",
+      "required": false
+    },
+    {
+      "id": "CHAR_PEI_CHANGQING",
+      "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+      "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-17T05:34:54"
+}

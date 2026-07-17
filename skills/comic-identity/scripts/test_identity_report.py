@@ -906,3 +906,36 @@ def test_story_bible_notes_use_exact_stable_heading_id(tmp_path: Path) -> None:
     assert "青灰圆领袍" in notes
     assert "不应误取" not in notes
     assert "面圆耳大" not in notes
+
+
+def test_report_audits_monster_views_like_characters(tmp_path: Path) -> None:
+    # 2026-07-17 P015 虎妖漂移回归：MON_ 必须与 CHAR_ 一样进视图完整性与 model-pack 审计。
+    root = tmp_path / "项目"
+    chapter = "第1话"
+    jobs_dir = root / "出图" / chapter / "prompt"
+    jobs_dir.mkdir(parents=True)
+    (root / "生产数据").mkdir(parents=True)
+    (jobs_dir / "panel_jobs.json").write_text(
+        json.dumps(
+            {
+                "jobs": [
+                    {
+                        "panel_id": "P001",
+                        "status": "ready",
+                        "reference_input_count": 0,
+                        "references": [
+                            {"id": "MON_TIGER", "path": "出图/共享/图片/MON_TIGER__anchor.png"},
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    identity.report(type("Args", (), {"project_root": str(root), "chapter": chapter, "write": False})())
+    report = json.loads((root / "生产数据" / f"comic_identity_report_{chapter}.json").read_text(encoding="utf-8"))
+    assert "MON_TIGER" in report["character_views"]
+    assert "MON_TIGER" in report["missing_character_views"]
+    assert "MON_TIGER" in report["model_pack_reports"]

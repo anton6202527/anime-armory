@@ -30,7 +30,7 @@ comic-review 负责证明“当前版本是否可以继续”，不负责代写�
 - `生产数据/gate_receipts/<stage>_第N话.json`：绑定 stage 输入 fingerprint、报告 SHA 和 panel jobs SHA 的收据。
 - `生产数据/comic_continuity_audit.json/md`：跨话 entry/delta/exit 确定性审计。
 - `生产数据/comic_style_consistency_第N话.json/md`、`comic_character_consistency_第N话.json/md`、`comic_scene_prop_consistency_第N话.json/md`：视觉一致性证据与返修目标。
-- `生产数据/comic_vlm_judge_tasks_第N话.json` / `comic_vlm_judge_verdicts_第N话.json`：脸/服装体型、背景连续、道具身份位置的并排判定任务与裁决。
+- `生产数据/comic_vlm_judge_tasks_第N话.json` / `comic_vlm_judge_verdicts_第N话.json`：脸/服装体型、背景连续、道具身份位置的并排判定任务与裁决。image gate 会核对裁决覆盖率：任务包存在但 0 裁决 → `vlm_judge_unadjudicated` warn（机检空转，第1话 P015 虎妖漏放实证）；部分裁决 → `vlm_judge_partial_coverage` warn；CCIP 不可用 → `identity_similarity_engine_degraded` warn。
 - `生产数据/qa_previews/`：panel、角色、风格 contact sheet 和长图预览。
 - `生产数据/comic_review_第N话.json/md`：综合审查报告。
 - `生产数据/release_verdict_第N话.json/md`：技术/生产/发布状态裁决。

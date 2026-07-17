@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第2话",
-  "generated_at": "2026-07-17T11:38:18+00:00",
+  "generated_at": "2026-07-17T12:32:05+00:00",
   "inputs": {
     "files": [
       {
@@ -13,7 +13,7 @@
       {
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36"
+        "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4"
       },
       {
         "path": "生产数据/comic_memory_anchor_第2话.json",
@@ -46,7 +46,7 @@
       "inputs_fingerprint": "660f6e259f620fe3c2d5034e8389be154e7d7f436aca55d6494afe19c67d6374"
     }
   },
-  "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+  "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
   "backend": {
     "adapter_id": "native_subject_capable",
     "model": "Seedream 5.0",
@@ -6369,5 +6369,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d"
+  "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5"
 }

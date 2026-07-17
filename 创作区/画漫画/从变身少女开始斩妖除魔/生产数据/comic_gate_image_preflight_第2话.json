@@ -4,12 +4,12 @@
   "project_root": ".",
   "chapter": "第2话",
   "stage": "image_preflight",
-  "created_at": "2026-07-17T19:38:38",
-  "verdict": "warn",
+  "created_at": "2026-07-17T05:30:53",
+  "verdict": "block",
   "summary": {
-    "finding_count": 29,
-    "block_count": 0,
-    "warn_count": 27,
+    "finding_count": 33,
+    "block_count": 2,
+    "warn_count": 29,
     "info_count": 2
   },
   "findings": [
@@ -30,6 +30,28 @@
       "code": "payoff_due_here",
       "artifact": "生产数据/comic_setup_payoff_audit_第2话.json",
       "reason": "伏笔「虎妖心口被贯穿却能复生，暗示鸣骨境妖物可觉醒天赋神通」计划本话（第2话）兑现——确认本话已把它收掉并标 status=done。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "mentioned_not_bound",
+      "artifact": "生产数据/comic_entity_presence_audit_第2话.json",
+      "reason": "P026 画面描述提到「虎山神」（registry 实体 MON_TIGER_SHANSHEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "mentioned_not_bound",
+      "artifact": "生产数据/comic_entity_presence_audit_第2话.json",
+      "reason": "P030 画面描述提到「虎妖」（registry 实体 MON_TIGER_SHANSHEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。",
       "return_to_stage": "comic-script",
       "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
       "evidence_family": "deterministic",
@@ -76,6 +98,28 @@
       "reason": "P001、P002、P028 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU/CHAR_PEI_CHANGQING, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。",
       "return_to_stage": "comic-script",
       "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "reference_plan_stale",
+      "artifact": "生产数据/comic_reference_plan_第2话.json",
+      "reason": "已落盘处方的 inputs_fingerprint 与当前输入不一致。",
+      "return_to_stage": "identity",
+      "suggested_fix": "重跑 comic-image 构建参考处方和 panel_jobs。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "reference_plan_stale",
+      "artifact": "生产数据/comic_reference_plan_第2话.json",
+      "reason": "已落盘处方的 plan_sha256 与当前输入不一致。",
+      "return_to_stage": "identity",
+      "suggested_fix": "重跑 comic-image 构建参考处方和 panel_jobs。",
       "evidence_family": "deterministic",
       "confidence": "deterministic"
     },
@@ -346,6 +390,7 @@
     "chapter_beat_audit: must=0 warn=0（advisory·不阻断）",
     "setup_payoff_ledger: must=0 warn=0（advisory·不阻断）",
     "reentry_context_audit: must=0 warn=0（advisory·不阻断）",
+    "entity_presence_audit: must=0 warn=2（advisory·不阻断）",
     "redundancy_audit: must=0 warn=4（advisory·不阻断）",
     "subtext_audit: must=0 warn=0（advisory·不阻断）",
     "reference_planner: 含角色格 30 需处理 22；处方 SHA 已校验"
@@ -399,7 +444,7 @@
       {
         "path": "脚本/第2话/source_semantics.json",
         "exists": true,
-        "sha256": "3563338b4358a1bb5ab1efd1e6c98e020d5ef99846be0fa087e3468847dd5e9e",
+        "sha256": "a5f1a8c277f633b1b183a00f34519df134245d19499d88f7e2736cc2f52edb03",
         "size": 65149
       },
       {
@@ -423,14 +468,14 @@
       {
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
-        "size": 36685
+        "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
+        "size": 36889
       },
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "f319f5394682ad2401b587bc858b4a33d011f53bb93acd690b4733784a1845b2",
-        "size": 6894
+        "sha256": "7208c15d859d81fcce80827ab72b828530cff844e88e5d82f73478bd4af9afda",
+        "size": 9475
       },
       {
         "path": "生产数据/comic_model_pack_signoffs/CHAR_JIANG_YUECHU.json",
@@ -443,6 +488,12 @@
         "exists": true,
         "sha256": "6998fcb8c1db00a228901c86ff3e7d52808d8309f13923e97ce9759d9a566f6c",
         "size": 2483
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/MON_TIGER_SHANSHEN.json",
+        "exists": true,
+        "sha256": "19be087461c78a6e3b4b44508220dd96b4b2821faee9ab6d7b7c8ae7dd6775a0",
+        "size": 2362
       },
       {
         "path": "生产数据/comic_memory_anchor_第2话.json",
@@ -459,8 +510,8 @@
       {
         "path": "出图/第2话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "83c9776255a82b3f65ef2108a09ef5df85e623d72bc8bca63e0cef9454055f86",
-        "size": 775206
+        "sha256": "a5087dbf98817fcb82605ebab27a224bba7699b6fdc79a4bf1170d466804e678",
+        "size": 787824
       },
       {
         "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -669,11 +720,95 @@
       {
         "path": "出图/第2话/panels/P001.png",
         "exists": true,
+        "sha256": "92c851108a4ddf47a50215ac49a8a405862bdd513f80ea9d2e53e89cc30bdd3f",
+        "size": 1718269
+      },
+      {
+        "path": "出图/第2话/candidates/P001/20260717T193902_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "16a0f9f4276bd7434a010bc1b696379d5844e9dd3cd684d9012fca9df55c8f22",
+        "size": 3923846
+      },
+      {
+        "path": "出图/第2话/candidates/P001/P001_20260717_194024_previous_backend_or_take.png",
+        "exists": true,
         "sha256": "b3ef3c516a8cdb51b6b5b0d2af1d3240dd1a1bd06cca907d4af47da9e0b03b2a",
         "size": 1915272
+      },
+      {
+        "path": "出图/第2话/panels/P002.png",
+        "exists": true,
+        "sha256": "d4fe959cc67c23785112dc9527272a4b0514992446ded2086cb7ee9bfdd0a091",
+        "size": 1534538
+      },
+      {
+        "path": "出图/第2话/candidates/P002/20260717T194353_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "25bcb91abf5d93e68581178262abd96d7aa884110a6cfbfcd6893d161f2b6699",
+        "size": 4976981
+      },
+      {
+        "path": "出图/第2话/candidates/P002/P002_20260717_194508_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "cda5f9466c5efd543686fa0a7298ce84dd715cefc22bb6d0f6001032fec53fb0",
+        "size": 1479731
+      },
+      {
+        "path": "出图/第2话/panels/P003.png",
+        "exists": true,
+        "sha256": "fc5d2fb1b1c97764797d1083fe54816481264c8d1d26339d826f72bb9d769755",
+        "size": 1399879
+      },
+      {
+        "path": "出图/第2话/candidates/P003/20260717T194508_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "d919e161d0f62a5238fce672efec716933c9ed4abfc408d1880340bc177a6286",
+        "size": 3924462
+      },
+      {
+        "path": "出图/第2话/candidates/P003/P003_20260717_194627_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "baa16d5695990c4733c020de9078387bafd38c03b9a7ad2fe1f912092b541647",
+        "size": 2123922
+      },
+      {
+        "path": "出图/第2话/panels/P004.png",
+        "exists": true,
+        "sha256": "b4c2ec5d628b205515183bc110c81ab2949dbc68e895407dd8be46bda2bfb5ee",
+        "size": 1921517
+      },
+      {
+        "path": "出图/第2话/candidates/P004/20260717T194627_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "d3cc79fed7ae5236dbafec3394359b527b2aafad90a46c3a21c1da24011a53f0",
+        "size": 5526350
+      },
+      {
+        "path": "出图/第2话/panels/P005.png",
+        "exists": true,
+        "sha256": "626e99596ea82d1ec799b71f94d3eef6478fa2f016cecc1b2ae819a804f5f7ad",
+        "size": 2292882
+      },
+      {
+        "path": "出图/第2话/candidates/P005/20260717T194750_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "ddc5ca9664f381ad3d06123af41e17d2b6b598811e2cc5fca45284d1b14582a5",
+        "size": 5244928
+      },
+      {
+        "path": "出图/第2话/panels/P006.png",
+        "exists": true,
+        "sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb",
+        "size": 2257606
+      },
+      {
+        "path": "出图/第2话/candidates/P006/20260717T194913_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "d18a544c62d3113ef8426c298913cbb9883dc3265e5d6237162c61dc7f8ec4e3",
+        "size": 5062721
       }
     ],
-    "sha256": "962cf0fb2a184ef5dd7b722bde33ca51e45558474bf85d73b73596c38123751e"
+    "sha256": "3cccf2ded192c342c2684f8277800f776aa0cc6962ff4c59fdd6c85460202288"
   },
-  "receipt_id": "1760c60b8b51574d93c0d99df83e3c23484186899802492657a67a142f1a3348"
+  "receipt_id": "da6e382564c54807f48e67db10f54d324c5203ed502d3b5f771e1c1a0a5539b3"
 }

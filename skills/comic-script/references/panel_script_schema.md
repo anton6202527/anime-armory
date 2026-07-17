@@ -114,7 +114,8 @@
 - `dialogue`：只存文字，不要求画进图里。`text_target` 优先作为最终嵌字文本；`text` 保留向后兼容；`source_text` 可记录原文。跨语种、RTL 或需词典断行文字应记录 `lang` / `dir`，避免渲染阶段靠错误启发式猜方向。
 - `narration_target` / `sfx_target`（可选）：当目标嵌字语言不同于源文本或默认正文时，用于保留最终可渲染文本。
 - `art_notes`：给排版和出图用，包含景别、构图、表情、动作、需要参考的资产。
-- `references`：角色、场景、道具、服装、特效等引用 ID；MVP 可先留自然语言，正式出图前再规范。
+- `references`：角色、场景、道具、服装、特效等引用 ID；MVP 可先留自然语言，正式出图前再规范。凡画面描述（description/art_notes/location）提到 registry 已登记实体（含别名 `assets[*].aliases`）而本格未绑定，`entity_presence_audit` 会出 warn——出图不附参考=形态裸奔（2026-07-17 虎妖/断横刀漂移实证）。
+- `entity_schedule`（可选·渐进采用·参照同仓视频线 storyboard 同名字段）：逐格实体在场契约 `{"required_presence": ["MON_x", "PROP_y"], "offscreen_presence": [], "forbidden_presence": []}`。写了就受 `entity_presence_audit` 校验：必在实体必须出现在 characters/references 绑定集、必在与禁入不得冲突、禁入实体不得被绑定。未写的格审计会在报告 `derived_schedule` 给出由绑定集派生的底稿。
 - `visual_contract`（正式出图前必填）：本话像素层一致性真值。至少包含 `style_baseline`、`character_integrity_policy` 和 `scene_anchors`；场景锚按 `LOC_` 管 `spatial_layout / lighting_anchor / axis_eyeline / resident_assets / forbidden_drift`。缺失时 `comic-review gate --stage image_preflight` 阻断。
 - `scene_anchor_id` / `spatial_layout` / `lighting_anchor` / `axis_eyeline`：含场景格必填；可逐格写，也可用 `scene_anchor_id` 继承 `visual_contract.scene_anchors`。`scene_anchor_id` 必须在顶层 `visual_contract.scene_anchors` 登记，同一场景跨格不得随机换布局、主光方向、冷暖光、常驻物件或人物左右关系。
 - `gaze_target` / `eyeline_direction`：含角色格必填。眼神必须锁定对话对象、对手、道具、命中点、画外声源或下一动作目标；不能只写“坚定眼神/看前方/远方”。除非明确写 `camera_role=POV/破第四墙`，不得默认看读者镜头。

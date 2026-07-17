@@ -3,15 +3,15 @@
   "kind": "comic_scene_prop_consistency",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第1话",
-  "created_at": "2026-07-16T01:31:56",
+  "created_at": "2026-07-17T05:36:16",
   "available": true,
   "verdict": "warn",
   "summary": {
     "scene_anchor_count": 1,
     "prop_count": 2,
-    "finding_count": 2,
+    "finding_count": 11,
     "block_count": 0,
-    "warn_count": 2,
+    "warn_count": 11,
     "info_count": 0
   },
   "scenes": [
@@ -332,9 +332,117 @@
       "return_to_stage": "image",
       "suggested_fix": "用 comic-identity anchors 生成/登记该道具锚点图后重建出图包。",
       "evidence_family": "reference_presence"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_DESOLATE_WILDERNESS",
+      "panel_id": "P017",
+      "artifact": "出图/第1话/panels/P017.png",
+      "reason": "VLM 并排判定低分/存疑：layout=2；本格转为水墨意象合成画面，荒原地平线与岩壁结构完全未继承，空间连续性断裂（疑为有意的心象插页）",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_background_suspect",
+      "subject": "LOC_DESOLATE_WILDERNESS",
+      "panel_id": "P018",
+      "artifact": "出图/第1话/panels/P018.png",
+      "reason": "VLM 并排判定低分/存疑：layout=2、lighting=2；由墨色意象骤回深红实景，布局与光位无从继承，背景链路在此断开",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P018",
+      "artifact": "出图/第1话/panels/P018.png",
+      "reason": "VLM 并排判定低分/存疑：structure=2；裴长青手中为完整修长弯刀，无断口无环首，与断横刀参考的断裂刀身结构不符",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P023",
+      "artifact": "出图/第1话/panels/P023.png",
+      "reason": "VLM 并排判定低分/存疑：structure=2；姜月初握柄姿态合理，但刀身是弧形长弯刀且刃尖完整、护手金饰，与锚定的直刃环首断刀刃口崩缺不符",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P024",
+      "artifact": "出图/第1话/panels/P024.png",
+      "reason": "VLM 并排判定低分/存疑：structure=2；手持弯刀完整无断口、无环首，与断横刀锚定不符（与P023同一把弯刀，批内自洽但对锚漂移）",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P025",
+      "artifact": "出图/第1话/panels/P025.png",
+      "reason": "VLM 并排判定低分/存疑：structure=2；变成直刃但配金色分段华丽剑柄，无环首无崩口无血渍缠布，规格材质与锚定断刀不符",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P026",
+      "artifact": "出图/第1话/panels/P026.png",
+      "reason": "VLM 并排判定低分/存疑：structure=1；双手倒持的是对称双刃宝剑（卷云鎏金剑格），完全不是单刃环首断横刀",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P027",
+      "artifact": "出图/第1话/panels/P027.png",
+      "reason": "VLM 并排判定低分/存疑：structure=2；手中为金柄弯刀刃形完整，与锚定直刃断刀结构不符",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
+    },
+    {
+      "severity": "warn",
+      "dimension": "scene_prop_consistency",
+      "code": "vlm_judge_prop_suspect",
+      "subject": "PROP_HENGDAO_BROKEN",
+      "panel_id": "P028",
+      "artifact": "出图/第1话/panels/P028.png",
+      "reason": "VLM 并排判定低分/存疑：structure=1；刺下的仍是P026那柄鎏金双刃剑，非断横刀，属道具彻底替换",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。",
+      "evidence_family": "vlm_judge"
     }
   ],
   "notes": [
-    "VLM 三轴裁决进度：0/93（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
+    "VLM 三轴裁决进度：93/93（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
   ]
 }

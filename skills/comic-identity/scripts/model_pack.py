@@ -364,12 +364,23 @@ def main(argv: Sequence[str] | None = None) -> int:
     assets = registry.get("assets") if isinstance(registry.get("assets"), Mapping) else {}
     selected = [item.strip() for item in args.characters.split(",") if item.strip()]
     if not selected:
+        # 2026-07-17：monster 从 opt-in 改为按档位默认纳管。此前 monster 需手动打
+        # model_pack_required=true 才进审计，虎妖（recurring_standard·16/30 格在场）漏管，
+        # P015 画成四足普通虎无人拦。现 core_full/recurring_standard 生物默认纳管，
+        # model_pack_required 仍可显式 true/false 覆盖。
+        def monster_managed(asset: Mapping) -> bool:
+            flag = asset.get("model_pack_required")
+            if flag is True or flag is False:
+                return flag
+            tier = str(asset.get("library_tier") or asset.get("tier") or "").strip()
+            return tier in ("core_full", "recurring_standard")
+
         selected = sorted(
             aid for aid, asset in assets.items()
             if isinstance(asset, Mapping)
             and (
                 str(asset.get("type")) == "character"
-                or (str(asset.get("type")) == "monster" and asset.get("model_pack_required") is True)
+                or (str(asset.get("type")) == "monster" and monster_managed(asset))
             )
         )
     if args.command == "signoff":

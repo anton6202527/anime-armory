@@ -21,8 +21,8 @@
   "render_stage": "完成稿",
   "reference_plan": {
     "path": "生产数据/comic_reference_plan_第2话.json",
-    "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-    "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076"
+    "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+    "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5"
   },
   "finishing_plan": "出图/第2话/finishing/finishing_plan.json",
   "jobs": [
@@ -54,13 +54,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "ea444c9a0c2c4481ef77194cdbfcaca06e44cec89a9b56d48341b7da7b8f5bb4"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -347,22 +347,20 @@
       },
       "result_path": "出图/第2话/panels/P001.png",
       "source": "Dreamina/即梦官方 CLI",
-      "attempt": 1,
-      "artifact_sha256": "b3ef3c516a8cdb51b6b5b0d2af1d3240dd1a1bd06cca907d4af47da9e0b03b2a",
-      "backend_version": "c58a6a2-dirty",
-      "model": "Seedream 5.0",
-      "generated_from_execution_input_sha256": "81830c2302cce3e8819e03f2a5dd8a2e0c9714887b18fb439a58bb02b0d513b4",
       "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P001.json",
+      "model": "Seedream 5.0",
+      "generated_from_contract_sha256": "9b32734646873e68f44fcf21f0c572656eee5e0b36ef430bb8729a9e06dead58",
+      "generated_at": "2026-07-17T19:40:24",
+      "reference_input_mode": "dreamina_image2image_images",
+      "artifact_sha256": "92c851108a4ddf47a50215ac49a8a405862bdd513f80ea9d2e53e89cc30bdd3f",
       "reference_input_count": 9,
-      "reference_input_mode": "dreamina_official_cli_image2image",
-      "generated_from_submit_prompt_sha256": "9446f0edfbe840050abff12c535a743c1586089f0b2c5cd3b7c314f8fb563195",
-      "generated_at": "2026-07-17T19:35:13",
+      "attempt": 1,
       "post_qc": {
         "schema_version": 1,
         "kind": "comic_panel_post_qc",
         "chapter": "第2话",
         "panel_id": "P001",
-        "created_at": "2026-07-17T19:35:13",
+        "created_at": "2026-07-17T19:40:24",
         "verdict": "pass",
         "path": "出图/第2话/panels/P001.png",
         "size": {
@@ -381,11 +379,13 @@
         "issues": [],
         "manual_review_required": false
       },
-      "generated_from_contract_sha256": "9b32734646873e68f44fcf21f0c572656eee5e0b36ef430bb8729a9e06dead58"
+      "backend_version": "{",
+      "generated_from_execution_input_sha256": "81830c2302cce3e8819e03f2a5dd8a2e0c9714887b18fb439a58bb02b0d513b4",
+      "generated_from_submit_prompt_sha256": "9446f0edfbe840050abff12c535a743c1586089f0b2c5cd3b7c314f8fb563195"
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 840
@@ -411,13 +411,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "8c78028990a8a7c56eb80cb199a9ece2651da4e74dbfbc7029a469e6647c095b"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -682,12 +682,47 @@
         "style_reference_limit": 1,
         "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第2话/panels/P002.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P002.json",
+      "model": "Seedream 5.0",
+      "generated_from_contract_sha256": "d598f0dd8d35fb3704bd7e359337254128a3f21385142411fc2e688d9a62f113",
+      "generated_at": "2026-07-17T19:45:08",
+      "reference_input_mode": "dreamina_image2image_images",
+      "artifact_sha256": "d4fe959cc67c23785112dc9527272a4b0514992446ded2086cb7ee9bfdd0a091",
+      "reference_input_count": 8,
+      "attempt": 1,
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P002",
+        "created_at": "2026-07-17T19:45:08",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P002.png",
+        "size": {
+          "width": 1188,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 840
+        },
+        "declared_reference_count": 8,
+        "reference_input_count": 8,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      },
+      "backend_version": "{",
+      "generated_from_execution_input_sha256": "30c461cd1d042f2a4fbae3d877126b2a8a2ef9b12166e67564504b9a6f5b3125",
+      "generated_from_submit_prompt_sha256": "d204fefed1a0b3edbd7a9fd04bb92d7c2c3db35f1326b29f3177fcafca000ab7"
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
@@ -713,13 +748,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "755db8fce883c7ca67ed8761e1af0c89fa5d1b6cdcd437fcb9c2a1b1d3c6f8bb"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -936,12 +971,47 @@
         "style_reference_limit": 1,
         "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第2话/panels/P003.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P003.json",
+      "model": "Seedream 5.0",
+      "generated_from_contract_sha256": "99294a139202e54e202a78a319fb71ffce5617b8faeeac5fa613e7f0d22b5499",
+      "generated_at": "2026-07-17T19:46:27",
+      "reference_input_mode": "dreamina_image2image_images",
+      "artifact_sha256": "fc5d2fb1b1c97764797d1083fe54816481264c8d1d26339d826f72bb9d769755",
+      "reference_input_count": 6,
+      "attempt": 1,
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P003",
+        "created_at": "2026-07-17T19:46:27",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P003.png",
+        "size": {
+          "width": 1188,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "declared_reference_count": 6,
+        "reference_input_count": 6,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      },
+      "backend_version": "{",
+      "generated_from_execution_input_sha256": "0f42bf6d0b3ed3c820d4d66fa0a03925e7aea80271dbbba8edf1e80ab9b5ade9",
+      "generated_from_submit_prompt_sha256": "76a0e8f61a1ddba06b881259f703408f13c99a9f3835ff9183852efc55cdcfd8"
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
@@ -967,13 +1037,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "4af578d3b5aefcaf6de61fc71d452425ed786ab66f87326d257bfd82e3d8b69d"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -1238,12 +1308,47 @@
         "style_reference_limit": 1,
         "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第2话/panels/P004.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P004.json",
+      "model": "Seedream 5.0",
+      "generated_from_contract_sha256": "fabcc7ff1688505a9c9c90755507fedfe5560c0ada76cbc84a94bed3f6653b02",
+      "generated_at": "2026-07-17T19:47:49",
+      "reference_input_mode": "dreamina_image2image_images",
+      "artifact_sha256": "b4c2ec5d628b205515183bc110c81ab2949dbc68e895407dd8be46bda2bfb5ee",
+      "reference_input_count": 8,
+      "attempt": 1,
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P004",
+        "created_at": "2026-07-17T19:47:49",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P004.png",
+        "size": {
+          "width": 1188,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "declared_reference_count": 8,
+        "reference_input_count": 8,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      },
+      "backend_version": "{",
+      "generated_from_execution_input_sha256": "648ceedcace8994092209dd5a0b099381d568619ef9dd1c226687809192266df",
+      "generated_from_submit_prompt_sha256": "3188116ae4d1e099b8c458b635c28f5ca213f14d58ca38ee111c78eb11148599"
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1116
@@ -1269,13 +1374,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "19d06aa40f7b5a96b107476fcd46e4b3c78c10f18ebc314ead6f29088f37d1be"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -1592,12 +1697,47 @@
         "style_reference_limit": 1,
         "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第2话/panels/P005.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P005.json",
+      "model": "Seedream 5.0",
+      "generated_from_contract_sha256": "41d20ddbf2c5f38e2172291bf14e121ddbbe498325c901be28cbcb45c5d44107",
+      "generated_at": "2026-07-17T19:49:13",
+      "reference_input_mode": "dreamina_image2image_images",
+      "artifact_sha256": "626e99596ea82d1ec799b71f94d3eef6478fa2f016cecc1b2ae819a804f5f7ad",
+      "reference_input_count": 10,
+      "attempt": 1,
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P005",
+        "created_at": "2026-07-17T19:49:13",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P005.png",
+        "size": {
+          "width": 1296,
+          "height": 1116
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1116
+        },
+        "declared_reference_count": 10,
+        "reference_input_count": 10,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      },
+      "backend_version": "{",
+      "generated_from_execution_input_sha256": "256511b18b3d0761e065153794048719111e8cfd67add8e608df2dbd8c2ee9e7",
+      "generated_from_submit_prompt_sha256": "6d4b67bbe27f0352a48bd7c724024156ff4cf8e17e4c5263fc7c2b3e881a0721"
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1156
@@ -1623,13 +1763,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "9f5529ac0735ea475d0d52a72cf4ac79ad0d55bb0a739d5263076aa222604aa0"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -1905,8 +2045,57 @@
         "style_reference_limit": 1,
         "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
       },
-      "result_path": "",
-      "source": "Dreamina/即梦官方 CLI"
+      "result_path": "出图/第2话/panels/P006.png",
+      "source": "Dreamina/即梦官方 CLI",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P006.json",
+      "model": "Seedream 5.0",
+      "generated_from_contract_sha256": "b2e87b2f92723e5ba00bcfbf92318e961f896151466ca1f73b79c4afec8e87fc",
+      "generated_at": "2026-07-17T19:50:26",
+      "reference_input_mode": "dreamina_image2image_images",
+      "artifact_sha256": "6bf64ee9960528ae49b98bc439f5aa2e02974d970d2cf4538cfd7ab6348eabcb",
+      "reference_input_count": 8,
+      "attempt": 1,
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P006",
+        "created_at": "2026-07-17T19:50:26",
+        "verdict": "warn",
+        "path": "出图/第2话/panels/P006.png",
+        "size": {
+          "width": 1296,
+          "height": 1156
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1156
+        },
+        "declared_reference_count": 8,
+        "reference_input_count": 8,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [
+          {
+            "x": 573,
+            "y": 361,
+            "w": 237,
+            "h": 77,
+            "area": 6474
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": true
+      },
+      "backend_version": "{",
+      "generated_from_execution_input_sha256": "eac87be303c1130053bc5baf1dc5af4fb25cb1492dba9be7bbaa65fa99ea38fe",
+      "generated_from_submit_prompt_sha256": "bf779f2aa1537c3ea18c31188b6e99901c1cd43915ccf3d3864bc7bee74d2d91"
     },
     {
       "panel_id": "P007",
@@ -1936,13 +2125,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "5014601f05eec201c39e8fba1630ca6eb47d48a60e2c559abc5d9362f4784e4f"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -2258,13 +2447,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "d9d8b99e94803de080d3e503dbaa42af6804697ba43c33fd07b6f7cae14bec37"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -2580,13 +2769,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "291e52f5591821ca9aebacc185fa2af9e881f6241d5f674bb08a70d77da6d0c7"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -2845,13 +3034,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "efe2f681fb743514b9e7c7771d6fe7211ab20b1645ee1e6c39c247f55d518eb4"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -3158,13 +3347,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "9ff07bc83d74a89240979aac392626866d11e7911614ba0f43ce7328239c772f"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -3480,13 +3669,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "256e45186555e3bd6c1c0c5895d1acbd353f4f3ab7a47b01a25cbe522a367f9a"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -3802,13 +3991,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "0caf17ec252addc690c72ce0f2e354ad2a0429a4ac886876ec57c2da2d929fc7"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -4124,13 +4313,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "5a53a90086eb2fb47d89ea0ef728068090cbf5ee086f487e7f804e61ef13f458"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -4389,13 +4578,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "4a9297bfe161f058592e16cecbbc9a91d17152839b0d526b6a5e16c0127a5f14"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -4702,13 +4891,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "d158af8b487d419dd9c5a4814d5b02e3d06d592a3f543cd4ae7f4dca445c70f1"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -5024,13 +5213,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "76d0e9a7f59f53871932b139c398ed26bfd905e56e4adac6c8553e2a97d86c67"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -5289,13 +5478,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "9d9a30d0f3d400dcc42339fc3c7b350769b0f20442fc86a65fbf0745ba4c7759"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -5545,13 +5734,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "2759432935ea2a6113e2bd98cf4d6551c90d02b02a23f6db11f15fd60d310d96"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -5801,13 +5990,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "238547c7573992bca97898a332e20ec165e885d1fad90fc2fea245f4700da080"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -6114,13 +6303,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "52dfcd4cdd2ab0d6ba9693203458b83e140f18edddffcc7ab30affd7dfa477ba"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -6379,13 +6568,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "047517d4469d8f5cc4dc213d7eefb55d3919939e1cbff43d13b18f433d6af011"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -6644,13 +6833,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "7acc81cb0f3291974e2790ba7a7c1d4241aa8db609416411c9adc0cdbd3124fc"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -6955,13 +7144,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "cf04e814677ccbf603e1ea2d9237a7e345dd99ddb992f9c516693129073481e2"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -7257,13 +7446,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "63a47a90cabe63e918df61b8f7a7896f0e8685ea796abbf7107f57595809ebd6"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -7570,13 +7759,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "886627bfd61fd0e2c614c945b2b01ca68c80d0947e2656a3b0546fd24a99f450"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -7892,13 +8081,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "63e59bc8f01e8a55ca8321d4f945c660d8f1c8897850f106d01218916e2cd7b7"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -8203,13 +8392,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "4f24044d07ef225b9fb92ebbbe20581802cb456fa96ef481f0dcfd71c382e4a9"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -8505,13 +8694,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "8bbceedeac0e99cfd4febc9675b900da603b92f5fbc27ba13b0eed0af78d9b26"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {
@@ -8816,13 +9005,13 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
-          "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
+          "plan_sha256": "b6c737b0aa33a208746cafa4d3ef15f9151283d609946a74c8be374b224605c5",
+          "inputs_fingerprint": "a39b6bb60135b4a6cf361b882a9dd70b86592c402dfa09e0628cb874706cefd5",
           "panel_plan_sha256": "2aad21bc471ac166305544816c7655e152e3f1ba37f56f71a42a5996a258f0f8"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
-          "sha256": "d65979b2d69625f2a3328d577cfdc381b27c0e89b6906d3414b27b1820768f36",
+          "sha256": "cae2fa6a7d02e7bcffe7522868f921fd0dac17320729aaafeb5bd04a26bebbf4",
           "schema_version": 2
         },
         "panel_script": {

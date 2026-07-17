@@ -1,8 +1,8 @@
 # 漫画 Gate — image_preflight — 第2话
 
-- 生成时间：2026-07-17T19:38:38
-- 结论：warn
-- block/warn/info：0 / 27 / 2
+- 生成时间：2026-07-17T05:30:53
+- 结论：block
+- block/warn/info：2 / 29 / 2
 
 ## 记录
 
@@ -18,6 +18,7 @@
 - chapter_beat_audit: must=0 warn=0（advisory·不阻断）
 - setup_payoff_ledger: must=0 warn=0（advisory·不阻断）
 - reentry_context_audit: must=0 warn=0（advisory·不阻断）
+- entity_presence_audit: must=0 warn=2（advisory·不阻断）
 - redundancy_audit: must=0 warn=4（advisory·不阻断）
 - subtext_audit: must=0 warn=0（advisory·不阻断）
 - reference_planner: 含角色格 30 需处理 22；处方 SHA 已校验
@@ -28,10 +29,14 @@
 |---|---|---|---|---|---|
 | info | climax_at_tail | 生产数据/comic_chapter_beat_audit_第2话.json | 高潮候选在 93%；确认中段是否有足够支撑。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | info | payoff_due_here | 生产数据/comic_setup_payoff_audit_第2话.json | 伏笔「虎妖心口被贯穿却能复生，暗示鸣骨境妖物可觉醒天赋神通」计划本话（第2话）兑现——确认本话已把它收掉并标 status=done。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
+| warn | mentioned_not_bound | 生产数据/comic_entity_presence_audit_第2话.json | P026 画面描述提到「虎山神」（registry 实体 MON_TIGER_SHANSHEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
+| warn | mentioned_not_bound | 生产数据/comic_entity_presence_audit_第2话.json | P030 画面描述提到「虎妖」（registry 实体 MON_TIGER_SHANSHEN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | narration_heavy_chapter | 生产数据/comic_redundancy_audit_第2话.json | 本话 19/24 个有文本格是纯旁白（79%>50%）——信息压缩靠旁白硬转=没画面化的流水账；条漫铁律是能画不说：把交代改成画面/对白/道具特写，旁白只留画面外增量。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | repeated_composition_plan | 生产数据/comic_redundancy_audit_第2话.json | P003、P018 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | repeated_composition_plan | 生产数据/comic_redundancy_audit_第2话.json | P007、P026 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU/CHAR_PEI_CHANGQING, 景别=中景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | repeated_composition_plan | 生产数据/comic_redundancy_audit_第2话.json | P001、P002、P028 计划了相同的 (场景=LOC_DESOLATE_WILDERN, 角色=CHAR_JIANG_YUECHU/CHAR_PEI_CHANGQING, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
+| block | reference_plan_stale | 生产数据/comic_reference_plan_第2话.json | 已落盘处方的 inputs_fingerprint 与当前输入不一致。 | identity | 重跑 comic-image 构建参考处方和 panel_jobs。 |
+| block | reference_plan_stale | 生产数据/comic_reference_plan_第2话.json | 已落盘处方的 plan_sha256 与当前输入不一致。 | identity | 重跑 comic-image 构建参考处方和 panel_jobs。 |
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P001 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P002 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P005 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |

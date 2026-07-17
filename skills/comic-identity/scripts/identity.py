@@ -2254,7 +2254,9 @@ def report(args: argparse.Namespace) -> int:
         )
 
     registry_assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
-    char_ids = sorted(rid for rid in refs_seen | set(registry_assets.keys()) if rid.startswith("CHAR_"))
+    # 2026-07-17 实证修正：一致性审计不再只看 CHAR_。第1话 P015 虎妖被画成四足普通虎，
+    # 就是因为 MON_ 不进视图完整性/model-pack/rerun 审计，registry 有定妆也没人核对出图。
+    char_ids = sorted(rid for rid in refs_seen | set(registry_assets.keys()) if rid.startswith(("CHAR_", "MON_")))
     missing_character_views: dict[str, list[str]] = {}
     character_views: dict[str, dict[str, str]] = {}
     for rid in char_ids:
@@ -3491,13 +3493,13 @@ def generate_views(args: argparse.Namespace) -> int:
     assets = registry.setdefault("assets", {})
     if not isinstance(assets, dict):
         raise SystemExit("identity_registry.json assets must be an object")
-    characters = parse_csv(args.characters, tuple(sorted(rid for rid in assets if rid.startswith("CHAR_"))))
+    characters = parse_csv(args.characters, tuple(sorted(rid for rid in assets if rid.startswith(("CHAR_", "MON_")))))
     views = parse_csv(args.views, REQUIRED_CHARACTER_VIEWS)
     unknown_views = [view for view in views if view not in REQUIRED_CHARACTER_VIEWS]
     if unknown_views:
         raise SystemExit("unknown views: " + ", ".join(unknown_views))
     if not characters:
-        raise SystemExit("no CHAR_ assets found; pass --characters CHAR_ID")
+        raise SystemExit("no CHAR_/MON_ assets found; pass --characters CHAR_ID/MON_ID")
     backend_order = ["codex", "dreamina"] if args.backend == "auto" else [args.backend]
     available: list[str] = []
     for backend in backend_order:
@@ -4007,7 +4009,7 @@ def main() -> int:
     p_expressions.set_defaults(func=generate_expression_references)
 
     p_views = sub.add_parser("views", help="生成/登记常驻角色专门定妆多视图")
-    p_views.add_argument("--characters", default="", help="逗号分隔 CHAR_ID；默认 registry 中全部 CHAR_")
+    p_views.add_argument("--characters", default="", help="逗号分隔 CHAR_/MON_ ID；默认 registry 中全部 CHAR_+MON_（生物与角色同标准定妆）")
     p_views.add_argument("--views", default="", help="逗号分隔 view；默认 front,three_quarter,side,back,face")
     p_views.add_argument("--backend", choices=("auto", "codex", "dreamina"), default="auto", help="多视图生成后端")
     p_views.add_argument("--overwrite", action="store_true", help="覆盖已有 <CHAR_ID>__<view>.png")

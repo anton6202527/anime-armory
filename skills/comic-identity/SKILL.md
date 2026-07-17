@@ -20,13 +20,13 @@ description: 画漫画角色/场景/服装/饰品/道具一致性流程。Use wh
 
 - `出图/共享/identity_registry.json`：schema v2 统一机器真值；角色含 `forms/outfits/expressions/states/default_binding`，`FX_`/`VFX_` 统一为 `vfx`，`SYS_`/`PROP_`/`OUTFIT_` 保持各自标准类型。
 - `出图/共享/图片/<REF_ID>__anchor.png`：可传给生图后端的锚点图。
-- `出图/共享/图片/<CHAR_ID>__front.png` / `__three_quarter.png` / `__side.png` / `__back.png` / `__face.png`：人物标准多视图包。项目 `_设置.md` 的 `定妆级别` 默认是 `长线专门定妆`，常驻角色进入批量生产前必须补齐。
+- `出图/共享/图片/<CHAR_ID>__front.png` / `__three_quarter.png` / `__side.png` / `__back.png` / `__face.png`：人物标准多视图包。项目 `_设置.md` 的 `定妆级别` 默认是 `长线专门定妆`，常驻角色进入批量生产前必须补齐。`MON_` 生物与角色同标准：views/report/model-pack 一并覆盖（2026-07-17 起，core_full/recurring_standard 生物默认纳管，`model_pack_required: false` 可显式退出）。
 - `出图/共享/图片/<CHAR_ID>__<OUTFIT_ID>.png`：在已采纳 front 上锁身份、只替换指定服装的专门换装参考。
 - `生产数据/comic_identity_anchors_第N话.json`：非人物共享锚点生成记录。
 - `生产数据/comic_identity_attempt_ledger_第N话.json`：在每次远端请求发起前写入的累计尝试账；超时、中断和失败都占用额度，恢复运行不得重置。
 - `生产数据/comic_identity_backend_health_第N话.json`：不绑定正式资产的图像通道健康探针账；每次先记 `started`，成功必须有可解码 PNG 路径/SHA，且明确不消费正式资产 variant 总账。
 - `生产数据/comic_identity_views_第N话_contact_sheet.jpg`：人物多视图 QA 拼图，用于快速检查是否缺图、串脸或视图不对。
-- `生产数据/comic_identity_report_第N话.json/md`：缺失引用、每格真实参考输入数、重抽目标。
+- `生产数据/comic_identity_report_第N话.json/md`：缺失引用、每格真实参考输入数、重抽目标；视图完整性与 model-pack 就绪度审计覆盖 `CHAR_`+`MON_`（怪物不再豁免）。
 - `生产数据/comic_model_pack_signoffs/<CHAR_ID>.json`：绑定全部必需视图 SHA 的人审签收；任一视图变化自动 stale。
 - `生产数据/comic_model_pack_report.json`：多视图技术缺陷、同源证据、签收状态和 `ready/needs_approval/needs_fix`。
 - 更新 `panel_jobs.json` 中每个 reference 的真实 `path`。

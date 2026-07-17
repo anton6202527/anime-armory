@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/从变身少女开始斩妖除魔",
   "chapter": "第2话",
-  "created_at": "2026-07-17T19:38:37",
+  "created_at": "2026-07-17T05:30:52",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -199,6 +199,76 @@
       "readiness": "ready",
       "technical_block": false,
       "findings": []
+    },
+    "MON_TIGER_SHANSHEN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_TIGER_SHANSHEN",
+      "asset_type": "monster",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+          "width": 941,
+          "height": 1672,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+          "width": 941,
+          "height": 1672,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+          "width": 941,
+          "height": 1672,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "b0c5e3e071548fba8ca9ce8fa3164a21781e3f383d41a51adad962de0e66cd5c",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_TIGER_SHANSHEN.json",
+        "status": "current",
+        "approved_at": "2026-07-17T12:10:38+00:00",
+        "reviewer": "Claude(agent目视复核)"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        }
+      ]
     }
   },
   "model_pack_gaps": {},
@@ -242,6 +312,13 @@
       "front": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
       "three_quarter": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
       "face": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png"
+    },
+    "MON_TIGER_SHANSHEN": {
+      "front": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "three_quarter": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+      "side": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+      "face": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+      "back": "出图/共享/图片/MON_TIGER_SHANSHEN__back.png"
     }
   },
   "missing_character_views": {},
@@ -308,7 +385,7 @@
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -353,8 +430,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P002.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -362,7 +439,7 @@
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 6,
       "valid_references": [
         {
@@ -397,8 +474,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 6,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P003.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -406,7 +483,7 @@
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -451,8 +528,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P004.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -460,7 +537,7 @@
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -515,8 +592,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P005.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -524,7 +601,7 @@
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -569,8 +646,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P006.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",

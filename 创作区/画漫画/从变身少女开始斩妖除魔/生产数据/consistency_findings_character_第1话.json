@@ -3,14 +3,103 @@
   "kind": "comic_consistency_findings",
   "dimension": "character_consistency",
   "chapter": "第1话",
-  "created_at": "2026-07-16T01:33:07",
+  "created_at": "2026-07-17T05:36:14",
   "summary": {
     "character_count": 3,
     "panel_binding_count": 55,
-    "finding_count": 0,
+    "finding_count": 8,
     "block_count": 0,
-    "warn_count": 0,
+    "warn_count": 8,
     "info_count": 0
   },
-  "findings": []
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "CHAR_JIANG_YUECHU",
+      "panel_id": "P003",
+      "artifact": "出图/第1话/panels/P003.png",
+      "reason": "VLM 并排判定给出低分/存疑：verdict=suspect；P003 仅左下角失焦的灰白衣肩臂与苍白手掌入镜，无脸无发型可辨，无法确认是姜月初本人",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P015",
+      "artifact": "出图/第1话/panels/P015.png",
+      "reason": "VLM 并排判定给出低分/存疑：face=2、outfit=1、build=2；背景右侧虎怪呈普通橙黄虎纹真虎毛色、通体无灰黑鳞甲、胸口黑洞金纹不可见，与registry DNA严重不符",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "CHAR_JIANG_YUECHU",
+      "panel_id": "P016",
+      "artifact": "出图/第1话/panels/P016.png",
+      "reason": "VLM 并排判定给出低分/存疑：verdict=suspect；左侧女子长发完全披散无高马尾束发，袍子比定妆整洁垂坠且背身看不到脸，认脸存疑",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P018",
+      "artifact": "出图/第1话/panels/P018.png",
+      "reason": "VLM 并排判定给出低分/存疑：face=2、outfit=1；虎怪变为橙黄真虎头与毛色、全身无鳞甲改穿破布裤束绳腰带，仅胸口黑洞保留，严重漂移",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P019",
+      "artifact": "出图/第1话/panels/P019.png",
+      "reason": "VLM 并排判定给出低分/存疑：face=2、outfit=1；橙黄虎头无灰黑鳞甲、下身破布裤，仅胸口黑洞存在，与虎山神DNA不符",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P020",
+      "artifact": "出图/第1话/panels/P020.png",
+      "reason": "VLM 并排判定给出低分/存疑：outfit=2；虎首人身直立且胸口有黑洞，但通体橙黄普通虎纹、身穿破布长袍，完全没有registry要求的灰黑鳞甲与金纹",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P022",
+      "artifact": "出图/第1话/panels/P022.png",
+      "reason": "VLM 并排判定给出低分/存疑：outfit=2；远景虎首人身直立、胸口黑洞清晰，但仍是破布长袍无鳞甲，毛色灰棕非定妆的灰白虎首配灰黑鳞甲",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "vlm_judge_character_suspect",
+      "character_id": "MON_TIGER_SHANSHEN",
+      "panel_id": "P024",
+      "artifact": "出图/第1话/panels/P024.png",
+      "reason": "VLM 并排判定给出低分/存疑：outfit=2；直立虎人胸口黑洞在，但橙黄普通虎头、赤膊配毛皮短裙，灰黑鳞甲完全缺失",
+      "return_to_stage": "image",
+      "suggested_fix": "按裁决 notes 并排复核；确认漂移则回 comic-image 重抽该格。"
+    }
+  ]
 }
