@@ -4,12 +4,12 @@
   "project_root": ".",
   "chapter": "第2话",
   "stage": "image_preflight",
-  "created_at": "2026-07-17T19:33:43",
+  "created_at": "2026-07-17T19:38:38",
   "verdict": "warn",
   "summary": {
-    "finding_count": 34,
+    "finding_count": 29,
     "block_count": 0,
-    "warn_count": 32,
+    "warn_count": 27,
     "info_count": 2
   },
   "findings": [
@@ -126,17 +126,6 @@
     {
       "severity": "warn",
       "dimension": "comic_gate",
-      "code": "strong_emotion_expression_reference_missing",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P006·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "dimension": "comic_gate",
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P006 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
@@ -151,17 +140,6 @@
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P008 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "dimension": "comic_gate",
-      "code": "strong_emotion_expression_reference_missing",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P010·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -216,7 +194,7 @@
       "dimension": "comic_gate",
       "code": "missing_reference",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包",
+      "reason": "P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -227,7 +205,7 @@
       "dimension": "comic_gate",
       "code": "missing_reference",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包",
+      "reason": "P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -261,17 +239,6 @@
       "code": "same_frame_color_collision",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P020 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "dimension": "comic_gate",
-      "code": "strong_emotion_expression_reference_missing",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P022·姜月初：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
       "evidence_family": "deterministic",
@@ -337,28 +304,6 @@
       "dimension": "comic_gate",
       "code": "missing_reference",
       "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P026·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "dimension": "comic_gate",
-      "code": "missing_reference",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
-      "reason": "P026·裴长青：缺 侧脸参考（极端角度/转头/过肩格）",
-      "return_to_stage": "identity",
-      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
-      "evidence_family": "deterministic",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "dimension": "comic_gate",
-      "code": "missing_reference",
-      "artifact": "生产数据/comic_reference_plan_第2话.json",
       "reason": "P026·裴长青：缺 背身参考（背影/过肩格）",
       "return_to_stage": "identity",
       "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
@@ -403,7 +348,7 @@
     "reentry_context_audit: must=0 warn=0（advisory·不阻断）",
     "redundancy_audit: must=0 warn=4（advisory·不阻断）",
     "subtext_audit: must=0 warn=0（advisory·不阻断）",
-    "reference_planner: 含角色格 30 需处理 23；处方 SHA 已校验"
+    "reference_planner: 含角色格 30 需处理 22；处方 SHA 已校验"
   ],
   "inputs_fingerprint": {
     "kind": "comic_inputs_fingerprint",
@@ -454,7 +399,7 @@
       {
         "path": "脚本/第2话/source_semantics.json",
         "exists": true,
-        "sha256": "7af3ba3f47b853d6b0cc43c14a6c43bbb53bc4232c82e0b1b292de865f151285",
+        "sha256": "3563338b4358a1bb5ab1efd1e6c98e020d5ef99846be0fa087e3468847dd5e9e",
         "size": 65149
       },
       {
@@ -484,7 +429,7 @@
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "b4528a7f591bdec71ed5bbe76ff1ec6a9e41c144ecf14f56ef506750f1c68bc8",
+        "sha256": "f319f5394682ad2401b587bc858b4a33d011f53bb93acd690b4733784a1845b2",
         "size": 6894
       },
       {
@@ -508,14 +453,14 @@
       {
         "path": "生产数据/comic_reference_plan_第2话.json",
         "exists": true,
-        "sha256": "34ff8faceebdd30c894333a7bf8d3d2d562e85a078cdbf0e1b24c2faa908b9f7",
-        "size": 232077
+        "sha256": "4cfbc333bd6e4d71dd173c45473f8a25a951c7bb2783f56baea11d744d6bc3b7",
+        "size": 230583
       },
       {
         "path": "出图/第2话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "c3deb14b37685dc9ff063ab3acf60d48b3fceeba5c77a776b3c39be5ce0c716e",
-        "size": 773794
+        "sha256": "83c9776255a82b3f65ef2108a09ef5df85e623d72bc8bca63e0cef9454055f86",
+        "size": 775206
       },
       {
         "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
@@ -720,9 +665,15 @@
         "exists": true,
         "sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155",
         "size": 105628
+      },
+      {
+        "path": "出图/第2话/panels/P001.png",
+        "exists": true,
+        "sha256": "b3ef3c516a8cdb51b6b5b0d2af1d3240dd1a1bd06cca907d4af47da9e0b03b2a",
+        "size": 1915272
       }
     ],
-    "sha256": "705d1791529f3c7681d0e19f6fc0123aa6d1b1fc8ed9d3b60a37dddbbb0eb679"
+    "sha256": "962cf0fb2a184ef5dd7b722bde33ca51e45558474bf85d73b73596c38123751e"
   },
-  "receipt_id": "0c30babaf659f49de8144ffb2fb8ac0fe5f27611a90504b9eadf82ac2543b807"
+  "receipt_id": "1760c60b8b51574d93c0d99df83e3c23484186899802492657a67a142f1a3348"
 }

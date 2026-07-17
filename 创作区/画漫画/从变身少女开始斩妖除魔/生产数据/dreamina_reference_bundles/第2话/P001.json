@@ -3,11 +3,9 @@
   "kind": "comic_dreamina_reference_bundle",
   "chapter": "第2话",
   "panel_id": "P001",
-  "model": "Seedream 5.0",
-  "channel": "Dreamina/即梦官方 CLI",
-  "reference_input_mode": "dreamina_official_cli_image2image",
+  "reference_input_mode": "dreamina_image2image_images",
   "reference_attachment_limit": 10,
-  "reference_input_count": 9,
+  "cli_image_input_count": 9,
   "references": [
     {
       "id": "CHAR_JIANG_YUECHU",
@@ -73,5 +71,7 @@
       "required": false
     }
   ],
-  "created_at": "2026-07-17T19:33:43"
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-17T19:38:38"
 }

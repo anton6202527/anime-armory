@@ -54,6 +54,77 @@ def _image_backend_override_allows(root: str, canonical: str) -> bool:
     return signed_kind == "approved" and signed_canon == canonical
 
 
+def _signed_image_disaster_failover(root: str, ep: str, current_canonical: str) -> Dict[str, Any]:
+    """Validate the narrow Codex→fallback disaster-handoff exception.
+
+    A generic backend override only authorizes spend on a non-preferred
+    backend; it must not silently legalize mixed episode output.  This helper
+    additionally requires the one-way failover policy and a production-ledger
+    handoff event, then rejects any successful bounce back to the old backend.
+    """
+    path = os.path.join(root, IMAGE_BACKEND_OVERRIDE_REL)
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except Exception:
+        return {"active": False, "reason": "missing_or_invalid_override"}
+    if not isinstance(payload, dict) or payload.get("approved") is not True:
+        return {"active": False, "reason": "override_not_approved"}
+    policy = payload.get("failover_policy") if isinstance(payload.get("failover_policy"), Mapping) else {}
+    if str(policy.get("direction") or "").strip().lower() != "codex_to_dreamina_once":
+        return {"active": False, "reason": "not_one_way_codex_dreamina"}
+    if policy.get("no_backend_bounce") is not True:
+        return {"active": False, "reason": "no_backend_bounce_not_locked"}
+    signed_raw = str(payload.get("backend") or payload.get("canonical") or "").strip()
+    signed_canon, signed_kind = classify_image_backend(signed_raw)
+    if signed_kind != "approved" or signed_canon != current_canonical or current_canonical != "dreamina":
+        return {"active": False, "reason": "signed_backend_not_current_dreamina"}
+
+    events = _load_production_events(root)
+    handoff_idx = 0
+    trigger = ""
+    for idx, event in enumerate(events, start=1):
+        if str(event.get("episode") or "").strip() != ep or str(event.get("stage") or "").strip() != "image":
+            continue
+        meta = event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+        from_canon = classify_image_backend(str(meta.get("handoff_from") or ""))[0]
+        to_canon = classify_image_backend(str(meta.get("handoff_to") or ""))[0]
+        event_trigger = str(meta.get("trigger") or "").strip().lower()
+        if (
+            from_canon == "codex"
+            and to_canon == current_canonical
+            and event_trigger in {"bounded_retries_exhausted", "codex_quota_or_credit_exhausted"}
+            and str(meta.get("no_backend_bounce") or "").strip().lower() in {"true", "1", "yes"}
+        ):
+            handoff_idx = idx
+            trigger = event_trigger
+    if not handoff_idx:
+        return {"active": False, "reason": "missing_handoff_event"}
+
+    for idx, event in enumerate(events, start=1):
+        if idx <= handoff_idx:
+            continue
+        if str(event.get("episode") or "").strip() != ep or str(event.get("stage") or "").strip() != "image":
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        generation = _event_generation(event)
+        status = str(generation.get("status") or event.get("status") or "").strip().lower()
+        if status == "fail":
+            continue
+        provider = _image_event_provider(event)
+        if classify_image_backend(provider)[0] == "codex":
+            return {"active": False, "reason": "backend_bounced_to_codex", "handoff_index": handoff_idx}
+    return {
+        "active": True,
+        "from": "codex",
+        "to": current_canonical,
+        "trigger": trigger,
+        "handoff_index": handoff_idx,
+        "path": path,
+    }
+
+
 def _block_unsigned_non_preferred_backend(root: str, canonical: str, loc: str, raw: str) -> None:
     if not canonical or canonical in PREFERRED_IMAGE_BACKENDS:
         return
@@ -294,6 +365,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
 
     setting = get_setting(root, "生图AI", "Codex").strip()
     canon, kind = classify_image_backend(setting)
+    disaster_failover = _signed_image_disaster_failover(root, ep, canon if kind == "approved" else "")
     if kind == "forbidden":
         add(
             BLOCK,
@@ -415,13 +487,25 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             + "。请用 dashboard record --provider 补录或重跑生成 adapter。",
         )
 
-    if len(used) >= 2:
+    failover_pair = {str(disaster_failover.get("from") or ""), str(disaster_failover.get("to") or "")}
+    failover_pair.discard("")
+    failover_mixing_allowed = bool(disaster_failover.get("active")) and used.issubset(failover_pair)
+    if len(used) >= 2 and not failover_mixing_allowed:
         add(
             BLOCK,
             "生图AI一致性",
             settings_loc,
             f"同项目/同集混用多个生图模型/渠道（{'、'.join(sorted(used))}）；混用会让同角色脸型/服装/画风跨镜漂移。"
             "请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
+        )
+    elif len(used) >= 2 and failover_mixing_allowed:
+        add(
+            INFO,
+            "生图AI一致性",
+            str(disaster_failover.get("path") or settings_loc),
+            "已验证一次性 Codex→Dreamina 灾备切换：已验收旧图可保留，handoff 后未发现回弹 Codex；"
+            "所有未生成/待重抽图片必须继续统一使用 Dreamina，并逐张执行 full image_qc + 实际像素目视。",
+            advisory=True,
         )
 
     # 基线「验现实」reconcile（坑 D）：check_image_backend_baseline 只比对 _设置.md 声明 vs 锁定基线，
@@ -435,7 +519,12 @@ def check_image_ai_policy(root: str, ep: str) -> None:
     )[0]
     if baseline_canon:
         drifted = sorted(c for c in used if c and c != baseline_canon)
-        if drifted:
+        old_failover_only = (
+            bool(disaster_failover.get("active"))
+            and baseline_canon == str(disaster_failover.get("to") or "")
+            and set(drifted).issubset({str(disaster_failover.get("from") or "")})
+        )
+        if drifted and not old_failover_only:
             add(
                 BLOCK,
                 "生图后端基线",
@@ -444,6 +533,15 @@ def check_image_ai_policy(root: str, ep: str) -> None:
                 "基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。"
                 "请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
                 return_to_stage="image",
+            )
+        elif drifted and old_failover_only:
+            add(
+                INFO,
+                "生图后端基线",
+                event_path,
+                "锁定基线已更新为 Dreamina；账本中的 Codex 成功事件均早于已签 handoff，作为已验收历史图保留，"
+                "不视为灾备后的后端回弹。",
+                advisory=True,
             )
 
     # 主体库硬闸（一致性梯子第②档）：所选后端**支持原生角色主体/Character ID**（seedream/可灵等）

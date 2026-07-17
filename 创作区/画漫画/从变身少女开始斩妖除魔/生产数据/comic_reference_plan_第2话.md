@@ -1,33 +1,28 @@
 # 逐格参考规划（事前处方）· 第2话
 
 - 后端 native_subject_capable（持久主体 True·单角色参考上限 4）
-- 含角色格 30 · 需处理 23 · warn 28 · info 0
+- 含角色格 30 · 需处理 22 · warn 23 · info 0
 
 - ⚠️ `multi_character_closeup` P001 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `multi_character_closeup` P002 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `same_frame_color_collision` P005 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P005 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
-- ⚠️ `strong_emotion_expression_reference_missing` P006·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）
 - ⚠️ `same_frame_color_collision` P006 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P008 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ⚠️ `strong_emotion_expression_reference_missing` P010·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）
 - ⚠️ `same_frame_color_collision` P010 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P011 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P012 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P013 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ⚠️ `missing_reference` P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包
-- ⚠️ `missing_reference` P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包
+- ⚠️ `missing_reference` P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包
+- ⚠️ `missing_reference` P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包
 - ⚠️ `same_frame_color_collision` P015 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P016 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P020 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
-- ⚠️ `strong_emotion_expression_reference_missing` P022·姜月初：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）
 - ⚠️ `same_frame_color_collision` P023 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `same_frame_color_collision` P024 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P024 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `same_frame_color_collision` P025 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P025 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
-- ⚠️ `missing_reference` P026·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包
-- ⚠️ `missing_reference` P026·裴长青：缺 侧脸参考（极端角度/转头/过肩格）
 - ⚠️ `missing_reference` P026·裴长青：缺 背身参考（背影/过肩格）
 - ⚠️ `multi_character_closeup` P028 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `missing_reference` P030·裴长青：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）

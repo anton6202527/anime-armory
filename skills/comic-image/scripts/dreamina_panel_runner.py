@@ -26,7 +26,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import codex_panel_runner as shared  # noqa: E402
 
 
-DREAMINA_MODEL = "Dreamina 5.0"
+DREAMINA_MODEL = "Seedream 5.0"
 DREAMINA_CHANNEL = "Dreamina/即梦官方 CLI"
 DREAMINA_REFERENCE_LIMIT = 10
 DREAMINA_RATIOS = {
@@ -370,8 +370,16 @@ def main() -> int:
         print("[err] dreamina not found in PATH", file=sys.stderr)
         return 2
     data = shared.load_json(jobs_path)
-    data["model"] = DREAMINA_MODEL
-    data["channel"] = DREAMINA_CHANNEL
+    if (
+        str(data.get("model") or "") != DREAMINA_MODEL
+        or str(data.get("channel") or "") != DREAMINA_CHANNEL
+    ):
+        print(
+            f"[err] panel jobs backend mismatch: {data.get('model')} / {data.get('channel')}; "
+            "先用 comic-settings 切换并重建 panel_jobs",
+            file=sys.stderr,
+        )
+        return 2
     targets = {item.strip() for item in args.targets.split(",") if item.strip()}
     jobs = shared.selected_jobs(data.get("jobs") or [], targets, args.limit, args.force)
     if not jobs:
@@ -399,9 +407,16 @@ def main() -> int:
     for index, job in enumerate(jobs, start=1):
         panel_id = str(job.get("panel_id") or "")
         final = panel_dir / f"{panel_id}.png"
-        archived_existing = (
-            shared.archive_existing(final, candidate_root / panel_id, "previous")
-            if args.force and not args.recheck_existing else ""
+        archived_existing = ""
+        should_archive_existing = (
+            shared.png_valid(final)
+            and not args.recheck_existing
+            and (
+                args.force
+                or job.get("status") != "ready"
+                or job.get("model") != DREAMINA_MODEL
+                or job.get("source") != DREAMINA_CHANNEL
+            )
         )
         all_records = shared.collect_reference_images(root, job)
         records, omitted = shared.select_reference_attachments(all_records, reference_limit)
@@ -533,6 +548,10 @@ def main() -> int:
                 print(f"[retry] {panel_id} attempt {attempt}/{max_attempts}: {error}", file=sys.stderr, flush=True)
                 continue
 
+            if should_archive_existing and not archived_existing:
+                archived_existing = shared.archive_existing(
+                    final, candidate_root / panel_id, "previous_backend_or_take"
+                )
             normalization = normalize_panel(raw_path, final, job.get("size") or {})
             post_qc = (
                 {}
@@ -551,6 +570,7 @@ def main() -> int:
                     "result_path": shared.rel_to_root(root, final),
                     "source": DREAMINA_CHANNEL,
                     "model": DREAMINA_MODEL,
+                    "model_version": args.model_version,
                     "generated_at": generated_at,
                     "backend_version": backend_version,
                     "artifact_sha256": shared.file_sha256(final),

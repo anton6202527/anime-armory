@@ -21,14 +21,14 @@
   "render_stage": "完成稿",
   "reference_plan": {
     "path": "生产数据/comic_reference_plan_第2话.json",
-    "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+    "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
     "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076"
   },
   "finishing_plan": "出图/第2话/finishing/finishing_plan.json",
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "failed",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -54,7 +54,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "ea444c9a0c2c4481ef77194cdbfcaca06e44cec89a9b56d48341b7da7b8f5bb4"
         },
@@ -345,9 +345,43 @@
         "style_reference_limit": 1,
         "notes": "Backend appears subject-library capable; registry should record any real subject id separately from reference images."
       },
-      "result_path": "",
+      "result_path": "出图/第2话/panels/P001.png",
       "source": "Dreamina/即梦官方 CLI",
-      "error": "dreamina submit exit 1: "
+      "attempt": 1,
+      "artifact_sha256": "b3ef3c516a8cdb51b6b5b0d2af1d3240dd1a1bd06cca907d4af47da9e0b03b2a",
+      "backend_version": "c58a6a2-dirty",
+      "model": "Seedream 5.0",
+      "generated_from_execution_input_sha256": "81830c2302cce3e8819e03f2a5dd8a2e0c9714887b18fb439a58bb02b0d513b4",
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第2话/P001.json",
+      "reference_input_count": 9,
+      "reference_input_mode": "dreamina_official_cli_image2image",
+      "generated_from_submit_prompt_sha256": "9446f0edfbe840050abff12c535a743c1586089f0b2c5cd3b7c314f8fb563195",
+      "generated_at": "2026-07-17T19:35:13",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P001",
+        "created_at": "2026-07-17T19:35:13",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P001.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 9,
+        "reference_input_count": 9,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      },
+      "generated_from_contract_sha256": "9b32734646873e68f44fcf21f0c572656eee5e0b36ef430bb8729a9e06dead58"
     },
     {
       "panel_id": "P002",
@@ -377,7 +411,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "8c78028990a8a7c56eb80cb199a9ece2651da4e74dbfbc7029a469e6647c095b"
         },
@@ -675,13 +709,13 @@
       "source_contract_sha256": "99294a139202e54e202a78a319fb71ffce5617b8faeeac5fa613e7f0d22b5499",
       "submit_prompt_sha256": "76a0e8f61a1ddba06b881259f703408f13c99a9f3835ff9183852efc55cdcfd8",
       "submit_prompt_chars": 1249,
-      "execution_input_sha256": "0c64bcb0df5da3d4d0f2cc00ce459a8ae0377d1e61abd7405ab1bf6d077fe5f6",
+      "execution_input_sha256": "0f42bf6d0b3ed3c820d4d66fa0a03925e7aea80271dbbba8edf1e80ab9b5ade9",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "7ef69c709b0b8ac834b9c1d033afad3c649acb71c12d74824454acfc39e7946a"
+          "panel_plan_sha256": "755db8fce883c7ca67ed8761e1af0c89fa5d1b6cdcd437fcb9c2a1b1d3c6f8bb"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -929,13 +963,13 @@
       "source_contract_sha256": "fabcc7ff1688505a9c9c90755507fedfe5560c0ada76cbc84a94bed3f6653b02",
       "submit_prompt_sha256": "3188116ae4d1e099b8c458b635c28f5ca213f14d58ca38ee111c78eb11148599",
       "submit_prompt_chars": 1246,
-      "execution_input_sha256": "c9cb7e9ee9261ee2044d4a9c0fb413953de5ef52e8afbd32cba1fdb4f25d304d",
+      "execution_input_sha256": "648ceedcace8994092209dd5a0b099381d568619ef9dd1c226687809192266df",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "486064051bf97d9df570527dfeaf8ce040e348aec12e6f29e15d9e32d9b5886b"
+          "panel_plan_sha256": "4af578d3b5aefcaf6de61fc71d452425ed786ab66f87326d257bfd82e3d8b69d"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -1231,13 +1265,13 @@
       "source_contract_sha256": "41d20ddbf2c5f38e2172291bf14e121ddbbe498325c901be28cbcb45c5d44107",
       "submit_prompt_sha256": "6d4b67bbe27f0352a48bd7c724024156ff4cf8e17e4c5263fc7c2b3e881a0721",
       "submit_prompt_chars": 1340,
-      "execution_input_sha256": "91bbdb96c7b9feadcda0ff692638ef7819f46c8c602695c88b707f1f6f4b1409",
+      "execution_input_sha256": "256511b18b3d0761e065153794048719111e8cfd67add8e608df2dbd8c2ee9e7",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "d392d2b35f72f70aba0cba1065870e19e653cdeda9b9d24f0739af0f2362901e"
+          "panel_plan_sha256": "19d06aa40f7b5a96b107476fcd46e4b3c78c10f18ebc314ead6f29088f37d1be"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -1585,13 +1619,13 @@
       "source_contract_sha256": "b2e87b2f92723e5ba00bcfbf92318e961f896151466ca1f73b79c4afec8e87fc",
       "submit_prompt_sha256": "bf779f2aa1537c3ea18c31188b6e99901c1cd43915ccf3d3864bc7bee74d2d91",
       "submit_prompt_chars": 1305,
-      "execution_input_sha256": "f4a20125c55b3921a3bcf86e2e652d125a8302db47683093643e120d6db3fd83",
+      "execution_input_sha256": "eac87be303c1130053bc5baf1dc5af4fb25cb1492dba9be7bbaa65fa99ea38fe",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "cfbf38a241cbcd32e117d296562c7c76d9648e2053eb2421ab71729f66b68584"
+          "panel_plan_sha256": "9f5529ac0735ea475d0d52a72cf4ac79ad0d55bb0a739d5263076aa222604aa0"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -1898,13 +1932,13 @@
       "source_contract_sha256": "2fd13f6de43c00435e6020caa190268319fd94930756aba374413542e6052e8c",
       "submit_prompt_sha256": "9c0d28f2166f83ce65535afb341e7563ccd65fcd650fc338a3cbd6974fc7290c",
       "submit_prompt_chars": 1254,
-      "execution_input_sha256": "04129f78f2ef3fca2fbc69e4a695d29015a80734b47ac3c3a3a2cf66d7b0cdcf",
+      "execution_input_sha256": "0050cd9a7272574d07f83f1b1084a9cece5f866a3938378fb0eb5f1186c62f29",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "44d1f2cda09c9d0efc5dc8ca7e87ab3a0e44e343735d1f09d52960f2d3725bbd"
+          "panel_plan_sha256": "5014601f05eec201c39e8fba1630ca6eb47d48a60e2c559abc5d9362f4784e4f"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -2220,13 +2254,13 @@
       "source_contract_sha256": "a8727dfe74f75120a7cc894dc856d6e216684f9d0d265e016913c76b0e8ad360",
       "submit_prompt_sha256": "6db7d1b728139fdf446e8c632c740a4d4f550557ebd01f952bc4c25645fc9fdb",
       "submit_prompt_chars": 1253,
-      "execution_input_sha256": "49d53f83e30dce13b81fe5a34ebed76c6e8066e20ee2f54b594a40715e236713",
+      "execution_input_sha256": "a825296a9468bea4242da11f9ab6bb9b6c65a0ed8d461577c433f5a7534aacd9",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "48fdd5c9b6c1ffb9d79c1468811d8696942a3aed83232d42d8ac5f243c7c70a8"
+          "panel_plan_sha256": "d9d8b99e94803de080d3e503dbaa42af6804697ba43c33fd07b6f7cae14bec37"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -2542,13 +2576,13 @@
       "source_contract_sha256": "e409a291832fee51b46b79458dd46a2194e315bb4f306c0d52df3461ac8465fa",
       "submit_prompt_sha256": "a2322572c632ac9be99c1644732f9ab86899896a12a57c3eb579f9840e95bff4",
       "submit_prompt_chars": 1322,
-      "execution_input_sha256": "aaddc5562fc9c000961cbef0505eb6f6f72f5ce5b8de6cf136c12ba2f4af5bd0",
+      "execution_input_sha256": "1bcea571baf6113348365f1abdcb5f444ccbf12b6fbc7d0d814ca206d87179ad",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "2a4d74453428412601b5a075af534056cb3a3772b4656ebb7f99ce1096ec7a93"
+          "panel_plan_sha256": "291e52f5591821ca9aebacc185fa2af9e881f6241d5f674bb08a70d77da6d0c7"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -2807,13 +2841,13 @@
       "source_contract_sha256": "0149224487478ae47abf02d9272ba1b383a3c14ca7d5f05f146562f486b6eba7",
       "submit_prompt_sha256": "8bb6bd1e7dfe70601a60871cdea91a2d5c40393e8cab7828ef61384cf2c9c955",
       "submit_prompt_chars": 1281,
-      "execution_input_sha256": "ebe66e2bbbcf12e9d0a628449bbac79ef86230ec71f1a122f7346fb1d1d3af23",
+      "execution_input_sha256": "7341290baaa493c81fe783bcf642672d6dea062738350d4fbbd427d50683d43f",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "e57f7776e6a88ea6108afc0c8833428c0a3dab84d937b63990c8a0b4e98cfe9a"
+          "panel_plan_sha256": "efe2f681fb743514b9e7c7771d6fe7211ab20b1645ee1e6c39c247f55d518eb4"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -3120,13 +3154,13 @@
       "source_contract_sha256": "65ef676782e55086972152e483565d8f615a7931de769eb1ceaed9e7919cad16",
       "submit_prompt_sha256": "0b32d30bf06e45282cde33a666ae3b216515e781a115b2628b5b566bb76ac5e4",
       "submit_prompt_chars": 1264,
-      "execution_input_sha256": "81bd444e0d2b525f9bed03ffc5001679ccdb9ef9462fd731d6e28cc6f73bcafd",
+      "execution_input_sha256": "f9fc3be824293b83e8e792b22038c13fa159b00e733b86e9f9736558892c2fd5",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "4cd4fb3d2f3873f9ac83f4e7b09e9fd295b6cd1976c611a4b9c64c57954f127c"
+          "panel_plan_sha256": "9ff07bc83d74a89240979aac392626866d11e7911614ba0f43ce7328239c772f"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -3442,13 +3476,13 @@
       "source_contract_sha256": "9dcf9193f1809427c8003536edfb4e50c983fe4fefd13c6e2c80875c433ef589",
       "submit_prompt_sha256": "d850c99f24cbd68b8a964776506d4190661ea9adcf031a4d694e8aacf57f9ae4",
       "submit_prompt_chars": 1249,
-      "execution_input_sha256": "485cb4749604793e594af638322ad20a405d15f3ded243556fb1735704b5ce10",
+      "execution_input_sha256": "a9727e906b431f6fcaf68fc4d506f118ddf35dfac47dd75f624ebbf3eb6a1131",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "9a81677ba13c8a5cb02a669d547c6dd459a2ca6e5bf6f58b700b50154b95f303"
+          "panel_plan_sha256": "256e45186555e3bd6c1c0c5895d1acbd353f4f3ab7a47b01a25cbe522a367f9a"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -3764,13 +3798,13 @@
       "source_contract_sha256": "e7e453fe7bb88867f1422852f6b13a2dcdec3b6973fe90aac58246b9748b0193",
       "submit_prompt_sha256": "08b7abaf7a5799cae214d22ddd13cd0f0a8124c83b6f98aa2d26ac8fe6ce4069",
       "submit_prompt_chars": 1299,
-      "execution_input_sha256": "7f33f9cbdf8ec2282ab69661ca25c0f31b763efea37f56b97ed9510ae31ad02a",
+      "execution_input_sha256": "506c72b4f63c4dbb2d3d8aa0c6bf175e3954388b03fcb3bea86fbed8481dd3e4",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "029d8427accdf220a684fd7484a144371f540ffa3106ce75aa213365bf5c2f5a"
+          "panel_plan_sha256": "0caf17ec252addc690c72ce0f2e354ad2a0429a4ac886876ec57c2da2d929fc7"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -4086,13 +4120,13 @@
       "source_contract_sha256": "7ca541912079c9c056c7ac20bbe6083c21d88d569457fa24a8b92c8070d08e58",
       "submit_prompt_sha256": "17449ffbcd4a94f127e6d7e16bb62ba404f6209e392474d2084955675076a8c8",
       "submit_prompt_chars": 1266,
-      "execution_input_sha256": "fbb147a6c832d97728c10f568644374cd3accf5fb7cbcf76ed196e9e3bb19e5c",
+      "execution_input_sha256": "1bd422789f124159aad37d4ca782db82aa218160074d5eb003c15ac93f831b96",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "198558df2dd5b42a89bbfa07987be88ef1091e5cce14eef21c0d58bf820067f9"
+          "panel_plan_sha256": "5a53a90086eb2fb47d89ea0ef728068090cbf5ee086f487e7f804e61ef13f458"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -4351,13 +4385,13 @@
       "source_contract_sha256": "6dc25e4af0fb44073cc261f4a68edf628b25c20ac98f6ff9e7e517ec9eab6073",
       "submit_prompt_sha256": "4c458d29128907922e7754df118fea7ea9d855360c20b9fd4c91ebca52d17cd4",
       "submit_prompt_chars": 1281,
-      "execution_input_sha256": "0bf261d47675c395a82043eb952cde7f56f7b02a1d360f697b791ff57b3fce5b",
+      "execution_input_sha256": "7e47a64b751e473d87a1e64234b28910ffa2178a90d870890e1f0aa8b9dddd08",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "ef32f9a1cc98fa01bc55a21e50662690d4d27253f6667722336741281b1a5007"
+          "panel_plan_sha256": "4a9297bfe161f058592e16cecbbc9a91d17152839b0d526b6a5e16c0127a5f14"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -4664,13 +4698,13 @@
       "source_contract_sha256": "57390c0a742a712f9bf6539d8866dbd740f0ce445899304e85905956a8563dd1",
       "submit_prompt_sha256": "febe535765f560897a78b876e2cb132505bb7ea59495f86a22217bc2e5f8eee7",
       "submit_prompt_chars": 1341,
-      "execution_input_sha256": "1f0bc44612ac5c2ef41640310757d14a2146c17de5833b5fd58dd52f7293ccfe",
+      "execution_input_sha256": "8752d6b3078b62c6cffb08fce5db3b1006c33e7c639158978182ac51f1338670",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "358d8a39eb725b0b47cee60fab2c3c3b1d2e03b22b386c8fde4ed9a7a9b5f31b"
+          "panel_plan_sha256": "d158af8b487d419dd9c5a4814d5b02e3d06d592a3f543cd4ae7f4dca445c70f1"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -4983,16 +5017,16 @@
       "submit_prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：俯视姜月初倒在泥地，指尖想撑起却无法用力；金色绘卷虚影悬在她视线上方，形成两个等待后期嵌字的空白系统区。 构图与表演：无字原图；绘卷内不得生成乱码，金色空白区后期嵌字。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:承接第1话同一南北向荒野：姜月初在画左或前景，裴长青倒在中景，虎山神在画右或后景；横刀先在姜手中，P014后飞落远处泥地，P022被重新拾起。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体；暗红轮廓光用于倒地静止冲击，百妖谱金光仅在系统与收录节点加强。；轴线/视线:延续姜月初画左、裴长青居中、虎山神画右的基本轴线；交锋格沿姜左向右冲、虎右向左拍的方向，不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P016；视线目标:悬在眼前的百妖谱绘卷虚影；视线方向:画上。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；本格服装=基础服装；继承角色基础定妆中的服装结构、配色与标志配饰；绝不出现：不得改变领型、配饰、主色或标志纹样；领型、纽扣数、布料花纹、配饰按服装参考保持，不得代际漂移；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰…。 线稿、黑场、网点与效果：墨线:clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable；黑场:assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features；网点/灰阶:风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast…。 文字处理：不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：俯视姜月初倒在泥地，指尖想撑起却无法用力；金色绘卷虚影悬在她视线上方，形成两个等待后期嵌字的空白系统区。 构图与表演：无字原图；绘卷内不得生成乱码，金色空白区后期嵌字。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:承接第1话同一南北向荒野：姜月初在画左或前景，裴长青倒在中景，虎山神在画右或后景；横刀先在姜手中，P014后飞落远处泥地，P022被重新拾起。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体；暗红轮廓光用于倒地静止冲击，百妖谱金光仅在系统与收录节点加强。；轴线/视线:延续姜月初画左、裴长青居中、虎山神画右的基本轴线；交锋格沿姜左向右冲、虎右向左拍的方向，不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P016；视线目标:悬在眼前的百妖谱绘卷虚影；视线方向:画上。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；本格服装=基础服装；继承角色基础定妆中的服装结构、配色与标志配饰；绝不出现：不得改变领型、配饰、主色或标志纹样；领型、纽扣数、布料花纹、配饰按服装参考保持，不得代际漂移；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰…。 线稿、黑场、网点与效果：墨线:clear silhouette, stronger outer contour, expressive line weight; keep face, hands, feet, and key props readable；黑场:assign solid blacks behind or around the focal subject to create a strong value read; avoid hiding identity features；网点/灰阶:风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast…。 文字处理：不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "negative_prompt": "",
-      "source_contract_sha256": "5d17fb7f715561e520afb0f7083264388346699758d0363f519caefe0022e4ac",
+      "source_contract_sha256": "1be9b6b432b021352b0c024d6eba23d927a8cdb73b7adf86494efee796167f66",
       "submit_prompt_sha256": "5d3feb035861eb315e7e90440046ec40497d3286498870234e494c053f858660",
       "submit_prompt_chars": 1308,
-      "execution_input_sha256": "9aac3eb559231aed9ee813d85e3761ef1505e87229811c45557422b49d2dfc7d",
+      "execution_input_sha256": "595acaf4ad85345744b8cf788ec7ed9939e567eeddd5389cf854612027d5511d",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "290285cdea1d858e6897cae4aaf85cdc18b124e856d47c2d98bfe5aa94766109"
+          "panel_plan_sha256": "76d0e9a7f59f53871932b139c398ed26bfd905e56e4adac6c8553e2a97d86c67"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -5194,19 +5228,19 @@
         },
         {
           "id": "CHAR_JIANG_YUECHU",
-          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
-          "view": "three_quarter",
-          "role": "three_quarter",
-          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+          "view": "side",
+          "role": "side",
+          "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491",
           "contract_id": "",
           "required": false
         },
         {
           "id": "CHAR_JIANG_YUECHU",
-          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
-          "view": "side",
-          "role": "side",
-          "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "view": "three_quarter",
+          "role": "three_quarter",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e",
           "contract_id": "",
           "required": false
         }
@@ -5251,13 +5285,13 @@
       "source_contract_sha256": "1d431cf09cf10a79e77629a8030702c03070ddceba7f915491414d199c69af6e",
       "submit_prompt_sha256": "2c5408636d994510d85f87c9c84b956d25f46ef078ead479b41b73a4301946b4",
       "submit_prompt_chars": 1309,
-      "execution_input_sha256": "b34973601f7b10491a9fe04cb73b5a0d401026862f6a3f1eb4cdb6237a87249a",
+      "execution_input_sha256": "433700c1875c123ce4643ecd43f964827cb5a3a6dc196fc4eb9d7208ef8a5259",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "5e7522d71737a6b7745c66d33873bec2a9d80eed06990872005e8aa77a5f1c83"
+          "panel_plan_sha256": "9d9a30d0f3d400dcc42339fc3c7b350769b0f20442fc86a65fbf0745ba4c7759"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -5511,7 +5545,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "2759432935ea2a6113e2bd98cf4d6551c90d02b02a23f6db11f15fd60d310d96"
         },
@@ -5763,13 +5797,13 @@
       "source_contract_sha256": "c87dc37b19c312962e265da57b1efe434c074886caa2362a4a353cf1ef9cd425",
       "submit_prompt_sha256": "0d410fed31af93a849db5712302fe40149781711b8e7f34705b4a39f29bde14e",
       "submit_prompt_chars": 1332,
-      "execution_input_sha256": "85bd5d8d0fdf9663e3345eab1e87c3273b5a5800d17a4263941a7cd425b0373f",
+      "execution_input_sha256": "812419bcc45fe49b97aa6efdb31a22ff874e0e4c602c3049c5a25ea9f520e11e",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "a46ff46366ebccf973dfbcbab0c277ca8c7be49656aba4362c4e8d87c6298cde"
+          "panel_plan_sha256": "238547c7573992bca97898a332e20ec165e885d1fad90fc2fea245f4700da080"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -6080,7 +6114,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "52dfcd4cdd2ab0d6ba9693203458b83e140f18edddffcc7ab30affd7dfa477ba"
         },
@@ -6341,13 +6375,13 @@
       "source_contract_sha256": "ef41a15d5bd1d08a0ece9fa7f6fdee03579b47e4ad9a5f4d311e920aae6a2665",
       "submit_prompt_sha256": "a1d8f5e0c108694e1a205c33bc8e20794a0335018b64e801d8c3bcdd0071fce7",
       "submit_prompt_chars": 1263,
-      "execution_input_sha256": "4c600f8445c9573a0f66ff3e696c858c10ad7b136346ffdab1bd26394f1849fb",
+      "execution_input_sha256": "64af63933b826ec99ff39155de90e343f897f1c2ca63942316227c30cdcb712e",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "61af737986c99d8432b70887e3a8e10503279526c36e5a487bf059f44b9ede02"
+          "panel_plan_sha256": "047517d4469d8f5cc4dc213d7eefb55d3919939e1cbff43d13b18f433d6af011"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -6610,7 +6644,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "7acc81cb0f3291974e2790ba7a7c1d4241aa8db609416411c9adc0cdbd3124fc"
         },
@@ -6921,7 +6955,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "cf04e814677ccbf603e1ea2d9237a7e345dd99ddb992f9c516693129073481e2"
         },
@@ -7223,7 +7257,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "63a47a90cabe63e918df61b8f7a7896f0e8685ea796abbf7107f57595809ebd6"
         },
@@ -7529,16 +7563,16 @@
       "submit_prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：远中景：金色系统光熄灭，姜月初收刀转身，独自走向裴长青尚有余温的身体；远处虎山神残躯被黑色墨雾和枯草遮住。 构图与表演：无字原图；姜背影和裴身体位置清楚，虎妖遗体只作非血腥环境信息。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:承接第1话同一南北向荒野：姜月初在画左或前景，裴长青倒在中景，虎山神在画右或后景；横刀先在姜手中，P014后飞落远处泥地，P022被重新拾起。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体；暗红轮廓光用于倒地静止冲击，百妖谱金光仅在系统与收录节点加强。；轴线/视线:延续姜月初画左、裴长青居中、虎山神画右的基本轴线；交锋格沿姜左向右冲、虎右向左拍的方向，不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P025；视线目标:前方倒地的裴长青；视线方向:画左下。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情…。 线稿、黑场、网点与效果：墨线:stable contour lineart with modest line-weight variation and clean readable anatomy；黑场:use small black accents for depth and material separation; keep safe text areas low detail；网点/灰阶:风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast…。 文字处理：不生成可读文字、气泡、文字框、字幕、Logo 或水印。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "prompt": "生成一张铺满画布的单格无字漫画画面。 画面事实：远中景：金色系统光熄灭，姜月初收刀转身，独自走向裴长青尚有余温的身体；远处虎山神残躯被黑色墨雾和枯草遮住。 构图与表演：无字原图；姜背影和裴身体位置清楚，虎妖遗体只作非血腥环境信息。 画风与稿层：国风厚涂条漫(新国风水墨气韵,写实电影光影,黑墨能量与金色火花)；目标稿层=完成稿。 场景连续性：空间布局:承接第1话同一南北向荒野：姜月初在画左或前景，裴长青倒在中景，虎山神在画右或后景；横刀先在姜手中，P014后飞落远处泥地，P022被重新拾起。；光位/光色:夕阳从画左后低位照入，冷灰天光压住整体；暗红轮廓光用于倒地静止冲击，百妖谱金光仅在系统与收录节点加强。；轴线/视线:延续姜月初画左、裴长青居中、虎山神画右的基本轴线；交锋格沿姜左向右冲、虎右向左拍的方向，不无理由跳轴。；常驻物件:已登记道具参考；枯草；被破布覆盖的静止无面剪影；巨岩；黑色妖墨；承接上一格:P025；视线目标:前方倒地的裴长青；视线方向:画左下。 参考保持：按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣；逐角色本格状态：姜月初：form=基础形态(囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化)；不得:不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情…。 线稿、黑场、网点与效果：墨线:stable contour lineart with modest line-weight variation and clean readable anatomy；黑场:use small black accents for depth and material separation; keep safe text areas low detail；网点/灰阶:风格驱动: keep a grayscale/value hierarchy under color; focal subject high contrast, background lower contrast…。 文字处理：不生成可读文字、气泡、文字框、字幕、Logo 或水印。 人体与道具：叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然。 避免：文字、气泡、UI、Logo 或水印、额外或畸形手指、手脚混淆、脸、发际线、眼型、发型或服装漂移、场景布局、光位或常驻道具漂移、角色无故直视读者镜头、内部多面板、截图边或拼贴边框、低清晰度、Q版化或任何写实伤害细节。",
       "negative_prompt": "",
-      "source_contract_sha256": "954660258e59f26f41194b344542621f8a6d68a5e10c7739f18a41780b259483",
+      "source_contract_sha256": "59a4b65fba378f038d08e1454ed5820d20b90daacf023a1d0b9ef5a47c763680",
       "submit_prompt_sha256": "d2a7a6902179295f3115b8269c1e3c5b8ec009680c850445a956502ce7299954",
       "submit_prompt_chars": 1226,
-      "execution_input_sha256": "be1fcb8b387dd227c9480bb6304bd0cf4940dba487778bd1f06e431d79c15847",
+      "execution_input_sha256": "cb6ab9c73202da4faf780d8737ad34b4c412ac10cd65188d05ef87437eab2f81",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "230b7c4417459c1dabf763e7c871373fabd68e4aff4391cd6300dd4b990e87e9"
+          "panel_plan_sha256": "886627bfd61fd0e2c614c945b2b01ca68c80d0947e2656a3b0546fd24a99f450"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -7797,10 +7831,10 @@
         },
         {
           "id": "CHAR_JIANG_YUECHU",
-          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
-          "view": "three_quarter",
-          "role": "three_quarter",
-          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+          "view": "back",
+          "role": "back",
+          "sha256": "f8a76b244e408caeb8a6225ef4cbfd1ee8c9aff854deffc0140da894a6645ebe",
           "contract_id": "",
           "required": false
         },
@@ -7854,13 +7888,13 @@
       "source_contract_sha256": "5e2ee5aa01f13e8163c5849fa17e265d65695f89e946d08ad50f050e5685d97c",
       "submit_prompt_sha256": "5df0bea72f578dc2a17b615261bd0525a20c66e511aeb7c4417167ebd07a65e6",
       "submit_prompt_chars": 1278,
-      "execution_input_sha256": "ec7e1a309c1c167b07fa6be1fb0a31b250d2a772ef14874bb546406fd546100e",
+      "execution_input_sha256": "0a39b922647671c3e29139df7d1db7aa4eb91247556d7cf4605dea40b7bc86d3",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "01610917efaa74bc174b72331318189e64a52bd9d05192965e7b6f359410da2b"
+          "panel_plan_sha256": "63e59bc8f01e8a55ca8321d4f945c660d8f1c8897850f106d01218916e2cd7b7"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -8169,7 +8203,7 @@
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
           "panel_plan_sha256": "4f24044d07ef225b9fb92ebbbe20581802cb456fa96ef481f0dcfd71c382e4a9"
         },
@@ -8467,13 +8501,13 @@
       "source_contract_sha256": "7b514620d64f382bb85ac7032bcec2df6c86de48c252d2847bb1c6e8b483d4ad",
       "submit_prompt_sha256": "95635789027e2cd9f1ddc4ed1b24363aee843a6baaad7798692834fa04a28426",
       "submit_prompt_chars": 1235,
-      "execution_input_sha256": "d5a66043d6b5d81cfa26a2d713c23640582e7cfe711a7109f118050f2067e438",
+      "execution_input_sha256": "20ffa5721dd63f5e2213ffd4c706e3e1200a244fe698477ba4bd9aa75828448a",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "972c0ae80ff3bc6a850b5dfb3b4c24f482d4c81734357242cfff2c6f535e64ed"
+          "panel_plan_sha256": "8bbceedeac0e99cfd4febc9675b900da603b92f5fbc27ba13b0eed0af78d9b26"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",
@@ -8778,13 +8812,13 @@
       "source_contract_sha256": "8d5c32684dd9f78a7fb2065d39ea6935bb1dda632f2836af793539ab5b161b16",
       "submit_prompt_sha256": "87b1a631390a70f223b6a419dbf24201540a24d0cca6e9461064e2a82499159c",
       "submit_prompt_chars": 1329,
-      "execution_input_sha256": "7577ebff945d7f6a164632917ecf253ce834b5e88e29c6beb77582a066e2c527",
+      "execution_input_sha256": "610595c033385496a1dac025e57f89d1401eaba2cef33479f3871e770cd27756",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
-          "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3",
+          "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d",
           "inputs_fingerprint": "b59132e84d132f01fc3319816aeb90dcc88bcce282de69f354eb4206850e1076",
-          "panel_plan_sha256": "f17e9f1850c0634480b047a1cb847ad7327601074a8ac887f66e2c5b140fc13a"
+          "panel_plan_sha256": "2aad21bc471ac166305544816c7655e152e3f1ba37f56f71a42a5996a258f0f8"
         },
         "identity_registry": {
           "path": "出图/共享/identity_registry.json",

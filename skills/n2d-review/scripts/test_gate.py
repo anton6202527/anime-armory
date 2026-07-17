@@ -4998,6 +4998,69 @@ def test_image_ai_backend_mixing_across_latest_assets_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "混用" in f["msg"] for f in gate.findings)
 
 
+def _write_disaster_failover(root: Path) -> None:
+    compliance = root / "合规"
+    compliance.mkdir(parents=True, exist_ok=True)
+    (compliance / "image_backend_override.json").write_text(json.dumps({
+        "approved": True,
+        "scope": "image",
+        "backend": "dreamina_official",
+        "failover_policy": {
+            "direction": "codex_to_dreamina_once",
+            "no_backend_bounce": True,
+            "trigger": ["one_codex_runner_exhausts_its_bounded_retries_on_timeout_or_network_or_http_5xx"],
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    event = {
+        "kind": "n2d_production_event",
+        "episode": "第1集",
+        "stage": "image",
+        "event": "manual",
+        "generation": {"status": "fail", "provider": "Codex"},
+        "meta": {
+            "handoff_from": "Codex",
+            "handoff_to": "Dreamina",
+            "trigger": "bounded_retries_exhausted",
+            "no_backend_bounce": "true",
+        },
+    }
+    with (prod / "production_events.jsonl").open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(event, ensure_ascii=False) + "\n")
+
+
+def test_signed_one_way_disaster_failover_keeps_accepted_codex_assets_without_mixing_block(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Codex")
+    _write_disaster_failover(root)
+    _append_image_event(root, "出图/第1集/图片/Clip_02.png", "Dreamina")
+    _write_image_baseline(root, access="Dreamina", model="Seedream 5.0")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] in {"生图AI一致性", "生图后端基线"} for f in gate.findings)
+    assert any(f["sev"] == gate.INFO and "灾备切换" in f["msg"] for f in gate.findings)
+
+
+def test_signed_disaster_failover_blocks_successful_bounce_back_to_codex(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Codex")
+    _write_disaster_failover(root)
+    _append_image_event(root, "出图/第1集/图片/Clip_02.png", "Dreamina")
+    _append_image_event(root, "出图/第1集/图片/Clip_03.png", "Codex")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "混用" in f["msg"] for f in gate.findings)
+
+
 def _write_lora_scope(root: Path, clips=("Clip_03",)) -> None:
     prod = root / "生产数据"
     prod.mkdir(parents=True, exist_ok=True)

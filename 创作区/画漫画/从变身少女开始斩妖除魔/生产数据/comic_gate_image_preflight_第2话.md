@@ -1,8 +1,8 @@
 # 漫画 Gate — image_preflight — 第2话
 
-- 生成时间：2026-07-17T19:33:43
+- 生成时间：2026-07-17T19:38:38
 - 结论：warn
-- block/warn/info：0 / 32 / 2
+- block/warn/info：0 / 27 / 2
 
 ## 记录
 
@@ -20,7 +20,7 @@
 - reentry_context_audit: must=0 warn=0（advisory·不阻断）
 - redundancy_audit: must=0 warn=4（advisory·不阻断）
 - subtext_audit: must=0 warn=0（advisory·不阻断）
-- reference_planner: 含角色格 30 需处理 23；处方 SHA 已校验
+- reference_planner: 含角色格 30 需处理 22；处方 SHA 已校验
 
 ## Findings
 
@@ -36,27 +36,22 @@
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P002 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P005 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P005 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | strong_emotion_expression_reference_missing | 生产数据/comic_reference_plan_第2话.json | P006·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P006 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P008 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | strong_emotion_expression_reference_missing | 生产数据/comic_reference_plan_第2话.json | P010·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P010 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P011 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P012 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P013 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
+| warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
+| warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P015 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P016 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P020 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | strong_emotion_expression_reference_missing | 生产数据/comic_reference_plan_第2话.json | P022·姜月初：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P023 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P024 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P024 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | same_frame_color_collision | 生产数据/comic_reference_plan_第2话.json | P025 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P025 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P026·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
-| warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P026·裴长青：缺 侧脸参考（极端角度/转头/过肩格） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P026·裴长青：缺 背身参考（背影/过肩格） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | multi_character_closeup | 生产数据/comic_reference_plan_第2话.json | P028 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。 | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |
 | warn | missing_reference | 生产数据/comic_reference_plan_第2话.json | P030·裴长青：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够） | identity | 按处方补该角色缺的视图/表情/服装参考并重建出图包。 |

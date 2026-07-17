@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第2话",
-  "generated_at": "2026-07-17T11:26:05+00:00",
+  "generated_at": "2026-07-17T11:38:18+00:00",
   "inputs": {
     "files": [
       {
@@ -63,10 +63,10 @@
   "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
   "summary": {
     "panels_with_characters": 30,
-    "panels_needing_action": 23,
+    "panels_needing_action": 22,
     "panels_blocked": 0,
     "block": 0,
-    "warn": 28,
+    "warn": 23,
     "info": 0
   },
   "panel_plans": [
@@ -556,7 +556,8 @@
             "state_id": "STATE_DREAD"
           },
           "variation_delta": [
-            "closeup"
+            "closeup",
+            "strong_emotion"
           ],
           "recommended_references": [
             {
@@ -652,7 +653,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "7ef69c709b0b8ac834b9c1d033afad3c649acb71c12d74824454acfc39e7946a"
+      "panel_plan_sha256": "755db8fce883c7ca67ed8761e1af0c89fa5d1b6cdcd437fcb9c2a1b1d3c6f8bb"
     },
     {
       "panel_id": "P004",
@@ -685,6 +686,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -732,6 +734,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -879,7 +882,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "486064051bf97d9df570527dfeaf8ce040e348aec12e6f29e15d9e32d9b5886b"
+      "panel_plan_sha256": "4af578d3b5aefcaf6de61fc71d452425ed786ab66f87326d257bfd82e3d8b69d"
     },
     {
       "panel_id": "P005",
@@ -964,6 +967,7 @@
           },
           "variation_delta": [
             "closeup",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1009,6 +1013,7 @@
           },
           "variation_delta": [
             "closeup",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1180,7 +1185,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "d392d2b35f72f70aba0cba1065870e19e653cdeda9b9d24f0739af0f2362901e"
+      "panel_plan_sha256": "19d06aa40f7b5a96b107476fcd46e4b3c78c10f18ebc314ead6f29088f37d1be"
     },
     {
       "panel_id": "P006",
@@ -1257,7 +1262,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1284,14 +1288,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -1407,7 +1409,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "cfbf38a241cbcd32e117d296562c7c76d9648e2053eb2421ab71729f66b68584"
+      "panel_plan_sha256": "9f5529ac0735ea475d0d52a72cf4ac79ad0d55bb0a739d5263076aa222604aa0"
     },
     {
       "panel_id": "P007",
@@ -1440,6 +1442,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1487,6 +1490,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1641,7 +1645,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "44d1f2cda09c9d0efc5dc8ca7e87ab3a0e44e343735d1f09d52960f2d3725bbd"
+      "panel_plan_sha256": "5014601f05eec201c39e8fba1630ca6eb47d48a60e2c559abc5d9362f4784e4f"
     },
     {
       "panel_id": "P008",
@@ -1674,6 +1678,7 @@
           },
           "variation_delta": [
             "wide_full_body",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1873,7 +1878,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "48fdd5c9b6c1ffb9d79c1468811d8696942a3aed83232d42d8ac5f243c7c70a8"
+      "panel_plan_sha256": "d9d8b99e94803de080d3e503dbaa42af6804697ba43c33fd07b6f7cae14bec37"
     },
     {
       "panel_id": "P009",
@@ -1897,7 +1902,9 @@
             "expression_id": "EXPR_DREAD",
             "state_id": "STATE_DREAD"
           },
-          "variation_delta": [],
+          "variation_delta": [
+            "strong_emotion"
+          ],
           "recommended_references": [
             {
               "role": "front",
@@ -1992,7 +1999,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "2a4d74453428412601b5a075af534056cb3a3772b4656ebb7f99ce1096ec7a93"
+      "panel_plan_sha256": "291e52f5591821ca9aebacc185fa2af9e881f6241d5f674bb08a70d77da6d0c7"
     },
     {
       "panel_id": "P010",
@@ -2024,7 +2031,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "action_eyeline_lock",
             "multi_character"
           ],
@@ -2052,16 +2058,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_JIANG_YUECHU",
@@ -2225,7 +2229,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "e57f7776e6a88ea6108afc0c8833428c0a3dab84d937b63990c8a0b4e98cfe9a"
+      "panel_plan_sha256": "efe2f681fb743514b9e7c7771d6fe7211ab20b1645ee1e6c39c247f55d518eb4"
     },
     {
       "panel_id": "P011",
@@ -2305,6 +2309,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -2461,7 +2466,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4cd4fb3d2f3873f9ac83f4e7b09e9fd295b6cd1976c611a4b9c64c57954f127c"
+      "panel_plan_sha256": "9ff07bc83d74a89240979aac392626866d11e7911614ba0f43ce7328239c772f"
     },
     {
       "panel_id": "P012",
@@ -2494,6 +2499,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -2697,7 +2703,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "9a81677ba13c8a5cb02a669d547c6dd459a2ca6e5bf6f58b700b50154b95f303"
+      "panel_plan_sha256": "256e45186555e3bd6c1c0c5895d1acbd353f4f3ab7a47b01a25cbe522a367f9a"
     },
     {
       "panel_id": "P013",
@@ -2730,6 +2736,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -2933,7 +2940,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "029d8427accdf220a684fd7484a144371f540ffa3106ce75aa213365bf5c2f5a"
+      "panel_plan_sha256": "0caf17ec252addc690c72ce0f2e354ad2a0429a4ac886876ec57c2da2d929fc7"
     },
     {
       "panel_id": "P014",
@@ -2957,7 +2964,9 @@
             "expression_id": "EXPR_DREAD",
             "state_id": "STATE_DREAD"
           },
-          "variation_delta": [],
+          "variation_delta": [
+            "strong_emotion"
+          ],
           "recommended_references": [
             {
               "role": "front",
@@ -3052,7 +3061,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "198558df2dd5b42a89bbfa07987be88ef1091e5cce14eef21c0d58bf820067f9"
+      "panel_plan_sha256": "5a53a90086eb2fb47d89ea0ef728068090cbf5ee086f487e7f804e61ef13f458"
     },
     {
       "panel_id": "P015",
@@ -3113,18 +3122,18 @@
           },
           "dropped_references": [
             {
-              "role": "side",
-              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
-              "strength_hint": 0.55
-            },
-            {
               "role": "back",
               "path": "出图/共享/图片/MON_TIGER_SHANSHEN__back.png",
               "strength_hint": 0.5
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+              "strength_hint": 0.55
             }
           ],
           "missing_references": [
-            "参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
+            "参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -3147,6 +3156,7 @@
           "variation_delta": [
             "back_or_over_shoulder",
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -3174,18 +3184,18 @@
           },
           "dropped_references": [
             {
-              "role": "side",
-              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
-              "strength_hint": 0.55
-            },
-            {
               "role": "back",
               "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
               "strength_hint": 0.5
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+              "strength_hint": 0.55
             }
           ],
           "missing_references": [
-            "参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
+            "参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -3309,7 +3319,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "ef32f9a1cc98fa01bc55a21e50662690d4d27253f6667722336741281b1a5007"
+      "panel_plan_sha256": "4a9297bfe161f058592e16cecbbc9a91d17152839b0d526b6a5e16c0127a5f14"
     },
     {
       "panel_id": "P016",
@@ -3385,6 +3395,7 @@
             "state_id": "STATE_DREAD"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -3532,7 +3543,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "358d8a39eb725b0b47cee60fab2c3c3b1d2e03b22b386c8fde4ed9a7a9b5f31b"
+      "panel_plan_sha256": "d158af8b487d419dd9c5a4814d5b02e3d06d592a3f543cd4ae7f4dca445c70f1"
     },
     {
       "panel_id": "P017",
@@ -3557,7 +3568,8 @@
             "state_id": "STATE_DREAD"
           },
           "variation_delta": [
-            "extreme_angle"
+            "extreme_angle",
+            "strong_emotion"
           ],
           "recommended_references": [
             {
@@ -3571,14 +3583,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "side",
               "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -3635,15 +3647,6 @@
             "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_JIANG_YUECHU",
-            "character_id": "CHAR_JIANG_YUECHU",
-            "required": false,
-            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
-          },
-          {
             "role": "side",
             "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
             "strength_hint": 0.55,
@@ -3651,6 +3654,15 @@
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
             "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_JIANG_YUECHU",
+            "character_id": "CHAR_JIANG_YUECHU",
+            "required": false,
+            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
           }
         ],
         "missing_required": [],
@@ -3660,7 +3672,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "290285cdea1d858e6897cae4aaf85cdc18b124e856d47c2d98bfe5aa94766109"
+      "panel_plan_sha256": "76d0e9a7f59f53871932b139c398ed26bfd905e56e4adac6c8553e2a97d86c67"
     },
     {
       "panel_id": "P018",
@@ -3685,7 +3697,8 @@
             "state_id": "STATE_DREAD"
           },
           "variation_delta": [
-            "closeup"
+            "closeup",
+            "strong_emotion"
           ],
           "recommended_references": [
             {
@@ -3774,7 +3787,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "5e7522d71737a6b7745c66d33873bec2a9d80eed06990872005e8aa77a5f1c83"
+      "panel_plan_sha256": "9d9a30d0f3d400dcc42339fc3c7b350769b0f20442fc86a65fbf0745ba4c7759"
     },
     {
       "panel_id": "P019",
@@ -3964,6 +3977,7 @@
             "state_id": "STATE_DREAD"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -4111,7 +4125,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "a46ff46366ebccf973dfbcbab0c277ca8c7be49656aba4362c4e8d87c6298cde"
+      "panel_plan_sha256": "238547c7573992bca97898a332e20ec165e885d1fad90fc2fea245f4700da080"
     },
     {
       "panel_id": "P021",
@@ -4258,9 +4272,7 @@
             "expression_id": "EXPR_NEUTRAL",
             "state_id": "STATE_BASE"
           },
-          "variation_delta": [
-            "strong_emotion"
-          ],
+          "variation_delta": [],
           "recommended_references": [
             {
               "role": "front",
@@ -4285,14 +4297,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
@@ -4356,8 +4366,8 @@
       },
       "blocked": false,
       "blocking_codes": [],
-      "needs_action": true,
-      "panel_plan_sha256": "61af737986c99d8432b70887e3a8e10503279526c36e5a487bf059f44b9ede02"
+      "needs_action": false,
+      "panel_plan_sha256": "047517d4469d8f5cc4dc213d7eefb55d3919939e1cbff43d13b18f433d6af011"
     },
     {
       "panel_id": "P023",
@@ -5090,9 +5100,9 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
-              "strength_hint": 0.65
+              "role": "back",
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+              "strength_hint": 0.5
             }
           ],
           "reference_budget": {
@@ -5108,19 +5118,17 @@
               "strength_hint": 0.55
             },
             {
-              "role": "back",
-              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
-              "strength_hint": 0.5
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
-          "missing_references": [
-            "参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_PEI_CHANGQING",
@@ -5134,6 +5142,7 @@
           },
           "variation_delta": [
             "back_or_over_shoulder",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5161,7 +5170,6 @@
           },
           "dropped_references": [],
           "missing_references": [
-            "侧脸参考（极端角度/转头/过肩格）",
             "背身参考（背影/过肩格）"
           ],
           "memory_anchor_reinjected": false,
@@ -5264,13 +5272,13 @@
             "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "back",
+            "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+            "strength_hint": 0.5,
             "id": "CHAR_JIANG_YUECHU",
             "character_id": "CHAR_JIANG_YUECHU",
             "required": false,
-            "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e"
+            "sha256": "f8a76b244e408caeb8a6225ef4cbfd1ee8c9aff854deffc0140da894a6645ebe"
           },
           {
             "role": "three_quarter",
@@ -5289,7 +5297,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "230b7c4417459c1dabf763e7c871373fabd68e4aff4391cd6300dd4b990e87e9"
+      "panel_plan_sha256": "886627bfd61fd0e2c614c945b2b01ca68c80d0947e2656a3b0546fd24a99f450"
     },
     {
       "panel_id": "P027",
@@ -5322,6 +5330,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5369,6 +5378,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5523,7 +5533,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "01610917efaa74bc174b72331318189e64a52bd9d05192965e7b6f359410da2b"
+      "panel_plan_sha256": "63e59bc8f01e8a55ca8321d4f945c660d8f1c8897850f106d01218916e2cd7b7"
     },
     {
       "panel_id": "P028",
@@ -5780,6 +5790,7 @@
             "state_id": "STATE_DREAD"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5824,6 +5835,7 @@
             "state_id": "STATE_PAIN"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5976,7 +5988,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "972c0ae80ff3bc6a850b5dfb3b4c24f482d4c81734357242cfff2c6f535e64ed"
+      "panel_plan_sha256": "8bbceedeac0e99cfd4febc9675b900da603b92f5fbc27ba13b0eed0af78d9b26"
     },
     {
       "panel_id": "P030",
@@ -6054,6 +6066,7 @@
           },
           "variation_delta": [
             "wide_full_body",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -6208,7 +6221,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "f17e9f1850c0634480b047a1cb847ad7327601074a8ac887f66e2c5b140fc13a"
+      "panel_plan_sha256": "2aad21bc471ac166305544816c7655e152e3f1ba37f56f71a42a5996a258f0f8"
     }
   ],
   "findings": [
@@ -6238,14 +6251,6 @@
     },
     {
       "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P006",
-      "character_id": "MON_TIGER_SHANSHEN",
-      "message": "P006·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P006",
       "message": "P006 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
@@ -6255,14 +6260,6 @@
       "code": "same_frame_color_collision",
       "panel": "P008",
       "message": "P008 多人同框主色撞色（易串脸）：CHAR_JIANG_YUECHU↔MON_TIGER_SHANSHEN（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
-    },
-    {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P010",
-      "character_id": "MON_TIGER_SHANSHEN",
-      "message": "P010·虎山神：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
     },
     {
       "severity": "warn",
@@ -6293,14 +6290,14 @@
       "code": "missing_reference",
       "panel": "P015",
       "character_id": "MON_TIGER_SHANSHEN",
-      "message": "P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
+      "message": "P015·虎山神：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包"
     },
     {
       "severity": "warn",
       "code": "missing_reference",
       "panel": "P015",
       "character_id": "CHAR_JIANG_YUECHU",
-      "message": "P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
+      "message": "P015·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，裁掉必需 back）；拆格/升档/精选参考包"
     },
     {
       "severity": "warn",
@@ -6319,14 +6316,6 @@
       "code": "same_frame_color_collision",
       "panel": "P020",
       "message": "P020 多人同框主色撞色（易串脸）：MON_TIGER_SHANSHEN↔CHAR_JIANG_YUECHU（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
-    },
-    {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P022",
-      "character_id": "CHAR_JIANG_YUECHU",
-      "message": "P022·姜月初：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
     },
     {
       "severity": "warn",
@@ -6362,20 +6351,6 @@
       "severity": "warn",
       "code": "missing_reference",
       "panel": "P026",
-      "character_id": "CHAR_JIANG_YUECHU",
-      "message": "P026·姜月初：缺 参考预算溢出（后端 multi_character_reference_limit=3 张，已丢 side、back）；拆格/升档/精选参考包"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P026",
-      "character_id": "CHAR_PEI_CHANGQING",
-      "message": "P026·裴长青：缺 侧脸参考（极端角度/转头/过肩格）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P026",
       "character_id": "CHAR_PEI_CHANGQING",
       "message": "P026·裴长青：缺 背身参考（背影/过肩格）"
     },
@@ -6394,5 +6369,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "5c1fd7778a2c9f0fbaebdb7c31e6c5e4e0f415e500f736dc80ef369b372f51a3"
+  "plan_sha256": "c4eaccd9413d0227c1be0618a98c87e9e7377ee008fd3f79ca5de12f317cc73d"
 }
