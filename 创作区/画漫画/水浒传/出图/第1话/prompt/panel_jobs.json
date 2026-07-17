@@ -6176,7 +6176,7 @@
     },
     {
       "panel_id": "P020",
-      "status": "failed",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 956
@@ -6538,7 +6538,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P020",
-        "created_at": "2026-07-16T19:54:53",
+        "created_at": "2026-07-17T08:37:54",
         "verdict": "pass",
         "path": "出图/第1话/panels/P020.png",
         "size": {
@@ -6557,11 +6557,11 @@
         "issues": [],
         "manual_review_required": false
       },
-      "error": "dreamina image2image exit 1: do request: Post \"https://jimeng.jianying.com/mweb/v1/get_history_by_ids?agent_detect=agent%3Acodex&aid=513695&cli_version=c58a6a2-dirty&from=dreamina_cli\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)\n"
+      "rechecked_at": "2026-07-17T08:37:54"
     },
     {
       "panel_id": "P021",
-      "status": "failed",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -6884,7 +6884,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P021",
-        "created_at": "2026-07-16T19:56:05",
+        "created_at": "2026-07-17T08:37:54",
         "verdict": "pass",
         "path": "出图/第1话/panels/P021.png",
         "size": {
@@ -6903,7 +6903,7 @@
         "issues": [],
         "manual_review_required": false
       },
-      "error": "dreamina image2image exit 1: do request: Post \"https://jimeng.jianying.com/mweb/v1/get_history_by_ids?agent_detect=agent%3Acodex&aid=513695&cli_version=c58a6a2-dirty&from=dreamina_cli\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)\n"
+      "rechecked_at": "2026-07-17T08:37:54"
     },
     {
       "panel_id": "P022",
@@ -7198,19 +7198,19 @@
       "result_path": "出图/第1话/panels/P022.png",
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
-      "generated_at": "2026-07-16T19:57:32",
+      "generated_at": "2026-07-16T23:48:17",
       "backend_version": "{",
-      "artifact_sha256": "a1c0a0550d02cf01d95bbd651fb0cdec4b1827eda6c252e85ece627f9356ca0d",
+      "artifact_sha256": "ba7b091b5d0efbc29338f67cb973bc5a9316095d3c40479bda164a6474bdb831",
       "attempt": 1,
-      "submit_id": "b538a7e5-e180-4abe-b442-6bc37af4dbf1",
+      "submit_id": "a5577458-5173-4260-bf13-bac6bb44111b",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 8,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P022.json",
       "prompt_snapshot": "出图/第1话/prompt/dreamina/P022.txt",
-      "prompt_snapshot_sha256": "447148b6637a77858c586730a45ac482381ee10710f6c73351ecb4d2342293c2",
-      "raw_candidate_path": "出图/第1话/candidates/P022/20260716T195605_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "48fca71b5d61ea5695cc5bd83100190631695abe11af9b3b2f8dd17160413dcd",
+      "raw_candidate_path": "出图/第1话/candidates/P022/20260716T233206_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -7230,7 +7230,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P022",
-        "created_at": "2026-07-16T19:57:32",
+        "created_at": "2026-07-16T23:48:17",
         "verdict": "pass",
         "path": "出图/第1话/panels/P022.png",
         "size": {
@@ -7248,7 +7248,13 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第1话/candidates/P022/P022_20260716_233206_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P023",
@@ -7566,7 +7572,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P023",
-        "created_at": "2026-07-16T19:58:42",
+        "created_at": "2026-07-17T08:37:55",
         "verdict": "pass",
         "path": "出图/第1话/panels/P023.png",
         "size": {
@@ -7584,7 +7590,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "rechecked_at": "2026-07-17T08:37:55"
     },
     {
       "panel_id": "P024",
@@ -7959,7 +7966,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P024",
-        "created_at": "2026-07-16T20:00:13",
+        "created_at": "2026-07-17T08:37:55",
         "verdict": "pass",
         "path": "出图/第1话/panels/P024.png",
         "size": {
@@ -7977,7 +7984,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "rechecked_at": "2026-07-17T08:37:55"
     },
     {
       "panel_id": "P025",
@@ -8352,7 +8360,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P025",
-        "created_at": "2026-07-16T20:01:33",
+        "created_at": "2026-07-17T08:37:55",
         "verdict": "pass",
         "path": "出图/第1话/panels/P025.png",
         "size": {
@@ -8370,7 +8378,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "rechecked_at": "2026-07-17T08:37:55"
     },
     {
       "panel_id": "P026",
@@ -8745,7 +8754,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P026",
-        "created_at": "2026-07-16T20:03:02",
+        "created_at": "2026-07-17T08:37:55",
         "verdict": "pass",
         "path": "出图/第1话/panels/P026.png",
         "size": {
@@ -8763,7 +8772,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "rechecked_at": "2026-07-17T08:37:55"
     },
     {
       "panel_id": "P027",
@@ -9081,7 +9091,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P027",
-        "created_at": "2026-07-16T20:04:18",
+        "created_at": "2026-07-17T08:37:55",
         "verdict": "pass",
         "path": "出图/第1话/panels/P027.png",
         "size": {
@@ -9099,7 +9109,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "rechecked_at": "2026-07-17T08:37:55"
     },
     {
       "panel_id": "P028",
@@ -9385,19 +9396,19 @@
       "result_path": "出图/第1话/panels/P028.png",
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
-      "generated_at": "2026-07-16T20:05:42",
+      "generated_at": "2026-07-17T06:18:40",
       "backend_version": "{",
-      "artifact_sha256": "2285f4799f34262084e2a9be2069924fdc997673f57065b1e8b2b0f9c50327c2",
+      "artifact_sha256": "d1116508b09c7d401bbe0b84c92d30830da793a6ac9a6f3c530628328595b947",
       "attempt": 1,
-      "submit_id": "c5d3a2c7-2d1c-46dd-be5c-9923420155d4",
+      "submit_id": "bd431582-21e3-4cbd-8afe-fe5609ab6ca6",
       "service_ratio": "3:2",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 8,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P028.json",
       "prompt_snapshot": "出图/第1话/prompt/dreamina/P028.txt",
-      "prompt_snapshot_sha256": "6a4ac85af42ddd519e16774fdb3aec5909d9f0f0ae0256a21d4264bfa51e6592",
-      "raw_candidate_path": "出图/第1话/candidates/P028/20260716T200418_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "3b9e19f29bba98dd60ecde1072c42c2ec20e912272cdd57597a6a2dc8833f9a4",
+      "raw_candidate_path": "出图/第1话/candidates/P028/20260717T060204_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -9417,7 +9428,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P028",
-        "created_at": "2026-07-16T20:05:42",
+        "created_at": "2026-07-17T06:18:40",
         "verdict": "pass",
         "path": "出图/第1话/panels/P028.png",
         "size": {
@@ -9435,7 +9446,13 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第1话/candidates/P028/P028_20260717_060204_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P029",
@@ -10123,19 +10140,19 @@
       "result_path": "出图/第1话/panels/P030.png",
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
-      "generated_at": "2026-07-16T20:08:42",
+      "generated_at": "2026-07-17T09:12:30",
       "backend_version": "{",
-      "artifact_sha256": "dd4da6140a09b190f3a249d6466cf375c0914230f40990e78fb58e6926ebd5d4",
+      "artifact_sha256": "8e6e6914adde0a9938caa05a3e37b811df3ef6343d7b6e5bfe02e26de2f922a4",
       "attempt": 1,
-      "submit_id": "d5d1f844-3dfe-40d9-a5f2-e93cc7c03ac0",
+      "submit_id": "5ff90ce7-ace8-4259-9fb0-488ac36c17ff",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P030.json",
       "prompt_snapshot": "出图/第1话/prompt/dreamina/P030.txt",
-      "prompt_snapshot_sha256": "0224346bde3f5648f629d84479ff6ff02c9b89fdaf851fe9728da694c32428cf",
-      "raw_candidate_path": "出图/第1话/candidates/P030/20260716T200713_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "dfe3ee3fce235f5c1dcb393873c5e384c968760d3b33047813efffc1bd80f849",
+      "raw_candidate_path": "出图/第1话/candidates/P030/20260717T085420_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -10155,7 +10172,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P030",
-        "created_at": "2026-07-16T20:08:42",
+        "created_at": "2026-07-17T09:12:30",
         "verdict": "pass",
         "path": "出图/第1话/panels/P030.png",
         "size": {
@@ -10173,7 +10190,13 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第1话/candidates/P030/P030_20260717_085420_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P031",
@@ -10516,19 +10539,19 @@
       "result_path": "出图/第1话/panels/P031.png",
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
-      "generated_at": "2026-07-16T20:10:08",
+      "generated_at": "2026-07-17T09:29:57",
       "backend_version": "{",
-      "artifact_sha256": "b7138133aa7f8c2c7842e1fe1d8e24b08eda0cb46f6bae5d205b12f572f84ed6",
+      "artifact_sha256": "46a1e0d103e907cdd9fc41b15ed185b650cf1abba36c5fb3554dfc6f42b6b38d",
       "attempt": 1,
-      "submit_id": "034b2455-7bc4-4baa-867f-f096c8ce845c",
+      "submit_id": "a7ac2b8e-ff4b-4b7c-acee-8340f7346ebc",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P031.json",
       "prompt_snapshot": "出图/第1话/prompt/dreamina/P031.txt",
-      "prompt_snapshot_sha256": "9e3f9d3990fed6e6dc860314f0ddf4f10d507dd301f4ba987de566a41f03c9bc",
-      "raw_candidate_path": "出图/第1话/candidates/P031/20260716T200842_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "e1a61215c24ffe06938a5b68af0d9620d777c25b69c305d17dd2cc2e94762892",
+      "raw_candidate_path": "出图/第1话/candidates/P031/20260717T091230_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -10548,7 +10571,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P031",
-        "created_at": "2026-07-16T20:10:08",
+        "created_at": "2026-07-17T09:29:57",
         "verdict": "pass",
         "path": "出图/第1话/panels/P031.png",
         "size": {
@@ -10566,11 +10589,17 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第1话/candidates/P031/P031_20260717_091230_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P032",
-      "status": "ready",
+      "status": "failed",
       "size": {
         "width": 1296,
         "height": 1040
@@ -10959,11 +10988,12 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "error": "dreamina image2image exit 1: "
     },
     {
       "panel_id": "P033",
-      "status": "ready",
+      "status": "failed",
       "size": {
         "width": 1188,
         "height": 920
@@ -11343,7 +11373,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "error": "dreamina image2image exit 1: do request: Post \"https://jimeng.jianying.com/mweb/v1/get_history_by_ids?agent_detect=agent%3Acodex&aid=513695&cli_version=c58a6a2-dirty&from=dreamina_cli\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)\n"
     },
     {
       "panel_id": "P034",
@@ -11686,19 +11717,19 @@
       "result_path": "出图/第1话/panels/P034.png",
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
-      "generated_at": "2026-07-16T20:14:08",
+      "generated_at": "2026-07-17T09:39:59",
       "backend_version": "{",
-      "artifact_sha256": "7772d86118d9f7d23c4f7e3d962b20ed3090801dc474681d7e3c3bcfa973a1f0",
+      "artifact_sha256": "5c7f4c7f6401547c3a6703323c70ad077b21ca83e8ce63daf2650077bffb538a",
       "attempt": 1,
-      "submit_id": "514ac9b3-8816-4700-8d94-849438484f54",
+      "submit_id": "ffee4dfe-9b28-4ac9-8d5b-4fb557b5c5b0",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 10,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P034.json",
       "prompt_snapshot": "出图/第1话/prompt/dreamina/P034.txt",
-      "prompt_snapshot_sha256": "45496b7379c293f909dc88ca491079aa02a7f6a427349578fceda6d4449a598f",
-      "raw_candidate_path": "出图/第1话/candidates/P034/20260716T201246_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "d09db966a80bdfa7fc8760621c70ca9d74d892ca8628c317add2d49aae191c86",
+      "raw_candidate_path": "出图/第1话/candidates/P034/20260717T093824_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -11718,7 +11749,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第1话",
         "panel_id": "P034",
-        "created_at": "2026-07-16T20:14:08",
+        "created_at": "2026-07-17T09:39:59",
         "verdict": "pass",
         "path": "出图/第1话/panels/P034.png",
         "size": {
@@ -11736,11 +11767,17 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第1话/candidates/P034/P034_20260717_093824_previous.png"
+        }
+      ]
     },
     {
       "panel_id": "P035",
-      "status": "ready",
+      "status": "failed",
       "size": {
         "width": 1296,
         "height": 1040
@@ -12120,11 +12157,12 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "error": "dreamina image2image exit 1: do request: Get \"https://jimeng.jianying.com/dreamina/cli/v1/dreamina_cli_user_info\": dial tcp 198.18.1.6:443: connect: operation timed out\n"
     },
     {
       "panel_id": "P036",
-      "status": "ready",
+      "status": "failed",
       "size": {
         "width": 1188,
         "height": 1040
@@ -12504,7 +12542,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "error": "dreamina result not ready within 240s: do request: Post \"https://jimeng.jianying.com/mweb/v1/get_history_by_ids?agent_detect=agent%3Acodex&aid=513695&cli_version=c58a6a2-dirty&from=dreamina_cli\": dial tcp 198.18.1.6:443: connect: operation timed out\n"
     },
     {
       "panel_id": "P037",

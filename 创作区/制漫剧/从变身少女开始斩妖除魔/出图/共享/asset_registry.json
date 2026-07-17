@@ -528,7 +528,20 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_断刀.png",
-          "status": "ready"
+          "status": "ready",
+          "derivation": {
+            "method": "dreamina_seedream5_regeneration_from_corrected_weapon_topology",
+            "provider": "Dreamina/即梦官方 CLI",
+            "model": "Seedream 5.0",
+            "submit_id": "4a0150ac-6d22-4b33-a9d9-c3aa0545a933",
+            "source_path": "出图/共享/图片/定妆_武器_横刀.png",
+            "review_focus": [
+              "single_cutting_edge",
+              "continuous_thick_spine",
+              "jagged_break_terminates",
+              "no_continuation_after_break"
+            ]
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_断刀_比例.png",
@@ -550,7 +563,20 @@
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_断刀.png",
           "status": "ready",
-          "sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff"
+          "sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff",
+          "derivation": {
+            "method": "dreamina_seedream5_regeneration_from_corrected_weapon_topology",
+            "provider": "Dreamina/即梦官方 CLI",
+            "model": "Seedream 5.0",
+            "submit_id": "4a0150ac-6d22-4b33-a9d9-c3aa0545a933",
+            "source_path": "出图/共享/图片/定妆_武器_横刀.png",
+            "review_focus": [
+              "single_cutting_edge",
+              "continuous_thick_spine",
+              "jagged_break_terminates",
+              "no_continuation_after_break"
+            ]
+          }
         }
       ],
       "constraints": {
@@ -636,7 +662,23 @@
         "checker": "face_consistency.verify_faceless",
         "records": [
           {
-            "png": "出图/共享/图片/定妆_道具_断刀.png",
+            "png": {
+              "path": "出图/共享/图片/定妆_道具_断刀.png",
+              "status": "ready",
+              "derivation": {
+                "method": "dreamina_seedream5_regeneration_from_corrected_weapon_topology",
+                "provider": "Dreamina/即梦官方 CLI",
+                "model": "Seedream 5.0",
+                "submit_id": "4a0150ac-6d22-4b33-a9d9-c3aa0545a933",
+                "source_path": "出图/共享/图片/定妆_武器_横刀.png",
+                "review_focus": [
+                  "single_cutting_edge",
+                  "continuous_thick_spine",
+                  "jagged_break_terminates",
+                  "no_continuation_after_break"
+                ]
+              }
+            },
             "png_sha256": "bc9576148c174b921458db3d9894a353e55c65b24de71d232bbed380b72139ff",
             "verdict": "ok",
             "clear_faces": 0,

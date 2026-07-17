@@ -227,6 +227,7 @@ def load_asset_index(root: Path) -> Optional[Dict[str, Any]]:
             "reference_group": a.get("reference_group") if isinstance(a.get("reference_group"), Mapping) else {},
             "scale": str((a.get("constraints") or {}).get("scale") if isinstance(a.get("constraints"), Mapping) else a.get("scale") or "").strip(),
             "must_not_have": _asset_must_not_have_terms(a),
+            "shape_contract": _asset_shape_contract_terms(a),
         }
         prefix = _asset_prefix(aid)
         if prefix:
@@ -275,6 +276,25 @@ def _asset_must_not_have_terms(asset: Mapping[str, Any]) -> List[str]:
     for term in terms:
         t = str(term).strip(" `。，；;、")
         if len(t) < 1 or t in seen:
+            continue
+        seen.add(t)
+        out.append(t)
+    return out
+
+
+def _asset_shape_contract_terms(asset: Mapping[str, Any]) -> List[str]:
+    """Required topology/structure clauses that pixel review must prove."""
+    constraints = asset.get("constraints") if isinstance(asset.get("constraints"), Mapping) else {}
+    terms: List[str] = []
+    for key in ("blade_topology", "structure", "vfx_boundary", "scale"):
+        if isinstance(constraints, Mapping):
+            terms.extend(_flatten_terms(constraints.get(key)))
+        terms.extend(_flatten_terms(asset.get(key)))
+    out: List[str] = []
+    seen: Set[str] = set()
+    for term in terms:
+        t = str(term).strip(" `。，；;、")
+        if not t or t in seen:
             continue
         seen.add(t)
         out.append(t)
@@ -3027,6 +3047,7 @@ def prop_shape_review_targets(root: Path, ep: str,
             "png_abs": str(_prop_shape_png_path(root, ep, ref)),
             "ref": ref,
             "must_not_have": must_not,
+            "shape_contract": entry.get("shape_contract") or [],
             "scale": entry.get("scale") or "",
             "confirmed": key in confirmations,
             "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
@@ -3068,6 +3089,7 @@ def prop_shape_review_targets(root: Path, ep: str,
                     "png_abs": str(root / "出图" / ep / png),
                     "ref": ref,
                     "must_not_have": must_not,
+                    "shape_contract": entry.get("shape_contract") or [],
                     "scale": entry.get("scale") or "",
                     "confirmed": confirmed,
                     "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
@@ -3215,6 +3237,7 @@ def write_prop_shape_skeleton(root: Path, ep: str, *, include_confirmed: bool = 
             "source": "image_qc:prop_shape_skeleton",
             "reason": "待人工或 VLM 确认：禁形/尺寸是否符合 asset_registry",
             "must_not_have": t.get("must_not_have") or [],
+            "shape_contract": t.get("shape_contract") or [],
             "scale": t.get("scale") or "",
             "stitch": t.get("stitch") or "",
         })
@@ -3265,6 +3288,7 @@ def confirm_prop_shape_targets(root: Path, ep: str, selector: str,
             "confirmed_at": now,
             "reason": reason or "人工确认无禁形且尺寸符合设定",
             "must_not_have": t.get("must_not_have") or [],
+            "shape_contract": t.get("shape_contract") or [],
             "scale": t.get("scale") or "",
             "stitch": t.get("stitch") or "",
         })
@@ -3276,10 +3300,14 @@ def confirm_prop_shape_targets(root: Path, ep: str, selector: str,
 def _prop_shape_vlm_prompt(target: Mapping[str, Any]) -> str:
     must_not = "、".join(str(x) for x in (target.get("must_not_have") or []) if str(x).strip())
     scale = str(target.get("scale") or "").strip()
+    shape_contract = "；".join(
+        str(x) for x in (target.get("shape_contract") or []) if str(x).strip()
+    )
     asset = str(target.get("asset_name") or target.get("asset") or "关键道具")
     return (
         f"{asset} 是关键剧情道具。请判定图中该道具是否满足设定："
         f"不得出现以下禁形：{must_not or '无'}。"
+        f"{'必须满足结构：' + shape_contract + '。' if shape_contract else ''}"
         f"{'尺寸/比例要求：' + scale + '。' if scale else ''}"
         "如果看不清该道具、存在任一禁形、或尺寸明显不符，match=false；"
         "只有清晰可见且无禁形并符合尺寸时 match=true。"

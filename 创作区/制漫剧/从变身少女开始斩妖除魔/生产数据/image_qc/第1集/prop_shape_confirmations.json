@@ -1,6 +1,165 @@
 {
   "confirmations": [
     {
+      "asset": "PROP_断刀",
+      "asset_name": "断刀",
+      "confirmed_at": "2026-07-17T00:54:08+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_断刀.png",
+      "png_sha256": "f4b13beb0be97ea09d1753f62ac0568006ddc9c6b20cc330aa6b720c57c22bd6",
+      "reason": "原像素3040x5404确认：单柄单残刀身；左侧连续厚钝刀背、右侧唯一亮锋刃；锯齿断口横跨刀宽并明确终止，下方大面积纯灰，无刀尖、续刃、碎片、第二刀、文字水印。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "weapon_count=1",
+        "single_hilt=1",
+        "broken_blade=1",
+        "cutting_edge_count=1",
+        "残存刀身保持单面刃与厚钝刀背",
+        "断口粗粝且明确终止",
+        "断口之后不得补出刀尖",
+        "完整刀身",
+        "第二把刀刃或实体光刃",
+        "jagged_break=1",
+        "仅一把断裂横刀",
+        "断口之后不得续出完整刀身或第二把刀",
+        "裴长青掷出的半截断刀",
+        "开局插在姜月初脚前",
+        "后续不得变成完整横刀",
+        "断口只允许少量冷光",
+        "血尘边缘高光",
+        "不得生长实体刀刃"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_断刀_shared_primary_定妆_道具_断刀_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_虎首",
+      "asset_name": "虎首",
+      "confirmed_at": "2026-07-17T01:40:19+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "出图/共享/图片/定妆_道具_虎首.png",
+      "png_sha256": "c2f4022b5a07b9f6ca2e1a67ea12dcfc8bd5e1a2e4951150cb2c3abcf7e60134",
+      "reason": "原像素确认：单一虎首，吊睛白额与黑色虎纹结构清晰，头部比例与CHAR_04同族；无额外身体/第二虎首/现代物件/文字水印，断面以克制黑墨遮蔽。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "由 CHAR_04 派生的结果资产",
+        "条纹",
+        "白额与头部比例必须继承本体"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_虎首_shared_primary_定妆_道具_虎首_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "VFX_百妖谱",
+      "asset_name": "百妖谱",
+      "confirmed_at": "2026-07-17T01:43:55+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "随机改色",
+        "遮挡主体脸",
+        "现代科幻UI",
+        "过度血腥猎奇"
+      ],
+      "png": "出图/共享/图片/定妆_特效_百妖谱.png",
+      "png_sha256": "0af7a1e9933799ab39aa976e21afc734cfdbe3852bf29394a4ff467083256046",
+      "reason": "原像素目视确认：单一竖向旧纸卷轴，中央为无文字留白纸面，边缘为黑墨妖影与克制朱砂/金点；未见可读文字、现代科幻UI、主体人脸或过度血腥元素。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "旧纸卷轴",
+        "黑墨边缘",
+        "朱砂染色",
+        "少量金点睛",
+        "底图无文字"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_百妖谱_shared_primary_定妆_特效_百妖谱_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "VFX_道行反噬",
+      "asset_name": "道行反噬",
+      "confirmed_at": "2026-07-17T01:44:45+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "随机改色",
+        "遮挡主体脸",
+        "现代科幻UI",
+        "过度血腥猎奇"
+      ],
+      "png": "出图/共享/图片/定妆_特效_道行反噬.png",
+      "png_sha256": "f48effd32adffdb231cdc47dde35f86a98c5fe49da64d91de5fd74339edfd232",
+      "reason": "原像素目视确认：以躯干蜷缩、腹部按压、前臂绷紧与横向震颤残影表现失控反噬；只有少量皮肤血点，未见虎纹、兽化、现代UI、满屏特效或主体脸遮挡。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "手臂震颤",
+        "呼吸失控",
+        "轻微血点",
+        "肌肉拉扯",
+        "不新增虎纹或兽化"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_道行反噬_shared_primary_定妆_特效_道行反噬_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "VFX_黑妖血",
+      "asset_name": "黑妖血",
+      "confirmed_at": "2026-07-17T01:45:33+00:00",
+      "human_signoff": false,
+      "must_not_have": [
+        "随机改色",
+        "遮挡主体脸",
+        "现代科幻UI",
+        "过度血腥猎奇"
+      ],
+      "png": "出图/共享/图片/定妆_特效_黑妖血.png",
+      "png_sha256": "45b6c729dd6d62f6bb703f2b022e9de4b34fbdb5d5e6053f0dbe2cfde6e8c377",
+      "reason": "原像素目视确认：单股厚重黑墨状妖血从地面血泊向上汇入空白旧卷，流向明确连续；未形成多股随机丝带、黑色海啸、现代UI、可读文字或猎奇肢体。",
+      "review_kind": "executor_visual",
+      "reviewer": "Codex视觉执行者",
+      "reviewer_role": "ai_visual_executor",
+      "scale": "None",
+      "shape_contract": [
+        "厚重黑墨质感",
+        "流向遵循地面→卷轴",
+        "不变成随机黑色丝带海啸"
+      ],
+      "shot": "shared_primary",
+      "source": "image_qc:executor_visual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/VFX_黑妖血_shared_primary_定妆_特效_黑妖血_compare.png",
+      "verdict": "ok"
+    },
+    {
       "asset": "WEAPON_01",
       "asset_name": "横刀",
       "confirmed_at": "2026-07-16T13:50:56+00:00",
@@ -38,6 +197,6 @@
     }
   ],
   "kind": "n2d_prop_shape_confirmations",
-  "updated_at": "2026-07-16T13:50:56+00:00",
+  "updated_at": "2026-07-17T01:45:33+00:00",
   "version": 1
 }

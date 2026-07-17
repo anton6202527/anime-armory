@@ -256,6 +256,7 @@ def test_prop_shape_review_requires_shared_high_risk_primary_confirmation(tmp_pa
                     "primary": {"path": "出图/共享/图片/定妆_武器_横刀.png", "status": "ready"},
                 },
                 "constraints": {
+                    "blade_topology": "single_blade=1；cutting_edge_count=1；一侧厚钝刀背，一侧唯一锋刃",
                     "must_not_have": ["双刃", "第二把刀刃"],
                     "scale": "约成人臂展的三分之二",
                 },
@@ -280,6 +281,13 @@ def test_prop_shape_review_requires_shared_high_risk_primary_confirmation(tmp_pa
     assert targets[0]["png"] == "出图/共享/图片/定妆_武器_横刀.png"
     assert targets[0]["shot"] == "shared_primary"
     assert targets[0]["scope"] == "shared_primary"
+    assert targets[0]["shape_contract"] == [
+        "single_blade=1",
+        "cutting_edge_count=1",
+        "一侧厚钝刀背",
+        "一侧唯一锋刃",
+        "约成人臂展的三分之二",
+    ]
     assert targets[0]["confirmed"] is False
 
     image_qc.confirm_prop_shape_targets(
