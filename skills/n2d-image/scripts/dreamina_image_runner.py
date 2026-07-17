@@ -97,7 +97,11 @@ def dreamina_reference_inputs(
         except ValueError:
             rel = str(path)
         role, owner = role_by_path.get(rel, ("reference", path.stem))
-        if index == 1 and target.mode in {"midframe", "tailframe"}:
+        continuity_source = previous_continuity_source_path(root, target, episode)
+        if index == 1 and (
+            target.mode in {"midframe", "tailframe"}
+            or (continuity_source is not None and path == continuity_source)
+        ):
             role = "source_frame"
             owner = target.clip
         inputs.append({
@@ -119,6 +123,7 @@ def build_dreamina_compiled_request(
     *,
     model_version: str = "",
     resolution_type: str = "",
+    retry_guidance: str = "",
 ) -> Dict[str, Any]:
     params: Dict[str, Any] = {}
     if model_version:
@@ -133,6 +138,7 @@ def build_dreamina_compiled_request(
         backend="dreamina",
         model=model_version,
         channel="official_cli",
+        retry_guidance=retry_guidance,
         request_params_override=params,
     )
     lint = base.lint_compiled_image_prompt(compiled)
@@ -150,6 +156,7 @@ def build_dreamina_prompt(
     model_version: str = "",
     resolution_type: str = "",
     compiled_request: Optional[Mapping[str, Any]] = None,
+    retry_guidance: str = "",
 ) -> str:
     """Return exactly the compiler text submitted to Dreamina."""
     compiled = dict(compiled_request or build_dreamina_compiled_request(
@@ -159,6 +166,7 @@ def build_dreamina_prompt(
         reference_inputs,
         model_version=model_version,
         resolution_type=resolution_type,
+        retry_guidance=retry_guidance,
     ))
     return str(compiled.get("prompt") or "").strip()
 
@@ -166,6 +174,78 @@ def build_dreamina_prompt(
 def _reference_block(body: str) -> str:
     m = re.search(r"(?ms)(?:\*\*)?参考图(?:\*\*)?.*?(?=^###\s+|^\*\*导演视角八维\*\*|^##\s+|\Z)", body)
     return m.group(0) if m else ""
+
+
+def _accepted_current_hash(root: Path, rel_path: str) -> bool:
+    """Whether the latest executor QA receipt accepts the exact current pixels."""
+    current = root / rel_path
+    if not current.is_file():
+        return False
+    current_sha = base.file_sha256(current)
+    events = root / "生产数据" / "production_events.jsonl"
+    if not events.is_file():
+        return False
+    latest: Optional[Mapping[str, Any]] = None
+    with events.open(encoding="utf-8") as fh:
+        for line in fh:
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            generation = row.get("generation") if isinstance(row, Mapping) else None
+            if (
+                row.get("stage") == "image"
+                and row.get("event") == "qa"
+                and isinstance(generation, Mapping)
+                and generation.get("asset") == rel_path
+            ):
+                latest = row
+    if not isinstance(latest, Mapping):
+        return False
+    generation = latest.get("generation") if isinstance(latest.get("generation"), Mapping) else {}
+    meta = latest.get("meta") if isinstance(latest.get("meta"), Mapping) else {}
+    return generation.get("status") == "accepted" and meta.get("artifact_sha256") == current_sha
+
+
+def previous_continuity_source_path(root: Path, target: base.Target, episode: str) -> Optional[Path]:
+    """Use the accepted prior Clip final frame when story state relays exactly."""
+    if target.mode != "firstframe":
+        return None
+    beat = base.storyboard_anchor_beat(root, episode, target)
+    if beat.get("faceless_insert"):
+        return None
+    data = base.load_json_file(root / "脚本" / episode / "storyboard.json")
+    clips = [row for row in data.get("clips") or [] if isinstance(row, Mapping)]
+    target_suffix = str(target.clip).replace("Clip_", "CLIP")
+    current_index = next((
+        index for index, row in enumerate(clips)
+        if str(row.get("id") or "").upper().endswith(target_suffix.upper())
+    ), -1)
+    if current_index <= 0:
+        return None
+    current = clips[current_index]
+    previous = clips[current_index - 1]
+    current_cont = current.get("continuity") if isinstance(current.get("continuity"), Mapping) else {}
+    previous_cont = previous.get("continuity") if isinstance(previous.get("continuity"), Mapping) else {}
+    start_state = re.sub(r"\s+", "", str(current_cont.get("start_state") or ""))
+    end_state = re.sub(r"\s+", "", str(previous_cont.get("end_state") or ""))
+    if not start_state or start_state != end_state:
+        return None
+    candidates: List[str] = []
+    anchors = previous_cont.get("anchors") if isinstance(previous_cont.get("anchors"), list) else []
+    for anchor in reversed(anchors):
+        if isinstance(anchor, Mapping) and anchor.get("anchor_png"):
+            candidates.append(str(anchor.get("anchor_png")))
+    for key in ("tailframe_png", "endframe_png", "firstframe_png"):
+        if previous_cont.get(key):
+            candidates.append(str(previous_cont.get(key)))
+    previous_id = str(previous.get("id") or "")
+    if match := re.search(r"CLIP(\d+)$", previous_id, re.I):
+        candidates.append(f"出图/{episode}/图片/EP01_CLIP{int(match.group(1)):02d}.png")
+    for rel in candidates:
+        if _accepted_current_hash(root, rel):
+            return root / rel
+    return None
 
 
 def prompt_reference_paths(root: Path, target: base.Target, episode: str) -> List[Path]:
@@ -184,12 +264,17 @@ def prompt_reference_paths(root: Path, target: base.Target, episode: str) -> Lis
         seen.add(path)
         paths.append(path)
 
-    if target.mode != "firstframe":
+    source_path: Optional[Path] = previous_continuity_source_path(root, target, episode)
+    if source_path is not None:
+        seen.add(source_path)
+        paths.append(source_path)
+    elif target.mode != "firstframe":
         try:
             source = root / base.target_for_shot(target.clip, target.section, episode).rel_path
             if source.is_file():
                 seen.add(source)
                 paths.append(source)
+                source_path = source
         except Exception:
             pass
 
@@ -203,21 +288,55 @@ def prompt_reference_paths(root: Path, target: base.Target, episode: str) -> Lis
     # replica of the 定妆 face-drift bug. Character (carried-identity) face anchors
     # are prepended so they survive the MAX_REFERENCES cap; everything else appends.
     bundle = base.reference_bundle_for_target(root, episode, target)
+    anchor_beat = base.storyboard_anchor_beat(root, episode, target)
+    beat_text = f"{anchor_beat.get('desc') or ''} {anchor_beat.get('video_prompt') or ''}"
+    anchor_character_filter = bool(
+        anchor_beat.get("single_reaction")
+        or anchor_beat.get("faceless_insert")
+        or anchor_beat.get("detail_insert")
+    )
+    anchor_focus_ids = set(anchor_beat.get("focus_ids") or []) if anchor_character_filter else set()
+    excluded_character_paths: set[Path] = set()
     face_first: List[Path] = []
     for item in bundle.get("items") or []:
         if str(item.get("kind")) != "character":
+            continue
+        owner = str(
+            item.get("owner") or item.get("character") or item.get("id") or
+            item.get("ref") or ""
+        )
+        owner_id = owner.split("/", 1)[0]
+        if anchor_character_filter and owner_id not in anchor_focus_ids:
+            for rel in item.get("paths") or []:
+                excluded_character_paths.add(root / str(rel))
             continue
         for rel in item.get("paths") or []:
             p = root / str(rel)
             if p.is_file() and p not in seen and p not in face_first:
                 face_first.append(p)
-    paths = face_first + [p for p in paths if p not in face_first]
+    # Relay/edit backends require attachment 1 to be the real source frame.
+    # Face-first prioritisation must never move a face atlas into that slot.
+    prefix = [source_path] if source_path is not None else []
+    paths = prefix + face_first + [
+        p for p in paths
+        if p not in prefix and p not in face_first and p not in excluded_character_paths
+    ]
+    excluded_asset_paths: set[Path] = set()
     for item in bundle.get("items") or []:
         if str(item.get("kind")) == "character":
             continue
+        if anchor_beat and str(item.get("kind")) == "asset":
+            asset_id = str(item.get("id") or "")
+            asset_type = str(item.get("type") or "").lower()
+            asset_token = re.sub(r"^(?:PROP|WEAPON|VFX|OUTFIT)_", "", asset_id, flags=re.I)
+            is_scene = asset_type in {"scene", "location", "loc"} or asset_id.startswith("LOC_")
+            if not is_scene and asset_id not in beat_text and asset_token not in beat_text:
+                for rel in item.get("paths") or []:
+                    excluded_asset_paths.add(root / str(rel))
+                continue
         for rel in item.get("paths") or []:
             add(str(rel))
-
+    paths = [path for path in paths if path not in excluded_asset_paths]
     return paths[:MAX_REFERENCES]
 
 
@@ -231,6 +350,33 @@ def submit_id_from(text: str) -> str:
         m = re.search(pat, text, re.I)
         if m:
             return m.group(1)
+    return ""
+
+
+def recover_submit_id_from_saved_tasks(prompt: str) -> str:
+    """Recover a paid task when the CLI submitted it but history lookup errored."""
+    proc = subprocess.run(
+        ["dreamina", "list_task", "--limit", "20"],
+        stdin=subprocess.DEVNULL,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if proc.returncode != 0:
+        return ""
+    try:
+        rows = json.loads(proc.stdout or "[]")
+    except json.JSONDecodeError:
+        return ""
+    if not isinstance(rows, list):
+        return ""
+    for row in rows:
+        if not isinstance(row, Mapping) or str(row.get("prompt") or "") != prompt:
+            continue
+        sid = str(row.get("submit_id") or "").strip()
+        if sid:
+            return sid
     return ""
 
 
@@ -271,11 +417,13 @@ def run_dreamina(
     resolution_type: str,
     refs: Optional[Sequence[Path]] = None,
     compiled_request: Optional[Mapping[str, Any]] = None,
+    recover_submit_id: str = "",
 ) -> tuple[bool, str, str, List[Path]]:
     resolved_refs = list(refs) if refs is not None else prompt_reference_paths(root, target, episode)
     if not resolved_refs:
         return False, "", "no ready reference images resolved for Dreamina image2image", resolved_refs
     reference_inputs = dreamina_reference_inputs(root, target, resolved_refs, episode)
+    retry_guidance = base.target_qc_retry_guidance(root, episode, target)
     compiled = dict(compiled_request or build_dreamina_compiled_request(
         root,
         episode,
@@ -283,6 +431,7 @@ def run_dreamina(
         reference_inputs,
         model_version=model_version,
         resolution_type=resolution_type,
+        retry_guidance=retry_guidance,
     ))
     prompt = build_dreamina_prompt(
         root,
@@ -292,58 +441,84 @@ def run_dreamina(
         model_version=model_version,
         resolution_type=resolution_type,
         compiled_request=compiled,
+        retry_guidance=retry_guidance,
     )
     ratio = base.aspect_ratio(root)
     download_dir = temp_path.parent / f"{temp_path.stem}_download"
     if download_dir.exists():
         shutil.rmtree(download_dir)
     download_dir.mkdir(parents=True, exist_ok=True)
-    cmd = [
-        "dreamina",
-        "image2image",
-        "--images",
-        ",".join(str(p) for p in resolved_refs),
-        "--prompt",
-        prompt,
-        "--ratio",
-        ratio,
-        "--poll",
-        str(max(0, min(poll_sec, int(timeout_sec or poll_sec)))),
-    ]
-    if model_version:
-        cmd.extend(["--model_version", model_version])
-    if resolution_type:
-        cmd.extend(["--resolution_type", resolution_type])
-    proc = subprocess.run(
-        cmd,
-        stdin=subprocess.DEVNULL,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=timeout_sec,
-    )
-    combined = "\n".join(p for p in (proc.stdout, proc.stderr) if p)
-    if proc.returncode != 0:
-        return False, "", f"dreamina image2image exit {proc.returncode}: {combined}", resolved_refs
-    sid = submit_id_from(combined)
+    sid = str(recover_submit_id or "").strip()
     if not sid:
-        return False, "", f"dreamina output did not include submit_id: {combined[:1000]}", resolved_refs
-    query = subprocess.run(
-        ["dreamina", "query_result", "--submit_id", sid, "--download_dir", str(download_dir)],
-        stdin=subprocess.DEVNULL,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=timeout_sec,
-    )
-    qout = "\n".join(p for p in (query.stdout, query.stderr) if p)
-    if query.returncode != 0:
-        return False, sid, f"dreamina query_result exit {query.returncode}: {qout}", resolved_refs
-    candidates = image_candidates(download_dir)
-    if not candidates:
-        return False, sid, f"dreamina query_result downloaded no image files: {qout[:1000]}", resolved_refs
+        cmd = [
+            "dreamina",
+            "image2image",
+            "--images",
+            ",".join(str(p) for p in resolved_refs),
+            "--prompt",
+            prompt,
+            "--ratio",
+            ratio,
+            "--poll",
+            str(max(0, min(poll_sec, int(timeout_sec or poll_sec)))),
+        ]
+        if model_version:
+            cmd.extend(["--model_version", model_version])
+        if resolution_type:
+            cmd.extend(["--resolution_type", resolution_type])
+        proc = subprocess.run(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=timeout_sec,
+        )
+        combined = "\n".join(p for p in (proc.stdout, proc.stderr) if p)
+        if proc.returncode != 0:
+            if "get_history_by_ids" in combined or "ret=2008" in combined:
+                sid = recover_submit_id_from_saved_tasks(prompt)
+            if not sid:
+                return False, "", f"dreamina image2image exit {proc.returncode}: {combined}", resolved_refs
+        if not sid:
+            sid = submit_id_from(combined)
+        if not sid:
+            return False, "", f"dreamina output did not include submit_id: {combined[:1000]}", resolved_refs
+    deadline = time.monotonic() + float(timeout_sec or 900)
+    qout = ""
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return False, sid, f"dreamina task still had no image at timeout: {qout[:1000]}", resolved_refs
+        query = subprocess.run(
+            ["dreamina", "query_result", "--submit_id", sid, "--download_dir", str(download_dir)],
+            stdin=subprocess.DEVNULL,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=remaining,
+        )
+        qout = "\n".join(p for p in (query.stdout, query.stderr) if p)
+        if query.returncode != 0:
+            return False, sid, f"dreamina query_result exit {query.returncode}: {qout}", resolved_refs
+        candidates = image_candidates(download_dir)
+        if candidates:
+            break
+        try:
+            status_payload = json.loads(query.stdout or "{}")
+        except json.JSONDecodeError:
+            status_payload = {}
+        status = str(status_payload.get("gen_status") or "").strip().lower()
+        queue_status = str((status_payload.get("queue_info") or {}).get("queue_status") or "").strip().lower()
+        if status in {"failed", "fail", "error", "cancelled", "canceled"} or queue_status in {
+            "failed", "fail", "error", "cancelled", "canceled",
+        }:
+            return False, sid, f"dreamina task ended without image: {qout[:1000]}", resolved_refs
+        # `querying` / `Generating` is a normal async state.  Re-query the same
+        # submit id instead of declaring failure and charging for a duplicate.
+        time.sleep(min(max(1, poll_sec), max(0.0, remaining)))
     if not materialize_png(candidates[0], temp_path):
         return False, sid, f"downloaded result is not a valid PNG and conversion failed: {candidates[0]}", resolved_refs
     return True, sid, "", resolved_refs
@@ -390,6 +565,57 @@ def record_event(
     metrics = compiled.get("metrics") if isinstance(compiled.get("metrics"), Mapping) else {}
     experiment = compiled.get("experiment") if isinstance(compiled.get("experiment"), Mapping) else {}
     prompt_sha = base.sha256_text(submitted_prompt)
+    image_model = str(compiled.get("model") or "Seedream 5.0")
+    channel = str(compiled.get("channel") or "Dreamina/即梦官方 CLI")
+    request_params = compiled.get("request_params") if isinstance(compiled.get("request_params"), Mapping) else {}
+    model_version = str(request_params.get("model_version") or image_model)
+    backend_version = f"dreamina-official-cli:model-{model_version}"
+    actual_inputs: List[str] = []
+    ref_rows: List[Dict[str, str]] = []
+    for ref in refs[:MAX_REFERENCES]:
+        try:
+            rel = str(ref.relative_to(root))
+        except ValueError:
+            rel = str(ref)
+        actual_inputs.append(rel)
+        ref_rows.append({"path": rel, "sha256": base.file_sha256(ref) if ref.is_file() else ""})
+    reference_bundle_sha = str(compiled.get("reference_inputs_sha256") or "") or base.sha256_text(
+        json.dumps(ref_rows, ensure_ascii=False, sort_keys=True)
+    )
+    route_hash = base.sha256_text(
+        f"dreamina|{image_model}|{channel}|{target.mode}|{target.shot}|{target.rel_path}"
+    )
+    capability_path = root / "生产数据" / "image_backend_capabilities" / "dreamina.json"
+    capability_id = (
+        f"{capability_path.relative_to(root)}#{base.file_sha256(capability_path)[:12]}"
+        if capability_path.is_file()
+        else "dreamina-refresh-missing"
+    )
+    final_path = root / target.rel_path
+    artifact_sha = base.optional_file_sha256(final_path) or base.optional_file_sha256(temp_path)
+    settings_sha = base.optional_file_sha256(root / "_设置.md")
+    identity_registry_sha = base.optional_file_sha256(root / "出图" / "共享" / "identity_registry.json")
+    asset_registry_sha = base.optional_file_sha256(root / "出图" / "共享" / "asset_registry.json")
+    adapter_version = f"dreamina_image_runner.py@{base.optional_file_sha256(Path(__file__))[:12]}"
+    qc_version = f"image_qc.py@{base.optional_file_sha256(base.repo_root() / base.IMAGE_QC)[:12]}"
+    input_fingerprint = base.sha256_text(json.dumps({
+        "asset": target.rel_path,
+        "mode": target.mode,
+        "prompt_sha256": prompt_sha,
+        "compiled_request_sha256": compiled.get("compiled_request_sha256") or "",
+        "reference_bundle_sha256": reference_bundle_sha,
+        "route_hash": route_hash,
+        "settings_sha256": settings_sha,
+        "identity_registry_sha256": identity_registry_sha,
+        "asset_registry_sha256": asset_registry_sha,
+        "requested_seed": seed,
+    }, ensure_ascii=False, sort_keys=True))
+    recipe_hash = base.sha256_text(json.dumps({
+        "input_fingerprint": input_fingerprint,
+        "artifact_sha256": artifact_sha,
+        "backend_version": backend_version,
+        "model_version": model_version,
+    }, ensure_ascii=False, sort_keys=True))
     event = "redraw" if archive_path or os.environ.get("N2D_REASON") == "rerun" else "generation"
     cmd = [
         sys.executable,
@@ -433,6 +659,20 @@ def record_event(
         "--meta",
         f"reference_count={len(refs)}",
         "--meta",
+        f"model={image_model}",
+        "--meta",
+        f"model_version={model_version}",
+        "--meta",
+        f"channel={channel}",
+        "--meta",
+        f"route_hash={route_hash}",
+        "--meta",
+        f"capability_evidence_id={capability_id}",
+        "--meta",
+        f"recipe_hash={recipe_hash}",
+        "--meta",
+        f"prompt_sha256={prompt_sha}",
+        "--meta",
         f"actual_submit_prompt_sha256={prompt_sha}",
         "--meta",
         f"prompt_compiler_kind={compiled.get('kind') or ''}",
@@ -462,6 +702,28 @@ def record_event(
         f"image_prompt_variant={experiment.get('variant') or ''}",
         "--meta",
         "compiled_request_params=" + json.dumps(compiled.get("request_params") or {}, ensure_ascii=False, sort_keys=True),
+        "--meta",
+        f"reference_bundle_sha256={reference_bundle_sha}",
+        "--meta",
+        f"backend_version={backend_version}",
+        "--meta",
+        f"quality_tier={request_params.get('resolution_type') or 'project_default'}",
+        "--meta",
+        f"actual_image_inputs={'|'.join(actual_inputs) if actual_inputs else 'none'}",
+        "--meta",
+        f"input_fingerprint={input_fingerprint}",
+        "--meta",
+        f"settings_sha256={settings_sha}",
+        "--meta",
+        f"identity_registry_sha256={identity_registry_sha}",
+        "--meta",
+        f"asset_registry_sha256={asset_registry_sha}",
+        "--meta",
+        f"artifact_sha256={artifact_sha}",
+        "--meta",
+        f"adapter_version={adapter_version}",
+        "--meta",
+        f"qc_version={qc_version}",
         "--meta",
         f"temp_output={temp_path}",
         "--meta",
@@ -519,6 +781,7 @@ def process_target(
     resolution_type: str,
     dry_run: bool,
     force: bool,
+    recover_submit_id: str = "",
 ) -> bool:
     seed = base.logical_seed(root, episode, target.shot, target.rel_path)
     final = root / target.rel_path
@@ -528,6 +791,7 @@ def process_target(
     previous_status = latest_recorded_status(root, task_id, target.rel_path)
     refs = prompt_reference_paths(root, target, episode)
     reference_inputs = dreamina_reference_inputs(root, target, refs, episode)
+    retry_guidance = base.target_qc_retry_guidance(root, episode, target)
     try:
         compiled_request = build_dreamina_compiled_request(
             root,
@@ -536,6 +800,7 @@ def process_target(
             reference_inputs,
             model_version=model_version,
             resolution_type=resolution_type,
+            retry_guidance=retry_guidance,
         )
     except ValueError as exc:
         print(f"[fail] {target.shot}: {exc}", file=sys.stderr)
@@ -548,6 +813,7 @@ def process_target(
         model_version=model_version,
         resolution_type=resolution_type,
         compiled_request=compiled_request,
+        retry_guidance=retry_guidance,
     )
     if dry_run:
         print(json.dumps({
@@ -623,6 +889,7 @@ def process_target(
             resolution_type=resolution_type,
             refs=refs,
             compiled_request=compiled_request,
+            recover_submit_id=recover_submit_id,
         )
         if ok:
             archive_path = archive_existing(root, target.rel_path, task_id)
@@ -706,6 +973,7 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--skip-image-qc", action="store_true")
     ap.add_argument("--skip-final-gate", action="store_true")
     ap.add_argument("--skip-preflight", action="store_true", help="skip the pre-spend image_preflight gate (logs a dashboard waiver)")
+    ap.add_argument("--recover-submit-id", default="", help="download/finalize an existing Dreamina submit id without creating a new paid task")
     return ap
 
 
@@ -727,11 +995,13 @@ def main(argv: Sequence[str]) -> int:
     targets = base.build_targets(root, episode, shots)
     if not targets:
         raise SystemExit("no targets resolved")
+    if ns.recover_submit_id and len(targets) != 1:
+        raise SystemExit("--recover-submit-id requires exactly one resolved target")
     task_id = os.environ.get("N2D_TASK_ID") or f"dreamina-{episode}"
 
     # Non-waivable ordering lock shared with codex_image_runner: --skip-preflight
     # cannot spend on Clip PNGs before the episode shared library is complete.
-    if not ns.dry_run and not base.enforce_shared_first_interlock(root, episode):
+    if not ns.dry_run and not base.enforce_shared_first_interlock(root, episode, targets=targets):
         return 1
 
     # Pre-spend interlock: 生成前先跑 image_preflight 硬闸门，block 即拒绝生成不花钱；
@@ -757,6 +1027,7 @@ def main(argv: Sequence[str]) -> int:
             resolution_type=ns.resolution_type,
             dry_run=ns.dry_run,
             force=ns.force,
+            recover_submit_id=ns.recover_submit_id,
         )
         if ok and not ns.dry_run and not ns.skip_image_qc:
             ok = base.run_target_image_qc(root, episode, target)

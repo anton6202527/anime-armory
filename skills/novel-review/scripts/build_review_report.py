@@ -176,6 +176,38 @@ CONSISTENCY_SECTION_MAP = {
         "problem": "前提/开局命中高频套路，且未在差异化决策里点名如何颠覆（同质化预警·建议级）",
         "fix_hint": "回 `设定/创作蓝图.md` 的差异化决策段，为命中套路写明差异化/颠覆点（或换开局）；也可在 author_intent.forbidden_tropes 显式登记。",
     },
+    "plot_variety": {
+        "dimension": "novelty",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "跨章节拍/桥段复读（同型桥段连打、危机→打脸循环、钩型/开篇单一、长铺垫零爽点）",
+        "fix_hint": "对照 `审稿/plot_variety_findings.json` 命中的章段换节拍/换钩型/插小爽点；trope_cliche 管前提级套路，本项管跨章循环复读。",
+    },
+    "chapter_transition": {
+        "dimension": "logic",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "章边界承接断裂候选（上一章末尾与本章开篇人物零交集且无转场标记/开篇悬空）",
+        "fix_hint": "对照 `审稿/transition_findings.json`：有意切线的开篇补转场标记（与此同时/翌日/另一边…），非有意的补一句承接把读者带过去。",
+    },
+    "prose_craft": {
+        "dimension": "line_craft",
+        "recommended_skill": "novel-edit",
+        "return_to_stage": "draft",
+        "count_key": "alerts",
+        "problem": "行文手艺问题候选（过滤词滤镜/副词对话标签/开篇设定倾倒/点破主题/生理化情绪复读/哲理对白）",
+        "fix_hint": "对照 `审稿/prose_craft_findings.json` 按传统 line-edit 手艺修：删滤镜直写感知、情绪进台词与动作节拍、设定拆进冲突现场、主题由事件承载不由旁白宣讲。",
+    },
+    "manuscript_map": {
+        "dimension": "structure",
+        "recommended_skill": "novel-craft",
+        "return_to_stage": "outline",
+        "count_key": "alerts",
+        "problem": "结构地图缺口（章缺 turn/value_shift 价值转折、缺章纲与场景卡来源）",
+        "fix_hint": "回 `设定/scene_cards.json` 补 turn/value_shift；传统手艺：无价值转折的场景删掉或合并进相邻场景。",
+    },
 }
 
 

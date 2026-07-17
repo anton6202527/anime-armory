@@ -107,3 +107,43 @@ def test_overseas_release_requires_named_hash_bound_jurisdiction_review(tmp_path
     path.write_text(json.dumps(brief, ensure_ascii=False), encoding="utf-8")
     done = cm.build(root, "completed", "合规/平台回执.png", "platform_managed", "preserve", "platform_managed")
     assert not any(f["code"].startswith("jurisdiction_review") for f in done["findings"])
+
+
+def test_self_rendered_explicit_label_requires_plan_entry_at_video_start(tmp_path):
+    root = _project(tmp_path)
+
+    # 声明自行烧录但 rendered_text_plan 无标识条目 → 责任空转 block
+    report = cm.build(root, "completed", "合规/平台回执.png", "self_rendered", "preserve", "platform_managed")
+    assert any(f["code"] == "explicit_label_plan_missing" and f["severity"] == "block"
+               for f in report["findings"])
+
+    # 有标识条目但不在起始段 → warn（《标识办法》要求视频起始画面显著提示）
+    (root / "合规" / "rendered_text_plan.json").write_text(json.dumps({
+        "schema_version": 1, "kind": "ad_rendered_text_plan",
+        "checks": [{"id": "master:ai_label", "deliverable_id": "master",
+                    "text": "内容由 AI 生成", "start": 8.0, "end": 10.0}],
+    }, ensure_ascii=False), encoding="utf-8")
+    report2 = cm.build(root, "completed", "合规/平台回执.png", "self_rendered", "preserve", "platform_managed")
+    assert not any(f["code"] == "explicit_label_plan_missing" for f in report2["findings"])
+    assert any(f["code"] == "explicit_label_not_at_start" and f["severity"] == "warn"
+               for f in report2["findings"])
+
+    # 标识条目落在片头 → 链路闭合，两个 code 都不再出现
+    (root / "合规" / "rendered_text_plan.json").write_text(json.dumps({
+        "schema_version": 1, "kind": "ad_rendered_text_plan",
+        "checks": [{"id": "master:ai_label", "deliverable_id": "master",
+                    "text": "内容由 AI 生成", "start": 0.0, "end": 3.0}],
+    }, ensure_ascii=False), encoding="utf-8")
+    report3 = cm.build(root, "completed", "合规/平台回执.png", "self_rendered", "preserve", "platform_managed")
+    assert not any(f["code"].startswith("explicit_label_") for f in report3["findings"])
+
+
+def test_platform_managed_label_skips_burnin_chain_and_unknown_status_warns(tmp_path):
+    root = _project(tmp_path)
+
+    report = cm.build(root, "completed", "合规/平台回执.png", "platform_managed", "preserve", "platform_managed")
+    assert not any(f["code"].startswith("explicit_label_") for f in report["findings"])
+
+    report2 = cm.build(root, "completed", "合规/平台回执.png", "发布方自己弄", "preserve", "platform_managed")
+    assert any(f["code"] == "explicit_label_status_unknown" and f["severity"] == "warn"
+               for f in report2["findings"])

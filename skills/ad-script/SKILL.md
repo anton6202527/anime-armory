@@ -50,6 +50,8 @@ description: 拍广告 第2阶段·脚本 + 第4阶段·分镜（配音后回跑
 python3 skills/ad-script/scripts/idea_payoff_ledger.py "<作品根>" --write   # 创意承诺→分镜兑现
 python3 skills/ad-script/scripts/copy_quality_audit.py "<作品根>" --write   # VO 文案质量
 python3 skills/ad-script/scripts/shot_variety_audit.py "<作品根>" --write   # 分镜视觉多样性（出图前）
+python3 skills/ad-script/scripts/product_craft_audit.py "<作品根>" --write  # 产品镜工艺三轴（光位/质感/角度）
+python3 skills/ad-script/scripts/performance_cue_audit.py "<作品根>" --write # 人物镜表演三轴（情绪/视线/可演动作）
 ```
 
 - **`idea_payoff_ledger`（创意承诺兑现账本）**：`创意/concept.json` 的 big idea / key message /
@@ -71,6 +73,15 @@ python3 skills/ad-script/scripts/shot_variety_audit.py "<作品根>" --write   #
   字段时也能抓）、`scene_monotony`/`framing_variety_low`（长片单场景/单景别，只 info）。
   **广告专有收敛**：① 产品 beauty/特写、片尾 endcard、logo/CTA/价格板等**有意重复镜豁免**；
   ② 广告很短，单场景/单景别本就常见合法，故场景/景别单调只 info、不 warn。落 `生产数据/ad_shot_variety_audit.json`。
+  另含 `rehook_gap`（再钩间隔·业界留存口径）：总长 ≥20s 的广告里连续 >20s 没有任何转折/揭晓/对比类
+  节拍 → warn——信息流长广告约每 15-20s 要给观众一个继续看的理由；15/6s 短广告一个开场钩就够（开场钩
+  归 ad-score `hook` 维度管），时长字段缺失过半不判。
+- **传统工艺双审计（出图前·advisory·同 gate creative_axis 接法）**：`product_craft_audit`（产品镜
+  光位/质感手法/角度三轴，词汇表 `../ad-image/references/传统产品镜手法.md`）+ `performance_cue_audit`
+  （人物镜情绪/视线/可演动作三轴——导演行规"给可演的过程不给结果形容词"，词汇表 `references/表演指令.md`）。
+  三轴全缺 warn、缺两轴 info、endcard 豁免；一镜有人拿产品则两审计各查各的轴。
+- **finalize_storyboard 附带 pack shot 行规**：endcard/收版镜实测停留 <1.5s → warn `endcard_hold_short`
+  （logo/CTA 要呼吸感，读不完等于没放）。
 
 > 这几个（含 `ad-concept` 的 `concept_pack.py`）都由 gate 以 **advisory** 并入：报告缺失只 info，
 > 报告里的 block 降为 warn。规矩见 `gate.py` 的 `score_findings`——**创意启发式只提示复核，

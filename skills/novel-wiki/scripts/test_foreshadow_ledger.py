@@ -276,3 +276,26 @@ def test_never_fired_ignores_resolved_and_unconfirmed():
          "importance": "high", "confirmed": False},  # 未确认候选
     ]
     assert fl.never_fired_at_finale(seeds, through_chapter=90, target_chapters=90) == []
+
+
+def test_empty_ledger_with_mature_manuscript_reports_gap(tmp_path):
+    # 空转报缺：正文 ≥10 章但台账零登记 → 显式建议级报缺（没数据≠没问题），不再安静 skipped
+    import os
+    d = os.path.join(str(tmp_path), "章节")
+    os.makedirs(d, exist_ok=True)
+    for i in range(1, 13):
+        with open(os.path.join(d, f"第{i:02d}章.md"), "w", encoding="utf-8") as f:
+            f.write("正文")
+    res = fl.analyze(str(tmp_path))
+    assert res["ran"] is True and res["blocking"] == 0
+    assert res["alerts"][0]["type"] == "foreshadow_ledger_empty"
+
+
+def test_empty_ledger_short_manuscript_still_skips(tmp_path):
+    import os
+    d = os.path.join(str(tmp_path), "章节")
+    os.makedirs(d, exist_ok=True)
+    with open(os.path.join(d, "第01章.md"), "w", encoding="utf-8") as f:
+        f.write("正文")
+    res = fl.analyze(str(tmp_path))
+    assert res["ran"] is False

@@ -121,6 +121,14 @@ def main():
     wiki_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "wiki_builder.py")
     run_step("百科事实提取", [sys.executable, wiki_script, root, "--chapter", str(ch_num)])
 
+    # 3b. 情绪/张力实测回填（advisory·绝不阻断）：logic_sentry 的"连续 N 章张力塌陷"节奏预警
+    #     依赖 设定/emotional_progression.json，而该文件此前只有"回扫窗口顺手跑一下"的 prose 提示、
+    #     无自动触发点 → 检测长期休眠（已知回填断点的换皮复现）。写后闭环是每章必经路径，
+    #     在逻辑哨兵之前回填，让它拿到含本章在内的最新张力曲线。失败不阻断。
+    print("🔄 正在回填逐章情绪/张力实测（emotional_progression）...")
+    tone_script = os.path.join(_HERE, "..", "..", "novel-review", "scripts", "tone_check.py")
+    subprocess.run([sys.executable, tone_script, root, "--write-progression"], check=False)
+
     # 4. 逻辑哨兵
     print(f"🔄 正在运行逻辑哨兵...")
     sentry_script = os.path.join(_HERE, "..", "..", "novel-wiki", "scripts", "logic_sentry.py")

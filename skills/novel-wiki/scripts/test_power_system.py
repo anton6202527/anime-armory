@@ -223,3 +223,30 @@ def test_enforce_downgrades_hypothetical_heuristic_block():
     out, downgrades = ps._hg_enforce(alerts)
     assert out[0]["severity"] == "建议级"
     assert ps._hg_count_blocking(out) == 0 and len(downgrades) == 1
+
+
+def test_genre_expansion_covers_numeric_growth_genres():
+    # 2026-07 扩容回归：游戏/无限流/末世/西幻此前不在白名单 → starter registry 不 seed →
+    # 整个战力一致性机检静默跳过。
+    for g in ("游戏", "无限流", "末世", "西幻"):
+        assert ps.genre_needs_power_check(g) is True, g
+
+
+def test_numeric_regress_age_flags_and_rebirth_exempt():
+    # 年龄倒流（长篇高发数值穿帮，此前无任何机检）——快照带 年龄 字段即查倒退；
+    # 重生/回溯题材写 regress_reason 即豁免。
+    tiers = {"sequence": [], "subtiers": []}
+    prog = [
+        {"chapter": 3, "character": "主角", "年龄": 18},
+        {"chapter": 9, "character": "主角", "年龄": 16},
+    ]
+    alerts = ps.validate_progression(prog, tiers)
+    hits = [a for a in alerts if a["type"] == "power_numeric_regress"]
+    assert len(hits) == 1 and "年龄" in hits[0]["evidence"] and hits[0]["chapter"] == 9
+
+    prog_ok = [
+        {"chapter": 3, "character": "主角", "年龄": 18},
+        {"chapter": 9, "character": "主角", "年龄": 16, "regress_reason": "重生回到少年时代"},
+    ]
+    assert [a for a in ps.validate_progression(prog_ok, tiers)
+            if a["type"] == "power_numeric_regress"] == []

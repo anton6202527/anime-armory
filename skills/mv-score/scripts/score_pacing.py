@@ -399,6 +399,10 @@ def main():
     print(f"  总时长对账 规划{dur['planned_total']}s vs 歌{dur['song_len']}s diff={dur['diff']} → {'差大' if dur['mismatch'] else 'ok'}")
     al = m["downbeat_alignment"]
     print(f"  踩鼓点率   {al['aligned']}/{al['boundaries']} 切点对齐 → {al['ratio'] if al['ratio'] is not None else '无样本'}")
+    lc = m.get("late_cut_bias") or {}
+    if lc.get("ratio") is not None:
+        tip = "（剪辑手法：卡点切压拍或提前1-3帧落刀，晚切读感拖）" if lc["ratio"] > 0.3 else ""
+        print(f"  晚切偏置   {lc['late']}/{lc['aligned']} 对齐切点晚于拍点>{lc['late_grace']}s → {lc['ratio']}{tip}")
     dn = m["chorus_verse_density"]
     print(f"  副歌vs主歌 密度对比={dn['contrast']}（副歌{dn['chorus_density']} / 主歌{dn['verse_density']}）→ {dn['ok']}")
     print(f"机器预评分 pacing_score = {payload['pacing_score']}/10（折算 {payload['pacing_score_pct']}/100）")

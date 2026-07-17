@@ -1990,37 +1990,42 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
         text = path.read_text(encoding="utf-8")
     except OSError:
         return {}
-    header_re = re.compile(
-        r"^###\s+((?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)\s*([^\n]*)$",
-        re.M,
-    )
+    header_re = re.compile(r"^###\s+([^\n]+)$", re.M)
     headers = list(header_re.finditer(text))
     out: Dict[str, Mapping[str, Any]] = {}
     for index, match in enumerate(headers):
-        aid = canonical_asset_id(match.group(1))
-        if not aid:
+        heading = match.group(1).strip()
+        heading_ids = [
+            canonical_asset_id(token)
+            for token in ASSET_TOKEN_RE.findall(heading)
+        ]
+        heading_ids = list(dict.fromkeys(aid for aid in heading_ids if aid))
+        if not heading_ids:
             continue
-        end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
+        next_heading = re.search(r"^#{1,3}\s+", text[match.end():], re.M)
+        end = match.end() + next_heading.start() if next_heading else len(text)
         body = text[match.end():end]
-        raw_name = clean_material_name(match.group(2), aid)
-        # A heading may group several machine ids, e.g.
-        # ``### PROP_扁担 + PROP_水桶``.  The ``+ PROP_...`` tail is not
-        # the first asset's display name; treating it as one aliases the first
-        # target path to the second asset and burns the wrong shared image.
-        if raw_name.startswith("+") or ASSET_PREFIX_RE.search(raw_name):
-            raw_name = ""
         cn_m = re.search(r"^\s*(?:[-*]\s*)?中文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
         en_m = re.search(r"^\s*(?:[-*]\s*)?英文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
-        profile = cn_m.group(1).strip() if cn_m else raw_name
-        out[aid] = {
-            "asset_id": aid,
-            "name": raw_name or asset_name_from_raw(aid, aid),
-            "type": asset_type_for_id(aid),
-            "profile": profile or raw_name or asset_name_from_raw(aid, aid),
-            "positive": profile or raw_name,
-            "english_prompt": en_m.group(1).strip() if en_m else "",
-            "source": str(path.relative_to(root)),
-        }
+        # A grouped heading such as ``PROP_扁担 + PROP_水桶`` describes every
+        # listed asset with the same following paragraph.  Never use the second
+        # machine id as the first asset's display name/profile.
+        first_id_pos = heading.find(heading_ids[0])
+        name_tail = heading[first_id_pos + len(heading_ids[0]):] if first_id_pos >= 0 else ""
+        single_name = clean_material_name(name_tail, heading_ids[0]) if len(heading_ids) == 1 else ""
+        prose = " ".join(line.strip() for line in body.strip().splitlines() if line.strip())
+        for aid in heading_ids:
+            raw_name = single_name if len(heading_ids) == 1 else ""
+            profile = cn_m.group(1).strip() if cn_m else (prose or raw_name)
+            out[aid] = {
+                "asset_id": aid,
+                "name": raw_name or asset_name_from_raw(aid, aid),
+                "type": asset_type_for_id(aid),
+                "profile": profile or raw_name or asset_name_from_raw(aid, aid),
+                "positive": profile or raw_name,
+                "english_prompt": en_m.group(1).strip() if en_m else "",
+                "source": str(path.relative_to(root)),
+            }
     # Modern material lists use compact shared-asset bullets instead of one
     # ``### ASSET_ID`` section per item, for example:
     # ``- `PROP_01/断刀`：暗色旧钢军用直刃，半截、沾血。``
@@ -2341,10 +2346,10 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         name = str(material.get("name") or req.get("name") or hint.get("name") or aid.replace("_", " "))
         name = clean_asset_display_name(aid, name)
         profile = str(
-            hint_constraints.get("structure")
-            or material.get("profile")
+            material.get("profile")
             or req.get("profile")
             or req.get("description")
+            or hint_constraints.get("structure")
             or hint.get("profile")
             or name
         )
@@ -2410,6 +2415,10 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 "must_not_have": ["AI生成可读文字", "现代手机UI", "随机蓝色科幻屏", "乱码文字"],
             })
         hint_drift = hint.get("drift") if isinstance(hint.get("drift"), list) else []
+        hint_drift = [
+            str(item) for item in hint_drift
+            if not re.search(r"\+\s*(?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_", str(item))
+        ]
         drift_terms = merge_unique_terms(
             [f"不要让{name}结构/颜色/尺寸漂移"],
             [f"不要{x}" for x in must_not_have],
@@ -2432,7 +2441,14 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                     "positive": profile,
                     "current_state": profile,
                     "constraints": constraints,
-                    "scene_dna": hint.get("scene_dna") if isinstance(hint, Mapping) else {},
+                    "scene_dna": (
+                        {}
+                        if re.search(
+                            r"\+\s*(?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_",
+                            flatten_contract_value(hint.get("scene_dna")),
+                        )
+                        else hint.get("scene_dna") if isinstance(hint, Mapping) else {}
+                    ),
                 },
                 asset_id=aid,
                 asset_type=atype,

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "artifact_catalog",
+  "status": "bootstrap",
+  "generated_at": "2026-07-17",
+  "project": {
+    "project_id": "comic_5011b770854b4681",
+    "line": "comic",
+    "title": "金瓶梅",
+    "root_rel": "."
+  },
+  "summary": {
+    "artifact_count": 0,
+    "total_bytes": 0,
+    "disposable_bytes": 0,
+    "invalid_count": 0
+  },
+  "event_sources": [],
+  "view_sources": [],
+  "artifacts": [],
+  "duplicates": []
+}

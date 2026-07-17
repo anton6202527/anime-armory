@@ -147,6 +147,38 @@ def clip_downbeat_alignment(clip_plan, beatgrid, tol=None):
     return aligned, len(bounds), ratio
 
 
+LATE_CUT_GRACE = float(getattr(_contract, "PACING_LATE_CUT_GRACE", 0.04))  # 超过 downbeat 此秒数算"晚切"（≈25fps 一帧）
+
+
+def late_cut_bias(clip_plan, beatgrid, tol=None, late_grace=None):
+    """已对齐切点里的「晚切」偏置：返回 (late, aligned, ratio)。
+
+    传统剪辑手法：MV 卡点切要**压拍或提前 1-3 帧**落刀——动作在拍点上被观众读到；
+    切点落在 downbeat 之后（晚切）读感是"慢半拍/拖"。对齐率(±tol)只看远近不看方向，
+    看不出系统性晚切。本函数只统计已对齐(±tol 内)切点中 delta=切点-最近拍 > late_grace
+    的比例。advisory 证据：AI 出片按 plan 切时长通常准，但人工微调/变速后容易整体偏晚。
+    无对齐切点 → ratio=None。
+    """
+    tol = ALIGN_TOL if tol is None else float(tol)
+    late_grace = LATE_CUT_GRACE if late_grace is None else float(late_grace)
+    bounds = _boundaries((clip_plan or {}).get("clips"))
+    grid = (beatgrid or {}).get("downbeats") or (beatgrid or {}).get("beats") or []
+    grid = sorted(float(t) for t in grid if isinstance(t, (int, float)))
+    if not bounds or not grid:
+        return 0, 0, None
+    late = aligned = 0
+    for b in bounds:
+        nearest = min(grid, key=lambda g: abs(b - g))
+        delta = b - nearest
+        if abs(delta) <= tol:
+            aligned += 1
+            if delta > late_grace:
+                late += 1
+    if not aligned:
+        return 0, 0, None
+    return late, aligned, round(late / aligned, 4)
+
+
 def chorus_verse_density(clip_plan, beatgrid=None):
     """副歌 vs 主歌 clip 密度（clip 数 / 秒）对比。
 
@@ -193,6 +225,7 @@ def pacing_report(clip_plan, beatgrid, song_len):
     cv, cv_suspicious, n_clips = equal_length_cv(clip_plan)
     total, song, diff, dur_mismatch = planned_duration_vs_song(clip_plan, song_len)
     aligned, n_bounds, align_ratio = clip_downbeat_alignment(clip_plan, beatgrid)
+    late_n, late_aligned, late_ratio = late_cut_bias(clip_plan, beatgrid)
     density = chorus_verse_density(clip_plan, beatgrid)
     return {
         "clip_count": n_clips,
@@ -209,6 +242,12 @@ def pacing_report(clip_plan, beatgrid, song_len):
             "boundaries": n_bounds,
             "ratio": align_ratio,
             "tol": ALIGN_TOL,
+        },
+        "late_cut_bias": {
+            "late": late_n,
+            "aligned": late_aligned,
+            "ratio": late_ratio,
+            "late_grace": LATE_CUT_GRACE,
         },
         "chorus_verse_density": density,
     }

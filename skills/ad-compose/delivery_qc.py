@@ -220,9 +220,50 @@ def inspect_item(root: Path, item: dict):
     }
 
 
+# 传统交付纪律：成片带烧录文字（字幕/法律行/CTA 板）或多语言再版时，必须同时交 **textless
+# 无字版母版**（流媒体/代理行规：Netflix 口径 texted ≥30% 即须交 textless production master）——
+# 否则每个语言版/修改版都要回炉重做 online，等于没交母版。
+_TEXTLESS_RE = re.compile(r"textless|无字|净版|clean", re.I)
+
+
+def textless_master_findings(root: Path, plan: dict):
+    deliverables = plan.get("deliverables") or []
+    if not deliverables:
+        return []
+    has_textless = any(
+        _TEXTLESS_RE.search(" ".join(str(item.get(k) or "") for k in ("deliverable_id", "kind", "label", "path")))
+        for item in deliverables)
+    if has_textless:
+        return []
+    rendered_plan = {}
+    try:
+        rendered_plan = json.loads((root / "合规" / "rendered_text_plan.json").read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    burned_rows = len((rendered_plan or {}).get("checks") or [])
+    locales = {}
+    try:
+        locales = json.loads((root / "合规" / "locale_matrix.json").read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    locale_rows = (locales or {}).get("locales") or (locales or {}).get("rows") or []
+    if burned_rows or len(locale_rows) > 1:
+        why = []
+        if burned_rows:
+            why.append(f"成片计划烧录 {burned_rows} 处文字")
+        if len(locale_rows) > 1:
+            why.append(f"locale matrix 有 {len(locale_rows)} 个语言版")
+        return [{"severity": "warn", "code": "textless_master_missing",
+                 "msg": f"{'；'.join(why)}，但交付计划里没有 textless/无字版母版——"
+                        "行规：带字成片必须配无字母版，否则每个语言版/改字都要回炉重做 online；"
+                        "在 delivery_plan 加 textless master 交付件（id 含 textless/无字）"}]
+    return []
+
+
 def build_report(root: Path, plan: dict):
     items = [inspect_item(root, item) for item in plan.get("deliverables") or [] if item.get("exists")]
     findings = [dict(f, deliverable_id=item["deliverable_id"]) for item in items for f in item["findings"]]
+    findings.extend(textless_master_findings(root, plan))
     return {
         "schema_version": 1, "kind": "ad_delivery_qc", "items": items,
         "summary": {

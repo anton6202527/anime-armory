@@ -1,0 +1,24 @@
+{
+  "backend": "Dreamina",
+  "backend_kind": "image",
+  "capabilities": {
+    "output_png": true,
+    "supports_text2image": true
+  },
+  "capability_evidence_id": "14e941b5891ec8f0",
+  "channel": "",
+  "checked_at": "2026-07-17",
+  "command": "official_cli_real_output",
+  "kind": "n2d_backend_smoke_evidence",
+  "note": "1440x2560 PNG可完整解码并已完成执行者原像素目视验收；无人物/文字/logo/水印。",
+  "output_asset": "生产数据/backend_smoke/assets/bf161381-deea-4960-8315-00ac69968500_image_1.png",
+  "profile_spec": {
+    "description": "backend is reachable or has a real output asset",
+    "required_capabilities": []
+  },
+  "proof_type": "manual_assert",
+  "smoke_profile": "basic",
+  "source": "dreamina text2image model_version=5.0",
+  "status": "pass",
+  "version": 1
+}

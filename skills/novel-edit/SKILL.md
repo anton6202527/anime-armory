@@ -28,6 +28,16 @@ description: Professional editing workflow for completed or in-progress novel dr
 | `line_edit` | 行文级精修：场景节奏、对白潜台词、句式、五感、文风、去 AI 味 | 章节定稿前 |
 | `copyedit_proofread` | 终稿清扫：错字、标点、术语、称谓、格式、章节标题 | 导出/投稿前 |
 
+**冷却通读（cold read-through）——四层之前的传统前置**：全稿或整卷完成后，**隔一段时间**
+（传统作家隔数周；生产线上至少隔一个批次/换一个会话）再从头到尾**只读不改**，用读者速度
+通读，只做三类批注：①哪里想跳读（节奏）②哪里没看懂/记不起前情（衔接与信息管理）
+③哪里情绪没到（落地拍缺失）。通读批注是 `editorial_assessment` 的第一手输入——跳过冷却
+直接进四层，编辑会带着"写作时的记忆"补脑，看不见读者真实的断点。AI 生产线的等价物：
+**换一个没有写作上下文的会话/代理做通读**（写作会话自读=作者热读，等于没冷却）；机检可先跑
+`consistency_audit`（含 chapter_transition/plot_variety/prose_craft）把结构性问题清掉，
+通读专注机检抓不到的主观断点。行文层的朗读 pass（读出来拗口的句子必有问题）放在
+`line_edit` 内做，不单独成层。
+
 ## 工作流
 
 1. 先跑已有证据层：`novel-review`、必要时 `novel-score`、`novel-balance`、`novel-simulate`、`novel-feedback`；多份报告已齐时先用 `novel-craft/scripts/revision_planner.py` 汇成 `修订/revision_plan.json`。

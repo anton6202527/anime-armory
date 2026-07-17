@@ -47,3 +47,30 @@ class SweepScheduleTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+import sweep_schedule as ss
+
+
+def test_hotspot_chapter_becomes_due_and_backward_compatible():
+    # 数据自适应 due：热点章即刻回扫；不传 hotspots 完全保持原静态行为
+    assert ss.is_due(7, 5, target=100) is False
+    assert ss.is_due(7, 5, target=100, hotspots={7}) is True
+    # 窗口计算把热点 due 点纳入边界（上一 due=7 → 窗口从 8 起）
+    assert ss.window_for(10, 5, target=100, hotspots={7}) == (8, 10)
+    assert ss.next_due_after(5, 5, target=100, hotspots={7}) == 7
+
+
+def test_project_hotspots_reads_ledger_and_degrades(tmp_path):
+    import json, os
+    # 缺账本 → 空集合（退化为静态调度）
+    assert ss.project_hotspots(str(tmp_path), 20) == set()
+    # 有账本：churn 突出的章成为热点（factors 含 high_churn 才算，midspan 不算）
+    os.makedirs(os.path.join(str(tmp_path), "审稿"), exist_ok=True)
+    deltas = {f"chapter_{i:02d}": {"summary": {"character_changes": []}} for i in range(1, 21)}
+    deltas["chapter_18"] = {"summary": {"character_changes": [
+        {"name": "甲"}, {"name": "乙"}, {"name": "丙"}, {"name": "丁"}]}}
+    with open(os.path.join(str(tmp_path), "审稿", "state_ledger.json"), "w", encoding="utf-8") as f:
+        json.dump({"chapter_deltas": deltas}, f, ensure_ascii=False)
+    hot = ss.project_hotspots(str(tmp_path), 20)
+    assert 18 in hot
+    assert all(not ss.in_midstory_band(c, 20) or c == 18 or c in hot for c in hot)  # 只有真热点

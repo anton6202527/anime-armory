@@ -50,6 +50,22 @@ try:
 except Exception:  # pragma: no cover
     trope_cliche = None
 try:
+    import plot_variety_audit  # noqa: E401  (同目录) — 情节节拍多样性/桥段复读（advisory）
+except Exception:  # pragma: no cover
+    plot_variety_audit = None
+try:
+    import chapter_transition  # noqa: E401  (同目录) — 章首承接/章间衔接（advisory）
+except Exception:  # pragma: no cover
+    chapter_transition = None
+try:
+    import prose_craft_audit  # noqa: E401  (同目录) — 传统行文手艺+篇章叙事指纹（advisory）
+except Exception:  # pragma: no cover
+    prose_craft_audit = None
+try:
+    import manuscript_map  # noqa: E401  (novel-craft/scripts·已在 sys.path) — 结构地图/价值转变 lint
+except Exception:  # pragma: no cover
+    manuscript_map = None
+try:
     import antagonist_scaling, timeline_check, minor_characters  # noqa: E401  (novel-wiki/scripts)
 except Exception:  # pragma: no cover
     antagonist_scaling = timeline_check = minor_characters = None
@@ -450,12 +466,13 @@ def _run_detector(label, module, project, out_name):
 # 让「加了一堆检测器却不知道整体盖没盖全」变成一张可读的覆盖表。一个检测器可同属多类。
 CONSTORY_TAXONOMY = {
     "时间线与情节逻辑": ["timeline", "logic_sentry", "thread_resolution", "foreshadow",
-                  "reader_contract", "hook_endings"],
+                  "reader_contract", "hook_endings", "plot_variety", "chapter_transition",
+                  "manuscript_map"],
     "人物刻画一致性": ["logic_sentry", "voice_drift", "minor_characters",
                  "antagonist_scaling", "power_system"],
     "世界观与设定": ["logic_sentry", "power_system"],
     "事实与细节一致性": ["logic_sentry", "research_fact_support", "mechanical"],
-    "叙事与文风": ["style_drift", "tone_curve", "mechanical"],
+    "叙事与文风": ["style_drift", "tone_curve", "mechanical", "plot_variety", "prose_craft"],
 }
 
 
@@ -520,6 +537,17 @@ def main():
             "minor_characters": _run_detector("配角连续性", minor_characters, args.project_path, "minor_character_findings.json"),
             # 想象力侧：套路/前提级陈词滥调（建议级·不阻断）。补‘只有行文级 AI 腔、没有情节级套路探测’的洞。
             "trope_cliche": _run_detector("套路探测", trope_cliche, args.project_path, "trope_cliche_findings.json"),
+            # 想象力侧②：桥段级节拍复读/爽点间隔/钩型·开篇单一化（advisory·不阻断）。
+            # trope_cliche 只扫蓝图/前提/首章开局，本检测器管**跨章**的桥段循环与节奏多样性。
+            "plot_variety": _run_detector("情节多样性", plot_variety_audit, args.project_path, "plot_variety_findings.json"),
+            # 剧情衔接侧：章边界承接质检（写作端 draft_packets 有"上一章承接"输入辅助，质检端此前空白）。
+            "chapter_transition": _run_detector("章间承接", chapter_transition, args.project_path, "transition_findings.json"),
+            # 行文手艺侧：过滤词/对话标签/设定倾倒（传统 line-edit）+ StoryScope 篇章指纹
+            # （点破主题/生理化情绪/嗅觉/映衬/哲理对白——keyword_banks 六桶词库的首个消费者）。
+            "prose_craft": _run_detector("行文手艺", prose_craft_audit, args.project_path, "prose_craft_findings.json"),
+            # 结构侧：McKee 价值转变 lint（缺 turn/value_shift）——此前只活在 author_workflow，
+            # 中长篇容易漏跑；进 review 链降 advisory，结构缺口随修订计划回流。
+            "manuscript_map": _run_detector("结构地图", manuscript_map, args.project_path, "manuscript_map_findings.json"),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:

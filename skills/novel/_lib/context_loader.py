@@ -18,6 +18,7 @@ if _HERE not in sys.path:
 
 from project_io import read_chapters, load_project_settings
 from novel_contract import get_product_path
+from consistency_scaffold import resolve_character_card
 
 def load_wiki(root):
     try:
@@ -130,7 +131,14 @@ def get_drafting_context(root, chapter_num, window_size=3):
     # 1. 基础设定
     blueprint = load_blueprint_or_bible(root, "创作蓝图.md")
     bible = load_blueprint_or_bible(root, "设定圣经.md")
-    char_card = load_blueprint_or_bible(root, "角色卡.md")
+    # 角色卡文件名走 resolve_character_card 单一真值源（同时认 角色卡.md 与 人物.md）：
+    # continue/expand/condense 派生线写的是 设定/人物.md，写死文件名会让派生线的
+    # 写章上下文角色卡恒为空（与 wiki_builder/logic_sentry 消费侧同源）。
+    char_card_path = resolve_character_card(root)
+    char_card = ""
+    if char_card_path and os.path.exists(char_card_path):
+        with open(char_card_path, "r", encoding="utf-8") as f:
+            char_card = f.read()
     
     # 2. 细纲 (从设定/章纲.md 提取)
     outline = ""

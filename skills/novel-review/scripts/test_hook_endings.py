@@ -148,3 +148,20 @@ def test_analyze_golden_three_marked(monkeypatch):
     golden = {s["chapter"]: s["is_golden"] for s in res["scored"]}
     assert golden[2] is True
     assert golden[9] is False
+
+
+def test_reveal_identity_hook_production_false_positive():
+    # 生产实锤回归（金睛缉妖录第1章）：强身份揭示钩曾被判 0 分 → 24 章全标红。
+    # 揭示词"也有" + 人物/往昔指涉"他当年" + 句中省略号 → 至少 3 分（过黄金三章阈值）。
+    ending = "这眼睛……他当年，也有。"
+    assert H.hook_score(ending) >= 3
+    assert H.ending_band(H.hook_score(ending), True) == "ok"
+
+
+def test_reveal_word_alone_plus_person():
+    assert H.hook_score("柜台后的老人抬起头，正是当年那个人。") >= 2
+
+
+def test_jiujing_question_not_double_counted_as_reveal():
+    # "究竟是谁" 是疑问不是揭示——负向断言防误命中
+    assert H.hook_score("这一切究竟是谁安排的？") == 1

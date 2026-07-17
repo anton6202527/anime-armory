@@ -1193,6 +1193,162 @@ def test_continuity_must_rewrites_adult_minor_shoulder_contact_to_non_contact() 
     assert all("拍肩" not in item for item in clauses)
 
 
+def test_continuity_must_keeps_story_contact_for_non_openai_backend() -> None:
+    body = (
+        "十四岁少年与成年管事对话。\n"
+        "**专项镜头模板**：continuity_must=[\"拍肩为张老大右手\", \"木牌始终在少年胸前\"]；negative=[]。"
+    )
+
+    clauses = codex_image_runner.section_continuity_must_for_model(
+        body,
+        soften_adult_minor_contact=False,
+    )
+
+    assert clauses == ["拍肩为张老大右手", "木牌始终在少年胸前"]
+    assert not any("不接触" in item for item in clauses)
+
+
+def test_midframe_anchor_uses_subshot_starting_at_exact_edit_boundary(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP02",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "continuity": {"anchors": [
+            {"at_sec": 4.8, "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png"},
+            {"at_sec": 6.1, "anchor_png": "出图/第1集/图片/EP01_CLIP02_a2.png"},
+        ]},
+        "shots": [
+            {"t": "0-4.8s", "lens": "MCU", "desc": "张老大俯身下令"},
+            {"t": "4.8-6.1s", "lens": "insert", "desc": "右手压在少年左肩"},
+            {"t": "6.1-7.969s", "lens": "CU", "desc": "贺平生垂眼短促应下", "video_prompt": "少年仅一次轻微点头"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"}, {"id": "CHAR_02", "name": "张老大"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_02",
+        title="## 镜头2",
+        body=(
+            "**目标落档**：`出图/第1集/图片/EP01_CLIP02_a2.png`\n"
+            "**剧本描述**：张老大俯身下令 右手压在少年左肩 贺平生垂眼短促应下\n"
+            "**专项镜头模板**：continuity_must=[\"拍肩为张老大右手\", \"木牌始终在少年胸前\"]；negative=[]。\n"
+            "### 正向 prompt（中文）\n动作瞬间：张老大俯身下令 右手压在少年左肩 贺平生垂眼短促应下\n"
+        ),
+        target_line="`出图/第1集/图片/EP01_CLIP02_a2.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_02_a2", clip="Clip_02", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP02_a2.png", section=section,
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="dreamina",
+        model="Seedream 5.0", channel="official_cli",
+    )
+    prompt = str(compiled.get("prompt") or "")
+
+    assert beat["desc"] == "贺平生垂眼短促应下"
+    assert beat["single_reaction"] is True
+    assert "少年仅一次轻微点头" in prompt
+    assert "张老大及其手臂完全出画" in prompt
+    assert "右手压在少年左肩" not in prompt
+    assert "拍肩为张老大右手" not in prompt
+
+
+def test_firstframe_uses_first_faceless_storyboard_subshot_only(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP03",
+        "character_ids": ["CHAR_01"],
+        "shots": [
+            {"t": "0-4.7s", "lens": "CU insert", "desc": "旧布包、一双空旧鞋和远处山门，不出现回忆人脸"},
+            {"t": "4.7-11.6s", "lens": "MS", "desc": "贺平生在巨缸前握紧扁担"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_03", title="## 镜头 3",
+        body=(
+            "**目标落档**：`出图/第1集/图片/EP01_CLIP03.png`\n"
+            "**资产身份注册层**：`CHAR_01/常态`\n"
+            "**剧本描述**：旧布包和空鞋 贺平生握紧扁担\n"
+            "### 正向 prompt（中文）\n动作瞬间：旧布包和空鞋 贺平生握紧扁担\n"
+        ),
+        target_line="`出图/第1集/图片/EP01_CLIP03.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_03_first", clip="Clip_03", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP03.png", section=section,
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="dreamina",
+        model="Seedream 5.0", channel="official_cli",
+    )
+    prompt = str(compiled.get("prompt") or "")
+
+    assert beat["frame_role"] == "first"
+    assert beat["faceless_insert"] is True
+    assert "旧布包、一双空旧鞋和远处山门" in prompt
+    assert "贺平生在巨缸前握紧扁担" not in prompt
+    assert "所有具名人物" in prompt
+
+
+def test_firstframe_does_not_render_video_jump_cuts_as_triptych(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP05",
+        "character_ids": ["CHAR_01"],
+        "shots": [{
+            "t": "0-2.5s",
+            "lens": "WS·同构图跳切",
+            "desc": "少年肩挑两桶侧身向画左行进，步幅变小",
+            "video_prompt": "用三个清晰跳切表现时间，桶体数量、衣服和扁担不变",
+        }],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_05", title="## 镜头 5",
+        body=(
+            "**目标落档**：`出图/第1集/图片/EP01_CLIP05.png`\n"
+            "**资产身份注册层**：`CHAR_01/常态`\n"
+            "### 正向 prompt（中文）\n动作瞬间：劳作蒙太奇后到潭边放桶\n"
+        ),
+        target_line="`出图/第1集/图片/EP01_CLIP05.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_05_first", clip="Clip_05", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP05.png", section=section,
+    )
+
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="dreamina",
+        model="Seedream 5.0", channel="official_cli",
+    )
+    prompt = str(compiled.get("prompt") or "")
+
+    assert "少年肩挑两桶侧身向画左行进，步幅变小" in prompt
+    assert "用三个清晰跳切表现时间" not in prompt
+    assert "只生成一个连续相机画面" in prompt
+    assert "禁止分屏、三联画、多格漫画、拼贴" in prompt
+
+
 def test_codex_prompt_for_group_character_split_ref_forces_single_member(tmp_path: Path) -> None:
     section = codex_image_runner.ClipSection(
         clip="CHAR_PURSUER",
@@ -2159,6 +2315,16 @@ def test_shared_first_interlock_blocks_review_failed_asset_reference(tmp_path: P
 
     assert any("WEAPON_TEST" in issue and "复核失败参考图" in issue for issue in issues)
     assert any("WEAPON_TEST" in issue and "self_check_passed=false" in issue for issue in issues)
+
+
+def test_shot_asset_refs_resolve_chinese_constraint_suffix_to_registered_id() -> None:
+    refs = codex_image_runner._shot_asset_refs(
+        "**资产引用注册层**：不要让 PROP_水桶结构/颜色/尺寸漂移；PROP_扁担保持稳定。",
+        {"PROP_水桶", "PROP_扁担"},
+    )
+
+    assert refs == {"PROP_水桶", "PROP_扁担"}
+    assert "PROP_水桶结构" not in refs
 
 
 def test_controlled_multiref_derivation_prefers_expected_parent(tmp_path: Path) -> None:

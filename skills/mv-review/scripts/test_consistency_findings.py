@@ -99,6 +99,64 @@ def test_production_stats_flags_high_redraw_and_takes(tmp_path: Path) -> None:
     assert "takes_per_clip_high" in codes
 
 
+def test_drift_risk_aggregated(tmp_path: Path) -> None:
+    mod = load_module()
+    write_json(tmp_path / "分镜" / "clip_plan.json", {"clips": [{"clip_id": "Clip_01"}]})
+    report = mod.build_report(str(tmp_path))
+    assert any(f["code"] == "drift_risk_missing" for f in report["findings"])
+    write_json(tmp_path / "生产数据" / "drift_risk" / "drift_risk.json",
+               {"summary": {"high": 3, "measured_backfilled": 1}})
+    report = mod.build_report(str(tmp_path))
+    hit = next(f for f in report["findings"] if f["code"] == "drift_risk_high")
+    assert hit["severity"] == "warn"
+
+
+def test_verifier_coverage_flags_dormant_face_stack(tmp_path: Path) -> None:
+    mod = load_module()
+    write_json(tmp_path / "分镜" / "clip_plan.json", {"clips": [{"clip_id": "Clip_01"}]})
+    write_json(tmp_path / "设定" / "identity_registry.json", {"lead_id": "CHAR_lead"})
+    # image_qc 存在但脸检降级 Pillow、dHash 没跑 → 适用但休眠
+    write_json(tmp_path / "生产数据" / "image_qc" / "image_qc.json", {
+        "summary": {"hard_blocks": 0, "advisory": 0},
+        "qc_environment": {"precision_level": "degraded"},
+        "checks": {"face": {"available": True, "mode": "pillow_basic"},
+                   "palette": {"available": True}},
+        "shot_variety": {"available": False},
+    })
+    report = mod.build_report(str(tmp_path))
+    hit = next(f for f in report["findings"] if f["code"] == "reality_verifier_dormant")
+    assert hit["severity"] == "warn"
+    dormant_keys = {r["key"] for r in hit["detail"]["rows"] if r["dormant"]}
+    assert "image_face" in dormant_keys and "image_composition_dhash" in dormant_keys
+    # video_qc 脸检真跑过 + 抽帧有样本 → 不休眠
+    write_json(tmp_path / "生产数据" / "video_qc" / "video_qc.json", {
+        "summary": {"hard_blocks": 0, "warnings": 0, "face_identity_mode": "insightface",
+                    "frame_samples": 9},
+        "seams": [],
+    })
+    report = mod.build_report(str(tmp_path))
+    hit = next(f for f in report["findings"] if f["code"] == "reality_verifier_dormant")
+    rows = {r["key"]: r for r in hit["detail"]["rows"]}
+    assert rows["video_face"]["ran_fresh"] and not rows["video_face"]["dormant"]
+    assert rows["video_frame_perception"]["ran_fresh"]
+
+
+def test_verifier_coverage_all_active_is_info(tmp_path: Path) -> None:
+    mod = load_module()
+    write_json(tmp_path / "分镜" / "clip_plan.json", {"clips": [{"clip_id": "Clip_01"}]})
+    write_json(tmp_path / "设定" / "identity_registry.json", {"lead_id": "CHAR_lead"})
+    write_json(tmp_path / "生产数据" / "image_qc" / "image_qc.json", {
+        "summary": {"hard_blocks": 0, "advisory": 0},
+        "qc_environment": {"precision_level": "full"},
+        "checks": {"face": {"available": True, "mode": "insightface"},
+                   "palette": {"available": True}},
+        "shot_variety": {"available": True},
+    })
+    report = mod.build_report(str(tmp_path))
+    assert any(f["code"] == "reality_verifiers_active" for f in report["findings"])
+    assert not any(f["code"] == "reality_verifier_dormant" for f in report["findings"])
+
+
 def test_production_stats_quiet_when_healthy(tmp_path: Path) -> None:
     mod = load_module()
     root = tmp_path

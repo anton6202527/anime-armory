@@ -286,6 +286,78 @@ class GateProgressTest(unittest.TestCase):
             self.assertTrue(any("正式生产痕迹" in w for w in warnings))
             self.assertEqual(gate._demo_flag_warnings(tmp, "image", {"is_demo": False}), [])
 
+    def test_drift_risk_advisory_never_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            # 无 clip_plan → 静默
+            self.assertEqual(gate._drift_risk_warnings(tmp, "image"), [])
+            clips = [{"clip_id": f"Clip_{i:02d}"} for i in range(1, 13)]
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": clips}, f, ensure_ascii=False)
+            # 有 clip_plan、未跑 → 提示先跑（advisory）
+            self.assertTrue(any("drift_risk" in w for w in gate._drift_risk_warnings(tmp, "image")))
+            # 报告有 high → warn；hash 一致不报过期
+            plan_hash = mv_utils.content_hash(os.path.join(tmp, "分镜", "clip_plan.json"))
+            dr = os.path.join(tmp, "生产数据", "drift_risk", "drift_risk.json")
+            os.makedirs(os.path.dirname(dr), exist_ok=True)
+            with open(dr, "w", encoding="utf-8") as f:
+                json.dump({"inputs_sha256": {"分镜/clip_plan.json": plan_hash},
+                           "summary": {"high": 2}}, f, ensure_ascii=False)
+            warnings = gate._drift_risk_warnings(tmp, "image")
+            self.assertTrue(any("high 风险" in w for w in warnings))
+            self.assertFalse(any("过期" in w for w in warnings))
+            # clip_plan 变化 → 过期提示（仍只是 warning）
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": clips + [{"clip_id": "Clip_99"}]}, f, ensure_ascii=False)
+            self.assertTrue(any("过期" in w for w in gate._drift_risk_warnings(tmp, "image")))
+
+    def test_craft_audit_advisory_never_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            self.assertEqual(gate._craft_audit_warnings(tmp, "image"), [])  # 无 clip_plan → 静默
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": [{"clip_id": "Clip_01"}]}, f, ensure_ascii=False)
+            self.assertTrue(any("craft_audit" in w for w in gate._craft_audit_warnings(tmp, "image")))
+            plan_hash = mv_utils.content_hash(os.path.join(tmp, "分镜", "clip_plan.json"))
+            ca = os.path.join(tmp, "生产数据", "craft_audit", "craft_audit.json")
+            os.makedirs(os.path.dirname(ca), exist_ok=True)
+            with open(ca, "w", encoding="utf-8") as f:
+                json.dump({"inputs_sha256": {"分镜/clip_plan.json": plan_hash},
+                           "summary": {"warn": 2},
+                           "findings": [{"severity": "warn", "code": "chorus_no_escalation"},
+                                        {"severity": "warn", "code": "no_dynamics_contrast"}]},
+                          f, ensure_ascii=False)
+            warnings = gate._craft_audit_warnings(tmp, "image")
+            self.assertTrue(any("chorus_no_escalation" in w for w in warnings))
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": [{"clip_id": "Clip_01"}, {"clip_id": "Clip_02"}]}, f, ensure_ascii=False)
+            self.assertTrue(any("过期" in w for w in gate._craft_audit_warnings(tmp, "image")))
+
+    def test_pilot_matrix_advisory_formal_big_project_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            small = [{"clip_id": f"Clip_{i:02d}"} for i in range(1, 5)]
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": small}, f, ensure_ascii=False)
+            # 小盘不打扰
+            self.assertEqual(gate._pilot_matrix_warnings(tmp, "image", {"is_demo": False}), [])
+            big = [{"clip_id": f"Clip_{i:02d}"} for i in range(1, 13)]
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": big}, f, ensure_ascii=False)
+            # 正式大盘未打样 → 提示；demo 不提示
+            self.assertTrue(any("打样" in w for w in gate._pilot_matrix_warnings(tmp, "image", {"is_demo": False})))
+            self.assertEqual(gate._pilot_matrix_warnings(tmp, "image", {"is_demo": True}), [])
+            # 有绑定当前 clip_plan 的矩阵 → 安静；clip_plan 变化 → 过期
+            plan_hash = mv_utils.content_hash(os.path.join(tmp, "分镜", "clip_plan.json"))
+            pm = os.path.join(tmp, "生产数据", "pilot_matrix", "pilot_matrix.json")
+            os.makedirs(os.path.dirname(pm), exist_ok=True)
+            with open(pm, "w", encoding="utf-8") as f:
+                json.dump({"inputs_sha256": {"分镜/clip_plan.json": plan_hash}, "probes": []}, f, ensure_ascii=False)
+            self.assertEqual(gate._pilot_matrix_warnings(tmp, "image", {"is_demo": False}), [])
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
+                json.dump({"clips": big + [{"clip_id": "Clip_99"}]}, f, ensure_ascii=False)
+            self.assertTrue(any("过期" in w for w in gate._pilot_matrix_warnings(tmp, "image", {"is_demo": False})))
+
 
 if __name__ == "__main__":
     unittest.main()

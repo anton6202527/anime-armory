@@ -56,6 +56,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
    - 角色：每个出正/侧/背三视图 → `定妆_<角色>_三视图.png`。
    - 场景：关键场景四视图。
    3. **产品**：包装正/侧/背 + 关键细节（logo 特写、材质）→ `定妆_<产品>.png`，并在 `出图/共享/asset_registry.json` 登记 `PROD_*`/`BRAND_*`、品牌 HEX、logo mask/保护区、包装文字禁改项、UI 状态。
+   - **多视图分参考**：定妆是网格大图（master sheet）时，用 `scripts/derive_reference_views.py --grid/--box` 裁成逐视图分参考 PNG（`出图/共享/定妆视图/<资产>/`）并落 `生产数据/ad_reference_views.json` 溯源（source sha256+裁切框）；把 `suggested_registry_patch` 里的路径**手工**补进 asset_registry 的 `reference_images` 再刷新快照——单张定妆照对 AI 只是固定板式，`reference_planner` 处方要求的多张参考就从这里来。
       - **品牌色锁 (Hex-Lock)**：显式声明品牌 HEX 值，并在 Prompt 末尾追加 `color consistency: strict HEX #[value]`。
       - **Logo 保护区**：标记 Logo 坐标，禁止 AI 在 Logo 区域生成环境干扰（如遮挡、强反光）。
    2. **写视觉契约总览**（`出图/分镜/prompt/00_总览.md`）：继承 `storyboard.json.visual_contract`（品牌色/光位锚/画风/构图），逐镜带视线方向/光位/起幅余量。

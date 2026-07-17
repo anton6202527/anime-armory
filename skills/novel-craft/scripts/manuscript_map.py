@@ -119,6 +119,7 @@ def build_map(root: str) -> dict[str, Any]:
             "primary_obstacle": _first_nonempty([s.get("obstacle") for s in chapter_scenes]),
             "value_shift": _first_nonempty([s.get("value_shift") for s in chapter_scenes]),
             "turn": _first_nonempty([s.get("turn") for s in chapter_scenes]),
+            "aftermath": _first_nonempty([s.get("aftermath") for s in chapter_scenes]),
             "reveal_or_payoff": [
                 str(s.get("reveal_or_payoff")).strip()
                 for s in chapter_scenes
@@ -212,6 +213,103 @@ def render_markdown(report: dict[str, Any], check: dict[str, Any] | None = None)
 
 def _cell(value: Any) -> str:
     return str(value or "").replace("|", "\\|").replace("\n", " ").strip()
+
+
+SEQUEL_GAP_RUN = 3  # 连续几章"有 turn 无 aftermath"算高压不落地
+
+
+def detect_sequel_gaps(rows: list[dict[str, Any]], run_len: int = SEQUEL_GAP_RUN) -> list[dict[str, Any]]:
+    """Scene-Sequel 落地拍检测（Swain 工艺）：连续 ≥run_len 章场景卡有 turn 却全无
+    aftermath（反应→两难→决定）→ advisory。单章无 sequel 完全合法（高压续压是常用
+    手法），**连续**多章不落地才是读者疲劳红旗。纯函数·可测。"""
+    alerts: list[dict[str, Any]] = []
+    run: list[int] = []
+
+    def _flush():
+        if len(run) >= run_len:
+            alerts.append({
+                "type": "SEQUEL-GAP-RUN", "severity": "建议级", "auto": True,
+                "chapter": run[0], "chapters": list(run),
+                "note": (f"第{run[0]}–{run[-1]}章连续 {len(run)} 章场景卡只有 turn（高压拍）、"
+                         f"全无 aftermath（落地拍：反应→两难→决定）——Scene-Sequel 工艺：高潮连打"
+                         f"不喘会麻木，情绪要落地读者才记得疼；在其中一章补一段 sequel"
+                         f"（工艺见 novel-craft/references/scene-sequel.md）"),
+            })
+        run.clear()
+
+    for row in rows:
+        if row.get("scene_count") and str(row.get("turn") or "").strip() \
+                and not str(row.get("aftermath") or "").strip():
+            run.append(row.get("chapter"))
+        else:
+            _flush()
+    _flush()
+    return alerts
+
+
+def analyze(root: str) -> dict[str, Any]:
+    """consistency_audit 子检测器契约适配：build+check → {ran, alerts, blocking(=0)}。
+
+    结构地图（McKee 价值转变 lint：缺 turn/value_shift/无计划来源）此前只被
+    author_workflow/supervisor/pipeline 读，没进 review 汇总——中长篇容易漏跑，
+    "连续几章无价值转折"这类传统结构问题到不了修订计划。manuscript_map 自身的
+    blocking 语义保留给结构闸；进 review 链一律降 advisory（审稿链的职责是把结构
+    缺口带进修订计划，不是拿计划期字段缺失硬挡审稿）。无任何计划源时优雅跳过。"""
+    report = build_map(root)
+    if not report.get("chapters"):
+        return {"ran": False, "skipped": "无章纲/场景卡/正文——没有结构地图可检"}
+    check = check_map(report)
+    alerts = []
+    for f in check.get("findings") or []:
+        if f.get("id") == "MANUSCRIPT-MAP-MISSING":
+            continue  # build_map 现算的 report 不会缺 kind；该项只对读盘态有意义
+        sev = "建议级" if f.get("severity") == "blocking" else "info"
+        alerts.append({"type": f.get("id"), "severity": sev, "auto": True,
+                       "chapter": f.get("chapter"),
+                       "note": f"{f.get('message')}（结构地图·价值转变 lint：每章该有 turn/value_shift，"
+                               f"传统手艺是『无转折的场景删掉或合并』）"})
+    alerts.extend(detect_sequel_gaps(report.get("chapters") or []))
+    alerts.extend(detect_dropped_anchors(root, report.get("chapters") or []))
+    return {"ran": True, "alerts": alerts, "total": len(alerts), "blocking": 0}
+
+
+_ANCHOR_SEG_RE = re.compile(r"[一-鿿]{2,}")
+
+
+def detect_dropped_anchors(root: str, rows: list[dict[str, Any]], limit: int = 8) -> list[dict[str, Any]]:
+    """意象锚对账（传统"道具戏眼/意象贯穿"手艺）：场景卡登记了 sensory_anchor（本场的
+    五感戏眼），但对应章正文里**一个词段都没出现** → 计划的意象被成文丢弃（info）。
+
+    传统手艺：意象锚是场景的记忆点与贯穿线（灶上的药味、指节上的旧疤），计划了不写
+    等于场景失去质感抓手；写了别的意象也行——所以只在**完全无命中**时提示，命中任一
+    ≥2 字段即视为兑现。读不到正文/锚为空一律跳过，宁缺毋滥。"""
+    alerts: list[dict[str, Any]] = []
+    for row in rows:
+        anchors = [a for a in (row.get("sensory_anchors") or []) if str(a).strip()]
+        path = row.get("chapter_path")
+        if not anchors or not path:
+            continue
+        abs_path = path if os.path.isabs(path) else os.path.join(root, path)
+        try:
+            with open(abs_path, encoding="utf-8") as f:
+                text = f.read()
+        except OSError:
+            continue
+        for anchor in anchors:
+            segs = _ANCHOR_SEG_RE.findall(str(anchor))
+            if not segs:
+                continue
+            if not any(seg in text for seg in segs):
+                alerts.append({
+                    "type": "SENSORY-ANCHOR-DROPPED", "severity": "info", "auto": True,
+                    "chapter": row.get("chapter"),
+                    "note": (f"第{row.get('chapter')}章场景卡登记的意象锚『{str(anchor)[:20]}』"
+                             f"在正文零命中——计划的五感戏眼被成文丢弃；补进场景，或回卡改成"
+                             f"实际用的意象（意象贯穿是廉价高效的质感手艺）"),
+                })
+                if len(alerts) >= limit:
+                    return alerts
+    return alerts
 
 
 def write_outputs(root: str, report: dict[str, Any], check: dict[str, Any]) -> tuple[str, str, str]:

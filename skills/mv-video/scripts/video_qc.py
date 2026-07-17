@@ -281,10 +281,31 @@ def location_key(clip):
     return str(clip.get("section") or "").strip()
 
 
-def seam_rows(clips, clip_rows):
+def load_discontinuity_exceptions(root):
+    """已签署的「有意不连续」例外账本：制片/intentional_discontinuity.json。
+
+    MV 常有刻意的段落 look 跳变（副歌切黑白/闪回/换色调）——机器只看色距会把导演意图
+    误报成 seam risk。例外必须**具名**（reviewer）且写明 reason 才生效：把「这是刻意的」
+    从口头共识变成留痕决定。只豁免 advisory 级的同场景硬切色跳；continuity_required
+    接缝声明了连续又签不连续=矛盾信号，仍保留 risk 并另加提示。"""
+    payload = mv_utils.load_json(os.path.join(root, "制片", "intentional_discontinuity.json"), {}) or {}
+    out = {}
+    for row in payload.get("entries") or []:
+        if not isinstance(row, dict):
+            continue
+        key = (str(row.get("from") or ""), str(row.get("to") or ""))
+        signed = str(row.get("reviewer") or "").strip() and str(row.get("reason") or row.get("notes") or "").strip()
+        if all(key) and signed:
+            out[key] = row
+    return out
+
+
+def seam_rows(clips, clip_rows, exceptions=None):
     rows = []
+    exceptions = exceptions or {}
     for prev_clip, cur_clip, prev, cur in zip(clips, clips[1:], clip_rows, clip_rows[1:]):
         contract = prev_clip.get("seam_contract") or (prev_clip.get("continuity") or {}).get("outgoing_seam") or {}
+        exception = exceptions.get((str(prev.get("clip_id")), str(cur.get("clip_id"))))
         risk = []
         if prev.get("verdict") != "ok" or cur.get("verdict") != "ok":
             risk.append("adjacent_clip_has_qc_warning")
@@ -298,10 +319,15 @@ def seam_rows(clips, clip_rows):
         if dist is not None and dist > 120:
             if contract.get("continuity_required"):
                 risk.append("large_color_delta_breaks_continuous_seam")
+                if exception:
+                    # 声明了连续接缝却又签「有意不连续」——矛盾信号，不豁免，提示先改其一。
+                    risk.append("intentional_exception_conflicts_continuous_seam")
             elif location_key(prev_clip) and location_key(prev_clip) == location_key(cur_clip):
-                # 同场景硬切色跳：同一场景相邻镜主色/色温跳变=观感断裂。
-                # 非连续接缝无 end-frame 合同可依，只作 advisory 风险提示，人工并排复核。
-                risk.append("same_scene_hard_cut_color_jump")
+                if not exception:
+                    # 同场景硬切色跳：同一场景相邻镜主色/色温跳变=观感断裂。
+                    # 非连续接缝无 end-frame 合同可依，只作 advisory 风险提示，人工并排复核。
+                    # 已具名签署 intentional_discontinuity 的接缝豁免（导演刻意 look 跳变）。
+                    risk.append("same_scene_hard_cut_color_jump")
         seam_similarity = hash_similarity(
             (prev_end.get("stats") or {}).get("perceptual_hash"),
             (cur_start.get("stats") or {}).get("perceptual_hash"),
@@ -316,6 +342,7 @@ def seam_rows(clips, clip_rows):
             "from": prev.get("clip_id"),
             "to": cur.get("clip_id"),
             "risk": risk,
+            "intentional_discontinuity": exception or None,
             "end_frame": prev_end.get("path"),
             "start_frame": cur_start.get("path"),
             "mean_rgb_distance": dist,
@@ -391,7 +418,7 @@ def build_report(root):
     face_mode = apply_face_identity_qc(root, merged, clip_rows)
     hard = sum(1 for r in clip_rows for f in r.get("findings", []) if f.get("level") == "block")
     warn = sum(1 for r in clip_rows for f in r.get("findings", []) if f.get("level") == "warn")
-    seams = seam_rows(merged, clip_rows)
+    seams = seam_rows(merged, clip_rows, load_discontinuity_exceptions(root))
     sampled = sum(1 for r in clip_rows for f in r.get("frame_samples", []) if f.get("ok"))
     input_paths = ("分镜/clip_plan.json", "分镜/timeline_manifest.json")
     selected_hashes = {row.get("video_path"): mv_utils.content_hash(os.path.join(root, row.get("video_path")))
@@ -462,7 +489,10 @@ def main():
     ap.add_argument("project_root")
     ap.add_argument("--no-fail", action="store_true")
     ap.add_argument("--accept-semantic", action="store_true", help="人工逐镜/逐接缝复核身份、服化道、空间、动作、口型和画风后签收")
-    ap.add_argument("--reviewer", help="配合 --accept-semantic，记录复核人")
+    ap.add_argument("--accept-discontinuity", action="append", default=[], metavar="FROM:TO",
+                    help="具名签署「有意不连续」接缝（如 Clip_03:Clip_04，可重复）；需 --reviewer 与 --notes 写明意图，"
+                         "签署后该接缝的同场景硬切色跳不再报 advisory")
+    ap.add_argument("--reviewer", help="配合 --accept-semantic / --accept-discontinuity，记录复核人")
     ap.add_argument("--notes", default="")
     args = ap.parse_args()
 
@@ -470,6 +500,23 @@ def main():
     if not os.path.isdir(root):
         print(f"[err] 找不到作品根：{root}", file=sys.stderr)
         return 2
+    if args.accept_discontinuity:
+        if not args.reviewer or not args.notes.strip():
+            print("[err] --accept-discontinuity 必须同时提供 --reviewer 和 --notes（写明为什么是刻意的）", file=sys.stderr)
+            return 2
+        ledger_path = os.path.join(root, "制片", "intentional_discontinuity.json")
+        ledger = mv_utils.load_json(ledger_path, {}) or {}
+        entries = [row for row in ledger.get("entries") or [] if isinstance(row, dict)]
+        for pair in args.accept_discontinuity:
+            if ":" not in pair:
+                print(f"[err] --accept-discontinuity 参数格式应为 FROM:TO，收到：{pair}", file=sys.stderr)
+                return 2
+            src, dst = (part.strip() for part in pair.split(":", 1))
+            entries = [row for row in entries if not (row.get("from") == src and row.get("to") == dst)]
+            entries.append({"from": src, "to": dst, "reviewer": args.reviewer,
+                            "reason": args.notes, "date": date.today().isoformat()})
+        mv_utils.write_json(ledger_path, {"kind": "mv_intentional_discontinuity", "entries": entries})
+        print(f"[ok] 有意不连续例外 → {ledger_path}（{len(args.accept_discontinuity)} 条）")
     report = build_report(root)
     if args.accept_semantic:
         if not args.reviewer:

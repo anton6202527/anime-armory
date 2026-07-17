@@ -320,6 +320,19 @@ def analyze(project, through_chapter=None, grace=DEFAULT_GRACE):
     data = load_ledger(project)
     seeds = data.get("seeds") or []
     if not seeds:
+        # 空转报缺（王敦外传实证）：台账为空时所有下游（balance 烂尾预警/logic_sentry/
+        # consistency_audit）静默空转，"没数据"被误读成"没问题"。正文已成规模（≥10 章）
+        # 还零登记 = 伏笔机制整体停摆，升级为显式建议级报缺而非安静 skipped。
+        written = _max_written_chapter(project)
+        if written >= 10:
+            return {"ran": True, "alerts": [{
+                "type": "foreshadow_ledger_empty", "severity": "建议级", "auto": True,
+                "chapter": written,
+                "note": (f"正文已 {written} 章但伏笔台账零登记——回收率/烂尾预警/越窗检测"
+                         "全部空转中（没数据≠没问题）。回补：`foreshadow_ledger.py plant` "
+                         "逐条登记已埋伏笔，或确认本书确实无伏笔线"),
+            }], "total": 1, "blocking": 0,
+                "skipped": ""}
         return {"ran": False,
                 "skipped": "无伏笔台账或台账为空（先用 foreshadow_ledger.py plant 埋点）"}
     if through_chapter is None:

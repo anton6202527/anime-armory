@@ -51,15 +51,17 @@ def batch_review_interval(settings, meta):
     return max(1, int(match.group(1))) if match else 5
 
 
-def batch_review_window(ch_num, interval, meta):
+def batch_review_window(ch_num, interval, meta, root=None):
     # due 点收口到 novel/_lib/sweep_schedule：基础平铺 + 项目尾 + 中段防守加密
-    # （40-60% 进度带按半间隔加密，长篇矛盾高发区）。与 draft_packets 同一真值源。
+    # （40-60% 进度带按半间隔加密，长篇矛盾高发区）+ 数据自适应热点（root 给定时读
+    # state_ledger churn 热点章）。与 draft_packets 同一真值源。
     if interval <= 0:
         return None
     target = int(meta.get("target_chapters") or 0)
-    if sweep_schedule.is_due(ch_num, interval, target):
-        return sweep_schedule.window_for(ch_num, interval, target)
-    next_due = sweep_schedule.next_due_after(ch_num, interval, target)
+    hotspots = sweep_schedule.project_hotspots(root, target) if root else None
+    if sweep_schedule.is_due(ch_num, interval, target, hotspots):
+        return sweep_schedule.window_for(ch_num, interval, target, hotspots)
+    next_due = sweep_schedule.next_due_after(ch_num, interval, target, hotspots)
     if target and next_due:
         next_due = min(next_due, target)
     return None, next_due

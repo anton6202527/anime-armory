@@ -77,3 +77,18 @@ def test_risk_hotspots_returns_midspan_and_high_churn():
     assert all(r["factors"] for r in hot)
     # 空/非法 total 安全
     assert nrw.risk_hotspots(0, churn_map={1: 9}) == []
+
+
+def test_build_churn_map_legacy_int_rolled_summary_counts():
+    # 旧版 rollup 把 character_changes 压成整数计数——churn 必须按计数入账，别静默归 0
+    # （早章 churn 归 0 会让热点分布系统性偏向近章）。新版 rollup 的 {name,event} 列表照常 len。
+    ledger = {"chapter_deltas": {
+        "chapter_02": {"merged_at": "x",
+                       "summary": {"rolled": True, "character_changes": 3, "characters_touched": ["甲"]}},
+        "chapter_09": {"merged_at": "y",
+                       "summary": {"rolled": True,
+                                   "character_changes": [{"name": "乙", "event": "death"}]}},
+    }}
+    churn = nrw.build_churn_map(ledger)
+    assert churn[2] == 3
+    assert churn[9] == 1

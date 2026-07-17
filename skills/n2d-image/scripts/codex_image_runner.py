@@ -1078,11 +1078,41 @@ def _shot_character_refs(body: str) -> Set[str]:
     return {r.strip("` *，,。；;、)）(") for r in refs if r.strip("` *，,。；;、)）(")}
 
 
-def _shot_asset_refs(body: str) -> Set[str]:
+_ASSET_REF_CONSTRAINT_SUFFIX_RE = re.compile(
+    r"^(?:结构|颜色|尺寸|数量|材质|比例|状态|禁漂|漂移|参考|约束|锁定|唯一性|保持|固定|归属|稳定|不变)"
+)
+
+
+def _shot_asset_refs(body: str, known_asset_ids: Iterable[str] = ()) -> Set[str]:
     text = _registry_ref_scan_text(body)
-    refs: Set[str] = set()
+    raw_refs: Set[str] = set()
     for prefix in ("LOC", "PROP", "WEAPON", "OUTFIT", "VFX"):
-        refs |= set(re.findall(rf"{prefix}_[A-Za-z0-9_\u4e00-\u9fff]+", text))
+        raw_refs |= set(re.findall(rf"{prefix}_[A-Za-z0-9_\u4e00-\u9fff]+", text))
+    known = sorted(
+        {str(item).strip() for item in known_asset_ids if str(item).strip()},
+        key=len,
+        reverse=True,
+    )
+    if not known:
+        return raw_refs
+    refs: Set[str] = set()
+    for ref in raw_refs:
+        if ref in known:
+            refs.add(ref)
+            continue
+        # Chinese prompt prose often concatenates a stable id and a constraint,
+        # e.g. ``PROP_水桶结构/颜色/尺寸漂移``.  The greedy CJK token scan must
+        # resolve that phrase back to the registered id rather than inventing a
+        # pseudo asset named ``PROP_水桶结构``.
+        normalized = next(
+            (
+                aid for aid in known
+                if ref.startswith(aid)
+                and _ASSET_REF_CONSTRAINT_SUFFIX_RE.match(ref[len(aid):])
+            ),
+            "",
+        )
+        refs.add(normalized or ref)
     return refs
 
 
@@ -1491,7 +1521,7 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
     """Resolve per-shot character/asset references into a backend-friendly bundle."""
     body = target.section.body
     char_refs = _shot_character_refs(body)
-    asset_refs = _shot_asset_refs(body)
+    asset_refs: Set[str] = set()
     if target.mode == "shared":
         for alias in getattr(target, "aliases", set()) or set():
             text = str(alias).strip()
@@ -1501,6 +1531,12 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
                 asset_refs.add(text)
     identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
     assets = load_json_file(root / "出图" / "共享" / "asset_registry.json")
+    known_asset_ids = {
+        str(asset.get("id") or "").strip()
+        for asset in assets.get("assets") or []
+        if isinstance(asset, dict) and str(asset.get("id") or "").strip()
+    }
+    asset_refs |= _shot_asset_refs(body, known_asset_ids)
     target_aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
     resident_scene_identity = bool(
         target.mode == "shared"
@@ -2083,6 +2119,11 @@ def shared_first_interlock_issues(root: Path, episode: str, targets: Optional[Se
 
     identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
     assets = load_json_file(root / "出图" / "共享" / "asset_registry.json")
+    known_asset_ids = {
+        str(asset.get("id") or "").strip()
+        for asset in assets.get("assets") or []
+        if isinstance(asset, dict) and str(asset.get("id") or "").strip()
+    }
     issues: List[str] = []
     seen: Set[str] = set()
 
@@ -2121,7 +2162,7 @@ def shared_first_interlock_issues(root: Path, episode: str, targets: Optional[Se
                 for issue in _character_basic_pack_issues(root, cid, form, section.body):
                     add_issue(f"{section.clip}: {issue}")
 
-        for asset_ref in sorted(_shot_asset_refs(section.body)):
+        for asset_ref in sorted(_shot_asset_refs(section.body, known_asset_ids)):
             asset = _asset_for_ref(assets, asset_ref)
             if not asset:
                 add_issue(f"{section.clip}: {asset_ref} 未登记到 asset_registry.json，先补共享库")
@@ -3307,15 +3348,20 @@ def model_facing_policy_guards(
     return list(dict.fromkeys(item.strip(" ；。") for item in guards if item.strip()))
 
 
-def section_continuity_must_for_model(body: str) -> List[str]:
+def section_continuity_must_for_model(
+    body: str,
+    *,
+    soften_adult_minor_contact: bool = True,
+) -> List[str]:
     """Extract storyboard ``continuity_must`` clauses from a prompt section.
 
     The prompt pack already carries the authoritative storyboard contract, but
     the compact compiler previously discarded this field.  That made visible
     props disappear between adjacent episode frames even though the upstream
-    plan explicitly required them.  Keep the clauses compact and rewrite an
-    adult/minor shoulder-contact beat to the same non-contact staging used by
-    the safety adapter.
+    plan explicitly required them. Keep clauses compact. Codex/OpenAI may opt
+    into the provider-boundary non-contact rewrite; other signed official
+    backends retain the storyboard action instead of receiving a contract that
+    simultaneously asks for contact and forbids it.
     """
     match = re.search(r"continuity_must\s*=\s*(\[[^\n]*?\])(?=；|;|\n|$)", str(body or ""))
     if not match:
@@ -3332,7 +3378,7 @@ def section_continuity_must_for_model(body: str) -> List[str]:
         clause = re.sub(r"\s+", " ", str(item or "")).strip(" ；。")
         if not clause:
             continue
-        if has_minor and re.search(r"(?:拍肩|压(?:到|住|在)?[^；。]{0,8}肩|肩头接触)", clause):
+        if soften_adult_minor_contact and has_minor and re.search(r"(?:拍肩|压(?:到|住|在)?[^；。]{0,8}肩|肩头接触)", clause):
             clause = "成人右手只撑在少年身侧桌边，靠近但不接触少年身体"
         clauses.append(clause)
     return list(dict.fromkeys(clauses))
@@ -3352,6 +3398,129 @@ def critical_retry_guard(retry_guidance: str) -> str:
                 return "返工硬约束（最高优先级）：" + reason
     flattened = re.sub(r"\s+", " ", text).strip()
     return "返工硬约束（最高优先级）：" + flattened
+
+
+_STILL_UNSAFE_VIDEO_EDIT_RE = re.compile(
+    r"跳切|分屏|拼贴|三联|四联|多格|蒙太奇|转场|剪切|"
+    r"jump\s*cut|split[- ]?screen|triptych|collage|montage|transition",
+    re.I,
+)
+
+
+def storyboard_motion_for_still(video_prompt: str) -> str:
+    """Keep pose/micro-motion guidance, never edit/layout language, in a still prompt.
+
+    Storyboard ``video_prompt`` is authored for a moving clip. Passing an edit
+    direction such as "三个清晰跳切" to an image model makes it render a
+    triptych/contact sheet. A physical first/mid/tail frame must remain one
+    continuous camera image; the video stage owns cuts and transitions.
+    """
+    text = re.sub(r"\s+", " ", str(video_prompt or "")).strip()
+    if not text or _STILL_UNSAFE_VIDEO_EDIT_RE.search(text):
+        return ""
+    return text
+
+
+def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str, Any]:
+    """Resolve a physical first/anchor frame to its timed storyboard sub-shot.
+
+    One prompt section can own several physical sub-shots. Reusing its merged
+    action for the first frame or every ``_aN`` merges adjacent edit beats. At
+    an exact edit boundary the anchor belongs to the sub-shot that starts
+    there, not the one that just ended.
+    """
+    match = re.search(r"_a(\d+)$", str(target.shot or ""), re.I)
+    if target.mode not in {"firstframe", "midframe"}:
+        return {}
+    if target.mode == "midframe" and not match:
+        return {}
+    data = load_json_file(root / "脚本" / episode / "storyboard.json")
+    target_num = re.search(r"(\d+)$", str(target.clip or ""))
+    if not target_num:
+        return {}
+    clip = next((
+        row for row in data.get("clips") or []
+        if isinstance(row, dict)
+        and re.search(r"(\d+)$", str(row.get("id") or ""))
+        and int(re.search(r"(\d+)$", str(row.get("id") or "")).group(1)) == int(target_num.group(1))
+    ), None)
+    if not isinstance(clip, dict):
+        return {}
+    if target.mode == "firstframe":
+        anchor_index = 0
+        at_sec = 0.0
+        frame_role = "first"
+    else:
+        anchors = (clip.get("continuity") or {}).get("anchors") or []
+        anchor_index = int(match.group(1)) - 1
+        if anchor_index < 0 or anchor_index >= len(anchors) or not isinstance(anchors[anchor_index], dict):
+            return {}
+        try:
+            at_sec = float(anchors[anchor_index].get("at_sec"))
+        except (TypeError, ValueError):
+            return {}
+        frame_role = f"a{anchor_index + 1}"
+    parsed: List[Tuple[float, float, Dict[str, Any]]] = []
+    for row in clip.get("shots") or []:
+        if not isinstance(row, dict):
+            continue
+        timing = re.match(r"\s*(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s?\s*$", str(row.get("t") or ""), re.I)
+        if timing:
+            parsed.append((float(timing.group(1)), float(timing.group(2)), row))
+    if not parsed:
+        return {}
+    exact = next((item for item in parsed if abs(item[0] - at_sec) <= 1e-4), None)
+    selected = exact or next((item for item in parsed if item[0] <= at_sec < item[1]), None)
+    if not selected:
+        return {}
+    start, end, row = selected
+    desc = re.sub(r"\s+", " ", str(row.get("desc") or "")).strip()
+    lens = re.sub(r"\s+", " ", str(row.get("lens") or "")).strip()
+    video_prompt = re.sub(r"\s+", " ", str(row.get("video_prompt") or "")).strip()
+    names: List[Tuple[str, str]] = []
+    identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
+    for character in identity.get("characters") or []:
+        if isinstance(character, dict):
+            cid = str(character.get("id") or "").strip()
+            name = str(character.get("name") or "").strip()
+            if cid and name:
+                names.append((cid, name))
+    focus = [(cid, name) for cid, name in names if name in desc]
+    focus_ids = [cid for cid, _name in focus]
+    focus_names = [name for _cid, name in focus]
+    excluded_names = [name for cid, name in names if cid in (clip.get("character_ids") or []) and cid not in focus_ids]
+    is_single_reaction = bool(
+        len(focus_names) == 1
+        and re.search(r"CU|ECU|特写|近景", lens, re.I)
+        and re.search(r"应下|反应|垂眼|点头|呼气|抿唇|沉默", desc)
+    )
+    is_faceless_insert = bool(
+        not focus_names
+        and re.search(r"insert|ECU|物件|特写", lens, re.I)
+        and re.search(r"不出现[^；。]{0,8}人脸|无人物|无人|空镜", desc)
+    )
+    is_detail_insert = bool(
+        not focus_names
+        and not is_faceless_insert
+        and re.search(r"insert|ECU|局部|特写", lens, re.I)
+        and re.search(r"掌心|手指|手背|手腕|脚|鞋|桶|扁担|道具|物件|伤口", desc)
+    )
+    return {
+        "anchor_index": anchor_index + 1,
+        "frame_role": frame_role,
+        "at_sec": at_sec,
+        "start_sec": start,
+        "end_sec": end,
+        "desc": desc,
+        "lens": lens,
+        "video_prompt": video_prompt,
+        "focus_ids": focus_ids,
+        "focus_names": focus_names,
+        "excluded_names": excluded_names,
+        "single_reaction": is_single_reaction,
+        "faceless_insert": is_faceless_insert,
+        "detail_insert": is_detail_insert,
+    }
 
 
 def compile_target_image_request(
@@ -3374,10 +3543,26 @@ def compile_target_image_request(
     params.update(dict(request_params_override or {}))
     body = str(target.section.body or "")
     policy_guards = model_facing_policy_guards(target, reference_inputs)
-    continuity_must = section_continuity_must_for_model(body)
+    anchor_beat = storyboard_anchor_beat(root, episode, target)
+    continuity_must = section_continuity_must_for_model(
+        body,
+        soften_adult_minor_contact=backend in {"codex", "openai"},
+    )
+    if anchor_beat.get("single_reaction"):
+        continuity_must = [
+            clause for clause in continuity_must
+            if not re.search(r"(?:拍肩|压(?:到|住|在)?[^；。]{0,8}肩|肩头接触)", clause)
+        ]
     if continuity_must:
         policy_guards.insert(0, "专项连续性硬约束：" + "；".join(continuity_must))
     retry_guard = critical_retry_guard(retry_guidance)
+    if retry_guard and anchor_beat.get("single_reaction"):
+        focus = "、".join(anchor_beat.get("focus_names") or []) or "本锚焦点角色"
+        excluded = "、".join(anchor_beat.get("excluded_names") or []) or "前一动作人物"
+        retry_guard = (
+            f"返工硬约束（最高优先级）：本锚只画{focus}的单人反应特写；"
+            f"{excluded}及其双手完全出画；不得延续前一子镜头的身体接触动作"
+        )
     if retry_guard:
         # Keep the actual-pixel rejection in a dedicated high-priority clause.
         # Appending it to a long objective silently loses it when the compiler
@@ -3419,6 +3604,124 @@ def compile_target_image_request(
         request_params=params,
         policy_guards=policy_guards,
     )
+    if anchor_beat:
+        still_motion = storyboard_motion_for_still(str(anchor_beat.get("video_prompt") or ""))
+        beat_action = "；".join(filter(None, (
+            str(anchor_beat.get("desc") or ""),
+            still_motion,
+        )))
+        # A multi-sub-shot section carries a merged dramatic objective.  Once
+        # this physical anchor is resolved, keeping that merged text leaks
+        # actions from adjacent edit beats back into the provider prompt.
+        # Replace it rather than append so the timed storyboard beat remains
+        # the only action truth for this image.
+        contract["objective"] = f"本锚只呈现 storyboard 子镜头：{anchor_beat.get('desc') or beat_action}"
+        contract["action"] = beat_action
+        contract["composition"] = (
+            f"本锚专属景别/机位：{anchor_beat.get('lens') or '继承 storyboard'}；"
+            "继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别"
+        )
+        guards = list(contract.get("policy_guards") or [])
+        guards.insert(0, (
+            "物理关键帧版式铁律：只生成一个连续相机画面；禁止分屏、三联画、多格漫画、拼贴、"
+            "接触表或把跳切/蒙太奇的多个时刻同时画进一张图；剪辑变化只由视频阶段完成"
+        ))
+        guards.insert(0, (
+            f"帧动作唯一真值：{anchor_beat.get('frame_role') or ('a' + str(anchor_beat.get('anchor_index')))} "
+            f"@ {anchor_beat.get('at_sec')}s "
+            f"只表现 `{anchor_beat.get('desc')}`；不得混入同一 Clip 的其它子镜头动作"
+        ))
+        if anchor_beat.get("faceless_insert"):
+            excluded_tokens = [
+                *(anchor_beat.get("excluded_names") or []),
+                *_shot_character_refs(body),
+            ]
+            contract["subject"] = str(anchor_beat.get("desc") or "无人物物件插入镜")
+            contract["subject_slots"] = ""
+            contract["preserve"] = [
+                item for item in (contract.get("preserve") or [])
+                if not any(token and token in str(item) for token in excluded_tokens)
+            ]
+            contract["exclude"] = list(dict.fromkeys([
+                *(contract.get("exclude") or []),
+                "人物", "清晰人脸", "人体残件",
+                *[f"{token}入画" for token in excluded_tokens if token],
+            ]))
+            guards = [
+                guard for guard in guards
+                if not any(marker in str(guard) for marker in (
+                    "镜头为旁观者视角", "脸部机检可核验铁律", "手部/肢体归属铁律",
+                    "源帧主体身份连续硬锁",
+                ))
+            ]
+            guards.insert(0, (
+                "本帧是无脸物件插入镜：只出现剧本指定旧物、空院与远景；"
+                "所有具名人物及其脸、手臂、身体、衣装残件完全不入画"
+            ))
+        elif anchor_beat.get("detail_insert"):
+            contract["subject"] = str(anchor_beat.get("desc") or "人物局部动作特写")
+            contract["subject_slots"] = ""
+            contract["exclude"] = list(dict.fromkeys([
+                *(contract.get("exclude") or []),
+                "人物脸部", "完整人物全身", "相邻子镜头动作",
+            ]))
+            guards = [
+                guard for guard in guards
+                if not any(marker in str(guard) for marker in (
+                    "镜头为旁观者视角", "脸部机检可核验铁律",
+                ))
+            ]
+            guards.insert(0, (
+                "本帧是人物局部插入镜：只呈现 storyboard 指定的手/脚/道具接触细节；"
+                "角色脸部和完整身体出画，肢体必须可追溯到同一角色且解剖、数量、接触点正确"
+            ))
+        elif anchor_beat.get("single_reaction"):
+            focus = "、".join(anchor_beat.get("focus_names") or []) or "本锚焦点角色"
+            excluded = "、".join(anchor_beat.get("excluded_names") or []) or "前一动作人物"
+            focus_ids = set(anchor_beat.get("focus_ids") or [])
+            excluded_tokens = [
+                *(anchor_beat.get("excluded_names") or []),
+                *[
+                    cid for cid in _shot_character_refs(body)
+                    if cid.split("/", 1)[0] not in focus_ids
+                ],
+            ]
+            slot_parts = re.split(r"\s*；(?=SLOT_\d+\s*:)", str(contract.get("subject_slots") or ""))
+            focus_slots = [
+                part for part in slot_parts
+                if any(cid in part for cid in focus_ids)
+            ]
+            if focus_slots:
+                contract["subject_slots"] = "；".join(focus_slots)
+                focus_descriptions = [
+                    match.group(1).strip()
+                    for part in focus_slots
+                    if (match := re.search(r"区分锚点[：:]\s*(.+)$", part))
+                ]
+                contract["subject"] = "；".join(focus_descriptions) or focus
+            preserve_focus: List[str] = []
+            for item in contract.get("preserve") or []:
+                clauses = [clause.strip() for clause in re.split(r"[；;]", str(item)) if clause.strip()]
+                kept = [
+                    clause for clause in clauses
+                    if not any(token and token in clause for token in excluded_tokens)
+                ]
+                if kept:
+                    preserve_focus.append("；".join(kept))
+            contract["preserve"] = preserve_focus
+            contract["exclude"] = list(dict.fromkeys([
+                *(contract.get("exclude") or []),
+                *[f"{token}入画" for token in excluded_tokens if token],
+            ]))
+            guards = [
+                guard for guard in guards
+                if not str(guard).startswith("源帧几何连续性硬锁：")
+            ]
+            guards.insert(0, (
+                f"本锚是单人反应特写：清晰主体只保留{focus}；{excluded}及其手臂完全出画，"
+                "前一子镜头的身体接触动作已结束，不得继续入画"
+            ))
+        contract["policy_guards"] = guards
     gaze_exclusions = camera_gaze_negatives_for(body) if any(
         "镜头为旁观者视角" in item for item in policy_guards
     ) else ""
@@ -3434,7 +3737,10 @@ def compile_target_image_request(
         )))
     if target.mode in {"midframe", "tailframe"}:
         preserve = list(contract.get("preserve") or [])
-        preserve.append("源帧的角色身份、服装、站位、场景几何、光位、轴线、手握位置与道具接触点")
+        if anchor_beat.get("single_reaction"):
+            preserve.append("源帧的角色身份、服装、场景几何、光位与轴线；前一子镜头接触动作不得延续")
+        else:
+            preserve.append("源帧的角色身份、服装、站位、场景几何、光位、轴线、手握位置与道具接触点")
         if has_weapon_body_contact(target):
             preserve.append("源帧既有武器接触点、伤口位置与入射角")
         contract["preserve"] = preserve

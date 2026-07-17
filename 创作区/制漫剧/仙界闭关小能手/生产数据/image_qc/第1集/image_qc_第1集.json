@@ -54,16 +54,16 @@
       "available": true,
       "characters": {
         "CHAR_01__本集为14岁杂役常态": {
-          "ep_mean_score": 0.5304,
-          "ep_n_shots": 3,
+          "ep_mean_score": 0.5067,
+          "ep_n_shots": 9,
           "floor": 0.4747,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
         "CHAR_02__常态": {
-          "ep_mean_score": 0.5549,
-          "ep_n_shots": 3,
+          "ep_mean_score": 0.5393,
+          "ep_n_shots": 4,
           "floor": 0.639,
           "floor_calibrated": true,
           "has_main": true,
@@ -203,6 +203,78 @@
           "score": 0.521,
           "score_vs_main": 0.515,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 1,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-17T12:04:01+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "执行者已实际打开当前 EP01_CLIP02_a1 原分辨率像素，并与已验收 EP01_CLIP02、CHAR_01 脸部特写、CHAR_02 克制表情锚并排核对：两人脸型、眉眼鼻口比例、发际线/发髻、年龄体型与服装连续；左右站位、木牌结构、成人右手桌边接触点、场景轴线和光位未漂移；无额外肢体、文字、水印。机器 warn 由主角垂眼三分之二侧脸与暖边光造成，非换脸。",
+          "manual_reviewer": "executor:codex",
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.4522,
+          "score_vs_main": 0.4401,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 0,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP02_a2.png",
+          "score": 0.5339,
+          "score_vs_main": 0.5241,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 0,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.4771,
+          "score_vs_main": 0.475,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 0,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP04.png",
+          "score": 0.5414,
+          "score_vs_main": 0.5173,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 0,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP04_a2.png",
+          "score": 0.5573,
+          "score_vs_main": 0.5362,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 0,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP05.png",
+          "score": 0.4929,
+          "score_vs_main": 0.4763,
+          "verdict": "ok"
         }
       ]
     },
@@ -254,6 +326,53 @@
           "png": "图片/EP01_CLIP02.png",
           "score": 0.83,
           "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.6352,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP02_a2.png",
+          "score": 0.7868,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.6817,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP04.png",
+          "score": 0.6406,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP04_a2.png",
+          "score": 0.6797,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP05.png",
+          "score": 0.305,
+          "verdict": "block"
         }
       ]
     },
@@ -337,23 +456,27 @@
       "episode": "第1集",
       "groups": {
         "LOC_01": {
-          "shots": 2,
-          "skipped": "组<3镜"
+          "median_dist": 0.423,
+          "shots": 5
         },
         "LOC_02": {
-          "shots": 2,
-          "skipped": "组<3镜"
+          "median_dist": 0.423,
+          "shots": 5
         },
         "LOC_03": {
-          "shots": 2,
-          "skipped": "组<3镜"
+          "median_dist": 0.423,
+          "shots": 5
         },
         "PROP_01": {
-          "shots": 2,
-          "skipped": "组<3镜"
+          "median_dist": 0.423,
+          "shots": 5
         },
         "PROP_扁担": {
-          "shots": 2,
+          "median_dist": 0.423,
+          "shots": 5
+        },
+        "PROP_旧布包": {
+          "shots": 1,
           "skipped": "组<3镜"
         },
         "PROP_木牌": {
@@ -361,8 +484,8 @@
           "skipped": "组<3镜"
         },
         "PROP_水桶": {
-          "shots": 2,
-          "skipped": "组<3镜"
+          "median_dist": 0.423,
+          "shots": 5
         }
       },
       "kind": "n2d_multimodal_consistency_report",
@@ -419,12 +542,83 @@
           "png": "图片/EP01_CLIP02.png",
           "score": 0.6237,
           "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.45,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP02_a2.png",
+          "score": 0.5648,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.4583,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP04.png",
+          "score": 0.4423,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP04_a2.png",
+          "score": 0.463,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP05.png",
+          "score": 0.274,
+          "verdict": "block"
         }
       ]
     },
     "scene": {
       "available": true,
       "groups": {
+        "秀竹峰后山浅潭": {
+          "constraints": {
+            "axis_rules": "站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+            "lighting_signature": {
+              "color_temperature": "cool_low_key",
+              "key_light_direction": "right",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "controlled",
+              "source_text": "主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射；主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "registered_id": "LOC_03",
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
         "秀竹峰杂役大殿": {
           "constraints": {
             "axis_rules": "站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左",
@@ -445,19 +639,55 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 21.0,
+          "median_dist": 25.8,
           "registered_id": "LOC_01",
-          "shots": 3
+          "shots": 5
+        },
+        "秀竹峰杂役院": {
+          "constraints": {
+            "axis_rules": "站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳",
+            "lighting_signature": {
+              "color_temperature": "neutral_low_key",
+              "key_light_direction": "right",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "controlled",
+              "source_text": "主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳；主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 23.2,
+          "registered_id": "LOC_02",
+          "shots": 5
         }
       },
       "impact_physics": [],
       "notes": [
+        "场景[秀竹峰后山浅潭] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[秀竹峰后山浅潭] 已注册light_anchor：主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射。验收时请重点核对。",
+        "场景[秀竹峰后山浅潭] 已注册axis_rules：站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下。验收时请重点核对。",
+        "场景[秀竹峰后山浅潭] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[秀竹峰后山浅潭] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[秀竹峰后山浅潭] 已注册lighting_signature：{'color_temperature': 'cool_low_key', 'saturation_profile': 'controlled', 'key_light_direction': 'right', 'source_text': '主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射；主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。",
         "场景[秀竹峰杂役大殿] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
         "场景[秀竹峰杂役大殿] 已注册light_anchor：主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光。验收时请重点核对。",
         "场景[秀竹峰杂役大殿] 已注册axis_rules：站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左。验收时请重点核对。",
         "场景[秀竹峰杂役大殿] 已注册face_policy：faceless。验收时请重点核对。",
         "场景[秀竹峰杂役大殿] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
-        "场景[秀竹峰杂役大殿] 已注册lighting_signature：{'color_temperature': 'cool_low_key', 'saturation_profile': 'low_desaturated', 'key_light_direction': 'left', 'source_text': '主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光；主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
+        "场景[秀竹峰杂役大殿] 已注册lighting_signature：{'color_temperature': 'cool_low_key', 'saturation_profile': 'low_desaturated', 'key_light_direction': 'left', 'source_text': '主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光；主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。",
+        "场景[秀竹峰杂役院] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[秀竹峰杂役院] 已注册light_anchor：主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳。验收时请重点核对。",
+        "场景[秀竹峰杂役院] 已注册axis_rules：站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担。验收时请重点核对。",
+        "场景[秀竹峰杂役院] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[秀竹峰杂役院] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[秀竹峰杂役院] 已注册lighting_signature：{'color_temperature': 'neutral_low_key', 'saturation_profile': 'controlled', 'key_light_direction': 'right', 'source_text': '主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳；主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
       ],
       "shots": []
     },
@@ -481,8 +711,20 @@
   },
   "face_anchor_quality": {
     "available": true,
-    "checked": 3,
+    "checked": 4,
     "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+        "code": "expression_sheet_face_count",
+        "level": "block",
+        "msg": "表情板人脸数量不符 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：声明 6 格，机器检出 11 张脸；需确认是否缺格、重复拼接、遮脸或检测漏脸后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
       {
         "asset": "出图/共享/图片/定妆_CHAR_03__常态.png",
         "code": "weak_face_anchor",
@@ -494,9 +736,9 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 2,
+    "applied": 3,
     "available": true,
-    "configured": 2,
+    "configured": 3,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
     "rows": [
       {
@@ -514,70 +756,24 @@
         "reason": "执行者已实际打开当前 EP01_CLIP01_a1 原分辨率像素并与首帧及 CHAR_01、CHAR_02 定妆锚核对：两人脸型、眉眼鼻口比例、发际线发髻、年龄体型、服装材质、左右站位均连续；木牌结构与手指接触点一致；本次机器 warn 来自低头侧角与场景冷光，不是换脸。",
         "reviewer": "executor:codex",
         "score": 0.5941
+      },
+      {
+        "char": "CHAR_01__本集为14岁杂役常态",
+        "original_verdict": "warn",
+        "png": "图片/EP01_CLIP02_a1.png",
+        "reason": "执行者已实际打开当前 EP01_CLIP02_a1 原分辨率像素，并与已验收 EP01_CLIP02、CHAR_01 脸部特写、CHAR_02 克制表情锚并排核对：两人脸型、眉眼鼻口比例、发际线/发髻、年龄体型与服装连续；左右站位、木牌结构、成人右手桌边接触点、场景轴线和光位未漂移；无额外肢体、文字、水印。机器 warn 由主角垂眼三分之二侧脸与暖边光造成，非换脸。",
+        "reviewer": "executor:codex",
+        "score": 0.4522
       }
     ]
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 5,
+    "covered": 9,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP03.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP04.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP04_a2.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP05.png",
-        "shot": "Clip_05"
-      },
       {
         "face_coverage_required": true,
         "identity_refs": [
@@ -634,8 +830,21 @@
       }
     ],
     "precision_level": "full",
-    "required": 5,
-    "skipped": [],
+    "required": 9,
+    "skipped": [
+      {
+        "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP03.png",
+        "reason": "storyboard_faceless_insert",
+        "shot": "Clip_03"
+      },
+      {
+        "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+        "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+        "reason": "storyboard_detail_insert",
+        "shot": "Clip_04"
+      }
+    ],
     "unclassified": [],
     "verdict": "ok"
   },
@@ -647,20 +856,33 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "d3cddf734216112a3c57c94fb27c8a068baff36bc80e0ecef57bcb13bdc90d55",
+      "出图/共享/asset_registry.json": "9bc9bebae44ec6be0a3923c11504cba32d131a9a0bde0ae9effd339d2afdd0fb",
       "出图/共享/identity_registry.json": "a55e159934adf0481c03b57524cf5dad86c8c9924fc0413c47588532ad1aae4f",
       "出图/共享/style_anchor_registry.json": "d5699112a0f4176bc8a16afd97500383c66b66fac919c44700792952db1ce9c3",
+      "出图/共享/图片/定妆_道具_扁担.png": "ea4e3cf2c7c6fc324e185879172c599f8010ab61830b76e672d9592febcb4e8f",
+      "出图/共享/图片/定妆_道具_旧布包.png": "501ae7cc06d2ed6e3837117b568ca323ee739b4310c5ad14d48c9187eee15a85",
+      "出图/共享/图片/定妆_道具_木牌.png": "3281e941d555fc03541190cfaec464edaca2bd6a1dedc52a1f560c1281db5d34",
+      "出图/共享/图片/定妆_道具_水桶.png": "7d3d3993e74d01a0861b57b8f6ec36acd3868f62da66b1d167863ffa514d00d4",
+      "出图/共享/图片/定妆_道具_破损黑盆.png": "01df7cd0a9660358a76ced308bf5574e9b7a647e8e34af9830e4b618d90e3b38",
       "出图/共享/图片/风格锚_国漫写实.png": "27f55f63c8405955674e92038096a85576968781c7d89f58be080563968002b2",
       "出图/第1集/prompt/00_总览.md": "3b6aac0ec28432bf6c3eef756ca28725a9e4c8b34fd06f13498b5bbf6a84db20",
-      "出图/第1集/prompt/01_分镜出图.md": "4327808bcdb8e8a21638ebd2c299e59e80b480db3ef65f3868f18e767ed7c303",
+      "出图/第1集/prompt/01_分镜出图.md": "761e8cd12fd483b22c46854b789a076211ac6d03f59d3bdaeac34ad568a807f8",
       "出图/第1集/图片/EP01_CLIP01.png": "7f1cd3a60ce98b721e492b61b50487339346eed2af39ebb64efea93c6b032230",
       "出图/第1集/图片/EP01_CLIP01_a1.png": "ef194654abd2d9114fb5a689e98450bfcea5128e6d871267053554d0557db5ae",
       "出图/第1集/图片/EP01_CLIP02.png": "971950b1163faedab24e70c20841168896f1a564fc85cbbfcab0f0231d57e330",
-      "生产数据/image_qc/第1集/face_confirmations.json": "89c719ce7f1957c7dd105026af772a5323d4a4a1ca20aa9d83b657fc55a31b39",
+      "出图/第1集/图片/EP01_CLIP02_a1.png": "f229fab7bfa8283893e7315fb42d703436ae7b75dc0d224bf7f1e98b7a74de18",
+      "出图/第1集/图片/EP01_CLIP02_a2.png": "d4a4cdf654014203fd2db9ae1624dfe9907d2c39ba0f2fca7c86784da43cfa1a",
+      "出图/第1集/图片/EP01_CLIP03.png": "983d14b1a69eb94c4f6d91c578ea6389c41a8864e7de53de7cf422619e12c44f",
+      "出图/第1集/图片/EP01_CLIP03_a1.png": "4e78f867d89c3cd7b2f2fca135b67711e10499edc1e5e93ee88e3940231b6473",
+      "出图/第1集/图片/EP01_CLIP04.png": "c4f5697598f7fbddfa56140e6c2377f23e23904839685b3d2ab26783135a7b28",
+      "出图/第1集/图片/EP01_CLIP04_a1.png": "5a406f752143a09c56c1d398bf2577468422af257e6e2af9f5d16727887bd971",
+      "出图/第1集/图片/EP01_CLIP04_a2.png": "0338d3cb91aff0ae88b9d3c03a2c323a7e1b703ac1f4161385820c1753a23886",
+      "出图/第1集/图片/EP01_CLIP05.png": "e2d5e0af228e6a13afc941889f02ae0332060c006ee393ae199714f08a40d329",
+      "生产数据/image_qc/第1集/face_confirmations.json": "0725f875f66b7bfa7d5b4dc96e817e8daaef3f6f8592b464186d888ce9ea1aba",
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "8b5aa59cdface9bdc41c7fdf09678a67a7303746c6852d20d8066d7032e1ba90"
     },
-    "sha": "fdd248f8f1ae9d9fb003259208149a3605f76837edb8d7ecf23d448c73644d3a"
+    "sha": "0b20e69207fbe133873b3c99c91833f27fea18bb9d96caa94b3ee98994bdc262"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -709,18 +931,16 @@
       {
         "face_coverage_required": true,
         "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态",
-          "CHAR_02/常态"
+          "CHAR_01/本集为14岁杂役常态"
         ],
         "label": "镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
         "png": "出图/第1集/图片/EP01_CLIP02_a2.png",
         "shot": "Clip_02"
       },
       {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
+        "face_check_policy": "storyboard_faceless_insert",
+        "face_coverage_required": false,
+        "identity_refs": [],
         "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
         "png": "出图/第1集/图片/EP01_CLIP03.png",
         "shot": "Clip_03"
@@ -744,10 +964,9 @@
         "shot": "Clip_04"
       },
       {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
+        "face_check_policy": "storyboard_detail_insert",
+        "face_coverage_required": false,
+        "identity_refs": [],
         "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
         "png": "出图/第1集/图片/EP01_CLIP04_a1.png",
         "shot": "Clip_04"
@@ -827,6 +1046,16 @@
     ],
     "findings": [
       {
+        "code": "expression_sheet_face_count",
+        "level": "block",
+        "msg": "表情板人脸数量不符 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：声明 6 格，机器检出 11 张脸；需确认是否缺格、重复拼接、遮脸或检测漏脸后再放行。"
+      },
+      {
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_01/本集为14岁杂役常态「六联表」（出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png）：裁切短边 941px（建议 ≥1024px，核心角教头线 ≥1024px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
         "code": "weak_face_anchor",
         "level": "warn",
         "msg": "脸部锚弱信噪比 CHAR_03/常态「face_anchor」（出图/共享/图片/定妆_CHAR_03__常态.png）：脸占画面仅 1%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
@@ -840,6 +1069,11 @@
         "code": "turnaround_misaligned",
         "level": "warn",
         "msg": "多视图对齐初筛异常 CHAR_02/常态：比例不一：front 脸高是 side 的 2.52 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "duplicate_composition",
+        "level": "warn",
+        "msg": "镜头构图重复 EP01_CLIP04 ↔ EP01_CLIP05：首帧 dHash=5/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。"
       },
       {
         "code": "vlm_setting_check_skipped",
@@ -861,15 +1095,174 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 2,
-    "pending": 0,
+    "confirmed": 0,
+    "pending": 14,
     "targets": [
+      {
+        "asset": "PROP_01",
+        "asset_name": "破损黑盆",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "ddb40ed876820bb568b6d8cbde708ef40143a0783d59dfd22b0882f0711962e5",
+        "label": "共享主参考·破损黑盆",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_破损黑盆.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_破损黑盆.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_破损黑盆.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "国漫写实",
+          "普通乡野旧黑褐陶盆",
+          "直径约少年肩宽",
+          "盆沿缺一个小口",
+          "外壁不对称沙眼和磨痕",
+          "盆底有很浅的自然细纹",
+          "无文字无符号",
+          "无金属光泽",
+          "大部分时间完全不发光",
+          "集尾只允许一缕低强度青金微光从盆底细纹中出现"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_01_shared_primary_定妆_道具_破损黑盆_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_扁担",
+        "asset_name": "扁担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "共享主参考·扁担",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_扁担.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_扁担.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_扁担.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_扁担_shared_primary_定妆_道具_扁担_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_旧布包",
+        "asset_name": "旧布包",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "c6b8c77c12450598e3002a0dbb40020aed8403a6e5edea3fa25c303cb986a0b8",
+        "label": "共享主参考·旧布包",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_旧布包.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_旧布包.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_旧布包.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "旧布包"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_旧布包_shared_primary_定妆_道具_旧布包_compare.png",
+        "stitched": true
+      },
       {
         "asset": "PROP_木牌",
         "asset_name": "木牌",
         "asset_type": "prop",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
+        "contract_fingerprint": "9c0666be390d0cf368713b358869e2aeb9e61ba42cca036d51015f59c0f0f535",
+        "label": "共享主参考·木牌",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_木牌.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_木牌.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_木牌.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "木牌"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_shared_primary_定妆_道具_木牌_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_水桶",
+        "asset_name": "水桶",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "共享主参考·水桶",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "出图/共享/图片/定妆_道具_水桶.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_水桶.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_水桶.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_水桶_shared_primary_定妆_道具_水桶_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_木牌",
+        "asset_name": "木牌",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "9c0666be390d0cf368713b358869e2aeb9e61ba42cca036d51015f59c0f0f535",
         "label": "镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
         "must_not_have": [
           "现代物件",
@@ -882,6 +1275,10 @@
         "reason": "registered_asset_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_木牌.png",
         "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "木牌"
+        ],
         "shot": "Clip_01",
         "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_01_EP01_CLIP01_compare.png",
         "stitched": true
@@ -891,7 +1288,8 @@
         "asset_name": "木牌",
         "asset_type": "prop",
         "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-        "confirmed": true,
+        "confirmed": false,
+        "contract_fingerprint": "9c0666be390d0cf368713b358869e2aeb9e61ba42cca036d51015f59c0f0f535",
         "label": "镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
         "must_not_have": [
           "现代物件",
@@ -904,22 +1302,257 @@
         "reason": "registered_asset_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_木牌.png",
         "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "木牌"
+        ],
         "shot": "Clip_02",
         "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_木牌_Clip_02_EP01_CLIP02_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_扁担",
+        "asset_name": "扁担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP03.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_扁担.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_扁担_Clip_03_EP01_CLIP03_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_旧布包",
+        "asset_name": "旧布包",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "c6b8c77c12450598e3002a0dbb40020aed8403a6e5edea3fa25c303cb986a0b8",
+        "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP03.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_旧布包.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "旧布包"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_旧布包_Clip_03_EP01_CLIP03_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_水桶",
+        "asset_name": "水桶",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP03.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP03.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_水桶.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_水桶_Clip_03_EP01_CLIP03_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_扁担",
+        "asset_name": "扁担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP04.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP04.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_扁担.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_扁担_Clip_04_EP01_CLIP04_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_水桶",
+        "asset_name": "水桶",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP04.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP04.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_水桶.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "Clip_04",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_水桶_Clip_04_EP01_CLIP04_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_扁担",
+        "asset_name": "扁担",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP05.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP05.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_扁担.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "Clip_05",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_扁担_Clip_05_EP01_CLIP05_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_水桶",
+        "asset_name": "水桶",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "20f537da85e577573a9cd8ea4b192ff37e379cb359c40ba1af83ba2f6c0e5659",
+        "label": "镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/EP01_CLIP05.png",
+        "png_abs": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/EP01_CLIP05.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_水桶.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "暗黄老竹扁担",
+          "中部肩压磨亮",
+          "两只同款旧木桶",
+          "铁箍暗锈",
+          "数量永远是二",
+          "水桶与扁担的绳索连接点固定",
+          "不要塑料",
+          "不要金色法器化"
+        ],
+        "shot": "Clip_05",
+        "stitch": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_水桶_Clip_05_EP01_CLIP05_compare.png",
+        "stitched": true
       }
     ],
-    "total": 2
+    "total": 14
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
@@ -931,15 +1564,31 @@
     ]
   },
   "shot_scale_contract": {
-    "available": true,
-    "checked": 0,
-    "findings": []
+    "available": false,
+    "findings": [],
+    "notes": [
+      "shot_scale_contract 失败：too many values to unpack (expected 2)"
+    ]
   },
   "shot_variety": {
     "available": true,
     "clips_checked": 0,
-    "duplicate_pairs": [],
-    "findings": [],
+    "duplicate_pairs": [
+      {
+        "clips": [
+          "EP01_CLIP04",
+          "EP01_CLIP05"
+        ],
+        "dhash": 5
+      }
+    ],
+    "findings": [
+      {
+        "code": "duplicate_composition",
+        "level": "warn",
+        "msg": "镜头构图重复 EP01_CLIP04 ↔ EP01_CLIP05：首帧 dHash=5/64——观众在成片里会看到两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。"
+      }
+    ],
     "notes": [],
     "static_pairs": []
   },
@@ -961,20 +1610,14 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 3,
-    "distance": 1.05,
+    "checked": 11,
+    "distance": 0.973,
     "episode_fingerprint": {
-      "contrast": 65.0,
-      "edge": 25.2,
-      "sat": 37.0
+      "contrast": 94.0,
+      "edge": 27.2,
+      "sat": 38.0
     },
-    "findings": [
-      {
-        "code": "style_attribution_drift",
-        "level": "warn",
-        "msg": "风格归属佐证：本集 3 帧整体风格指纹偏离风格锚（线条边缘度偏离最大，归一距离 1.05 ≥ 1.00）——渲染可能漂出「国漫写实」。锚[饱和14.0/对比130.0/边缘52.5] vs 本集[饱和37.0/对比65.0/边缘25.2]；最偏离镜：EP01_CLIP02.png（偏离 1.14）。人判：是否踩 风格禁忌（欧美脸、塑料页游服装、过度磨皮、现代物件、随机霓虹、水印、可读乱码文字、肢体或手指畸变）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
-      }
-    ],
+    "findings": [],
     "intent": {
       "anchors": [
         "出图/共享/图片/风格锚_国漫写实.png"
@@ -993,7 +1636,7 @@
     }
   },
   "summary": {
-    "advisory": 6,
+    "advisory": 9,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1004,13 +1647,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 3,
+        "ok": 9,
         "warn": 0
       },
       "hair": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
-        "ok": 3,
+        "ok": 8,
         "warn": 0
       },
       "human_anatomy": {
@@ -1020,10 +1663,10 @@
         "warn": 0
       },
       "lint": {
-        "block": 0,
+        "block": 2,
         "noface": 0,
         "ok": 0,
-        "warn": 4
+        "warn": 5
       },
       "multimodal": {
         "block": 0,
@@ -1032,13 +1675,19 @@
         "warn": 0
       },
       "outfit": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
-        "ok": 3,
+        "ok": 8,
         "warn": 0
       },
       "prohibited_face_patch": {
         "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 14,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -1055,12 +1704,6 @@
         "ok": 0,
         "warn": 0
       },
-      "style_attribution": {
-        "block": 0,
-        "noface": 0,
-        "ok": 0,
-        "warn": 1
-      },
       "tone_light_contract": {
         "block": 0,
         "noface": 0,
@@ -1069,18 +1712,18 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 0,
+    "hard_blocks": 15,
     "unavailable_visual_checks": [],
-    "verdict": "review"
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 3,
+    "checked": 11,
     "findings": [
       {
         "code": "tone_warmth_contradiction",
         "level": "warn",
-        "msg": "色调像素兜底：契约基调=冷（前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光），但本集 3 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.15 ≥ 0.10）——渲染与契约暖冷相反，人判。"
+        "msg": "色调像素兜底：契约基调=冷（前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光），但本集 11 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.11 ≥ 0.10）——渲染与契约暖冷相反，人判。"
       }
     ],
     "intent": {
@@ -1088,8 +1731,8 @@
       "evidence": "前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光",
       "warmth": "cool"
     },
-    "luma_median": 44.9,
-    "warmth_median": 0.2
+    "luma_median": 60.1,
+    "warmth_median": 0.1
   },
   "turnaround_alignment": {
     "available": true,

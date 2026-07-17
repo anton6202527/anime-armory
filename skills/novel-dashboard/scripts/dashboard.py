@@ -24,6 +24,10 @@ if NOVEL_LIB not in sys.path:
     sys.path.insert(0, NOVEL_LIB)
 
 from novel_pipeline import artifact_graph, dry_run_plan  # noqa: E402
+try:
+    from report_snapshot import validate_snapshot  # noqa: E402
+except Exception:  # pragma: no cover - 兜底：缺模块时不做新鲜度核验（诚实置 None）
+    validate_snapshot = None
 
 
 def _circuit_failure_threshold() -> int:
@@ -130,6 +134,17 @@ def revision_summary(root: str) -> dict[str, Any]:
     }
 
 
+def _snapshot_freshness(root: str, payload: Any) -> dict[str, Any]:
+    """报告 source_snapshot vs **当前正文** 的实时核验（王敦外传实证的自盲修复）：
+    dashboard 生成早于改稿时，provenance 图的 stale 检测看不到"报告的源正文已变"——
+    报告文件本身没变、不算 stale，但它评的已经不是现在这本书。每次 build 都重新对
+    快照 hash，而不是信任生成时点的图。缺快照/缺依赖 → fresh=None（诚实未知，不装新鲜）。"""
+    if validate_snapshot is None or not isinstance(payload, dict) or not payload:
+        return {"fresh": None, "msg": "未核验（缺报告或核验依赖）"}
+    ok, msg = validate_snapshot(root, payload.get("source_snapshot"))
+    return {"fresh": bool(ok), "msg": msg}
+
+
 def review_summary(root: str) -> dict[str, Any]:
     path = os.path.join(root, "审稿", "review_report.json")
     payload = load_json(path, {}) or {}
@@ -143,6 +158,7 @@ def review_summary(root: str) -> dict[str, Any]:
         "finding_count": len(findings),
         "blocking_count": len(blocking),
         "blocking_ids": [item.get("id") or item.get("dimension") or item.get("problem") for item in blocking[:20]],
+        "snapshot": _snapshot_freshness(root, payload) if os.path.exists(path) else {"fresh": None, "msg": "无报告"},
     }
 
 
@@ -157,6 +173,7 @@ def score_summary(root: str) -> dict[str, Any]:
         "verdict": payload.get("verdict") if isinstance(payload, dict) else "",
         "production_decision": (payload.get("production_decision") or {}).get("decision") if isinstance(payload, dict) else "",
         "market_evidence_jobs": rel(root, market_jobs) if os.path.exists(market_jobs) else "",
+        "snapshot": _snapshot_freshness(root, payload) if os.path.exists(path) else {"fresh": None, "msg": "无报告"},
     }
 
 
@@ -472,6 +489,11 @@ def render_markdown(dashboard: dict[str, Any]) -> str:
     ops_slo = dashboard.get("ops_slo") or {}
     trends = dashboard.get("trends") or {}
     lines.append(f"- review blockers：{review.get('blocking_count', 0)} / findings={review.get('finding_count', 0)}")
+    # 报告新鲜度（实时核验·非生成时点快照）：False = 正文在报告之后改过，review/score 结论已过期
+    for label, summ in (("review", review), ("score", score)):
+        snap = summ.get("snapshot") or {}
+        if snap.get("fresh") is False:
+            lines.append(f"- ⚠️ {label} 报告已过期：{snap.get('msg')}")
     lines.append(
         f"- author workflow：{author_flow.get('current_step') or 'unknown'} "
         f"done={author_flow.get('done_count', 0)}/{author_flow.get('step_count', 0)} source={author_flow.get('source') or '-'}"

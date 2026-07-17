@@ -324,6 +324,43 @@ def test_enqueue_writes_mv_rework_queue():
         shutil.rmtree(tmp)
 
 
+def test_late_cut_bias_flags_systematic_late_cuts():
+    # 切点全部落在 downbeat 之后 0.10s（对齐窗口 ±0.15s 内、超晚切容差 0.04s）→ 全晚切
+    late_plan = {"clips": [
+        {"clip_id": "C1", "section": "verse", "start": 0.0, "end": 4.10, "duration": 4.10},
+        {"clip_id": "C2", "section": "verse", "start": 4.10, "end": 8.10, "duration": 4.0},
+        {"clip_id": "C3", "section": "verse", "start": 8.10, "end": 12.10, "duration": 4.0},
+        {"clip_id": "C4", "section": "verse", "start": 12.10, "end": 24.0, "duration": 11.9},
+    ]}
+    late, aligned, ratio = pacing.late_cut_bias(late_plan, BEATGRID)
+    assert aligned == 3 and late == 3 and ratio == 1.0
+
+
+def test_late_cut_bias_quiet_on_grid_or_early():
+    # 压拍切（GOOD_PLAN）→ 零晚切
+    late, aligned, ratio = pacing.late_cut_bias(GOOD_PLAN, BEATGRID)
+    assert late == 0 and ratio == 0.0
+    # 提前 2-3 帧落刀（-0.10s）是专业手法 → 不算晚切
+    early_plan = {"clips": [
+        {"clip_id": "C1", "section": "verse", "start": 0.0, "end": 3.90, "duration": 3.90},
+        {"clip_id": "C2", "section": "verse", "start": 3.90, "end": 7.90, "duration": 4.0},
+        {"clip_id": "C3", "section": "verse", "start": 7.90, "end": 24.0, "duration": 16.1},
+    ]}
+    late, aligned, ratio = pacing.late_cut_bias(early_plan, BEATGRID)
+    assert aligned == 2 and late == 0 and ratio == 0.0
+
+
+def test_late_cut_bias_none_without_aligned_cuts():
+    late, aligned, ratio = pacing.late_cut_bias({"clips": []}, BEATGRID)
+    assert ratio is None
+
+
+def test_pacing_report_includes_late_cut_bias():
+    report = pacing.pacing_report(GOOD_PLAN, BEATGRID, 24.0)
+    assert "late_cut_bias" in report
+    assert report["late_cut_bias"]["ratio"] == 0.0
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     for t in tests:

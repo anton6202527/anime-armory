@@ -6,7 +6,7 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-17T11:33:20+00:00",
+  "generated_at": "2026-07-17T11:56:39+00:00",
   "contracts": [
     {
       "name": "storyboard",
@@ -54,7 +54,7 @@
     {
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
-      "sha256": "fe568e4752c0338d5aad0aedf08df5895e38214e376f976847446305e429cefb"
+      "sha256": "761e8cd12fd483b22c46854b789a076211ac6d03f59d3bdaeac34ad568a807f8"
     }
   ]
 }

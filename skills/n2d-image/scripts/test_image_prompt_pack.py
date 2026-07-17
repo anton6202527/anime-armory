@@ -375,6 +375,60 @@ def test_material_asset_map_reads_compact_shared_asset_bullets(tmp_path: Path) -
     assert assets["VFX_01"]["name"] == "百妖谱底框"
 
 
+def test_material_asset_map_expands_grouped_asset_heading_without_id_alias_pollution(tmp_path: Path) -> None:
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        """# 素材清单
+## 道具出图
+### PROP_扁担 + PROP_水桶
+
+暗黄老竹扁担；两只同款旧木桶，铁箍暗锈，数量永远是二。
+
+## 风格锚
+
+这段不属于道具描述。
+""",
+        encoding="utf-8",
+    )
+
+    assets = image_prompt_pack.material_asset_map(tmp_path, {"episode": 1})
+
+    assert set(assets) == {"PROP_扁担", "PROP_水桶"}
+    assert assets["PROP_扁担"]["name"] == "PROP 扁担"
+    assert assets["PROP_水桶"]["name"] == "PROP 水桶"
+    assert "两只同款旧木桶" in assets["PROP_扁担"]["profile"]
+    assert "两只同款旧木桶" in assets["PROP_水桶"]["profile"]
+    assert "+ PROP_水桶" not in assets["PROP_扁担"]["profile"]
+    assert "这段不属于道具描述" not in assets["PROP_扁担"]["profile"]
+
+
+def test_material_asset_map_repairs_stale_group_heading_pollution_from_generated_registry(tmp_path: Path) -> None:
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        "### PROP_扁担 + PROP_水桶\n\n暗黄老竹扁担；两只旧木桶，铁箍暗锈。\n",
+        encoding="utf-8",
+    )
+    registry = tmp_path / "出图" / "共享" / "asset_registry.json"
+    registry.parent.mkdir(parents=True)
+    registry.write_text(json.dumps({
+        "assets": [{
+            "id": "PROP_扁担",
+            "type": "prop",
+            "constraints": {"structure": "+ PROP_水桶"},
+            "drift_forbidden": ["不要让+ PROP_水桶结构漂移"],
+            "scene_dna": {"landmarks": ["+ PROP_水桶"]},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    story = {"episode": 1, "clips": [{"object_ids": ["PROP_扁担", "PROP_水桶"]}]}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+
+    assert defs["PROP_扁担"]["positive"].startswith("暗黄老竹扁担")
+    assert "+ PROP_水桶" not in json.dumps(defs["PROP_扁担"], ensure_ascii=False)
+
+
 def test_landed_prop_primary_does_not_impersonate_scale_or_in_hand_views(tmp_path: Path) -> None:
     primary = tmp_path / "出图" / "共享" / "图片" / "定妆_武器_横刀.png"
     primary.parent.mkdir(parents=True)

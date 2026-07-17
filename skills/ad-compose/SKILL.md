@@ -30,7 +30,7 @@ ffmpeg 无 libass 时，字幕走 Pillow PNG overlay。
 3. **多时长 cutdown**：按镜头优先级选段，但渲染从已混音/字幕/包装的主片精确 trim；选中 `claim_ids` 时自动补回对应 disclosure 镜，缺披露直接 block。
 4. **多比例 reframe**：覆盖 16:9/9:16/4:5/1:1，支持固定 `--crop-x/--crop-y` 或 `--focus-plan` 动态跟随；高价值版位不得默认中心裁切后直接交付。
 5. **A/B 版本**：deliver.py 只给 expected_path，由操作者手工剪/导出。
-6. **逐交付件技术 QC**：`deliver.py` 先写本次 `delivery_plan.json`，再生成 `delivery_qc.json`；实测时长、实际 placement 比例/分辨率/音轨、编解码、48 kHz、帧率、LUFS/true peak、BT.709/range/progressive。
+6. **逐交付件技术 QC**：`deliver.py` 先写本次 `delivery_plan.json`，再生成 `delivery_qc.json`；实测时长、实际 placement 比例/分辨率/音轨、编解码、48 kHz、帧率、LUFS/true peak、BT.709/range/progressive。另按行规查 **textless 无字版母版**：成片带烧录文字或 locale matrix 多语言时，交付计划须含 id/label 带 `textless`/`无字` 的母版件（缺=warn `textless_master_missing`）——否则每个语言版/改字都要回炉重做 online。烧录法律行/脚注停留时长按字数换算快筛（>12 字/秒 warn `rendered_text_reading_speed_warn`，见 rendered_text_qc）。
 7. **最终像素文字 QC**：先用 `rendered_text_qc.py --init-plan` 登记每版字幕、CTA、价格、claim 和法律声明的时间窗/框；在最终编码文件抽帧，OCR/像素对比度只定位，具名人逐项确认精确文案、对比度、停留时间和遮挡并留证。
 8. **ASR 四路对账**：`asr_consistency.py` 对 `voiceover.txt → 实际 VO transcript → 字幕 → 最终母版 transcript`；数字、价格、CTA、spoken claim 和法律声明精确匹配。可用 `deliver.py --run-asr` 调本地 whisper；预计算 transcript 也须在 `asr_receipts.json` 绑定媒体/文本 SHA、引擎/模型与时间，缺证据即 block。
 9. **无障碍 QC**：`accessibility_qc.json` 验完整字幕、逐事件非语言音频字幕，并按项目 WCAG 2.2 目标要求音频描述或媒体替代；阅读速度/自动对比度/低分辨率闪烁仅作快筛。

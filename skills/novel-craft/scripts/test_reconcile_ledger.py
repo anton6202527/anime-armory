@@ -210,7 +210,8 @@ class RollupTest(unittest.TestCase):
                 "chapter_deltas": {
                     "chapter_01": {"merged_at": "x", "summary": {
                         "new_facts": ["a", "b"],
-                        "character_changes": [{"name": "林越", "change": "觉醒"}],
+                        "character_changes": [{"name": "林越", "change": "觉醒"},
+                                              {"name": "老仵作", "change": "殉职", "event": "death"}],
                         "open_threads_added": ["铜钱来历"], "threads_resolved": []},
                         "verification": {"status": "ok", "chapter_file_hash": "h",
                                          "delta_hash": "d", "notes": "很长的核对说明" * 20}},
@@ -228,7 +229,11 @@ class RollupTest(unittest.TestCase):
             c01 = out["chapter_deltas"]["chapter_01"]
             self.assertTrue(c01["summary"]["rolled"])
             self.assertEqual(c01["summary"]["new_facts"], 2)
-            self.assertEqual(c01["summary"]["characters_touched"], ["林越"])
+            # character_changes 不许压成整数：保留 {name, event}（丢 change 文本），
+            # 否则 graph_sentry 生死闸对已 rollup 早章失明、narrative_risk_weight churn 归 0。
+            self.assertEqual(c01["summary"]["character_changes"],
+                             [{"name": "林越"}, {"name": "老仵作", "event": "death"}])
+            self.assertEqual(c01["summary"]["characters_touched"], ["林越", "老仵作"])
             self.assertEqual(c01["verification"]["status"], "ok")
             self.assertEqual(c01["verification"]["chapter_file_hash"], "h")
             self.assertEqual(c01["verification"]["delta_hash"], "d")

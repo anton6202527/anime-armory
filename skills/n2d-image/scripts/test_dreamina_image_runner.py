@@ -87,7 +87,87 @@ def test_dreamina_image_runner_requires_signed_exception(tmp_path: Path) -> None
     dreamina.require_dreamina_image_signoff(tmp_path)
 
 
+def test_dreamina_main_scopes_shared_first_interlock_to_selected_targets(tmp_path: Path, monkeypatch) -> None:
+    target = _project(tmp_path)
+    captured = {}
+    monkeypatch.setattr(dreamina, "require_dreamina_image_signoff", lambda _root: None)
+    monkeypatch.setattr(base, "build_targets", lambda *_args, **_kwargs: [target])
+
+    def scoped_interlock(_root, _episode, targets=None):
+        captured["targets"] = targets
+        return False
+
+    monkeypatch.setattr(base, "enforce_shared_first_interlock", scoped_interlock)
+
+    assert dreamina.main([str(tmp_path), "第1集", "--shots", "Clip_02_a1"]) == 1
+    assert captured["targets"] == [target]
+
+
+def test_dreamina_record_event_writes_release_grade_recipe_evidence(tmp_path: Path, monkeypatch) -> None:
+    target = _project(tmp_path)
+    final = tmp_path / target.rel_path
+    final.parent.mkdir(parents=True, exist_ok=True)
+    final.write_bytes(b"final-png")
+    capability = tmp_path / "生产数据" / "image_backend_capabilities" / "dreamina.json"
+    capability.parent.mkdir(parents=True, exist_ok=True)
+    capability.write_text('{"backend":"dreamina"}', encoding="utf-8")
+    captured = {}
+
+    def capture_run(cmd, **_kwargs):
+        captured["cmd"] = cmd
+        return type("Result", (), {"returncode": 0})()
+
+    monkeypatch.setattr(dreamina.subprocess, "run", capture_run)
+    dreamina.record_event(
+        tmp_path,
+        "第1集",
+        target,
+        status="pass",
+        duration_sec=1.0,
+        task_id="dreamina-test",
+        seed="1234",
+        temp_path=tmp_path / "temp.png",
+        submit_id="submit-1",
+        refs=[tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_脸部特写.png"],
+        archive_path=None,
+        compiled_request={
+            "kind": "n2d_compiled_image_prompt",
+            "version": 1,
+            "model": "Seedream 5.0",
+            "channel": "Dreamina/即梦官方 CLI",
+            "compiled_request_sha256": "compiled-sha",
+            "reference_inputs_sha256": "refs-sha",
+            "request_params": {"model_version": "5.0", "resolution_type": "2k"},
+        },
+        submitted_prompt="test prompt",
+    )
+
+    cmd = captured["cmd"]
+    meta = {
+        cmd[index + 1].split("=", 1)[0]: cmd[index + 1].split("=", 1)[1]
+        for index, token in enumerate(cmd[:-1])
+        if token == "--meta" and "=" in cmd[index + 1]
+    }
+    for key in (
+        "model", "channel", "route_hash", "capability_evidence_id", "recipe_hash",
+        "prompt_sha256", "reference_bundle_sha256", "backend_version", "quality_tier",
+        "actual_image_inputs", "artifact_sha256", "seed_effective", "seed_support",
+    ):
+        assert meta[key]
+    assert meta["reference_bundle_sha256"] == "refs-sha"
+    assert meta["seed_effective"] == "false"
+
+
 def _combat_target(body: str) -> "base.Target":
+    positive = base.re.search(r"\*\*正向 prompt（中文）\*\*[：:]\s*([^\n]+)", body)
+    negative = base.re.search(r"\*\*负向 prompt\*\*[：:]\s*([^\n]+)", body)
+    if positive:
+        body = (
+            "## 镜头 7\n### 正向 prompt（中文）\n"
+            f"动作瞬间：{positive.group(1)}\n"
+            "### 负向 prompt\n"
+            f"{negative.group(1) if negative else ''}"
+        )
     section = base.ClipSection(
         clip="Clip_07", title="## 镜头 7", body=body, target_line="`出图/第1集/图片/镜头7.png`")
     return base.Target(shot="Clip_07::镜头7", clip="Clip_07", mode="firstframe",
@@ -187,3 +267,215 @@ def test_dreamina_unanchored_check_matches_attached_paths(tmp_path: Path) -> Non
     assert base.carried_identity_unanchored(bundle, attached_rel) is False
     # With nothing identity-bearing attached, it is unanchored → would block spend.
     assert base.carried_identity_unanchored(bundle, ["出图/共享/图片/占位图.png"]) is True
+
+
+def test_dreamina_relay_keeps_source_first_and_drops_nonfocus_character(tmp_path: Path, monkeypatch) -> None:
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    shared_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    shared_dir.mkdir(parents=True)
+    source = image_dir / "EP01_CLIP02.png"
+    focus = shared_dir / "CHAR_01_face.png"
+    excluded = shared_dir / "CHAR_02_face.png"
+    for path in (source, focus, excluded):
+        path.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
+    section = base.ClipSection(
+        clip="Clip_02", title="## 镜头 2", body="",
+        target_line="`出图/第1集/图片/EP01_CLIP02_a2.png`",
+    )
+    target = base.Target(
+        shot="Clip_02_a2", clip="Clip_02", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP02_a2.png", section=section,
+    )
+    source_target = base.Target(
+        shot="Clip_02_first", clip="Clip_02", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP02.png", section=section,
+    )
+    monkeypatch.setattr(base, "target_for_shot", lambda *_args: source_target)
+    monkeypatch.setattr(base, "storyboard_anchor_beat", lambda *_args: {
+        "single_reaction": True, "focus_ids": ["CHAR_01"],
+    })
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": [
+        {"kind": "character", "id": "CHAR_01", "paths": ["出图/共享/图片/CHAR_01_face.png"]},
+        {"kind": "character", "id": "CHAR_02", "paths": ["出图/共享/图片/CHAR_02_face.png"]},
+    ]})
+
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+    inputs = dreamina.dreamina_reference_inputs(tmp_path, target, refs, "第1集")
+
+    assert refs[0] == source
+    assert focus in refs
+    assert excluded not in refs
+    assert inputs[0]["role"] == "source_frame"
+
+
+def test_firstframe_exact_state_relay_uses_previous_accepted_last_anchor_as_source(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    previous = tmp_path / "出图" / "第1集" / "图片" / "EP01_CLIP04_a2.png"
+    previous.parent.mkdir(parents=True)
+    previous.write_bytes(b"previous-final-anchor")
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [
+        {
+            "id": "EP01_CLIP04",
+            "continuity": {
+                "end_state": "少年右肩挑两桶向画左行进",
+                "anchors": [{"anchor_png": "出图/第1集/图片/EP01_CLIP04_a2.png"}],
+            },
+            "shots": [{"t": "0-1s", "lens": "MS", "desc": "少年行进"}],
+        },
+        {
+            "id": "EP01_CLIP05",
+            "continuity": {"start_state": "少年右肩挑两桶向画左行进"},
+            "shots": [{"t": "0-2s", "lens": "WS", "desc": "少年步幅变小"}],
+        },
+    ]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text('{"characters": []}', encoding="utf-8")
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    events.write_text(json.dumps({
+        "stage": "image", "event": "qa",
+        "generation": {
+            "asset": "出图/第1集/图片/EP01_CLIP04_a2.png",
+            "status": "accepted",
+        },
+        "meta": {"artifact_sha256": base.file_sha256(previous)},
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+    section = base.ClipSection(
+        clip="Clip_05", title="## 镜头 5", body="",
+        target_line="`出图/第1集/图片/EP01_CLIP05.png`",
+    )
+    target = base.Target(
+        shot="Clip_05_first", clip="Clip_05", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP05.png", section=section,
+    )
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": []})
+
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+    inputs = dreamina.dreamina_reference_inputs(tmp_path, target, refs, "第1集")
+
+    assert refs[0] == previous
+    assert inputs[0]["role"] == "source_frame"
+    assert inputs[0]["owner"] == "Clip_05"
+
+
+def test_dreamina_requeries_same_async_submit_until_image_exists(tmp_path: Path, monkeypatch) -> None:
+    ref = tmp_path / "ref.png"
+    ref.write_bytes(b"ref")
+    section = base.ClipSection(
+        clip="Clip_01", title="## 镜头 1", body="",
+        target_line="`出图/第1集/图片/EP01_CLIP01.png`",
+    )
+    target = base.Target(
+        shot="Clip_01_first", clip="Clip_01", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP01.png", section=section,
+    )
+    temp_path = tmp_path / "work" / "frame.png"
+    calls = []
+
+    def fake_run(cmd, **_kwargs):
+        calls.append(cmd)
+        if cmd[1] == "image2image":
+            return type("Result", (), {"returncode": 0, "stdout": '{"submit_id":"sid-1"}', "stderr": ""})()
+        if len([call for call in calls if call[1] == "query_result"]) == 1:
+            return type("Result", (), {
+                "returncode": 0,
+                "stdout": '{"submit_id":"sid-1","gen_status":"querying","queue_info":{"queue_status":"Generating"}}',
+                "stderr": "",
+            })()
+        download = Path(cmd[cmd.index("--download_dir") + 1])
+        download.mkdir(parents=True, exist_ok=True)
+        (download / "result.jpg").write_bytes(b"result")
+        return type("Result", (), {"returncode": 0, "stdout": '{"gen_status":"done"}', "stderr": ""})()
+
+    monkeypatch.setattr(dreamina.subprocess, "run", fake_run)
+    monkeypatch.setattr(dreamina.time, "sleep", lambda _seconds: None)
+    monkeypatch.setattr(dreamina, "materialize_png", lambda _src, _out: True)
+
+    ok, submit_id, error, _refs = dreamina.run_dreamina(
+        target,
+        root=tmp_path,
+        episode="第1集",
+        temp_path=temp_path,
+        timeout_sec=30,
+        poll_sec=1,
+        model_version="5.0",
+        resolution_type="2k",
+        refs=[ref],
+        compiled_request={"prompt": "test prompt", "request_params": {}},
+    )
+
+    assert ok is True
+    assert submit_id == "sid-1"
+    assert error == ""
+    assert len([call for call in calls if call[1] == "query_result"]) == 2
+
+
+def test_dreamina_recovers_paid_submit_from_list_task_after_history_error(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    ref = tmp_path / "ref.png"
+    ref.write_bytes(b"ref")
+    section = base.ClipSection(
+        clip="Clip_01", title="## 镜头 1", body="",
+        target_line="`出图/第1集/图片/EP01_CLIP01.png`",
+    )
+    target = base.Target(
+        shot="Clip_01_first", clip="Clip_01", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP01.png", section=section,
+    )
+    temp_path = tmp_path / "work" / "frame.png"
+    calls = []
+
+    def fake_run(cmd, **_kwargs):
+        calls.append(cmd)
+        if cmd[1] == "image2image":
+            return type("Result", (), {
+                "returncode": 1, "stdout": "",
+                "stderr": "get_history_by_ids failed: ret=2008",
+            })()
+        if cmd[1] == "list_task":
+            return type("Result", (), {
+                "returncode": 0,
+                "stdout": json.dumps([{
+                    "submit_id": "sid-recovered",
+                    "prompt": "single-frame-prompt",
+                    "gen_status": "querying",
+                }]),
+                "stderr": "",
+            })()
+        if cmd[1] == "query_result":
+            download_dir = Path(cmd[cmd.index("--download_dir") + 1])
+            download_dir.mkdir(parents=True, exist_ok=True)
+            (download_dir / "result.png").write_bytes(
+                b"\x89PNG\r\n\x1a\n" + b"0" * 64
+            )
+            return type("Result", (), {
+                "returncode": 0, "stdout": '{"gen_status":"success"}', "stderr": "",
+            })()
+        raise AssertionError(cmd)
+
+    monkeypatch.setattr(dreamina.subprocess, "run", fake_run)
+    monkeypatch.setattr(dreamina, "materialize_png", lambda _src, out: out.write_bytes(b"ok") or True)
+    ok, sid, error, _refs = dreamina.run_dreamina(
+        target,
+        root=tmp_path,
+        episode="第1集",
+        temp_path=temp_path,
+        timeout_sec=30,
+        poll_sec=1,
+        model_version="5.0",
+        resolution_type="2k",
+        refs=[ref],
+        compiled_request={"prompt": "single-frame-prompt"},
+    )
+
+    assert ok is True
+    assert sid == "sid-recovered"
+    assert error == ""
+    assert len([call for call in calls if call[1] == "image2image"]) == 1
+    assert len([call for call in calls if call[1] == "list_task"]) == 1

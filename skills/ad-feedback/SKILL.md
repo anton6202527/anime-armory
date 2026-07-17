@@ -25,6 +25,7 @@ python3 skills/ad-feedback/scripts/feedback_ingest.py "<作品根>" --input 投�
 - 归因窗口、conversion event、平台、placement、受众和预算须与 brief.measurement/platform_pack 对齐；跨版位数据不是同一可比层。
 - 平台原生的随机分桶、显著性与实验报告优先；本地 Wilson 95% 区间只适用于聚合二项 CTR/CVR 快筛，不冒充 Google 等平台的 bucket/Jackknife 方法。
 - frequency 上升且 CTR/ROAS 下滑时标疲劳，优先刷新 hook/caption/开场，不把疲劳误判为产品失败。
+- 3s 观看率（hook rate）有数据且样本合格时按基准地板快筛：`view_3s_rate < 25%` → `hook_rate_low` warn（2026 业界基准·会过期快照）——前 3 秒失败时后段再强也到不了，优先单变量换 hook 复测；`video_3s` 全 0 视为字段缺失不判。
 - 不用投放前启发式代替真实数据，也不凭小样本宣布胜者。
 
 最小计划字段：`hypothesis/primary_kpi/conversion_event/attribution_window/platform/placement/audience/randomization_unit/decision_rule/start_date/end_date/min_impressions/held_constant/variants[]`；每个 variant 必填 `asset_path/asset_sha256`。导入时 KPI、变体、平台、placement、受众和样本线均从已批准计划读取，不能投放后换素材或调低门槛。

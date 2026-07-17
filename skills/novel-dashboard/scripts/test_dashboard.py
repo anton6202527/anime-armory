@@ -113,3 +113,35 @@ def test_dashboard_collects_core_signals_and_writes_outputs():
         assert os.path.exists(os.path.join(root, "生产数据", "novel_dashboard_history.jsonl"))
         with open(md_path, encoding="utf-8") as f:
             assert "author workflow" in f.read()
+
+
+def test_review_snapshot_staleness_detected_live(tmp_path):
+    # 过期自盲修复回归（王敦外传实证）：正文在 review 报告之后被改（扩写）时，dashboard
+    # 每次 build 都要实时核验 source_snapshot——不能因为报告文件本身没变就报"0 过期"。
+    import json
+    import os
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import dashboard as db
+
+    root = str(tmp_path)
+    os.makedirs(os.path.join(root, "章节"), exist_ok=True)
+    os.makedirs(os.path.join(root, "审稿"), exist_ok=True)
+    ch = os.path.join(root, "章节", "第01章.md")
+    with open(ch, "w", encoding="utf-8") as f:
+        f.write("旧正文")
+    lib = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "..", "..", "novel", "_lib"))
+    sys.path.insert(0, lib)
+    from report_snapshot import snapshot_chapters
+    snap = snapshot_chapters(root, mode="review:full")
+    with open(os.path.join(root, "审稿", "review_report.json"), "w", encoding="utf-8") as f:
+        json.dump({"findings": [], "source_snapshot": snap}, f, ensure_ascii=False)
+
+    assert db.review_summary(root)["snapshot"]["fresh"] is True
+    # 改稿（扩写）后：同一份报告必须被实时判过期
+    with open(ch, "w", encoding="utf-8") as f:
+        f.write("扩写后的正文，比原来长了很多")
+    res = db.review_summary(root)
+    assert res["snapshot"]["fresh"] is False
+    assert "重新" in res["snapshot"]["msg"]

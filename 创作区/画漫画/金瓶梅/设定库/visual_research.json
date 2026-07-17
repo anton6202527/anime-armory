@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "kind": "comic_visual_research",
+  "status": "confirmed",
+  "scope": "明代（词话本风俗背景，托宋写明）山东运河市镇（清河/临清一带）；第一季前5话；主要对象：武松、潘金莲、武大、王婆、张大户；紫石街街市、武大家、景阳冈、张大户宅。",
+  "project_style_anchor_id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+  "sources": [
+    {
+      "source_id": "FILM_001",
+      "title": "央视版电视剧《水浒传》（1998，中国中央电视台）武松线（景阳冈—紫石街段）",
+      "url": "https://tv.cctv.com/",
+      "provider": "中国中央电视台（版权方）",
+      "accessed_at": "2026-07-17",
+      "type": "film_tv_narrative",
+      "usage_boundary": "research_only",
+      "findings": [
+        "打虎段以长铺垫（酒店/榜文/暮色）压缩+爆发式短打呈现，动作戏的节奏骨架值得借鉴：先蓄势后一瞬。",
+        "紫石街叔嫂戏全程依赖室内小空间的座次与视线错位制造张力，证明该段不需要任何直露画面即可成立。",
+        "市井群像（挑担、闲汉、街坊围观）作为背景持续在场，是把家庭剧放进社会压力场的关键手法。",
+        "仅作叙事节奏与场面调度研究；不参考任何演员形象、剧照构图与整套服装。"
+      ]
+    },
+    {
+      "source_id": "PRIMARY_001",
+      "title": "仇英本《清明上河图》（明·仇英款，辽宁省博物馆藏）",
+      "url": "https://www.lnmuseum.com.cn/",
+      "provider": "辽宁省博物馆",
+      "accessed_at": "2026-07-17",
+      "type": "museum_primary",
+      "usage_boundary": "research_only",
+      "findings": [
+        "明代江南/运河市镇的街市形制一手依据：临街铺面+挑檐+布幌+竹帘，二层木楼临街开窗，可直接支撑紫石街与清河县街景锚。",
+        "青绿设色的明代风俗画范式：石绿、石青大面积铺陈中以赭石、白粉提亮，市井人物用矿物色点缀——本作『绢本暖调+局部朱砂记忆点』的直接色彩依据。",
+        "散点透视下的人流分组（担贩、轿马、围观群）提供条漫竖向步移景异的分组构图法。",
+        "船轿、招幌、货担等道具形制可作 PROP 设计的形准依据。"
+      ]
+    },
+    {
+      "source_id": "PRIMARY_002",
+      "title": "《明宪宗元宵行乐图》卷（中国国家博物馆藏）",
+      "url": "https://www.chnmuseum.cn/",
+      "provider": "中国国家博物馆",
+      "accessed_at": "2026-07-17",
+      "type": "institution_primary",
+      "usage_boundary": "research_only",
+      "findings": [
+        "明代人物比例与开脸的宫廷写实范式：三白开脸、细眉长目，身长约六头身——写实国漫化时的『古意底线』参照。",
+        "明代男子网巾/幞头类首服与曳撒、直身类袍服的层次穿法一手图证，支撑武松公服与市井男装设计。",
+        "群像场面的灯彩、货郎摊供节庆/市集场景的色彩密度参考：高密度暖色只在节庆场合使用，日常市井降密度。"
+      ]
+    },
+    {
+      "source_id": "PRIMARY_003",
+      "title": "『衣冠大成——明代服饰文化展』（山东博物馆，孔府旧藏明代服饰）",
+      "url": "https://www.sdmuseum.com/",
+      "provider": "山东博物馆",
+      "accessed_at": "2026-07-17",
+      "type": "institution_primary",
+      "usage_boundary": "research_only",
+      "findings": [
+        "存世明代成衣（袍、衫、裙、比甲）的裁剪结构、织物光泽与纹样尺度一手依据，山东地域恰合本作故事发生地。",
+        "女装『袄裙+比甲』层次与马面裙褶量的实物证据，支撑潘金莲从布裙荆钗到渐趋鲜丽的服装弧线。",
+        "补服与常服的等级差异图证，用于区分知县、都头与平民的服装语法，防止清宫剧混装。"
+      ]
+    }
+  ],
+  "derived_style": {
+    "summary": "STYLE_JPM_MING_GENRE_CINEMATIC：以仇英本清明上河图的明代市镇形制与青绿设色为环境基底，人物取明代风俗画开脸底线上的写实国漫造型，服装严格走明制（袄裙/比甲/网巾/曳撒），光线用电影级动机光（天光、烛火、炭火、雪光）；绢本暖调赭石藤黄石绿为主，朱砂只留给帘子、嫁衣与血这三类记忆点；含蓄留白的世情叙事，任何单格皆可公开发布。",
+    "decisions": [
+      {
+        "dimension": "character",
+        "decision": "写实国漫人物在明代风俗画开脸底线上塑形：三白开脸弱化为肤色分区，细眉长目保留；男子网巾/幞头、女子袄裙比甲按明制执行，等级用补服/布料光泽区分；禁止影视演员脸与清宫剧服饰。",
+        "evidence_source_ids": ["PRIMARY_002", "PRIMARY_003"]
+      },
+      {
+        "dimension": "environment",
+        "decision": "街市按仇英本市镇形制搭建：临街铺面+布幌+竹帘+二层木楼；条漫竖向用散点分组的步移景异，市井群像常驻背景构成社会压力场。",
+        "evidence_source_ids": ["PRIMARY_001", "FILM_001"]
+      },
+      {
+        "dimension": "palette",
+        "decision": "绢本暖调：赭石、藤黄、石绿为主，白粉提亮；朱砂只用于帘子、嫁衣、血三类记忆点；节庆场景才允许高密度暖色，日常市井降饱和。",
+        "evidence_source_ids": ["PRIMARY_001", "PRIMARY_002"]
+      },
+      {
+        "dimension": "action_pacing",
+        "decision": "动作与情欲张力都走『长蓄势+一瞬爆发/一瞬冻结』：打虎先榜文暮色铺陈后大格爆发；叔嫂戏靠座次与视线错位，全程无直露画面。",
+        "evidence_source_ids": ["FILM_001"]
+      }
+    ],
+    "do_not_copy": [
+      "影视演员脸、具体剧照构图与镜头",
+      "单一影视版本的整套服饰组合",
+      "清宫剧/和风浮世绘元素混入明代市井",
+      "博物馆藏品的直接扫描图作生图挂载参考"
+    ]
+  },
+  "rights_rules": {
+    "research_only": true,
+    "no_actor_likeness_direct_anchor": true,
+    "no_film_still_as_generation_reference": true,
+    "no_specific_composition_replication": true,
+    "no_costume_combination_replication": true,
+    "only_licensed_or_open_assets_in_generation": true,
+    "notes": [
+      "本合同只保存 URL、研究发现与派生设计决策，不下载或挂载影视截图。",
+      "生图锚一律为本项目 Dreamina 原创生成并经签收的资产。"
+    ]
+  }
+}

@@ -51,20 +51,25 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    python3 skills/ad-video/scripts/inherit_contract.py "<作品根>" --json "<作品根>/出视频/分镜/contract_inheritance.json"
    ```
    品牌色/光位锚/轴线未继承、产品镜丢产品身份锁定、缺编译块、编译后端与路由不一致或 compiler lint error = 🔴 block。0 block 才生成。
-4. **图生视频**：调生视频 CLI，标 `need_end_frame` 的用首+尾双帧引导焊接点。
-5. **出视频落档 QC（post-video gate）**：
+4. **animatic 预演（传统 PPM 纪律·花钱前最后一道免费签核）**：
+   ```bash
+   python3 skills/ad-video/scripts/animatic.py "<作品根>"
+   ```
+   用首帧 PNG × 实测镜头时长 + VO 拼 `合成/animatic.mp4`（+ `生产数据/ad_animatic_manifest.json`，逐帧 SHA + VO 时长对账）。节奏塌/镜序错/VO 不贴，在预演里改是免费的，生完视频再改是重烧。缺首帧/缺实测时长直接 block（预演不能拿空画面凑）；gate video 以 advisory 侧车提示，首帧或时长变更后预演过期。
+5. **图生视频**：调生视频 CLI，标 `need_end_frame` 的用首+尾双帧引导焊接点。
+6. **出视频落档 QC（post-video gate）**：
    ```bash
    python3 skills/ad-video/scripts/video_qc.py "<作品根>"
    ```
    用 ffprobe 实测视频流/分辨率/时长，用 ffmpeg 抽 start/mid/end 三帧并生成 contact sheet；对输入首帧、镜内产品漂移、相邻镜头真实尾/首帧做启发式比较。抽帧失败会 block“无法验收”，视觉 dHash 只 WARN 交人工。报告须晚于 clips 且 full precision 才能进 compose（或显式人工签收）。
-6. 回写 `_进度.md` 视频 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" video --status ✅ --artifact 出视频/分镜/视频`，提示 `ad-compose`。
+7. 回写 `_进度.md` 视频 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" video --status ✅ --artifact 出视频/分镜/视频`，提示 `ad-compose`。
 
 ## 广告专有强化
 
 - **品牌色 + 产品形态继承是硬闸门**：`inherit_contract.py` 把品牌色/光位/轴线漂移、产品镜丢产品身份锁定句拦在生成前。
 - **产品镜稳定优先**：产品 hero 镜路由到主体一致性最强的后端，避免 image2video 把包装/logo 抖花。
 - **资产注册表驱动**：`route.py` 消费 `asset_registry.json`，让 App/UI/end card 的 `PROD_*`、`BRAND_*` 和平台安全区一起进入视频路由产物。
-- **生成后也要验收**：`inherit_contract.py` 只管生成前 prompt 继承；`video_qc.py` 负责生成后的 Clip 文件、产品锁、文字可读、安全区、接缝声明，不允许坏 Clip 进入剪辑。
+- **生成后也要验收**：`inherit_contract.py` 只管生成前 prompt 继承；`video_qc.py` 负责生成后的 Clip 文件、产品锁、文字可读、安全区、接缝声明，外加**批内混帧率/混分辨率**（`batch_fps_mix`/`batch_resolution_mix`·warn——合成强制统一参数会静默掩盖来源差异）与**同场景相邻镜色跳**（`seam_color_jump`·平均色距>0.12 warn，已声明转场降 info——dHash 只抓灰度结构，调色/白平衡跳变靠色距抓），不允许坏 Clip 进入剪辑。
 - **运镜服务节奏**：广告节奏紧，一镜一个主运镜，动作峰值对 VO/音乐床节奏点（`ad-script` 时间轴标）。产品 hero/demo/end card 的可用运镜见 `skills/ad/references/运镜/manifest.json`。
 - **多比例**：按主比例出视频，其它比例 `ad-compose` reframe；运镜别让主体/产品冲出 action-safe。
 

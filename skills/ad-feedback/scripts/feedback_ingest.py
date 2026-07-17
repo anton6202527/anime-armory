@@ -16,6 +16,9 @@ from pathlib import Path
 
 
 NUMERIC = ("impressions", "clicks", "conversions", "spend", "revenue", "video_3s", "video_6s", "completed_views")
+# 业界信息流基准（2026 采集·会过期快照）：3s 观看率（hook rate）< 25% ≈ 前 3 秒失败，
+# 无论后段多强都先修 hook。仅在数据真带 video_3s 时判（全 0 视为字段缺失，不臆造）。
+HOOK_RATE_FLOOR = 0.25
 
 
 def file_sha256(path: Path):
@@ -201,6 +204,14 @@ def build(input_rows, min_impressions=1000, measurement=None, experiment_validat
         findings.append({"severity": "block", "code": "experiment_not_preregistered",
                          "msg": "缺已批准且绑定当前计划的实验预注册；本批数据只可诊断，不得宣布胜者"})
     findings.extend(_fatigue(rows_by_variant))
+    for v in variants:
+        if v["sample_qualified"] and v["video_3s"] > 0 and v["view_3s_rate"] < HOOK_RATE_FLOOR:
+            findings.append({
+                "severity": "warn", "code": "hook_rate_low", "variant_id": v["variant_id"],
+                "msg": (f"变体 {v['variant_id']} 3s 观看率 {v['view_3s_rate']:.1%} < 基准地板 {HOOK_RATE_FLOOR:.0%}"
+                        f"——前 3 秒（hook_id={v.get('hook_id') or '?'}）在流量里失败，后段再强也到不了；"
+                        "优先单变量换 hook 复测，别急着改 message/CTA"),
+            })
     components = {key: _component_rollup(input_rows, key, min_impressions)
                   for key in ("hook_id", "message_id", "cta_id")}
     return {"schema_version": 3, "kind": "ad_feedback_report", "verdict": verdict, "winner": winner,

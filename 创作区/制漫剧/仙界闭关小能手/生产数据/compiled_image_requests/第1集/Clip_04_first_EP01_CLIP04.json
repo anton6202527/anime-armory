@@ -1,0 +1,213 @@
+{
+  "actual_submit_prompt": "生成一张正式多人剧情关键帧：本锚只呈现 storyboard 子镜头：少年屈膝将扁担压上右肩，两桶保持清晰前后归属 主体：十四岁清瘦少年·内双长眼薄唇·低小髻灰布发带·灰褐粗布短打·晒黄警觉眼神 主体布局：无 动作瞬间：少年屈膝将扁担压上右肩，两桶保持清晰前后归属；少年只完成屈膝、肩入扁担、缓慢站起的一次起担，相机固定，桶不变数量 构图：本锚专属景别/机位：MS·侧前固定；继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别 场景：秀竹峰杂役院；扁担；水桶；前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光；光位锚=LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射 光影：{\"LOC_01\": {\"主光方向\": \"画左高处\", \"色温\": \"4800K冷灰\", \"动机光源\": \"破窗天光\"}, \"LOC_02\": {\"主光方向\": \"画右后\", \"色温\": \"4300K傍晚\", \"动机光源\": \"低位夕阳\"}, \"LOC_03\": {\"主光方向\": \"画右上\"… 情绪焦点：本镜戏剧功能是让主角从被动受辱转成主动试路，观众应获得对少年的笨拙韧劲产生认同 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_01的character参考 图2作为CHAR_01的character参考 图3作为CHAR_01的character参考 图4作为CHAR_01的character参考 图5作为CHAR_01的character参考 图6作为CHAR_01的character参考 图7作为CHAR_01的character参考 图8作为CHAR_01的character参考 图9作为LOC_02的asset参考 图10作为PROP_扁担的asset参考 保持一致：贺平生 CHAR_01/本集为14岁杂役常态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色；无特殊资产拓扑；按 保持结构、数量、材质和归属；CHAR_01: 衣领汗湿、掌心发红、发丝贴额；{\"LOC_01\": {\"主光方向\": \"画左高处\", \"色温\": \"4800K冷灰\", \"动机光源\": \"破窗天光\"}, \"LOC_02\": {\"主光方向\": \"画右后\", \"色温\": \"4300K傍晚\", \"动机光源\": \"低位夕阳\"}… 帧动作唯一真值：first @ 0.0s 只表现 `少年屈膝将扁担压上右肩，两桶保持清晰前后归属`；不得混入同一 Clip 的其它子镜头动作 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+  "actual_submit_prompt_chars": 1787,
+  "actual_submit_prompt_sha256": "04af113e0d643bb02d7341db405b9a8d683c3fc43310f2643157852bcbecfe3e",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "生成一张正式多人剧情关键帧：本锚只呈现 storyboard 子镜头：少年屈膝将扁担压上右肩，两桶保持清晰前后归属 主体：十四岁清瘦少年·内双长眼薄唇·低小髻灰布发带·灰褐粗布短打·晒黄警觉眼神 主体布局：无 动作瞬间：少年屈膝将扁担压上右肩，两桶保持清晰前后归属；少年只完成屈膝、肩入扁担、缓慢站起的一次起担，相机固定，桶不变数量 构图：本锚专属景别/机位：MS·侧前固定；继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别 场景：秀竹峰杂役院；扁担；水桶；前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光；光位锚=LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射 光影：{\"LOC_01\": {\"主光方向\": \"画左高处\", \"色温\": \"4800K冷灰\", \"动机光源\": \"破窗天光\"}, \"LOC_02\": {\"主光方向\": \"画右后\", \"色温\": \"4300K傍晚\", \"动机光源\": \"低位夕阳\"}, \"LOC_03\": {\"主光方向\": \"画右上\"… 情绪焦点：本镜戏剧功能是让主角从被动受辱转成主动试路，观众应获得对少年的笨拙韧劲产生认同 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_01的character参考 图2作为CHAR_01的character参考 图3作为CHAR_01的character参考 图4作为CHAR_01的character参考 图5作为CHAR_01的character参考 图6作为CHAR_01的character参考 图7作为CHAR_01的character参考 图8作为CHAR_01的character参考 图9作为LOC_02的asset参考 图10作为PROP_扁担的asset参考 保持一致：贺平生 CHAR_01/本集为14岁杂役常态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色；无特殊资产拓扑；按 保持结构、数量、材质和归属；CHAR_01: 衣领汗湿、掌心发红、发丝贴额；{\"LOC_01\": {\"主光方向\": \"画左高处\", \"色温\": \"4800K冷灰\", \"动机光源\": \"破窗天光\"}, \"LOC_02\": {\"主光方向\": \"画右后\", \"色温\": \"4300K傍晚\", \"动机光源\": \"低位夕阳\"}… 帧动作唯一真值：first @ 0.0s 只表现 `少年屈膝将扁担压上右肩，两桶保持清晰前后归属`；不得混入同一 Clip 的其它子镜头动作 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+        "role": "character",
+        "sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
+        "role": "character",
+        "sha256": "48f29a9cb10a3258837a877503159cf5d7d96dea22b1e600141e79e3dc05d1dd"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png",
+        "role": "character",
+        "sha256": "ef5d0fa7a56c6dab52a66c8b45a4196d3c639e70efaea45ba6d00abede839b40"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+        "role": "character",
+        "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
+        "role": "character",
+        "sha256": "70d7e15850ae15c7e93af72714e28c96b043053047732f7f8a92be480f99431e"
+      },
+      {
+        "index": 6,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
+        "role": "character",
+        "sha256": "80b68295ac6d528f7eb2d1f9edd4d1f08879483ba6cdfaceb614e3fdb32fe340"
+      },
+      {
+        "index": 7,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
+        "role": "character",
+        "sha256": "17c9544dba319cbfc26265893c52dda6219bff7d1a7f5f5edb5ef64801da316e"
+      },
+      {
+        "index": 8,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
+        "role": "character",
+        "sha256": "408eba9d4fb48a5035e2f1438da5ff3bd1c9599c73077fff64af58ed4425431c"
+      },
+      {
+        "index": 9,
+        "owner": "LOC_02",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+        "role": "asset",
+        "sha256": "57a8a3997329e241331459f4ea839c85fa472408a30a7e6eebd529c83a579fc2"
+      },
+      {
+        "index": 10,
+        "owner": "PROP_扁担",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_扁担.png",
+        "role": "asset",
+        "sha256": "ea4e3cf2c7c6fc324e185879172c599f8010ab61830b76e672d9592febcb4e8f"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "2k"
+    }
+  },
+  "compiler": {
+    "backend": "dreamina",
+    "channel": "official_cli",
+    "compiled_request_sha256": "85949edb05321c4cb5b420f7d1437f35cd7e77d7c81d02e51b476ea54eb8e6d5",
+    "compiler_decisions": [],
+    "execution_context_sha256": "509278f0bb1ff1ac25f17f966ccd6e1bbbd47db74994f5ecdf74d3d8f169304d",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_verbose:1787>1200",
+        "submit_prompt_many_clauses:40>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 40,
+      "constraint_compression": {
+        "policy_guard_input": 5,
+        "policy_guard_output": 5,
+        "preserve_input": 4,
+        "preserve_output": 4
+      },
+      "estimated_text_tokens": 447,
+      "negative_chars": 0,
+      "prompt_chars": 1787,
+      "reference_count": 10
+    },
+    "mode": "firstframe",
+    "model": "5.0",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "seedream_concise_natural_language",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成一张正式多人剧情关键帧：本锚只呈现 storyboard 子镜头：少年屈膝将扁担压上右肩，两桶保持清晰前后归属 主体：十四岁清瘦少年·内双长眼薄唇·低小髻灰布发带·灰褐粗布短打·晒黄警觉眼神 主体布局：无 动作瞬间：少年屈膝将扁担压上右肩，两桶保持清晰前后归属；少年只完成屈膝、肩入扁担、缓慢站起的一次起担，相机固定，桶不变数量 构图：本锚专属景别/机位：MS·侧前固定；继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别 场景：秀竹峰杂役院；扁担；水桶；前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光；光位锚=LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射 光影：{\"LOC_01\": {\"主光方向\": \"画左高处\", \"色温\": \"4800K冷灰\", \"动机光源\": \"破窗天光\"}, \"LOC_02\": {\"主光方向\": \"画右后\", \"色温\": \"4300K傍晚\", \"动机光源\": \"低位夕阳\"}, \"LOC_03\": {\"主光方向\": \"画右上\"… 情绪焦点：本镜戏剧功能是让主角从被动受辱转成主动试路，观众应获得对少年的笨拙韧劲产生认同 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_01的character参考 图2作为CHAR_01的character参考 图3作为CHAR_01的character参考 图4作为CHAR_01的character参考 图5作为CHAR_01的character参考 图6作为CHAR_01的character参考 图7作为CHAR_01的character参考 图8作为CHAR_01的character参考 图9作为LOC_02的asset参考 图10作为PROP_扁担的asset参考 保持一致：贺平生 CHAR_01/本集为14岁杂役常态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色；无特殊资产拓扑；按 保持结构、数量、材质和归属；CHAR_01: 衣领汗湿、掌心发红、发丝贴额；{\"LOC_01\": {\"主光方向\": \"画左高处\", \"色温\": \"4800K冷灰\", \"动机光源\": \"破窗天光\"}, \"LOC_02\": {\"主光方向\": \"画右后\", \"色温\": \"4300K傍晚\", \"动机光源\": \"低位夕阳\"}… 帧动作唯一真值：first @ 0.0s 只表现 `少年屈膝将扁担压上右肩，两桶保持清晰前后归属`；不得混入同一 Clip 的其它子镜头动作 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_表情_六联表.png",
+        "role": "character",
+        "sha256": "394b2c8f3f0b0ee39f2bbe1c2a38f0bddfd3d67a448e5ad1618b79fa0becda3e"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_后45度.png",
+        "role": "character",
+        "sha256": "48f29a9cb10a3258837a877503159cf5d7d96dea22b1e600141e79e3dc05d1dd"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_三视图.png",
+        "role": "character",
+        "sha256": "ef5d0fa7a56c6dab52a66c8b45a4196d3c639e70efaea45ba6d00abede839b40"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态.png",
+        "role": "character",
+        "sha256": "c4277239033ed9f941ed3acebbd5e76004dcb51bcb7f4f9a4b465c7bf79e83f3"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_脸部特写.png",
+        "role": "character",
+        "sha256": "70d7e15850ae15c7e93af72714e28c96b043053047732f7f8a92be480f99431e"
+      },
+      {
+        "index": 6,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_45度.png",
+        "role": "character",
+        "sha256": "80b68295ac6d528f7eb2d1f9edd4d1f08879483ba6cdfaceb614e3fdb32fe340"
+      },
+      {
+        "index": 7,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_侧.png",
+        "role": "character",
+        "sha256": "17c9544dba319cbfc26265893c52dda6219bff7d1a7f5f5edb5ef64801da316e"
+      },
+      {
+        "index": 8,
+        "owner": "CHAR_01",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_01__本集为14岁杂役常态_背.png",
+        "role": "character",
+        "sha256": "408eba9d4fb48a5035e2f1438da5ff3bd1c9599c73077fff64af58ed4425431c"
+      },
+      {
+        "index": 9,
+        "owner": "LOC_02",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+        "role": "asset",
+        "sha256": "57a8a3997329e241331459f4ea839c85fa472408a30a7e6eebd529c83a579fc2"
+      },
+      {
+        "index": 10,
+        "owner": "PROP_扁担",
+        "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_扁担.png",
+        "role": "asset",
+        "sha256": "ea4e3cf2c7c6fc324e185879172c599f8010ab61830b76e672d9592febcb4e8f"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "2k"
+    },
+    "source_contract_sha256": "14581b1aa21683b8a34e29afe916cf4a064a6e13f5351a49e1d4c62b79aa2455",
+    "source_contract_text_sha256": "6794fd2b7fcf3735879e0fb061663e97651480bfc08af1bf11b5bd125b1d7df9",
+    "task_type": "multi_subject",
+    "version": 1
+  },
+  "created_at": "2026-07-17T14:04:18+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "6c2d5ca03df0e4cc2e2fc63b9c9c8fe9247f07c4349fdb0822161236004286ce",
+  "request_params_sha256": "c4b0735d3dae3aa9647b2548fd67e543a0e23a6c41822a2f49ff2d5eac39f1c4",
+  "shot": "Clip_04_first",
+  "target": "出图/第1集/图片/EP01_CLIP04.png",
+  "version": 1
+}

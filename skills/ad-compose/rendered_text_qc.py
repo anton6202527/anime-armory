@@ -321,6 +321,14 @@ def build(root: Path, plan: Mapping[str, Any] | None = None):
         if duration < 0.7:
             findings.append({"severity": "warn", "code": "rendered_text_duration_house_warn",
                              "msg": f"{check['id']} 仅展示 {duration:.2f}s；内部快筛，须实机审读"})
+        # 传统播出审查口径：法律行/脚注停留时长要按字数换算（不是固定地板）——40 字放 1 秒
+        # 谁也读不完。沿用本线字幕 12 CJK 字符/秒快筛；subtitle 行归 accessibility_qc 管，不重复报。
+        elif str(check.get("kind")) != "subtitle" and len(normalize(expected)) / duration > 12.0:
+            findings.append({"severity": "warn", "code": "rendered_text_reading_speed_warn",
+                             "msg": f"{check['id']} {len(normalize(expected))} 字只停留 {duration:.2f}s"
+                                    f"（约 {len(normalize(expected)) / duration:.0f} 字/秒 > 12）——"
+                                    "法律声明/脚注按字数给停留时长是播出审查行规；加长展示或拆行",
+                             "confidence": "heuristic"})
         results.append({"id": check["id"], "deliverable_id": did, "kind": check["kind"],
                         "expected_text": expected, "frame": frame.relative_to(root).as_posix(), "frame_sha256": sha(frame),
                         "ocr": automated, "contrast_estimate": contrast, "duration_seconds": duration,

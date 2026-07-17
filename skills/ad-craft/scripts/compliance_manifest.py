@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -161,6 +162,52 @@ def rights_region_coverage(rights_rows, regions):
     return coverage, findings
 
 
+# 显式标识责任状态的既知取值：external=生成服务/平台加标；self=发布方自行烧录进成片。
+# 《人工智能生成合成内容标识办法》（2025-09-01 施行）要求视频在**起始画面**加显著提示标识——
+# 责任=self 时必须能沿 rendered_text_plan → rendered_text_qc（OCR）像素验证，不能只在台账上记一笔。
+EXPLICIT_LABEL_EXTERNAL = {"platform_managed", "generation_service_managed"}
+EXPLICIT_LABEL_SELF = {"self", "self_rendered", "burned_in", "publisher_rendered"}
+AI_LABEL_TEXT_RE = re.compile(
+    r"AI\s*生成|人工智能生成|生成合成|AI\s*合成|AIGC|AI[- ]?generated|synthetic", re.IGNORECASE)
+AI_LABEL_START_MAX_SECONDS = 3.0
+
+
+def explicit_label_burnin_findings(root, uses_ai, explicit_label_status):
+    """责任=self 时把显式标识接到像素验证链：plan 无标识条目=责任空转 block；不在起始段=warn。"""
+    if not uses_ai:
+        return []
+    status = str(explicit_label_status or "").strip()
+    if status in EXPLICIT_LABEL_EXTERNAL or status == "pending":
+        return []
+    findings = []
+    if status not in EXPLICIT_LABEL_SELF:
+        findings.append({"severity": "warn", "code": "explicit_label_status_unknown",
+                         "msg": f"explicit_label.status={status!r} 不是既知取值"
+                                f"（external：{'/'.join(sorted(EXPLICIT_LABEL_EXTERNAL))}；"
+                                f"self：{'/'.join(sorted(EXPLICIT_LABEL_SELF))}）——自由文本无法进入机检链"})
+        return findings
+    plan = load(root / "合规" / "rendered_text_plan.json", {}) or {}
+    label_rows = [row for row in plan.get("checks") or []
+                  if AI_LABEL_TEXT_RE.search(str(row.get("text") or ""))]
+    if not label_rows:
+        findings.append({"severity": "block", "code": "explicit_label_plan_missing",
+                         "msg": "声明由发布方自行烧录显式 AI 标识，但 合规/rendered_text_plan.json 没有任何"
+                                "标识文字条目（AI 生成/生成合成…）——责任空转，rendered_text_qc 无从像素验证；"
+                                "《标识办法》要求视频起始画面有显著提示标识"})
+        return findings
+    def _start_ok(row):
+        try:
+            return float(row.get("start")) <= AI_LABEL_START_MAX_SECONDS
+        except (TypeError, ValueError):
+            return False
+    if not any(_start_ok(row) for row in label_rows):
+        findings.append({"severity": "warn", "code": "explicit_label_not_at_start",
+                         "msg": f"rendered_text_plan 的 AI 标识条目没有一条落在视频起始段"
+                                f"（start ≤ {AI_LABEL_START_MAX_SECONDS:g}s）——《标识办法》要求起始画面"
+                                "显著提示；把 master 的标识条目 start/timestamp 填到片头并过 rendered_text_qc"})
+    return findings
+
+
 def build(root: Path, declaration_status="pending", declaration_evidence="",
           explicit_label_status="platform_managed", metadata_status="preserve",
           implicit_label_status="pending"):
@@ -195,6 +242,7 @@ def build(root: Path, declaration_status="pending", declaration_evidence="",
     if uses_ai and explicit_label_status == "pending":
         findings.append({"severity": "block", "code": "explicit_label_pending",
                          "msg": "显式标识责任仍为 pending；需确认由生成服务、传播平台或发布方落实"})
+    findings.extend(explicit_label_burnin_findings(root, uses_ai, explicit_label_status))
     if uses_ai and implicit_label_status in {"pending", "stripped"}:
         findings.append({"severity": "block", "code": "implicit_label_pending",
                          "msg": "隐式标识/文件元数据责任未闭合或被剥离；需记录由服务方、平台或发布方落实"})

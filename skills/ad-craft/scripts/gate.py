@@ -595,6 +595,16 @@ def creative_axis_findings(root):
         "未跑分镜视觉多样性机检；建议出图前跑 ad-script/scripts/shot_variety_audit.py"
         "（同景别机位反复/画面复读/场景单调，出图前拦最省钱）",
         sources=[os.path.join("脚本", "storyboard.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_product_craft_audit.json"), "ad_product_craft",
+        "未跑产品镜工艺声明机检；建议出图前跑 ad-script/scripts/product_craft_audit.py"
+        "（光位/质感手法/角度三轴没写进产品镜，AI 只会给平光电商图）",
+        sources=[os.path.join("脚本", "storyboard.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_performance_cue_audit.json"), "ad_performance_cue",
+        "未跑人物镜表演指令机检；建议出图前跑 ad-script/scripts/performance_cue_audit.py"
+        "（情绪/视线/可演动作三轴没写进人物镜，AI 只会给死脸假笑）",
+        sources=[os.path.join("脚本", "storyboard.json")]))
     return out
 
 
@@ -631,6 +641,20 @@ def run_gate(root, stage, allow_placeholder=False):
         findings.extend(image_findings(root))
         findings.extend(product_qc_findings(root))
         findings.extend(video_contract_findings(root))
+        # 止损账本（advisory）：出图已花钱，进视频/合成前把重抽率/credit 消耗抬到台面上。
+        findings.extend(_advisory_report_findings(
+            root, os.path.join("生产数据", "ad_stop_loss.json"), "ad_stop_loss",
+            "未跑生成止损审计；建议跑 ad-craft/scripts/stop_loss.py --write"
+            "（重抽率/单资产次数/credit 消耗，带病续抽是最贵的浪费）",
+            sources=[os.path.join("生产数据", "production_events.jsonl")]))
+        # animatic 预演（advisory·传统 PPM 纪律）：image2video 是最贵一步，先用首帧+实测时长+VO
+        # 拼免费预演签核节奏/镜序，再进付费生成；首帧或时长变更后预演过期。
+        findings.extend(_advisory_report_findings(
+            root, os.path.join("生产数据", "ad_animatic_manifest.json"), "ad_animatic",
+            "未拼 animatic 预演；建议跑 ad-video/scripts/animatic.py"
+            "（传统制前会纪律：节奏塌在预演里改是免费的，生完视频再改是重烧）",
+            sources=[os.path.join("出图", "分镜", "图片"), os.path.join("脚本", "镜头时长.json"),
+                     os.path.join("配音", "vo.wav")]))
     if stage == "compose":
         findings.extend(video_clip_findings(root))
         findings.extend(video_qc_findings(root))

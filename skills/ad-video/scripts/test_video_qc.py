@@ -114,3 +114,95 @@ def test_asset_regex_does_not_match_plain_product_or_brand_words():
 
     assert vq.prod_assets(shot) == set()
     assert vq.brand_assets(shot) == set()
+
+
+def test_video_qc_warns_on_mixed_fps_and_resolution(tmp_path, monkeypatch):
+    root = _project(tmp_path)
+
+    def probe(path):
+        if "01" in path.stem:
+            return {"streams": [{"codec_type": "video", "width": 1280, "height": 720,
+                                 "avg_frame_rate": "24/1"}],
+                    "format": {"duration": "4"}}
+        return {"streams": [{"codec_type": "video", "width": 1080, "height": 1920,
+                             "avg_frame_rate": "30000/1001"}],
+                "format": {"duration": "3"}}
+
+    monkeypatch.setattr(vq, "_probe", probe)
+    payload = vq.run_qc(root)
+
+    checks = {f["check"] for f in payload["findings"]}
+    assert "batch_fps_mix" in checks
+    assert "batch_resolution_mix" in checks
+    fps_finding = next(f for f in payload["findings"] if f["check"] == "batch_fps_mix")
+    assert fps_finding["severity"] == "warn"
+
+
+def test_video_qc_no_batch_warn_when_uniform(tmp_path, monkeypatch):
+    root = _project(tmp_path)
+    monkeypatch.setattr(vq, "_probe", lambda path: {
+        "streams": [{"codec_type": "video", "width": 1280, "height": 720, "avg_frame_rate": "30/1"}],
+        "format": {"duration": "4" if "01" in path.stem else "3"},
+    })
+    payload = vq.run_qc(root)
+
+    checks = {f["check"] for f in payload["findings"]}
+    assert "batch_fps_mix" not in checks
+    assert "batch_resolution_mix" not in checks
+
+
+def _color_project(tmp_path, declared_transition):
+    root = _project(tmp_path)
+    sb = json.loads((root / "脚本" / "storyboard.json").read_text(encoding="utf-8"))
+    for clip in sb["clips"]:
+        clip["scene"] = "同一间厨房"
+        clip.pop("transition", None)
+    if declared_transition:
+        sb["clips"][0]["transition"] = "whip pan"
+    else:
+        # 抹掉 prompt 里的接缝声明词，逼出未声明路径
+        (root / "出视频" / "分镜" / "prompt" / "镜头01.md").write_text(
+            "资产引用：PROD_STARBOX_APP；同一包装、同一 logo、同一品牌色；文字清晰可读。", encoding="utf-8")
+    (root / "脚本" / "storyboard.json").write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    return root
+
+
+def _color_jump_payload(root, monkeypatch):
+    monkeypatch.setattr(vq, "_probe", lambda path: {
+        "streams": [{"codec_type": "video", "width": 1280, "height": 720, "avg_frame_rate": "30/1"}],
+        "format": {"duration": "4" if "01" in path.stem else "3"},
+    })
+
+    def fake_extract(video, at, out):
+        Image, _ = vq._load_imaging()
+        if Image is None:
+            return False
+        out.parent.mkdir(parents=True, exist_ok=True)
+        color = (20, 20, 20) if "镜头01" in out.name else (200, 180, 120)
+        Image.new("RGB", (32, 18), color).save(out)
+        return True
+
+    monkeypatch.setattr(vq, "_extract_frame", fake_extract)
+    return vq.run_qc(root)
+
+
+def test_video_qc_warns_same_scene_color_jump(tmp_path, monkeypatch):
+    Image, _ = vq._load_imaging()
+    if Image is None:
+        return  # 无 PIL 环境降级，与 run_qc 行为一致
+    payload = _color_jump_payload(_color_project(tmp_path, declared_transition=False), monkeypatch)
+
+    jumps = [f for f in payload["findings"] if f["check"] == "seam_color_jump"]
+    assert jumps and jumps[0]["severity"] == "warn"
+    assert jumps[0]["detail"]["color_distance"] > vq.SEAM_COLOR_WARN
+
+
+def test_video_qc_color_jump_declared_transition_downgrades_to_info(tmp_path, monkeypatch):
+    Image, _ = vq._load_imaging()
+    if Image is None:
+        return
+    payload = _color_jump_payload(_color_project(tmp_path, declared_transition=True), monkeypatch)
+
+    jumps = [f for f in payload["findings"] if f["check"] == "seam_color_jump"]
+    assert jumps and jumps[0]["severity"] == "info"
+    assert jumps[0]["detail"]["declared_transition"] is True

@@ -23,13 +23,13 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4716 | 285364 |
-| novel | `novel` + `novel-*` | 29 | 3145 | 68250 |
-| comic | `comic` + `comic-*` | 13 | 1486 | 42681 |
+| n2d | `n2d` + `n2d-*` | 21 | 4717 | 286687 |
+| novel | `novel` + `novel-*` | 29 | 3173 | 70865 |
+| comic | `comic` + `comic-*` | 13 | 1484 | 42759 |
 | song | `song` + `song-*` | 11 | 660 | 9899 |
-| mv | `mv` + `mv-*` | 14 | 1130 | 20575 |
-| ad | `ad` + `ad-*` | 14 | 1098 | 34592 |
-| **合计** | `skills/*/SKILL.md` | **102** | 12235 | 461361 |
+| mv | `mv` + `mv-*` | 14 | 1137 | 23516 |
+| ad | `ad` + `ad-*` | 14 | 1117 | 36721 |
+| **合计** | `skills/*/SKILL.md` | **102** | 12288 | 470447 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -213,12 +213,12 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `创
 | 合约/骨架 | `mv-craft` | 项目骨架、完整 SHA-256 阶段契约、正式 gate、V1+A1+markers OTIO/receipt、animatic/picture lock、权利/AI 使用与 provenance |
 | 节拍 | `mv-beat` | BPM/tempo/beat/downbeat 候选；正式版绑定当前歌曲，并具名确认拍号、小节相位和完整 sections |
 | 视觉蓝图 | `mv-script` | 听歌识影、角色/场景/叙事结构 |
-| 分镜规划 | `mv-plan` | song/beat/lyrics/blueprint/settings 收据、clip/timeline、动作峰值音乐锚、接缝分类、语义 prompt 任务包 |
-| 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；逐图登记 model+channel+实际 prompt/reference/asset hash，跑本线 image_qc（脸漂移 G1/主色/**帧级视觉多样性 dHash**·构图撞脸+静态长镜/锚点 lint/禁本地贴脸/来源链），批后总检 |
+| 分镜规划 | `mv-plan` | song/beat/lyrics/blueprint/settings 收据、clip/timeline、动作峰值音乐锚、接缝分类、语义 prompt 任务包；**正式大盘全量出图前 `pilot_matrix` 打样矩阵**（开场钩/副歌爆点/最高风险近景/最大运动/换装首镜 3-5 镜先验证再全量） |
+| 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；逐图登记 model+channel+实际 prompt/reference/asset hash，跑本线 image_qc（脸漂移 G1/主色/**帧级视觉多样性 dHash**·构图撞脸+静态长镜/锚点 lint/禁本地贴脸/来源链），批后总检；**出图前 `drift_risk` 漂移风险预测**（近景/大表情/换装/多主体等信号逐 clip 打分·实测脸警回灌） |
 | 出视频 | `mv-video` | 后端能力编译、可选多镜头 `sequence_units`、逐镜任务/登记/具名评分/挑版；连续镜加 seam、唱演镜加 lip-sync；歌曲永远外铺 |
 | 字幕/唱演时间轴（条件） | `mv-lyric-sync` | 已知歌词字符时间轴强制对齐、hash-bound 覆盖报告、LRC/ASS/Karaoke；低覆盖只允许具名逐行听审；纯器乐且无字幕/口型可跳过 |
 | 合成 | `mv-compose` | 严格时间线与 OTIO 合同，trim/尾帧 hold 不批量变速；ProRes/PCM 母版 + BT.709 H.264/AAC 交付 + 时长/响度/真峰值 QC |
-| 质检/评分 | `mv-review` / `mv-score` | 新鲜节奏收据、逐缝分类审片、锁版/字幕/交付/来源链总审；**出图前 `shot_variety_audit` 事前拦同构图反复/景别单调/副歌静镜/场景滞留/缺参考锚**（advisory·补纯数值卡点引擎不读画面的盲区）；启发式阈值仅项目显式选择时硬挡 |
+| 质检/评分 | `mv-review` / `mv-score` | 新鲜节奏收据、逐缝分类审片、锁版/字幕/交付/来源链总审；**出图前 `shot_variety_audit` 事前拦同构图反复/景别单调/副歌静镜/场景滞留/缺参考锚**（advisory·补纯数值卡点引擎不读画面的盲区）；`verifier_coverage` fail-closed 覆盖账本（脸检/dHash 等现实验证器适用但休眠→现形）；`consistency_charter` 防 load-bearing 闸被静默降级（守护片段+is_demo 基线冻结·测试 introspect 源码）；**`craft_audit` 传统 MV 手法结构律**（副歌复现升级/动静对比/hook 上脸/冷开场/关键镜候选/bridge 换气）+ 卡点引擎晚切偏置（压拍或提前 1-3 帧落刀）；启发式阈值仅项目显式选择时硬挡 |
 
 **允许的跨线交接**：song 或用户提供的成品歌/歌词文件可进入 mv；mv 不 import song 实现，深度审歌只提示回 `song-review`。
 

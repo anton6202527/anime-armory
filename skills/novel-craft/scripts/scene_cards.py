@@ -92,6 +92,11 @@ def empty_card(chapter, scene_no, outline_item):
         "conflict": "",
         "turn": "",
         "value_shift": "",
+        # Sequel 半拍（Swain Scene-Sequel）：turn 之后 POV 的 反应→两难→决定。
+        # 传统手艺：高压场景后必须给情绪落地拍，否则读者疲劳（连打不喘=麻木）；
+        # 不必每场都填——衔接下一场即高压续压时留空即合法，连续多章全空才会被
+        # manuscript_map 的 sequel gap 检测提示。
+        "aftermath": "",
         "reveal_or_payoff": "",
         "subtext": "",
         "sensory_anchor": "",

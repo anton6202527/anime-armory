@@ -256,5 +256,28 @@ class FinalizeMainTest(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
 
+
+
+class EndcardHoldTest(unittest.TestCase):
+    def test_short_endcard_hold_warns(self):
+        sb = {"shots": [
+            {"shot_id": "S1", "duration": 4, "shot": "产品演示"},
+            {"shot_id": "S9", "duration": 1.0, "shot": "endcard CTA 立即购买"},
+        ]}
+        findings = fs.endcard_hold_check(sb)
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0]["kind"], "endcard_hold_short")
+        self.assertEqual(findings[0]["severity"], "warn")
+
+    def test_adequate_hold_or_no_endcard_quiet(self):
+        self.assertFalse(fs.endcard_hold_check({"shots": [
+            {"shot_id": "S9", "duration": 2.0, "shot": "片尾品牌定格"}]}))
+        self.assertFalse(fs.endcard_hold_check({"shots": [
+            {"shot_id": "S1", "duration": 1.0, "shot": "产品特写"}]}))
+        # 时长缺失(0)不判——归 fit_check/占位链管
+        self.assertFalse(fs.endcard_hold_check({"shots": [
+            {"shot_id": "S9", "shot": "endcard"}]}))
+
+
 if __name__ == "__main__":
     unittest.main()

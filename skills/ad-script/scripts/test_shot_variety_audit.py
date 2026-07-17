@@ -105,3 +105,52 @@ def test_kind_and_schema(tmp_path):
     # findings 必须用 ad house 的 msg 键
     for f in report["findings"]:
         assert "msg" in f and "severity" in f and "code" in f
+
+
+def test_rehook_gap_warns_on_long_ad_without_mid_hooks(tmp_path):
+    # 40s 广告：开场钩之后 30s 全是平铺产品演示，没有任何再钩节拍 → warn
+    _write_storyboard(tmp_path, [
+        {"shot_id": "S1", "duration": 5, "scene": "开场", "shot": "痛点提问：你的地板多久没真正干净过"},
+        {"shot_id": "S2", "duration": 10, "scene": "客厅", "shot": "产品匀速滑过地板"},
+        {"shot_id": "S3", "duration": 10, "scene": "客厅", "shot": "机身侧面缓慢摇移"},
+        {"shot_id": "S4", "duration": 10, "scene": "客厅", "shot": "遥控器按键特写缓推"},
+        {"shot_id": "S5", "duration": 5, "scene": "片尾", "shot": "endcard CTA 立即购买"},
+    ])
+    report = sva.build(tmp_path)
+
+    assert "rehook_gap" in _codes(report)
+    hit = next(f for f in report["findings"] if f["code"] == "rehook_gap")
+    assert hit["severity"] == "warn"
+    assert report["summary"]["block"] == 0
+
+
+def test_rehook_gap_quiet_when_mid_hooks_present(tmp_path):
+    # 同样 40s，但中段有对比揭晓再钩 → 不报
+    _write_storyboard(tmp_path, [
+        {"shot_id": "S1", "duration": 5, "scene": "开场", "shot": "痛点提问：地板多久没干净过"},
+        {"shot_id": "S2", "duration": 10, "scene": "客厅", "shot": "产品匀速滑过地板"},
+        {"shot_id": "S3", "duration": 10, "scene": "客厅", "shot": "before/after 对比揭晓：灰尘槽倒出一整杯"},
+        {"shot_id": "S4", "duration": 10, "scene": "客厅", "shot": "实测挑战：麦片酱油一次过"},
+        {"shot_id": "S5", "duration": 5, "scene": "片尾", "shot": "endcard CTA 立即购买"},
+    ])
+    report = sva.build(tmp_path)
+
+    assert "rehook_gap" not in _codes(report)
+
+
+def test_rehook_gap_skips_short_ads_and_missing_durations(tmp_path):
+    # 15s 短广告：一个开场钩就够，不判
+    _write_storyboard(tmp_path, [
+        {"shot_id": "S1", "duration": 5, "scene": "开场", "shot": "平铺开场"},
+        {"shot_id": "S2", "duration": 5, "scene": "客厅", "shot": "产品滑过"},
+        {"shot_id": "S3", "duration": 5, "scene": "片尾", "shot": "endcard CTA"},
+    ])
+    assert "rehook_gap" not in _codes(sva.build(tmp_path))
+
+    # 时长字段缺失过半：不臆造节奏问题
+    _write_storyboard(tmp_path, [
+        {"shot_id": "S1", "shot": "平铺开场"},
+        {"shot_id": "S2", "shot": "产品滑过"},
+        {"shot_id": "S3", "duration": 30, "shot": "长演示"},
+    ])
+    assert "rehook_gap" not in _codes(sva.build(tmp_path))

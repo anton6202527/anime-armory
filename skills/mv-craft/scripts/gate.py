@@ -492,6 +492,95 @@ def _shot_variety_warnings(root, stage):
     return warnings
 
 
+def _drift_risk_warnings(root, stage):
+    """出图前漂移风险预测（advisory · mv-image drift_risk）。永不制造 block——缺/过期/high 都只进 warnings。
+
+    与 _shot_variety_warnings 同惯例：gate 只消费报告文件，不 subprocess 跑 advisory 脚本。
+    image 是最便宜的拦截点——参考锚该挂在哪、哪些镜先打样，应在花积分前知道。"""
+    if stage not in {"image", "video_jobs"}:
+        return []
+    clip_plan = os.path.join(root, "分镜", "clip_plan.json")
+    if not os.path.exists(clip_plan):
+        return []
+    path = os.path.join(root, "生产数据", "drift_risk", "drift_risk.json")
+    report = mv_utils.load_json(path, None)
+    if not isinstance(report, dict):
+        return ["未跑出图前漂移风险预测；建议 `python3 skills/mv-image/scripts/drift_risk.py <作品根> --write`"
+                "（预测近景/大表情/换装/极端角度/多主体哪些 clip 最易漂，出图前挂参考锚最便宜）"]
+    warnings = []
+    recorded = (report.get("inputs_sha256") or {}).get("分镜/clip_plan.json")
+    if recorded and recorded != mv_utils.content_hash(clip_plan):
+        warnings.append("漂移风险预测已过期：clip_plan 变化后未重跑 drift_risk")
+    summary = report.get("summary") or {}
+    try:
+        high = int(summary.get("high") or 0)
+    except (TypeError, ValueError):
+        high = 0
+    if high:
+        warnings.append(f"漂移风险预测有 {high} 个 high 风险 clip——出图前给这些镜挂定妆/表情/场景参考，"
+                        "并让它们先进打样矩阵验证")
+    return warnings
+
+
+def _craft_audit_warnings(root, stage):
+    """传统 MV 手法机检（advisory · mv-review craft_audit）。永不制造 block——只把 warn 抬进报告。
+
+    副歌复现升级/动静对比/hook 上脸/冷开场/关键镜候选等结构律在出图前机检最便宜；
+    与 _shot_variety_warnings 同惯例：gate 只消费报告文件。"""
+    if stage not in {"image", "video_jobs"}:
+        return []
+    clip_plan = os.path.join(root, "分镜", "clip_plan.json")
+    if not os.path.exists(clip_plan):
+        return []
+    path = os.path.join(root, "生产数据", "craft_audit", "craft_audit.json")
+    report = mv_utils.load_json(path, None)
+    if not isinstance(report, dict):
+        return ["未跑传统手法机检；出图前建议 `python3 skills/mv-review/scripts/craft_audit.py <作品根> --write`"
+                "（查副歌复现无升级/动静无对比/hook 不上脸/冷开场过长/关键镜单候选/bridge 不换气）"]
+    warnings = []
+    recorded = (report.get("inputs_sha256") or {}).get("分镜/clip_plan.json")
+    if recorded and recorded != mv_utils.content_hash(clip_plan):
+        warnings.append("传统手法机检已过期：clip_plan 变化后未重跑 craft_audit")
+    summary = report.get("summary") or {}
+    try:
+        warn = int(summary.get("warn") or 0)
+    except (TypeError, ValueError):
+        warn = 0
+    if warn:
+        codes = sorted({str(f.get("code")) for f in (report.get("findings") or [])
+                        if f.get("severity") == "warn"})
+        warnings.append(f"传统手法机检有 {warn} 条 advisory（{'/'.join(codes) or 'n/a'}）——"
+                        "副歌要一次比一次大、主歌收副歌放、hook 至少一次上脸唱；回 mv-plan 调结构再出图")
+    return warnings
+
+
+# 正式项目 clip 数达到此规模仍未打样 → 提示先 mini-pilot（advisory）。小盘打样收益低，不打扰。
+PILOT_MIN_CLIPS = 12
+
+
+def _pilot_matrix_warnings(root, stage, meta):
+    """打样探针矩阵（advisory · mv-plan pilot_matrix）。只对正式大盘提示，永不 block。
+
+    全量出图是 MV 最大的单笔积分支出；正式项目大盘（≥PILOT_MIN_CLIPS）建议先出 3-5 个
+    代表镜（开场/副歌爆点/最高漂移风险/最大运动/换装首镜）验证脸/风格/体感再全量。"""
+    if stage != "image" or meta.get("is_demo"):
+        return []
+    plan = _load_plan(root)
+    clips = [c for c in plan.get("clips") or [] if isinstance(c, dict)]
+    if len(clips) < PILOT_MIN_CLIPS:
+        return []
+    path = os.path.join(root, "生产数据", "pilot_matrix", "pilot_matrix.json")
+    report = mv_utils.load_json(path, None)
+    if not isinstance(report, dict):
+        return [f"正式项目 {len(clips)} 个 clip 将全量出图，未见打样矩阵；建议先 "
+                "`python3 skills/mv-plan/scripts/pilot_matrix.py <作品根> --write` "
+                "挑 3-5 个代表镜打样验证脸/风格/爆点，再全量出图"]
+    recorded = (report.get("inputs_sha256") or {}).get("分镜/clip_plan.json")
+    if recorded and recorded != mv_utils.content_hash(os.path.join(root, "分镜", "clip_plan.json")):
+        return ["打样矩阵已过期：clip_plan 变化后未重跑 pilot_matrix"]
+    return []
+
+
 def _video_report_errors(root, stage):
     if stage != "compose":
         return []
@@ -595,6 +684,64 @@ def _picture_lock_errors(root, stage, meta):
     return errors
 
 
+def _vlm_judge_warnings(root, stage):
+    """VLM 并排裁决覆盖率对账（advisory · 出图后看图判内容）。永不制造 block——只把 warn 抬进报告。
+
+    参照同仓漫画线 2026-07-17 实证修的"机检空转"漏洞：裁决任务包生成后 0 条被执行、
+    gate 不告警照样 pass，画错主体无人拦。mv 的数值机检（脸余弦/dHash）不看内容，
+    "同一个人吗/接缝接得上吗"必须有看图裁决层；本函数照 gate『只读报告文件、不 subprocess』
+    惯例消费 生产数据/vlm_judge/ 两个文件，做三档告警：缺任务包→建议跑；0 裁决→机检空转；
+    部分裁决→覆盖率不足；suspect/低分→逐条转 warn。"""
+    if stage not in {"image", "video_jobs", "compose"}:
+        return []
+    clip_plan = os.path.join(root, "分镜", "clip_plan.json")
+    if not os.path.exists(clip_plan):
+        return []
+    tasks_file = os.path.join(root, "生产数据", "vlm_judge", "vlm_judge_tasks.json")
+    tasks_payload = mv_utils.load_json(tasks_file, None)
+    if not isinstance(tasks_payload, dict):
+        return ["未生成 VLM 并排裁决任务包；出图后建议 `python3 skills/mv-review/scripts/vlm_judge.py <作品根> --write`"
+                "（主角身份/接缝连续两轴看图裁决——数值机检不看内容，这层缺席时换脸/断缝只能靠人肉抽查）"]
+    warnings = []
+    recorded = (tasks_payload.get("inputs_sha256") or {}).get("分镜/clip_plan.json")
+    if recorded and recorded != mv_utils.content_hash(clip_plan):
+        warnings.append("VLM 裁决任务包已过期：clip_plan 变化后未重跑 vlm_judge --write")
+    task_list = [t for t in (tasks_payload.get("tasks") or []) if isinstance(t, dict)]
+    if not task_list:
+        return warnings
+    # 合同校验：裁决必须复制 image_sha256/task_sha256 且带 evaluator，缺一即视为未裁决（防空壳/防陈旧）。
+    expected = {
+        str(t.get("task_id")): (str((t.get("image") or {}).get("sha256") or ""), str(t.get("task_sha256") or ""))
+        for t in task_list
+    }
+    verdicts_payload = mv_utils.load_json(
+        os.path.join(root, "生产数据", "vlm_judge", "vlm_judge_verdicts.json"), {}) or {}
+    valid = {}
+    for record in verdicts_payload.get("verdicts") or []:
+        if not isinstance(record, dict):
+            continue
+        tid = str(record.get("task_id") or "")
+        contract = expected.get(tid)
+        evaluator = record.get("evaluator") if isinstance(record.get("evaluator"), dict) else {}
+        if (contract and contract[0] and str(record.get("image_sha256") or "") == contract[0]
+                and str(record.get("task_sha256") or "") == contract[1]
+                and str(evaluator.get("model") or "").strip()):
+            valid[tid] = record
+    if not valid:
+        warnings.append(f"VLM 并排裁决空转：任务包已生成 {len(task_list)} 条但 0 条有效裁决——"
+                        "主角身份/接缝连续机检形同虚设，由多模态 agent 逐条看图打分写回 verdict 文件")
+        return warnings
+    if len(valid) < len(task_list):
+        warnings.append(f"VLM 并排裁决覆盖率不足：{len(valid)}/{len(task_list)}——未裁决 clip 无内容级保障，补齐后重跑 gate")
+    for tid, record in sorted(valid.items()):
+        scores = record.get("scores") if isinstance(record.get("scores"), dict) else {}
+        low = [f"{k}={v}" for k, v in scores.items() if isinstance(v, (int, float)) and v <= 2]
+        if str(record.get("verdict") or "").lower() == "suspect" or low:
+            warnings.append(f"VLM 裁决存疑 {tid}：{'、'.join(low) or 'verdict=suspect'}"
+                            f"{('；' + str(record.get('notes'))) if record.get('notes') else ''}——并排人审，确认漂移则重抽该 clip")
+    return warnings
+
+
 def check(root, stage):
     errors = []
     warnings = []
@@ -644,6 +791,10 @@ def check(root, stage):
     warnings.extend(identity_warnings)
     warnings.extend(_demo_flag_warnings(root, stage, meta))
     warnings.extend(_shot_variety_warnings(root, stage))
+    warnings.extend(_craft_audit_warnings(root, stage))
+    warnings.extend(_drift_risk_warnings(root, stage))
+    warnings.extend(_vlm_judge_warnings(root, stage))
+    warnings.extend(_pilot_matrix_warnings(root, stage, meta))
     errors.extend(_video_report_errors(root, stage))
     errors.extend(_picture_lock_errors(root, stage, meta))
     errors.extend(_timeline_contract_errors(root, stage, meta))

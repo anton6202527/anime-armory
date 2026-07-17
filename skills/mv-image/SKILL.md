@@ -114,6 +114,8 @@ python3 skills/mv-image/scripts/cover_pack.py set-cover <作品根>
 
 > **出图前先跑计划期视觉多样性机检**（最便宜的点，无需出图）：`python3 skills/mv-review/scripts/shot_variety_audit.py <作品根> --write`。它读 `分镜/clip_plan.json` 的 `shot_design`，在花积分前就拦「同构图反复 / 景别单调 / 副歌静镜 / 场景滞留 / 大变化镜头缺参考锚」。gate（image 阶段）会把它的 warn 抬进报告（advisory·不硬拦）。出图后 image_qc 的 `dHash` 再做像素级现实核对。
 
+> **出图前再跑漂移风险预测**：`python3 skills/mv-image/scripts/drift_risk.py <作品根> --write`。不读像素、不花钱：用 clip_plan + identity_registry 的高危信号（近景占比/大表情/极端角度/逆光暗部/换装/长间隔复现/多主体同框/缺参考锚 + 主角定妆组基础分）逐 clip 打 high/medium/low，high 风险镜**出图前**挂定妆/表情/场景参考、优先进 `mv-plan/scripts/pilot_matrix.py` 打样。image_qc 已实测出脸警的 clip 自动回灌升 high（既成事实非预测；脸检降级模式下不臆造回灌）。写 `生产数据/drift_risk/drift_risk.{json,md}`，report-only（最高 warn），被 gate（image/video_jobs）与 `consistency_findings` 消费。
+
 **优雅降级（绝不静默报通过）**：缺 insightface → 脸检降级 Pillow（只验 图损坏/分辨率/清晰度，不臆造相似度）；更缺 Pillow → 整项跳过交人判；缺 `palette_anchor` / `clip_plan.json` → 对应检查跳过并记 note。报告写 `qc_environment.precision_level=full|degraded|none`，degraded/none 时提示先补依赖再进 mv-video。
 
 **CLI**：

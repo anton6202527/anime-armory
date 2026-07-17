@@ -324,18 +324,35 @@ def merge_delta_to_ledger(root, chapter, verification=None):
 
 
 def _compact_delta_summary(summary):
-    """把一章 delta 大 blob 压成计数摘要（rollup 用）。"""
+    """把一章 delta 大 blob 压成计数摘要（rollup 用）。
+
+    character_changes **不压成纯计数**：保留 {name, event} 精简结构（只丢 change 自由文本）。
+    graph_sentry 的 deceased_reactivation 确定性生死闸靠逐章 event 枚举跨全书扫描——压成整数
+    会让已 rollup 的早章永久失明（"第3章死、第300章复活"恰好是长篇最该抓的硬伤），
+    narrative_risk_weight 的 churn 也会静默归 0、热点系统性偏向近章。"""
     if not isinstance(summary, dict):
         return {"rolled": True}
     def _count(key):
         v = summary.get(key)
         return len(v) if isinstance(v, list) else 0
-    chars = sorted({cc["name"] for cc in (summary.get("character_changes") or [])
-                    if isinstance(cc, dict) and cc.get("name")})
+    cc_raw = summary.get("character_changes")
+    cc_thin = []
+    for cc in (cc_raw if isinstance(cc_raw, list) else []):
+        if not isinstance(cc, dict):
+            continue
+        name = str(cc.get("name") or cc.get("character") or "").strip()
+        if not name:
+            continue
+        thin = {"name": name}
+        event = cc.get("event") or cc.get("lifecycle")
+        if event:
+            thin["event"] = event
+        cc_thin.append(thin)
+    chars = sorted({cc["name"] for cc in cc_thin})
     return {
         "rolled": True,
         "new_facts": _count("new_facts"),
-        "character_changes": _count("character_changes"),
+        "character_changes": cc_thin,
         "characters_touched": chars,
         "open_threads_added": _count("open_threads_added"),
         "threads_resolved": _count("threads_resolved"),

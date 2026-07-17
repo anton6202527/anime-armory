@@ -34,6 +34,23 @@ python3 skills/novel-simulate/scripts/simulate_panel.py "<作品根>" [--scope o
 
 报告含：总评(受众兼容度) / 爽点捕获图 / 弃书点预警 / 各人格针对性改法。
 
+### 3. 行为式读者度量（2026-07·补"可预测性"缺失维度）
+
+传统"扮演读者发感想"只产主观定性；行为式协议改测**读者的预测行为**（arXiv 2412.15239 想象
+续写预测 engagement + arXiv 2604.09854 Spoiler Alert 张力指标——后者是目前唯一能把人类小说
+正确排在 LLM 产出之上的自动指标，抓的正是评分模型抓不到的"套路化/可预测"维度）：
+
+1. **面板预测**（AI 代理执行）：读到第 NN 章末，每个人格写 2-5 条"下一章会发生什么"的
+   一句话短预测（全面板合计 ≥5 条，10-20 条更稳），落盘
+   `评分/reader_predictions_第NN章.json`（`{chapter, predictions:[{persona,text}…]}`）。
+   **禁止先看下一章再写预测**（污染度量）；建议在关键节点章（黄金三章末/弧段高潮前）采集。
+2. **确定性度量**：`python3 skills/novel-simulate/scripts/behavioral_signals.py "<作品根>"`
+   - **悬念值** = 预测两两相异度（全员猜同一方向 → `suspense_collapse` 建议级：只剩一条明线）；
+   - **意外度** = 1 − 预测对真实下一章的最大包含度（真实剧情被猜中 → `predictable_plot`
+     建议级：剧情太顺，考虑做一次预期颠覆）。
+   输出 `评分/behavioral_signals.json`；advisory 恒不阻断，字面近似只报低分候选（换词猜中会漏，
+   高分不认证为"真悬念"）。
+
 ## 何时使用
 
 - **Demo Gate 之后**：在投入大量精力写全本前，先看看这组 Demo 章是否能抓住预期受众。

@@ -652,16 +652,18 @@ def batch_review_interval_from_settings(root, meta):
     return max(1, int(match.group(1)))
 
 
-def batch_review_window(chapter, interval, meta):
+def batch_review_window(chapter, interval, meta, root=None):
     # due 点计算收口到 novel/_lib/sweep_schedule（单一真值源）：基础平铺 + 项目尾 +
-    # 中段防守加密（40-60% 进度带按半间隔加密——长篇矛盾高发区，见该模块 docstring）。
+    # 中段防守加密（40-60% 进度带按半间隔加密——长篇矛盾高发区，见该模块 docstring）+
+    # 数据自适应热点（root 给定时读 state_ledger churn 热点章，写后立即回扫而非等平铺间隔）。
     if interval <= 0:
         return None
     target = int(meta.get("target_chapters") or 0)
-    if sweep_schedule.is_due(chapter, interval, target):
-        start, end = sweep_schedule.window_for(chapter, interval, target)
+    hotspots = sweep_schedule.project_hotspots(root, target) if root else None
+    if sweep_schedule.is_due(chapter, interval, target, hotspots):
+        start, end = sweep_schedule.window_for(chapter, interval, target, hotspots)
         return {"due": True, "start": start, "end": end}
-    next_due = sweep_schedule.next_due_after(chapter, interval, target)
+    next_due = sweep_schedule.next_due_after(chapter, interval, target, hotspots)
     if target and next_due:
         next_due = min(next_due, target)
     return {"due": False, "next_due": next_due}
@@ -904,6 +906,100 @@ def research_pack_section(packs):
     return "\n".join(lines) + "\n"
 
 
+SCENE_USAGE_REL = os.path.join("资料", "research_scene_usage.json")
+MECHANICAL_FINDINGS_REL = os.path.join("审稿", "mechanical_findings.json")
+# AI 腔账单归组关键词：mechanical_check 的 AI 腔/机械文风 finding 特征词（dim=AI腔 之外，
+# 排比/破折号/句首高频等散落在重复率 dim 里，按 msg 关键词并入）。
+_AI_TIC_MSG_KEYS = ("排比", "破折号", "句首", "套话", "金句", "议论文", "句长过于均匀",
+                    "总结式", "不是X而是Y", "机械开篇", "句式模板", "点破主题")
+
+
+def ai_tic_section(root, limit=6):
+    """本项目"AI 腔账单"：既往机检抓到的机械文风惯犯清单，注入写章包做**初稿期**负面约束。
+
+    跨项目实证（金睛缉妖录/王敦外传）：排比三连、破折号 5.5/千字、单角色名句首 143 次
+    这类 AI 腔被机检反复抓到，但全部降级 polish、从未在导出前被修——根因是检测在**下游**
+    （审稿轮），而习惯在**上游**（写作轮）。这里把上一轮 mechanical_findings 按问题类型
+    归组回灌到下一章任务包：不是泛泛的"去AI味"提醒，是本书实际被抓的惯犯清单。
+    缺文件返回空串（首批章节无账单，零成本）。"""
+    payload = load_json(os.path.join(root, MECHANICAL_FINDINGS_REL), {}) or {}
+    findings = payload.get("findings") or []
+    if not isinstance(findings, list):
+        return ""
+    groups = {}
+    for f in findings:
+        if not isinstance(f, dict):
+            continue
+        msg = str(f.get("msg") or "")
+        if f.get("dim") == "AI腔" or any(k in msg for k in _AI_TIC_MSG_KEYS):
+            # 去掉计数括号取前缀归组：同类问题跨章 msg 只差数字
+            key = re.sub(r"[（(].*?[)）]", "", msg)[:24]
+            g = groups.setdefault(key, {"msg": msg, "chapters": set()})
+            ch = f.get("chapter")
+            if isinstance(ch, int):
+                g["chapters"].add(ch)
+    if not groups:
+        return ""
+    rows = sorted(groups.values(), key=lambda g: len(g["chapters"]), reverse=True)[:limit]
+    lines = [
+        "\n## 本书 AI 腔账单（机检实测·初稿期主动规避）",
+        "- 以下是**本项目既往章节**被机检反复抓到的机械文风惯犯清单——本章初稿就避开，"
+        "别等润色轮（下游降级 polish 后基本没人修，账单会一直滚）。",
+    ]
+    for g in rows:
+        chs = sorted(g["chapters"])
+        if len(chs) > 1:
+            span = f"曾于 {len(chs)} 章命中（第{chs[0]}–{chs[-1]}章间）"
+        elif chs:
+            span = f"第{chs[0]}章命中"
+        else:
+            span = "多处命中"
+        lines.append(f"- {g['msg']}（{span}）")
+    return "\n".join(lines) + "\n"
+
+
+def scene_usage_section(root, chapter, limit=8):
+    """逐条命中本章的 per-scene 专业事实用法指引（dramatic_use/forbidden_use）。
+
+    novel-research 花力气把每条 claim 映射到场景并写明「戏剧化用法/禁用写法」
+    （build_scene_usage → 资料/research_scene_usage.json），但此前该文件只被
+    author_workflow（状态）和 pipeline（存在性）读过，从未到达写作端——作者拿到的
+    是整包 facts，不是"这一场该怎么用这条事实/禁止写成什么样"。这里把命中本章的
+    条目直接注入写章包，闭掉产出后没人消费的断点。缺文件/无命中返回空串，零成本。"""
+    payload = load_json(os.path.join(root, SCENE_USAGE_REL), {}) or {}
+    usages = payload.get("usages") or []
+    if not isinstance(usages, list):
+        return ""
+    hits = []
+    for u in usages:
+        if not isinstance(u, dict):
+            continue
+        ch = u.get("chapter")
+        if ch == "all" or ch == chapter or (isinstance(ch, str) and ch.isdigit() and int(ch) == chapter):
+            hits.append(u)
+    if not hits:
+        return ""
+    lines = [
+        "\n## 本章专业事实用法（scene usage·自动命中）",
+        "- 下列 fact 已映射到本章：按「用法」把事实落成场景行动/阻碍/道具/台词/误判，别写成科普旁白；「禁用」写法一律不得出现。",
+    ]
+    for u in hits[:limit]:
+        scene = "、".join(str(s) for s in (u.get("scene_ids") or [])) or "全章"
+        lines.append(f"- [{u.get('claim_id') or '?'}] {clip(str(u.get('claim') or ''), 90)}（scene：{scene}）")
+        du = str(u.get("dramatic_use") or "").strip()
+        fu = str(u.get("forbidden_use") or "").strip()
+        un = str(u.get("uncertainty") or "").strip()
+        if du:
+            lines.append(f"  - 用法：{clip(du, 140)}")
+        if fu:
+            lines.append(f"  - ⛔ 禁用：{clip(fu, 140)}")
+        if un:
+            lines.append(f"  - ⚠ 不确定：{clip(un, 100)}（不得写成定论）")
+    if len(hits) > limit:
+        lines.append(f"- …另有 {len(hits) - limit} 条命中，见 `资料/research_scene_usage.md`。")
+    return "\n".join(lines) + "\n"
+
+
 def observation_packet_section(root, chapter):
     """Return selected life-observation material for this chapter."""
     packet_rel = OBSERVATION_PACKET_REL_FMT.format(chapter=chapter)
@@ -1016,6 +1112,8 @@ def scene_cards_section(cards):
         "\n## 场景卡（Scene Cards · 写时逐场兑现）",
         f"- 参考全文：`{SCENE_CARDS_REFERENCE}`",
         "- 每个场景必须有目标、阻碍、冲突、转折和价值变化；没有转折的场景要合并、删除或重写。",
+        "- Scene-Sequel 工艺：turn（高压拍）之后按需给 aftermath（落地拍：反应→两难→决定）——"
+        "高潮连打不喘会麻木；连续多章全无落地拍会被结构地图提示（`references/scene-sequel.md`）。",
     ]
     for card in cards:
         lines.append(f"\n### {card.get('id') or 'SCENE'} · 第{card.get('scene_no') or '?'}场")
@@ -1028,6 +1126,7 @@ def scene_cards_section(cards):
             ("conflict", "冲突"),
             ("turn", "转折"),
             ("value_shift", "价值变化"),
+            ("aftermath", "落地拍（反应→两难→决定，可留空=续压）"),
             ("reveal_or_payoff", "揭示/兑现"),
             ("subtext", "潜台词"),
             ("sensory_anchor", "五感锚点"),
@@ -1455,6 +1554,14 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     arc_mem_section = arc_memory_section(arc_memories, emotional_progress)
     female_section = female_fiction_section() if female_active else ""
     research_section = research_pack_section(research_packs)
+    usage_section = scene_usage_section(root, chapter)
+    if usage_section:
+        research_section = research_section + usage_section
+        if SCENE_USAGE_REL not in source_paths:
+            source_paths.append(SCENE_USAGE_REL)
+    ai_tic = ai_tic_section(root)
+    if ai_tic and MECHANICAL_FINDINGS_REL not in source_paths:
+        source_paths.append(MECHANICAL_FINDINGS_REL)
     waiver_section = ""
     if demo_waiver:
         waiver_section = f"""
@@ -1529,7 +1636,7 @@ python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}�
 """
     batch_section = ""
     if live_check and batch_interval > 0:
-        window = batch_review_window(chapter, batch_interval, meta)
+        window = batch_review_window(chapter, batch_interval, meta, root=root)
         if window and window.get("due"):
             start, end = window["start"], window["end"]
             batch_json = f"审稿/batch_mechanical_第{start:02d}-{end:02d}章.json"
@@ -1607,7 +1714,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {event_cooling_section}
 {observation_section_text}
 {aesthetic_section_text}
-{research_section}
+{research_section}{ai_tic}
 {live_check_section}
 {batch_section}
 

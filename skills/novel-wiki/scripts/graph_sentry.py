@@ -75,7 +75,10 @@ def _iter_character_changes(ledger: Dict[str, Any]):
         if isinstance(delta, dict) and isinstance(delta.get("summary"), dict):
             delta = delta["summary"]
         ch = _chapter_no(key) or (delta.get("chapter") if isinstance(delta, dict) else 0) or 0
-        for cc in (delta.get("character_changes") or []) if isinstance(delta, dict) else []:
+        # 旧版 rollup 曾把 character_changes 压成**整数计数**（2026-07 起改为保留 {name,event}
+        # 精简列表）；历史台账里的整数态既不可迭代（裸 for 会 TypeError）也无事件可查，跳过。
+        ccs = delta.get("character_changes") if isinstance(delta, dict) else None
+        for cc in (ccs if isinstance(ccs, list) else []):
             if isinstance(cc, dict):
                 name = str(cc.get("name") or cc.get("character") or "").strip()
                 change = str(cc.get("change") or cc.get("delta") or cc.get("note") or "").strip()

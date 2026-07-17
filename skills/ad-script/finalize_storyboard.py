@@ -443,6 +443,30 @@ def seam_check(storyboard):
     return findings
 
 
+# 传统 pack shot 行规：片尾 logo/CTA 收版要"呼吸感"，低于 ~1.5s 观众记不住品牌也点不了 CTA。
+ENDCARD_MIN_HOLD_SECONDS = 1.5
+_ENDCARD_RE = re.compile(r"片尾|尾板|end.?card|endcard|收版|品牌定格", re.IGNORECASE)
+
+
+def endcard_hold_check(storyboard):
+    """endcard/收版镜停留 < 1.5s → warn（有 endcard 才判；缺 endcard 归 ad-score cta 维度管）。"""
+    findings = []
+    shots = storyboard.get("shots") or storyboard.get("clips") or []
+    for i, sh in enumerate(shots, 1):
+        blob = " ".join(str(sh.get(k) or "") for k in
+                        ("shot", "frame", "画面", "section", "purpose", "shot_type", "scene", "场景"))
+        if not (sh.get("endcard") or sh.get("is_endcard") or _ENDCARD_RE.search(blob)):
+            continue
+        dur = float(sh.get("duration", sh.get("时长", 0)) or 0)
+        if dur and dur < ENDCARD_MIN_HOLD_SECONDS:
+            sid = sh.get("shot_id") or sh.get("clip_id") or f"镜头{i}"
+            findings.append({"severity": "warn", "kind": "endcard_hold_short",
+                             "msg": f"{sid} 是收版/endcard 镜但只停留 {dur:.1f}s"
+                                    f"（<{ENDCARD_MIN_HOLD_SECONDS:g}s）——pack shot 行规要给 logo/CTA 呼吸感，"
+                                    "观众读不完就等于没放；从前面镜头匀 0.5-1s 过来"})
+    return findings
+
+
 def _settings_master_seconds(root):
     """--master 缺省时，尝试从 <root>/_设置.md 读「主片时长」选择点（纯文本宽松解析）。"""
     p = os.path.join(root, "_设置.md")
@@ -492,6 +516,7 @@ def main():
     findings += usp_disclaimer_check(brief, sb, claim_src)
     findings += claim_presentation_check(brief, sb)
     findings += seam_check(sb)
+    findings += endcard_hold_check(sb)
 
     # 主片时长缺失：不静默放过整条总时长约束，至少 warn。
     if not master_sec:

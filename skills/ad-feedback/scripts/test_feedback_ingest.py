@@ -72,3 +72,25 @@ def test_data_must_match_registered_variants_and_strata():
     assert report["winner"] is None
     assert any(f["code"] == "unregistered_variant" for f in report["findings"])
     assert any(f["code"] == "platform_drift" for f in report["findings"])
+
+
+def test_hook_rate_floor_flags_failing_hook_only_with_data():
+    report = build([
+        {"variant_id": "A", "hook_id": "H1", "impressions": 5000, "clicks": 200, "video_3s": 800},
+        {"variant_id": "B", "hook_id": "H2", "impressions": 5000, "clicks": 150, "video_3s": 2500},
+    ], min_impressions=1000)
+    hits = [f for f in report["findings"] if f["code"] == "hook_rate_low"]
+    assert [f["variant_id"] for f in hits] == ["A"]  # A=16% < 25%；B=50% 达标
+    assert hits[0]["severity"] == "warn"
+
+    # video_3s 全 0 = 数据源没带该字段，不判（不臆造 hook 失败）
+    report2 = build([
+        {"variant_id": "A", "impressions": 5000, "clicks": 200},
+    ], min_impressions=1000)
+    assert not [f for f in report2["findings"] if f["code"] == "hook_rate_low"]
+
+    # 样本不合格（曝光不足）不判
+    report3 = build([
+        {"variant_id": "A", "impressions": 200, "clicks": 20, "video_3s": 10},
+    ], min_impressions=1000)
+    assert not [f for f in report3["findings"] if f["code"] == "hook_rate_low"]

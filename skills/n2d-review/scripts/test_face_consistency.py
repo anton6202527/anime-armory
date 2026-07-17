@@ -553,6 +553,42 @@ def test_shot_character_map_uses_primary_slot_marker(tmp_path):
     assert shot_map["图片/Clip02_first.png"] == ["张老大_常态"]
 
 
+def test_shot_character_map_uses_timed_reaction_anchor_focus(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生", "forms": [{"form": "常态", "asset_key": "贺平生_常态"}]},
+        {"id": "CHAR_02", "name": "张老大", "forms": [{"form": "常态", "asset_key": "张老大_常态"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    (prompt_dir / "01_分镜出图.md").write_text("\n".join([
+        "## Clip 02",
+        "目标：出图/第1集/图片/EP01_CLIP02.png 出图/第1集/图片/EP01_CLIP02_a2.png",
+        "**资产身份注册层**：`CHAR_01/常态`, `CHAR_02/常态`；二人都登记。",
+        "**多人同框身份槽位**：SLOT_1: `CHAR_02/常态` -> primary 星标；SLOT_2: `CHAR_01/常态`。",
+    ]), encoding="utf-8")
+    storyboard = root / "脚本" / ep / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP02",
+        "continuity": {"anchors": [{"anchor_png": "出图/第1集/图片/EP01_CLIP02_a2.png", "at_sec": 6.1}]},
+        "shots": [
+            {"t": "0-6.1s", "lens": "MCU", "desc": "张老大俯身下令"},
+            {"t": "6.1-7.9s", "lens": "CU", "desc": "贺平生垂眼短促应下"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+
+    shot_map = fc.shot_character_map(str(root), ep)
+    assert shot_map["图片/EP01_CLIP02.png"] == ["张老大_常态"]
+    assert shot_map["图片/EP01_CLIP02_a2.png"] == ["贺平生_常态"]
+
+
 def test_shot_character_map_explicit_star_overrides_primary_slot_text(tmp_path):
     import json
     import face_consistency as fc

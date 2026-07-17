@@ -26,6 +26,9 @@ TEXT_LOCK = ("清晰", "可读", "不乱码", "不要乱码", "准确显示", "�
 PRODUCT_LOCK_TEXT = ("同一包装", "同一 logo", "同一logo", "同一品牌色", "产品参考", "资产引用")
 SEAM_MARKERS = ("接缝", "首尾", "尾帧", "首帧", "end frame", "first frame", "seam")
 CAP_SUBJECT_LOCK = "subject_consistency"
+# 同场景相邻镜色跳（归一化平均色距，dHash 抓结构抓不住调色/白平衡跳变）；批内混帧率容差。
+SEAM_COLOR_WARN = 0.12
+BATCH_FPS_TOL = 0.05
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -183,22 +186,74 @@ def _seconds(value: Any) -> float:
     return float(m.group()) if m else 0.0
 
 
-def technical_findings(root: Path, clip: str, shot: Mapping[str, Any]) -> List[Dict[str, Any]]:
+def _fps(video_stream: Mapping[str, Any]) -> Optional[float]:
+    for key in ("avg_frame_rate", "r_frame_rate"):
+        raw = str(video_stream.get(key) or "")
+        if "/" in raw:
+            num, _, den = raw.partition("/")
+            try:
+                if float(den) > 0:
+                    return round(float(num) / float(den), 2)
+            except ValueError:
+                pass
+        else:
+            try:
+                return round(float(raw), 2) if raw else None
+            except ValueError:
+                pass
+    return None
+
+
+def technical_findings(root: Path, clip: str, shot: Mapping[str, Any]) -> tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
     path = expected_video_path(root, clip)
     data = _probe(path)
     if not data:
-        return [finding("block", clip, "ffprobe", "clip 无法用 ffprobe 读取，不能只凭文件非空验收")]
+        return [finding("block", clip, "ffprobe", "clip 无法用 ffprobe 读取，不能只凭文件非空验收")], None
     streams = data.get("streams") or []
     video = next((s for s in streams if s.get("codec_type") == "video"), None)
     if not video:
-        return [finding("block", clip, "video_stream", "clip 缺有效视频流")]
+        return [finding("block", clip, "video_stream", "clip 缺有效视频流")], None
     out = []
     actual = _seconds((data.get("format") or {}).get("duration"))
     expected = _seconds(next((shot.get(k) for k in ("duration", "duration_sec", "seconds", "时长") if shot.get(k) is not None), 0))
     if expected and abs(actual - expected) > max(0.35, expected * 0.08):
         out.append(finding("block", clip, "duration", f"实测 {actual:.3f}s 与镜头目标 {expected:.3f}s 不符"))
-    if int(video.get("width") or 0) <= 0 or int(video.get("height") or 0) <= 0:
+    width, height = int(video.get("width") or 0), int(video.get("height") or 0)
+    if width <= 0 or height <= 0:
         out.append(finding("block", clip, "resolution", "clip 分辨率无效"))
+    return out, {"fps": _fps(video), "width": width, "height": height}
+
+
+def batch_consistency_findings(tech_facts: Mapping[str, Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """批内混帧率/混分辨率检查：合成会强制统一参数而静默掩盖差异，须在验收面显式抬出。"""
+    out: List[Dict[str, Any]] = []
+    fps_map = {c: f["fps"] for c, f in tech_facts.items() if f and f.get("fps")}
+    if len(fps_map) >= 2:
+        counts: Dict[float, int] = {}
+        for value in fps_map.values():
+            counts[value] = counts.get(value, 0) + 1
+        mode = max(counts, key=lambda v: (counts[v], -v))
+        odd = {c: v for c, v in fps_map.items() if abs(v - mode) > BATCH_FPS_TOL}
+        if odd:
+            out.append(finding(
+                "warn", "-", "batch_fps_mix",
+                f"批内混帧率：多数 clip 为 {mode}fps，异常 {sorted(odd)}；合成强制统一帧率会静默掩盖来源差异，先确认再进合成。",
+                {"mode_fps": mode, "outliers": {c: v for c, v in sorted(odd.items())}},
+            ))
+    res_map = {c: (f["width"], f["height"]) for c, f in tech_facts.items()
+               if f and f.get("width") and f.get("height")}
+    if len(res_map) >= 2:
+        counts2: Dict[tuple, int] = {}
+        for value in res_map.values():
+            counts2[value] = counts2.get(value, 0) + 1
+        mode2 = max(counts2, key=lambda v: (counts2[v], v))
+        odd2 = {c: v for c, v in res_map.items() if v != mode2}
+        if odd2:
+            out.append(finding(
+                "warn", "-", "batch_resolution_mix",
+                f"批内混分辨率：多数 clip 为 {mode2[0]}x{mode2[1]}，异常 {sorted(odd2)}；缩放统一前先确认来源与清晰度损失。",
+                {"mode_resolution": list(mode2), "outliers": {c: list(v) for c, v in sorted(odd2.items())}},
+            ))
     return out
 
 
@@ -330,15 +385,39 @@ def prompt_handoff_findings(root: Path, clip: str, shot: Mapping[str, Any]) -> L
     return out
 
 
+def _seam_declared(root: Path, clip: str, shot: Mapping[str, Any]) -> bool:
+    transition = str(shot.get("continuity", {}).get("transition") if isinstance(shot.get("continuity"), Mapping) else shot.get("transition") or "")
+    text = read_text(prompt_path(root, clip)) + "\n" + shot_text(shot)
+    return bool(transition) or any(mark in text for mark in SEAM_MARKERS)
+
+
 def seam_findings(root: Path, clip: str, shot: Mapping[str, Any], index: int, total: int) -> List[Dict[str, Any]]:
     if index >= total:
         return []
-    transition = str(shot.get("continuity", {}).get("transition") if isinstance(shot.get("continuity"), Mapping) else shot.get("transition") or "")
-    text = read_text(prompt_path(root, clip)) + "\n" + shot_text(shot)
-    if not transition and not any(mark in text for mark in SEAM_MARKERS):
+    if not _seam_declared(root, clip, shot):
         return [finding("warn", clip, "seam_contract",
                         "非末尾 clip 缺接缝/尾帧/transition 声明；合成时可能出现跳变。")]
     return []
+
+
+def _scene_label(shot: Mapping[str, Any]) -> str:
+    return str(shot.get("scene") or shot.get("场景") or "").strip()
+
+
+def _avg_rgb(path: Path, Image) -> Optional[tuple]:
+    try:
+        with Image.open(path) as im:
+            raw = im.convert("RGB").resize((16, 16)).tobytes()
+        n = len(raw) // 3
+        return tuple(sum(raw[i::3]) / n for i in range(3))
+    except Exception:
+        return None
+
+
+def _color_dist(a: Optional[tuple], b: Optional[tuple]) -> Optional[float]:
+    if a is None or b is None:
+        return None
+    return (sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5) / (255.0 * (3 ** 0.5))
 
 
 def run_qc(root: Path) -> Dict[str, Any]:
@@ -350,13 +429,16 @@ def run_qc(root: Path) -> Dict[str, Any]:
     Image, ImageDraw = _load_imaging()
     all_samples: List[Path] = []
     samples_by_clip: Dict[str, List[Path]] = {}
+    tech_facts: Dict[str, Optional[Dict[str, Any]]] = {}
     if not shots:
         findings.append(finding("block", "-", "storyboard", "缺 storyboard clips/shots，无法验收视频。"))
     for index, shot in enumerate(shots, start=1):
         clip = clip_id(shot, index)
         findings.extend(clip_presence_findings(root, clip, jobs.get(clip)))
         if expected_video_path(root, clip).is_file():
-            findings.extend(technical_findings(root, clip, shot))
+            tech, facts = technical_findings(root, clip, shot)
+            findings.extend(tech)
+            tech_facts[clip] = facts
             if Image is not None:
                 sample_findings, samples = visual_sample_findings(root, clip, shot, Image)
                 findings.extend(sample_findings)
@@ -386,6 +468,20 @@ def run_qc(root: Path) -> Dict[str, Any]:
                         {"left_end": str(left_samples[-1]), "right_start": str(right_samples[0]),
                          "confidence": "heuristic"},
                     ))
+                # 同场景色跳：dHash 只抓灰度结构，调色/白平衡跳变要靠平均色距抓（n2d 同口径 0.12）。
+                left_shot, right_shot = shots[index], shots[index + 1]
+                if _scene_label(left_shot) == _scene_label(right_shot):
+                    cdist = _color_dist(_avg_rgb(left_samples[-1], Image), _avg_rgb(right_samples[0], Image))
+                    if cdist is not None and cdist > SEAM_COLOR_WARN:
+                        declared = _seam_declared(root, left, left_shot)
+                        findings.append(finding(
+                            "info" if declared else "warn", f"{left}->{right}", "seam_color_jump",
+                            f"同场景相邻镜色距 {cdist:.3f} > {SEAM_COLOR_WARN}（尾帧→首帧调色/白平衡跳变）"
+                            + ("；该镜已声明转场/接缝，供合成时确认。" if declared else "；未声明转场，合成硬切会露馅，需回看或声明有意断裂。"),
+                            {"color_distance": round(cdist, 4), "declared_transition": declared,
+                             "confidence": "heuristic"},
+                        ))
+    findings.extend(batch_consistency_findings({c: f for c, f in tech_facts.items() if f}))
     inheritance = load_json(root / "出视频" / "分镜" / "contract_inheritance.json")
     if not inheritance:
         findings.append(finding("warn", "-", "contract_inheritance", "缺 contract_inheritance.json，建议先跑 ad-video/scripts/inherit_contract.py。"))

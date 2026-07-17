@@ -89,7 +89,15 @@ def build_churn_map(state_ledger, world_ledger=None):
         if not ch:
             continue
         cc = (delta.get("character_changes") or []) if isinstance(delta, dict) else []
-        churn[ch] = churn.get(ch, 0) + (len(cc) if isinstance(cc, list) else 0)
+        if isinstance(cc, list):
+            n = len(cc)
+        elif isinstance(cc, (int, float)) and not isinstance(cc, bool):
+            # 旧版 rollup 压缩态：character_changes 是整数计数（2026-07 起改为 {name,event}
+            # 精简列表）。历史台账的整数直接当 churn 数，别静默归 0 让早章热点消失。
+            n = int(cc)
+        else:
+            n = 0
+        churn[ch] = churn.get(ch, 0) + n
     wl = world_ledger if isinstance(world_ledger, dict) else {}
     for entry in wl.get("major_changes", []) if isinstance(wl, dict) else []:
         if not isinstance(entry, dict):

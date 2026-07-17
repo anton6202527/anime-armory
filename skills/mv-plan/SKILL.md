@@ -39,11 +39,13 @@ python3 skills/mv-plan/scripts/plan_clips.py "<制MV作品根>" --granularity �
    - 语义补全时读取 `mv-video/references/action_knowledge.md`（动作家族/动作峰值/转场母题）和 `mv-image/references/visual_consistency.md`（身份锚点/主色/母题），优先补 `action_family/action_peak/visual_motif/transition_motif/shot_design`，再补 continuity；写回时同步落 `分镜/semantic_prompts.json`，便于复查和重跑。`compose_prompts.py` 默认要求覆盖全部 clip，缺字段会报错；临时局部注入才用 `--allow-partial`。
 4. 跑 `mv-craft/scripts/identity_registry.py <作品根>`，生成身份/资产/参考注册表。
 5. 跑 `mv-score` 产绑定当前 plan/beatgrid/song 的 deterministic pacing receipt；不设 `--threshold` 时只给证据、不把审美启发式做硬挡。`mv-score`/`pacing.py` 是**纯数值卡点引擎**（等长/downbeat/密度/总时长），从不读画面字段——视觉重复它看不见。
-6. **出图前跑 `mv-review/scripts/shot_variety_audit.py <作品根> --write`**：读本阶段写好的 `shot_design`，在花积分前拦「同 (场景,景别,机位,运镜) 反复 / 连续同场景景别单调 / 副歌 key 镜静止运镜 / 单场景占比过高 / 母题过用 / 大变化镜头缺参考锚」。report-only（advisory·永不 block），被 image gate 与审片消费。命中就回本阶段换景别/机位/场景/补参考再出图——MV 命门除卡点就是视觉不重复。
-7. `mv-image` 按 `clip_plan.json` 出首帧和 `match_action` 接缝需要的尾帧，并登记每张图的 model/channel/prompt/hash 收据。
-8. `mv-craft` 生成 production pack、真实 animatic、OTIO 并完成具名 picture lock。
-9. `mv-video/scripts/video_jobs.py` 按锁定计划生成逐 clip 任务和可用的多镜头 `sequence_units`。
-10. `mv-compose` 按 `timeline_manifest.json` 合成。
+6. **出图前跑 `mv-review/scripts/shot_variety_audit.py <作品根> --write`**：读本阶段写好的 `shot_design`，在花积分前拦「同 (场景,景别,机位,运镜) 反复 / 连续同场景景别单调 / 副歌 key 镜静止运镜 / 单场景占比过高 / 母题过用 / 大变化镜头缺参考锚」。report-only（advisory·永不 block），被 image gate 与审片消费。命中就回本阶段换景别/机位/场景/补参考再出图——MV 命门除卡点就是视觉不重复。**同时跑 `mv-review/scripts/craft_audit.py <作品根> --write`（传统 MV 手法机检）**：查副歌复现无升级（每次副歌回归要加码，末副歌最大 payoff）/ 副歌运镜能量不高于主歌（无动静对比）/ hook 不上脸（副歌至少一次对镜演唱近景）/ 冷开场过长（首钩前 >8s）/ 关键镜单候选（key 镜出 2-3 张首帧候选再挑）/ bridge 不换气 / 词画零呼应。同为 report-only，被 image gate 消费。
+7. **出图前跑 `mv-image/scripts/drift_risk.py <作品根> --write`**：不读像素、不花钱，用 clip_plan+identity_registry 的高危信号（近景/大表情/极端角度/逆光暗部/换装/长间隔复现/多主体同框/缺参考锚）预测哪些 clip 最易漂，high 风险镜出图前挂定妆/表情/场景参考。report-only，被 image gate 与 consistency_findings 消费；image_qc 已有实测脸警时自动回灌升档。
+8. **正式大盘（≥12 clip）全量出图前跑 `scripts/pilot_matrix.py <作品根> --write`**：从 clip_plan（+drift_risk/shot_variety 报告）挑 3-5 个代表镜（开场钩/副歌爆点/最高漂移风险近景/最大运动/换装换景首镜）先打样，人工确认「脸像不像、风格对不对、爆点体感够不够」再全量——全量返工=整曲重烧积分，打样是最后一个免费决策点。report-only，正式大盘未打样时 image gate 提示（advisory·不拦）。
+9. `mv-image` 按 `clip_plan.json` 出首帧和 `match_action` 接缝需要的尾帧，并登记每张图的 model/channel/prompt/hash 收据。
+10. `mv-craft` 生成 production pack、真实 animatic、OTIO 并完成具名 picture lock。
+11. `mv-video/scripts/video_jobs.py` 按锁定计划生成逐 clip 任务和可用的多镜头 `sequence_units`。
+12. `mv-compose` 按 `timeline_manifest.json` 合成。
 
 ## 原则
 

@@ -9,7 +9,7 @@ description: Read-only next-action recommender (上层 agent 编排层) for nove
 
 它只产 `next action`，不直接写正文、不调用模型、不绕过蓝图/设定/Demo 等人工确认边界。
 
-> **没有 LLM「评委/辩论」环节。** 本层的「批判/把关」是**确定性的结构化信号读取**——读 `review_report.json` 的 blocking finding、`revision_plan` 的 P0/冲突、batch 死信、语义任务状态，按规则给下一步，不挂任何开放式 LLM 评委（遵循 novel-* 设计法「别挂 LLM 评委，先抽结构再判」）。若未来要加 Writer-Critic-Editor 式迭代，也必须 checklist-grounded（对照读者契约/弧光/伏笔账本），且经成本闸控；不得引入凭感觉的 LLM 互评。**可选 critic 的完整 spec（触发条件 / checklist 绑定 / perspective-diverse 镜头 / 成本闸 / 落地边界）见 [`references/critic-loop.md`](references/critic-loop.md)——目前仅 spec、未接线，绝不进 post_write 常开主路。**
+> **没有 LLM「评委/辩论」环节。** 本层的「批判/把关」是**确定性的结构化信号读取**——读 `review_report.json` 的 blocking finding、`revision_plan` 的 P0/冲突、batch 死信、语义任务状态，按规则给下一步，不挂任何开放式 LLM 评委（遵循 novel-* 设计法「别挂 LLM 评委，先抽结构再判」）。若未来要加 Writer-Critic-Editor 式迭代，也必须 checklist-grounded（对照读者契约/弧光/伏笔账本），且经成本闸控；不得引入凭感觉的 LLM 互评。**可选 critic 的完整 spec（触发条件 / checklist 绑定 / perspective-diverse 镜头 / 成本闸 / 落地边界）见 [`references/critic-loop.md`](references/critic-loop.md)——绝不进 post_write 常开主路；触发面已接线（2026-07）：`supervisor.py` 的 `signals.critic_loop` 会读 `_设置.md` 的 `critic_loop` 选择点，开启时在 next_action 信号里提示"高权重章过确定性闸后按 spec 跑 critic"，评委 verdict 必须过 `novel/_lib/judge_protocol.py` 去偏后才可采信。**
 
 ## 核心能力与边界
 

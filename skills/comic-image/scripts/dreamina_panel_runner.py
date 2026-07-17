@@ -81,7 +81,7 @@ def build_prompt(
     ratio: str,
     correction: str = "",
 ) -> str:
-    shared.validate_compiled_job(job, expected_backend="dreamina")
+    shared.validate_compiled_job(job, expected_backend=DREAMINA_MODEL)
     size = job.get("size") if isinstance(job.get("size"), dict) else {}
     width = int(size.get("width") or 1296)
     height = int(size.get("height") or 1040)

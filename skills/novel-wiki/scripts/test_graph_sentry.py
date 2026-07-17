@@ -208,3 +208,32 @@ def test_merged_summary_wrapped_ledger_still_fires():
     }}
     a = graph_sentry.detect_lifecycle_conflicts(led)
     assert len(a) == 1 and a[0]["entity"] == "王五" and a[0]["severity"] == "阻断级"
+
+
+def test_rolled_thin_summary_still_fires_deterministic_gate():
+    # 回归：2026-07 起 rollup 把 character_changes 压成 {name,event} 精简列表（丢 change 文本）——
+    # 已 rollup 的早章死亡 event 必须仍参与生死闸，否则"第3章死、第300章复活"因维护性 rollup 漏检。
+    led = {"chapter_deltas": {
+        "chapter_03": {"merged_at": "x",
+                       "summary": {"rolled": True, "new_facts": 2,
+                                   "character_changes": [{"name": "王五", "event": "death"}],
+                                   "characters_touched": ["王五"]},
+                       "verification": {}},
+        "chapter_07": {"merged_at": "y",
+                       "summary": {"chapter": 7,
+                                   "character_changes": [{"name": "王五", "event": "fights", "change": "挥刀杀敌"}]},
+                       "verification": {}},
+    }}
+    a = graph_sentry.detect_lifecycle_conflicts(led)
+    assert len(a) == 1 and a[0]["type"] == "deceased_ledger_reactivation" and a[0]["entity"] == "王五"
+
+
+def test_legacy_int_rolled_summary_skipped_not_crash():
+    # 旧版 rollup 遗留台账：character_changes 是整数计数——不可迭代也无事件，必须跳过而非 TypeError。
+    led = {"chapter_deltas": {
+        "chapter_01": {"merged_at": "x",
+                       "summary": {"rolled": True, "character_changes": 3, "characters_touched": ["甲"]},
+                       "verification": {}},
+        "chapter_07": {"summary": {"character_changes": [{"name": "王五", "event": "death"}]}},
+    }}
+    assert graph_sentry.detect_lifecycle_conflicts(led) == []

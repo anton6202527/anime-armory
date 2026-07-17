@@ -39,6 +39,11 @@ try:
 except Exception:  # pragma: no cover - provenance is additive
     append_event = None
 
+try:
+    from project_io import load_project_settings  # noqa: E402
+except Exception:  # pragma: no cover - settings 缺失时 critic 触发面静默关闭
+    load_project_settings = None
+
 
 SUPERVISOR_KIND = "novel_supervisor_next_action"
 SUPERVISOR_LEDGER_KIND = "novel_supervisor_circuit_ledger"
@@ -442,6 +447,26 @@ def command_for_stage(root: str, stage: dict[str, Any]) -> list[str]:
     return []
 
 
+def critic_loop_signal(root: str) -> dict[str, Any]:
+    """critic_loop 选择点的**触发面**（references/critic-loop.md 的 spec 此前只是纸面：
+    `_设置.md` 开了 critic_loop 也没有任何机器提示，spec 永远不会在正确时机被想起）。
+    本函数只做发现与提示——不执行任何 LLM 评委（supervisor 铁律：确定性编排，不挂评委），
+    去偏协议的确定性执行层在 novel/_lib/judge_protocol.py。"""
+    if load_project_settings is None:
+        return {"enabled": False, "reason": "settings loader unavailable"}
+    try:
+        settings = load_project_settings(root) or {}
+    except Exception:
+        return {"enabled": False, "reason": "settings unreadable"}
+    raw = str(settings.get("critic_loop") or settings.get("Critic迭代") or "").strip().lower()
+    enabled = raw in {"on", "true", "1", "开", "开启", "yes", "enabled"}
+    return {"enabled": enabled,
+            "spec": "skills/novel-supervisor/references/critic-loop.md",
+            "note": ("已开启：高权重章（黄金三章/弧段高潮/关键反转）过确定性闸后，"
+                     "按 spec 跑 checklist-grounded critic（评委结论必须过 judge_protocol 去偏）"
+                     if enabled else "未开启（默认关·成本闸控）")}
+
+
 def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[str, Any]:
     root = os.path.abspath(root)
     plan = dry_run_plan(root)
@@ -476,6 +501,7 @@ def decide_next_action(root: str, *, write_pipeline_plan: bool = False) -> dict[
             "batch": batch,
             "retry_count": breaker["failure_count"],
             "circuit_breaker": breaker,
+            "critic_loop": critic_loop_signal(root),
         },
         "recommended_commands": [],
         "handoff": None,

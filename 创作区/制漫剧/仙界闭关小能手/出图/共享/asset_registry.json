@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-15T16:39:30+00:00",
+  "generated_at": "2026-07-17T11:56:38+00:00",
   "assets": [
     {
       "id": "LOC_01",
@@ -540,7 +540,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_扁担.md",
           "status": "ready",
-          "sha256": "0a68dae7ac28e3bbd324d5d6eda45f7c0a41c353407e6386aade4e45a4a0a6d0"
+          "sha256": "3e9a5cea41036109390032eb6240f5576b35676c5c9a5c60886a0b4a10030eb3"
         },
         {
           "slot": "primary_reference",
@@ -554,7 +554,7 @@
         }
       ],
       "constraints": {
-        "structure": "+ PROP_水桶",
+        "structure": "暗黄老竹扁担，中部肩压磨亮；两只同款旧木桶，铁箍暗锈，数量永远是二，水桶与扁担的绳索连接点固定，不要塑料、不要金色法器化。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -569,22 +569,21 @@
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移",
-        "不要让+ PROP_水桶结构/颜色/尺寸漂移"
+        "不要数量漂移"
       ],
       "scene_dna": {
-        "belonging_anchor": "+ PROP_水桶 属于本集剧情资产，不是独立场景。",
+        "belonging_anchor": "扁担 属于本集剧情资产，不是独立场景。",
         "landmarks": [
-          "+ PROP_水桶"
+          "扁担"
         ],
-        "spatial_layout": "+ PROP_水桶只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "+ PROP_水桶",
-        "color_lighting_weather": "LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "spatial_layout": "扁担只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "暗黄老竹扁担，中部肩压磨亮；两只同款旧木桶，铁箍暗锈，数量永远是二，水桶与扁担的绳索连接点固定，不要塑料、不要金色法器化。",
+        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
         "resident_assets": [
-          "+ PROP_水桶"
+          "扁担"
         ],
         "forbidden": [
-          "+ PROP_水桶结构漂移",
+          "扁担结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
@@ -593,7 +592,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "+ PROP_水桶",
+      "current_state": "暗黄老竹扁担，中部肩压磨亮；两只同款旧木桶，铁箍暗锈，数量永远是二，水桶与扁担的绳索连接点固定，不要塑料、不要金色法器化。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -647,7 +646,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_水桶.md",
           "status": "ready",
-          "sha256": "c62afef010c44f2344e2a7ca20b2638bb440065872e002a1a3126bf050eb13e0"
+          "sha256": "015ace9c688b809b5a83dc1fd17c3f70685d6555e79ac95a6ffd041b463fbcd9"
         },
         {
           "slot": "primary_reference",
@@ -661,7 +660,7 @@
         }
       ],
       "constraints": {
-        "structure": "水桶",
+        "structure": "暗黄老竹扁担，中部肩压磨亮；两只同款旧木桶，铁箍暗锈，数量永远是二，水桶与扁担的绳索连接点固定，不要塑料、不要金色法器化。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -699,7 +698,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "水桶",
+      "current_state": "暗黄老竹扁担，中部肩压磨亮；两只同款旧木桶，铁箍暗锈，数量永远是二，水桶与扁担的绳索连接点固定，不要塑料、不要金色法器化。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -895,7 +894,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/PROP_01_破损黑盆.md",
           "status": "ready",
-          "sha256": "8ca47bc2acdc51697f4857d0de32728e801ced57b0608090fc185f2b23bbe952"
+          "sha256": "81afe25e33dfd01be6517a2d96140e73c7b0550a1b0f45798e3b5a8c4e65a09a"
         },
         {
           "slot": "primary_reference",
@@ -909,7 +908,7 @@
         }
       ],
       "constraints": {
-        "structure": "破损黑盆",
+        "structure": "国漫写实，普通乡野旧黑褐陶盆，直径约少年肩宽，盆沿缺一个小口，外壁不对称沙眼和磨痕，盆底有很浅的自然细纹，无文字无符号，无金属光泽，大部分时间完全不发光；集尾只允许一缕低强度青金微光从盆底细纹中出现。",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -947,7 +946,7 @@
       "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
-      "current_state": "破损黑盆",
+      "current_state": "国漫写实，普通乡野旧黑褐陶盆，直径约少年肩宽，盆沿缺一个小口，外壁不对称沙眼和磨痕，盆底有很浅的自然细纹，无文字无符号，无金属光泽，大部分时间完全不发光；集尾只允许一缕低强度青金微光从盆底细纹中出现。",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [

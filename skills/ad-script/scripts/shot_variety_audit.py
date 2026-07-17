@@ -43,6 +43,10 @@ DESC_MIN_CHARS = int(os.environ.get("AD_SHOTVAR_DESC_MIN_CHARS", "6"))
 # 场景单调 / 景别单调 只在片子够长时才成立（短广告单场景合法）。
 MIN_SHOTS_FOR_MONOTONY = int(os.environ.get("AD_SHOTVAR_MIN_SHOTS", "5"))
 SCENE_MONO_FRAC = float(os.environ.get("AD_SHOTVAR_SCENE_FRAC", "0.85"))
+# 再钩间隔（业界留存口径：≥30s 信息流广告约每 15-20s 需一个再钩/转折/揭晓，防中段划走）。
+# 只对总时长 ≥ REHOOK_MIN_TOTAL 的长广告生效；短广告一个开场钩即可（开场钩归 ad-score hook 维度管）。
+REHOOK_MIN_TOTAL = float(os.environ.get("AD_SHOTVAR_REHOOK_MIN_TOTAL", "20"))
+REHOOK_GAP_WARN = float(os.environ.get("AD_SHOTVAR_REHOOK_GAP", "20"))
 NGRAM = 2
 PROVENANCE = "internal-heuristic·confidence=low"
 
@@ -54,6 +58,11 @@ _EXEMPT_RE = re.compile(
     re.IGNORECASE)
 # 明确的静止/hold 意图（豁免"静态"类判断，虽然本脚本目前不单独判静态长镜）。
 _HOLD_RE = re.compile(r"固定|静止|定格|hold|freeze|保持", re.IGNORECASE)
+# 再钩标记（半确定性关键词初筛，与 ad-score hook 口径同族·本线自包含）：转折/揭晓/对比/悬念等。
+_REHOOK_RE = re.compile(
+    r"钩子|hook|悬念|冲突|痛点|反转|转折|提问|对比|反差|揭晓|揭秘|真相|结果|竟然|居然|"
+    r"挑战|测试|实测|before|after|证言|见证|数字冲击|倒计时",
+    re.IGNORECASE)
 
 
 def now_iso() -> str:
@@ -220,6 +229,60 @@ def audit_framing_variety(shots: List[Tuple[str, Dict[str, Any]]], findings: Lis
     return 0
 
 
+def _shot_seconds(shot: Mapping[str, Any]) -> Optional[float]:
+    for key in ("duration", "时长", "duration_sec", "seconds"):
+        if shot.get(key) is not None:
+            try:
+                return float(re.sub(r"[^\d.]", "", str(shot.get(key))) or 0) or None
+            except ValueError:
+                return None
+    return None
+
+
+def _is_rehook(shot: Mapping[str, Any]) -> bool:
+    blob = " ".join(str(shot.get(k) or "") for k in
+                    ("shot", "frame", "画面", "主体动作", "description", "desc", "visual",
+                     "section", "role", "purpose", "vo", "voiceover", "台词"))
+    return bool(_REHOOK_RE.search(blob))
+
+
+def audit_rehook_gap(shots: List[Tuple[str, Dict[str, Any]]], findings: List[Dict[str, Any]]) -> int:
+    """≥20s 长广告的再钩间隔：连续 >20s 没有任何转折/揭晓/对比类节拍 → warn（业界留存口径：
+    信息流长广告约每 15-20s 需一个再钩防中段划走；15/6s 短广告一个开场钩就够，不判）。
+    时长字段缺失过半时不判（insufficient data，不臆造节奏问题）。"""
+    timed = [(sid, shot, _shot_seconds(shot)) for sid, shot in shots]
+    known = [t for _sid, _s, t in timed if t]
+    if len(known) < max(1, len(timed) // 2 + 1):
+        return 0
+    total = sum(known)
+    if total < REHOOK_MIN_TOTAL:
+        return 0
+    elapsed = 0.0
+    last_hook_end = 0.0
+    worst_gap, worst_span = 0.0, ("", "")
+    span_start_id = timed[0][0] if timed else ""
+    for sid, shot, secs in timed:
+        start = elapsed
+        elapsed += secs or 0.0
+        if _is_rehook(shot):
+            gap = start - last_hook_end
+            if gap > worst_gap:
+                worst_gap, worst_span = gap, (span_start_id, sid)
+            last_hook_end = elapsed
+            span_start_id = sid
+    tail_gap = elapsed - last_hook_end
+    if tail_gap > worst_gap:
+        worst_gap, worst_span = tail_gap, (span_start_id, timed[-1][0] if timed else "")
+    if worst_gap > REHOOK_GAP_WARN:
+        findings.append(finding("warn", "rehook_gap",
+                                f"总长 {total:.0f}s 的广告里，{worst_span[0]}→{worst_span[1]} 之间约 {worst_gap:.0f}s "
+                                f"没有任何再钩节拍（转折/揭晓/对比/证言…）——信息流长广告约每 {REHOOK_GAP_WARN:.0f}s "
+                                "要给观众一个继续看的理由，否则中段划走（advisory·关键词初筛，节奏好坏仍需人判）",
+                                [worst_span[0], worst_span[1]]))
+        return 1
+    return 0
+
+
 def build(root: Path) -> Dict[str, Any]:
     """契约形状（findings 用 `msg` 键，ad gate 可直接消费）：
 
@@ -248,6 +311,7 @@ def build(root: Path) -> Dict[str, Any]:
             audit_duplicate_description(shots, findings)
             audit_scene_monotony(shots, findings)
             audit_framing_variety(shots, findings)
+            audit_rehook_gap(shots, findings)
 
     return {
         "schema_version": VERSION,
@@ -258,6 +322,7 @@ def build(root: Path) -> Dict[str, Any]:
         "thresholds": {
             "desc_sim_warn": DESC_SIM_WARN, "desc_min_chars": DESC_MIN_CHARS,
             "min_shots_for_monotony": MIN_SHOTS_FOR_MONOTONY, "scene_mono_frac": SCENE_MONO_FRAC,
+            "rehook_min_total": REHOOK_MIN_TOTAL, "rehook_gap_warn": REHOOK_GAP_WARN,
             "ngram": NGRAM, "provenance": PROVENANCE,
             "note": "advisory：本检永不产 block。产品 beauty/片尾/logo/CTA 板等有意重复镜已豁免；"
                     "短广告单场景合法，故场景/景别单调只 info。",

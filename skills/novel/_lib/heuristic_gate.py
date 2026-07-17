@@ -47,6 +47,9 @@ DETERMINISTIC_TYPES = frozenset({
     "power_tier_regress",
     "power_level_regress",
     "power_combat_regress",
+    #   - power_numeric_regress：通用单调数值字段（年龄/修为等）跨章倒退——同 progression 快照
+    #     数值×章号比较、regress_reason 豁免（重生/回溯题材标注即放行），trigger 不扫正文。
+    "power_numeric_regress",
 })
 
 _DOWNGRADE_NOTE = "（启发式低置信·按 B10 自动降为建议级·不硬阻断 post_write）"

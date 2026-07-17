@@ -75,3 +75,23 @@ def test_rendered_text_plan_cannot_omit_an_approved_subtitle_cue(tmp_path):
     plan["checks"] = [{**plan["checks"][0], "id": "master:custom:only"}]
     report = rt.build(root, plan)
     assert any(row["code"] == "rendered_text_contract_uncovered" for row in report["findings"])
+
+
+def test_legal_line_reading_speed_scales_with_char_count(tmp_path):
+    root, plan = _project(tmp_path)
+    long_legal = "本产品效果因人而异请遵医嘱详情见官网活动页最终解释权说明具体以实物为准"  # 35 字
+    plan["checks"][0].update({
+        "id": "master:legal:001", "kind": "legal",
+        "expected_text": long_legal, "observed_text": long_legal,
+        "timestamp": 1.0, "start": 0.2, "end": 1.8,  # 1.6s → ~22 字/秒
+    })
+    report = rt.build(root, plan)
+
+    hits = [f for f in report["findings"] if f["code"] == "rendered_text_reading_speed_warn"]
+    assert hits and hits[0]["severity"] == "warn"
+
+    # 同样文字给足停留时长（35 字 / 12cps ≈ 3s）→ 不报；字幕行归 accessibility_qc 管也不报
+    plan["checks"][0].update({"start": 0.2, "end": 3.5, "timestamp": 1.0})
+    _video(root / "合成" / "成片_主片.mp4", duration=4)
+    report2 = rt.build(root, plan)
+    assert not [f for f in report2["findings"] if f["code"] == "rendered_text_reading_speed_warn"]

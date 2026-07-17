@@ -1201,6 +1201,76 @@ def character_shot_manifest(block: Dict[str, str]) -> Optional[Dict[str, Any]]:
     return manifests[0] if manifests else None
 
 
+def _storyboard_anchor_focus_refs(
+    root: Path, ep: str, png: str, id_refs: Sequence[str]
+) -> Optional[List[str]]:
+    """Narrow a physical first/anchor frame to its visible identity set."""
+    try:
+        storyboard = json.loads((root / "脚本" / ep / "storyboard.json").read_text(encoding="utf-8"))
+        identity = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    png_key = _coverage_png_key(png)
+    names = [
+        (str(row.get("id") or "").strip(), str(row.get("name") or "").strip())
+        for row in identity.get("characters") or [] if isinstance(row, dict)
+    ]
+    for clip in storyboard.get("clips") or []:
+        if not isinstance(clip, dict):
+            continue
+        frame_times: List[Tuple[str, float]] = []
+        first_key = _coverage_png_key(str(clip.get("firstframe_png") or ""))
+        if first_key:
+            frame_times.append((first_key, 0.0))
+        for anchor in (clip.get("continuity") or {}).get("anchors") or []:
+            if isinstance(anchor, dict):
+                try:
+                    at_sec = float(anchor.get("at_sec"))
+                except (TypeError, ValueError):
+                    continue
+                anchor_key = _coverage_png_key(str(anchor.get("anchor_png") or ""))
+                if anchor_key:
+                    frame_times.append((anchor_key, at_sec))
+        for frame_key, at_sec in frame_times:
+            if frame_key != png_key:
+                continue
+            parsed = []
+            for shot in clip.get("shots") or []:
+                if not isinstance(shot, dict):
+                    continue
+                timing = re.match(r"\s*(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s?\s*$", str(shot.get("t") or ""), re.I)
+                if timing:
+                    parsed.append((float(timing.group(1)), float(timing.group(2)), shot))
+            selected = next((row for row in parsed if abs(row[0] - at_sec) <= 1e-4), None)
+            selected = selected or next((row for row in parsed if row[0] <= at_sec < row[1]), None)
+            if not selected:
+                return None
+            shot = selected[2]
+            desc = str(shot.get("desc") or "")
+            lens = str(shot.get("lens") or "")
+            focus_ids = [cid for cid, name in names if cid and name and name in desc]
+            if (
+                not focus_ids
+                and re.search(r"insert|ECU|物件|特写", lens, re.I)
+                and re.search(r"不出现[^；。]{0,8}人脸|无人物|无人|空镜", desc)
+            ):
+                return []
+            if (
+                not focus_ids
+                and re.search(r"insert|ECU|局部|特写", lens, re.I)
+                and re.search(r"掌心|手指|手背|手腕|脚|鞋|桶|扁担|道具|物件|伤口", desc)
+            ):
+                return ["__STORYBOARD_FACE_EXEMPT_DETAIL__"]
+            if not (
+                len(focus_ids) == 1
+                and re.search(r"CU|ECU|特写|近景", lens, re.I)
+                and re.search(r"应下|反应|垂眼|点头|呼气|抿唇|沉默", desc)
+            ):
+                return None
+            return [ref for ref in id_refs if normalize_identity_ref(ref).split("/", 1)[0] == focus_ids[0]]
+    return None
+
+
 def _declares_no_tail_frame(body: str) -> bool:
     text = str(body or "")
     return bool(
@@ -2162,6 +2232,19 @@ def lint_prompts(root: Path, ep: str) -> Dict[str, Any]:
     for blk in blocks:
         res["shots_linted"] += 1
         for manifest in character_shot_manifests(blk):
+            focus_refs = _storyboard_anchor_focus_refs(
+                root, ep, str(manifest.get("png") or ""), manifest.get("identity_refs") or [],
+            )
+            if focus_refs is not None:
+                detail_insert = "__STORYBOARD_FACE_EXEMPT_DETAIL__" in focus_refs
+                if detail_insert:
+                    focus_refs = []
+                manifest["identity_refs"] = sorted(set(focus_refs))
+                if not focus_refs:
+                    manifest["face_coverage_required"] = False
+                    manifest["face_check_policy"] = (
+                        "storyboard_detail_insert" if detail_insert else "storyboard_faceless_insert"
+                    )
             res["character_shots"].append(manifest)
         res["findings"].extend(lint_shot_block(blk, valid_ids, registry_forms, asset_index,
                                                form_ref_counts, persistent_subject, ep_num))
@@ -3735,6 +3818,13 @@ def _resolve_existing_character_png(root: Path, ep: str, rec: Mapping[str, Any])
     for cand in candidates:
         if cand.exists() and cand.is_file():
             return _episode_rel_path(root, ep, cand)
+
+    # An explicit physical target (for example ``Clip_03_a1.png``) that has not
+    # landed yet is pending.  Falling back by shot key here can accidentally
+    # substitute the already-landed first frame from the same Clip and demand
+    # face coverage on a deliberately faceless insert.
+    if png:
+        return None
 
     shot = str(rec.get("shot") or "")
     if not shot:

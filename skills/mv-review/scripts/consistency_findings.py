@@ -222,6 +222,122 @@ def shot_variety(findings: list[dict[str, Any]], root: str) -> None:
         findings.append(finding("info", "shot_variety", "shot_variety_clean", "视觉多样性事前机检无重复/单调项。", rel))
 
 
+def craft_audit(findings: list[dict[str, Any]], root: str) -> None:
+    """传统 MV 手法机检（advisory）——副歌升级/动静对比/hook 上脸/冷开场/关键镜候选/bridge 换气。"""
+    if not has_clip_plan(root):
+        return
+    rel = "生产数据/craft_audit/craft_audit.json"
+    report = load_json(os.path.join(root, rel))
+    if not isinstance(report, dict):
+        findings.append(finding("info", "craft", "craft_audit_missing",
+                                "未跑传统手法机检（craft_audit）；出图前建议补跑。", rel))
+        return
+    summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+    warn = int(summary.get("warn") or 0)
+    if warn:
+        codes = sorted({str(f.get("code")) for f in (report.get("findings") or [])
+                        if f.get("severity") == "warn"})
+        findings.append(finding("warn", "craft", "craft_audit_warn",
+                                f"传统手法 advisory={warn}（{'/'.join(codes) or 'n/a'}），回 mv-plan 调结构。",
+                                rel, "craft_audit"))
+    else:
+        findings.append(finding("info", "craft", "craft_audit_clean", "传统手法机检无结构律违反项。", rel))
+
+
+def drift_risk(findings: list[dict[str, Any]], root: str) -> None:
+    """出图前漂移风险预测（advisory）——high 风险 clip 出图前应挂参考锚并优先打样。"""
+    if not has_clip_plan(root):
+        return
+    rel = "生产数据/drift_risk/drift_risk.json"
+    report = load_json(os.path.join(root, rel))
+    if not isinstance(report, dict):
+        findings.append(finding("info", "drift_risk", "drift_risk_missing",
+                                "未跑出图前漂移风险预测（drift_risk）；出图前建议补跑。", rel))
+        return
+    summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+    high = int(summary.get("high") or 0)
+    measured = int(summary.get("measured_backfilled") or 0)
+    if high:
+        findings.append(finding("warn", "drift_risk", "drift_risk_high",
+                                f"漂移风险 high={high}（实测回灌 {measured}），出图前给这些 clip 挂定妆/表情/场景参考。",
+                                rel, "drift_risk"))
+    else:
+        findings.append(finding("info", "drift_risk", "drift_risk_clean", "漂移风险预测无 high 风险 clip。", rel))
+
+
+# ── fail-closed 覆盖账本：现实验证器 适用 × 真跑过 ─────────────────────────────
+# 治「跑了数据却没真执行一致性」：脸检(insightface)/构图 dHash(Pillow)/视频脸检 都是
+# 后端缺失时优雅降级成 advisory 的现实验证器——真实出片机器上依赖常常没装，最强的
+# 检测器全程休眠，报告却看着「跑过 QC」。此账本显式声明每个验证器是否适用（项目登记了
+# 要查的数据）+ 是否真跑过（后端真出活），适用但休眠 → warn 现形（正式项目的 image 脸检
+# 休眠已由 gate 的 precision!=full 硬拦，本层不重复造 block）。
+
+def _verifier_rows(root: str) -> list[dict[str, Any]]:
+    """逐验证器状态（纯函数化 I/O 汇总）：{key,label,applicable,ran_fresh,dormant,evidence}。"""
+    image_qc_report = load_json(os.path.join(root, "生产数据/image_qc/image_qc.json"), {}) or {}
+    video_qc_report = load_json(os.path.join(root, "生产数据/video_qc/video_qc.json"), {}) or {}
+    registry = load_json(os.path.join(root, "设定/identity_registry.json"))
+    has_plan = has_clip_plan(root)
+    has_identity = isinstance(registry, dict) and bool(registry.get("lead_id"))
+    has_image_qc = bool(image_qc_report)
+    has_video_qc = bool(video_qc_report)
+
+    face = ((image_qc_report.get("checks") or {}).get("face") or {})
+    palette = ((image_qc_report.get("checks") or {}).get("palette") or {})
+    variety = image_qc_report.get("shot_variety") or {}
+    v_summary = video_qc_report.get("summary") or {}
+
+    rows = [
+        {"key": "image_face", "label": "出图主角脸检(insightface)",
+         "applicable": has_plan and has_identity and has_image_qc,
+         "ran_fresh": face.get("mode") == "insightface" and bool(face.get("available")),
+         "evidence": f"mode={face.get('mode') or 'none'}",
+         "producer": "mv-image/scripts/image_qc.py"},
+        {"key": "image_palette", "label": "主色锚 palette(Pillow)",
+         "applicable": has_image_qc and bool(palette),
+         "ran_fresh": bool(palette.get("available")),
+         "evidence": f"available={palette.get('available')}",
+         "producer": "mv-image/scripts/image_qc.py"},
+        {"key": "image_composition_dhash", "label": "出图构图重复 dHash(Pillow)",
+         "applicable": has_image_qc and bool(variety),
+         "ran_fresh": bool(variety.get("available")),
+         "evidence": f"available={variety.get('available')}",
+         "producer": "mv-image/scripts/image_qc.py"},
+        {"key": "video_face", "label": "视频脸身份漂移(insightface)",
+         "applicable": has_video_qc and has_identity,
+         "ran_fresh": v_summary.get("face_identity_mode") == "insightface",
+         "evidence": f"face_identity_mode={v_summary.get('face_identity_mode') or 'none'}",
+         "producer": "mv-video/scripts/video_qc.py"},
+        {"key": "video_frame_perception", "label": "视频首中尾抽帧感知(ffmpeg+Pillow)",
+         "applicable": has_video_qc,
+         "ran_fresh": int(v_summary.get("frame_samples") or 0) > 0,
+         "evidence": f"frame_samples={v_summary.get('frame_samples') or 0}",
+         "producer": "mv-video/scripts/video_qc.py"},
+    ]
+    for row in rows:
+        row["dormant"] = bool(row["applicable"] and not row["ran_fresh"])
+    return rows
+
+
+def verifier_coverage(findings: list[dict[str, Any]], root: str) -> None:
+    """现实验证器覆盖：适用但休眠（后端缺失/静默降级）→ warn，全部在岗 → info。"""
+    rows = _verifier_rows(root)
+    applicable = [r for r in rows if r["applicable"]]
+    if not applicable:
+        return
+    dormant = [r for r in applicable if r["dormant"]]
+    detail = {"rows": rows}
+    if dormant:
+        labels = "、".join(f"{r['label']}（{r['evidence']}）" for r in dormant)
+        findings.append(finding("warn", "verifier_coverage", "reality_verifier_dormant",
+                                f"{len(dormant)}/{len(applicable)} 个现实验证器适用但休眠：{labels}——"
+                                "报告看着「跑过 QC」但最强检测器没真出活；补依赖重跑，或具名降级放行。",
+                                "", "verifier_coverage", detail))
+    else:
+        findings.append(finding("info", "verifier_coverage", "reality_verifiers_active",
+                                f"{len(applicable)} 个适用的现实验证器全部真跑过。", "", "verifier_coverage", detail))
+
+
 REDRAW_RATE_WARN = 0.35        # 单曲工位默认重画率预警线
 TAKES_PER_CLIP_WARN = 3.0      # 平均每 clip 抽 take 数超过此值 → 出视频侧烧钱失控预警
 
@@ -293,7 +409,10 @@ def build_report(root: str) -> dict[str, Any]:
     findings: list[dict[str, Any]] = []
     registry_checks(findings, root)
     shot_variety(findings, root)
+    craft_audit(findings, root)
+    drift_risk(findings, root)
     image_qc(findings, root)
+    verifier_coverage(findings, root)
     report_summary(findings, root, "生产数据/video_inherit_contract/inherit_contract.json",
                    "video_handoff", "inherit_contract")
     video_qc_details(findings, root)
@@ -326,6 +445,8 @@ def build_report(root: str) -> dict[str, Any]:
             "分镜/reference_plan.json",
             "设定/reference_requirements.json",
             "生产数据/shot_variety/shot_variety.json",
+            "生产数据/craft_audit/craft_audit.json",
+            "生产数据/drift_risk/drift_risk.json",
             "生产数据/image_qc/image_qc.json",
             "生产数据/video_inherit_contract/inherit_contract.json",
             "生产数据/video_qc/video_qc.json",

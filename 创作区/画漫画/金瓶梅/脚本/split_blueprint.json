@@ -1,0 +1,135 @@
+{
+  "kind": "comic_split_blueprint",
+  "version": 2,
+  "status": "confirmed",
+  "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。第1话完整覆盖词话本第一回，保留『帘下怨毒』的回末钩子。",
+  "coverage_scope": {
+    "planned_through": "第1章",
+    "reason": "滚动细化：本批只正式规划第1话（第一回）；第2-5话的编辑意图见 开发包/season_arc.json，各话开工前再补 confirmed 合同进本蓝图。"
+  },
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "working_title": "景阳冈与紫石街",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_CH001",
+          "source_path": "源本/金瓶梅.txt",
+          "start": "第1章",
+          "end": "第1章"
+        }
+      ],
+      "reader_promise": "看一个被预言了结局的家庭如何搭好毁灭的舞台：打虎英雄、懦弱兄长与被钱权处置过的女人住进同一屋檐。",
+      "core_conflict": "金莲要在被处置过的人生里抓住唯一像出路的男人，武松要守住兄弟纲常；同檐之下，欲望与纲常必有一断。",
+      "turning_point": "雪夜火盆边金莲递酒撩拨，武松掷杯斥嫂——她唯一的幻想当面碎裂，怨由此生。",
+      "payoff": "金莲反诬武松调戏，武大不敢问备细；武松搬离，兄弟被离间成寇仇，帘子下只剩她和她的怨毒。",
+      "ending_mode": "cliffhanger",
+      "budget": {
+        "unit": "panels",
+        "target": 44,
+        "soft_range": [
+          40,
+          48
+        ]
+      },
+      "entry_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "政和年间山东清河：武松因打人流落柴进庄上思兄归乡；武大携金莲迁居清河县卖炊饼；张大户已死，金莲的婚姻是他生前赌气的处置。"
+          },
+          "CHAR_WU_SONG": {
+            "story_state": "逃难在外的清河壮士，思念兄长，尚无功名。",
+            "visual_state": "布衣行客，随身梢棒，风尘仆仆。"
+          },
+          "CHAR_PAN_JINLIAN": {
+            "story_state": "被张大户收用又倒赔房奁嫁给武大的处置品，心怀怨望，帘下度日。",
+            "visual_state": "布裙荆钗仍难掩姿色，帘下嗑瓜子露金莲。"
+          },
+          "CHAR_WU_DA": {
+            "story_state": "本分懦弱的炊饼贩，被街坊呼作三寸丁谷树皮，携女迁居清河避是非。",
+            "visual_state": "矮小佝偻，炊饼担不离肩。"
+          },
+          "CHAR_WANG_PO": {
+            "story_state": "紫石街隔壁茶坊主，人情练达的闲人，与武家尚只是邻里。"
+          }
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "STORY_CHAPTER",
+          "field": "state",
+          "from": "政和年间山东清河：武松因打人流落柴进庄上思兄归乡；武大携金莲迁居清河县卖炊饼；张大户已死，金莲的婚姻是他生前赌气的处置。",
+          "to": "武松打虎封都头又因嫂搬离；武大被禁言不敢寻弟；金莲独守帘下，怨毒与欲望同时无人看管。",
+          "panel_id": "P042",
+          "reason": "雪夜撩斥与反诬事件公开化了叔嫂对立，兄弟纽带被切断。"
+        },
+        {
+          "entity_id": "CHAR_WU_SONG",
+          "field": "story_state",
+          "from": "逃难在外的清河壮士，思念兄长，尚无功名。",
+          "to": "景阳冈打虎封巡捕都头；因嫂撩拨反诬与兄长分居，迁回县前客店，兄弟情被离间。",
+          "panel_id": "P042",
+          "reason": "打虎受赏封官（P010）；雪夜斥嫂后被反诬，携铺盖搬离武大家（P042）。"
+        },
+        {
+          "entity_id": "CHAR_WU_SONG",
+          "field": "visual_state",
+          "from": "布衣行客，随身梢棒，风尘仆仆。",
+          "to": "巡捕都头公服，居县前客店；梢棒已折弃于景阳冈。",
+          "panel_id": "P011",
+          "reason": "知县赐官后换都头装束；梢棒在打虎中折断。"
+        },
+        {
+          "entity_id": "CHAR_PAN_JINLIAN",
+          "field": "story_state",
+          "from": "被张大户收用又倒赔房奁嫁给武大的处置品，心怀怨望，帘下度日。",
+          "to": "撩拨武松被当面斥回，反诬得逞赶走武松；幻想破灭后独守帘下，怨毒对准整个武家。",
+          "panel_id": "P044",
+          "reason": "雪夜掷杯斥嫂（P036）碎其幻想；反诬（P039）离间兄弟得逞，但她要的人彻底走了。"
+        },
+        {
+          "entity_id": "CHAR_WU_DA",
+          "field": "story_state",
+          "from": "本分懦弱的炊饼贩，被街坊呼作三寸丁谷树皮，携女迁居清河避是非。",
+          "to": "亲弟被妻赶走却不敢问备细，被妻子严令不许寻弟；家庭内外两头孤立。",
+          "panel_id": "P043",
+          "reason": "金莲哭诉反诬后武大不敢再问；千叮万嘱禁其去县前寻武松。"
+        },
+        {
+          "entity_id": "CHAR_WANG_PO",
+          "field": "story_state",
+          "from": "紫石街隔壁茶坊主，人情练达的闲人，与武家尚只是邻里。",
+          "to": "已以『帮忙安排酒菜』进入武家人情网，摸清了这家人的底细与缝隙。",
+          "panel_id": "P022",
+          "reason": "武大央王婆安排叔嫂接风酒菜，邻里之便首次落进武家门内。"
+        }
+      ],
+      "exit_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "武松打虎封都头又因嫂搬离；武大被禁言不敢寻弟；金莲独守帘下，怨毒与欲望同时无人看管。"
+          },
+          "CHAR_WU_SONG": {
+            "story_state": "景阳冈打虎封巡捕都头；因嫂撩拨反诬与兄长分居，迁回县前客店，兄弟情被离间。",
+            "visual_state": "巡捕都头公服，居县前客店；梢棒已折弃于景阳冈。"
+          },
+          "CHAR_PAN_JINLIAN": {
+            "story_state": "撩拨武松被当面斥回，反诬得逞赶走武松；幻想破灭后独守帘下，怨毒对准整个武家。",
+            "visual_state": "帘下常服，眉眼间怨毒渐显。"
+          },
+          "CHAR_WU_DA": {
+            "story_state": "亲弟被妻赶走却不敢问备细，被妻子严令不许寻弟；家庭内外两头孤立。",
+            "visual_state": "矮小佝偻，炊饼担不离肩。"
+          },
+          "CHAR_WANG_PO": {
+            "story_state": "已以『帮忙安排酒菜』进入武家人情网，摸清了这家人的底细与缝隙。"
+          }
+        }
+      },
+      "status": "confirmed"
+    }
+  ]
+}

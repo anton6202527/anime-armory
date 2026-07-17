@@ -30,16 +30,18 @@ try:
     from power_system_defs import (
         GENRE_KEYWORDS, GENRE_MIN_HITS, POWER_GENRES, MOTIF_KEYWORDS, MOTIF_MIN_HITS,
         ATTRS_MAX, REGRESS_EXEMPT_KEYWORDS, POWER_SYSTEM_REGISTRY_KIND,
+        EXTRA_MONOTONIC_NUMERIC,
         genre_needs_power_check,
     )
 except Exception:  # 退化兜底（独立跑/测试桩）
     GENRE_KEYWORDS = (("系统流", ("系统", "面板", "等级", "升级")),)
     GENRE_MIN_HITS = 2
-    POWER_GENRES = ("系统流", "修仙", "玄幻", "战神")
+    POWER_GENRES = ("系统流", "修仙", "玄幻", "战神", "游戏", "无限流", "末世", "西幻")
     MOTIF_KEYWORDS = (("system_panel", ("系统面板", "面板", "等级")), ("level_up", ("升级", "突破")))
     MOTIF_MIN_HITS = 1
     ATTRS_MAX = 7
-    REGRESS_EXEMPT_KEYWORDS = ("跌境", "废修", "封印", "散功")
+    REGRESS_EXEMPT_KEYWORDS = ("跌境", "废修", "封印", "散功", "重生", "转世")
+    EXTRA_MONOTONIC_NUMERIC = ("年龄", "age", "修为", "修为值", "境界值")
     POWER_SYSTEM_REGISTRY_KIND = "novel_power_system_registry"
 
     def genre_needs_power_check(genre):  # type: ignore
@@ -168,6 +170,23 @@ def validate_progression(progression, tiers, *, demote_severity="阻断级"):
                                          f"战力倒退：第{ch}章 {pw:g} < 之前 {last_power:g}",
                                          "战力跨章不应无理由变小；确有重伤/封印请写 regress_reason"))
                 last_power = pw if (last_power is None or pw >= last_power or exempt) else last_power
+    # 通用单调数值字段（年龄/修为等）：快照带该字段即逐角色查倒退——年龄倒流是长篇高发
+    # 数值穿帮，此前完全无机检；重生/转世/时光回溯题材在快照写 regress_reason 即豁免。
+    for field in EXTRA_MONOTONIC_NUMERIC:
+        for char, snaps in by_char.items():
+            snaps_sorted = sorted(snaps, key=lambda s: _num(s.get("chapter")) or 0)
+            last_val = None
+            for snap in snaps_sorted:
+                val = _num(snap.get(field))
+                if val is None:
+                    continue
+                ch = snap.get("chapter")
+                exempt = any(k in str(snap.get("regress_reason") or "") for k in REGRESS_EXEMPT_KEYWORDS)
+                if last_val is not None and val < last_val and not exempt:
+                    alerts.append(_alert("power_numeric_regress", char, demote_severity, ch,
+                                         f"数值倒退：第{ch}章 {field}={val:g} < 之前 {last_val:g}",
+                                         f"{field} 跨章不应无理由变小；重生/回溯/跌境等剧情请在快照写 regress_reason"))
+                last_val = val if (last_val is None or val >= last_val or exempt) else last_val
     return alerts
 
 

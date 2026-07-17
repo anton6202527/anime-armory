@@ -1,0 +1,51 @@
+{
+  "backend": "Dreamina",
+  "backend_kind": "image",
+  "capabilities": {
+    "auto_runnable": true,
+    "channel": "Dreamina/即梦官方 CLI",
+    "exact_model_evidence_required": false,
+    "exact_model_id": "",
+    "max_reference_images": null,
+    "model": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)",
+    "model_precision": "provider_model",
+    "negative_strategy": "inline_constraints",
+    "official": true,
+    "output": "png_file",
+    "persistent_subject": false,
+    "prompt_language": "zh",
+    "prompt_profile": "seedream_concise_natural_language",
+    "prompt_request_fields": [
+      "aspect_ratio",
+      "size",
+      "quality",
+      "output_format",
+      "model_version",
+      "resolution_type"
+    ],
+    "reference_mode": "official_cli_references",
+    "supports_edit": true,
+    "supports_high_fidelity_reference": true,
+    "supports_image_reference": true,
+    "supports_mask": false,
+    "supports_text2image": true
+  },
+  "capability_evidence_id": "1a2ca79056ddabd9",
+  "channel": "Dreamina/即梦官方 CLI",
+  "checked_at": "2026-07-17",
+  "command": "non_paid_probe",
+  "kind": "n2d_backend_smoke_evidence",
+  "note": "确认即梦官方 CLI 已登录·会员态有效（dreamina 控制台或一次 dry-run）",
+  "output_asset": "",
+  "profile_spec": {
+    "description": "reference/frame handoff input path",
+    "required_capabilities": [
+      "supports_image_reference"
+    ]
+  },
+  "proof_type": "probe_inconclusive",
+  "smoke_profile": "frame_control",
+  "source": "adapter_probe",
+  "status": "skipped",
+  "version": 1
+}

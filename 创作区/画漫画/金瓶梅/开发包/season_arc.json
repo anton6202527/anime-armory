@@ -1,0 +1,67 @@
+{
+  "kind": "comic_season_arc",
+  "version": 2,
+  "status": "confirmed",
+  "arc_name": "紫石街风月·第一季（武松—金莲—西门庆三角的立与破）",
+  "scope": "前5话编辑规划；后续在首话数据与编辑签核后滚动细化",
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "working_title": "景阳冈与紫石街",
+      "source_scope": "第1章（第一回）全回",
+      "core_conflict": "金莲要在被钱权处置过的人生里抓住唯一像出路的男人，武松要守住兄弟纲常，两人在同一屋檐下必有一断。",
+      "ending_mode": "cliffhanger",
+      "ending_intent": "武松搬离、武大被禁言，家门只剩一道无人看守的帘子——停在帘下那双怨毒的眼睛上，驱动追读。",
+      "promise_refs": ["PRM_001", "PRM_002", "PRM_003"],
+      "soft_panel_range": [40, 48]
+    },
+    {
+      "chapter": "第2话",
+      "working_title": "帘下",
+      "source_scope": "第2章（第二回）全回",
+      "core_conflict": "叉竿误中西门庆，欲望与生意在王婆茶坊里一拍即合；金莲以为遇到的是命，其实是价。",
+      "ending_mode": "reveal",
+      "ending_intent": "揭示王婆开出的『说风情』价码，把爱欲故事翻面成交易故事。",
+      "promise_refs": ["PRM_001", "PRM_003"],
+      "soft_panel_range": [38, 46]
+    },
+    {
+      "chapter": "第3话",
+      "working_title": "十件挨光计",
+      "source_scope": "第3章（第三回）全回",
+      "core_conflict": "王婆的十件挨光计步步推进，每一步都留给金莲一个可以喊停的口，她一次也没有喊。",
+      "ending_mode": "decision",
+      "ending_intent": "落在金莲不喊停的那一个沉默瞬间——她的选择，也是她的罪与她的可怜。",
+      "promise_refs": ["PRM_001", "PRM_003"],
+      "soft_panel_range": [40, 48]
+    },
+    {
+      "chapter": "第4话",
+      "working_title": "郓哥闹茶肆",
+      "source_scope": "第4章（第四回）全回",
+      "core_conflict": "偷情成了街知巷闻的秘密，郓哥为一篮梨捅破窗户纸，武大第一次也是最后一次鼓起勇气。",
+      "ending_mode": "cliffhanger",
+      "ending_intent": "捉奸在即，停在武大推门前的那口气上。",
+      "promise_refs": ["PRM_001"],
+      "soft_panel_range": [38, 46]
+    },
+    {
+      "chapter": "第5话",
+      "working_title": "鸩",
+      "source_scope": "第5章（第五回）全回",
+      "core_conflict": "捉奸失败被踢伤的武大只剩一句『我兄弟回来』的威胁，这句威胁让三个人决定他必须死。",
+      "ending_mode": "cliffhanger",
+      "ending_intent": "武大咽气、金莲摔盏，停在『武松何时归来』的倒计时上，接入复仇线。",
+      "promise_refs": ["PRM_001", "PRM_002"],
+      "soft_panel_range": [40, 48]
+    }
+  ],
+  "human_review": {
+    "required": true,
+    "state": "approved",
+    "reviewer": "Claude制作代理（用户授权）",
+    "role": "制作代理",
+    "time": "2026-07-17T12:00:00+08:00",
+    "evidence": "出品人 lalala 2026-07-17 指令；设定库/approval_delegation.json。前5话按词话本第一至五回一话一回切分，闭环各自成立；如出品人对切法有异议可随时回改。"
+  }
+}

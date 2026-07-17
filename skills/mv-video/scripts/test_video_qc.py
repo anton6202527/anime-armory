@@ -56,6 +56,64 @@ class VideoQcPureTest(unittest.TestCase):
         self.assertIn("large_color_delta_breaks_continuous_seam", rows[0]["risk"])
         self.assertNotIn("same_scene_hard_cut_color_jump", rows[0]["risk"])
 
+    def test_signed_discontinuity_exception_suppresses_same_scene_jump(self):
+        prev = {"clip_id": "Clip_001", "shot_design": {"location_id": "竹林"}}
+        cur = {"clip_id": "Clip_002", "shot_design": {"location_id": "竹林"}}
+        clip_rows = [
+            {"clip_id": "Clip_001", "verdict": "ok", "probe": {"duration": 4.0},
+             "frame_samples": [{"label": "end", "ok": True,
+                                "stats": {"available": True, "mean_rgb": [10, 10, 10], "perceptual_hash": None}}],
+             "visual_adherence": {}},
+            {"clip_id": "Clip_002", "verdict": "ok", "probe": {"duration": 4.0},
+             "frame_samples": [{"label": "start", "ok": True,
+                                "stats": {"available": True, "mean_rgb": [200, 200, 200], "perceptual_hash": None}}],
+             "visual_adherence": {}},
+        ]
+        exc = {("Clip_001", "Clip_002"): {"from": "Clip_001", "to": "Clip_002",
+                                          "reviewer": "Wesley", "reason": "副歌切黑白闪回"}}
+        rows = video_qc.seam_rows([prev, cur], clip_rows, exc)
+        self.assertNotIn("same_scene_hard_cut_color_jump", rows[0]["risk"])
+        self.assertEqual(rows[0]["intentional_discontinuity"]["reviewer"], "Wesley")
+        # 未签署的接缝照常报
+        rows = video_qc.seam_rows([prev, cur], clip_rows, {})
+        self.assertIn("same_scene_hard_cut_color_jump", rows[0]["risk"])
+
+    def test_discontinuity_exception_conflicts_with_continuous_seam(self):
+        prev = {"clip_id": "Clip_001", "shot_design": {"location_id": "竹林"},
+                "seam_contract": {"continuity_required": True}}
+        cur = {"clip_id": "Clip_002", "shot_design": {"location_id": "竹林"}}
+        clip_rows = [
+            {"clip_id": "Clip_001", "verdict": "ok", "probe": {"duration": 4.0},
+             "frame_samples": [{"label": "end", "ok": True,
+                                "stats": {"available": True, "mean_rgb": [10, 10, 10], "perceptual_hash": None}}],
+             "visual_adherence": {}},
+            {"clip_id": "Clip_002", "verdict": "ok", "probe": {"duration": 4.0},
+             "frame_samples": [{"label": "start", "ok": True,
+                                "stats": {"available": True, "mean_rgb": [200, 200, 200], "perceptual_hash": None}}],
+             "visual_adherence": {}},
+        ]
+        exc = {("Clip_001", "Clip_002"): {"from": "Clip_001", "to": "Clip_002",
+                                          "reviewer": "Wesley", "reason": "想切"}}
+        rows = video_qc.seam_rows([prev, cur], clip_rows, exc)
+        # 连续接缝合同不被例外豁免，且提示矛盾
+        self.assertIn("large_color_delta_breaks_continuous_seam", rows[0]["risk"])
+        self.assertIn("intentional_exception_conflicts_continuous_seam", rows[0]["risk"])
+
+    def test_load_discontinuity_exceptions_requires_signature(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "制片", "intentional_discontinuity.json")
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"entries": [
+                    {"from": "Clip_01", "to": "Clip_02", "reviewer": "Wesley", "reason": "刻意跳变"},
+                    {"from": "Clip_03", "to": "Clip_04"},  # 无签名 → 不生效
+                    {"from": "Clip_05", "to": "Clip_06", "reviewer": "  ", "reason": "x"},  # 空签名 → 不生效
+                ]}, f, ensure_ascii=False)
+            exceptions = video_qc.load_discontinuity_exceptions(tmp)
+            self.assertIn(("Clip_01", "Clip_02"), exceptions)
+            self.assertNotIn(("Clip_03", "Clip_04"), exceptions)
+            self.assertNotIn(("Clip_05", "Clip_06"), exceptions)
+
     def test_face_drift_threshold_calibrates_from_image_qc(self):
         with tempfile.TemporaryDirectory() as tmp:
             # 无报告 → 经验回退

@@ -36,6 +36,25 @@ def test_filter_wiki_none_as_of_passthrough():
     assert cl.filter_wiki_as_of(wiki, None) is wiki  # 非数 → 原样
 
 
+def test_drafting_context_resolves_renwu_md_character_card(tmp_path):
+    # 派生线（continue/expand/condense）落的是 设定/人物.md 而非 角色卡.md——
+    # 写死文件名会让派生线写章上下文角色卡恒为空（B2 消费侧漏网点，2026-07 修）。
+    root = tmp_path
+    (root / "设定").mkdir()
+    (root / "设定" / "人物.md").write_text("## 王敦\n性格：狂狷", encoding="utf-8")
+    ctx = cl.get_drafting_context(str(root), 1)
+    assert "王敦" in ctx["character_card"]
+
+
+def test_drafting_context_prefers_canonical_card(tmp_path):
+    root = tmp_path
+    (root / "设定").mkdir()
+    (root / "设定" / "角色卡.md").write_text("## 正主", encoding="utf-8")
+    (root / "设定" / "人物.md").write_text("## 备胎", encoding="utf-8")
+    ctx = cl.get_drafting_context(str(root), 1)
+    assert "正主" in ctx["character_card"]
+
+
 def test_load_power_system_as_of_filters_future(tmp_path):
     import json
     root = tmp_path

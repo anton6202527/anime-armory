@@ -335,6 +335,77 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("急诊抢救", text)
             self.assertIn("不要写成无人分诊直接开刀", text)
 
+    def test_scene_usage_is_injected_for_chapter(self):
+        # research_scene_usage.json 的 per-scene dramatic_use/forbidden_use 必须到达写章包——
+        # 此前它产出后只被状态/存在性检查读过，从未注入写作端（数据流断点，2026-07 修）。
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.makedirs(os.path.join(tmp, "资料"), exist_ok=True)
+            usage = {
+                "schema_version": 1,
+                "kind": "novel_research_scene_usage",
+                "usages": [
+                    {"pack_topic": "急诊抢救", "claim_id": "FACT-001",
+                     "claim": "先评估生命体征再处置", "chapter": 3,
+                     "scene_ids": ["S3-1"],
+                     "dramatic_use": "让主角在混乱中先探颈动脉，与家属的催促形成冲突",
+                     "forbidden_use": "不得写成跳过分诊直接开刀",
+                     "uncertainty": ""},
+                    {"pack_topic": "急诊抢救", "claim_id": "FACT-002",
+                     "claim": "别章事实", "chapter": 9, "scene_ids": [],
+                     "dramatic_use": "无关本章", "forbidden_use": ""},
+                ],
+            }
+            with open(os.path.join(tmp, "资料", "research_scene_usage.json"), "w", encoding="utf-8") as f:
+                json.dump(usage, f, ensure_ascii=False)
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("本章专业事实用法（scene usage·自动命中）", text)
+            self.assertIn("先探颈动脉", text)
+            self.assertIn("不得写成跳过分诊直接开刀", text)
+            self.assertIn("`资料/research_scene_usage.json`", text)
+            self.assertNotIn("别章事实", text)   # 非本章条目不注入
+
+    def test_ai_tic_ledger_is_injected_from_mechanical_findings(self):
+        # 本书 AI 腔账单：既往 mechanical_findings 的机械文风惯犯必须回灌下一章任务包——
+        # 检测在下游（审稿轮）而习惯在上游（写作轮），跨项目实证这类问题降 polish 后没人修。
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.makedirs(os.path.join(tmp, "审稿"), exist_ok=True)
+            findings = {
+                "schema_version": 1, "kind": "novel_mechanical_findings",
+                "findings": [
+                    {"chapter": 1, "severity": "🟢", "dim": "AI腔",
+                     "msg": "排比三连段落偏多（6 段疑似），AI 习惯性排比——精简至必要修辞", "evidence": ""},
+                    {"chapter": 2, "severity": "🟢", "dim": "AI腔",
+                     "msg": "排比三连段落偏多（4 段疑似），AI 习惯性排比——精简至必要修辞", "evidence": ""},
+                    {"chapter": 2, "severity": "🟢", "dim": "重复",
+                     "msg": "破折号「——」过多（5.5/千字），AI 习惯用破折号代替逗号", "evidence": ""},
+                    {"chapter": 1, "severity": "🟡", "dim": "字数",
+                     "msg": "字数 800 低于下限", "evidence": ""},   # 非 AI 腔项不入账单
+                ],
+            }
+            with open(os.path.join(tmp, "审稿", "mechanical_findings.json"), "w", encoding="utf-8") as f:
+                json.dump(findings, f, ensure_ascii=False)
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("本书 AI 腔账单", text)
+            self.assertIn("排比三连", text)
+            self.assertIn("破折号", text)
+            self.assertNotIn("低于下限", text.split("本书 AI 腔账单")[1][:600])  # 非 AI 腔项不进账单
+
     def test_observation_packet_is_injected_for_chapter(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)

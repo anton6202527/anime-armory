@@ -1030,8 +1030,99 @@ def shot_character_map(root: str, ep: str) -> Dict[str, List[str]]:
                     chars.append(ref)
         if chars:
             for png in target_pngs:
-                out[png] = chars
+                focus = storyboard_anchor_focus_assets(root, ep, png, chars)
+                if focus is None:
+                    out[png] = chars
+                elif focus:
+                    out[png] = focus
     return out
+
+
+def storyboard_anchor_focus_assets(
+    root: str, ep: str, png: str, section_chars: Sequence[str]
+) -> Optional[List[str]]:
+    """Return the single on-screen identity for a timed reaction anchor.
+
+    One prompt section can contain several edit beats and both dialogue
+    participants.  A physical ``_aN`` PNG at a reaction-CU boundary must not be
+    compared against the section-level primary from an earlier beat.
+    """
+    try:
+        storyboard = json.load(open(os.path.join(root, "脚本", ep, "storyboard.json"), encoding="utf-8"))
+        identity = json.load(open(os.path.join(root, "出图", "共享", "identity_registry.json"), encoding="utf-8"))
+    except Exception:
+        return None
+    png_key = episode_image_rel(str(png or ""), ep) or str(png or "")
+    asset_by_ref = identity_asset_map(root)
+    registered = registered_character_assets(root)
+    names: List[Tuple[str, str]] = []
+    for character in identity.get("characters") or []:
+        if isinstance(character, dict):
+            cid = str(character.get("id") or "").strip()
+            name = str(character.get("name") or "").strip()
+            if cid and name:
+                names.append((cid, name))
+    for clip in storyboard.get("clips") or []:
+        if not isinstance(clip, dict):
+            continue
+        frame_times: List[Tuple[str, float]] = []
+        first_key = episode_image_rel(str(clip.get("firstframe_png") or ""), ep)
+        if first_key:
+            frame_times.append((first_key, 0.0))
+        for anchor in (clip.get("continuity") or {}).get("anchors") or []:
+            if isinstance(anchor, dict):
+                anchor_key = episode_image_rel(str(anchor.get("anchor_png") or ""), ep)
+                try:
+                    anchor_at = float(anchor.get("at_sec"))
+                except (TypeError, ValueError):
+                    continue
+                if anchor_key:
+                    frame_times.append((anchor_key, anchor_at))
+        for frame_key, at_sec in frame_times:
+            if frame_key != png_key:
+                continue
+            selected = None
+            parsed = []
+            for shot in clip.get("shots") or []:
+                if not isinstance(shot, dict):
+                    continue
+                timing = re.match(r"\s*(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*s?\s*$", str(shot.get("t") or ""), re.I)
+                if timing:
+                    parsed.append((float(timing.group(1)), float(timing.group(2)), shot))
+            selected = next((row for row in parsed if abs(row[0] - at_sec) <= 1e-4), None)
+            selected = selected or next((row for row in parsed if row[0] <= at_sec < row[1]), None)
+            if not selected:
+                return None
+            shot = selected[2]
+            desc = str(shot.get("desc") or "")
+            lens = str(shot.get("lens") or "")
+            focus_ids = [cid for cid, name in names if name in desc]
+            if (
+                not focus_ids
+                and re.search(r"insert|ECU|物件|特写", lens, re.I)
+                and re.search(r"不出现[^；。]{0,8}人脸|无人物|无人|空镜", desc)
+            ):
+                return []
+            if (
+                not focus_ids
+                and re.search(r"insert|ECU|局部|特写", lens, re.I)
+                and re.search(r"掌心|手指|手背|手腕|脚|鞋|桶|扁担|道具|物件|伤口", desc)
+            ):
+                return []
+            if not (
+                len(focus_ids) == 1
+                and re.search(r"CU|ECU|特写|近景", lens, re.I)
+                and re.search(r"应下|反应|垂眼|点头|呼气|抿唇|沉默", desc)
+            ):
+                return None
+            focus_id = focus_ids[0]
+            candidates = [
+                asset for ref, asset in asset_by_ref.items()
+                if ref.split("/", 1)[0] == focus_id
+                and (not registered or asset in registered)
+            ]
+            return list(dict.fromkeys(candidates))
+    return None
 
 
 def section_clip_key(header: str) -> str:

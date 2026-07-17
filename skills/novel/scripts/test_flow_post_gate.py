@@ -104,6 +104,7 @@ class PostWriteTest(unittest.TestCase):
                 "reader_contract_sentry.py",
                 "reconcile_ledger.py",
                 "wiki_builder.py",
+                "tone_check.py",           # 情绪/张力实测回填（advisory·哨兵前跑，激活张力塌陷检测）
                 "logic_sentry.py",
                 "power_system.py",
                 "antagonist_scaling.py",  # 反派战力 scaling 自检（advisory）

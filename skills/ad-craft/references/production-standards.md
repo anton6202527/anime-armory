@@ -93,6 +93,16 @@
 
 多版位项目还必须写 `deliverable_placements`，例如 `master → YouTube:in_stream`、`reframe_9x16 → TikTok:auction_in_feed`。每个交付件只消费自己的版位约束；缺映射、未知版位或有版位无交付件均 block。这样不会让横版主片被竖版规则误挡，也允许明确的 sound-off OOH 版本在字幕/视觉信息完整时无音轨交付。
 
+### 竖版信息流安全区快照（2026-07 采集·会过期，release 证据仍以官方当期模板为准）
+
+设计首帧/字幕/CTA 排版时的起点参考；数值随平台 UI 改版漂移（如 2026-01 TikTok 新增播放列表按钮使右侧死区扩 ~20px），**不得**代替 `platform_safe_zone_evidence` 的当期官方模板证据：
+
+- 通用耐用规则（不易过期）：**80/60 规则**——关键文字/视觉放在画面中央 80% 宽 × 60% 高内；重要内容避开底部 25% 与右侧 15%。1080x1920 竖版的通用安全区约为居中 900x1400。
+- TikTok（9:16）：避开顶部 ~130px、底部 ~484px、右侧 ~140px、左侧 ~44px；**买量广告**底部还要给 "Shop Now/Learn More" 按钮加 ~50px（合计 ~370px+ 底边距）。
+- Instagram Reels：底部 ~25% 被 UI 遮挡（2025 末音频署名条又加高 ~50px）；Sponsored 标签 + Learn More 再吃 ~80px。
+- YouTube Shorts：底部 ~30% 遮挡（订阅按钮 2025 末加大 30%，左下死区更大）；广告位底部有 Skip Ad / Visit Site。
+- 三平台 2026 起默认开启 AI 自动字幕——成片若烧录字幕，位置要与平台自动字幕区错开，避免双字幕叠印（`rendered_text_qc` 管烧录字幕可读性，版位遮挡靠本快照 + 证据模板）。
+
 ## 发行辖区
 
 中国大陆由当前广告法机检和 claim 依据共同闭合。非大陆发行在 `legal_reviews[]` 为每个 `release_regions` 写：
