@@ -127,6 +127,25 @@ def test_repeated_readiness_check_is_idempotent(tmp_path: Path) -> None:
     assert registry["assets"]["CHAR_A"]["model_pack"] == first
 
 
+def test_shared_report_does_not_churn_when_only_created_at_changes(tmp_path: Path) -> None:
+    path = tmp_path / "生产数据" / "comic_model_pack_report.json"
+    first = {
+        "kind": "comic_model_pack_report",
+        "version": 1,
+        "created_at": "2026-07-17T10:00:00+00:00",
+        "characters": [{"character_id": "CHAR_A", "readiness": "ready"}],
+        "summary": {"ready": 1},
+    }
+    model_pack.write_stable_report(path, first)
+    first_bytes = path.read_bytes()
+    second = {**first, "created_at": "2026-07-17T11:00:00+00:00"}
+
+    result = model_pack.write_stable_report(path, second)
+
+    assert result["created_at"] == "2026-07-17T10:00:00+00:00"
+    assert path.read_bytes() == first_bytes
+
+
 def test_model_pack_signoff_requires_accountable_identity_and_reason(tmp_path: Path) -> None:
     registry = registry_fixture(tmp_path)
     confirmations = {key: True for key in model_pack.REQUIRED_CONFIRMATIONS}

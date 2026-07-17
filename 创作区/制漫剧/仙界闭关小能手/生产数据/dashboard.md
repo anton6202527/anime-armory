@@ -1,14 +1,14 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-17T23:20:18+00:00
-- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-17T23:21:09+00:00
+- 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 190 | — | 5h24m33s | 103 | 6 | 15 | 53 | 77.7% | 0.0% |
+| 2 | 191 | — | 5h24m33s | 103 | 6 | 16 | 53 | 77.7% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.5146 | 0.1456 | 0 | 0.0% |
+| 0.5146 | 0.1553 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,7 +47,7 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 5h24m33s | 52.4% | 5.8% | dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_first×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_a2×2；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_03_first×1 | 15 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 5h24m33s | 52.4% | 5.8% | dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_first×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_a2×2；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_03_first×1 | 16 | — | — | — | — | — | — |
 | 全剧 | — | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 重抽原因分维度
@@ -59,4 +59,5 @@
 
 ## 最新阻断
 
-- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — image_qc standalone 报告有 15 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。
+- 第1集 / image_preflight / 生图后端适配: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md — 生图后端「Dreamina」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend "Dreamina" --source "<官方文档或CLI/API证据>" --source-url "<链接或留空>" --evidence-kind official_docs --note "<本次能力结论>"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。
+- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — image_qc standalone 报告有 15 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。

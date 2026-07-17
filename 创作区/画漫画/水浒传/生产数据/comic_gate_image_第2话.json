@@ -4,13 +4,13 @@
   "project_root": ".",
   "chapter": "第2话",
   "stage": "image",
-  "created_at": "2026-07-17T17:09:28",
+  "created_at": "2026-07-17T18:17:28",
   "verdict": "warn",
   "summary": {
     "finding_count": 33,
     "block_count": 0,
-    "warn_count": 29,
-    "info_count": 4
+    "warn_count": 3,
+    "info_count": 30
   },
   "findings": [
     {
@@ -76,288 +76,288 @@
       }
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P004.png",
       "reason": "风格指纹内聚度 0.7359 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P005.png",
       "reason": "风格指纹内聚度 0.7061 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P008.png",
       "reason": "风格指纹内聚度 0.6205 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P009.png",
       "reason": "风格指纹内聚度 0.6543 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P010.png",
       "reason": "风格指纹内聚度 0.7092 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P013.png",
       "reason": "风格指纹内聚度 0.6865 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P016.png",
       "reason": "风格指纹内聚度 0.6836 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P017.png",
       "reason": "风格指纹内聚度 0.7165 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P023.png",
       "reason": "风格指纹内聚度 0.7271 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P034.png",
       "reason": "风格指纹内聚度 0.7108 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第2话/panels/P036.png",
       "reason": "风格指纹内聚度 0.7373 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "location_color_grade_shift",
       "artifact": "出图/第2话/panels/P013.png",
       "reason": "同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.225, tint_dev=0.015。",
-      "return_to_stage": "image",
-      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "color_grade",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "location_color_grade_shift",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.223, tint_dev=0.007。",
-      "return_to_stage": "image",
-      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "color_grade",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "location_color_grade_shift",
       "artifact": "出图/第2话/panels/P017.png",
       "reason": "同场景“坍塌后的伏魔殿外廊”内调色代理偏离组中位：warmth_dev=0.239, tint_dev=0.048。",
-      "return_to_stage": "image",
-      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "color_grade",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P004.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3642（中位 0.017），线宽代理 edge_density=0.0758（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P005.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.4058（中位 0.017），线宽代理 edge_density=0.0866（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P006.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3399（中位 0.017），线宽代理 edge_density=0.0664（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P007.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3799（中位 0.017），线宽代理 edge_density=0.0814（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P008.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.4579（中位 0.017），线宽代理 edge_density=0.0685（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P009.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.5737（中位 0.017），线宽代理 edge_density=0.0747（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P010.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.4456（中位 0.017），线宽代理 edge_density=0.0682（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "tone_value_outlier",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "黑白灰量化偏离话内中位：black_ratio=0.3463（中位 0.017），线宽代理 edge_density=0.073（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。",
-      "return_to_stage": "image",
-      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "tone_value",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "style_anchor_drift",
       "artifact": "出图/共享/style_baseline.json",
       "reason": "本话整体指纹与风格锚图最高相似度仅 0.8789，风格锚可能已失去约束力。",
-      "return_to_stage": "image",
-      "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "cross_chapter_baseline",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "hair_fingerprint_low",
       "artifact": "出图/第2话/panels/P029.png",
       "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.405。这是色彩分布代理，需并排人审。",
-      "return_to_stage": "image",
-      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
       "evidence_family": "character_consistency",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "face_fingerprint_low",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "CHAR_ABBOT_SHANGQING face 指纹与参考图相似度偏低：score=0.428。这是色彩分布代理，需并排人审。",
-      "return_to_stage": "image",
-      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
       "evidence_family": "character_consistency",
       "confidence": "heuristic"
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "comic_gate",
       "code": "hair_fingerprint_low",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.373。这是色彩分布代理，需并排人审。",
-      "return_to_stage": "image",
-      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
       "evidence_family": "character_consistency",
       "confidence": "heuristic"
     },
@@ -465,7 +465,7 @@
       {
         "path": "脚本/第2话/source_semantics.json",
         "exists": true,
-        "sha256": "ad9ba7c8dc89fa4f368bdb89f06a8cd33e8d7d177c56d4780c00737b14660bcd",
+        "sha256": "b79cb0ff628077455a57d301f52f7e4b337fe5a066d90ecab198701378f4ac1f",
         "size": 116404
       },
       {
@@ -489,13 +489,13 @@
       {
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "6203d5e31f9a693a2b818722200d69f2fbaf6383e227eff6dea9dbec7271327f",
-        "size": 157624
+        "sha256": "5d44ccf855642e1da68701d3970e3377a91cb16fcc276fe773d3ea26c136db79",
+        "size": 159054
       },
       {
         "path": "生产数据/comic_model_pack_report.json",
         "exists": true,
-        "sha256": "c6b24cfbc0759c027b58a6f66a3e9ab218268fbf75de28625d88744c55a103cf",
+        "sha256": "196913639d6dd4eaff3d3f2815e322edbd13d01467a307393df812babe417c58",
         "size": 21059
       },
       {
@@ -561,14 +561,14 @@
       {
         "path": "生产数据/comic_reference_plan_第2话.json",
         "exists": true,
-        "sha256": "d2eb3a322749c4bb1ee0e67e09c5f1ffc06d1f56f385cecb1bd0ef596086c433",
-        "size": 181675
+        "sha256": "4c5a839c061786bf4671111614267e190a68b7027df633bde9e30b26f7abadcd",
+        "size": 181673
       },
       {
         "path": "出图/第2话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "cf5f0214c18ff370f949b2988d5ad259c583afbd35042d26ab425771fae19c78",
-        "size": 1029574
+        "sha256": "85019b0e29042824ecd9da413f831ef6b3164332c7ce94c89606c24e8b999524",
+        "size": 1000002
       },
       {
         "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
@@ -595,16 +595,28 @@
         "size": 2169733
       },
       {
-        "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+        "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
         "exists": true,
-        "sha256": "1fa172b10d5c96aaa234a75ca78a6dbf6d9b9db0c70cc6d34700d35047a58ac4",
-        "size": 2587240
+        "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f",
+        "size": 3014505
       },
       {
         "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
         "exists": true,
         "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d",
         "size": 2208444
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__expression_EXPR_TERRIFIED_dreamina__20260717T175558046459.md",
+        "exists": true,
+        "sha256": "8ae0fac65ff964cf9168c99fa9036b184a4cabce6156b7b83ed89fdb735856f5",
+        "size": 4506
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+        "exists": true,
+        "sha256": "1fa172b10d5c96aaa234a75ca78a6dbf6d9b9db0c70cc6d34700d35047a58ac4",
+        "size": 2587240
       },
       {
         "path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__expression_EXPR_STUNNED_dreamina__20260717T140451058118.md",
@@ -1297,28 +1309,10 @@
         "size": 1938845
       },
       {
-        "path": "出图/第2话/candidates/P001/20260717T163943_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "4001c90a93b52a0e44796735084ae11d3618a9cded43705a4e0d173a1a151119",
-        "size": 5107981
-      },
-      {
-        "path": "出图/第2话/candidates/P001/P001_20260717_163943_previous.png",
-        "exists": true,
-        "sha256": "79aee62f684f360cb42b2c89a1bbfc94bc9c5e4d792fee582a91b94134c9df72",
-        "size": 2051090
-      },
-      {
         "path": "出图/第2话/panels/P002.png",
         "exists": true,
         "sha256": "56a9bcc3c79688ca1ffdc3c92ac0f17cf649eba6bbb9cb2502c68c22f5f4e2d0",
         "size": 1516840
-      },
-      {
-        "path": "出图/第2话/candidates/P002/20260717T145621_attempt2_dreamina_raw.png",
-        "exists": true,
-        "sha256": "5c49d934b8d9cfe785394d20f2c1281aee7b263da629e5141c2c513932f192a0",
-        "size": 4375909
       },
       {
         "path": "出图/第2话/panels/P003.png",
@@ -1327,22 +1321,10 @@
         "size": 1383220
       },
       {
-        "path": "出图/第2话/candidates/P003/20260717T145747_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "4a7bb8cddba578fdddcf144701fb9b032b220b0c2b7c8b4ce9054c45f5174ec8",
-        "size": 4585917
-      },
-      {
         "path": "出图/第2话/panels/P004.png",
         "exists": true,
         "sha256": "b1a76ac3c27d97f651ff0f0316d8f94121db2fd768f4b2eec1c87c4cdf4cebf8",
         "size": 1485783
-      },
-      {
-        "path": "出图/第2话/candidates/P004/20260717T145919_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "458dcdcc18a255f203c55ef48da3ff8cae0f23c7da3309ae0a6916255bb49908",
-        "size": 3627674
       },
       {
         "path": "出图/第2话/panels/P005.png",
@@ -1351,28 +1333,10 @@
         "size": 916681
       },
       {
-        "path": "出图/第2话/candidates/P005/20260717T150043_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "360e2cce82745ff312d8a4746e07fcc23b4e85b4f00e6a1a681afd8d8f642584",
-        "size": 3906683
-      },
-      {
         "path": "出图/第2话/panels/P006.png",
         "exists": true,
         "sha256": "4c7a6e1ea620b25d3b8d01986564ca132de54853831d2ff7c1c48bd5f8b6ce93",
         "size": 1343074
-      },
-      {
-        "path": "出图/第2话/candidates/P006/20260717T170400_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "9248058329bf13b54b2eab39871720e58fcc4b10827e8e10152f62010df31f79",
-        "size": 3256431
-      },
-      {
-        "path": "出图/第2话/candidates/P006/P006_20260717_170400_previous.png",
-        "exists": true,
-        "sha256": "1ed8c949d76259ee5e0a121affd7dfe62b835b4e1c26602f76694ca2775702ed",
-        "size": 1230626
       },
       {
         "path": "出图/第2话/panels/P007.png",
@@ -1381,22 +1345,10 @@
         "size": 1512323
       },
       {
-        "path": "出图/第2话/candidates/P007/20260717T150324_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "da349ebc9509b7c8bce154a696cbea21f5d2832a5900a92f2569ab1fbdde4ec8",
-        "size": 3768910
-      },
-      {
         "path": "出图/第2话/panels/P008.png",
         "exists": true,
         "sha256": "fbf922bc3d72082c1ed3bb5fbeec6d8fbcd60d72b02322497b1138acee25d187",
         "size": 1408273
-      },
-      {
-        "path": "出图/第2话/candidates/P008/20260717T150442_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "2836014ba513babe4545e0652304ed6e6ba797708454900d08af74384bc85a04",
-        "size": 3348495
       },
       {
         "path": "出图/第2话/panels/P009.png",
@@ -1405,22 +1357,10 @@
         "size": 1580677
       },
       {
-        "path": "出图/第2话/candidates/P009/20260717T150633_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "cb332ffe9f221737696ea708eca312295d4ee6a732b348d5b4a5877b545781e6",
-        "size": 3951857
-      },
-      {
         "path": "出图/第2话/panels/P010.png",
         "exists": true,
         "sha256": "38ae9c7bc5b4e2739f0c9ec552b43b2c840eb698587ee934af9410f477570a5e",
         "size": 1331821
-      },
-      {
-        "path": "出图/第2话/candidates/P010/20260717T150806_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "d5c18d8dbb8137ba4ff446d1ab432c49e4b9efdec0aa7f4adbc6ba3e9cc1fa74",
-        "size": 3175602
       },
       {
         "path": "出图/第2话/panels/P011.png",
@@ -1429,22 +1369,10 @@
         "size": 1681081
       },
       {
-        "path": "出图/第2话/candidates/P011/20260717T150928_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "e79cc0ceb500046fe7ce5db116708227aad6e92bbae45052e2289b9c02aeca23",
-        "size": 5126225
-      },
-      {
         "path": "出图/第2话/panels/P012.png",
         "exists": true,
         "sha256": "5edc2252e94d17d363957894520f0fcde0ca9ee4a28bdf489fb86700583ac2bf",
         "size": 2018958
-      },
-      {
-        "path": "出图/第2话/candidates/P012/20260717T151058_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "70dd69edaf5f1a489e124653bab0913285b70d96a81b3e0c2879ae71a86df48d",
-        "size": 4800203
       },
       {
         "path": "出图/第2话/panels/P013.png",
@@ -1453,22 +1381,10 @@
         "size": 2184499
       },
       {
-        "path": "出图/第2话/candidates/P013/20260717T151227_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "b76cb01f8402bcdf1ae38c3e59a948127cc674725f69a7b30dd6e0a799e9d053",
-        "size": 5396382
-      },
-      {
         "path": "出图/第2话/panels/P014.png",
         "exists": true,
         "sha256": "a1c5fa7a706b75eaf96d319ca54759da5a775ccb60e6eb318abc0a04770763dc",
         "size": 1482985
-      },
-      {
-        "path": "出图/第2话/candidates/P014/20260717T151343_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "c399328e81de0bd51b34111910cb3cdeef8a17ae903b57e95f84e52cb0984e88",
-        "size": 4196127
       },
       {
         "path": "出图/第2话/panels/P015.png",
@@ -1477,22 +1393,10 @@
         "size": 2350369
       },
       {
-        "path": "出图/第2话/candidates/P015/20260717T151514_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "3bf94968a3e47d06f3a52c1c8307050a7c77d7abbdcf4bd7dfbc3988e7b30c27",
-        "size": 5875974
-      },
-      {
         "path": "出图/第2话/panels/P016.png",
         "exists": true,
         "sha256": "dc8d59d2b96f3d39832fd4d21806860dc0473d5ef3342d39fb580c0eee5c8913",
         "size": 1938644
-      },
-      {
-        "path": "出图/第2话/candidates/P016/20260717T151643_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "d17ca2c76bd7432023c9ee41b1b4cb6bc5d8b57b2ae92fbd587d279b4a190d71",
-        "size": 4430347
       },
       {
         "path": "出图/第2话/panels/P017.png",
@@ -1501,22 +1405,10 @@
         "size": 1433300
       },
       {
-        "path": "出图/第2话/candidates/P017/20260717T151753_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "778fbccd2b2feab0a7b0a811751074b6f0e8941d7d83ab9045bb3084959085bf",
-        "size": 4035702
-      },
-      {
         "path": "出图/第2话/panels/P018.png",
         "exists": true,
         "sha256": "949373da80ed7f31edee598ca697fdd5e697df264cff5c767090575c1f6fb5d4",
         "size": 1777207
-      },
-      {
-        "path": "出图/第2话/candidates/P018/20260717T151917_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "02905cc8942ed84961db0239495bdc928f298297b11fa84ed99411418cc3d57c",
-        "size": 4269108
       },
       {
         "path": "出图/第2话/panels/P019.png",
@@ -1525,22 +1417,10 @@
         "size": 1607797
       },
       {
-        "path": "出图/第2话/candidates/P019/20260717T152042_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "db66673369b3c3e8f61bf1e43dfdbca712196b7d0aa5c61cc341502d13574856",
-        "size": 4590149
-      },
-      {
         "path": "出图/第2话/panels/P020.png",
         "exists": true,
         "sha256": "4bcd9012d3bd9db17f3516afd139ad7b1d8d2066e7f63a7fd92520f489bdf423",
         "size": 1004605
-      },
-      {
-        "path": "出图/第2话/candidates/P020/20260717T152228_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "c565aa209ff1ccc51c246b4a56884c35bd0b53d8fd78973c9f78bde7788d6968",
-        "size": 4396020
       },
       {
         "path": "出图/第2话/panels/P021.png",
@@ -1549,22 +1429,10 @@
         "size": 1558253
       },
       {
-        "path": "出图/第2话/candidates/P021/20260717T152459_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "b85ebd8d47b3d9fa5794672b41c79df05e3081a4064739581e953878536d2eaf",
-        "size": 4348601
-      },
-      {
         "path": "出图/第2话/panels/P022.png",
         "exists": true,
         "sha256": "afb378a047a4d2ba8af21fe3f480105c58acaf34870d9aca7c0cfe15963d9924",
         "size": 1445484
-      },
-      {
-        "path": "出图/第2话/candidates/P022/20260717T152637_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "0de2d5ea8d2a3f72362f33aebcdeb5893fb7d731f4e82e07743987b0f0b6655d",
-        "size": 4734417
       },
       {
         "path": "出图/第2话/panels/P023.png",
@@ -1573,28 +1441,10 @@
         "size": 1791748
       },
       {
-        "path": "出图/第2话/candidates/P023/20260717T152808_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "216cded17345872b447bff2caa6156d4124689ab39a9b1a9351eb7171f3c8e63",
-        "size": 4475148
-      },
-      {
         "path": "出图/第2话/panels/P024.png",
         "exists": true,
         "sha256": "0b8a21671cd8f825ce8a76322aab739783881c30e7804514fcd8d5526228d1ef",
         "size": 1747336
-      },
-      {
-        "path": "出图/第2话/candidates/P024/20260717T164121_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "4b3e738ee510e460c991614b2487233a1952a5736e36378e5114e289f604b080",
-        "size": 4589681
-      },
-      {
-        "path": "出图/第2话/candidates/P024/P024_20260717_164121_previous.png",
-        "exists": true,
-        "sha256": "ac296f1a75b9230d86e2d487ec15b1d20be12046a77e1cc4461276650de1e1f5",
-        "size": 1812791
       },
       {
         "path": "出图/第2话/panels/P025.png",
@@ -1603,28 +1453,10 @@
         "size": 1723835
       },
       {
-        "path": "出图/第2话/candidates/P025/20260717T153155_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "e045e0f4353cc83422df73b7cb3f01db20af3ecbea90bd96c369600da5f0c761",
-        "size": 5204472
-      },
-      {
         "path": "出图/第2话/panels/P026.png",
         "exists": true,
         "sha256": "b4d8fce0b4be76ee45912540aa3c99a551e00102df806e7c1a12df44515902bc",
         "size": 1545233
-      },
-      {
-        "path": "出图/第2话/candidates/P026/20260717T164244_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "cadb73c31bfbb60a8a307737c2adad9703408b13bcc79ab60eaf96e9de13e4b6",
-        "size": 5278286
-      },
-      {
-        "path": "出图/第2话/candidates/P026/P026_20260717_164244_previous.png",
-        "exists": true,
-        "sha256": "6c096b7c135b0d97b6bdfa71d5fd42414938ee2a39b1ae0160c961002db556fa",
-        "size": 1606637
       },
       {
         "path": "出图/第2话/panels/P027.png",
@@ -1633,28 +1465,10 @@
         "size": 1220650
       },
       {
-        "path": "出图/第2话/candidates/P027/20260717T164409_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "27b6244630ed44088a9f7c04739569add1638fd000ee7f2f3586b0253d45b343",
-        "size": 5524961
-      },
-      {
-        "path": "出图/第2话/candidates/P027/P027_20260717_164409_previous.png",
-        "exists": true,
-        "sha256": "0f2fc669f1356daf0628bca921f748b97edd76142ed7372764a8374ffd3d8c44",
-        "size": 1103622
-      },
-      {
         "path": "出图/第2话/panels/P028.png",
         "exists": true,
         "sha256": "062ab5edf751632870633dfd6c7ac6f417b6537bdbbc17e898c2310b5ab0b703",
         "size": 1585184
-      },
-      {
-        "path": "出图/第2话/candidates/P028/20260717T154613_attempt2_dreamina_raw.png",
-        "exists": true,
-        "sha256": "39acfcaa99ece20f98b032d265f4147c68022ec448ff6b3a4fe056d44c466d04",
-        "size": 4623521
       },
       {
         "path": "出图/第2话/panels/P029.png",
@@ -1663,22 +1477,10 @@
         "size": 1772273
       },
       {
-        "path": "出图/第2话/candidates/P029/20260717T154906_attempt2_dreamina_raw.png",
-        "exists": true,
-        "sha256": "ed8e95bb6760c81be91af3136725b71bde43e1b6e275c6187487011f603beb5f",
-        "size": 4090917
-      },
-      {
         "path": "出图/第2话/panels/P030.png",
         "exists": true,
         "sha256": "243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c",
         "size": 1636086
-      },
-      {
-        "path": "出图/第2话/candidates/P030/20260717T155130_attempt2_dreamina_raw.png",
-        "exists": true,
-        "sha256": "22bdb2e5aec38d5b8002b7b88722e54aa4615f4f6a77f7012120804e18190def",
-        "size": 3760723
       },
       {
         "path": "出图/第2话/panels/P031.png",
@@ -1687,22 +1489,10 @@
         "size": 1939173
       },
       {
-        "path": "出图/第2话/candidates/P031/20260717T155251_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "d2a6b30693194a0456352fa77264217433ec5ab925ad96cb260867622c4a9fa0",
-        "size": 5807667
-      },
-      {
         "path": "出图/第2话/panels/P032.png",
         "exists": true,
         "sha256": "470825450bc45e7f820ef62571e0558f6a92a17d3025f350c9f981cf9fa1af5a",
         "size": 1832361
-      },
-      {
-        "path": "出图/第2话/candidates/P032/20260717T155420_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "6c77b75d0669476684da995c7ecfabb03a52c19ba53b6c39db2670a833b60c79",
-        "size": 6296120
       },
       {
         "path": "出图/第2话/panels/P033.png",
@@ -1711,22 +1501,10 @@
         "size": 2052757
       },
       {
-        "path": "出图/第2话/candidates/P033/20260717T155543_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "362f4da29c083e375749fd534ed97190668c528269d3034239c71152fbeb84a2",
-        "size": 5646181
-      },
-      {
         "path": "出图/第2话/panels/P034.png",
         "exists": true,
         "sha256": "6c650906942ddc4307ebf159efaebfcc6d0b9c954d173327b6862d56c46a2b98",
         "size": 2185954
-      },
-      {
-        "path": "出图/第2话/candidates/P034/20260717T155709_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "2936eba57c47ed976c72e605a70ae0d476404f007a3183f003d102c72d0df3b1",
-        "size": 5320080
       },
       {
         "path": "出图/第2话/panels/P035.png",
@@ -1735,28 +1513,10 @@
         "size": 1737734
       },
       {
-        "path": "出图/第2话/candidates/P035/20260717T155839_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "d57cdd3dcb78fd04c06a474db5fa69b9126baf1242d7e9ec82621b6537c0a9e6",
-        "size": 5147213
-      },
-      {
         "path": "出图/第2话/panels/P036.png",
         "exists": true,
         "sha256": "fba1ceae67c5b6d4db3871f52cdfc3b3d685ac67a67cc143a31725c6baf30da2",
         "size": 1658238
-      },
-      {
-        "path": "出图/第2话/candidates/P036/20260717T164545_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "38e7988704acb1d1842584003413a9c90f27889a02ae66bd39740f798c23e7df",
-        "size": 4000119
-      },
-      {
-        "path": "出图/第2话/candidates/P036/P036_20260717_164545_previous.png",
-        "exists": true,
-        "sha256": "39ac330d98d5475043fe829578c43e64a553941d01f1a6a0b2679ec181c21f46",
-        "size": 1918722
       },
       {
         "path": "出图/第2话/panels/P037.png",
@@ -1765,28 +1525,10 @@
         "size": 1239330
       },
       {
-        "path": "出图/第2话/candidates/P037/20260717T162656_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "5a8b725c77c43e5399682026bec307214789cbdfc059333145e8b86069d75b6a",
-        "size": 3372989
-      },
-      {
-        "path": "出图/第2话/candidates/P037/P037_20260717_162656_previous.png",
-        "exists": true,
-        "sha256": "89472868d4a2fbf3bf0b4e5f036ebce0f6e63bf9208ff9ee81746b23f289a89b",
-        "size": 1848695
-      },
-      {
         "path": "出图/第2话/panels/P038.png",
         "exists": true,
         "sha256": "20d527e0d591e4b65e29d021eb77e2d557ba00d3178dcb88c2f3c8fc37f6fc48",
         "size": 1786061
-      },
-      {
-        "path": "出图/第2话/candidates/P038/20260717T160344_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "24124a742e45af87aca4ad415e1f9f55f7e8fbb814d1f14d38744d9d40ebc354",
-        "size": 5515093
       },
       {
         "path": "出图/第2话/panels/P039.png",
@@ -1795,22 +1537,10 @@
         "size": 1649267
       },
       {
-        "path": "出图/第2话/candidates/P039/20260717T161517_attempt2_dreamina_raw.png",
-        "exists": true,
-        "sha256": "e975145e76de37f7944a975a13203314a85070f48a2047cc26585d3406adf946",
-        "size": 6128148
-      },
-      {
         "path": "出图/第2话/panels/P040.png",
         "exists": true,
         "sha256": "1b96d2a3faecafeaaa84f6997578036ba9b576212df09e845e9b14000af3135e",
         "size": 2024416
-      },
-      {
-        "path": "出图/第2话/candidates/P040/20260717T161642_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "fcb2544909a248f75662054eaeb1f1ca63f9096e199ffec2e49ce284f81a81a1",
-        "size": 5402841
       },
       {
         "path": "出图/第2话/panels/P041.png",
@@ -1819,28 +1549,10 @@
         "size": 2180518
       },
       {
-        "path": "出图/第2话/candidates/P041/20260717T161819_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "7789fa9d9a5415494347fedb75ff9e102f23e01cc06905b72ae6cb8b4b249079",
-        "size": 5275112
-      },
-      {
         "path": "出图/第2话/panels/P042.png",
         "exists": true,
         "sha256": "d0a0407ec9bd7337085a5f33b4622760368a7d5db4d19f4e366d19be87b75c89",
         "size": 2497804
-      },
-      {
-        "path": "出图/第2话/candidates/P042/20260717T164709_attempt1_dreamina_raw.png",
-        "exists": true,
-        "sha256": "f61d4ece185e1bd5a1b3a5d178a8c866566ab157da048fdd502177edfdd483da",
-        "size": 6292289
-      },
-      {
-        "path": "出图/第2话/candidates/P042/P042_20260717_164709_previous.png",
-        "exists": true,
-        "sha256": "a33d5a12a8e35f6ff473019abd3194b061fc3c838814f555bccc90b398597796",
-        "size": 2215029
       },
       {
         "path": "生产数据/panel_qc/第2话/P001.json",
@@ -2095,7 +1807,7 @@
         "size": 540
       }
     ],
-    "sha256": "075f2c096ed047fee7325685820c5beeddd606ebc718a6c39527c830368ce272"
+    "sha256": "1dbceba34dff428ec973383004872b5b80936c1576dba6045b37455238826afa"
   },
-  "receipt_id": "0708984516042a76ce49e6860bad8e6c25d63bddf58d475c3e50d8d8258f4605"
+  "receipt_id": "2bbe9585c706e4ec9c47c6dedebe9854f619a472c75eefb5851996ca94eb6988"
 }

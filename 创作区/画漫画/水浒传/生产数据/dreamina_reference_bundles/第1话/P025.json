@@ -5,7 +5,7 @@
   "panel_id": "P025",
   "reference_input_mode": "dreamina_image2image_images",
   "reference_attachment_limit": 10,
-  "cli_image_input_count": 10,
+  "cli_image_input_count": 9,
   "references": [
     {
       "id": "CHAR_HONG_XIN",
@@ -64,13 +64,6 @@
       "required": false
     },
     {
-      "id": "CHAR_HONG_XIN",
-      "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-      "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1",
-      "role": "three_quarter",
-      "required": false
-    },
-    {
       "id": "MON_WHITE_TIGER",
       "path": "出图/共享/图片/MON_WHITE_TIGER__three_quarter.png",
       "sha256": "93ae3b93a742db5ea825c8937bb3f14be7c1241bcaacc203970986bbe9128d07",
@@ -80,5 +73,5 @@
   ],
   "omitted_attachment_count": 0,
   "omitted_attachments": [],
-  "created_at": "2026-07-17T08:37:55"
+  "created_at": "2026-07-17T19:38:03"
 }

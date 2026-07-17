@@ -5,7 +5,7 @@
   "panel_id": "P029",
   "reference_input_mode": "dreamina_image2image_images",
   "reference_attachment_limit": 10,
-  "cli_image_input_count": 8,
+  "cli_image_input_count": 9,
   "references": [
     {
       "id": "CHAR_HONG_XIN",
@@ -51,20 +51,27 @@
     },
     {
       "id": "CHAR_HONG_XIN",
-      "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-      "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1",
-      "role": "three_quarter",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+      "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7",
+      "role": "outfit",
       "required": false
     },
     {
       "id": "CHAR_HONG_XIN",
-      "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
-      "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7",
-      "role": "outfit",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+      "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f",
+      "role": "expression",
+      "required": false
+    },
+    {
+      "id": "CHAR_HONG_XIN",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+      "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1",
+      "role": "three_quarter",
       "required": false
     }
   ],
   "omitted_attachment_count": 0,
   "omitted_attachments": [],
-  "created_at": "2026-07-17T06:18:40"
+  "created_at": "2026-07-17T18:59:54"
 }
