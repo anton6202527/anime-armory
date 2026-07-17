@@ -659,7 +659,7 @@
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
@@ -899,12 +899,47 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P003.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-17T09:22:21",
+      "backend_version": "codex-cli 0.144.4",
+      "artifact_sha256": "baa16d5695990c4733c020de9078387bafd38c03b9a7ad2fe1f912092b541647",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P003.json",
+      "generated_from_contract_sha256": "676158f7651381ab10fc7760f46e2fbfbf453876353028a5db8e93f14467ee77",
+      "generated_from_submit_prompt_sha256": "76a0e8f61a1ddba06b881259f703408f13c99a9f3835ff9183852efc55cdcfd8",
+      "generated_from_execution_input_sha256": "f4abce75b3831a478c6519a6b96160072b72b74f930499019536fe0e400b04df",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P003",
+        "created_at": "2026-07-17T09:22:21",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P003.png",
+        "size": {
+          "width": 1188,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 920
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "failed",
       "size": {
         "width": 1188,
         "height": 920
@@ -1175,7 +1210,8 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
       "result_path": "",
-      "source": "Codex CLI"
+      "source": "Codex CLI",
+      "error": "codex exit 124: stderr=Reading additional input from stdin...\n2026-07-17T04:21:19.450745Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses\n2026-07-17T04:21:22.963330Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses\n2026-07-17T04:21:26.877378Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses\n2026-07-17T04:21:31.609209Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses\n\ntimeout after 600s | stdout={\"type\":\"thread.started\",\"thread_id\":\"019f6e44-8fb5-7c40-a193-ba2d44c39283\"}\n{\"type\":\"turn.started\"}\n{\"type\":\"error\",\"message\":\"Reconnecting... 2/5 (stream disconnected before completion: tls handshake eof)\"}\n{\"type\":\"error\",\"message\":\"Reconnecting... 3/5 (stream disconnected before completion: tls handshake eof)\"}\n{\"type\":\"error\",\"message\":\"Reconnecting... 4/5 (stream disconnected before completion: tls handshake eof)\"}\n{\"type\":\"error\",\"message\":\"Reconnecting... 5/5 (stream disconnected before completion: tls handshake eof)\"}\n{\"type\":\"item.completed\",\"item\":{\"id\":\"item_0\",\"type\":\"agent_message\",\"text\":\"我会使用 imagegen 技能，把五张附件作为真实参考输入，按指定的单格、无字和安全呈现约束直接生成。\"}}\n{\"type\":\"item.completed\",\"item\":{\"id\":\"item_1\",\"type\":\"error\",\"message\":\"Falling back from WebSockets to HTTPS transport. stream disconnected before completion: idle timeout waiting for websocket\"}}"
     },
     {
       "panel_id": "P005",

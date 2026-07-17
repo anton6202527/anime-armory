@@ -237,14 +237,14 @@
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "39e9134c7d0181725c08d3dff568a91b4ffcbaea8c859bc2a9c015ade84c0624"
+      "sha256": "1ad21b49696af15ef19bfeb45c14879af2cee8569553013bd6176781ad834422"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 34
+      "file_count": 35
     },
     {
       "stage": "image",
@@ -320,7 +320,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "出图",
-  "last_progress_value": "37/51",
-  "last_progress_state": "partial"
+  "last_progress_column": "出图prompt",
+  "last_progress_value": "✅",
+  "last_progress_state": "done"
 }

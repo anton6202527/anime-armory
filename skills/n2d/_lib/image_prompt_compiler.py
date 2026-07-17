@@ -20,7 +20,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 KIND = "n2d_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-16.2"
+PROFILE_VERSION = "2026-07-17.1"
 COMPILED_HEADING = "### 后端编译提交 image prompt"
 
 TASK_TYPES = {
@@ -353,6 +353,56 @@ def resolve_contract_conflicts(
             if softened != action:
                 resolved["action"] = softened
                 decisions.append("nonviolent_social_action_softened_for_provider")
+
+        # A benign adult/minor dialogue can still be misread as coercive when
+        # the production contract uses dramatic shorthand such as “俯身压下”
+        # or “羞辱”.  Keep those words in the auditable source contract, but at
+        # the provider boundary describe the same beat as separated verbal
+        # blocking with explicit zero contact.  Apply the rewrite to every
+        # pixel-facing field so a preserve/policy sentence cannot reintroduce
+        # the unsafe reading after the action field was cleaned.
+        provider_blob = _one_line([
+            resolved.get("objective"), resolved.get("subject"), resolved.get("action"),
+            resolved.get("mood"), resolved.get("preserve"), resolved.get("policy_guards"),
+        ])
+        adult_minor_dialogue = (
+            re.search(r"十四岁|少年|未成年|minor", provider_blob, re.I)
+            and re.search(r"成年|成人|管事|张老大|adult|supervisor", provider_blob, re.I)
+            and not re.search(r"刀|剑|枪|矛|匕首|武器|流血|伤口|受伤|搏斗|打斗|攻击|杀", provider_blob)
+        )
+        if adult_minor_dialogue:
+            replacements = (
+                ("张老大俯身把命令逐字压下", "张老大站在木桌另一侧，严肃口头交代劳役"),
+                ("管事俯身", "管事站在木桌另一侧"),
+                ("把羞辱变成具体劳役", "把严苛安排落实为具体劳役"),
+                ("羞辱", "严苛训话"),
+                ("粗大右手撑在少年身侧的木桌边，靠近但不接触身体", "右手撑在木桌远离少年的一侧，两人由木桌明确分隔，零身体接触"),
+                ("成人右手只撑在少年身侧桌边，靠近但不接触少年身体", "张老大的右手只撑在木桌远离少年的一侧，两人由木桌明确分隔，零身体接触"),
+                ("手掌落在少年身侧的木桌面", "手掌落在木桌远离少年的一侧"),
+                ("手掌与桌面接触只用手部插入镜", "手掌只与木桌接触，少年保持完整个人空间"),
+            )
+
+            def rewrite_adult_minor(value: Any) -> Any:
+                if isinstance(value, str):
+                    text = value
+                    for old, new in replacements:
+                        text = text.replace(old, new)
+                    return text
+                if isinstance(value, list):
+                    return [rewrite_adult_minor(item) for item in value]
+                if isinstance(value, tuple):
+                    return tuple(rewrite_adult_minor(item) for item in value)
+                return value
+
+            changed = False
+            for key in ("objective", "action", "mood", "preserve", "policy_guards"):
+                before = resolved.get(key)
+                after = rewrite_adult_minor(before)
+                if after != before:
+                    resolved[key] = after
+                    changed = True
+            if changed:
+                decisions.append("adult_minor_dialogue_rewritten_as_separated_verbal_blocking")
 
         exclusions = normalize_exclusions(resolved.get("exclude") or [])
         graphic_anatomy = re.compile(r"断手|断肢|缺肢|血光|伤口|入体|贯穿")

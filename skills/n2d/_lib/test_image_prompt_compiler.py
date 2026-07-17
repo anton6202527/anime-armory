@@ -499,10 +499,31 @@ def test_codex_compiler_softens_adult_minor_shoulder_pressure_to_table_blocking(
     assert "压在瘦削左肩" not in payload["prompt"]
     assert "压到少年肩头" not in payload["prompt"]
     assert "压肩" not in payload["prompt"]
-    assert "撑在少年身侧的木桌边" in payload["prompt"]
-    assert "不接触身体" in payload["prompt"]
-    assert "手掌与桌面接触" in payload["prompt"]
+    assert "木桌远离少年的一侧" in payload["prompt"]
+    assert "零身体接触" in payload["prompt"]
+    assert "少年保持完整个人空间" in payload["prompt"]
     assert "撑桌为张老大右手" in payload["prompt"]
+
+
+def test_codex_compiler_rewrites_adult_minor_pressure_language_across_pixel_fields():
+    payload = compile_image_prompt(_contract(
+        backend="codex",
+        objective="把羞辱变成具体劳役",
+        subject="成年管事与十四岁少年",
+        action="张老大俯身把命令逐字压下；粗大右手撑在少年身侧的木桌边，靠近但不接触身体",
+        mood="羞辱与忍耐",
+        preserve=["成人右手只撑在少年身侧桌边，靠近但不接触少年身体"],
+        policy_guards=["手掌与桌面接触只用手部插入镜"],
+    ), "codex")
+
+    prompt = payload["prompt"]
+    assert "俯身" not in prompt
+    assert "羞辱" not in prompt
+    assert "靠近但不接触" not in prompt
+    assert "严肃口头交代劳役" in prompt
+    assert "严苛安排落实为具体劳役" in prompt
+    assert "木桌明确分隔，零身体接触" in prompt
+    assert "adult_minor_dialogue_rewritten_as_separated_verbal_blocking" in payload["compiler_decisions"]
 
 
 def test_backend_and_task_golden_fixtures():

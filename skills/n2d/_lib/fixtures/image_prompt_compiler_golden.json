@@ -1,7 +1,7 @@
 {
   "kind": "n2d_image_prompt_compiler_golden",
   "version": 1,
-  "profile_version": "2026-07-16.2",
+  "profile_version": "2026-07-17.1",
   "contract": {
     "task_type": "multi_subject",
     "model": "fixture-model",
