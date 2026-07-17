@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_expression_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-17T17:56:57",
+  "bindings": [
+    {
+      "character_id": "CHAR_HONG_XIN",
+      "expression_id": "EXPR_TERRIFIED"
+    }
+  ],
+  "backend": "Dreamina official CLI",
+  "model": "Dreamina 5.0",
+  "model_version": "5.0",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "",
+  "previous_manifest_sha256": "",
+  "generated": 1,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-17T17:56:57",
+      "status": "expression_reference_ready",
+      "character_id": "CHAR_HONG_XIN",
+      "expression_id": "EXPR_TERRIFIED",
+      "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+      "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f",
+      "kind": "generated_expression_reference",
+      "chapter": "第1话",
+      "attempt": 1,
+      "attempts_used": 1,
+      "attempts_authorized": 2,
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "identity_anchor_path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+      "identity_anchor_sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__expression_EXPR_TERRIFIED_dreamina__20260717T175558046459.md",
+      "prompt_sha256": "8ae0fac65ff964cf9168c99fa9036b184a4cabce6156b7b83ed89fdb735856f5",
+      "ratio": "1:1",
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "submit_id": "7bed8d2a-7e4f-4100-aa36-90a96cc47f09"
+    }
+  ]
+}

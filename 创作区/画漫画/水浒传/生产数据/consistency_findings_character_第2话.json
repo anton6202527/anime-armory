@@ -3,48 +3,78 @@
   "kind": "comic_consistency_findings",
   "dimension": "character_consistency",
   "chapter": "第2话",
-  "created_at": "2026-07-17T17:16:05",
+  "created_at": "2026-07-17T17:34:54",
   "summary": {
     "character_count": 3,
     "panel_binding_count": 38,
     "finding_count": 3,
     "block_count": 0,
-    "warn_count": 3,
-    "info_count": 0
+    "warn_count": 0,
+    "info_count": 3
   },
   "findings": [
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "character_consistency",
       "code": "hair_fingerprint_low",
       "character_id": "CHAR_ABBOT_SHANGQING",
       "panel_id": "P029",
       "artifact": "出图/第2话/panels/P029.png",
       "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.405。这是色彩分布代理，需并排人审。",
-      "return_to_stage": "image",
-      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "火光暗场、侧向站位和幅巾覆盖压缩头发色彩分布；脸型、长须、青灰道袍与方丈参考可连续识别。",
+        "evidence": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "7896d85c08d013980121bb6f5dec81cc3f17152b5b5f4a2dfb72ef2b09692e7c",
+        "source": "生产数据/character_consistency_acceptance_第2话.json"
+      }
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "character_consistency",
       "code": "face_fingerprint_low",
       "character_id": "CHAR_ABBOT_SHANGQING",
       "panel_id": "P030",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "CHAR_ABBOT_SHANGQING face 指纹与参考图相似度偏低：score=0.428。这是色彩分布代理，需并排人审。",
-      "return_to_stage": "image",
-      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "记忆层黑场、火把侧光和中远景改变了脸部色彩代理；眉眼、脸型、长须与服装层级与 P029 连续。",
+        "evidence": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c",
+        "source": "生产数据/character_consistency_acceptance_第2话.json"
+      }
     },
     {
-      "severity": "warn",
+      "severity": "info",
       "dimension": "character_consistency",
       "code": "hair_fingerprint_low",
       "character_id": "CHAR_ABBOT_SHANGQING",
       "panel_id": "P030",
       "artifact": "出图/第2话/panels/P030.png",
       "reason": "CHAR_ABBOT_SHANGQING hair 指纹与参考图相似度偏低：score=0.373。这是色彩分布代理，需并排人审。",
-      "return_to_stage": "image",
-      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "manual_review",
+        "accepted_at": "",
+        "reason": "幅巾、暗场和火光使头发色彩代理低分，头部轮廓与方丈多视图一致。",
+        "evidence": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+        "artifact_sha256": "243f56690454181eb271fd32ab3846f32d2a423a34cb2da2ca9dbbfa82603d1c",
+        "source": "生产数据/character_consistency_acceptance_第2话.json"
+      }
     }
   ]
 }

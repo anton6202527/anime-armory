@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第1话",
-  "generated_at": "2026-07-16T11:22:46+00:00",
+  "generated_at": "2026-07-17T09:51:31+00:00",
   "inputs": {
     "files": [
       {
@@ -13,7 +13,7 @@
       {
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "90f7691eb06737d32823706af0f1636da9018bc0fa4ad0294b85665d4996146e"
+        "sha256": "6203d5e31f9a693a2b818722200d69f2fbaf6383e227eff6dea9dbec7271327f"
       },
       {
         "path": "生产数据/comic_memory_anchor_第1话.json",
@@ -46,7 +46,7 @@
       "inputs_fingerprint": null
     }
   },
-  "inputs_fingerprint": "3866bd45e9681eca32a3d653d3fa8dfd9acbe99055a46502b4d011e71b770ed7",
+  "inputs_fingerprint": "89ae0043b8df72f269c977a795a9865d5939452a56464d59c1ae5c6919725bcc",
   "backend": {
     "adapter_id": "dreamina_image2image",
     "model": "Dreamina 5.0",
@@ -64,9 +64,9 @@
   "summary": {
     "panels_with_characters": 42,
     "panels_needing_action": 35,
-    "panels_blocked": 0,
-    "block": 0,
-    "warn": 33,
+    "panels_blocked": 18,
+    "block": 18,
+    "warn": 5,
     "info": 0
   },
   "panel_plans": [
@@ -790,6 +790,11 @@
           ],
           "recommended_references": [
             {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+              "strength_hint": 0.78
+            },
+            {
               "role": "front",
               "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
               "strength_hint": 0.55
@@ -802,38 +807,35 @@
           ],
           "reference_budget": {
             "limit": 5,
-            "requested": 2,
-            "selected": 2,
+            "requested": 3,
+            "selected": 3,
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "45°/three_quarter 参考（档位或本格变化量需要）",
-            "45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
       "attachment_plan": {
         "limit": 10,
         "required_count": 4,
-        "selected_count": 5,
+        "selected_count": 6,
         "selected": [
           {
-            "role": "front",
-            "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
-            "strength_hint": 0.55,
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+            "strength_hint": 0.78,
             "id": "CHAR_EMPEROR_RENZONG",
             "character_id": "CHAR_EMPEROR_RENZONG",
             "required": true,
-            "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02"
+            "sha256": "62a96c9c4166bae73c6d2b4c1161d9f4c791a34a904de1f7bca7b5c9001d45b0"
           },
           {
             "id": "STYLE_SHUIHU_SONG_CINEMATIC",
@@ -857,6 +859,15 @@
             "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d"
           },
           {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_EMPEROR_RENZONG",
+            "character_id": "CHAR_EMPEROR_RENZONG",
+            "required": false,
+            "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02"
+          },
+          {
             "role": "face",
             "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
             "strength_hint": 0.72,
@@ -872,8 +883,8 @@
       },
       "blocked": false,
       "blocking_codes": [],
-      "needs_action": true,
-      "panel_plan_sha256": "5e8c39660397b7575ece1edc72b7afddd90a06518f9b7d85a2778d4ae07b911e"
+      "needs_action": false,
+      "panel_plan_sha256": "12d8c5adc2bc421930843b15ca297705365cd2a41d7886f12ace080f420c6fff"
     },
     {
       "panel_id": "P007",
@@ -1246,7 +1257,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1268,15 +1278,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "45°/three_quarter 参考（档位或本格变化量需要）",
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_HONG_XIN",
@@ -1289,7 +1296,6 @@
             "state_id": "STATE_COURT_ENVOY"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -1316,14 +1322,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_COMPOSED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -1442,7 +1446,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "be7606ddd02e126cb8188f07bc24133273fc559f7679b001e1e7af41b96042cc"
+      "panel_plan_sha256": "b06f4f173f914ed2e3f60bd0ca1912bc21e06ce7d77e29a67e8cf8d4639521a6"
     },
     {
       "panel_id": "P011",
@@ -2635,14 +2639,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -2804,13 +2808,13 @@
             "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -2829,7 +2833,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "bafa9ddc0016b1f37ba2982b97d9b3da23b896caa6f9bbe4df46ba3e18332dc8"
+      "panel_plan_sha256": "4dd9224d51bc8d4448e740593b1ba255200a730bbdf0e3ad1cd395dc8d702238"
     },
     {
       "panel_id": "P020",
@@ -2876,32 +2880,40 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "back",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__back.png",
+              "strength_hint": 0.5
             }
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 4,
+            "requested": 6,
             "selected": 4,
-            "dropped": 0
+            "dropped": 2
           },
-          "dropped_references": [],
-          "missing_references": [
-            "侧脸参考（极端角度/转头/过肩格）",
-            "背身参考（背影/过肩格）"
+          "dropped_references": [
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
+              "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
+            }
           ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -2929,27 +2941,35 @@
               "strength_hint": 0.72
             },
             {
+              "role": "back",
+              "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__back.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__side.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 3,
-            "selected": 3,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "侧脸参考（极端角度/转头/过肩格）",
-            "背身参考（背影/过肩格）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -3052,22 +3072,22 @@
             "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "back",
+            "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__back.png",
+            "strength_hint": 0.5,
             "id": "CHAR_ABBOT_SHANGQING",
             "character_id": "CHAR_ABBOT_SHANGQING",
             "required": false,
-            "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436"
+            "sha256": "5086c9cbc8f0f9bd6f4a4f51c540f98823ee47fcebe6869d45d850476f68dac5"
           }
         ],
         "missing_required": [],
@@ -3077,7 +3097,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "960d052802ea84103f9e68c52fcb0c5e2c31f42fb51d530d15d11833793875cc"
+      "panel_plan_sha256": "8937c116608e0418a98efb4fa98557896799abce08f6b02814fe5513da7c5e4c"
     },
     {
       "panel_id": "P021",
@@ -3114,14 +3134,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -3192,15 +3212,6 @@
             "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
-          },
-          {
             "role": "outfit",
             "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
             "strength_hint": 0.55,
@@ -3208,6 +3219,15 @@
             "character_id": "CHAR_HONG_XIN",
             "required": false,
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
           }
         ],
         "missing_required": [],
@@ -3217,7 +3237,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "fdd853b7f9457196becaf5e93b1af23339b1969b906dabffaa2acc8bf0f48184"
+      "panel_plan_sha256": "63626ec06f36afbd41115239d052a47a3d51baedea1442231d1a17a1e1a62e10"
     },
     {
       "panel_id": "P022",
@@ -3254,14 +3274,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -3332,15 +3352,6 @@
             "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
-          },
-          {
             "role": "outfit",
             "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
             "strength_hint": 0.55,
@@ -3348,6 +3359,15 @@
             "character_id": "CHAR_HONG_XIN",
             "required": false,
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
           }
         ],
         "missing_required": [],
@@ -3357,7 +3377,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "ab90ecec6dcecd0b44a4b8d7f1a7908f247587da993c4b8f831ce5b103f4cbc2"
+      "panel_plan_sha256": "0d284867ad0f48eeb4b97075a9641f1809b39762cd19cb99d2924466ee471f1d"
     },
     {
       "panel_id": "P023",
@@ -3381,9 +3401,7 @@
             "expression_id": "EXPR_COMPOSED",
             "state_id": "STATE_MOUNTAIN_START"
           },
-          "variation_delta": [
-            "strong_emotion"
-          ],
+          "variation_delta": [],
           "recommended_references": [
             {
               "role": "front",
@@ -3396,14 +3414,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -3413,14 +3431,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_COMPOSED；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": null,
@@ -3476,15 +3492,6 @@
             "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
-          },
-          {
             "role": "outfit",
             "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
             "strength_hint": 0.55,
@@ -3492,6 +3499,15 @@
             "character_id": "CHAR_HONG_XIN",
             "required": false,
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
           }
         ],
         "missing_required": [],
@@ -3500,8 +3516,8 @@
       },
       "blocked": false,
       "blocking_codes": [],
-      "needs_action": true,
-      "panel_plan_sha256": "2475c34954cc66c4a6521de2f1442968f2d9667b027c66c2f6800ea1a23cca88"
+      "needs_action": false,
+      "panel_plan_sha256": "0cb98e9d31c48fdf9f09fb28223485883bb465244ad9c7103609d7cdb277a4e5"
     },
     {
       "panel_id": "P024",
@@ -3534,6 +3550,7 @@
           },
           "variation_delta": [
             "action_eyeline_lock",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -3565,14 +3582,16 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "MON_WHITE_TIGER",
@@ -3744,10 +3763,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "58fb4917cd5d1510b8b5445e30c45d79329295ff97c52a7998cbdd61fbf2b6b3"
+      "panel_plan_sha256": "994b401a2736940ed18fccf8c5a3e9bcb7ee7cdddd6d13d6299adaf03dd346fd"
     },
     {
       "panel_id": "P025",
@@ -3780,6 +3801,7 @@
           },
           "variation_delta": [
             "extreme_angle",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -3794,25 +3816,31 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+              "strength_hint": 0.55
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
               "strength_hint": 0.55
             }
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 4,
+            "requested": 5,
             "selected": 4,
-            "dropped": 0
+            "dropped": 1
           },
-          "dropped_references": [],
+          "dropped_references": [
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
+            }
+          ],
           "missing_references": [
-            "侧脸参考（极端角度/转头/过肩格）"
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -3859,7 +3887,7 @@
           },
           "dropped_references": [],
           "missing_references": [
-            "侧脸参考（极端角度/转头/过肩格）"
+            "侧脸参考（极端角度/转头格）"
           ],
           "memory_anchor_reinjected": false,
           "escalation": null,
@@ -3968,13 +3996,13 @@
             "sha256": "3fa67b59c7e736bf7413fbb1997e4c5d52f908f01f4a70c3e397916095502d59"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -3990,10 +4018,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "475a4986f60fc681c6240faf04593eb3c6f7b68a3f4d426b4752dd7aeb158c2b"
+      "panel_plan_sha256": "11ca859f77059097f3fd3cfb3a451eac25874fa2c0fc00f2dcf7b46aecf3dc39"
     },
     {
       "panel_id": "P026",
@@ -4080,7 +4110,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "action_eyeline_lock",
             "multi_character"
           ],
@@ -4108,16 +4137,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -4242,10 +4269,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "6f3b860db0c3a432c67760737d7c4e1f80dacbe58dc1c2e85492a1b062a4c960"
+      "panel_plan_sha256": "a8c660a83f262ff23bfc7cee84d0c1c19c9a634bd07032ddc6cef6b02f3614aa"
     },
     {
       "panel_id": "P027",
@@ -4270,148 +4299,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
-            "closeup"
-          ],
-          "recommended_references": [
-            {
-              "role": "front",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
-              "strength_hint": 0.8
-            },
-            {
-              "role": "face",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
-              "strength_hint": 0.72
-            },
-            {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
-              "role": "outfit",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
-              "strength_hint": 0.55
-            }
-          ],
-          "reference_budget": {
-            "limit": 5,
-            "requested": 4,
-            "selected": 4,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [],
-          "memory_anchor_reinjected": false,
-          "escalation": null,
-          "pose_gaze_directive": null,
-          "prompt_required": [],
-          "needs_action": false
-        }
-      ],
-      "multi_subject": null,
-      "attachment_plan": {
-        "limit": 10,
-        "required_count": 5,
-        "selected_count": 8,
-        "selected": [
-          {
-            "role": "front",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
-            "strength_hint": 0.8,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": true,
-            "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f"
-          },
-          {
-            "id": "STYLE_SHUIHU_SONG_CINEMATIC",
-            "role": "style",
-            "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
-            "required": false,
-            "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795"
-          },
-          {
-            "id": "LOC_LONGHUSHAN_PATH",
-            "role": "location",
-            "path": "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png",
-            "required": true,
-            "sha256": "cfd924682a3c4382806206fcbf49093c0ef829d9af734c944639a47e6cad26e7"
-          },
-          {
-            "id": "PROP_IMPERIAL_EDICT",
-            "role": "prop",
-            "path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
-            "required": true,
-            "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d"
-          },
-          {
-            "id": "PROP_SILVER_CENSER",
-            "role": "prop",
-            "path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
-            "required": true,
-            "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8"
-          },
-          {
-            "role": "face",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
-            "strength_hint": 0.72,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
-          },
-          {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
-          },
-          {
-            "role": "outfit",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
-            "strength_hint": 0.55,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
-          }
-        ],
-        "missing_required": [],
-        "over_capacity": false,
-        "split_suggestion": ""
-      },
-      "blocked": false,
-      "blocking_codes": [],
-      "needs_action": false,
-      "panel_plan_sha256": "6c2d5b476a29d7b053af3a4cbaceae83d83630cccc1865ec10d46d798b34c6ef"
-    },
-    {
-      "panel_id": "P028",
-      "character_bindings": [
-        {
-          "character_id": "CHAR_HONG_XIN",
-          "form_id": "FORM_BASE",
-          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
-          "expression_id": "EXPR_TERRIFIED",
-          "state_id": "STATE_MOUNTAIN_DIRTY"
-        }
-      ],
-      "characters": [
-        {
-          "char_id": "CHAR_HONG_XIN",
-          "name": "洪信",
-          "tier": "recurring_standard",
-          "binding": {
-            "form_id": "FORM_BASE",
-            "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
-            "expression_id": "EXPR_TERRIFIED",
-            "state_id": "STATE_MOUNTAIN_DIRTY"
-          },
-          "variation_delta": [
+            "closeup",
             "strong_emotion"
           ],
           "recommended_references": [
@@ -4426,14 +4314,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -4506,15 +4394,6 @@
             "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
-            "id": "CHAR_HONG_XIN",
-            "character_id": "CHAR_HONG_XIN",
-            "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
-          },
-          {
             "role": "outfit",
             "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
             "strength_hint": 0.55,
@@ -4522,19 +4401,30 @@
             "character_id": "CHAR_HONG_XIN",
             "required": false,
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
           }
         ],
         "missing_required": [],
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "0091845693ccd48a2a19419a9751af9e7f249fa0301ddfafbedfd02a74ebab33"
+      "panel_plan_sha256": "b6ea4559a2a06d93cb2c3e5989a2cc778763c28eb8dc0a6f5067e2904eb47fdd"
     },
     {
-      "panel_id": "P029",
+      "panel_id": "P028",
       "character_bindings": [
         {
           "character_id": "CHAR_HONG_XIN",
@@ -4555,7 +4445,9 @@
             "expression_id": "EXPR_TERRIFIED",
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
-          "variation_delta": [],
+          "variation_delta": [
+            "strong_emotion"
+          ],
           "recommended_references": [
             {
               "role": "front",
@@ -4568,14 +4460,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -4585,12 +4477,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         }
       ],
       "multi_subject": null,
@@ -4646,6 +4540,15 @@
             "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
           },
           {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
+          },
+          {
             "role": "three_quarter",
             "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
             "strength_hint": 0.65,
@@ -4653,6 +4556,134 @@
             "character_id": "CHAR_HONG_XIN",
             "required": false,
             "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
+      "needs_action": true,
+      "panel_plan_sha256": "e15326751fd4a5f618e28de22d33c0427672ba683fe2c2e82a6356521dbbfb3f"
+    },
+    {
+      "panel_id": "P029",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_HONG_XIN",
+          "name": "洪信",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+            "expression_id": "EXPR_TERRIFIED",
+            "state_id": "STATE_MOUNTAIN_DIRTY"
+          },
+          "variation_delta": [
+            "strong_emotion"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+              "strength_hint": 0.8
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+              "strength_hint": 0.72
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+              "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
+            }
+          ],
+          "reference_budget": {
+            "limit": 5,
+            "requested": 4,
+            "selected": 4,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": null,
+      "attachment_plan": {
+        "limit": 10,
+        "required_count": 5,
+        "selected_count": 8,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+            "strength_hint": 0.8,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": true,
+            "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f"
+          },
+          {
+            "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "required": false,
+            "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795"
+          },
+          {
+            "id": "LOC_LONGHUSHAN_PATH",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png",
+            "required": true,
+            "sha256": "cfd924682a3c4382806206fcbf49093c0ef829d9af734c944639a47e6cad26e7"
+          },
+          {
+            "id": "PROP_IMPERIAL_EDICT",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+            "required": true,
+            "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d"
+          },
+          {
+            "id": "PROP_SILVER_CENSER",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+            "required": true,
+            "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+            "strength_hint": 0.72,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d"
           },
           {
             "role": "outfit",
@@ -4662,16 +4693,27 @@
             "character_id": "CHAR_HONG_XIN",
             "required": false,
             "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+            "strength_hint": 0.65,
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
           }
         ],
         "missing_required": [],
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
-      "needs_action": false,
-      "panel_plan_sha256": "bcb847147b78b78d906f283f16182a15f4b38704f1ced5e033537852c95fd462"
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
+      "needs_action": true,
+      "panel_plan_sha256": "1aef53bf722545d68171dd821923504e0a07905b4bc76b61f92e152d3113222b"
     },
     {
       "panel_id": "P030",
@@ -4704,6 +4746,7 @@
           },
           "variation_delta": [
             "closeup",
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -4718,14 +4761,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -4735,12 +4778,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -4888,13 +4933,13 @@
             "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -4910,10 +4955,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "6cbc5122f2abecb77eb19ac78197487c8c94ace50a33d73718c297a202b970e6"
+      "panel_plan_sha256": "490525f1fd9810fb9e3bede24958809a311d71a9ed83128cb6509130f96705c3"
     },
     {
       "panel_id": "P031",
@@ -4945,6 +4992,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -4959,14 +5007,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -4976,12 +5024,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -5128,13 +5178,13 @@
             "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -5150,10 +5200,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "78a547b7c073e67a12fa504a398d3dd1253f82f435a84a3e04440d7e5faabe1f"
+      "panel_plan_sha256": "5cff9b83127a41a3be4728d084d893238493e4e57ba9d0961fae2f0ceae1a416"
     },
     {
       "panel_id": "P032",
@@ -5185,6 +5237,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5199,14 +5252,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -5216,12 +5269,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "MON_SNOW_SERPENT",
@@ -5368,13 +5423,13 @@
             "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -5390,10 +5445,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "6997d033bb45189d6609ab03977bf7e7c0180188e693b5487adc518d37890262"
+      "panel_plan_sha256": "93312212681a7bbc1e44b53cb4de264f991ac5b43fc0cf6f56668d80610da9fd"
     },
     {
       "panel_id": "P033",
@@ -5440,14 +5497,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -5477,7 +5534,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5504,14 +5560,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -5614,13 +5668,13 @@
             "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -5636,10 +5690,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "a64caf4c401f0ac473f3c0eda7bce01d3066671e2420632d357e1b51a3182edd"
+      "panel_plan_sha256": "ca350916f67578e8764db6b7fe58f06320bf3c39e885c74f4179215f585889df"
     },
     {
       "panel_id": "P034",
@@ -5671,6 +5727,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5685,14 +5742,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -5702,12 +5759,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -5854,13 +5913,13 @@
             "sha256": "ccaf799c4a1dce87c090b1af3e5f5f86b363d9feaa8fcb630131502fff228dcd"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -5876,10 +5935,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "abfb348ef4110ead90c88e3cfa029d16eb9453d3530724530292ea6144e31b46"
+      "panel_plan_sha256": "616f60c28e650c578982fdc109b729d349c14163bcde95250116e2855928d6f3"
     },
     {
       "panel_id": "P035",
@@ -5911,6 +5972,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -5925,14 +5987,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -5942,12 +6004,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -6094,13 +6158,13 @@
             "sha256": "ccaf799c4a1dce87c090b1af3e5f5f86b363d9feaa8fcb630131502fff228dcd"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -6116,10 +6180,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "0b3aa65a212ea8078774687e261639ceeeef2ea645f160cf7944a728f0748f57"
+      "panel_plan_sha256": "91cfa782e43dcdca1da45f44e0d6e92b5768b68ecbee14f18a75b6c365454e89"
     },
     {
       "panel_id": "P036",
@@ -6151,6 +6217,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -6165,14 +6232,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -6182,12 +6249,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -6334,13 +6403,13 @@
             "sha256": "ccaf799c4a1dce87c090b1af3e5f5f86b363d9feaa8fcb630131502fff228dcd"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -6356,10 +6425,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "9f96e0472a2ab9130e66a541918751c798934f78514fe6eec2a8319e313e16e3"
+      "panel_plan_sha256": "4bad78e2fe11dc18495797ba3e6ab62eeaeb1bd0f91b875ae97a0ff4a6864151"
     },
     {
       "panel_id": "P037",
@@ -6391,6 +6462,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -6405,14 +6477,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -6422,12 +6494,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "CHAR_MASTER_XUJING",
@@ -6574,13 +6648,13 @@
             "sha256": "ccaf799c4a1dce87c090b1af3e5f5f86b363d9feaa8fcb630131502fff228dcd"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -6596,10 +6670,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "9f3a275d43eda958df0e68b09da16d2722000170b2de97f6dac77e2abebe4121"
+      "panel_plan_sha256": "5dfef0502672b3dac6e1be5a147c0b35ade3fa8f7a685f8e5c4624f62b530363"
     },
     {
       "panel_id": "P038",
@@ -6686,7 +6762,6 @@
             "state_id": "STATE_HERDBOY_REVEAL"
           },
           "variation_delta": [
-            "strong_emotion",
             "action_eyeline_lock",
             "multi_character"
           ],
@@ -6714,16 +6789,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_KNOWING_SMILE；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -6848,10 +6921,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "3ce05b0dae53c3683dd797cfc10c910225c720b7b5d54a27fd4b139d6b7b5793"
+      "panel_plan_sha256": "d1eaf251bde446606be567069d6b371bee5b627d9fb999a3b9edcf057ea1bd2b"
     },
     {
       "panel_id": "P039",
@@ -6898,14 +6973,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -6935,7 +7010,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -6962,14 +7036,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -7072,13 +7144,13 @@
             "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -7094,10 +7166,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "2b0b4a20f7f9df42003f2c933198c3a0ca401e3e08ab63795665c787f734e279"
+      "panel_plan_sha256": "b22ea2f8c3f88c6538780837677caa149f3d1350b03f7fb732bc263e90bcffc8"
     },
     {
       "panel_id": "P040",
@@ -7144,14 +7218,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -7181,7 +7255,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -7208,14 +7281,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -7318,13 +7389,13 @@
             "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -7340,10 +7411,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "6009d32f5cae6cf3b34e36d48bd6656d5c2be3875f544467e94d2617fe535542"
+      "panel_plan_sha256": "4b58c1dbc57ea8210a819e855baebc1077d7fd833447323c9ff629d32348679e"
     },
     {
       "panel_id": "P041",
@@ -7375,6 +7448,7 @@
             "state_id": "STATE_MOUNTAIN_DIRTY"
           },
           "variation_delta": [
+            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -7389,14 +7463,14 @@
               "strength_hint": 0.72
             },
             {
-              "role": "three_quarter",
-              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-              "strength_hint": 0.65
-            },
-            {
               "role": "outfit",
               "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
               "strength_hint": 0.55
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+              "strength_hint": 0.65
             }
           ],
           "reference_budget": {
@@ -7406,12 +7480,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [],
+          "missing_references": [
+            "强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+          ],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": false
+          "needs_action": true
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -7558,13 +7634,13 @@
             "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+            "strength_hint": 0.55,
             "id": "CHAR_HONG_XIN",
             "character_id": "CHAR_HONG_XIN",
             "required": false,
-            "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1"
+            "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7"
           },
           {
             "role": "three_quarter",
@@ -7580,10 +7656,12 @@
         "over_capacity": false,
         "split_suggestion": ""
       },
-      "blocked": false,
-      "blocking_codes": [],
+      "blocked": true,
+      "blocking_codes": [
+        "strong_emotion_expression_reference_missing"
+      ],
       "needs_action": true,
-      "panel_plan_sha256": "ff79078b59159532580644c2d1b92103110ffa218d785df198ab5b72aa27dc72"
+      "panel_plan_sha256": "6e86aae10f6d326059660fe841da0cf65616d900c61e787b8392794781bc0f75"
     },
     {
       "panel_id": "P042",
@@ -8073,7 +8151,6 @@
             "state_id": "STATE_FUMO_DEFIANT"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -8100,14 +8177,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_DEFIANT；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -8120,7 +8195,6 @@
             "state_id": "STATE_BASE"
           },
           "variation_delta": [
-            "strong_emotion",
             "multi_character"
           ],
           "recommended_references": [
@@ -8147,14 +8221,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -8275,7 +8347,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "2ff484c713d4f5f76d971e022d0ce7b3c5516d0771a45d75c07cc861108173dd"
+      "panel_plan_sha256": "77d8eefc228380a642890a750adcb5cd1638fb7a8bbf7bf6c69a3ee719fd047f"
     },
     {
       "panel_id": "P045",
@@ -9032,26 +9104,29 @@
               "role": "face",
               "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
               "strength_hint": 0.72
+            },
+            {
+              "role": "expression",
+              "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+              "strength_hint": 0.6,
+              "contract_id": "EXPR_STUNNED"
             }
           ],
           "reference_budget": {
             "limit": 4,
-            "requested": 3,
-            "selected": 3,
+            "requested": 4,
+            "selected": 4,
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_STUNNED；不能用中性 face 冒充）",
-            "全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ABBOT_SHANGQING",
@@ -9065,7 +9140,6 @@
           },
           "variation_delta": [
             "wide_full_body",
-            "strong_emotion",
             "action_eyeline_lock",
             "multi_character"
           ],
@@ -9093,17 +9167,14 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-            "全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
           "prompt_required": [
             "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
           ],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -9139,7 +9210,7 @@
       "attachment_plan": {
         "limit": 10,
         "required_count": 5,
-        "selected_count": 9,
+        "selected_count": 10,
         "selected": [
           {
             "role": "three_quarter",
@@ -9215,6 +9286,16 @@
             "character_id": "CHAR_ABBOT_SHANGQING",
             "required": false,
             "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68"
+          },
+          {
+            "role": "expression",
+            "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+            "strength_hint": 0.6,
+            "contract_id": "EXPR_STUNNED",
+            "id": "CHAR_HONG_XIN",
+            "character_id": "CHAR_HONG_XIN",
+            "required": false,
+            "sha256": "1fa172b10d5c96aaa234a75ca78a6dbf6d9b9db0c70cc6d34700d35047a58ac4"
           }
         ],
         "missing_required": [],
@@ -9224,24 +9305,10 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "08846d599d3600fc06889d832d636299be4bd1ee4765c7e571cc73dd7a0de59d"
+      "panel_plan_sha256": "8c44de3b84d9225667c8d0cef2c24289e6a69219ba62a20d85102b139d281705"
     }
   ],
   "findings": [
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P006",
-      "character_id": "CHAR_EMPEROR_RENZONG",
-      "message": "P006·宋仁宗：缺 45°/three_quarter 参考（档位或本格变化量需要）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P006",
-      "character_id": "CHAR_EMPEROR_RENZONG",
-      "message": "P006·宋仁宗：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
-    },
     {
       "severity": "warn",
       "code": "same_frame_color_collision",
@@ -9249,101 +9316,60 @@
       "message": "P008 多人同框主色撞色（易串脸）：CHAR_FAN_ZHONGYAN↔CHAR_EMPEROR_RENZONG（同主色「红」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
     },
     {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P010",
-      "character_id": "CHAR_EMPEROR_RENZONG",
-      "message": "P010·宋仁宗：缺 45°/three_quarter 参考（档位或本格变化量需要）"
-    },
-    {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
-      "panel": "P010",
-      "character_id": "CHAR_EMPEROR_RENZONG",
-      "message": "P010·宋仁宗：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "panel": "P024",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P024·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
-      "panel": "P010",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P010·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_COMPOSED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P020",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P020·洪信：缺 侧脸参考（极端角度/转头/过肩格）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P020",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P020·洪信：缺 背身参考（背影/过肩格）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P020",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P020·上清宫住持：缺 侧脸参考（极端角度/转头/过肩格）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P020",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P020·上清宫住持：缺 背身参考（背影/过肩格）"
-    },
-    {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P023",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P023·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_COMPOSED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
       "panel": "P025",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P025·洪信：缺 侧脸参考（极端角度/转头/过肩格）"
+      "message": "P025·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
       "severity": "warn",
       "code": "missing_reference",
       "panel": "P025",
       "character_id": "MON_WHITE_TIGER",
-      "message": "P025·吊睛白额锦毛大虫：缺 侧脸参考（极端角度/转头/过肩格）"
+      "message": "P025·吊睛白额锦毛大虫：缺 侧脸参考（极端角度/转头格）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
       "panel": "P026",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P026·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "message": "P026·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
-      "panel": "P026",
-      "character_id": "MON_WHITE_TIGER",
-      "message": "P026·吊睛白额锦毛大虫：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "panel": "P027",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P027·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
       "panel": "P028",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P028·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "message": "P028·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P029",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P029·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P030",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P030·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
       "severity": "warn",
@@ -9352,68 +9378,81 @@
       "message": "P030 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
     },
     {
-      "severity": "warn",
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P031",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P031·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P032",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P032·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
       "panel": "P033",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P033·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "message": "P033·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
-      "panel": "P033",
-      "character_id": "MON_SNOW_SERPENT",
-      "message": "P033·雪花大蛇：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "panel": "P034",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P034·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P035",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P035·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P036",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P036·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
+      "code": "strong_emotion_expression_reference_missing",
+      "panel": "P037",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P037·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
+    },
+    {
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
       "panel": "P038",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P038·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "message": "P038·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P038",
-      "character_id": "CHAR_MASTER_XUJING",
-      "message": "P038·虚靖天师：缺 强情绪格缺对应表情参考（expression_id=EXPR_KNOWING_SMILE；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
       "panel": "P039",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P039·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "message": "P039·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P039",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P039·上清宫住持：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
       "panel": "P040",
       "character_id": "CHAR_HONG_XIN",
-      "message": "P040·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "message": "P040·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
-      "severity": "warn",
+      "severity": "block",
       "code": "strong_emotion_expression_reference_missing",
-      "panel": "P040",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P040·上清宫住持：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
+      "panel": "P041",
+      "character_id": "CHAR_HONG_XIN",
+      "message": "P041·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_TERRIFIED；不能用中性 face 冒充）"
     },
     {
       "severity": "warn",
@@ -9423,57 +9462,11 @@
     },
     {
       "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P044",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P044·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_DEFIANT；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P044",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P044·上清宫住持：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
       "code": "multi_character_closeup",
       "panel": "P047",
       "message": "P047 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
-    },
-    {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P048",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P048·洪信：缺 强情绪格缺对应表情参考（expression_id=EXPR_STUNNED；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P048",
-      "character_id": "CHAR_HONG_XIN",
-      "message": "P048·洪信：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
-    },
-    {
-      "severity": "warn",
-      "code": "strong_emotion_expression_reference_missing",
-      "panel": "P048",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P048·上清宫住持：缺 强情绪格缺对应表情参考（expression_id=EXPR_NEUTRAL；不能用中性 face 冒充）",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P048",
-      "character_id": "CHAR_ABBOT_SHANGQING",
-      "message": "P048·上清宫住持：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
     }
   ],
   "notes": [],
-  "plan_sha256": "4816f1480d9959b81857aeb7e5e89f2f3b40ac4c389eb840c04eeaebdcb1afa9"
+  "plan_sha256": "7a1f167442c842bbcc0bb730f0d04df6e00fffeb9cf355b73f8f581779c1a012"
 }

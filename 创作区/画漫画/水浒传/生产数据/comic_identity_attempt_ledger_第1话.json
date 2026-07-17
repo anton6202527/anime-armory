@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "comic_identity_generation_attempt_ledger",
   "chapter": "第1话",
-  "updated_at": "2026-07-16T18:47:02.269033",
+  "updated_at": "2026-07-17T17:56:57.752852",
   "migration": {
     "status": "backfilled_from_existing_evidence",
     "recorded_at": "2026-07-15T15:47:00+08:00",
@@ -1200,6 +1200,22 @@
       "finished_at": "2026-07-16T18:47:02.269032",
       "artifact_path": "出图/共享/candidates/LOC_FUMO_HALL_INTERIOR/anchor/20260716T184600338433__dreamina5_attempt2.png",
       "artifact_sha256": "79cfe0702aa82152aad51b66b041432c3c82dbcc4147d4c4ba3ca1c599dd8c25"
+    },
+    {
+      "attempt_id": "859ef62c00c5b60a8a9a",
+      "started_at": "2026-07-17T17:55:58.047150",
+      "status": "succeeded",
+      "generation_kind": "expression",
+      "asset_id": "CHAR_HONG_XIN",
+      "variant": "EXPR_TERRIFIED",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "prompt_sha256": "8ae0fac65ff964cf9168c99fa9036b184a4cabce6156b7b83ed89fdb735856f5",
+      "finished_at": "2026-07-17T17:56:57.752849",
+      "artifact_path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+      "artifact_sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f"
     }
   ]
 }

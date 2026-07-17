@@ -1,12 +1,12 @@
 {
   "kind": "comic_identity_drift_report",
   "version": 1,
-  "generated_at": "2026-07-17T09:16:07+00:00",
+  "generated_at": "2026-07-17T09:34:56+00:00",
   "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
   "summary": {
     "chapters_scanned": 2,
     "characters_tracked": 9,
-    "characters_with_drift": 1,
+    "characters_with_drift": 0,
     "characters_block": 0
   },
   "chapters": [
@@ -22,18 +22,13 @@
       ],
       "chapter_status": {
         "第1话": "ok",
-        "第2话": "warn"
+        "第2话": "ok"
       },
-      "first_bad_chapter": "第2话",
-      "warn_or_block_chapters": [
-        "第2话"
-      ],
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
       "block_chapters": [],
-      "codes": [
-        "face_fingerprint_low",
-        "hair_fingerprint_low"
-      ],
-      "recommendation": "CHAR_ABBOT_SHANGQING：仅 第2话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+      "codes": [],
+      "recommendation": null
     },
     {
       "char_id": "CHAR_EMPEROR_RENZONG",

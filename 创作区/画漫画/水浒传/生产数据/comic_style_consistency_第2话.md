@@ -1,41 +1,42 @@
 # 漫画风格一致性报告 — 第2话
 
-- 生成时间：2026-07-17T17:15:52
-- 结论：warn
+- 生成时间：2026-07-17T17:34:41
+- 结论：pass
 - panel 数：42
-- block/warn/info：0 / 23 / 0
+- block/warn/info：0 / 0 / 23
 
 ## 记录
 
 - 跨话基准比对通过：与基准话（第1话）相似度 0.9850。
+- 已按 生产数据/style_consistency_acceptance_第2话.json 人审签收 23 条风格一致性 finding；原始机器 severity 保留在 machine_severity。
 
 ## Findings
 
 | severity | code | panel | artifact | reason | suggested_fix |
 |---|---|---|---|---|---|
-| warn | panel_style_outlier | P004 | 出图/第2话/panels/P004.png | 风格指纹内聚度 0.7359 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P005 | 出图/第2话/panels/P005.png | 风格指纹内聚度 0.7061 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P008 | 出图/第2话/panels/P008.png | 风格指纹内聚度 0.6205 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P009 | 出图/第2话/panels/P009.png | 风格指纹内聚度 0.6543 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P010 | 出图/第2话/panels/P010.png | 风格指纹内聚度 0.7092 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P013 | 出图/第2话/panels/P013.png | 风格指纹内聚度 0.6865 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P016 | 出图/第2话/panels/P016.png | 风格指纹内聚度 0.6836 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P017 | 出图/第2话/panels/P017.png | 风格指纹内聚度 0.7165 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P023 | 出图/第2话/panels/P023.png | 风格指纹内聚度 0.7271 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P034 | 出图/第2话/panels/P034.png | 风格指纹内聚度 0.7108 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | panel_style_outlier | P036 | 出图/第2话/panels/P036.png | 风格指纹内聚度 0.7373 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
-| warn | location_color_grade_shift | P013 | 出图/第2话/panels/P013.png | 同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.225, tint_dev=0.015。 | 人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。 |
-| warn | location_color_grade_shift | P030 | 出图/第2话/panels/P030.png | 同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.223, tint_dev=0.007。 | 人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。 |
-| warn | location_color_grade_shift | P017 | 出图/第2话/panels/P017.png | 同场景“坍塌后的伏魔殿外廊”内调色代理偏离组中位：warmth_dev=0.239, tint_dev=0.048。 | 人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。 |
-| warn | tone_value_outlier | P004 | 出图/第2话/panels/P004.png | 黑白灰量化偏离话内中位：black_ratio=0.3642（中位 0.017），线宽代理 edge_density=0.0758（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P005 | 出图/第2话/panels/P005.png | 黑白灰量化偏离话内中位：black_ratio=0.4058（中位 0.017），线宽代理 edge_density=0.0866（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P006 | 出图/第2话/panels/P006.png | 黑白灰量化偏离话内中位：black_ratio=0.3399（中位 0.017），线宽代理 edge_density=0.0664（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P007 | 出图/第2话/panels/P007.png | 黑白灰量化偏离话内中位：black_ratio=0.3799（中位 0.017），线宽代理 edge_density=0.0814（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P008 | 出图/第2话/panels/P008.png | 黑白灰量化偏离话内中位：black_ratio=0.4579（中位 0.017），线宽代理 edge_density=0.0685（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P009 | 出图/第2话/panels/P009.png | 黑白灰量化偏离话内中位：black_ratio=0.5737（中位 0.017），线宽代理 edge_density=0.0747（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P010 | 出图/第2话/panels/P010.png | 黑白灰量化偏离话内中位：black_ratio=0.4456（中位 0.017），线宽代理 edge_density=0.0682（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | tone_value_outlier | P030 | 出图/第2话/panels/P030.png | 黑白灰量化偏离话内中位：black_ratio=0.3463（中位 0.017），线宽代理 edge_density=0.073（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。 |
-| warn | style_anchor_drift |  | 出图/共享/style_baseline.json | 本话整体指纹与风格锚图最高相似度仅 0.8789，风格锚可能已失去约束力。 | 并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。 |
+| info | panel_style_outlier | P004 | 出图/第2话/panels/P004.png | 风格指纹内聚度 0.7359 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P005 | 出图/第2话/panels/P005.png | 风格指纹内聚度 0.7061 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P008 | 出图/第2话/panels/P008.png | 风格指纹内聚度 0.6205 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P009 | 出图/第2话/panels/P009.png | 风格指纹内聚度 0.6543 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P010 | 出图/第2话/panels/P010.png | 风格指纹内聚度 0.7092 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P013 | 出图/第2话/panels/P013.png | 风格指纹内聚度 0.6865 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P016 | 出图/第2话/panels/P016.png | 风格指纹内聚度 0.6836 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P017 | 出图/第2话/panels/P017.png | 风格指纹内聚度 0.7165 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P023 | 出图/第2话/panels/P023.png | 风格指纹内聚度 0.7271 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P034 | 出图/第2话/panels/P034.png | 风格指纹内聚度 0.7108 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | panel_style_outlier | P036 | 出图/第2话/panels/P036.png | 风格指纹内聚度 0.7373 明显低于本话中位 0.7826，疑似画风、细节密度或照片感跳变。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | location_color_grade_shift | P013 | 出图/第2话/panels/P013.png | 同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.225, tint_dev=0.015。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | location_color_grade_shift | P030 | 出图/第2话/panels/P030.png | 同场景“伏魔殿封禁记忆层”内调色代理偏离组中位：warmth_dev=0.223, tint_dev=0.007。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | location_color_grade_shift | P017 | 出图/第2话/panels/P017.png | 同场景“坍塌后的伏魔殿外廊”内调色代理偏离组中位：warmth_dev=0.239, tint_dev=0.048。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P004 | 出图/第2话/panels/P004.png | 黑白灰量化偏离话内中位：black_ratio=0.3642（中位 0.017），线宽代理 edge_density=0.0758（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P005 | 出图/第2话/panels/P005.png | 黑白灰量化偏离话内中位：black_ratio=0.4058（中位 0.017），线宽代理 edge_density=0.0866（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P006 | 出图/第2话/panels/P006.png | 黑白灰量化偏离话内中位：black_ratio=0.3399（中位 0.017），线宽代理 edge_density=0.0664（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P007 | 出图/第2话/panels/P007.png | 黑白灰量化偏离话内中位：black_ratio=0.3799（中位 0.017），线宽代理 edge_density=0.0814（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P008 | 出图/第2话/panels/P008.png | 黑白灰量化偏离话内中位：black_ratio=0.4579（中位 0.017），线宽代理 edge_density=0.0685（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P009 | 出图/第2话/panels/P009.png | 黑白灰量化偏离话内中位：black_ratio=0.5737（中位 0.017），线宽代理 edge_density=0.0747（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P010 | 出图/第2话/panels/P010.png | 黑白灰量化偏离话内中位：black_ratio=0.4456（中位 0.017），线宽代理 edge_density=0.0682（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | tone_value_outlier | P030 | 出图/第2话/panels/P030.png | 黑白灰量化偏离话内中位：black_ratio=0.3463（中位 0.017），线宽代理 edge_density=0.073（中位 0.114）。疑似网点密度/黑场/线宽口径不统一。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | style_anchor_drift |  | 出图/共享/style_baseline.json | 本话整体指纹与风格锚图最高相似度仅 0.8789，风格锚可能已失去约束力。 | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
 
 ## Panel 指纹
 
