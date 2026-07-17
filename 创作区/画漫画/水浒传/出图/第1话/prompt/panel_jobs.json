@@ -15563,7 +15563,7 @@
     },
     {
       "panel_id": "P045",
-      "status": "ready",
+      "status": "failed",
       "size": {
         "width": 1296,
         "height": 1232
@@ -15934,7 +15934,8 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "error": "dreamina result not ready within 240s: do request: Post \"https://jimeng.jianying.com/mweb/v1/get_history_by_ids?agent_detect=agent%3Acodex&aid=513695&cli_version=c58a6a2-dirty&from=dreamina_cli\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)\n"
     },
     {
       "panel_id": "P046",
