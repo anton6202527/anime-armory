@@ -1,6 +1,6 @@
 # 漫画一致性报告 — 第4话
 
-- 生成时间：2026-07-18T17:36:12
+- 生成时间：2026-07-18T18:53:06
 - reference 总数：10
 - 缺失 reference：0
 - 需要重抽格：0
@@ -37,23 +37,23 @@
 | P024 | ready | 7 | - | 7 |
 | P025 | ready | 7 | - | 7 |
 | P026 | ready | 7 | - | 7 |
-| P027 | failed | 10 | - | 0 |
-| P028 | failed | 10 | - | 0 |
-| P029 | planned | 10 | - | 0 |
-| P030 | planned | 10 | - | 0 |
-| P031 | planned | 7 | - | 0 |
-| P032 | planned | 10 | - | 0 |
-| P033 | planned | 6 | - | 0 |
-| P034 | planned | 10 | - | 0 |
-| P035 | planned | 10 | - | 0 |
-| P036 | planned | 10 | - | 0 |
-| P037 | planned | 6 | - | 0 |
-| P038 | planned | 10 | - | 0 |
-| P039 | planned | 10 | - | 0 |
-| P040 | planned | 10 | - | 0 |
-| P041 | planned | 10 | - | 0 |
-| P042 | planned | 10 | - | 0 |
-| P043 | planned | 10 | - | 0 |
-| P044 | planned | 9 | - | 0 |
-| P045 | planned | 9 | - | 0 |
-| P046 | planned | 9 | - | 0 |
+| P027 | ready | 10 | - | 6 |
+| P028 | ready | 10 | - | 6 |
+| P029 | ready | 10 | - | 6 |
+| P030 | ready | 10 | - | 6 |
+| P031 | ready | 7 | - | 6 |
+| P032 | ready | 10 | - | 6 |
+| P033 | ready | 6 | - | 6 |
+| P034 | ready | 10 | - | 6 |
+| P035 | ready | 10 | - | 6 |
+| P036 | ready | 10 | - | 6 |
+| P037 | failed | 6 | - | 0 |
+| P038 | ready | 10 | - | 6 |
+| P039 | ready | 10 | - | 6 |
+| P040 | ready | 10 | - | 6 |
+| P041 | ready | 10 | - | 6 |
+| P042 | ready | 10 | - | 6 |
+| P043 | ready | 10 | - | 6 |
+| P044 | ready | 9 | - | 6 |
+| P045 | ready | 9 | - | 6 |
+| P046 | ready | 9 | - | 6 |

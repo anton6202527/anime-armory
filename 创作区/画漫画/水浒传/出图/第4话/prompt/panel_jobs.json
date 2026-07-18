@@ -12394,7 +12394,7 @@
     },
     {
       "panel_id": "P037",
-      "status": "failed",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 840
@@ -12644,9 +12644,68 @@
         "style_reference_limit": 1,
         "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
       },
-      "result_path": "",
+      "result_path": "出图/第4话/panels/P037.png",
       "source": "Dreamina/即梦官方 CLI",
-      "error": "dreamina result not ready within 600s: {\n  \"submit_id\": \"6e999fcc-9a35-4aaf-b8d6-606d74981f63\",\n  \"prompt\": \"生成一张单格、铺满画布、无字的彩色漫画完成稿。\\n\\n核心画面事实：王进低头守礼，苍白额角见汗，身体不因屈辱失去军人骨架\\n人物状态：王进 / 禁军教头当值服 / 抱病应召当值状态\\n画风：宋画工笔淡彩与写实国漫结合，低饱和矿物色，清晰有压力变化的墨线，电影动机光，粗粝北宋市井质感。\\n构图：服务端使用 3:2，关键人物、脸、手脚、道具和动作接触点全部放在中央安全区，四边预留 12% 裁切余量；最终裁为 1188x840。\\n\\n输入图职责：\\n- 输入图 1：角色身份/服装参考（CHAR_WANG_JIN，不得与其他角色串脸串衣）\\n- 输入图 2：仅继承线条、色彩、光影与材质语言的画风参考\\n- 输入图 3：场景结构、材质与光位参考（LOC_DIANSHUAI_HALL）\\n- 输入图 4：角色身份/服装参考（CHAR_WANG_JIN，不得与其他角色串脸串衣）\\n- 输入图 5：角色身份/服装参考（CHAR_WANG_JIN，不得与其他角色串脸串衣）\\n- 输入图 6：角色身份/服装参考（CHAR_WANG_JIN，不得与其他角色串脸串衣）\\n\\n保持同一角色的脸型、眼型、发际线、发髻、体型和服装主色；不同角色绝不串脸、串衣或合并。场景图只继承空间、材质和光位，风格图只继承线条、色彩与光影。\\n本次纠偏：保留本格已签收人物与场景锚，人物关系、站位、服装和动作清楚；只画核心画面事实。\\n\\n只生成一个完整面板。禁止内部多格、拼贴、边框、对白气泡、旁白框、空白文字框、可读文字、乱码、日文、Logo、水印、现代物件、额外肢体、手脚混淆、穿模和无来源发光。\",\n  \"logid\": \"20260718180029192168113005667DA7B\",\n  \"gen_status\": \"fail\",\n  \"fail_reason\": \"generation failed: final generation failed\",\n  \"credit_count\": 3,\n  \"queue_info\": {\n    \"queue_idx\": 0,\n    \"priority\": 1,\n    \"queue_status\": \"Finish\",\n    \"queue_length\": 0,\n    \"debug_info\": \"{\\\"have_no_dreamina_queue_name\\\":true,\\\"dreamina_matrix_queue_name\\\":\\\"\\\",\\\"dreamina_matrix_req_key\\\":\\\"\\\",\\\"dreamina_matrix_second_req_key\\\":\\\"\\\",\\\"have_no_queue_name\\\":false,\\\"queue_name\\\":\\\"high_aes_general_v50\\\",\\\"matrix_req_key\\\":\\\"MImageGen:high_aes_general_v50\\\",\\\"matrix_second_req_key\\\":\\\"\\\"}\"\n  }\n}\n"
+      "model": "Dreamina 5.0",
+      "model_version": "5.0",
+      "generated_at": "2026-07-18T18:55:41",
+      "backend_version": "{",
+      "artifact_sha256": "fda413b1080d3496f612eb4d73ff57aabf888131e46564b115aa9d6a266f20de",
+      "attempt": 1,
+      "submit_id": "4a653e80-9e9f-4877-8582-7e85a929070e",
+      "service_ratio": "3:2",
+      "resolution_type": "2k",
+      "reference_input_mode": "dreamina_image2image_images",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P037.json",
+      "prompt_snapshot": "出图/第4话/prompt/dreamina/P037.txt",
+      "prompt_snapshot_sha256": "8e87b0375a21bdafecf80118c8292149ea0fe921fbf2aa559a964f0ea50c1000",
+      "execution_prompt_mode": "concise_recovery",
+      "raw_candidate_path": "出图/第4话/candidates/P037/20260718T185412_attempt1_dreamina_raw.png",
+      "canvas_normalization": {
+        "mode": "center_crop_after_safe_margin_prompt",
+        "source_size": {
+          "width": 2496,
+          "height": 1664
+        },
+        "target_size": {
+          "width": 1188,
+          "height": 840
+        }
+      },
+      "generated_from_contract_sha256": "f3616e5765c3626fbf9f846f7ed98e552c6c6a5da91d58da96af346fca5bd895",
+      "generated_from_submit_prompt_sha256": "20bc450f3b32140a60164875c38bbb03a550ddbc500a41e9074ab1da55565596",
+      "generated_from_execution_input_sha256": "5da1da26baae030ca4f6d5ad06fd81e92d4e9df9d2ec3ab6231f4a00cb6e4719",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第4话",
+        "panel_id": "P037",
+        "created_at": "2026-07-18T18:55:41",
+        "verdict": "pass",
+        "path": "出图/第4话/panels/P037.png",
+        "size": {
+          "width": 1188,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1188,
+          "height": 840
+        },
+        "declared_reference_count": 6,
+        "declared_reference_binding_count": 6,
+        "reference_input_count": 2,
+        "omitted_attachment_count": 4,
+        "omitted_attachment_ids": [
+          "STYLE_SHUIHU_SONG_CINEMATIC",
+          "CHAR_WANG_JIN",
+          "CHAR_WANG_JIN",
+          "CHAR_WANG_JIN"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P038",

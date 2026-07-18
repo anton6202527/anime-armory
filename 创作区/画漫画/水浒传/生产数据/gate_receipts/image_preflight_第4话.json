@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "kind": "comic_gate_receipt",
-  "receipt_id": "8c226c71ead6275fdd56a9d2d0119bbbfdfc36f105682757372b4d15745c5256",
+  "receipt_id": "7aff2296f1fe528343525cc4ab54620423bc1248e85bf36deaf926991c5a260f",
   "chapter": "第4话",
   "stage": "image_preflight",
-  "created_at": "2026-07-18T17:36:13",
+  "created_at": "2026-07-18T18:54:10",
   "verdict": "warn",
   "execution_authorized": true,
-  "inputs_fingerprint_sha256": "92b75208f6f0eea0d04aeb57076cc69e671ca022554796f5695c14e1c8494036",
-  "panel_jobs_sha256": "83b7073a5cf36c67e5e7df1da309fecb3acc0901ac79e94d5de3062a6d2ae33d",
+  "inputs_fingerprint_sha256": "bdaf9dd1a70c4381f41b0c2752a869910e64328cca8c287d8becd875efb9c56f",
+  "panel_jobs_sha256": "f5db98c34f01fd3262215438ba3e4f4609ea98d573f904fca8823b626b431478",
   "artifacts": {
     "panel_jobs_path": "出图/第4话/prompt/panel_jobs.json",
-    "panel_jobs_sha256": "83b7073a5cf36c67e5e7df1da309fecb3acc0901ac79e94d5de3062a6d2ae33d"
+    "panel_jobs_sha256": "f5db98c34f01fd3262215438ba3e4f4609ea98d573f904fca8823b626b431478"
   },
   "report_path": "生产数据/comic_gate_image_preflight_第4话.json",
-  "report_sha256": "2911e7d1415b922c1ba06beb5759d228605a473b9e624bb8e5d504d55e9f876e"
+  "report_sha256": "461f81205e9b24a7f98ed6bfb9fe93c1b8ee5963de5de4420e7982c79c15f26f"
 }

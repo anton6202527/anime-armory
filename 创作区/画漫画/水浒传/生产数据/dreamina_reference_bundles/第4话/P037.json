@@ -4,8 +4,8 @@
   "chapter": "第4话",
   "panel_id": "P037",
   "reference_input_mode": "dreamina_image2image_images",
-  "reference_attachment_limit": 6,
-  "cli_image_input_count": 6,
+  "reference_attachment_limit": 2,
+  "cli_image_input_count": 2,
   "references": [
     {
       "id": "CHAR_WANG_JIN",
@@ -15,42 +15,35 @@
       "required": true
     },
     {
-      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
-      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
-      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
-      "role": "style",
-      "required": false
-    },
-    {
       "id": "LOC_DIANSHUAI_HALL",
       "path": "出图/共享/图片/LOC_DIANSHUAI_HALL__anchor.png",
       "sha256": "56f5ac1b596ed5d8cc5dc0b66e7c396043b6c2303bee3c033337362a5b6aada1",
       "role": "location",
       "required": true
+    }
+  ],
+  "omitted_attachment_count": 4,
+  "omitted_attachments": [
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
     },
     {
       "id": "CHAR_WANG_JIN",
       "path": "出图/共享/图片/CHAR_WANG_JIN__face.png",
-      "sha256": "cac2ca341f55fea13db3e094f508f54482238fa75b80b7040b21fcb2bcc63ba6",
-      "role": "face",
-      "required": false
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
     },
     {
       "id": "CHAR_WANG_JIN",
       "path": "出图/共享/图片/CHAR_WANG_JIN__OUTFIT_IMPERIAL_INSTRUCTOR.png",
-      "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
-      "role": "outfit",
-      "required": false
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
     },
     {
       "id": "CHAR_WANG_JIN",
       "path": "出图/共享/图片/CHAR_WANG_JIN__three_quarter.png",
-      "sha256": "09a2c6b987e705675b6822c12331c2f27f5cead71d5abffbc1143bf63bf4fa5b",
-      "role": "three_quarter",
-      "required": false
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
     }
   ],
-  "omitted_attachment_count": 0,
-  "omitted_attachments": [],
-  "created_at": "2026-07-18T17:50:27"
+  "created_at": "2026-07-18T18:54:12"
 }
