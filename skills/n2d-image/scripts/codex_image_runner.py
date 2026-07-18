@@ -3739,8 +3739,21 @@ def compile_target_image_request(
         preserve = list(contract.get("preserve") or [])
         if anchor_beat.get("single_reaction"):
             preserve.append("源帧的角色身份、服装、场景几何、光位与轴线；前一子镜头接触动作不得延续")
+        elif anchor_beat:
+            preserve.append(
+                "源帧的角色身份、服装、场景几何、光位、轴线，以及既有道具的结构、总数量和归属；"
+                "只按本锚 storyboard 改变人物姿态、手握点、道具位置与接触状态"
+            )
         else:
             preserve.append("源帧的角色身份、服装、站位、场景几何、光位、轴线、手握位置与道具接触点")
+        if anchor_beat:
+            anchor_guards = list(contract.get("policy_guards") or [])
+            anchor_guards.insert(0, (
+                "中锚动作状态替换铁律：源帧中的同一人物和同一组道具只改变到本锚新状态；"
+                "不得同时保留旧姿态/旧位置又新增一套新姿态/新位置，不得复制人物、肢体或道具；"
+                "道具总数量、拓扑与归属严格不变"
+            ))
+            contract["policy_guards"] = anchor_guards
         if has_weapon_body_contact(target):
             preserve.append("源帧既有武器接触点、伤口位置与入射角")
         contract["preserve"] = preserve

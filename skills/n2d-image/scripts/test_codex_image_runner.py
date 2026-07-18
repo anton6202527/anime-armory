@@ -1258,6 +1258,9 @@ def test_midframe_anchor_uses_subshot_starting_at_exact_edit_boundary(tmp_path: 
     assert "张老大及其手臂完全出画" in prompt
     assert "右手压在少年左肩" not in prompt
     assert "拍肩为张老大右手" not in prompt
+    assert "中锚动作状态替换铁律" in prompt
+    assert "不得同时保留旧姿态/旧位置又新增一套新姿态/新位置" in prompt
+    assert "道具总数量、拓扑与归属严格不变" in prompt
 
 
 def test_firstframe_uses_first_faceless_storyboard_subshot_only(tmp_path: Path) -> None:

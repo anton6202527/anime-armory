@@ -363,6 +363,69 @@ def test_firstframe_exact_state_relay_uses_previous_accepted_last_anchor_as_sour
     assert inputs[0]["owner"] == "Clip_05"
 
 
+def test_same_target_exact_hash_rejection_uses_current_pixels_as_correction_source(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    first = tmp_path / "出图" / "第1集" / "图片" / "EP01_CLIP05.png"
+    current = first.with_name("EP01_CLIP05_a1.png")
+    first.parent.mkdir(parents=True)
+    first.write_bytes(b"accepted-first")
+    current.write_bytes(b"rejected-current")
+    face = tmp_path / "出图" / "共享" / "图片" / "CHAR_01_face.png"
+    face.parent.mkdir(parents=True)
+    face.write_bytes(b"canonical-face")
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    events.write_text(json.dumps({
+        "stage": "image", "event": "qa",
+        "generation": {
+            "asset": "出图/第1集/图片/EP01_CLIP05_a1.png",
+            "status": "rejected",
+        },
+        "qa": {"msg": "删除多余的第3只桶"},
+        "meta": {
+            "artifact_sha256": base.file_sha256(current),
+            "review_kind": "executor_visual",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+    section = base.ClipSection(
+        clip="Clip_05", title="## 镜头 5", body="",
+        target_line="`出图/第1集/图片/EP01_CLIP05_a1.png`",
+    )
+    target = base.Target(
+        shot="Clip_05_a1", clip="Clip_05", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP05_a1.png", section=section,
+    )
+    monkeypatch.setattr(base, "target_for_shot", lambda *_args: base.Target(
+        shot="Clip_05_first", clip="Clip_05", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP05.png", section=section,
+    ))
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": [{
+        "kind": "character", "id": "CHAR_01",
+        "paths": ["出图/共享/图片/CHAR_01_face.png"],
+    }]})
+    monkeypatch.setattr(base, "storyboard_anchor_beat", lambda *_args: {})
+
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+    inputs = dreamina.dreamina_reference_inputs(tmp_path, target, refs, "第1集")
+
+    assert refs[0] == current
+    assert first not in refs
+    assert inputs[0]["role"] == "source_frame"
+
+    reset_refs = dreamina.prompt_reference_paths(
+        tmp_path, target, "第1集", canonical_reset=True,
+    )
+    reset_inputs = dreamina.dreamina_reference_inputs(
+        tmp_path, target, reset_refs, "第1集", canonical_reset=True,
+    )
+
+    assert reset_refs[0] == face
+    assert current not in reset_refs
+    assert first not in reset_refs
+    assert reset_inputs[0]["role"] == "character"
+
+
 def test_dreamina_requeries_same_async_submit_until_image_exists(tmp_path: Path, monkeypatch) -> None:
     ref = tmp_path / "ref.png"
     ref.write_bytes(b"ref")

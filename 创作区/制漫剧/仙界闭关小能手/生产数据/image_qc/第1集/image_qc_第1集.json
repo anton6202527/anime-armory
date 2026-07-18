@@ -54,8 +54,8 @@
       "available": true,
       "characters": {
         "CHAR_01__本集为14岁杂役常态": {
-          "ep_mean_score": 0.5067,
-          "ep_n_shots": 9,
+          "ep_mean_score": 0.4877,
+          "ep_n_shots": 10,
           "floor": 0.4747,
           "floor_calibrated": true,
           "has_main": true,
@@ -275,6 +275,17 @@
           "score": 0.4929,
           "score_vs_main": 0.4763,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "face_idx": 0,
+          "floor": 0.4747,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP05_a1.png",
+          "score": 0.3257,
+          "score_vs_main": 0.3167,
+          "verdict": "block"
         }
       ]
     },
@@ -372,6 +383,13 @@
           "floor": 0.83,
           "png": "图片/EP01_CLIP05.png",
           "score": 0.305,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.83,
+          "png": "图片/EP01_CLIP05_a1.png",
+          "score": 0.1463,
           "verdict": "block"
         }
       ]
@@ -589,6 +607,13 @@
           "png": "图片/EP01_CLIP05.png",
           "score": 0.274,
           "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__本集为14岁杂役常态",
+          "floor": 0.5848,
+          "png": "图片/EP01_CLIP05_a1.png",
+          "score": 0.1506,
+          "verdict": "block"
         }
       ]
     },
@@ -616,7 +641,7 @@
             ]
           },
           "registered_id": "LOC_03",
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "秀竹峰杂役大殿": {
@@ -769,20 +794,11 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 9,
+    "covered": 10,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/本集为14岁杂役常态"
-        ],
-        "label": "镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP05_a1.png",
-        "shot": "Clip_05"
-      },
       {
         "face_coverage_required": true,
         "identity_refs": [
@@ -830,7 +846,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 9,
+    "required": 10,
     "skipped": [
       {
         "label": "镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
@@ -878,11 +894,12 @@
       "出图/第1集/图片/EP01_CLIP04_a1.png": "5a406f752143a09c56c1d398bf2577468422af257e6e2af9f5d16727887bd971",
       "出图/第1集/图片/EP01_CLIP04_a2.png": "0338d3cb91aff0ae88b9d3c03a2c323a7e1b703ac1f4161385820c1753a23886",
       "出图/第1集/图片/EP01_CLIP05.png": "e2d5e0af228e6a13afc941889f02ae0332060c006ee393ae199714f08a40d329",
+      "出图/第1集/图片/EP01_CLIP05_a1.png": "2f0f3cfb64b3112f89aad4054eb09616b8788a2015cca1004e0fb7ad4db956a3",
       "生产数据/image_qc/第1集/face_confirmations.json": "0725f875f66b7bfa7d5b4dc96e817e8daaef3f6f8592b464186d888ce9ea1aba",
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "8b5aa59cdface9bdc41c7fdf09678a67a7303746c6852d20d8066d7032e1ba90"
     },
-    "sha": "0b20e69207fbe133873b3c99c91833f27fea18bb9d96caa94b3ee98994bdc262"
+    "sha": "30967d1d94e9b3893edc251453e747ffdc087deb1a822a81430a849c5d39a22c"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1610,12 +1627,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 11,
+    "checked": 12,
     "distance": 0.973,
     "episode_fingerprint": {
-      "contrast": 94.0,
+      "contrast": 93.5,
       "edge": 27.2,
-      "sat": 38.0
+      "sat": 40.5
     },
     "findings": [],
     "intent": {
@@ -1636,7 +1653,7 @@
     }
   },
   "summary": {
-    "advisory": 9,
+    "advisory": 11,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1645,13 +1662,13 @@
         "warn": 0
       },
       "face": {
-        "block": 0,
+        "block": 1,
         "noface": 0,
         "ok": 9,
         "warn": 0
       },
       "hair": {
-        "block": 1,
+        "block": 2,
         "noface": 0,
         "ok": 8,
         "warn": 0
@@ -1675,7 +1692,7 @@
         "warn": 0
       },
       "outfit": {
-        "block": 1,
+        "block": 2,
         "noface": 0,
         "ok": 8,
         "warn": 0
@@ -1712,18 +1729,18 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 15,
+    "hard_blocks": 16,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 11,
+    "checked": 12,
     "findings": [
       {
         "code": "tone_warmth_contradiction",
         "level": "warn",
-        "msg": "色调像素兜底：契约基调=冷（前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光），但本集 11 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.11 ≥ 0.10）——渲染与契约暖冷相反，人判。"
+        "msg": "色调像素兜底：契约基调=冷（前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光），但本集 12 帧实测整体偏暖（暖冷 log(R/B) 中位数 +0.11 ≥ 0.10）——渲染与契约暖冷相反，人判。"
       }
     ],
     "intent": {
@@ -1731,7 +1748,7 @@
       "evidence": "前半段木灰冷青、低饱和；夕阳只给贺平生一道暖边；潭边转冷银月色，集尾仅盆底一缕青金幽光",
       "warmth": "cool"
     },
-    "luma_median": 60.1,
+    "luma_median": 57.3,
     "warmth_median": 0.1
   },
   "turnaround_alignment": {

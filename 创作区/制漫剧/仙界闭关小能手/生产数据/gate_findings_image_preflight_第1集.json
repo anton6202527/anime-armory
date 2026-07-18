@@ -128,7 +128,6 @@
     },
     {
       "affected_artifacts": [
-        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json",
         "合规/compliance_manifest.json",
         "脚本/第1集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -141,25 +140,6 @@
         "生图后端适配"
       ],
       "findings": [
-        {
-          "affected_artifacts": [
-            "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json"
-          ],
-          "affected_shots": [],
-          "dim": "生图后端适配",
-          "dim_key": "生图后端适配",
-          "dimension": "生图后端适配",
-          "episode": "第1集",
-          "gate_stage": "image_preflight",
-          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
-          "message": "生图后端「Dreamina」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-          "msg": "生图后端「Dreamina」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
         {
           "affected_artifacts": [
             "合规/compliance_manifest.json",
@@ -210,7 +190,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json、合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
     },
     {
       "affected_artifacts": [
@@ -894,25 +874,6 @@
       "return_to_stage": "image_prompt",
       "sev": "warn",
       "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json"
-      ],
-      "affected_shots": [],
-      "dim": "生图后端适配",
-      "dim_key": "生图后端适配",
-      "dimension": "生图后端适配",
-      "episode": "第1集",
-      "gate_stage": "image_preflight",
-      "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
-      "message": "生图后端「Dreamina」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-      "msg": "生图后端「Dreamina」缺少本次官方 API/CLI 刷新证据：refresh evidence is 1 day(s) old。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Dreamina\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -1991,10 +1952,9 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-17T23:21:09+00:00",
+  "generated_at": "2026-07-18T01:02:24+00:00",
   "inputs_fingerprint": {
     "files": {
-      "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_backend_capabilities/dreamina.json": "22a195f8dd0bae3e1236253717f592fdf4bd5fa13f53be3f98182fb4e657b58c",
       "出图/共享/asset_registry.json": "9bc9bebae44ec6be0a3923c11504cba32d131a9a0bde0ae9effd339d2afdd0fb",
       "出图/共享/identity_registry.json": "a55e159934adf0481c03b57524cf5dad86c8c9924fc0413c47588532ad1aae4f",
       "出图/共享/prompt": null,
@@ -2003,7 +1963,7 @@
       "合规/compliance_manifest.json": "75854205eaad87161a929bb21ae4c77cdba6a9ebf6bbd03be59af8624e1791c8",
       "脚本/第1集/storyboard.json": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
     },
-    "sha": "d7caae5617c7928a37ebf5e09c4117f755e35a9ca86549246c2566ac10958ed2"
+    "sha": "664fbce138673b73ef541eb8c5966c1a858dd17bd043654c26b973b4f5a4e756"
   },
   "kind": "n2d_consistency_findings",
   "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
@@ -2069,7 +2029,7 @@
         "warn": 1
       },
       "生图后端适配": {
-        "block": 1,
+        "block": 0,
         "info": 0,
         "warn": 2
       },
@@ -2090,11 +2050,11 @@
       }
     },
     "severity": {
-      "block": 1,
+      "block": 0,
       "info": 15,
       "warn": 37
     },
-    "total": 53
+    "total": 52
   },
   "version": 1
 }

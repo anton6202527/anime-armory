@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-17T15:18:36+00:00",
+  "created_at": "2026-07-18T01:01:36+00:00",
   "episodes": [
     "第1集"
   ],
@@ -24,7 +24,7 @@
     "skills/n2d-dashboard/scripts/portfolio.py": "e54d9b5752e893a8ff6a4614b5dbe2698b140af959d5b580d33f4ba27b1c00ce",
     "skills/n2d-dashboard/scripts/validate_benchmark_schema.py": "d4a699e1c2aa5df6d0493b275927d6d5d458f1aba1c638de5d9f21f4bcdef339",
     "skills/n2d-image/QUICKSTART.md": "8c2b577966c405a2fe5ffb265296c8f74fd1dc82a06d9b751614d419384790dc",
-    "skills/n2d-image/SKILL.md": "b81c02dd9f8c310041ae4b285f0e2cf6242e19516030502940b71ddb3bf3e29c",
+    "skills/n2d-image/SKILL.md": "91eff4ba3b7905964e0e5f7ddbb68c720ad0a34482625e4ad9b6a526eca4df6b",
     "skills/n2d-image/references/cli_registry.md": "a33e9893bdc992f81c456ecdf324a9e48d9a15b103e5f13ac4e1f4583e45d4e2",
     "skills/n2d-image/references/image_prompt_compiler.md": "0c5314f513a28e07dc1d96b4fad14524bd60bce7da35b19f7db3038dd775f684",
     "skills/n2d-image/references/lora_consistency.md": "48f9ef36938bcac350945e0a9e5ef7c5232edd31d7b5454d91debfc2b4351779",
@@ -38,11 +38,11 @@
     "skills/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d-image/scripts/candidate_select.py": "ea378289fa05523d9bc2279133bcbac149685ca56966d4fead0f2ec97803d4b3",
     "skills/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d-image/scripts/codex_image_runner.py": "aeb854fa9b86ce7bda12757c6d847b43df82514583adf759eb5a79f7d2eee197",
+    "skills/n2d-image/scripts/codex_image_runner.py": "04097845975f5e909235f3e5ea3c77436f6b4a4485dfbc68ec3241c2cd90c44e",
     "skills/n2d-image/scripts/cover_pack.py": "d28e040d2bce55e1a4df57f485f26d4fd5bb922a936a58104588fff23448de9c",
     "skills/n2d-image/scripts/derive_makeup_pack.py": "3cbd90d624778ffdd7313824428dfeebdd241f1a515ef0ce21e0c1582a3a574f",
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
-    "skills/n2d-image/scripts/dreamina_image_runner.py": "9d500545df337f5db64435ecd2872ca28ed82d9427393b50139d8f1231e9cb85",
+    "skills/n2d-image/scripts/dreamina_image_runner.py": "38d6162e5f25666c9bd56b3d5cbc0fa0460c865718fa2f4ac099bc5e4a5e2260",
     "skills/n2d-image/scripts/face_drift_risk.py": "5e51ac470565bb5ccd72e58da2b3d3cbe7d5ca984f36331196b44aa7be535cec",
     "skills/n2d-image/scripts/image_prompt_metrics.py": "dbf846f0ec43962f4b87300fdd352374cf3f8594f8a0ac299e3077441d938eaf",
     "skills/n2d-image/scripts/image_prompt_pack.py": "108836ed761f681c1f4d35b2dc60d203c80416c340b224e50d33e8b7f058611d",
@@ -276,7 +276,7 @@
     "skills/n2d-voice/voice_preflight.py": "8d48392e7229fc3ccf2a1ba96c27ba1c7ed6796f831dd4cf8e6bc577ecc3dd1d",
     "skills/n2d-voice/voice_text.py": "8b168cb9cda1f07e09e02d459accf6f31200ff044df284fd81ecd454426bf961",
     "skills/n2d/Q&A.md": "957ce9f3191c0244ff4c141155bf5ccee702e3d35f9baf872b0fa7f491a8e928",
-    "skills/n2d/SKILL.md": "dcc756a6fbe2991e6139e9b14917eabb2d48e090af2a80970517b4baf20d4317",
+    "skills/n2d/SKILL.md": "ceb83555dd514ec1ab950431d3c89e273ea29044bf31e37c4d2b875deeba535a",
     "skills/n2d/_lib/backend_smoke.py": "e350c97c3a686add93e8b6c919fadc8a7965ae76c72f4997f879a72c7ad3acbf",
     "skills/n2d/_lib/bgm_contract.py": "1ec1f68bcc9c6ed2e138354153a9079bee655f1d5a81c66749ce21cea425fb03",
     "skills/n2d/_lib/continuity_chain.py": "2442df8b7287e018d5ab791dcc63df8e1c1709c163c433f3fc50fb943f0e07b6",

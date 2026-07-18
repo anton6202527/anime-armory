@@ -72,6 +72,8 @@ def dreamina_reference_inputs(
     target: base.Target,
     refs: Sequence[Path],
     episode: str,
+    *,
+    canonical_reset: bool = False,
 ) -> List[Dict[str, Any]]:
     """Describe the exact Dreamina attachments, including complete hashes."""
     role_by_path: Dict[str, tuple[str, str]] = {}
@@ -98,9 +100,11 @@ def dreamina_reference_inputs(
             rel = str(path)
         role, owner = role_by_path.get(rel, ("reference", path.stem))
         continuity_source = previous_continuity_source_path(root, target, episode)
-        if index == 1 and (
+        correction_source = rejected_correction_source_path(root, target)
+        if not canonical_reset and index == 1 and (
             target.mode in {"midframe", "tailframe"}
             or (continuity_source is not None and path == continuity_source)
+            or (correction_source is not None and path == correction_source)
         ):
             role = "source_frame"
             owner = target.clip
@@ -248,7 +252,23 @@ def previous_continuity_source_path(root: Path, target: base.Target, episode: st
     return None
 
 
-def prompt_reference_paths(root: Path, target: base.Target, episode: str) -> List[Path]:
+def rejected_correction_source_path(root: Path, target: base.Target) -> Optional[Path]:
+    """Use the exact rejected pixels as source for a localized same-target fix."""
+    current = root / target.rel_path
+    if not current.is_file():
+        return None
+    if not base.latest_hash_bound_executor_visual_rejection(root, target):
+        return None
+    return current
+
+
+def prompt_reference_paths(
+    root: Path,
+    target: base.Target,
+    episode: str,
+    *,
+    canonical_reset: bool = False,
+) -> List[Path]:
     paths: List[Path] = []
     seen: set[Path] = set()
 
@@ -264,11 +284,14 @@ def prompt_reference_paths(root: Path, target: base.Target, episode: str) -> Lis
         seen.add(path)
         paths.append(path)
 
-    source_path: Optional[Path] = previous_continuity_source_path(root, target, episode)
+    source_path: Optional[Path] = None if canonical_reset else (
+        rejected_correction_source_path(root, target)
+        or previous_continuity_source_path(root, target, episode)
+    )
     if source_path is not None:
         seen.add(source_path)
         paths.append(source_path)
-    elif target.mode != "firstframe":
+    elif not canonical_reset and target.mode != "firstframe":
         try:
             source = root / base.target_for_shot(target.clip, target.section, episode).rel_path
             if source.is_file():
@@ -782,6 +805,7 @@ def process_target(
     dry_run: bool,
     force: bool,
     recover_submit_id: str = "",
+    canonical_reset: bool = False,
 ) -> bool:
     seed = base.logical_seed(root, episode, target.shot, target.rel_path)
     final = root / target.rel_path
@@ -789,8 +813,16 @@ def process_target(
     temp_dir.mkdir(parents=True, exist_ok=True)
     temp_path = temp_dir / f"{episode}_{base.temp_token(target.shot)}_{Path(target.rel_path).stem}.png"
     previous_status = latest_recorded_status(root, task_id, target.rel_path)
-    refs = prompt_reference_paths(root, target, episode)
-    reference_inputs = dreamina_reference_inputs(root, target, refs, episode)
+    if canonical_reset and not base.latest_hash_bound_executor_visual_rejection(root, target):
+        print(
+            f"[fail] {target.shot}: --canonical-reset 只允许当前 PNG 的当前 hash 已有 executor_visual qa rejected 收据时使用",
+            file=sys.stderr,
+        )
+        return False
+    refs = prompt_reference_paths(root, target, episode, canonical_reset=canonical_reset)
+    reference_inputs = dreamina_reference_inputs(
+        root, target, refs, episode, canonical_reset=canonical_reset,
+    )
     retry_guidance = base.target_qc_retry_guidance(root, episode, target)
     try:
         compiled_request = build_dreamina_compiled_request(
@@ -974,6 +1006,11 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--skip-final-gate", action="store_true")
     ap.add_argument("--skip-preflight", action="store_true", help="skip the pre-spend image_preflight gate (logs a dashboard waiver)")
     ap.add_argument("--recover-submit-id", default="", help="download/finalize an existing Dreamina submit id without creating a new paid task")
+    ap.add_argument(
+        "--canonical-reset",
+        action="store_true",
+        help="after an exact-hash visual rejection, rebuild from canonical identity/asset refs without a rejected/continuity source frame",
+    )
     return ap
 
 
@@ -1028,6 +1065,7 @@ def main(argv: Sequence[str]) -> int:
             dry_run=ns.dry_run,
             force=ns.force,
             recover_submit_id=ns.recover_submit_id,
+            canonical_reset=ns.canonical_reset,
         )
         if ok and not ns.dry_run and not ns.skip_image_qc:
             ok = base.run_target_image_qc(root, episode, target)
