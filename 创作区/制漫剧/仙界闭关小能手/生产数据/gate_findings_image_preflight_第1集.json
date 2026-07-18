@@ -311,48 +311,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "物料新鲜度"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "出图/共享/prompt",
-            "出图/第1集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "物料新鲜度",
-          "dim_key": "物料新鲜度",
-          "dimension": "物料新鲜度",
-          "episode": "第1集",
-          "gate_stage": "image_preflight",
-          "loc": "第1集",
-          "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 固化新基线。",
-          "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 固化新基线。",
-          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-          "return_to_stage": "update_plan",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "update_plan",
-      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第1集/prompt"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "剧情经济性"
       ],
       "findings": [
@@ -1264,30 +1222,6 @@
         "出图/第1集/prompt"
       ],
       "affected_shots": [],
-      "dim": "物料新鲜度",
-      "dim_key": "物料新鲜度",
-      "dimension": "物料新鲜度",
-      "episode": "第1集",
-      "gate_stage": "image_preflight",
-      "loc": "第1集",
-      "message": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 固化新基线。",
-      "msg": "前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手\" 第1集` 固化新基线。",
-      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
-      "return_to_stage": "update_plan",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "出图/共享/prompt",
-        "出图/第1集/prompt"
-      ],
-      "affected_shots": [],
       "dim": "剧本可看性合同",
       "dim_key": "剧本可看性合同",
       "dimension": "剧本可看性合同",
@@ -2018,7 +1952,7 @@
     }
   ],
   "gate_stage": "image_preflight",
-  "generated_at": "2026-07-18T13:28:08+00:00",
+  "generated_at": "2026-07-18T14:00:56+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "9bc9bebae44ec6be0a3923c11504cba32d131a9a0bde0ae9effd339d2afdd0fb",
@@ -2074,11 +2008,6 @@
         "info": 0,
         "warn": 1
       },
-      "物料新鲜度": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
       "物料漂移预案": {
         "block": 0,
         "info": 8,
@@ -2121,11 +2050,11 @@
       }
     },
     "severity": {
-      "block": 1,
+      "block": 0,
       "info": 15,
       "warn": 37
     },
-    "total": 53
+    "total": 52
   },
   "version": 1
 }

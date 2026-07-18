@@ -3,28 +3,28 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 16 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 15 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 16
+      "value": 15
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 16 项",
+      "message": "第1集 QA 阻断 15 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 16
+      "value": 15
     }
   ],
   "counts": {
     "critical": 1,
     "warn": 1
   },
-  "generated_at": "2026-07-18T13:56:16+00:00",
+  "generated_at": "2026-07-18T14:00:56+00:00",
   "kind": "n2d_production_alerts",
-  "root": "创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "thresholds": {
     "beat_density_variance_ceiling": null,
     "bounce_3s_ceiling": null,

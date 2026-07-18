@@ -1,14 +1,14 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-18T13:56:16+00:00
-- 事件日志：`创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
+- 生成时间：2026-07-18T14:00:56+00:00
+- 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 200 | — | 5h29m38s | 112 | 9 | 16 | 55 | 75.9% | 0.0% |
+| 2 | 199 | — | 5h29m38s | 112 | 9 | 15 | 55 | 75.9% | 0.0% |
 
 ## ROI
 
@@ -20,7 +20,7 @@
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.4911 | 0.1429 | 0 | 0.0% |
+| 0.4911 | 0.1339 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -47,7 +47,7 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 5h29m38s | 49.1% | 8.0% | dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_first×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_a1×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_a2×2 | 16 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 5h29m38s | 49.1% | 8.0% | dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_first×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_a1×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_a2×2 | 15 | — | — | — | — | — | — |
 | 全剧 | — | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 重抽原因分维度
@@ -59,5 +59,4 @@
 
 ## 最新阻断
 
-- 第1集 / image_preflight / 物料新鲜度: 第1集 — 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集` 固化新基线。
-- 第1集 / image / 出图落档QC: 创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — image_qc standalone 报告有 15 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。
+- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — image_qc standalone 报告有 15 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。
