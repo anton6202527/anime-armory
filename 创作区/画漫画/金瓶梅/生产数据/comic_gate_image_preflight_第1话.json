@@ -4,7 +4,7 @@
   "project_root": ".",
   "chapter": "第1话",
   "stage": "image_preflight",
-  "created_at": "2026-07-18T13:19:39",
+  "created_at": "2026-07-18T15:12:34",
   "verdict": "warn",
   "summary": {
     "finding_count": 19,
@@ -290,7 +290,7 @@
       {
         "path": "脚本/第1话/source_semantics.json",
         "exists": true,
-        "sha256": "9bea566fd5238c42c981a1583cbff46f8c9959db1d23bde86e3954b39fab8518",
+        "sha256": "7c3145f5fc9e09d84e14fbc2b6fe6b977ec9b3e3d1b35d419b7392e1765ef3a4",
         "size": 60432
       },
       {
@@ -366,8 +366,8 @@
       {
         "path": "出图/第1话/prompt/panel_jobs.json",
         "exists": true,
-        "sha256": "b67b1029e336caa0433dadebe52e73927f609c49ac908d78e7ae6a2a836096cb",
-        "size": 1128805
+        "sha256": "10c1b80868d84c0cbfd3c2d2d10528fb219385a59b4e77c5d01399bc83543c08",
+        "size": 1232450
       },
       {
         "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
@@ -884,9 +884,609 @@
         "exists": true,
         "sha256": "7c9db21a34fd3a160540b8effda54e68bfc7db5c89fb888fd791a50e56e2f8ae",
         "size": 5545810
+      },
+      {
+        "path": "出图/第1话/panels/P002.png",
+        "exists": true,
+        "sha256": "0948f56346b653fcff4befa8be1cc76e3cbbf2cb1ee244a27e8ca347966b4358",
+        "size": 2230030
+      },
+      {
+        "path": "出图/第1话/candidates/P002/20260718T131939_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "7ec185005759d711da551c5ea017cfb40eebb138a50f695eba4de5a2b7e00623",
+        "size": 5612383
+      },
+      {
+        "path": "出图/第1话/panels/P003.png",
+        "exists": true,
+        "sha256": "df7317d0f8559d530ccb3d27604496d275296ce74eb6350eecc221cd6f5d1bf1",
+        "size": 1750024
+      },
+      {
+        "path": "出图/第1话/candidates/P003/20260718T150056_attempt2_dreamina_raw.png",
+        "exists": true,
+        "sha256": "8c955b501d0267d0c872036ebf52f935563d913d0865f17c39bb6cd41ae16f64",
+        "size": 6122907
+      },
+      {
+        "path": "出图/第1话/candidates/P003/P003_20260718_144212_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "4e60abaa7c5eb3a0e73898f396815d6e0bf91da0e147ac5db6b350716e53865e",
+        "size": 1595921
+      },
+      {
+        "path": "出图/第1话/candidates/P003/P003_20260718_150222_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "4b9f8ca269da10f97fe2081b11a1b79622bf26f4335e9e6dcfb660458486ec76",
+        "size": 1727573
+      },
+      {
+        "path": "出图/第1话/panels/P004.png",
+        "exists": true,
+        "sha256": "f203d30772098e9a4a214d7886e7188f06016fe3012ea343e7f485ccea580878",
+        "size": 1405812
+      },
+      {
+        "path": "出图/第1话/candidates/P004/20260718T144212_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "07622e3a1ea3bda43db6e1641de755146f4803901886ebb0231ecc83311baae9",
+        "size": 5080508
+      },
+      {
+        "path": "出图/第1话/candidates/P004/P004_20260718_144409_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "c5dd6518b2a105d395a3dfb13e96883542a8e61a943437a6d4acb9cc9f51bb4c",
+        "size": 1387902
+      },
+      {
+        "path": "出图/第1话/panels/P005.png",
+        "exists": true,
+        "sha256": "e7c1ba080491446889e6ae52b12704c04e03cf2446a2cfe8a357a3c95ec8e226",
+        "size": 1993964
+      },
+      {
+        "path": "出图/第1话/candidates/P005/20260718T150340_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "f885f0ed9b41b8d17771fcd74d9bbaacecd79f7e0fd25f48beaa040ade68a4e4",
+        "size": 5760590
+      },
+      {
+        "path": "出图/第1话/candidates/P005/P005_20260718_144546_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "dc5652962327a18acbf1fcf5440287966ac492e6cab2b14ebec992d8d7469838",
+        "size": 1932510
+      },
+      {
+        "path": "出图/第1话/candidates/P005/P005_20260718_150531_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "07d683ccb788e9c4409892a313f2b3eeba225b2ecac2e34e2bdfb193e3c739b6",
+        "size": 1926893
+      },
+      {
+        "path": "出图/第1话/panels/P006.png",
+        "exists": true,
+        "sha256": "92024f044703d62c0e2db014546460557a1177eff1048e7667d12b1a7beefbd8",
+        "size": 2295017
+      },
+      {
+        "path": "出图/第1话/candidates/P006/20260718T144600_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "72c8e323d892205f9ef2838d0b42d8cd52cb83c177982255d136da4e08a578e6",
+        "size": 5928769
+      },
+      {
+        "path": "出图/第1话/candidates/P006/P006_20260718_144738_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "5fe5759e84800462e6a83c0f606ef89167e4d00318af38ae79483a5bf64f7cd3",
+        "size": 2196878
+      },
+      {
+        "path": "出图/第1话/panels/P007.png",
+        "exists": true,
+        "sha256": "e7f42c6aad497179b6a954e24a054f86d18430d9670ed39cf928bb0fdf0d0225",
+        "size": 2436823
+      },
+      {
+        "path": "出图/第1话/candidates/P007/20260718T132657_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "4b7ac3e6602c7b2a52b93c55e64c0bd3d154350ad2706173dc99290f6cf88aaa",
+        "size": 5770091
+      },
+      {
+        "path": "出图/第1话/panels/P008.png",
+        "exists": true,
+        "sha256": "6e680582a137f1294a70fce7582ad63d49a0bdd42799841df655b7eda3d2f958",
+        "size": 2272679
+      },
+      {
+        "path": "出图/第1话/candidates/P008/20260718T150736_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "734935821697df4a8a62586c777e25a2a7c9379fe17c3af05fb3f611bb864913",
+        "size": 5862869
+      },
+      {
+        "path": "出图/第1话/candidates/P008/P008_20260718_144940_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "40b1b6652e2cda5cf38276fd478951b36649f0b6c5b62186dffc30464822218a",
+        "size": 2174002
+      },
+      {
+        "path": "出图/第1话/candidates/P008/P008_20260718_150910_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "4702fd3dd27c5002bf32525a74855965478cacd243c2f6a444a9ee352858b2a7",
+        "size": 2134134
+      },
+      {
+        "path": "出图/第1话/panels/P009.png",
+        "exists": true,
+        "sha256": "b8ccbc87405555414c3b5aa41d7d703743bf746836734fa4980e5c40acc3aafb",
+        "size": 2531960
+      },
+      {
+        "path": "出图/第1话/candidates/P009/20260718T132954_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "510d54375ab211dc5229e2ddae032220bcf7fa233efef64443d16cc22201e225",
+        "size": 5953768
+      },
+      {
+        "path": "出图/第1话/panels/P010.png",
+        "exists": true,
+        "sha256": "5ce71717f9dd0a262d105c594de60961d72220b913e0b082f4fbb678eb58334e",
+        "size": 2289715
+      },
+      {
+        "path": "出图/第1话/candidates/P010/20260718T133123_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "2b66560f57167e4d6f3a37038174f17f7153da1f28897ba978732c4ab9a42be9",
+        "size": 5826752
+      },
+      {
+        "path": "出图/第1话/panels/P011.png",
+        "exists": true,
+        "sha256": "cd83196a380a1c376f1b74fa06aa0c57708f81ba9cf35d2d8bbc331751521c6c",
+        "size": 2370955
+      },
+      {
+        "path": "出图/第1话/candidates/P011/20260718T133257_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "09a86dc4c8a2d1882c9064c225d2113f291285ea92b888edf3ac630a5c539e6a",
+        "size": 5802001
+      },
+      {
+        "path": "出图/第1话/panels/P012.png",
+        "exists": true,
+        "sha256": "fbf9332a9b7c902b184e2daf60be701a3adb7b581f6ed64fa23c2c11a6302f52",
+        "size": 1899131
+      },
+      {
+        "path": "出图/第1话/candidates/P012/20260718T133416_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "35541605164a0ce943350461d1c0bfcdde461790117488f6bfc517ae26202789",
+        "size": 5578976
+      },
+      {
+        "path": "出图/第1话/panels/P013.png",
+        "exists": true,
+        "sha256": "8c07a815136aba7c1caa9442d79bcf6e3ec720e3bbcaeac6ff3362ff1ddf3ceb",
+        "size": 1682026
+      },
+      {
+        "path": "出图/第1话/candidates/P013/20260718T133603_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b940c18602d4a2e38cf73a77a43239195098f0a98c288719686c0c075f3e8bdd",
+        "size": 5359577
+      },
+      {
+        "path": "出图/第1话/panels/P014.png",
+        "exists": true,
+        "sha256": "6662e198359f9a2a9b8a4a85f92e601f6e26bd116efc17078c58199946744a64",
+        "size": 1799289
+      },
+      {
+        "path": "出图/第1话/candidates/P014/20260718T133717_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "9038b65c7a37dc98c92196bde0a4f70b961a383a44d0a32888a052952bb052c8",
+        "size": 4827735
+      },
+      {
+        "path": "出图/第1话/panels/P015.png",
+        "exists": true,
+        "sha256": "0e848d508cda571226aeaa5264ed13f17b861381ea61bd3a974f2f14240a6ae4",
+        "size": 1457637
+      },
+      {
+        "path": "出图/第1话/candidates/P015/20260718T133844_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "aef1a485d84f654e4af592edc95da98d637c0b28ca0e777226b66f5800825f80",
+        "size": 3852068
+      },
+      {
+        "path": "出图/第1话/panels/P016.png",
+        "exists": true,
+        "sha256": "310916b46c7554220780345fa9f3c4b6bc7c1e12532e7ae563892876e99cd994",
+        "size": 1733432
+      },
+      {
+        "path": "出图/第1话/candidates/P016/20260718T134029_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "affc3ac363ebd1228be3b691ce166cbd09600bad920ea64f10d67bb68a1285bf",
+        "size": 4200809
+      },
+      {
+        "path": "出图/第1话/panels/P017.png",
+        "exists": true,
+        "sha256": "4ab10f46a5f2287cce65f588f28710112f3d4e97f19439f3904715f3b6626d9a",
+        "size": 1196608
+      },
+      {
+        "path": "出图/第1话/candidates/P017/20260718T145006_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b0f2b8203df9129e415e5516633377e4c0182717f6e94ae259ac9e1449b5c812",
+        "size": 3827276
+      },
+      {
+        "path": "出图/第1话/candidates/P017/P017_20260718_145135_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "605bc4244a9418be111000c92281a8fd6b4a28dcc27010e78ec55bf80fe01d16",
+        "size": 1186581
+      },
+      {
+        "path": "出图/第1话/panels/P018.png",
+        "exists": true,
+        "sha256": "123e6f49c3c1d4082f0eb105c7bbbc8691b98968b8f7fc4ced460957247e9a49",
+        "size": 2289497
+      },
+      {
+        "path": "出图/第1话/candidates/P018/20260718T134328_attempt2_dreamina_raw.png",
+        "exists": true,
+        "sha256": "fed5dc7d42fe630c572b17e0fbc7a6fe960f814c8ed5fe304afe7684f782d791",
+        "size": 5223892
+      },
+      {
+        "path": "出图/第1话/panels/P019.png",
+        "exists": true,
+        "sha256": "880ebc5b4fd2db0b0bd03758e30db4fecd6cae681bd37c1ee688d506c42bd44a",
+        "size": 1765359
+      },
+      {
+        "path": "出图/第1话/candidates/P019/20260718T134442_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "82d003f12ae32df3eeacb188fe14c4283dae00851a6c6512391f31502feb3b45",
+        "size": 4809179
+      },
+      {
+        "path": "出图/第1话/panels/P020.png",
+        "exists": true,
+        "sha256": "09f9ee6454b5daeef57aedcb0b6778d9adb4b686f2143849a2dc70469cc7e423",
+        "size": 2371858
+      },
+      {
+        "path": "出图/第1话/candidates/P020/20260718T134607_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "ac1b4d10e67d5391f47d11eda56547971f6ebe353b3412e53ed7ac0a3aff9f0f",
+        "size": 5605885
+      },
+      {
+        "path": "出图/第1话/panels/P021.png",
+        "exists": true,
+        "sha256": "b404cb560c3d9262a06a95cea0b399ea43155befefe501deb5e37561da413d2d",
+        "size": 1906421
+      },
+      {
+        "path": "出图/第1话/candidates/P021/20260718T134739_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "50bf8f076f5ed6497fd883298c9d3a773bbd6c31ccee6cf9f23e4b32a7b31830",
+        "size": 4677189
+      },
+      {
+        "path": "出图/第1话/panels/P022.png",
+        "exists": true,
+        "sha256": "6bb5592d30baf7f526e934855b0e0dca4d1913f679815c4a9854a85258880f04",
+        "size": 1761226
+      },
+      {
+        "path": "出图/第1话/candidates/P022/20260718T145151_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0d9dae8827d754d9f282564dc391f2d89e1ea51a929eae7f8489725851aef114",
+        "size": 5137061
+      },
+      {
+        "path": "出图/第1话/candidates/P022/P022_20260718_145312_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "f4cbb741e33e27d8d1bccac1d7ce5fa65ef720045fc087f3026b4df427b97ba4",
+        "size": 1842818
+      },
+      {
+        "path": "出图/第1话/panels/P023.png",
+        "exists": true,
+        "sha256": "683f4b738f3a0b03fc6174c12bc5f5ccc42d88c3d44078d0d9485933c9d76a40",
+        "size": 1866731
+      },
+      {
+        "path": "出图/第1话/candidates/P023/20260718T135032_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "7a9e09ec7531d90c63f765e115a2c8252e73ac9e1debcaf3ca9311571fd0ac63",
+        "size": 4429658
+      },
+      {
+        "path": "出图/第1话/panels/P024.png",
+        "exists": true,
+        "sha256": "9cd4f8ab0e9e5750cb5338cb04e379ef2ffd086b961a67376ee5b4c2693ffecd",
+        "size": 1471162
+      },
+      {
+        "path": "出图/第1话/candidates/P024/20260718T135203_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0694af5894aa70383b250b496398215dca2efb503176fc9baa11b30b54e2a7e3",
+        "size": 5194779
+      },
+      {
+        "path": "出图/第1话/panels/P025.png",
+        "exists": true,
+        "sha256": "238517506741a18b47554001eef05afb288fa1acfb13b410ea62a5910540120e",
+        "size": 1594233
+      },
+      {
+        "path": "出图/第1话/candidates/P025/20260718T135333_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "425cb8dacb5abcb55eae25c080aca606b57561a2de876e7bf153ef4bb4561df6",
+        "size": 4737921
+      },
+      {
+        "path": "出图/第1话/panels/P026.png",
+        "exists": true,
+        "sha256": "14dbcb3a685475b32de3377a6a9354e3d20a0d5feabba2652c48deb0ad6f5eaa",
+        "size": 1438585
+      },
+      {
+        "path": "出图/第1话/candidates/P026/20260718T135517_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "73f76b9ba692fc64aab1235789b44bfde90b0d95e566f0e8667edca695ef940a",
+        "size": 5008038
+      },
+      {
+        "path": "出图/第1话/panels/P027.png",
+        "exists": true,
+        "sha256": "825757035e74e22a9b4bf6075b60e84f0605b230c7edcef085cbde3b6a3c99c7",
+        "size": 1563539
+      },
+      {
+        "path": "出图/第1话/candidates/P027/20260718T135658_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "915db1e2e06f1981f7e1c3d3c522247bf922c8437074c724656d7fdc0473ec44",
+        "size": 4284004
+      },
+      {
+        "path": "出图/第1话/panels/P028.png",
+        "exists": true,
+        "sha256": "8652c6c7349f55f36b8bb4bf038af8a1f19ae2d507025bbb9cbdb7dff4d45d0f",
+        "size": 2018729
+      },
+      {
+        "path": "出图/第1话/candidates/P028/20260718T150945_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b4299041e118f66e57dead6fdbd0c2330505e4851f59b8842373c038eb6a3f9a",
+        "size": 5083502
+      },
+      {
+        "path": "出图/第1话/candidates/P028/P028_20260718_145644_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "4532a257e6f85063ca5108288308dfa462a38b6e0ecc9634e3e4602e5c4ca850",
+        "size": 1967504
+      },
+      {
+        "path": "出图/第1话/candidates/P028/P028_20260718_151115_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "c2a55b4ed2c6a704d982b9209eef296470b92a0c588665d57a16132fad6f4247",
+        "size": 2191114
+      },
+      {
+        "path": "出图/第1话/panels/P029.png",
+        "exists": true,
+        "sha256": "a3679f194648e84d3e376e2a8f272897553b3aa7604c16e031348f251026499e",
+        "size": 1658168
+      },
+      {
+        "path": "出图/第1话/candidates/P029/20260718T140057_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "4783bdffe4e483bd673e29e9d917123a3466641589c67ad0ce2098369944c3ff",
+        "size": 4674666
+      },
+      {
+        "path": "出图/第1话/panels/P030.png",
+        "exists": true,
+        "sha256": "88d2d5b8fd9c94a784a590db44f5ee4ec3bbe20fd7e9409e654675613a4a5cb7",
+        "size": 2387363
+      },
+      {
+        "path": "出图/第1话/candidates/P030/20260718T145326_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "e118f85c997b90ab283c7a13bf101c805ddfcd510c5b0d57ce7c28cb7622a2f6",
+        "size": 5559425
+      },
+      {
+        "path": "出图/第1话/candidates/P030/P030_20260718_145453_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "9ae26768d17719c78a501413af104b810bf5a7c33c91814e737fb1f3d21bc2eb",
+        "size": 2696874
+      },
+      {
+        "path": "出图/第1话/panels/P031.png",
+        "exists": true,
+        "sha256": "fb3bf46b9a4f8ae198aab64f8bddc4ea1358ceea4d4ab7c6e33ee88728e5ed2d",
+        "size": 1493147
+      },
+      {
+        "path": "出图/第1话/candidates/P031/20260718T140401_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "679d3eeca4c828363da9fcc524f2efcbaf019a794ebe6922e5082be13c9f8d49",
+        "size": 4302012
+      },
+      {
+        "path": "出图/第1话/panels/P032.png",
+        "exists": true,
+        "sha256": "ebcfedfc93f0ecaeb03b62be467b4c7dde6850549cd93d328f514065efa79db3",
+        "size": 2565486
+      },
+      {
+        "path": "出图/第1话/candidates/P032/20260718T140556_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "fc3d2a14028cde4ef99a04127736a67d9e35d32c64ec04e7a4efa0167a8c49dd",
+        "size": 6043804
+      },
+      {
+        "path": "出图/第1话/panels/P033.png",
+        "exists": true,
+        "sha256": "eef97ac2633b2322f9f579d8c33b760514ba4d4053a20e259333b1ffbfab973e",
+        "size": 1700578
+      },
+      {
+        "path": "出图/第1话/candidates/P033/20260718T140725_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "2a2bdefe21d69ac6eba2fa565cd1a6616b49b70229f1eea4abd0a1581a4c258d",
+        "size": 5074339
+      },
+      {
+        "path": "出图/第1话/panels/P034.png",
+        "exists": true,
+        "sha256": "17626eef4d5d4e617e98922c3ceda05bac63cc33a83389842539b29f2c3cc3ef",
+        "size": 1883832
+      },
+      {
+        "path": "出图/第1话/candidates/P034/20260718T140849_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b65092eeb88b84a760af84d5be687ce9044cb6cf6bb4873a733e14f6822476e7",
+        "size": 4266158
+      },
+      {
+        "path": "出图/第1话/panels/P035.png",
+        "exists": true,
+        "sha256": "0b50b2dbc31777176578525e87062f2f64b7a5341aba08538e9dad22826acfdd",
+        "size": 1949732
+      },
+      {
+        "path": "出图/第1话/candidates/P035/20260718T141014_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "bfd90c5f92fb906965ffa4efa85a0c2fa561d97f51adf0f8a5c0226a068d906c",
+        "size": 4840021
+      },
+      {
+        "path": "出图/第1话/panels/P036.png",
+        "exists": true,
+        "sha256": "821163a3032f6355216066aa196b7323548b476773801cc0f0726c63382d6d6a",
+        "size": 1627644
+      },
+      {
+        "path": "出图/第1话/candidates/P036/20260718T141151_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "2b7f8130f38483c6ca945654e50e50b0cb7e19b7f838986092bc1cf7628a06fe",
+        "size": 4179251
+      },
+      {
+        "path": "出图/第1话/panels/P037.png",
+        "exists": true,
+        "sha256": "4c30afe07e47a8d100cd9a7e2de5122af908e5be71a04d57926ece92c8573426",
+        "size": 1650729
+      },
+      {
+        "path": "出图/第1话/candidates/P037/20260718T141327_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "437ed8515a79663724bb70be1f425ada4bd26c20fd3c8c9a426e629494341e45",
+        "size": 4515120
+      },
+      {
+        "path": "出图/第1话/panels/P038.png",
+        "exists": true,
+        "sha256": "ba65ad2dad07286f6875098bac7ffe6c1e95d1f00d1209e3728b2b4e165b8af2",
+        "size": 1590606
+      },
+      {
+        "path": "出图/第1话/candidates/P038/20260718T141501_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "6bdef2ba9416633885e1e5c78b06c4484341e4b20382dd4188ad273dc039be44",
+        "size": 4700294
+      },
+      {
+        "path": "出图/第1话/panels/P039.png",
+        "exists": true,
+        "sha256": "a37dbdcea4b08ed54741e7a76df1d6522310b3e6ce5c98689f4b66db3b5778b9",
+        "size": 1913299
+      },
+      {
+        "path": "出图/第1话/candidates/P039/20260718T141646_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "401c5e3c93af1d4763709a1d756e49122782046c982a7c346744d4a2ab8f7371",
+        "size": 5141676
+      },
+      {
+        "path": "出图/第1话/panels/P040.png",
+        "exists": true,
+        "sha256": "fe64e64be23d2a58e1bb7ea8eb4a9e1bd4a00c156188329e5a7dbaedf3976b0a",
+        "size": 1684969
+      },
+      {
+        "path": "出图/第1话/candidates/P040/20260718T141845_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "4db2cb65edba32c9fd688de4639cd7d06b421b6f2a1eaee5c58ff721ebfc7f1e",
+        "size": 4612061
+      },
+      {
+        "path": "出图/第1话/panels/P041.png",
+        "exists": true,
+        "sha256": "95f7b56e1169f0fbaeb2017a9ff2ad18c1ba1c0eb851ff444fcc36aa34c627b4",
+        "size": 1660437
+      },
+      {
+        "path": "出图/第1话/candidates/P041/20260718T145659_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "bb56ed0aaf1163792ec550b8a10c0fa902db34b3e70c73183cb37f002a58f6cb",
+        "size": 5144726
+      },
+      {
+        "path": "出图/第1话/candidates/P041/P041_20260718_145831_previous_backend_or_take.png",
+        "exists": true,
+        "sha256": "68582dd156289ea98933cccbd41c2df9f54cb3bf14dbf7aa9c376af220e304a8",
+        "size": 1673389
+      },
+      {
+        "path": "出图/第1话/panels/P042.png",
+        "exists": true,
+        "sha256": "4e1893dac01634513d9cb88b65cad9922007640772bd3d34963b4159936310de",
+        "size": 1701614
+      },
+      {
+        "path": "出图/第1话/candidates/P042/20260718T142154_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "17e01b6d8ecb9c0430b9776ebbb07c2f30fedf705a9e49a6286104367f043596",
+        "size": 4082293
+      },
+      {
+        "path": "出图/第1话/panels/P043.png",
+        "exists": true,
+        "sha256": "6a461831348664fd2dafae95ec79b7eebd27b0404d7242f17e4de7ee107ec362",
+        "size": 3058467
+      },
+      {
+        "path": "出图/第1话/candidates/P043/20260718T142332_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "2c74b83d256df04a56682b7658628f8b156b2f8354ddb17fa1c189b05c167b1b",
+        "size": 4552014
+      },
+      {
+        "path": "出图/第1话/panels/P044.png",
+        "exists": true,
+        "sha256": "eda373760071a198ab9577d2b1697312a2ee7e566ccadfce2786011207e7aca1",
+        "size": 2524864
+      },
+      {
+        "path": "出图/第1话/candidates/P044/20260718T142459_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "f3592e7ef65745b4fd19016526b05da5185476103c035a3216441df35e9a8607",
+        "size": 3700715
       }
     ],
-    "sha256": "9fda653c26d52a291a191be15ec8d3cceb0097c419e91b2606bdaad49b456dae"
+    "sha256": "f59bc091b897f8702efae94ea9c981ded8a7011753ef7c4df345414110e7f49e"
   },
-  "receipt_id": "8797125a743f53c1719d09ce737763620ff68ffa194a9bafc50c6e03957a83dd"
+  "receipt_id": "003b14638f2b66e947c41d401f8e916b84136d2cb0ac32f4399fce57612aea55"
 }

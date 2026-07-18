@@ -1,0 +1,3296 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第4话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 court_debate",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:重揭示长停顿；P002:中等呼吸；P003:中等呼吸；P004:重揭示长停顿；P005:重揭示长停顿；P006:中等呼吸",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "端王府昨夜的蹴鞠球落在高俅脚边；今晨同一只脚紧跟端王跨过宫门，球影与宫门门槛匹配转场。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 403,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "高俅捧衣、递茶、备球，永远比端王身边其他亲随快半步；三段动作压在同一竖格内但不做拼贴边框。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 443,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 185,
+                "y": 413,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "庭中日影从画右移到画左，高俅的影子始终贴在端王身后，案上月签由一枚变两枚但不出现可读字。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 672,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 861,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "宫城深处丧钟震动檐铃，白幡从高处落下，前景蹴鞠球停在阴影里。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P004_S1",
+              "type": "sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 921,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 876,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 876,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1192,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "紫宸殿御座空悬，文武百官在冷白丧仪中分列，中央通道空得逼人。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1252,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 136,
+                "y": 1207,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "两班官员低声商议，视线最终汇向殿门外尚未入画的端王，笏板形成收束方向。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "court_debate"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 submission",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:重揭示长停顿；P008:重揭示长停顿；P009:中等呼吸；P010:中等呼吸；P011:重揭示长停顿；P012:中等呼吸",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "端王被引入长长丹墀，高俅止步帘外阴影，第一次被权力门槛隔开。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P007_N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 136,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 403,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "端王在中轴高台承受百官拜贺；人物仍是同一张年轻清秀面孔，冠服从亲王紫衣切换为克制赭黄御服。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P008_S1",
+              "type": "sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 463,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 136,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 734,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "高俅伏在百官末位，抬眼看向御座；暗金冠饰在他细长眼中缩成一点。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_N1",
+              "type": "narration",
+              "content_ref": "panel:P009.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 774,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.narration",
+              "rect": {
+                "x": 185,
+                "y": 744,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 963,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "即位后的内殿，高俅仍穿王府亲随装跪在阶下，徽宗挥退左右。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1003,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1192,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "徽宗俯身看向高俅，手指轻点案上的空白官籍，姿态像当日点球。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P011_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "徽宗",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "徽宗"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1252,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1207,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "高俅俯首至地，袖中手指却悄然收紧，喜色只藏在单侧嘴角。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "submission"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 satirical_bridge",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P018",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ]
+      },
+      "gutter_intent": "P013:中等呼吸；P014:重揭示长停顿；P015:中等呼吸；P016:重揭示长停顿；P017:重揭示长停顿；P018:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "徽宗指向边关图与军功簿，高俅的名字位置仍是一块空白，所有文字留待后期。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P013_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "徽宗",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "徽宗"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 110,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 81,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 289,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "御手越过边关图，直接把一枚空白名签放进枢密院名册，高俅的影子先于本人进入册页。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "徽宗",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "徽宗"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 346,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 303,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 601,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "同一条宫廊中高俅三次经过，腰带与随员逐级增加，脸和清瘦体态始终不变；落叶转为新芽表现半年。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 639,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 185,
+                "y": 610,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 818,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "一方官印落在公案上，高俅双手接过殿帅府任命，御座在远景压住画面上方。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P016_S1",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 875,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 832,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 832,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1130,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅身着低饱和绛红殿帅公服、黑色展脚幞头正面立于长阶，仍是窄长脸、左高眉与清瘦长腿。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P017_N1",
+              "type": "narration",
+              "content_ref": "panel:P017.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1187,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.narration",
+              "rect": {
+                "x": 136,
+                "y": 1144,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1442,
+            "w": 1296,
+            "h": 286
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "昔日赭褐蹴鞠球的圆形影子在地面滚过，转为官印压下的圆形朱痕；不出现可读诗句。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P018_N1",
+              "type": "narration",
+              "content_ref": "panel:P018.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1499,
+                "w": 777,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.narration",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P018",
+          "story_function": "satirical_bridge"
+        },
+        "payoff": {
+          "panel_id": "P019",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_004",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P024 explanation",
+      "eye_flow_path": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P019",
+        "exit_panel_id": "P024",
+        "path": [
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024"
+        ]
+      },
+      "gutter_intent": "P019:重揭示长停顿；P020:中等呼吸；P021:重揭示长停顿；P022:中等呼吸；P023:重揭示长停顿；P024:中等呼吸",
+      "panels": [
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "殿帅府外景，中轴台阶直上正厅；高俅官轿停在画下，军将左右列迎。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P019_N1",
+              "type": "narration",
+              "content_ref": "panel:P019.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.narration",
+              "rect": {
+                "x": 136,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 403,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "高俅升上公案，左右公吏衙将、都军监军依次躬身，冷光切开等级。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P020_N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 443,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 185,
+                "y": 413,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 632,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "属吏双手把浅木匣与数册军籍呈到公案，布签分队清楚、册面无可读字。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P021_N1",
+              "type": "narration",
+              "content_ref": "panel:P021.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 692,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P021.narration",
+              "rect": {
+                "x": 136,
+                "y": 647,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 963,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "高俅一手压住册页、一手逐项点过，众将低头等待，手—册—案接触清楚。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P022_S1",
+              "type": "sfx",
+              "content_ref": "panel:P022.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1003,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 973,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1192,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "翻开的军籍中一个布签位置空缺，高俅指尖停住；姓名区域只留后期安全区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P023_N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1252,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 136,
+                "y": 1207,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "军正司躬身呈上病状，远处众将交换不安眼神。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P024_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P024.dialogue:1",
+              "speaker": "军正司",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "军正司"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P024",
+          "story_function": "explanation"
+        },
+        "payoff": {
+          "panel_id": "P025",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_005",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P030 illness_claim",
+      "eye_flow_path": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P025",
+        "exit_panel_id": "P030",
+        "path": [
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030"
+        ]
+      },
+      "gutter_intent": "P025:重揭示长停顿；P026:重揭示长停顿；P027:重揭示长停顿；P028:重揭示长停顿；P029:中等呼吸；P030:中等呼吸",
+      "panels": [
+        {
+          "panel_id": "P025",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅把病状按回案上，冷眼越过纸面直逼众人，指节压皱纸角。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P025_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P025.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            },
+            {
+              "balloon_id": "P025_S1",
+              "type": "sfx",
+              "content_ref": "panel:P025.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 129,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 86,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 86,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P026",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 384,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅手指从空缺名签直指厅门，牌军领命转身，构图把纸上缺位变成现实追索。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P026_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P026.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 441,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 398,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P027",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 696,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王进家内室，王进穿灰白家居服卧在画右病榻，王母在暖灯下替他掖被，后墙兵器架沉默。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P027_N1",
+              "type": "narration",
+              "content_ref": "panel:P027.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 753,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.narration",
+              "rect": {
+                "x": 136,
+                "y": 710,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P028",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1008,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "前门被重重拍响，布帘向内震动；王母回头，冷光从门缝切入暖室。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P028_S1",
+              "type": "sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1065,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1022,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P029",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1320,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "两名牌军站在门外不越门槛，一人递出空白传唤牌，王母挡在门内，病中的王进留在帘后。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P029_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "牌军",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "牌军"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1358,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1329,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P030",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1537,
+            "w": 1188,
+            "h": 191
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "王进扶帘起身，脸色苍白而站姿仍直，手按胸口向牌军说明。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P030_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P030.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1575,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P030.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1546,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P030",
+          "story_function": "illness_claim"
+        },
+        "payoff": {
+          "panel_id": "P031",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_006",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P036 humiliation",
+      "eye_flow_path": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P031",
+        "exit_panel_id": "P036",
+        "path": [
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036"
+        ]
+      },
+      "gutter_intent": "P031:中等呼吸；P032:重揭示长停顿；P033:重揭示长停顿；P034:重揭示长停顿；P035:重揭示长停顿；P036:中等呼吸",
+      "panels": [
+        {
+          "panel_id": "P031",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "牌军压低声音求他赴衙，视线向身后街角示意；两人也被命令绑住。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P031_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "牌军",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "牌军"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 110,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 81,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P032",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 289,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王母扶住王进手臂，王进看向病榻又看向门外，最终取下当值外袍。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P032_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 346,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 303,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P033",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 601,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王进换上青灰教头服抱病走上殿帅府台阶，画面上方公案所在正厅像一张张开的口。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P033_N1",
+              "type": "narration",
+              "content_ref": "panel:P033.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 658,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.narration",
+              "rect": {
+                "x": 136,
+                "y": 615,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P034",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 913,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王进在中轴下方连拜四拜后躬身唱喏，高俅高踞公案；双方垂直距离夸张但空间仍真实。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P034_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P034.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 970,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P034.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 927,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P035",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1225,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅从军籍抬眼，目光先落在‘王进’姓名安全区，再落向王进的方长脸；旧恨尚未揭明。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P035_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P035.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1282,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P035.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1239,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P036",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1537,
+            "w": 1188,
+            "h": 191
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "高俅前倾指向阶下，故意用手比划花棒摊贩动作；王进握拳藏入袖中。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P036_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P036.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1575,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1546,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P036",
+          "story_function": "humiliation"
+        },
+        "payoff": {
+          "panel_id": "P037",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_007",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P042 turning_point",
+      "eye_flow_path": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P037",
+        "exit_panel_id": "P042",
+        "path": [
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042"
+        ]
+      },
+      "gutter_intent": "P037:中等呼吸；P038:重揭示长停顿；P039:重揭示长停顿；P040:中等呼吸；P041:重揭示长停顿；P042:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P037",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "王进低头守礼，苍白额角见汗，身体不因屈辱失去军人骨架。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P037_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P037.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 110,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 81,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P038",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 289,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅的手指几乎戳到王进面前，背后军籍空缺签与他形成同一竖线。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P038_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P038.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 346,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 303,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P039",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 601,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅拍案喝令左右，两名军士刚伸手便被旁侧牙将按住手臂；不表现实际殴打或伤口。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P039_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            },
+            {
+              "balloon_id": "P039_S1",
+              "type": "sfx",
+              "content_ref": "panel:P039.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 658,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 615,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 615,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P040",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 913,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "camera_hint": "众牙将与军正司一齐上前拱手，把王进围在保护性的半圈内，高俅在高处被孤立。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P040_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P040.dialogue:1",
+              "speaker": "众将",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "众将"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 951,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 922,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P041",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1130,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅缓缓坐回公案，把军籍合上却用一根手指压住缺位布签。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P041_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P041.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            },
+            {
+              "balloon_id": "P041_S1",
+              "type": "sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1187,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1144,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1144,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P042",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1442,
+            "w": 1296,
+            "h": 286
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王进谢罪起身抬头，第一次看清高俅窄长脸与单侧上挑嘴角；两人视线正面相撞。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P042_N1",
+              "type": "narration",
+              "content_ref": "panel:P042.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1499,
+                "w": 777,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.narration",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P042",
+          "story_function": "turning_point"
+        },
+        "payoff": {
+          "panel_id": "P043",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_008",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P046 decision",
+      "eye_flow_path": [
+        "P043",
+        "P044",
+        "P045",
+        "P046"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P043",
+        "exit_panel_id": "P046",
+        "path": [
+          "P043",
+          "P044",
+          "P045",
+          "P046"
+        ]
+      },
+      "gutter_intent": "P043:重揭示长停顿；P044:重揭示长停顿；P045:重揭示长停顿；P046:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P043",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "府门外冷光中，王进回忆父亲以花棒打翻年轻高二：只用墨色剪影与一根花棒，不新增可识别演员脸；现实高俅官帽影子覆盖旧日倒地影。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P043_N1",
+              "type": "narration",
+              "content_ref": "panel:P043.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 150,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.narration",
+              "rect": {
+                "x": 136,
+                "y": 91,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P044",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 492,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王进回家后在门内失去强撑，王母抱住他；两人克制落泪，病榻和兵器架仍在固定方位。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P044_N1",
+              "type": "narration",
+              "content_ref": "panel:P044.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 570,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.narration",
+              "rect": {
+                "x": 136,
+                "y": 511,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P045",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 912,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "烛火旁王进摊开去往延安的无字路线图，向母亲解释这场旧怨；窗外两名牌军影子若隐若现。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P045_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 990,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 931,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        },
+        {
+          "panel_id": "P046",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1332,
+            "w": 1296,
+            "h": 396
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王母把少量细软包进素布，王进手按延安方向；后门冷光与门前两名监视牌军剪影构成夹击，他回头安慰母亲。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P046_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P046.dialogue:1",
+              "speaker": "王母",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王母"
+              }
+            },
+            {
+              "balloon_id": "P046_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P046.dialogue:2",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1411,
+                "w": 777,
+                "h": 277
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1351,
+                "w": 518,
+                "h": 132
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.dialogue:2",
+              "rect": {
+                "x": 784,
+                "y": 1351,
+                "w": 518,
+                "h": 132
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P046",
+          "story_function": "decision"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "显式effects_plan: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第4话/panel_script.json",
+    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-18T07:45:33.256777+00:00",
+    "note": "状态合同措辞对齐前话退出态后复核通过。",
+    "subject_sha256": "e7bc91dcd88c8263e6071b8e2e51894e7d81b8c25eebf5ab44e0f3857b66aaf2",
+    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

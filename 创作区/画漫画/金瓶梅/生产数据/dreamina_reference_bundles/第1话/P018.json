@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P018",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 8,
+  "references": [
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+      "sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_QINGHE_ZISHI_STREET",
+      "path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+      "sha256": "1dbb3efc2763366fb371b91acb809604c9693ea9975a85e0c593c1aad76aded7",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_RED_CURTAIN",
+      "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "sha256": "97afe1744b710dcc6c0e4951cef27c913feafabe1d94c456ad37bcb81a97eb69",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+      "sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__back.png",
+      "sha256": "0cb0125035c28769effd88e0f5bd790f8daae9cb3ceb73097ad71d4f2b5b71f6",
+      "role": "back",
+      "required": false
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__side.png",
+      "sha256": "160585bb74d6b22545a0d5cecb1e0284fcbfa794b7ab7ef846fec705e57a436d",
+      "role": "side",
+      "required": false
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__three_quarter.png",
+      "sha256": "0257280477992a9fee5d9725c963e9a50ae8b12a2d027a4c4083b2fa88dfa596",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T13:43:11"
+}

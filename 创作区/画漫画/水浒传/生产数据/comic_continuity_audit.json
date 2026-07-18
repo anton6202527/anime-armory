@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "kind": "comic_continuity_audit",
-  "created_at": "2026-07-18T05:34:10+00:00",
+  "created_at": "2026-07-18T10:24:59+00:00",
   "project_root": ".",
-  "through_chapter": "第3话",
+  "through_chapter": "第4话",
   "summary": {
-    "chapters": 3,
+    "chapters": 4,
     "block": 0,
     "warn": 0,
     "info": 0
@@ -238,6 +238,124 @@
           },
           "CHAR_DUAN_WANG": {
             "story_state": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。"
+          }
+        }
+      }
+    },
+    {
+      "chapter": "第4话",
+      "panel_script_path": "脚本/第4话/panel_script.json",
+      "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "人间因果链已从高俅被端王选中启动，微小偏好开始与最高权力接驳。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "汴京表面繁华如常，权力体系却已向蹴球与媚上的私人偏好打开入口。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "凭蹴球与逢迎获得端王直接青睐，已被正式索为王府亲随。",
+            "visual_state": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。",
+            "visual_state": "仍是未即位亲王，保留年轻清俊面孔与亲王常服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "八十万禁军教头，因病告假在家，尚不知道新任殿帅与自家有旧仇。",
+            "visual_state": "三十余岁，病中面色苍白但体格端正，家居素袍下仍有军人肩背。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "王进六十余岁的老母，与儿子相依为命。",
+            "visual_state": "银灰发髻、朴素交领袄裙、布鞋，行动略缓。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "高俅的升迁已逼出第一名离京者，神话因果落成普通人的流亡选择。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "私人恩宠已转化为军府公权，旧怨可以借点名、军法与监视合法施压。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "经枢密院入名和随驾迁转，半年内升任殿帅府太尉。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "认出高俅的报复意图，已与母亲决定设法摆脱监视、夜逃延安。",
+            "visual_state": "病色未退，回家后换回素色家居袍，神情由克制转为警觉决绝。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
+            "visual_state": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "高俅的升迁已逼出第一名离京者，神话因果落成普通人的流亡选择。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "私人恩宠已转化为军府公权，旧怨可以借点名、军法与监视合法施压。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "经枢密院入名和随驾迁转，半年内升任殿帅府太尉。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "认出高俅的报复意图，已与母亲决定设法摆脱监视、夜逃延安。",
+            "visual_state": "病色未退，回家后换回素色家居袍，神情由克制转为警觉决绝。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
+            "visual_state": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。"
           }
         }
       }

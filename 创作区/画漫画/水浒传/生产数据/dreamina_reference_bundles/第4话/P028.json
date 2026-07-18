@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第4话",
+  "panel_id": "P028",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 6,
+  "cli_image_input_count": 6,
+  "references": [
+    {
+      "id": "CHAR_WANG_JIN",
+      "path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+      "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_WANG_MOTHER",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+      "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "LOC_WANG_JIN_HOME",
+      "path": "出图/共享/图片/LOC_WANG_JIN_HOME__anchor.png",
+      "sha256": "b9917bd1c8db9b8505b1638fb15d0ba566630acd94a77965052e1a55ed191dfc",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_MILITARY_ROSTER",
+      "path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
+      "sha256": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_WANG_JIN",
+      "path": "出图/共享/图片/CHAR_WANG_JIN__face.png",
+      "sha256": "cac2ca341f55fea13db3e094f508f54482238fa75b80b7040b21fcb2bcc63ba6",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_WANG_MOTHER",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__face.png",
+      "sha256": "e4295aa885ec2cab47e34bf883920ee5e769b48be92f1ee3f931ea02e94e0257",
+      "role": "face",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 4,
+  "omitted_attachments": [
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_WANG_JIN",
+      "path": "出图/共享/图片/CHAR_WANG_JIN__OUTFIT_WANG_HOME.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_WANG_MOTHER",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__OUTFIT_ELDER_HOME.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_WANG_JIN",
+      "path": "出图/共享/图片/CHAR_WANG_JIN__three_quarter.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    }
+  ],
+  "created_at": "2026-07-18T17:37:28"
+}

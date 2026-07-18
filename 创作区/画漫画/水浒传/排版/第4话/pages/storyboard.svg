@@ -1,0 +1,307 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="48076" viewBox="0 0 1440 48076">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="6244" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_001</tspan></text>
+<rect x="72" y="28" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  opening_hook</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">端王府昨夜的蹴鞠球落在高俅脚边；今晨同一只脚紧跟端王跨过宫门，球影与宫门门槛匹配转场。</tspan></text>
+<text x="100" y="908" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：从一只脚，到一步青云。</tspan></text>
+<rect x="120" y="76" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="110" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B001N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="1124" width="1188" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="1172" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P002  dependency_montage</tspan></text>
+<text x="154" y="1222" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅捧衣、递茶、备球，永远比端王身边其他亲随快半步；三段动作压在同一竖格内但不做拼贴边框。</tspan></text>
+<text x="154" y="1884" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：端王所爱，他样样先知。</tspan></text>
+<rect x="174" y="1172" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="1206" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B002N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="126" y="2100" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="2148" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P003  time_passage</tspan></text>
+<text x="154" y="2198" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">庭中日影从画右移到画左，高俅的影子始终贴在端王身后，案上月签由一枚变两枚但不出现可读字。</tspan></text>
+<text x="154" y="2780" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：不到两个月，寸步不离。</tspan></text>
+<rect x="172" y="2146" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="2180" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B003N1</tspan><tspan x="188" dy="27">narration</tspan></text>
+<rect x="72" y="2996" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3044" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P004  inciting_event</tspan></text>
+<text x="100" y="3094" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">宫城深处丧钟震动檐铃，白幡从高处落下，前景蹴鞠球停在阴影里。</tspan></text>
+<text x="100" y="3956" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：哲宗晏驾。 | SFX：当——</tspan></text>
+<rect x="120" y="3044" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="3078" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B004N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="3918" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="3952" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B004S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="4172" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="4220" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P005  vacancy</tspan></text>
+<text x="100" y="4270" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">紫宸殿御座空悬，文武百官在冷白丧仪中分列，中央通道空得逼人。</tspan></text>
+<text x="100" y="5052" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：天子无嗣。</tspan></text>
+<rect x="120" y="4220" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="4254" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B005N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="5268" width="1188" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="5316" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P006  court_debate</tspan></text>
+<text x="154" y="5366" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">两班官员低声商议，视线最终汇向殿门外尚未入画的端王，笏板形成收束方向。</tspan></text>
+<text x="154" y="6028" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：百官议立端王。</tspan></text>
+<rect x="174" y="5316" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="5350" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B006N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="0" y="6324" width="1440" height="6084" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="6368" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_002</tspan></text>
+<rect x="72" y="6352" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6400" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  summons</tspan></text>
+<text x="100" y="6450" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">端王被引入长长丹墀，高俅止步帘外阴影，第一次被权力门槛隔开。</tspan></text>
+<text x="100" y="7232" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：门里，是天下。</tspan></text>
+<rect x="120" y="6400" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="6434" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B007N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="7448" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="7496" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P008  accession_turn</tspan></text>
+<text x="100" y="7546" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">端王在中轴高台承受百官拜贺；人物仍是同一张年轻清秀面孔，冠服从亲王紫衣切换为克制赭黄御服。</tspan></text>
+<text x="100" y="8408" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：端王赵佶，受册为天子。 | SFX：山呼——</tspan></text>
+<rect x="120" y="7496" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="7530" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B008N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="8370" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="8404" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B008S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="8624" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="8672" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P009  reaction</tspan></text>
+<text x="154" y="8722" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅伏在百官末位，抬眼看向御座；暗金冠饰在他细长眼中缩成一点。</tspan></text>
+<text x="154" y="9384" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：他看见的，不只是故主。</tspan></text>
+<rect x="174" y="8672" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="8706" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B009N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="126" y="9600" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="9648" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P010  private_audience</tspan></text>
+<text x="154" y="9698" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">即位后的内殿，高俅仍穿王府亲随装跪在阶下，徽宗挥退左右。</tspan></text>
+
+<rect x="72" y="10496" width="1296" height="960" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10544" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  favor_declared</tspan></text>
+<text x="100" y="10594" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">徽宗俯身看向高俅，手指轻点案上的空白官籍，姿态像当日点球。</tspan></text>
+<text x="100" y="11296" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">徽宗：朕欲抬举你。</tspan></text>
+<rect x="120" y="10544" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="10578" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B011D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="126" y="11512" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="11560" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P012  submission</tspan></text>
+<text x="154" y="11610" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅俯首至地，袖中手指却悄然收紧，喜色只藏在单侧嘴角。</tspan></text>
+<text x="154" y="12192" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅：臣，谢陛下隆恩。</tspan></text>
+<rect x="172" y="11558" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="11592" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B012D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="0" y="12488" width="1440" height="6284" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="12532" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_003</tspan></text>
+<rect x="126" y="12516" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="12564" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P013  institutional_obstacle</tspan></text>
+<text x="154" y="12614" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">徽宗指向边关图与军功簿，高俅的名字位置仍是一块空白，所有文字留待后期。</tspan></text>
+<text x="154" y="13196" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">徽宗：但无边功，不可骤迁。</tspan></text>
+<rect x="172" y="12562" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="12596" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B013D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="13412" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13460" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  shortcut</tspan></text>
+<text x="100" y="13510" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">御手越过边关图，直接把一枚空白名签放进枢密院名册，高俅的影子先于本人进入册页。</tspan></text>
+<text x="100" y="14212" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">徽宗：先教枢密院与你入名。</tspan></text>
+<rect x="120" y="13460" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="13494" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B014D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="126" y="14428" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="14476" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P015  rank_montage</tspan></text>
+<text x="154" y="14526" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">同一条宫廊中高俅三次经过，腰带与随员逐级增加，脸和清瘦体态始终不变；落叶转为新芽表现半年。</tspan></text>
+<text x="154" y="15188" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：随驾迁转，不到半年。</tspan></text>
+<rect x="174" y="14476" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="14510" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B015N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="72" y="15404" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="15452" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P016  appointment_payoff</tspan></text>
+<text x="100" y="15502" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">一方官印落在公案上，高俅双手接过殿帅府任命，御座在远景压住画面上方。</tspan></text>
+<text x="100" y="16364" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：殿帅府太尉。 | SFX：啪。</tspan></text>
+<rect x="120" y="15452" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="15486" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B016N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="16326" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="16360" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B016S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="16580" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="16628" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P017  visual_transformation</tspan></text>
+<text x="100" y="16678" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅身着低饱和绛红殿帅公服、黑色展脚幞头正面立于长阶，仍是窄长脸、左高眉与清瘦长腿。</tspan></text>
+<text x="100" y="17460" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：一步，登天。</tspan></text>
+<rect x="120" y="16628" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="16662" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B017N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="17676" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="17724" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P018  satirical_bridge</tspan></text>
+<text x="100" y="17774" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">昔日赭褐蹴鞠球的圆形影子在地面滚过，转为官印压下的圆形朱痕；不出现可读诗句。</tspan></text>
+<text x="100" y="18556" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：全凭手脚，会到当权。</tspan></text>
+<rect x="120" y="17724" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="17758" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B018N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="0" y="18852" width="1440" height="6164" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="18896" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_004</tspan></text>
+<rect x="72" y="18880" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="18928" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P019  new_domain</tspan></text>
+<text x="100" y="18978" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">殿帅府外景，中轴台阶直上正厅；高俅官轿停在画下，军将左右列迎。</tspan></text>
+<text x="100" y="19760" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：择日到任。</tspan></text>
+<rect x="120" y="18928" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="18962" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B019N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="19976" width="1188" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="20024" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P020  submission_of_office</tspan></text>
+<text x="154" y="20074" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅升上公案，左右公吏衙将、都军监军依次躬身，冷光切开等级。</tspan></text>
+<text x="154" y="20736" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：一府人等，尽来参拜。</tspan></text>
+<rect x="174" y="20024" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="20058" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B020N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="72" y="20952" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="21000" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P021  prop_introduction</tspan></text>
+<text x="100" y="21050" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">属吏双手把浅木匣与数册军籍呈到公案，布签分队清楚、册面无可读字。</tspan></text>
+<text x="100" y="21832" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：各呈手本，开报花名。</tspan></text>
+<rect x="120" y="21000" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="21034" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B021N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="22048" width="1188" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="22096" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P022  inspection</tspan></text>
+<text x="154" y="22146" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅一手压住册页、一手逐项点过，众将低头等待，手—册—案接触清楚。</tspan></text>
+<text x="154" y="22808" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">SFX：沙、沙。</tspan></text>
+<rect x="540" y="22770" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="22804" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B022S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="23024" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="23072" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P023  absence_discovered</tspan></text>
+<text x="100" y="23122" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">翻开的军籍中一个布签位置空缺，高俅指尖停住；姓名区域只留后期安全区。</tspan></text>
+<text x="100" y="23904" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：只欠一名。</tspan></text>
+<rect x="120" y="23072" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="23106" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B023N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="24120" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="24168" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P024  explanation</tspan></text>
+<text x="154" y="24218" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">军正司躬身呈上病状，远处众将交换不安眼神。</tspan></text>
+<text x="154" y="24800" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">军正司：王教头患病未愈，已有病状在官。</tspan></text>
+<rect x="172" y="24166" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="24200" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B024D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="0" y="25096" width="1440" height="6124" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="25140" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_005</tspan></text>
+<rect x="72" y="25124" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="25172" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P025  abuse_of_power</tspan></text>
+<text x="100" y="25222" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅把病状按回案上，冷眼越过纸面直逼众人，指节压皱纸角。</tspan></text>
+<text x="100" y="26004" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅：胡说！分明是抗拒官府！ | SFX：啪！</tspan></text>
+<rect x="120" y="25172" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="25206" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B025D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="25966" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="26000" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B025S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="26220" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="26268" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P026  order</tspan></text>
+<text x="100" y="26318" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅手指从空缺名签直指厅门，牌军领命转身，构图把纸上缺位变成现实追索。</tspan></text>
+<text x="100" y="27020" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅：快与我拿来！</tspan></text>
+<rect x="120" y="26268" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="26302" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B026D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="27236" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="27284" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P027  victim_introduction</tspan></text>
+<text x="100" y="27334" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进家内室，王进穿灰白家居服卧在画右病榻，王母在暖灯下替他掖被，后墙兵器架沉默。</tspan></text>
+<text x="100" y="28116" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：王进无妻子，只有六旬老母。</tspan></text>
+<rect x="120" y="27284" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="27318" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B027N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="28332" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="28380" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P028  threat_arrives</tspan></text>
+<text x="100" y="28430" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">前门被重重拍响，布帘向内震动；王母回头，冷光从门缝切入暖室。</tspan></text>
+<text x="100" y="29212" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：砰！砰！</tspan></text>
+<rect x="540" y="29174" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="29208" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B028S1</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="29428" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="29476" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P029  summons_delivered</tspan></text>
+<text x="154" y="29526" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">两名牌军站在门外不越门槛，一人递出空白传唤牌，王母挡在门内，病中的王进留在帘后。</tspan></text>
+<text x="154" y="30108" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">牌军：高殿帅点你不着，定要拿你。</tspan></text>
+<rect x="172" y="29474" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="29508" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B029D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="126" y="30324" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="30372" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P030  illness_claim</tspan></text>
+<text x="154" y="30422" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">王进扶帘起身，脸色苍白而站姿仍直，手按胸口向牌军说明。</tspan></text>
+<text x="154" y="31004" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">王进：我确实病未痊愈。</tspan></text>
+<rect x="172" y="30370" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="30404" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B030D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="0" y="31300" width="1440" height="6084" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="31344" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_006</tspan></text>
+<rect x="126" y="31328" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="31376" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P031  coercion</tspan></text>
+<text x="154" y="31426" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">牌军压低声音求他赴衙，视线向身后街角示意；两人也被命令绑住。</tspan></text>
+<text x="154" y="32008" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">牌军：教头若不去，定连累我们。</tspan></text>
+<rect x="172" y="31374" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="31408" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B031D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="32224" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="32272" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P032  choice_to_comply</tspan></text>
+<text x="100" y="32322" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王母扶住王进手臂，王进看向病榻又看向门外，最终取下当值外袍。</tspan></text>
+<text x="100" y="33024" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进：我去。</tspan></text>
+<rect x="120" y="32272" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="32306" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B032D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="33240" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="33288" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P033  approach</tspan></text>
+<text x="100" y="33338" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进换上青灰教头服抱病走上殿帅府台阶，画面上方公案所在正厅像一张张开的口。</tspan></text>
+<text x="100" y="34120" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：只得捱着病来。</tspan></text>
+<rect x="120" y="33288" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="33322" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B033N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="34336" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="34384" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P034  formal_submission</tspan></text>
+<text x="100" y="34434" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进在中轴下方连拜四拜后躬身唱喏，高俅高踞公案；双方垂直距离夸张但空间仍真实。</tspan></text>
+<text x="100" y="35136" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进：王进，参见太尉。</tspan></text>
+<rect x="120" y="34384" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="34418" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B034D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="35352" width="1296" height="960" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="35400" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P035  recognition_seed</tspan></text>
+<text x="100" y="35450" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅从军籍抬眼，目光先落在‘王进’姓名安全区，再落向王进的方长脸；旧恨尚未揭明。</tspan></text>
+<text x="100" y="36152" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅：你便是都军教头王昇的儿子？</tspan></text>
+<rect x="120" y="35400" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="35434" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B035D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="126" y="36368" width="1188" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="36416" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P036  humiliation</tspan></text>
+<text x="154" y="36466" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅前倾指向阶下，故意用手比划花棒摊贩动作；王进握拳藏入袖中。</tspan></text>
+<text x="154" y="37168" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">高俅：你父亲不过街市使棒卖药，你懂什么武艺？</tspan></text>
+<rect x="174" y="36416" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="36450" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B036D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="0" y="37464" width="1440" height="6124" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="37508" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_007</tspan></text>
+<rect x="126" y="37492" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="37540" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P037  defense</tspan></text>
+<text x="154" y="37590" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">王进低头守礼，苍白额角见汗，身体不因屈辱失去军人骨架。</tspan></text>
+<text x="154" y="38172" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">王进：小人怎敢？实是病未痊愈。</tspan></text>
+<rect x="172" y="37538" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="37572" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B037D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="38388" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="38436" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P038  catch_22</tspan></text>
+<text x="100" y="38486" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅的手指几乎戳到王进面前，背后军籍空缺签与他形成同一竖线。</tspan></text>
+<text x="100" y="39188" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅：你既害病，如何来得？</tspan></text>
+<rect x="120" y="38436" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="38470" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B038D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="39404" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="39452" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P039  violence_order</tspan></text>
+<text x="100" y="39502" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅拍案喝令左右，两名军士刚伸手便被旁侧牙将按住手臂；不表现实际殴打或伤口。</tspan></text>
+<text x="100" y="40284" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅：拿下，加力与我打！ | SFX：喝！</tspan></text>
+<rect x="120" y="39452" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="39486" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B039D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="40246" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="40280" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B039S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="40500" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="40548" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P040  intercession</tspan></text>
+<text x="154" y="40598" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">众牙将与军正司一齐上前拱手，把王进围在保护性的半圈内，高俅在高处被孤立。</tspan></text>
+<text x="154" y="41180" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">众将：今日太尉上任吉日，权免他一次。</tspan></text>
+<rect x="172" y="40546" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="40580" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B040D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="41396" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="41444" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P041  deferred_threat</tspan></text>
+<text x="100" y="41494" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅缓缓坐回公案，把军籍合上却用一根手指压住缺位布签。</tspan></text>
+<text x="100" y="42276" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">高俅：且饶你今日，明日再和你理会。 | SFX：啪。</tspan></text>
+<rect x="120" y="41444" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="41478" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B041D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="42238" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="42272" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B041S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="42492" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="42540" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P042  turning_point</tspan></text>
+<text x="100" y="42590" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进谢罪起身抬头，第一次看清高俅窄长脸与单侧上挑嘴角；两人视线正面相撞。</tspan></text>
+<text x="100" y="43372" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：这一眼，他认出来了。</tspan></text>
+<rect x="120" y="42540" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="42574" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B042N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="0" y="43668" width="1440" height="4408" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="43712" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_008</tspan></text>
+<rect x="72" y="43696" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="43744" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P043  memory_and_realization</tspan></text>
+<text x="100" y="43794" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">府门外冷光中，王进回忆父亲以花棒打翻年轻高二：只用墨色剪影与一根花棒，不新增可识别演员脸；现实高俅官帽影子覆盖旧日倒地影。</tspan></text>
+<text x="100" y="44576" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：圆社高二。父亲一棒打翻的旧仇。</tspan></text>
+<rect x="120" y="43744" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="43778" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B043N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="44792" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="44840" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P044  emotional_aftershock</tspan></text>
+<text x="100" y="44890" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进回家后在门内失去强撑，王母抱住他；两人克制落泪，病榻和兵器架仍在固定方位。</tspan></text>
+<text x="100" y="45672" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：母子二人，抱头而哭。</tspan></text>
+<rect x="120" y="44840" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="44874" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B044N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="45888" width="1296" height="996" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="45936" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P045  decision_debate</tspan></text>
+<text x="100" y="45986" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">烛火旁王进摊开去往延安的无字路线图，向母亲解释这场旧怨；窗外两名牌军影子若隐若现。</tspan></text>
+<text x="100" y="46724" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王进：不怕官，只怕管。留在东京，性命难保。</tspan></text>
+<rect x="120" y="45936" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="45970" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B045D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="46940" width="1296" height="1080" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="46988" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P046  decision</tspan></text>
+<text x="100" y="47038" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王母把少量细软包进素布，王进手按延安方向；后门冷光与门前两名监视牌军剪影构成夹击，他回头安慰母亲。</tspan></text>
+<text x="100" y="47860" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">王母：三十六着，走为上。 | 王进：母亲放心，我自有道理。</tspan></text>
+<rect x="120" y="46988" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="47022" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B046D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="46988" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="47022" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B046D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+</svg>

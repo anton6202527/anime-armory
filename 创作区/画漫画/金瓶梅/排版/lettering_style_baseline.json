@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "comic_lettering_style_baseline",
+  "source_chapter": "第1话",
+  "styles": {
+    "narration": {
+      "font": "project_default",
+      "size": "42",
+      "direction": "horizontal",
+      "bubble": "caption"
+    },
+    "dialogue": {
+      "font": "project_default",
+      "size": "44",
+      "direction": "horizontal",
+      "bubble": "round"
+    },
+    "sfx": {
+      "font": "project_default",
+      "size": "72",
+      "direction": "horizontal",
+      "bubble": "none"
+    }
+  }
+}

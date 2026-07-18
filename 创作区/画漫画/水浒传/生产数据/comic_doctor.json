@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "comic_doctor",
-  "created_at": "2026-07-14T06:52:25+00:00",
+  "created_at": "2026-07-18T06:16:08+00:00",
   "python": "3.14.4",
   "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
   "project_root": ".",
@@ -89,12 +89,12 @@
     },
     {
       "name": "development_signoff",
-      "status": "missing",
+      "status": "present",
       "path": "开发包/signoff.json"
     },
     {
       "name": "model_pack_signoffs",
-      "status": "missing",
+      "status": "present",
       "path": "生产数据/comic_model_pack_signoffs"
     },
     {

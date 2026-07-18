@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/金瓶梅",
   "chapter": "第1话",
-  "created_at": "2026-07-18T13:19:38",
+  "created_at": "2026-07-18T17:08:14",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -553,7 +553,7 @@
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -573,8 +573,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P002.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -582,7 +582,7 @@
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 6,
       "valid_references": [
         {
@@ -617,8 +617,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 6,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P003.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -626,7 +626,7 @@
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 6,
       "valid_references": [
         {
@@ -661,8 +661,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 6,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P004.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -670,7 +670,7 @@
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 6,
       "valid_references": [
         {
@@ -705,8 +705,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 6,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P005.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -714,7 +714,7 @@
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -769,8 +769,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P006.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -778,7 +778,7 @@
     },
     {
       "panel_id": "P007",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -833,8 +833,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P007.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -842,7 +842,7 @@
     },
     {
       "panel_id": "P008",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -897,8 +897,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P008.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -906,7 +906,7 @@
     },
     {
       "panel_id": "P009",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -961,8 +961,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P009.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -970,7 +970,7 @@
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 9,
       "valid_references": [
         {
@@ -1020,8 +1020,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P010.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1029,7 +1029,7 @@
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 7,
       "valid_references": [
         {
@@ -1069,8 +1069,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 7,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P011.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1078,7 +1078,7 @@
     },
     {
       "panel_id": "P012",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 6,
       "valid_references": [
         {
@@ -1113,8 +1113,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 6,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P012.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1122,7 +1122,7 @@
     },
     {
       "panel_id": "P013",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 2,
       "valid_references": [
         {
@@ -1137,8 +1137,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 2,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P013.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1146,7 +1146,7 @@
     },
     {
       "panel_id": "P014",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
@@ -1176,8 +1176,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P014.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1185,7 +1185,7 @@
     },
     {
       "panel_id": "P015",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
@@ -1215,8 +1215,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P015.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1224,7 +1224,7 @@
     },
     {
       "panel_id": "P016",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -1269,8 +1269,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P016.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1278,7 +1278,7 @@
     },
     {
       "panel_id": "P017",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -1323,8 +1323,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P017.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1332,7 +1332,7 @@
     },
     {
       "panel_id": "P018",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -1377,8 +1377,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P018.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1386,7 +1386,7 @@
     },
     {
       "panel_id": "P019",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 9,
       "valid_references": [
         {
@@ -1436,8 +1436,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P019.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1445,7 +1445,7 @@
     },
     {
       "panel_id": "P020",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1500,8 +1500,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P020.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1509,7 +1509,7 @@
     },
     {
       "panel_id": "P021",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1564,8 +1564,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P021.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1573,7 +1573,7 @@
     },
     {
       "panel_id": "P022",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 7,
       "valid_references": [
         {
@@ -1613,8 +1613,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 7,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P022.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1622,7 +1622,7 @@
     },
     {
       "panel_id": "P023",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1677,8 +1677,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P023.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1686,7 +1686,7 @@
     },
     {
       "panel_id": "P024",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1741,8 +1741,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P024.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1750,7 +1750,7 @@
     },
     {
       "panel_id": "P025",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1805,8 +1805,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P025.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1814,7 +1814,7 @@
     },
     {
       "panel_id": "P026",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1869,8 +1869,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P026.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1878,7 +1878,7 @@
     },
     {
       "panel_id": "P027",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1933,8 +1933,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P027.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -1942,7 +1942,7 @@
     },
     {
       "panel_id": "P028",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -1997,16 +1997,16 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P028.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 2
     },
     {
       "panel_id": "P029",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2061,8 +2061,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P029.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2070,7 +2070,7 @@
     },
     {
       "panel_id": "P030",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 4,
       "valid_references": [
         {
@@ -2095,8 +2095,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P030.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2104,7 +2104,7 @@
     },
     {
       "panel_id": "P031",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 8,
       "valid_references": [
         {
@@ -2149,8 +2149,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P031.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2158,7 +2158,7 @@
     },
     {
       "panel_id": "P032",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 3,
       "valid_references": [
         {
@@ -2178,8 +2178,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P032.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2187,7 +2187,7 @@
     },
     {
       "panel_id": "P033",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2242,8 +2242,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P033.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2251,7 +2251,7 @@
     },
     {
       "panel_id": "P034",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2306,8 +2306,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P034.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2315,7 +2315,7 @@
     },
     {
       "panel_id": "P035",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2370,8 +2370,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P035.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2379,7 +2379,7 @@
     },
     {
       "panel_id": "P036",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2434,8 +2434,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P036.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2443,7 +2443,7 @@
     },
     {
       "panel_id": "P037",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2498,8 +2498,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P037.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2507,7 +2507,7 @@
     },
     {
       "panel_id": "P038",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2562,8 +2562,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P038.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2571,7 +2571,7 @@
     },
     {
       "panel_id": "P039",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2626,8 +2626,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P039.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2635,7 +2635,7 @@
     },
     {
       "panel_id": "P040",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 9,
       "valid_references": [
         {
@@ -2685,8 +2685,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 9,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P040.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2694,7 +2694,7 @@
     },
     {
       "panel_id": "P041",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2749,16 +2749,16 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 8,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P041.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 2
     },
     {
       "panel_id": "P042",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2813,8 +2813,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P042.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2822,7 +2822,7 @@
     },
     {
       "panel_id": "P043",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 10,
       "valid_references": [
         {
@@ -2877,8 +2877,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 10,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P043.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -2886,7 +2886,7 @@
     },
     {
       "panel_id": "P044",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 7,
       "valid_references": [
         {
@@ -2926,8 +2926,8 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 7,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第1话/P044.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",

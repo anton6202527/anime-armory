@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-18T15:16:56",
+  "ref_id": "CHAR_WANG_JIN",
+  "candidate_path": "出图/共享/candidates/CHAR_WANG_JIN/front/20260718__dreamina5__concise_recovery2.png",
+  "candidate_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+  "adopted_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+  "adopted_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "即梦5.0同后端简化文字起始图第2张：单一原创人物、方长脸浓直眉直鼻短须、军人肩背、青灰教头服、全身手脚与3:4画幅均通过；无演员脸、拼贴、文字、武器或明清服饰。提交ID=e41b3dd9-1d4b-47f9-9ae5-08762543fe85。依据用户授权采纳。",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

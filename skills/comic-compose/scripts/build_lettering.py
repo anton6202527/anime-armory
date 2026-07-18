@@ -164,7 +164,7 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
             )
             counter += 1
         if panel.get("sfx"):
-            slot = (panel_slots.get("sfx") or [{}])[0]
+            sfx_slots = panel_slots.get("sfx") or []
             sfx_targets = panel.get("sfx_target") or panel.get("target_sfx") or []
             if isinstance(sfx_targets, str):
                 sfx_targets = [sfx_targets]
@@ -174,26 +174,40 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
             shape = str(sfx_plan.get("shape") or "").strip()
             mode = str(sfx_plan.get("mode") or "post_lettering_sfx").strip()
             for idx, sfx in enumerate(panel.get("sfx") or []):
-                sfx_text = str(sfx_targets[idx] if idx < len(sfx_targets) and str(sfx_targets[idx]).strip() else sfx).strip()
-                items.append(
-                    {
-                        "item_id": f"L{counter:03d}",
-                        "panel_id": pid,
-                        "type": "sfx",
-                        "speaker": "",
-                        **text_fields(sfx_text, translations, text_language, str(sfx)),
-                        "slot_id": slot.get("slot_id", ""),
-                        "style": {
-                            "font": "project_default",
-                            "size": 72,
-                            "direction": "horizontal",
-                            "bubble": "none",
-                            "drawn_lettering_mode": mode,
-                            "integration": integration,
-                            "shape": shape,
-                        },
-                    }
-                )
+                slot = sfx_slots[idx] if idx < len(sfx_slots) else {}
+                target = sfx_targets[idx] if idx < len(sfx_targets) else ""
+                if isinstance(target, dict):
+                    target_text = first_text(target, ("text_target", "target_text", "text"))
+                else:
+                    target_text = str(target or "").strip()
+                if isinstance(sfx, dict):
+                    sfx_text = target_text or first_text(sfx, ("text_target", "target_text", "text"))
+                    source_text = first_text(sfx, ("text_source", "source_text", "source_excerpt"))
+                    sound_source = str(sfx.get("source") or "").strip()
+                else:
+                    sfx_text = target_text or str(sfx or "").strip()
+                    source_text = ""
+                    sound_source = ""
+                item = {
+                    "item_id": f"L{counter:03d}",
+                    "panel_id": pid,
+                    "type": "sfx",
+                    "speaker": "",
+                    **text_fields(sfx_text, translations, text_language, source_text),
+                    "slot_id": slot.get("slot_id", ""),
+                    "style": {
+                        "font": "project_default",
+                        "size": 72,
+                        "direction": "horizontal",
+                        "bubble": "none",
+                        "drawn_lettering_mode": mode,
+                        "integration": integration,
+                        "shape": shape,
+                    },
+                }
+                if sound_source:
+                    item["sound_source"] = sound_source
+                items.append(item)
                 counter += 1
     return {
         "schema_version": 1,

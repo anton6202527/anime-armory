@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-18T03:08:00+00:00",
+  "created_at": "2026-07-18T07:38:06+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -685,6 +685,140 @@
     {
       "kind": "comic_character_model_pack",
       "version": 1,
+      "character_id": "CHAR_WANG_JIN",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+          "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "source_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WANG_JIN__three_quarter.png",
+          "sha256": "09a2c6b987e705675b6822c12331c2f27f5cead71d5abffbc1143bf63bf4fa5b",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "source_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_JIN__face.png",
+          "sha256": "cac2ca341f55fea13db3e094f508f54482238fa75b80b7040b21fcb2bcc63ba6",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "source_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "3d4b2657195201d0cb8ada8673614a15992ccdb26102b715ddb08371561fb9fb",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG_JIN.json",
+        "status": "current",
+        "approved_at": "2026-07-18T07:37:15+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔three_quarter 低分辨率色彩代理差异较大 (0.661)；请并排人审，不能据此自动判定换人",
+          "metric": 0.661458
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WANG_MOTHER",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+          "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_MOTHER__face.png",
+          "sha256": "e4295aa885ec2cab47e34bf883920ee5e769b48be92f1ee3f931ea02e94e0257",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+            "source_sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "289f05820d813023368caa0395eb02a6d3b93bcd45fcc4566072042fa51bb5a6",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG_MOTHER.json",
+        "status": "current",
+        "approved_at": "2026-07-18T07:04:09+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
       "character_id": "CHAR_WEN_YANBO",
       "asset_type": "character",
       "tier": "named_minimal",
@@ -922,10 +1056,10 @@
     }
   ],
   "summary": {
-    "assets": 14,
-    "characters": 12,
+    "assets": 16,
+    "characters": 14,
     "monsters": 2,
-    "ready": 14,
+    "ready": 16,
     "needs_approval": 0,
     "needs_fix": 0
   }

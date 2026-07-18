@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第4话",
+  "panel_id": "P022",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 7,
+  "references": [
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+      "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_DIANSHUAI_HALL",
+      "path": "出图/共享/图片/LOC_DIANSHUAI_HALL__anchor.png",
+      "sha256": "56f5ac1b596ed5d8cc5dc0b66e7c396043b6c2303bee3c033337362a5b6aada1",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_MILITARY_ROSTER",
+      "path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
+      "sha256": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+      "sha256": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__OUTFIT_DIANSHUAI_TAIWEI.png",
+      "sha256": "19f7ce4b11321a35f8dc35bb33fd0cfc344601c2f2fcb59f7b7883bbe416258b",
+      "role": "outfit",
+      "required": false
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+      "sha256": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T16:36:43"
+}

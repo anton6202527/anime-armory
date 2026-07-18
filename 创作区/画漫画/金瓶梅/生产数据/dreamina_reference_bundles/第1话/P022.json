@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P022",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 7,
+  "references": [
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__front.png",
+      "sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_WANG_PO",
+      "path": "出图/共享/图片/CHAR_WANG_PO__front.png",
+      "sha256": "330f44fe2416d561af3dbb729e6ba152d03532cb394fb54237888ee054448d1a",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_QINGHE_ZISHI_STREET",
+      "path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+      "sha256": "1dbb3efc2763366fb371b91acb809604c9693ea9975a85e0c593c1aad76aded7",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__face.png",
+      "sha256": "d9e63cf51c71bea75ed9d7c1d8f54aaeef4cbb9d00d0cb552e452b66367fa910",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_WANG_PO",
+      "path": "出图/共享/图片/CHAR_WANG_PO__face.png",
+      "sha256": "0bf6f6d1e4d7098c688ca154987a949d0e1ef22efe12cf9fecc197240573722b",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+      "sha256": "821882b418c8f3dd5fc1141a988fbe0713513788c3f15b853d9f332e92ebe2b8",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T14:51:51"
+}

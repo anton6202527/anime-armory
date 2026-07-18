@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "comic_continuity_audit",
-  "created_at": "2026-07-18T05:19:34+00:00",
+  "created_at": "2026-07-18T09:08:05+00:00",
   "project_root": ".",
   "through_chapter": "第1话",
   "summary": {

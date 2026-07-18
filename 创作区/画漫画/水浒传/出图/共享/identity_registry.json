@@ -3736,6 +3736,104 @@
             ],
             "status": "confirmed"
           }
+        },
+        "OUTFIT_DIANSHUAI_TAIWEI": {
+          "id": "OUTFIT_DIANSHUAI_TAIWEI",
+          "name": "殿帅太尉公服",
+          "description": "身份场合:殿帅府主官；以文官化公服执掌禁军，不作临阵武将；层次:素色中衣、低饱和绛红圆领长袍、深色革带；轮廓:直身近踝公服包住原有清瘦长腿，肩线不增厚；权力感来自高台、幞头与站姿，不靠甲胄；领襟:窄圆领，领口尺度跨格固定；开合:侧向内隐系结，不画正中盘扣、拉链或扣排；袖摆:中等偏宽，翻册和指人时露出手部动作；腰带:深褐革带配克制带饰，不作夸张金玉带；冠帽:黑色直脚/展脚幞头，脚形和比例由换装front锁定；鞋履:黑色官靴；材料:哑光细绢视觉、皮革带靴；色域:低饱和绛红、墨黑、深褐；佩饰:幞头、官带；状态:appointment_clean、roster_review、retaliation_cold",
+          "forbidden": "明清补服；清代顶戴朝珠；武将重甲；帝王龙袍；影视版高俅整套造型；换装后换脸或壮硕化",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_GAO_QIU__OUTFIT_DIANSHUAI_TAIWEI.png",
+              "sha256": "19f7ce4b11321a35f8dc35bb33fd0cfc344601c2f2fcb59f7b7883bbe416258b",
+              "view": "front",
+              "source": {
+                "kind": "existing_outfit_reference",
+                "character_id": "CHAR_GAO_QIU",
+                "outfit_id": "OUTFIT_DIANSHUAI_TAIWEI",
+                "identity_anchor_path": "出图/共享/图片/CHAR_GAO_QIU__front.png"
+              },
+              "updated_at": "2026-07-18T15:35:49"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_GAO_QIU",
+            "outfit_id": "OUTFIT_DIANSHUAI_TAIWEI",
+            "name": "殿帅太尉公服",
+            "identity_rank": "殿帅府主官；以文官化公服执掌禁军，不作临阵武将",
+            "occasion_activity": [
+              "到任升厅",
+              "点验军籍",
+              "传唤与训斥军官"
+            ],
+            "layers": [
+              "素色中衣",
+              "低饱和绛红圆领长袍",
+              "深色革带"
+            ],
+            "silhouette": "直身近踝公服包住原有清瘦长腿，肩线不增厚；权力感来自高台、幞头与站姿，不靠甲胄",
+            "collar_neckline": "窄圆领，领口尺度跨格固定",
+            "closure": "侧向内隐系结，不画正中盘扣、拉链或扣排",
+            "sleeves": "中等偏宽，翻册和指人时露出手部动作",
+            "hem": "近踝，升厅与落座时自然叠褶",
+            "waist_belt": "深褐革带配克制带饰，不作夸张金玉带",
+            "headwear": [
+              "黑色直脚/展脚幞头，脚形和比例由换装front锁定"
+            ],
+            "footwear": [
+              "黑色官靴"
+            ],
+            "materials": [
+              "哑光细绢视觉",
+              "皮革带靴"
+            ],
+            "palette": [
+              "低饱和绛红",
+              "墨黑",
+              "深褐"
+            ],
+            "patterns": [
+              "主体无补子、满地团花或随机龙纹"
+            ],
+            "permanent_accessories": [
+              "幞头",
+              "官带"
+            ],
+            "removable_accessories": [],
+            "state_variants": [
+              "appointment_clean",
+              "roster_review",
+              "retaliation_cold"
+            ],
+            "continuity_keys": [
+              "同一张窄长脸",
+              "左高眉",
+              "幞头脚形",
+              "圆领宽度",
+              "绛红色值",
+              "革带高度"
+            ],
+            "forbidden": [
+              "明清补服",
+              "清代顶戴朝珠",
+              "武将重甲",
+              "帝王龙袍",
+              "影视版高俅整套造型",
+              "换装后换脸或壮硕化"
+            ],
+            "uncertain": [
+              "小说中的殿帅太尉为叙事官职；本套按宋代高级官员公服语法与禁军主官剧情功能保守原创，不宣称精确复原某日仪制"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_DPM_FUTOU",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          },
+          "updated_at": "2026-07-18T15:35:49"
         }
       },
       "expressions": {
@@ -3775,6 +3873,15 @@
           "expression_id": "EXPR_NEUTRAL",
           "transient": false,
           "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        },
+        "STATE_DIANSHUAI_TAIWEI": {
+          "id": "STATE_DIANSHUAI_TAIWEI",
+          "name": "殿帅太尉状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_DIANSHUAI_TAIWEI",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "第4话P017起沿用殿帅公服；脸、体态和发际轮廓继承既有高俅模型包"
         }
       },
       "default_binding": {
@@ -3892,7 +3999,7 @@
         }
       ],
       "status": "ready",
-      "updated_at": "2026-07-18T10:18:00+08:00",
+      "updated_at": "2026-07-18T15:35:49",
       "views": {
         "front": "出图/共享/图片/CHAR_GAO_QIU__front.png",
         "three_quarter": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
@@ -4134,6 +4241,103 @@
             ],
             "status": "confirmed"
           }
+        },
+        "OUTFIT_EMPEROR_ACCESSION": {
+          "id": "OUTFIT_EMPEROR_ACCESSION",
+          "name": "徽宗即位初期御服",
+          "description": "身份场合:北宋新帝；即位与常朝叙事的克制原创转译；层次:素色中衣、低饱和赭黄圆领御袍、礼仪镜头可加克制深色冠服层；轮廓:修长肩窄体态不变，袍身直顺、袖量稳定；威仪来自中轴、材质与冠服比例；领襟:圆领，领袖仅少量暗金级差；开合:侧向内隐结构，不画正中现代扣排；袖摆:中宽长袖，受贺时袖口叠放关系固定；腰带:深色或暗金低对比带具；冠帽:即位礼仪格使用克制通天冠语法，私下/常朝格使用黑色展脚幞头；两种场合不得随机混用；鞋履:深色御靴；材料:哑光细绢/罗视觉、低反光带具；色域:低饱和赭黄、墨黑、暗金少量；佩饰:按场合锁定的冠帽、低对比带具；状态:accession_ritual、court_emperor、private_favor",
+          "forbidden": "清代龙袍与朝冠；明代翼善冠或补子；满金戏服；馆藏宋徽宗画像脸；影视演员脸；即位后突然老化或壮硕",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_DUAN_WANG__OUTFIT_EMPEROR_ACCESSION.png",
+              "sha256": "a4cde3154fe6c69e22a761c4af63a103cb413fe6f6ea2fd992bcefc8789ffe7d",
+              "view": "front",
+              "source": {
+                "kind": "existing_outfit_reference",
+                "character_id": "CHAR_DUAN_WANG",
+                "outfit_id": "OUTFIT_EMPEROR_ACCESSION",
+                "identity_anchor_path": "出图/共享/图片/CHAR_DUAN_WANG__front.png"
+              },
+              "updated_at": "2026-07-18T15:35:49"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_DUAN_WANG",
+            "outfit_id": "OUTFIT_EMPEROR_ACCESSION",
+            "name": "徽宗即位初期御服",
+            "identity_rank": "北宋新帝；即位与常朝叙事的克制原创转译",
+            "occasion_activity": [
+              "入宫承统",
+              "即位受贺",
+              "私下擢用高俅"
+            ],
+            "layers": [
+              "素色中衣",
+              "低饱和赭黄圆领御袍",
+              "礼仪镜头可加克制深色冠服层"
+            ],
+            "silhouette": "修长肩窄体态不变，袍身直顺、袖量稳定；威仪来自中轴、材质与冠服比例",
+            "collar_neckline": "圆领，领袖仅少量暗金级差",
+            "closure": "侧向内隐结构，不画正中现代扣排",
+            "sleeves": "中宽长袖，受贺时袖口叠放关系固定",
+            "hem": "近踝长袍，台阶与端坐时不随机缩短",
+            "waist_belt": "深色或暗金低对比带具",
+            "headwear": [
+              "即位礼仪格使用克制通天冠语法，私下/常朝格使用黑色展脚幞头；两种场合不得随机混用"
+            ],
+            "footwear": [
+              "深色御靴"
+            ],
+            "materials": [
+              "哑光细绢/罗视觉",
+              "低反光带具"
+            ],
+            "palette": [
+              "低饱和赭黄",
+              "墨黑",
+              "暗金少量"
+            ],
+            "patterns": [
+              "不靠满身龙纹识别皇帝，若有纹样仅作低对比固定局部"
+            ],
+            "permanent_accessories": [
+              "按场合锁定的冠帽",
+              "低对比带具"
+            ],
+            "removable_accessories": [],
+            "state_variants": [
+              "accession_ritual",
+              "court_emperor",
+              "private_favor"
+            ],
+            "continuity_keys": [
+              "同一张端王脸",
+              "宽额",
+              "修长肩线",
+              "冠帽场合",
+              "赭黄色值",
+              "圆领尺度"
+            ],
+            "forbidden": [
+              "清代龙袍与朝冠",
+              "明代翼善冠或补子",
+              "满金戏服",
+              "馆藏宋徽宗画像脸",
+              "影视演员脸",
+              "即位后突然老化或壮硕"
+            ],
+            "uncertain": [
+              "即位礼服制度繁复；本话只以保守冠服语法建立叙事级差，具体细节不宣称对应某次真实仪典"
+            ],
+            "evidence_refs": [
+              "SRC_NMC_COSTUME",
+              "SRC_DPM_FUTOU",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          },
+          "updated_at": "2026-07-18T15:35:49"
         }
       },
       "expressions": {
@@ -4164,6 +4368,15 @@
           "expression_id": "EXPR_NEUTRAL",
           "transient": false,
           "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        },
+        "STATE_EMPEROR_ACCESSION": {
+          "id": "STATE_EMPEROR_ACCESSION",
+          "name": "徽宗即位状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_EMPEROR_ACCESSION",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "第4话即位后沿用御服；脸、宽额与修长体态继承端王模型包，礼仪冠与常朝幞头按场合锁定"
         }
       },
       "default_binding": {
@@ -4232,7 +4445,7 @@
         }
       ],
       "status": "ready",
-      "updated_at": "2026-07-18T10:28:00+08:00",
+      "updated_at": "2026-07-18T15:35:49",
       "views": {
         "front": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
         "three_quarter": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
@@ -5434,11 +5647,933 @@
         ],
         "status": "confirmed"
       }
+    },
+    "CHAR_WANG_JIN": {
+      "id": "CHAR_WANG_JIN",
+      "type": "character",
+      "display_name": "王进",
+      "character_dna": "三十余岁原创北宋军官面孔；方长脸、浓直眉、内收眼神、鼻梁挺直、短须整齐；黑发束髻；身高体健但病中略显苍白；军人肩背与克制气质固定",
+      "variant_policy": "病中、受辱、逃亡与授艺阶段必须继承同一脸型、眉眼、发际线、短须、身高体态；只改变气色、服装和行李状态",
+      "forbidden_inheritance": "不得继承影视演员脸、风格锚人物脸、临时花棒、左右站位、伤病姿态或高俅服饰",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "病中、受辱、逃亡与授艺阶段必须继承同一脸型、眉眼、发际线、短须、身高体态；只改变气色、服装和行李状态",
+          "forbidden": "不得继承影视演员脸、风格锚人物脸、临时花棒、左右站位、伤病姿态或高俅服饰",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+              "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WANG_JIN"
+              },
+              "updated_at": "2026-07-18T15:26:35"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_IMPERIAL_INSTRUCTOR": {
+          "id": "OUTFIT_IMPERIAL_INSTRUCTOR",
+          "name": "禁军教头当值服",
+          "description": "身份场合:东京八十万禁军教头；专业军官当值，非高级朝官或披甲将领；层次:素色中衣、低饱和青灰/灰绿圆领窄袖长袍、深褐革带；轮廓:军人肩背清楚、衣身利落，袍长小腿下段；病中只减气色不塌骨架；领襟:克制圆领，领口不露现代内搭；开合:侧向内隐系结；袖摆:中窄袖，便于军务动作；腰带:深褐革带，无越级金玉饰；冠帽:黑色软幞巾/克制军吏幞头，由front锁定轮廓；鞋履:黑褐官靴；材料:哑光细布、旧革；色域:青灰、灰绿、深褐、墨黑；佩饰:固定冠帽轮廓、革带；状态:duty_clean、ill_pale、humiliated_tense",
+          "forbidden": "武将重甲；明清官服；仙侠束袖；影视演员脸；粗豪莽汉化；把花棒固定在身",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_JIN__OUTFIT_IMPERIAL_INSTRUCTOR.png",
+              "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+              "view": "front",
+              "source": {
+                "kind": "existing_outfit_reference",
+                "character_id": "CHAR_WANG_JIN",
+                "outfit_id": "OUTFIT_IMPERIAL_INSTRUCTOR",
+                "identity_anchor_path": "出图/共享/图片/CHAR_WANG_JIN__front.png"
+              },
+              "updated_at": "2026-07-18T15:35:49"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WANG_JIN",
+            "outfit_id": "OUTFIT_IMPERIAL_INSTRUCTOR",
+            "name": "禁军教头当值服",
+            "identity_rank": "东京八十万禁军教头；专业军官当值，非高级朝官或披甲将领",
+            "occasion_activity": [
+              "殿帅府点卯",
+              "抱病应召",
+              "受上官诘问"
+            ],
+            "layers": [
+              "素色中衣",
+              "低饱和青灰/灰绿圆领窄袖长袍",
+              "深褐革带"
+            ],
+            "silhouette": "军人肩背清楚、衣身利落，袍长小腿下段；病中只减气色不塌骨架",
+            "collar_neckline": "克制圆领，领口不露现代内搭",
+            "closure": "侧向内隐系结",
+            "sleeves": "中窄袖，便于军务动作",
+            "hem": "小腿下段，步行与拜见不拖地",
+            "waist_belt": "深褐革带，无越级金玉饰",
+            "headwear": [
+              "黑色软幞巾/克制军吏幞头，由front锁定轮廓"
+            ],
+            "footwear": [
+              "黑褐官靴"
+            ],
+            "materials": [
+              "哑光细布",
+              "旧革"
+            ],
+            "palette": [
+              "青灰",
+              "灰绿",
+              "深褐",
+              "墨黑"
+            ],
+            "patterns": [
+              "无补子、团花、龙纹或甲片"
+            ],
+            "permanent_accessories": [
+              "固定冠帽轮廓",
+              "革带"
+            ],
+            "removable_accessories": [],
+            "state_variants": [
+              "duty_clean",
+              "ill_pale",
+              "humiliated_tense"
+            ],
+            "continuity_keys": [
+              "交付的方长脸与短须",
+              "军人肩背",
+              "冠帽轮廓",
+              "圆领宽度",
+              "革带高度",
+              "病中苍白发生点"
+            ],
+            "forbidden": [
+              "武将重甲",
+              "明清官服",
+              "仙侠束袖",
+              "影视演员脸",
+              "粗豪莽汉化",
+              "把花棒固定在身"
+            ],
+            "uncertain": [
+              "禁军教头具体常服缺直接成套实物链；按北宋军吏与城市职业图像语法保守原创"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_DPM_FUTOU",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          },
+          "updated_at": "2026-07-18T15:35:49"
+        },
+        "OUTFIT_WANG_HOME": {
+          "id": "OUTFIT_WANG_HOME",
+          "name": "王进病中家居服",
+          "description": "身份场合:病休在家的禁军教头；家庭私域便服；层次:灰白素中衣、旧青灰交领便袍；轮廓:宽松但不松垮，仍能读出军人肩背；卧床时衣襟与腰带自然松开；领襟:右衽交领，方向跨格固定；开合:内系布带，病榻状态可松但不得变现代睡衣；袖摆:中窄素袖；腰带:素布带；冠帽:室内不戴正式幞头，黑发束髻不散乱；鞋履:室内布履；卧床时可不入画；材料:旧棉麻布；色域:灰白、旧青灰、淡褐；状态:bed_ill、home_recovered、packing_night",
+          "forbidden": "现代睡衣；披甲卧床；影楼汉服飘带；影视演员脸；无因果恢复红润",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_JIN__OUTFIT_WANG_HOME.png",
+              "sha256": "e627ce22ecfc485be6e3a9c97aa12eb9fedc49dda9df9bc9b0a44563cd260c0f",
+              "view": "front",
+              "source": {
+                "kind": "existing_outfit_reference",
+                "character_id": "CHAR_WANG_JIN",
+                "outfit_id": "OUTFIT_WANG_HOME",
+                "identity_anchor_path": "出图/共享/图片/CHAR_WANG_JIN__front.png"
+              },
+              "updated_at": "2026-07-18T15:35:49"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WANG_JIN",
+            "outfit_id": "OUTFIT_WANG_HOME",
+            "name": "王进病中家居服",
+            "identity_rank": "病休在家的禁军教头；家庭私域便服",
+            "occasion_activity": [
+              "卧床养病",
+              "与母亲商议",
+              "夜间收拾细软"
+            ],
+            "layers": [
+              "灰白素中衣",
+              "旧青灰交领便袍"
+            ],
+            "silhouette": "宽松但不松垮，仍能读出军人肩背；卧床时衣襟与腰带自然松开",
+            "collar_neckline": "右衽交领，方向跨格固定",
+            "closure": "内系布带，病榻状态可松但不得变现代睡衣",
+            "sleeves": "中窄素袖",
+            "hem": "近踝家居长袍",
+            "waist_belt": "素布带",
+            "headwear": [
+              "室内不戴正式幞头，黑发束髻不散乱"
+            ],
+            "footwear": [
+              "室内布履；卧床时可不入画"
+            ],
+            "materials": [
+              "旧棉麻布"
+            ],
+            "palette": [
+              "灰白",
+              "旧青灰",
+              "淡褐"
+            ],
+            "patterns": [
+              "无显眼纹样"
+            ],
+            "permanent_accessories": [],
+            "removable_accessories": [
+              "夜逃时披巾与包袱另记状态"
+            ],
+            "state_variants": [
+              "bed_ill",
+              "home_recovered",
+              "packing_night"
+            ],
+            "continuity_keys": [
+              "右衽方向",
+              "束髻",
+              "短须",
+              "病色",
+              "素布带",
+              "是否已披外层"
+            ],
+            "forbidden": [
+              "现代睡衣",
+              "披甲卧床",
+              "影楼汉服飘带",
+              "影视演员脸",
+              "无因果恢复红润"
+            ],
+            "uncertain": [
+              "原著只明确患病在家；具体家居层次为证据约束下原创"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          },
+          "updated_at": "2026-07-18T15:35:49"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_DUTY_ILL": {
+          "id": "STATE_DUTY_ILL",
+          "name": "抱病应召当值状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_IMPERIAL_INSTRUCTOR",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": true,
+          "continuity_contract": "苍白病色持续至离开殿帅府；军人肩背、脸型与短须不变"
+        },
+        "STATE_HOME_ILL": {
+          "id": "STATE_HOME_ILL",
+          "name": "病中家居状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_WANG_HOME",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": true,
+          "continuity_contract": "家中病榻至应召前沿用；衣襟、病色和束髻连续"
+        },
+        "STATE_HOME_DECISION": {
+          "id": "STATE_HOME_DECISION",
+          "name": "夜议出逃状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_WANG_HOME",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": true,
+          "continuity_contract": "受辱返家后至决定夜逃；服装仍为家居服，包袱仅在P046出现"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_IMPERIAL_INSTRUCTOR",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_DUTY_ILL"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+          "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第4话",
+            "candidate_path": "出图/共享/candidates/CHAR_WANG_JIN/front/20260718__dreamina5__concise_recovery2.png",
+            "candidate_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "即梦5.0同后端简化文字起始图第2张：单一原创人物、方长脸浓直眉直鼻短须、军人肩背、青灰教头服、全身手脚与3:4画幅均通过；无演员脸、拼贴、文字、武器或明清服饰。提交ID=e41b3dd9-1d4b-47f9-9ae5-08762543fe85。依据用户授权采纳。",
+            "reviewed_at": "2026-07-18T15:16:56",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "source_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T15:26:35"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WANG_JIN__three_quarter.png",
+          "sha256": "09a2c6b987e705675b6822c12331c2f27f5cead71d5abffbc1143bf63bf4fa5b",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第4话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "source_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T15:26:35"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_JIN__face.png",
+          "sha256": "cac2ca341f55fea13db3e094f508f54482238fa75b80b7040b21fcb2bcc63ba6",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第4话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+            "source_sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T15:26:35"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T15:35:49",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_WANG_JIN__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_WANG_JIN__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "3d4b2657195201d0cb8ada8673614a15992ccdb26102b715ddb08371561fb9fb",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-18T07:37:15+00:00"
+      }
+    },
+    "CHAR_WANG_MOTHER": {
+      "id": "CHAR_WANG_MOTHER",
+      "type": "character",
+      "display_name": "王进母亲",
+      "character_dna": "六十余岁原创北宋老妇面孔；圆长脸、眼角细纹、银灰发髻、瘦小微驼、慈和而坚韧；布包发髻与素朴气质固定",
+      "variant_policy": "家居、收拾细软、骑马逃亡阶段保持同一脸型、银灰发髻、身高与微驼体态；只改变披巾、包袱和疲惫程度",
+      "forbidden_inheritance": "不得继承影视演员脸、宫廷贵妇首饰、临时包袱、坐骑姿态或年轻化五官",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "家居、收拾细软、骑马逃亡阶段保持同一脸型、银灰发髻、身高与微驼体态；只改变披巾、包袱和疲惫程度",
+          "forbidden": "不得继承影视演员脸、宫廷贵妇首饰、临时包袱、坐骑姿态或年轻化五官",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+              "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WANG_MOTHER"
+              },
+              "updated_at": "2026-07-18T14:59:23"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_ELDER_HOME": {
+          "id": "OUTFIT_ELDER_HOME",
+          "name": "王母素朴家居服",
+          "description": "身份场合:普通军官家庭年长母亲；家务与夜间议逃；层次:素色内层、灰褐右衽交领短袄、深灰长裙/宽裤裙；轮廓:瘦小微驼，衣量适中不拖地；家务动作利落；领襟:右衽交领，领缘窄；开合:内系布带，不出现盘扣、蝴蝶结或拉链；袖摆:窄至中等袖量，腕部不堆积；腰带:素布带；冠帽:银灰发髻外加素布包髻，形状由front锁定；鞋履:深褐布鞋；材料:旧棉麻布、素布包髻；色域:灰褐、烟灰、旧麻色；佩饰:素布包髻；状态:home_care、door_alarm、packing_night",
+          "forbidden": "宫廷贵妇首饰；清宫旗头；年轻化；喜剧老妇造型；影视演员脸；现代盘扣袄",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_MOTHER__OUTFIT_ELDER_HOME.png",
+              "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+              "view": "front",
+              "source": {
+                "kind": "existing_outfit_reference",
+                "character_id": "CHAR_WANG_MOTHER",
+                "outfit_id": "OUTFIT_ELDER_HOME",
+                "identity_anchor_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png"
+              },
+              "updated_at": "2026-07-18T15:35:49"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WANG_MOTHER",
+            "outfit_id": "OUTFIT_ELDER_HOME",
+            "name": "王母素朴家居服",
+            "identity_rank": "普通军官家庭年长母亲；家务与夜间议逃",
+            "occasion_activity": [
+              "照料病子",
+              "应门",
+              "收拾细软",
+              "夜间议逃"
+            ],
+            "layers": [
+              "素色内层",
+              "灰褐右衽交领短袄",
+              "深灰长裙/宽裤裙"
+            ],
+            "silhouette": "瘦小微驼，衣量适中不拖地；家务动作利落",
+            "collar_neckline": "右衽交领，领缘窄",
+            "closure": "内系布带，不出现盘扣、蝴蝶结或拉链",
+            "sleeves": "窄至中等袖量，腕部不堆积",
+            "hem": "上衣至髋下，下装近踝",
+            "waist_belt": "素布带",
+            "headwear": [
+              "银灰发髻外加素布包髻，形状由front锁定"
+            ],
+            "footwear": [
+              "深褐布鞋"
+            ],
+            "materials": [
+              "旧棉麻布",
+              "素布包髻"
+            ],
+            "palette": [
+              "灰褐",
+              "烟灰",
+              "旧麻色"
+            ],
+            "patterns": [
+              "无华纹或贵妇刺绣"
+            ],
+            "permanent_accessories": [
+              "素布包髻"
+            ],
+            "removable_accessories": [
+              "夜逃披巾与包袱另记状态"
+            ],
+            "state_variants": [
+              "home_care",
+              "door_alarm",
+              "packing_night"
+            ],
+            "continuity_keys": [
+              "银灰发髻",
+              "包髻轮廓",
+              "右衽方向",
+              "微驼体态",
+              "鞋形",
+              "包袱出现点"
+            ],
+            "forbidden": [
+              "宫廷贵妇首饰",
+              "清宫旗头",
+              "年轻化",
+              "喜剧老妇造型",
+              "影视演员脸",
+              "现代盘扣袄"
+            ],
+            "uncertain": [
+              "原著未详述王母服装；按北宋城市普通家庭老妇服饰语法保守原创"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          },
+          "updated_at": "2026-07-18T15:35:49"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_HOME": {
+          "id": "STATE_HOME",
+          "name": "王母家居状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_ELDER_HOME",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "第4话照料、应门与议逃均沿用；披巾和包袱只在后续状态显式加入"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_ELDER_HOME",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_HOME"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+          "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第4话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__front_dreamina__20260718T145816650628.md",
+            "prompt_sha256": "98e034e370e7296857fddfc5397de632d7af2fab5e1e92f24cbc7f9654662937",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "73651929-7dd3-4f5b-836b-1a1f87009441"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T14:59:23"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WANG_MOTHER__three_quarter.png",
+          "sha256": "6d4e0ffabbeb303889fa9e4b6e797852047f260125965bedb006048a89ef52c4",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第4话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__three_quarter_dreamina__20260718T145923677127.md",
+            "prompt_sha256": "e61eca9a1132b9e8d8b13dffb1959c81ffa3c4db498fa04f6cbd47fcea7f10ab",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "07b995a9-fbb1-463c-be45-d33e5107776a"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+            "source_sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T15:00:25"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_MOTHER__face.png",
+          "sha256": "e4295aa885ec2cab47e34bf883920ee5e769b48be92f1ee3f931ea02e94e0257",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第4话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__face_dreamina__20260718T150025395677.md",
+            "prompt_sha256": "7c22327e35f369ea79a340580a225b2425cd43a4129e55fdd7243387198a923f",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "996ae3dc-5101-4662-8487-0a6e8ce751f6"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+            "source_sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T15:01:27"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T15:35:49",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_WANG_MOTHER__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_WANG_MOTHER__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "289f05820d813023368caa0395eb02a6d3b93bcd45fcc4566072042fa51bb5a6",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-18T07:04:09+00:00"
+      }
+    },
+    "LOC_DIANSHUAI_HALL": {
+      "id": "LOC_DIANSHUAI_HALL",
+      "type": "location",
+      "display_name": "殿帅府正厅",
+      "description": "北宋禁军衙署正厅；高台公案在画面上方，左右军将班列，中轴直通厅门；冷灰天光从画左入，案后深赭屏风与兵籍架为常驻物件",
+      "notes": "第4话高俅到任与逼问王进的主要场景；禁止明清衙门匾额、龙椅、现代军营和可读伪字",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_DIANSHUAI_HALL__anchor.png",
+          "sha256": "56f5ac1b596ed5d8cc5dc0b66e7c396043b6c2303bee3c033337362a5b6aada1",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第4话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第4话/LOC_DIANSHUAI_HALL__anchor_dreamina__20260718T150726660953.md",
+            "prompt_sha256": "829457452b3d048c21a6fcfafe503f7c0e2a5731019e35398ca114394f27cb37",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "f7675be7-d74a-4fc5-add1-4e607821a6ab",
+            "raw_canvas_path": "出图/共享/candidates/LOC_DIANSHUAI_HALL/anchor/20260718T150822496814__raw_canvas.png",
+            "raw_canvas_sha256": "22ae7c19b3efac80be04ef2f1fd2f85d756ab89dbafc2cdd9fb88a501386792c",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T15:08:23"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T15:08:23",
+      "anchor_path": "出图/共享/图片/LOC_DIANSHUAI_HALL__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_DIANSHUAI_HALL__anchor.png",
+      "sha256": "56f5ac1b596ed5d8cc5dc0b66e7c396043b6c2303bee3c033337362a5b6aada1"
+    },
+    "LOC_WANG_JIN_HOME": {
+      "id": "LOC_WANG_JIN_HOME",
+      "type": "location",
+      "display_name": "王进家",
+      "description": "汴京普通军官小院；前厅与内室以布帘相隔，病榻在画右，兵器架靠后墙，后门通窄巷；暖烛光与冷窗光对照",
+      "notes": "第4话病中传唤、母子议逃场景；空间小而整洁，禁止豪宅、现代家具和过度贫民窟化",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_WANG_JIN_HOME__anchor.png",
+          "sha256": "b9917bd1c8db9b8505b1638fb15d0ba566630acd94a77965052e1a55ed191dfc",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第4话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第4话/LOC_WANG_JIN_HOME__anchor_dreamina__20260718T150823208874.md",
+            "prompt_sha256": "a51a7e713a24c63425e751e917bae3bcbfab801b35d7d90342124420b341b8d0",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "2825bf31-265b-45ae-a43a-90e5de1068da",
+            "raw_canvas_path": "出图/共享/candidates/LOC_WANG_JIN_HOME/anchor/20260718T150928660209__raw_canvas.png",
+            "raw_canvas_sha256": "7da8d96c57686d6985b9c658ce350ce7e2d160b746aeaa48e7b262db2a597944",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T15:09:29"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T15:09:29",
+      "anchor_path": "出图/共享/图片/LOC_WANG_JIN_HOME__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_WANG_JIN_HOME__anchor.png",
+      "sha256": "b9917bd1c8db9b8505b1638fb15d0ba566630acd94a77965052e1a55ed191dfc"
+    },
+    "PROP_MILITARY_ROSTER": {
+      "id": "PROP_MILITARY_ROSTER",
+      "type": "prop",
+      "display_name": "禁军花名册",
+      "description": "多册素色纸本军籍，以布签和木匣分队收纳；高俅点名王进的剧情核心道具；只画不可读墨线与单个缺位签，不生成可读伪字",
+      "notes": "hero/stunt共用结构：纸册、布签、木匣数量关系固定；不得画成现代档案夹、圣旨或账本UI",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
+          "sha256": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第4话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第4话/PROP_MILITARY_ROSTER__anchor_dreamina__20260718T150929301479.md",
+            "prompt_sha256": "b25207c6f35e46d21d66c4c42501d292e75965062b8296361ddec6acb6873da8",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "2c016945-8aa6-4114-b11b-11a6ba053b81",
+            "raw_canvas_path": "出图/共享/candidates/PROP_MILITARY_ROSTER/anchor/20260718T151027511370__raw_canvas.png",
+            "raw_canvas_sha256": "f5aedffead1be9f5c71c1ae0bce563c0f325ad833e140cb76d8366bf48758881",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T15:10:28"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T15:10:28",
+      "prop_contract": "功能:高俅到任点验军籍并从缺位中锁定王进，是私人旧怨转化为公权迫害的证据道具；尺度:数册约前臂长的纸本簿册，按队用布签区分，收于可双手搬动的浅木匣；结构:线装/折装视觉语法的素纸簿册、布签与浅木匣形成清楚层级；不宣称复原具体档案装帧；材料:素纸、麻线、布签、无漆或深褐木匣；交互:属吏双手呈匣；高俅单手压册、另一手翻页或点向缺位签，手—册—案接触必须可读；题字:锚图与生图只保留不可读墨线；王进姓名、册题和缺位标记全部后期嵌入；状态:boxed_archive、presented_on_desk、opened_roster、wang_absence_marked；版本:hero、background、duplicate",
+      "forbidden_inheritance": "现代文件夹或活页夹；电脑表格/UI；圣旨卷轴；随机可读字；塑料封皮；册数和缺位签跨格漂移",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_MILITARY_ROSTER",
+        "name": "禁军花名册与分队木匣",
+        "function": "高俅到任点验军籍并从缺位中锁定王进，是私人旧怨转化为公权迫害的证据道具",
+        "ownership": "殿帅府军籍房；由属吏双手呈到公案，高俅翻检",
+        "era_region": "北宋东京殿帅府叙事时空",
+        "dimensions": "数册约前臂长的纸本簿册，按队用布签区分，收于可双手搬动的浅木匣",
+        "construction": "线装/折装视觉语法的素纸簿册、布签与浅木匣形成清楚层级；不宣称复原具体档案装帧",
+        "materials": [
+          "素纸",
+          "麻线",
+          "布签",
+          "无漆或深褐木匣"
+        ],
+        "moving_parts": [
+          "册页翻动",
+          "布签抽取",
+          "木匣开合"
+        ],
+        "interaction_grip": "属吏双手呈匣；高俅单手压册、另一手翻页或点向缺位签，手—册—案接触必须可读",
+        "inscription_policy": "锚图与生图只保留不可读墨线；王进姓名、册题和缺位标记全部后期嵌入",
+        "state_variants": [
+          "boxed_archive",
+          "presented_on_desk",
+          "opened_roster",
+          "wang_absence_marked"
+        ],
+        "production_variants": [
+          "hero",
+          "background",
+          "duplicate"
+        ],
+        "continuity_keys": [
+          "木匣比例",
+          "册数",
+          "布签颜色与位置",
+          "缺位签位置",
+          "翻开方向",
+          "是否在公案上"
+        ],
+        "forbidden": [
+          "现代文件夹或活页夹",
+          "电脑表格/UI",
+          "圣旨卷轴",
+          "随机可读字",
+          "塑料封皮",
+          "册数和缺位签跨格漂移"
+        ],
+        "uncertain": [
+          "北宋军籍具体装帧与标签体系证据有限；项目以纸本办公动作、时代材料和剧情可读性作保守原创"
+        ],
+        "evidence_refs": [
+          "SRC_DPM_QINGMING",
+          "SRC_NMC_COSTUME",
+          "SRC_SHUIHU_SOURCE"
+        ],
+        "status": "confirmed"
+      },
+      "anchor_path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
+      "sha256": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2"
     }
   },
   "schema_meta": {
     "initialized_at": "2026-07-14T04:04:20+00:00",
     "initialized_by": "registry_v2 init"
   },
-  "updated_at": "2026-07-18T02:08:52.909694+00:00"
+  "updated_at": "2026-07-18T06:31:53.675763+00:00"
 }

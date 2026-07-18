@@ -106,6 +106,16 @@ python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画
 
 目检发现伪字、串脸、服装漂移或关键接触点错误时，可在该格剩余尝试额度内用 `--force --targets Pxxx --max-attempts 1 --correction "..."` 做一次执行层纠偏；纠偏文本写进 prompt 快照与生成事件，不得借此改剧情、加角色或绕过原始哈希合同。
 
+Dreamina 同一格的完整编译提示若连续出现 `final generation failed` 或轮询超时，先保持原模型/渠道，降到能覆盖所有必需主体的最小 `--reference-limit`；仍失败时用 `--concise-recovery`。该模式从已哈希 `submit_prompt` 提取核心画面事实，并只保留实际附件职责、人物服装/状态、画风、裁切安全区和无字/人体约束；它会在 job 与事件账记录 `execution_prompt_mode=concise_recovery`，不得用来改变剧情、角色集合或场景。
+
+若精简后仍只有某一画面事实持续触发服务端失败，可加 `--recovery-fact "..."` 做等义、中性、可视化改写；必须保留原角色、动作结果、场景和情绪强度。改写后的完整执行词会进入 prompt 快照，不得用它补写新剧情或规避合同审查。
+
+```bash
+python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
+  --targets P027 --reference-limit 6 --max-attempts 2 --concise-recovery \
+  --correction "保留两位具名角色和场景锚，动作关系清楚。"
+```
+
 建议先 `--targets P001 --limit 1` 做 smoke test；通过后再批跑。生成完成会更新 `panel_jobs.json` 的 `result_path/status`，全部面板就绪时把本话 `出图` 标为 `✅`。
 每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=block` 时该 job 标为 `qc_block` 而不是 `ready`，默认立即停止批跑，不能进入合成；修复后用 `--force --targets Pxxx` 重抽。`verdict=warn` 可继续登记，但 `comic-review gate --stage image` 会要求人审签收或重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
 

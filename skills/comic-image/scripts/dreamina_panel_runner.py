@@ -116,6 +116,64 @@ def build_prompt(
 """
 
 
+def concise_visual_fact(job: dict[str, Any]) -> str:
+    """从已哈希提交词提取不改剧情的核心可见事实。"""
+    text = str(job.get("submit_prompt") or "").strip()
+    match = re.search(r"画面事实[：:]\s*(.+?)(?:\s+构图与表演[：:]|\s+画风与稿层[：:]|$)", text)
+    if match:
+        return match.group(1).strip(" ；;。")
+    return text[:600].strip()
+
+
+def build_concise_recovery_prompt(
+    job: dict[str, Any],
+    reference_records: list[dict[str, str]],
+    ratio: str,
+    correction: str = "",
+    fact_override: str = "",
+) -> str:
+    """构建同后端超时/最终失败时的精简执行包装，不改已哈希生产合同。"""
+    shared.validate_compiled_job(job, expected_backend=DREAMINA_MODEL)
+    size = job.get("size") if isinstance(job.get("size"), dict) else {}
+    width = int(size.get("width") or 1296)
+    height = int(size.get("height") or 1040)
+    mapping = "\n".join(
+        f"- 输入图 {index}：{reference_role_label(record)}"
+        for index, record in enumerate(reference_records, start=1)
+    )
+    identities: list[str] = []
+    for binding in job.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        resolved = binding.get("resolved_contracts") if isinstance(binding.get("resolved_contracts"), dict) else {}
+        outfit = resolved.get("outfit") if isinstance(resolved.get("outfit"), dict) else {}
+        state = resolved.get("state") if isinstance(resolved.get("state"), dict) else {}
+        label = str(binding.get("display_name") or binding.get("character_id") or "角色")
+        parts = [label]
+        if outfit.get("name"):
+            parts.append(str(outfit["name"]))
+        if state.get("name"):
+            parts.append(str(state["name"]))
+        identities.append(" / ".join(parts))
+    identity_line = "；".join(identities) or "按输入角色参考锁定身份"
+    corrective = f"\n本次纠偏：{correction.strip()}" if correction.strip() else ""
+    fact = fact_override.strip() or concise_visual_fact(job)
+    return f"""生成一张单格、铺满画布、无字的彩色漫画完成稿。
+
+核心画面事实：{fact}
+人物状态：{identity_line}
+画风：宋画工笔淡彩与写实国漫结合，低饱和矿物色，清晰有压力变化的墨线，电影动机光，粗粝北宋市井质感。
+构图：服务端使用 {ratio}，关键人物、脸、手脚、道具和动作接触点全部放在中央安全区，四边预留 12% 裁切余量；最终裁为 {width}x{height}。
+
+输入图职责：
+{mapping or "- 无参考图；严格执行核心画面事实。"}
+
+保持同一角色的脸型、眼型、发际线、发髻、体型和服装主色；不同角色绝不串脸、串衣或合并。场景图只继承空间、材质和光位，风格图只继承线条、色彩与光影。{corrective}
+
+只生成一个完整面板。禁止内部多格、拼贴、边框、对白气泡、旁白框、空白文字框、可读文字、乱码、日文、Logo、水印、现代物件、额外肢体、手脚混淆、穿模和无来源发光。
+"""
+
+
 def submit_id_from(text: str) -> str:
     patterns = (
         r'"submit_id"\s*:\s*"([^"]+)"',
@@ -338,6 +396,16 @@ def main() -> int:
         help="仅用于已目检失败目标格的执行层纠偏补充；不改写已哈希剧情/画面合同，prompt 快照会留痕",
     )
     parser.add_argument(
+        "--concise-recovery",
+        action="store_true",
+        help="同一 Dreamina 后端连续超时/最终失败时，仅提交核心画面事实、身份/服装/场景锚与安全约束的精简执行包装",
+    )
+    parser.add_argument(
+        "--recovery-fact",
+        default="",
+        help="仅配合 --concise-recovery：对触发服务端失败的核心画面事实做等义、中性、可视化改写；不得改变角色、动作结果或场景",
+    )
+    parser.add_argument(
         "--recheck-existing",
         action="store_true",
         help="只复核并恢复现有 panel PNG 的状态，不归档、不调用 Dreamina，也不消耗新的生成尝试",
@@ -505,7 +573,17 @@ def main() -> int:
             continue
 
         ratio = nearest_supported_ratio(job.get("size") or {})
-        prompt = build_prompt(job, records, ratio, correction=args.correction)
+        prompt_mode = "concise_recovery" if args.concise_recovery else "compiled_full"
+        if args.concise_recovery:
+            prompt = build_concise_recovery_prompt(
+                job,
+                records,
+                ratio,
+                correction=args.correction,
+                fact_override=args.recovery_fact,
+            )
+        else:
+            prompt = build_prompt(job, records, ratio, correction=args.correction)
         prompt_path = root / "出图" / args.chapter / "prompt" / "dreamina" / f"{panel_id}.txt"
         prompt_path.parent.mkdir(parents=True, exist_ok=True)
         prompt_path.write_text(prompt.rstrip() + "\n", encoding="utf-8")
@@ -587,6 +665,7 @@ def main() -> int:
                     "reference_manifest": shared.rel_to_root(root, reference_manifest),
                     "prompt_snapshot": shared.rel_to_root(root, prompt_path),
                     "prompt_snapshot_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+                    "execution_prompt_mode": prompt_mode,
                     "raw_candidate_path": shared.rel_to_root(root, raw_path),
                     "canvas_normalization": normalization,
                     "generated_from_contract_sha256": str(job.get("source_contract_sha256") or ""),
@@ -616,6 +695,7 @@ def main() -> int:
                     "reference_manifest": job["reference_manifest"],
                     "reference_input_count": len(records),
                     "post_qc_verdict": post_qc_verdict,
+                    "execution_prompt_mode": prompt_mode,
                     "duration_sec": round(time.monotonic() - started, 2),
                     "backend_version": backend_version,
                 },

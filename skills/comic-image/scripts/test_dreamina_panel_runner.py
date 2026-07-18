@@ -88,3 +88,14 @@ def test_build_prompt_accepts_dreamina_compiled_job() -> None:
     assert "1296x1040" in prompt
     assert submit_prompt in prompt
     assert "卷轴表面保持纯色" in prompt
+
+    concise = runner.build_concise_recovery_prompt(
+        job,
+        [],
+        "4:3",
+        correction="只保留一张病榻。",
+        fact_override="北宋宫城在晨雾中显现。",
+    )
+    assert "核心画面事实：北宋宫城在晨雾中显现" in concise
+    assert "只保留一张病榻" in concise
+    assert len(concise) < len(prompt)

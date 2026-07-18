@@ -1,0 +1,120 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第4话",
+  "created_at": "2026-07-18T15:01:27",
+  "characters": [
+    "CHAR_WANG_JIN",
+    "CHAR_WANG_MOTHER"
+  ],
+  "views": [
+    "front",
+    "three_quarter",
+    "face"
+  ],
+  "backend": "dreamina",
+  "attempted_backends": [
+    "dreamina"
+  ],
+  "codex_execution_mode": "",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第4话.json",
+  "previous_manifest_archive": "",
+  "previous_manifest_sha256": "",
+  "contact_sheet": "生产数据/comic_identity_views_第4话_contact_sheet.jpg",
+  "generated": 3,
+  "skipped": 0,
+  "failed": 3,
+  "items": [
+    {
+      "ts": "2026-07-18T14:58:16",
+      "status": "character_view_failed",
+      "ref_id": "CHAR_WANG_JIN",
+      "view": "front",
+      "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "anchor_kind": "style_only_text_prompt_seed",
+      "backend": "dreamina",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "dreamina query_result produced no image before the 600s total timeout: ll-body view, standing neutrally, face looking forward\\n\\n本次没有已采纳角色图片作为附件。必须只依据下面的项目设定生成稳定、可复用的长线 front 设定图；这张图会成为后续 three_quarter / side / back / face 视图的参考锚点。\\n已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质和墨晕语言；不得继承其中人物的脸、发型、服装、体态、姿势、构图或具体场景。\\n\\n角色设定摘录：\\n### 王进 CHAR_WANG_JIN\\n\\n- 功能：高俅掌权后首个被私人旧怨击中的禁军教头；他的谨慎退让和最终出逃建立“逼上梁山”制度因果的现实底色。\\n- 年龄/体态：三十余岁，身高体健、军人肩背，病中气色苍白但骨架与站姿不塌。\\n- 脸/眼/发：方长脸、浓直眉、目光内收，直鼻梁、整齐短须；黑发束髻。\\n- 衣装：殿帅府当值用低饱和青灰/灰绿圆领教头公服；家中病服为灰白交领便服。两套衣装共用发髻、短须和体态真值。\\n- 禁漂移：不使用影视演员脸；不做粗豪莽汉、仙侠侠客或披甲大将；花棒、包袱、病态和逃亡姿势均不是身份 DNA。\\n- 资产档位：`recurring_standard`，须 front / three_quarter / face。\\n\\n项目定妆契约：\\n- 名称:王进\\n- 角色DNA:三十余岁原创北宋军官面孔；方长脸、浓直眉、内收眼神、鼻梁挺直、短须整齐；黑发束髻；身高体健但病中略显苍白；军人肩背与克制气质固定\\n- 年龄/形态继承:病中、受辱、逃亡与授艺阶段必须继承同一脸型、眉眼、发际线、短须、身高体态；只改变气色、服装和行李状态\\n- 禁继承:不得继承影视演员脸、风格锚人物脸、临时花棒、左右站位、伤病姿态或高俅服饰\\n- 默认服装 OUTFIT_BASE:name:基础服装；description:继承角色基础定妆中的服装结构、配色与标志配饰；forbidden:不得改变领型、配饰、主色或标志纹样\\n\\n画面要求：\\n1. 生成单一主体 reference art，不要场景叙事，不要其他人物/生物、气泡、文字、logo、水印。\\n2. 单人站立全身正面定妆：从头顶到鞋底完整入画，脚/鞋完整可见，人物居中，面向镜头，中性表情，直立或轻微放松站姿。\\n3. 中性浅灰或低饱和纯色背景，柔和均匀光，头脸/头骨结构、永久标志、体表材质、服装主形制与标志配饰、体态比例必须清楚。\\n4. 保持项目基础视觉风格：自定义(宋画工笔淡彩×国漫写实人物×电影级光影，低饱和矿物色，粗粝江湖质感，竖向步移景异)；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。\\n5. 不得坐、蹲、跪、弯腰、倒地、挥砍、冲刺、摆战斗 pose；不得裁掉头发、手、脚、鞋或永久身份佩饰。\\n6. 不生成临时剧情手持物、画面左右站位或同框调度；只有项目定妆契约明确列为永久佩饰/身体特征的标志物才可出现。\\n7. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 front 视图，画面里只能有一个完整角色。\\n8. 遵循项目登记的角色定妆画幅。\\n9. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。\",\n  \"logid\": \"20260718144816192168113005645267A\",\n  \"gen_status\": \"fail\",\n  \"fail_reason\": \"generation failed: final generation failed\",\n  \"credit_count\": 3,\n  \"queue_info\": {\n    \"queue_idx\": 0,\n    \"priority\": 1,\n    \"queue_status\": \"Finish\",\n    \"queue_length\": 0,\n    \"debug_info\": \"{\\\"have_no_dreamina_queue_name\\\":true,\\\"dreamina_matrix_queue_name\\\":\\\"\\\",\\\"dreamina_matrix_req_key\\\":\\\"\\\",\\\"dreamina_matrix_second_req_key\\\":\\\"\\\",\\\"have_no_queue_name\\\":false,\\\"queue_name\\\":\\\"high_aes_general_v50\\\",\\\"matrix_req_key\\\":\\\"MImageGen:high_aes_general_v50\\\",\\\"matrix_second_req_key\\\":\\\"\\\"}\"\n  }\n}\n"
+    },
+    {
+      "ts": "2026-07-18T14:58:16",
+      "status": "character_view_failed",
+      "ref_id": "CHAR_WANG_JIN",
+      "view": "three_quarter",
+      "anchor_path": "出图/共享/图片/CHAR_WANG_JIN__anchor.png",
+      "backend": "dreamina",
+      "error": "anchor missing or invalid"
+    },
+    {
+      "ts": "2026-07-18T14:58:16",
+      "status": "character_view_failed",
+      "ref_id": "CHAR_WANG_JIN",
+      "view": "face",
+      "anchor_path": "出图/共享/图片/CHAR_WANG_JIN__anchor.png",
+      "backend": "dreamina",
+      "error": "anchor missing or invalid"
+    },
+    {
+      "ts": "2026-07-18T14:59:23",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_WANG_MOTHER",
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+      "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+      "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "anchor_kind": "style_only_text_prompt_seed",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "73651929-7dd3-4f5b-836b-1a1f87009441",
+      "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "style_reference_role": "style_only",
+      "prompt_path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__front_dreamina__20260718T145816650628.md",
+      "prompt_sha256": "98e034e370e7296857fddfc5397de632d7af2fab5e1e92f24cbc7f9654662937"
+    },
+    {
+      "ts": "2026-07-18T15:00:25",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_WANG_MOTHER",
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__three_quarter.png",
+      "sha256": "6d4e0ffabbeb303889fa9e4b6e797852047f260125965bedb006048a89ef52c4",
+      "anchor_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "07b995a9-fbb1-463c-be45-d33e5107776a",
+      "prompt_path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__three_quarter_dreamina__20260718T145923677127.md",
+      "prompt_sha256": "e61eca9a1132b9e8d8b13dffb1959c81ffa3c4db498fa04f6cbd47fcea7f10ab"
+    },
+    {
+      "ts": "2026-07-18T15:01:27",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_WANG_MOTHER",
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__face.png",
+      "sha256": "e4295aa885ec2cab47e34bf883920ee5e769b48be92f1ee3f931ea02e94e0257",
+      "anchor_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "996ae3dc-5101-4662-8487-0a6e8ce751f6",
+      "prompt_path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__face_dreamina__20260718T150025395677.md",
+      "prompt_sha256": "7c22327e35f369ea79a340580a225b2425cd43a4129e55fdd7243387198a923f"
+    }
+  ]
+}

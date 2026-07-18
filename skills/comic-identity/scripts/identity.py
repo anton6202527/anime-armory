@@ -3678,16 +3678,20 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
             pending.unlink(missing_ok=True)
             submit_id = ""
             if backend == "dreamina":
-                ok, submit_id, last_error = run_dreamina_image(
-                    prompt,
-                    front,
-                    pending,
-                    timeout_sec=args.timeout_sec,
-                    poll_sec=args.poll_sec,
-                    model_version=args.model_version,
-                    resolution_type=args.resolution_type,
-                    ratio=submitted_ratio,
-                )
+                try:
+                    ok, submit_id, last_error = run_dreamina_image(
+                        prompt,
+                        front,
+                        pending,
+                        timeout_sec=args.timeout_sec,
+                        poll_sec=args.poll_sec,
+                        model_version=args.model_version,
+                        resolution_type=args.resolution_type,
+                        ratio=submitted_ratio,
+                    )
+                except KeyboardInterrupt:
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                    raise
                 if not ok:
                     finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
                     print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
@@ -3843,6 +3847,7 @@ def generate_views(args: argparse.Namespace) -> int:
     codex_backend_version = codex_version() if "codex" in available else ""
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     style_reference = project_style_anchor(root, registry)
+    dreamina_front_mode = str(getattr(args, "dreamina_front_mode", "style-image2image") or "style-image2image")
     candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
     if candidate_count:
         if views != ["front"]:
@@ -3968,13 +3973,18 @@ def generate_views(args: argparse.Namespace) -> int:
                     and style_reference
                     and png_valid(style_reference)
                 ):
-                    # Dreamina text-seeded character fronts still need a real
-                    # image2image attachment.  The adopted STYLE_ anchor fills
-                    # that role as style_only; it is never an identity source.
+                    # Preferred route attaches the adopted STYLE_ anchor as
+                    # style_only.  An explicit text2image mode is available as
+                    # a same-backend recovery round when that route repeatedly
+                    # fails; it never silently changes the project backend.
                     use_text_anchor = True
                     anchor = style_reference
                     anchor_is_valid = True
-                    anchor_kind = "style_only_text_prompt_seed"
+                    anchor_kind = (
+                        "dreamina_text2image_prompt_seed"
+                        if dreamina_front_mode == "text2image"
+                        else "style_only_text_prompt_seed"
+                    )
                 else:
                     print(f"[fail] {character_id} {view}: anchor missing or invalid: {anchor}", flush=True)
                     failed += 1
@@ -3993,7 +4003,7 @@ def generate_views(args: argparse.Namespace) -> int:
             anchor_rel = rel_to_root(root, anchor) if anchor_is_valid else ""
             backend_candidates = (
                 ["dreamina"]
-                if use_text_anchor and anchor_kind == "style_only_text_prompt_seed"
+                if use_text_anchor and anchor_kind in {"style_only_text_prompt_seed", "dreamina_text2image_prompt_seed"}
                 else (["codex"] if use_text_anchor else available)
             )
             prompt_by_backend = {
@@ -4021,7 +4031,7 @@ def generate_views(args: argparse.Namespace) -> int:
                         notes,
                         visual_style=visual_style,
                         asset_contract=asset_contract,
-                        style_reference_attached=bool(style_reference),
+                        style_reference_attached=bool(style_reference) and dreamina_front_mode != "text2image",
                     )
                     if use_text_anchor
                     else character_view_prompt(
@@ -4053,12 +4063,17 @@ def generate_views(args: argparse.Namespace) -> int:
                     last_backend = backend
                     backend_label = CODEX_CHANNEL if backend == "codex" else DREAMINA_CHANNEL
                     model_label = CODEX_MODEL if backend == "codex" else f"Dreamina {args.model_version}"
+                    attempt_variant = (
+                        "front_text2image"
+                        if backend == "dreamina" and use_text_anchor and dreamina_front_mode == "text2image"
+                        else view
+                    )
                     attempt_id, attempt = begin_generation_attempt(
                         root,
                         args.chapter,
                         generation_kind="view",
                         asset_id=character_id,
-                        variant=view,
+                        variant=attempt_variant,
                         max_attempts_total=args.max_attempts,
                         backend=backend_label,
                         model=model_label,
@@ -4130,16 +4145,35 @@ def generate_views(args: argparse.Namespace) -> int:
                                     "style_reference_role": "style_only",
                                 }
                             )
-                        ok, submit_id, error = run_dreamina_image(
-                            prompt_by_backend["dreamina"],
-                            style_reference if use_text_anchor and style_reference else anchor,
-                            candidate,
-                            timeout_sec=args.timeout_sec,
-                            poll_sec=args.poll_sec,
-                            model_version=args.model_version,
-                            resolution_type=args.resolution_type,
-                            ratio=ratio,
-                        )
+                        try:
+                            if use_text_anchor and dreamina_front_mode == "text2image":
+                                ok, submit_id, error = run_dreamina_text_image(
+                                    prompt_by_backend["dreamina"],
+                                    candidate,
+                                    timeout_sec=args.timeout_sec,
+                                    poll_sec=args.poll_sec,
+                                    model_version=args.model_version,
+                                    resolution_type=args.resolution_type,
+                                    ratio=ratio,
+                                )
+                                source["generation_route"] = "dreamina_text2image_explicit_recovery"
+                                source.pop("style_reference_path", None)
+                                source.pop("style_reference_sha256", None)
+                                source.pop("style_reference_role", None)
+                            else:
+                                ok, submit_id, error = run_dreamina_image(
+                                    prompt_by_backend["dreamina"],
+                                    style_reference if use_text_anchor and style_reference else anchor,
+                                    candidate,
+                                    timeout_sec=args.timeout_sec,
+                                    poll_sec=args.poll_sec,
+                                    model_version=args.model_version,
+                                    resolution_type=args.resolution_type,
+                                    ratio=ratio,
+                                )
+                        except KeyboardInterrupt:
+                            finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                            raise
                         source.update(
                             {
                                 "backend": DREAMINA_CHANNEL,
@@ -4417,7 +4451,13 @@ def main() -> int:
     p_views.add_argument(
         "--allow-text-anchor",
         action="store_true",
-        help="无现成 anchor 时允许用文字设定生成首张 front 定妆图；仅 Codex 图像通道可用",
+        help="无现成角色 anchor 时允许用文字设定生成首张 front；Codex 可直接生成，Dreamina 须附已采纳 STYLE_ 锚且只继承画风",
+    )
+    p_views.add_argument(
+        "--dreamina-front-mode",
+        choices=("style-image2image", "text2image"),
+        default="style-image2image",
+        help="Dreamina 首张 front 的显式路由；默认附已采纳风格锚，连续失败时可用同后端 text2image 开新恢复轮次",
     )
     p_views.set_defaults(func=generate_views)
 

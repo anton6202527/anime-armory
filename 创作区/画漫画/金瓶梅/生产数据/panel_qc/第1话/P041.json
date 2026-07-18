@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第1话",
+  "panel_id": "P041",
+  "created_at": "2026-07-18T15:14:03",
+  "verdict": "warn",
+  "path": "出图/第1话/panels/P041.png",
+  "size": {
+    "width": 1188,
+    "height": 920
+  },
+  "expected_size": {
+    "width": 1188,
+    "height": 920
+  },
+  "declared_reference_count": 10,
+  "declared_reference_binding_count": 10,
+  "reference_input_count": 8,
+  "omitted_attachment_count": 2,
+  "omitted_attachment_ids": [
+    "STYLE_JPM_MING_GENRE_CINEMATIC",
+    "CHAR_PAN_JINLIAN"
+  ],
+  "blank_region_candidates": [
+    {
+      "x": 950,
+      "y": 373,
+      "w": 107,
+      "h": 104,
+      "area": 7008
+    },
+    {
+      "x": 192,
+      "y": 769,
+      "w": 104,
+      "h": 144,
+      "area": 5040
+    },
+    {
+      "x": 113,
+      "y": 772,
+      "w": 107,
+      "h": 65,
+      "area": 3440
+    },
+    {
+      "x": 466,
+      "y": 842,
+      "w": 158,
+      "h": 76,
+      "area": 6912
+    },
+    {
+      "x": 670,
+      "y": 845,
+      "w": 169,
+      "h": 73,
+      "area": 4424
+    }
+  ],
+  "issues": [
+    {
+      "severity": "warn",
+      "category": "baked_text_container",
+      "reason": "found 5 likely blank white region(s); manually verify this is not a baked bubble"
+    }
+  ],
+  "manual_review_required": true
+}

@@ -1,0 +1,3822 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第4话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第4话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 6164,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 court_debate",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "court_debate"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 233,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P002",
+          "x": 126,
+          "y": 1124,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 court_debate",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "court_debate"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1306,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 185,
+                "y": 1169,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1172,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 2100,
+          "w": 1188,
+          "h": 760,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "none",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 court_debate",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "court_debate"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2250,
+                "w": 712,
+                "h": 530
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P004",
+          "x": 72,
+          "y": 2916,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 court_debate",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "court_debate"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3137,
+                "w": 777,
+                "h": 781
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 2971,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 2971,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2964,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B004S2",
+              "type": "sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3838,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P005",
+          "x": 72,
+          "y": 4092,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 court_debate",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "court_debate"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4297,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 136,
+                "y": 4143,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4140,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 5188,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 court_debate",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "court_debate"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5372,
+                "w": 712,
+                "h": 641
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 185,
+                "y": 5232,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 5236,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 6084,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 submission",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "submission"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 233,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B007N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P008",
+          "x": 72,
+          "y": 1124,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 submission",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "submission"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1345,
+                "w": 777,
+                "h": 781
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 136,
+                "y": 1179,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1179,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B008N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1172,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B008S2",
+              "type": "sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2046,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P009",
+          "x": 126,
+          "y": 2300,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 submission",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "submission"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2482,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.narration",
+              "rect": {
+                "x": 185,
+                "y": 2345,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009N1",
+              "type": "narration",
+              "content_ref": "panel:P009.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 2348,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P010",
+          "x": 126,
+          "y": 3276,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "none",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 submission",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "submission"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3442,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P011",
+          "x": 72,
+          "y": 4172,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 submission",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "submission"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4361,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 4219,
+                "w": 518,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "徽宗",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "徽宗"
+              },
+              "x": 120,
+              "y": 4220,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P012",
+          "x": 126,
+          "y": 5188,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 submission",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "submission"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5356,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 5228,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 172,
+              "y": 5234,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 6284,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 satirical_bridge",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "satirical_bridge"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 196,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "徽宗",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "徽宗"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P014",
+          "x": 72,
+          "y": 924,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 satirical_bridge",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "satirical_bridge"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1116,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 971,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "徽宗",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "徽宗"
+              },
+              "x": 120,
+              "y": 972,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P015",
+          "x": 126,
+          "y": 1940,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 satirical_bridge",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "satirical_bridge"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2124,
+                "w": 712,
+                "h": 644
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 185,
+                "y": 1983,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1988,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 2916,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 satirical_bridge",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "satirical_bridge"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3140,
+                "w": 777,
+                "h": 782
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 2971,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 2971,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2964,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B016S2",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3838,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P017",
+          "x": 72,
+          "y": 4092,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 satirical_bridge",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "satirical_bridge"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4300,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.narration",
+              "rect": {
+                "x": 136,
+                "y": 4143,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B017N1",
+              "type": "narration",
+              "content_ref": "panel:P017.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4140,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P018",
+          "x": 72,
+          "y": 5188,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 satirical_bridge",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "satirical_bridge"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5395,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.narration",
+              "rect": {
+                "x": 136,
+                "y": 5238,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B018N1",
+              "type": "narration",
+              "content_ref": "panel:P018.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 5236,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_004",
+      "source_name_page_id": "SCROLL_004",
+      "width": 1440,
+      "height": 6164,
+      "reading_order": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 explanation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "explanation"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 233,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.narration",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B019N1",
+              "type": "narration",
+              "content_ref": "panel:P019.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P020",
+          "x": 126,
+          "y": 1124,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 explanation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "explanation"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1306,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 185,
+                "y": 1169,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B020N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1172,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P021",
+          "x": 72,
+          "y": 2100,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 explanation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "explanation"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2305,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P021.narration",
+              "rect": {
+                "x": 136,
+                "y": 2151,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B021N1",
+              "type": "narration",
+              "content_ref": "panel:P021.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2148,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P022",
+          "x": 126,
+          "y": 3196,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "none",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 explanation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "explanation"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3378,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 3241,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B022S1",
+              "type": "sfx",
+              "content_ref": "panel:P022.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3918,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P023",
+          "x": 72,
+          "y": 4172,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 explanation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "explanation"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4377,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 136,
+                "y": 4223,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B023N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4220,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P024",
+          "x": 126,
+          "y": 5268,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 explanation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "explanation"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5436,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 5308,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B024D1",
+              "type": "dialogue",
+              "content_ref": "panel:P024.dialogue:1",
+              "speaker": "军正司",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "军正司"
+              },
+              "x": 172,
+              "y": 5314,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_005",
+      "source_name_page_id": "SCROLL_005",
+      "width": 1440,
+      "height": 6124,
+      "reading_order": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "panels": [
+        {
+          "panel_id": "P025",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 illness_claim",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "illness_claim"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 236,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 79,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B025D1",
+              "type": "dialogue",
+              "content_ref": "panel:P025.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B025S2",
+              "type": "sfx",
+              "content_ref": "panel:P025.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P026",
+          "x": 72,
+          "y": 1124,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 illness_claim",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "illness_claim"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1316,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1171,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B026D1",
+              "type": "dialogue",
+              "content_ref": "panel:P026.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 120,
+              "y": 1172,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P027",
+          "x": 72,
+          "y": 2140,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 illness_claim",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "illness_claim"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2348,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.narration",
+              "rect": {
+                "x": 136,
+                "y": 2191,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B027N1",
+              "type": "narration",
+              "content_ref": "panel:P027.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2188,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P028",
+          "x": 72,
+          "y": 3236,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 illness_claim",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "illness_claim"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3444,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 3287,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B028S1",
+              "type": "sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4078,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P029",
+          "x": 126,
+          "y": 4332,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 illness_claim",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "illness_claim"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4500,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4371,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B029D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "牌军",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "牌军"
+              },
+              "x": 172,
+              "y": 4378,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P030",
+          "x": 126,
+          "y": 5228,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 illness_claim",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "illness_claim"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5395,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P030.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 5267,
+                "w": 475,
+                "h": 277
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B030D1",
+              "type": "dialogue",
+              "content_ref": "panel:P030.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 5274,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_006",
+      "source_name_page_id": "SCROLL_006",
+      "width": 1440,
+      "height": 6084,
+      "reading_order": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "panels": [
+        {
+          "panel_id": "P031",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 humiliation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "humiliation"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 196,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B031D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "牌军",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "牌军"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P032",
+          "x": 72,
+          "y": 924,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 humiliation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "humiliation"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1116,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 971,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B032D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 120,
+              "y": 972,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P033",
+          "x": 72,
+          "y": 1940,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 humiliation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "humiliation"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2148,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.narration",
+              "rect": {
+                "x": 136,
+                "y": 1991,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B033N1",
+              "type": "narration",
+              "content_ref": "panel:P033.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1988,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P034",
+          "x": 72,
+          "y": 3036,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 humiliation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "humiliation"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3228,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P034.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3083,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B034D1",
+              "type": "dialogue",
+              "content_ref": "panel:P034.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 120,
+              "y": 3084,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P035",
+          "x": 72,
+          "y": 4052,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 humiliation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "humiliation"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4244,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P035.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 4099,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B035D1",
+              "type": "dialogue",
+              "content_ref": "panel:P035.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 120,
+              "y": 4100,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P036",
+          "x": 126,
+          "y": 5068,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 humiliation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "humiliation"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5258,
+                "w": 712,
+                "h": 668
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 5113,
+                "w": 475,
+                "h": 316
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B036D1",
+              "type": "dialogue",
+              "content_ref": "panel:P036.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 174,
+              "y": 5116,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_007",
+      "source_name_page_id": "SCROLL_007",
+      "width": 1440,
+      "height": 6124,
+      "reading_order": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "panels": [
+        {
+          "panel_id": "P037",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 turning_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "turning_point"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 196,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B037D1",
+              "type": "dialogue",
+              "content_ref": "panel:P037.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P038",
+          "x": 72,
+          "y": 924,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 turning_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "turning_point"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1116,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 971,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B038D1",
+              "type": "dialogue",
+              "content_ref": "panel:P038.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 120,
+              "y": 972,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P039",
+          "x": 72,
+          "y": 1940,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 turning_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "turning_point"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2148,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1991,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1991,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B039D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 120,
+              "y": 1988,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B039S2",
+              "type": "sfx",
+              "content_ref": "panel:P039.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2782,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P040",
+          "x": 126,
+          "y": 3036,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "thin",
+          "gutter_intent": "中等呼吸",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 turning_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "turning_point"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3204,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3075,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B040D1",
+              "type": "dialogue",
+              "content_ref": "panel:P040.dialogue:1",
+              "speaker": "众将",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "众将"
+              },
+              "x": 172,
+              "y": 3082,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P041",
+          "x": 72,
+          "y": 3932,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 turning_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "turning_point"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4140,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3983,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 3983,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B041D1",
+              "type": "dialogue",
+              "content_ref": "panel:P041.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 120,
+              "y": 3980,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B041S2",
+              "type": "sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4774,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P042",
+          "x": 72,
+          "y": 5028,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 turning_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "turning_point"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5235,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.narration",
+              "rect": {
+                "x": 136,
+                "y": 5078,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B042N1",
+              "type": "narration",
+              "content_ref": "panel:P042.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 5076,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_008",
+      "source_name_page_id": "SCROLL_008",
+      "width": 1440,
+      "height": 4408,
+      "reading_order": [
+        "P043",
+        "P044",
+        "P045",
+        "P046"
+      ],
+      "panels": [
+        {
+          "panel_id": "P043",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 234,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.narration",
+              "rect": {
+                "x": 136,
+                "y": 78,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B043N1",
+              "type": "narration",
+              "content_ref": "panel:P043.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P044",
+          "x": 72,
+          "y": 1124,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1330,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.narration",
+              "rect": {
+                "x": 136,
+                "y": 1174,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B044N1",
+              "type": "narration",
+              "content_ref": "panel:P044.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1172,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P045",
+          "x": 72,
+          "y": 2220,
+          "w": 1296,
+          "h": 996,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2417,
+                "w": 777,
+                "h": 696
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2268,
+                "w": 518,
+                "h": 332
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B045D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 120,
+              "y": 2268,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P046",
+          "x": 72,
+          "y": 3272,
+          "w": 1296,
+          "h": 1080,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "只用真实门响、衣摆、翻页、钟声与记忆墨影；禁游戏UI、魔法粒子和无来源发光。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3487,
+                "w": 777,
+                "h": 755
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3323,
+                "w": 518,
+                "h": 360
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.dialogue:2",
+              "rect": {
+                "x": 784,
+                "y": 3323,
+                "w": 518,
+                "h": 360
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B046D1",
+              "type": "dialogue",
+              "content_ref": "panel:P046.dialogue:1",
+              "speaker": "王母",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王母"
+              },
+              "x": 120,
+              "y": 3320,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B046D2",
+              "type": "dialogue",
+              "content_ref": "panel:P046.dialogue:2",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 598,
+              "y": 3320,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第4话/panel_script.json",
+    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "name_board": "排版/第4话/name_board.json",
+    "name_board_sha256": "c7dc2d99d5c18e424513fbe76ff043f61c2c496632e7a80cc858098fb5479ff5",
+    "name_approval_subject_sha256": "e7bc91dcd88c8263e6071b8e2e51894e7d81b8c25eebf5ab44e0f3857b66aaf2",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-18T07:45:33.374936+00:00",
+    "note": "状态合同措辞对齐后46格排版复核通过。",
+    "subject_sha256": "28636bb400548981d7ed549a31bc1569ec18354874360f02079648d15a4b7c42",
+    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "name_board_sha256": "c7dc2d99d5c18e424513fbe76ff043f61c2c496632e7a80cc858098fb5479ff5",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

@@ -51,6 +51,16 @@ DOCX 会用标准库直接读取 `word/document.xml` 的正文段落；页眉、
 python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫画/作品名" --chapter 第1话 --source-language 文言 --target-text-language 中文 --force-normalization
 ```
 
+连续多话消费同一源章时，先为新话运行上面的 gate 生成当前合同骨架，再继承前话已经审定的释义；该迁移只复用语言字段，当前话合同、源 SHA、消费决策与签收不会沿用：
+
+```bash
+python3 skills/comic-script/scripts/inherit_source_semantics.py "创作区/画漫画/作品名" \
+  --chapter 第4话 --from-chapter 第3话 --consume-start 28 --consume-end 37 \
+  --decision S029=并入 --decision S030=并入 --write --json
+```
+
+继承脚本会拒绝源段原文漂移；消费范围之前统一记为“前话已改编”、之后统一记为“后文带出”，范围内仍需编辑逐段复核释义和最终取舍，再重跑 `source_semantics_gate.py`。
+
 通过标准：
 
 - `source_language`、`target_text_language` 已记录。

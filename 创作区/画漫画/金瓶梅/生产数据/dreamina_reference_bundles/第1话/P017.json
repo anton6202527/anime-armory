@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P017",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 8,
+  "references": [
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+      "sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__front.png",
+      "sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_WU_HOME",
+      "path": "出图/共享/图片/LOC_WU_HOME__anchor.png",
+      "sha256": "0b172d373b0d6ad365285ed655f6e30b087ddf5d85679908ae3fa7a018047b8c",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+      "sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__face.png",
+      "sha256": "d9e63cf51c71bea75ed9d7c1d8f54aaeef4cbb9d00d0cb552e452b66367fa910",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__three_quarter.png",
+      "sha256": "0257280477992a9fee5d9725c963e9a50ae8b12a2d027a4c4083b2fa88dfa596",
+      "role": "three_quarter",
+      "required": false
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+      "sha256": "821882b418c8f3dd5fc1141a988fbe0713513788c3f15b853d9f332e92ebe2b8",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T14:50:06"
+}

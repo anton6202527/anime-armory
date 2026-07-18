@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "style_consistency",
+  "chapter": "第1话",
+  "created_at": "2026-07-18T17:09:10",
+  "summary": {
+    "panel_count": 44,
+    "finding_count": 10,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 10
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "internal_panel_gutters",
+      "panel_id": "P028",
+      "artifact": "出图/第1话/panels/P028.png",
+      "reason": "检测到疑似内部分栏/拼贴 gutter，单个漫画 panel 被模型画成多面板。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "脚本明确要求长竖格三层生活蒙太奇，三道横向分隔用于表现一个月内的邻里宴、赠缎和夜归，不是模型误生成的漫画分栏。",
+        "evidence": "脚本/第1话/panel_script.json；生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_005.webp",
+        "artifact_sha256": "8652c6c7349f55f36b8bb4bf038af8a1f19ae2d507025bbb9cbdb7dff4d45d0f",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P001",
+      "artifact": "出图/第1话/panels/P001.png",
+      "reason": "风格指纹内聚度 0.4869 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "开篇题眼格以黑场、红帘和飞刃构成独立视觉序幕，黑场比例明显高于正文属于有意设计；线法、矿物色和红帘母题与后文一致。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_001.webp",
+        "artifact_sha256": "86465fc0ed0f20eb238533dfaf14a6824996dbf7af40239b6f453190f544341a",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P002",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "风格指纹内聚度 0.7471 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "清河县日景建立镜头因天空与街道大面积浅色而改变色彩分布；人物线法、建筑细节和低饱和古典配色与全话连续。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_001.webp",
+        "artifact_sha256": "0948f56346b653fcff4befa8be1cc76e3cbbf2cb1ee244a27e8ca347966b4358",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P003",
+      "artifact": "出图/第1话/panels/P003.png",
+      "reason": "风格指纹内聚度 0.7848 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "景阳冈夕照山水段采用暖色空气透视，属于从县城切入英雄前史的计划内转场；人物、树石和笔触语言连续。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_001.webp",
+        "artifact_sha256": "df7317d0f8559d530ccb3d27604496d275296ce74eb6350eecc221cd6f5d1bf1",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P005",
+      "artifact": "出图/第1话/panels/P005.png",
+      "reason": "风格指纹内聚度 0.7772 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "落日逆光和卧牛形山石扩大了暖色与暗部占比；与相邻景阳冈格的衣色、松树、枯草和水墨淡彩处理一致。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_001.webp",
+        "artifact_sha256": "e7c1ba080491446889e6ae52b12704c04e03cf2446a2cfe8a357a3c95ec8e226",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P012",
+      "artifact": "出图/第1话/panels/P012.png",
+      "reason": "风格指纹内聚度 0.7902 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "红轿近景使单一红色面积和人物比例显著上升，属于武大兄弟相认段的视觉锚点；街景线法和材质仍与县城段一致。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_002.webp",
+        "artifact_sha256": "fbf9332a9b7c902b184e2daf60be701a3adb7b581f6ed64fa23c2c11a6302f52",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P013",
+      "artifact": "出图/第1话/panels/P013.png",
+      "reason": "风格指纹内聚度 0.7923 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "张大户家室内格以中轴案桌、暗帘和烛影建立回忆段，低照度是计划内叙事变化；建筑与人物仍服从同一古典淡彩基线。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_003.webp",
+        "artifact_sha256": "8c07a815136aba7c1caa9442d79bcf6e3ec720e3bbcaeac6ff3362ff1ddf3ceb",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P031",
+      "artifact": "出图/第1话/panels/P031.png",
+      "reason": "风格指纹内聚度 0.8012 明显低于本话中位 0.8436，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "雪街日景的大面积白色和近景人物改变了像素指纹；服装、建筑、人物线条与前后武家段连续。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_006.webp",
+        "artifact_sha256": "fb3bf46b9a4f8ae198aab64f8bddc4ea1358ceea4d4ab7c6e33ee88728e5ed2d",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "adjacent_panel_grade_jump",
+      "panel_id": "P028",
+      "artifact": "出图/第1话/panels/P028.png",
+      "reason": "与同场景锚 LOC_WU_HOME 的前一格 P027 相比冷暖/亮度跳变：warmth_jump=0.438, val_jump=0.033；疑似光位翻转或昼夜漂移。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "adjacent_continuity",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "P028 按脚本跨越一个月并并置日景、室内暖光和夜街，冷暖变化是时间蒙太奇的必要信息，不是同一瞬间的错误白平衡漂移。",
+        "evidence": "脚本/第1话/panel_script.json；生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_005.webp",
+        "artifact_sha256": "8652c6c7349f55f36b8bb4bf038af8a1f19ae2d507025bbb9cbdb7dff4d45d0f",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    },
+    {
+      "severity": "info",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P001",
+      "artifact": "出图/第1话/panels/P001.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.4259（中位 0.045），线宽代理 edge_density=0.0947（中位 0.131）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "制作代理（出品人 lalala 授权）",
+        "accepted_at": "2026-07-18T16:59:45+08:00",
+        "reason": "高黑场用于题眼序幕和危险预告，红帘、剑光与金属物仍保持清晰层级，进入正文后立即恢复常规明度。",
+        "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg；排版/第1话/pages/page_001.webp",
+        "artifact_sha256": "86465fc0ed0f20eb238533dfaf14a6824996dbf7af40239b6f453190f544341a",
+        "source": "生产数据/style_consistency_acceptance_第1话.json"
+      }
+    }
+  ]
+}

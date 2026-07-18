@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "kind": "comic_cover_job",
+  "scope": "work_cover",
+  "title": "金瓶梅",
+  "size": {
+    "width": 1440,
+    "height": 2560
+  },
+  "orientation": "portrait",
+  "text_language": "中文",
+  "synopsis_source": "设定库/story_bible.md 一句话核心 / _meta.json synopsis",
+  "生成模型": "Dreamina 5.0",
+  "生成渠道": "Dreamina/即梦官方 CLI",
+  "backend_capabilities": {
+    "adapter_id": "dreamina_image2image",
+    "model": "Dreamina 5.0",
+    "channel": "Dreamina/即梦官方 CLI",
+    "supports_image_inputs": true,
+    "persistent_subject": false,
+    "reference_image_limit": 10,
+    "single_character_reference_limit": 5,
+    "multi_character_reference_limit": 4,
+    "non_character_reference_limit": 2,
+    "style_reference_limit": 1,
+    "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-18 with dreamina image2image --help)."
+  },
+  "reference_budget": {
+    "selected": 6,
+    "character_identity": 3,
+    "style_only": 1,
+    "location_and_prop": 2,
+    "limit": 10
+  },
+  "creative_direction": {
+    "focal_character": "CHAR_PAN_JINLIAN",
+    "visual_motif": "PROP_RED_CURTAIN",
+    "setting": "LOC_QINGHE_ZISHI_STREET",
+    "composition": "单人物竖版主视觉；红帘作为人物与吃人世道之间的边界；上方保留标题安全区但不生成文字",
+    "review_scope": "内部 demo 封面；不构成公开发行、商业交付或权利清理"
+  },
+  "prompt": "《金瓶梅》作品竖版封面 key visual，明代风俗画工笔重彩×写实国漫人物×电影级动机光，绢本矿物色，含蓄世情叙事。9:16竖版，单一连续画面，不分栏。潘金莲为唯一清晰人物，保持参考图同一张脸、长圆鹅蛋脸、细长丹凤眼、半高髻、月白交领短袄、黛青比甲、暗红马面裙。她站在紫石街武家门内的红褐竹帘之后，左手轻扶破损帘边，身体三分之二侧向街外，收下颌后抬眼，不看镜头，神情克制、警觉、决意改变命运。红帘从画面上方垂落形成视觉主轴，如一张网把她与街道隔开；帘外远处是雨雪交叠的紫石街、市井灯火和高墙阴影，暗示钱权与人情网络，不出现可辨识的其他人物脸。上方约25%为深色低细节标题安全区但不写任何文字，下方保留朱砂红帘、石绿建筑、冷蓝雪夜与炉火暖光对冲。三值明暗清楚，外轮廓中线，脸手细线，背景淡线，哑光绢纸矿物色。全身或膝上构图，双手与帘子接触自然，五指正确，衣褶完整，布鞋与地面清楚。无文字，无标题，无logo，无水印，无气泡，无牌匾文字，无现代物件，无清宫发饰，无唐式高胸裙，无露骨或挑逗姿势，无影视演员脸，无Q版，无3D CG。",
+  "submit_prompt": "《金瓶梅》作品竖版封面 key visual，明代风俗画工笔重彩×写实国漫人物×电影级动机光，绢本矿物色，含蓄世情叙事。9:16竖版，单一连续画面，不分栏。潘金莲为唯一清晰人物，保持参考图同一张脸、长圆鹅蛋脸、细长丹凤眼、半高髻、月白交领短袄、黛青比甲、暗红马面裙。她站在紫石街武家门内的红褐竹帘之后，左手轻扶破损帘边，身体三分之二侧向街外，收下颌后抬眼，不看镜头，神情克制、警觉、决意改变命运。红帘从画面上方垂落形成视觉主轴，如一张网把她与街道隔开；帘外远处是雨雪交叠的紫石街、市井灯火和高墙阴影，暗示钱权与人情网络，不出现可辨识的其他人物脸。上方约25%为深色低细节标题安全区但不写任何文字，下方保留朱砂红帘、石绿建筑、冷蓝雪夜与炉火暖光对冲。三值明暗清楚，外轮廓中线，脸手细线，背景淡线，哑光绢纸矿物色。全身或膝上构图，双手与帘子接触自然，五指正确，衣褶完整，布鞋与地面清楚。无文字，无标题，无logo，无水印，无气泡，无牌匾文字，无现代物件，无清宫发饰，无唐式高胸裙，无露骨或挑逗姿势，无影视演员脸，无Q版，无3D CG。",
+  "submit_prompt_sha256": "c95d2af4b6d3cb41a4e641c99535de715e9f51a5ced0ed37de101a402cfb0988",
+  "negative_prompt": "文字，水印，logo，乱码字，字幕，标题，牌匾字，对白气泡，空白气泡，旁白框，文字框，多人物清晰正脸，分栏，拼贴，额外手指，畸形手，手脚混淆，脸部漂移，发际线漂移，眼型漂移，发型漂移，服装漂移，looking at viewer，eye contact with camera，自拍，低清晰度，Q版化，3D游戏CG，现代物件，清宫发饰，唐式高胸裙，裸露，挑逗姿势，露骨情色",
+  "character_bindings": [
+    {
+      "character_id": "CHAR_PAN_JINLIAN",
+      "role": "focal_character",
+      "form_id": "FORM_BASE",
+      "outfit_id": "OUTFIT_BASE",
+      "expression_id": "EXPR_NEUTRAL",
+      "state_id": "STATE_BASE"
+    }
+  ],
+  "references": [
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+      "sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+      "view": "face",
+      "role": "identity_face"
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__three_quarter.png",
+      "sha256": "0257280477992a9fee5d9725c963e9a50ae8b12a2d027a4c4083b2fa88dfa596",
+      "view": "three_quarter",
+      "role": "identity_pose"
+    },
+    {
+      "id": "CHAR_PAN_JINLIAN",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+      "sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+      "view": "front",
+      "role": "outfit_and_proportion"
+    },
+    {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+      "role": "style_only"
+    },
+    {
+      "id": "PROP_RED_CURTAIN",
+      "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "sha256": "97afe1744b710dcc6c0e4951cef27c913feafabe1d94c456ad37bcb81a97eb69",
+      "role": "visual_motif"
+    },
+    {
+      "id": "LOC_QINGHE_ZISHI_STREET",
+      "path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+      "sha256": "1dbb3efc2763366fb371b91acb809604c9693ea9975a85e0c593c1aad76aded7",
+      "role": "environment"
+    }
+  ],
+  "consumed_contracts": {
+    "identity_registry": {
+      "path": "出图/共享/identity_registry.json",
+      "sha256": "5c05d02062b54d504243092ee20372234f99b3537116af1213cb0e993fd3cc42",
+      "schema_version": 2
+    },
+    "approval_delegation": {
+      "path": "设定库/approval_delegation.json",
+      "sha256": "1607fb37271d29c92e391e575e4420eea59471dd34c50bf1e31a3e0c4f0818f",
+      "scope": "即梦出图批次的常规重抽与候选采纳"
+    }
+  },
+  "compliance_note": "封面遵循项目含蓄世情改编口径，不生成露骨画面；当前仅用于 demo 学习。公开发布、商业交付和权利签收不在本 job 授权范围内。",
+  "status": "ready",
+  "result_path": "出图/封面/cover.png",
+  "result_sha256": "b51f9f4a3a30b9ccd42cf0217ed2442136451feb1f043acbbdabe14a4e422224",
+  "execution": {
+    "backend": "Dreamina official CLI",
+    "model": "Dreamina 5.0",
+    "model_version": "5.0",
+    "resolution_type": "2k",
+    "ratio": "9:16",
+    "canvas": {
+      "width": 1440,
+      "height": 2560
+    },
+    "reference_input_mode": "dreamina_image2image_images",
+    "reference_count": 6,
+    "submit_id": "d9186a01-d510-4a66-b1a4-b977318dae99",
+    "credit_count": 3,
+    "candidate_path": "出图/封面/candidates/d9186a01-d510-4a66-b1a4-b977318dae99/d9186a01-d510-4a66-b1a4-b977318dae99_image_1.png",
+    "attempts": [
+      {
+        "attempt": 1,
+        "status": "transport_timeout_before_submit",
+        "credit_consumed": 0,
+        "reason": "即梦用户信息预检连接超时；未创建生成任务"
+      },
+      {
+        "attempt": 2,
+        "status": "success",
+        "submit_id": "d9186a01-d510-4a66-b1a4-b977318dae99",
+        "credit_consumed": 3
+      }
+    ]
+  },
+  "manual_review": {
+    "verdict": "pass",
+    "reviewed_by": "制作代理（出品人 lalala 授权）",
+    "reviewed_at": "2026-07-18T18:10:49+08:00",
+    "authorization": "设定库/approval_delegation.json",
+    "reason": "人物脸与定妆一致，红帘母题清晰，双手、服装与脚部完整，无文字伪影；雪夜街巷和暖灯形成明确家门边界，上方具备标题安全区。",
+    "scope": "内部 demo 封面候选采纳；不批准公开发布、商业交付或权利清理"
+  },
+  "generated_at": "2026-07-18T18:01:51+08:00",
+  "completed_at": "2026-07-18T18:10:49+08:00"
+}

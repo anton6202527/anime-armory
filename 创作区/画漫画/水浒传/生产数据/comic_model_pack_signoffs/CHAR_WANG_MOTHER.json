@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_WANG_MOTHER",
+  "tier": "named_minimal",
+  "model_pack_fingerprint": "289f05820d813023368caa0395eb02a6d3b93bcd45fcc4566072042fa51bb5a6",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+      "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "front",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+        "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_WANG_MOTHER__face.png",
+      "sha256": "e4295aa885ec2cab47e34bf883920ee5e769b48be92f1ee3f931ea02e94e0257",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "face",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+        "source_sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "并排检查正面、四分之三与头像：同一圆长脸、银灰包髻、微驼体态和灰褐家居服连续；全身手脚完整，无演员脸、贵妇首饰、文字或现代物件。依据用户授权自主签收。",
+  "approved_at": "2026-07-18T07:04:09+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

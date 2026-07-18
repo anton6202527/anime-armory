@@ -131,6 +131,43 @@ def test_build_lettering_carries_drawn_sfx_plan() -> None:
     assert item["style"]["shape"] == "jagged impact"
 
 
+def test_build_lettering_extracts_structured_sfx_and_distinct_slots() -> None:
+    panel_script = {
+        "chapter": "第1话",
+        "panels": [
+            {
+                "panel_id": "P001",
+                "sfx": [
+                    {"text": "轰！", "text_target": "轰！", "source": "猛虎落地"},
+                    {"text": "沙——", "text_target": "沙——", "source": "草叶摩擦"},
+                ],
+            }
+        ],
+    }
+    layout = {
+        "segments": [
+            {
+                "panels": [
+                    {
+                        "panel_id": "P001",
+                        "bubble_slots": [
+                            {"slot_id": "B001S1", "type": "sfx"},
+                            {"slot_id": "B001S2", "type": "sfx"},
+                        ],
+                    }
+                ]
+            }
+        ]
+    }
+
+    lettering = build_lettering.build_lettering(panel_script, layout, {}, "中文")
+
+    assert [item["text"] for item in lettering["items"]] == ["轰！", "沙——"]
+    assert [item["slot_id"] for item in lettering["items"]] == ["B001S1", "B001S2"]
+    assert [item["sound_source"] for item in lettering["items"]] == ["猛虎落地", "草叶摩擦"]
+    assert all("{'text'" not in item["text"] for item in lettering["items"])
+
+
 def test_translation_todo_created_and_cleared(tmp_path: Path) -> None:
     root = tmp_path / "项目"
     (root / "排版" / "第1话").mkdir(parents=True)
