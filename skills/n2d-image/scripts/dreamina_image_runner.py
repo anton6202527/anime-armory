@@ -1044,7 +1044,9 @@ def main(argv: Sequence[str]) -> int:
     # Pre-spend interlock: 生成前先跑 image_preflight 硬闸门，block 即拒绝生成不花钱；
     # 逃生口 --skip-preflight 留痕成 dashboard waiver（与 codex_image_runner 同源）。
     if not ns.dry_run:
-        if ns.skip_preflight:
+        if ns.recover_submit_id:
+            print("[gate] recovery mode uses an existing paid submit id; pre-spend image_preflight is not applicable")
+        elif ns.skip_preflight:
             base.record_waiver(root, episode, "image_preflight", "skip-preflight",
                                "operator passed --skip-preflight; pre-spend image_preflight gate not run")
         elif not base.run_image_gate(root, episode, stage="image_preflight"):

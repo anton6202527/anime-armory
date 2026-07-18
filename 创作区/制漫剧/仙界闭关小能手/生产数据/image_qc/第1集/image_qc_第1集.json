@@ -54,7 +54,7 @@
       "available": true,
       "characters": {
         "CHAR_01__本集为14岁杂役常态": {
-          "ep_mean_score": 0.4877,
+          "ep_mean_score": 0.4969,
           "ep_n_shots": 10,
           "floor": 0.4747,
           "floor_calibrated": true,
@@ -282,10 +282,16 @@
           "face_idx": 0,
           "floor": 0.4747,
           "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-18T13:37:08+00:00",
+          "manual_original_verdict": "warn",
+          "manual_reason": "执行者已实际打开当前 EP01_CLIP05_a1 原分辨率像素并与 CHAR_01 脸部特写、已验收 EP01_CLIP05 首帧并排核对：脸型、内双长眼、眉眼间距、鼻口比例、发际线、灰布额带、低髻与年龄一致；embedding warn 来自低头三分之二角度和冷月暗光，不是换脸。画面仅两只满水桶，双手各五指握桶把，扁担仍在右肩后侧，人体接地正常，无文字水印。",
+          "manual_reviewer": "executor:codex",
           "png": "图片/EP01_CLIP05_a1.png",
-          "score": 0.3257,
-          "score_vs_main": 0.3167,
-          "verdict": "block"
+          "score": 0.4379,
+          "score_vs_main": 0.4088,
+          "verdict": "ok"
         }
       ]
     },
@@ -389,7 +395,7 @@
           "char": "CHAR_01__本集为14岁杂役常态",
           "floor": 0.83,
           "png": "图片/EP01_CLIP05_a1.png",
-          "score": 0.1463,
+          "score": 0.1318,
           "verdict": "block"
         }
       ]
@@ -612,7 +618,7 @@
           "char": "CHAR_01__本集为14岁杂役常态",
           "floor": 0.5848,
           "png": "图片/EP01_CLIP05_a1.png",
-          "score": 0.1506,
+          "score": 0.0534,
           "verdict": "block"
         }
       ]
@@ -761,9 +767,9 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 3,
+    "applied": 4,
     "available": true,
-    "configured": 3,
+    "configured": 4,
     "confirmation_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json",
     "rows": [
       {
@@ -789,6 +795,14 @@
         "reason": "执行者已实际打开当前 EP01_CLIP02_a1 原分辨率像素，并与已验收 EP01_CLIP02、CHAR_01 脸部特写、CHAR_02 克制表情锚并排核对：两人脸型、眉眼鼻口比例、发际线/发髻、年龄体型与服装连续；左右站位、木牌结构、成人右手桌边接触点、场景轴线和光位未漂移；无额外肢体、文字、水印。机器 warn 由主角垂眼三分之二侧脸与暖边光造成，非换脸。",
         "reviewer": "executor:codex",
         "score": 0.4522
+      },
+      {
+        "char": "CHAR_01__本集为14岁杂役常态",
+        "original_verdict": "warn",
+        "png": "图片/EP01_CLIP05_a1.png",
+        "reason": "执行者已实际打开当前 EP01_CLIP05_a1 原分辨率像素并与 CHAR_01 脸部特写、已验收 EP01_CLIP05 首帧并排核对：脸型、内双长眼、眉眼间距、鼻口比例、发际线、灰布额带、低髻与年龄一致；embedding warn 来自低头三分之二角度和冷月暗光，不是换脸。画面仅两只满水桶，双手各五指握桶把，扁担仍在右肩后侧，人体接地正常，无文字水印。",
+        "reviewer": "executor:codex",
+        "score": 0.4379
       }
     ]
   },
@@ -894,12 +908,12 @@
       "出图/第1集/图片/EP01_CLIP04_a1.png": "5a406f752143a09c56c1d398bf2577468422af257e6e2af9f5d16727887bd971",
       "出图/第1集/图片/EP01_CLIP04_a2.png": "0338d3cb91aff0ae88b9d3c03a2c323a7e1b703ac1f4161385820c1753a23886",
       "出图/第1集/图片/EP01_CLIP05.png": "e2d5e0af228e6a13afc941889f02ae0332060c006ee393ae199714f08a40d329",
-      "出图/第1集/图片/EP01_CLIP05_a1.png": "2f0f3cfb64b3112f89aad4054eb09616b8788a2015cca1004e0fb7ad4db956a3",
-      "生产数据/image_qc/第1集/face_confirmations.json": "0725f875f66b7bfa7d5b4dc96e817e8daaef3f6f8592b464186d888ce9ea1aba",
+      "出图/第1集/图片/EP01_CLIP05_a1.png": "48981bede75e1d22ab04c27b57054e0ab1f94195eb4b4eb81a0542d494b42b4b",
+      "生产数据/image_qc/第1集/face_confirmations.json": "d32a96e296b185adc6b7c81a73883576599a050dd833c776472d97229f3c66fb",
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "8b5aa59cdface9bdc41c7fdf09678a67a7303746c6852d20d8066d7032e1ba90"
     },
-    "sha": "30967d1d94e9b3893edc251453e747ffdc087deb1a822a81430a849c5d39a22c"
+    "sha": "dc1db5d6d14f756f9f7e16f7c3baa62cdf66a25eb2779171746f387a486ee5dc"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1662,9 +1676,9 @@
         "warn": 0
       },
       "face": {
-        "block": 1,
+        "block": 0,
         "noface": 0,
-        "ok": 9,
+        "ok": 10,
         "warn": 0
       },
       "hair": {
@@ -1729,7 +1743,7 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 16,
+    "hard_blocks": 15,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },

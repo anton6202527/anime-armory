@@ -1,6 +1,6 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-18T01:02:52+00:00
+- 生成时间：2026-07-18T13:30:15+00:00
 - 事件日志：`/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
@@ -8,19 +8,19 @@
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 2 | 197 | — | 5h29m35s | 110 | 8 | 17 | 55 | 75.4% | 0.0% |
+| 2 | 199 | — | 5h29m38s | 111 | 9 | 3 | 44 | 75.7% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 50s | — | 5h29m35s | 50.0% | 7.3% | 0 | — | — | — | — |
+| 50s | — | 5h29m38s | 49.5% | 8.1% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 0.5 | 0.1545 | 0 | 0.0% |
+| 0.3964 | 0.027 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 50.0% | 90.0% | ⚠️ 差距 |
-| 重抽率 | 7.3% | 10.0% | ✅ 达标 |
+| 一次通过率 | 49.5% | 90.0% | ⚠️ 差距 |
+| 重抽率 | 8.1% | 10.0% | ✅ 达标 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -47,17 +47,18 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图 | — | — | 5h29m35s | 50.0% | 7.3% | dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_first×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_a2×2；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_a1×2 | 17 | — | — | — | — | — | — |
+| 第1集 | 出图 | — | — | 5h29m38s | 49.5% | 8.1% | dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_first×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_05_a1×3；dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_a2×2 | 3 | — | — | — | — | — | — |
 | 全剧 | — | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
 ## 重抽原因分维度
 
 | 维度 | 次数 | 占比 |
 |---|---:|---:|
-| 后端/管线迁移 (backend_migration) | 8 | 100% |
+| 后端/管线迁移 (backend_migration) | 9 | 100% |
 | **一致性小计**（脸漂/服装/场景/画风） | **0** | **0%** |
 
 ## 最新阻断
 
 - 第1集 / image / 逐张机器QC+实际目视: EP01_CLIP05_a1.png — 执行者原分辨率目视拒收：CHAR_01 ArcFace 0.3257<0.4747；局部修复母图仍保留3只地面木桶，未删除多余桶。相同局部编辑已连续失败，禁止继续死磕当前坏像素。下一次切 canonical reset：不使用任何分镜源帧，只用CHAR_01同源身份锚、LOC_03潭边和PROP_扁担/水桶登记参考，重新构建单人弯腰、地面恰好2桶的单一画面。
-- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — image_qc standalone 报告有 16 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。
+- 第1集 / image_preflight / 物料新鲜度: 第1集 — 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手" 第1集` 固化新基线。
+- 第1集 / image / 出图落档QC: /Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json — 发现未入账 image_qc 报告但其新鲜度为 `stale`：报告 `inputs_fingerprint` 与当前文件失配：出图/第1集/图片/EP01_CLIP05_a1.png(变更)。先重跑 `dashboard gate --stage image` 或 image_qc，不能用旧报告证明图片一致。

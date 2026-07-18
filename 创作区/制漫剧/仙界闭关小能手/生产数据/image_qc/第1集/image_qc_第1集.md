@@ -1,7 +1,7 @@
 # n2d Image QC（出图落档机检）
 
 - episode: 第1集
-- 总判定: **block** · 硬阻断 16（必须修） · 非阻断初筛 11 · 视觉降级 0
+- 总判定: **block** · 硬阻断 15（必须修） · 非阻断初筛 11 · 视觉降级 0
 - 机检能力: **full** · 当前解释器: `/opt/homebrew/Caskroom/miniconda/base/bin/python3`
 - 阶段跳转: **image** · image_qc 有硬阻断，需修复/重抽受影响镜头后重跑
 
@@ -12,7 +12,7 @@
 - 🟢 active rejects 0 · review `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/human_image_review.json`
 
 ## 一致性机检（复用 n2d-review 阈值，单一真值源；崩脸=硬阻断，其余=非阻断初筛）
-- 崩脸 G1: 🔴 block 1 · warn 0
+- 崩脸 G1: 🟢 block 0 · warn 0
 - 发型 H1: 🔴 block 2 · warn 0
 - 服装 N1: 🔴 block 2 · warn 0
 - 场景 O2: 🟢 block 0 · warn 0
@@ -23,7 +23,7 @@
 
 ## 角色脸定妆比对覆盖（硬闸）
 - 🟢 已落档角色图 required 10 · covered 10 · missing 0 · pending 5 · precision full
-- 人工脸部确认: applied 3 · 确认文件 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json`
+- 人工脸部确认: applied 4 · 确认文件 `/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/face_confirmations.json`
 
 ## 核心角色五角 turnaround（逐视图 hash 收据硬闸）
 - 🟢 checked forms 4 · pending/stale receipts 0 · contract `front/three_quarter/side/rear_three_quarter/back`

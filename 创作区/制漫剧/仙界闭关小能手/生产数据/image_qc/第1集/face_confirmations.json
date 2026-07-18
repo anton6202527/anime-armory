@@ -36,6 +36,24 @@
       "verdict": "ok"
     },
     {
+      "char": "CHAR_01__本集为14岁杂役常态",
+      "confirmed_at": "2026-07-18T13:37:08+00:00",
+      "floor": 0.4747,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP01_CLIP05_a1.png",
+      "png_sha256": "48981bede75e1d22ab04c27b57054e0ab1f94195eb4b4eb81a0542d494b42b4b",
+      "reason": "执行者已实际打开当前 EP01_CLIP05_a1 原分辨率像素并与 CHAR_01 脸部特写、已验收 EP01_CLIP05 首帧并排核对：脸型、内双长眼、眉眼间距、鼻口比例、发际线、灰布额带、低髻与年龄一致；embedding warn 来自低头三分之二角度和冷月暗光，不是换脸。画面仅两只满水桶，双手各五指握桶把，扁担仍在右肩后侧，人体接地正常，无文字水印。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.4379,
+      "score_vs_main": 0.4088,
+      "shot": "Clip_05",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_02__常态",
       "confirmed_at": "2026-07-16T00:48:43+00:00",
       "floor": 0.639,
@@ -55,6 +73,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-07-17T12:04:01+00:00",
+  "updated_at": "2026-07-18T13:37:08+00:00",
   "version": 1
 }
