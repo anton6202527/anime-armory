@@ -1612,17 +1612,9 @@ def check_machine_audit_liveness(root: Path, chapter: str, char_report: dict[str
     审计引擎降级/裁决未执行必须出 finding，不准降级成 notes 静默过闸。
     """
     caps = char_report.get("capabilities") if isinstance(char_report.get("capabilities"), dict) else {}
-    if not caps.get("ccip"):
-        add(
-            findings,
-            "warn",
-            "identity_similarity_engine_degraded",
-            f"生产数据/comic_character_consistency_{chapter}.json",
-            "CCIP 动漫身份 embedding 不可用，角色/生物相似度机检降级为色彩分布代理（同色调换脸/变形会漏报）。",
-            "review",
-            "独立 venv 安装 dghs-imgutils 后重跑 gate；在装好前必须以 VLM 并排裁决兜底身份轴。",
-        )
     if vlm_judge is None:
+        if not caps.get("ccip"):
+            add(findings, "warn", "identity_similarity_engine_degraded", f"生产数据/comic_character_consistency_{chapter}.json", "CCIP 动漫身份 embedding 不可用，且 VLM 并排判定模块也不可用。", "review", "安装 dghs-imgutils 或恢复 VLM 并排裁决。")
         add(findings, "warn", "vlm_judge_module_missing", "skills/comic-review/scripts/vlm_judge.py", "VLM 并排判定模块不可用，三轴身份机检缺失。", "review", "恢复 vlm_judge.py 后重跑 gate。")
         return
     try:
@@ -1632,6 +1624,26 @@ def check_machine_audit_liveness(root: Path, chapter: str, char_report: dict[str
         return
     task_count = int(status.get("task_count") or 0)
     verdict_count = int(status.get("verdict_count") or 0)
+    if not caps.get("ccip"):
+        fallback_complete = bool(task_count and verdict_count == task_count)
+        add(
+            findings,
+            "info" if fallback_complete else "warn",
+            "identity_similarity_engine_degraded",
+            f"生产数据/comic_character_consistency_{chapter}.json",
+            (
+                "CCIP 动漫身份 embedding 不可用；VLM 三轴并排裁决已完整覆盖，已按规定完成身份轴兜底。"
+                if fallback_complete
+                else "CCIP 动漫身份 embedding 不可用，角色/生物相似度机检降级为色彩分布代理（同色调换脸/变形会漏报）。"
+            ),
+            "review",
+            (
+                "保留当前 VLM 裁决证据；后续环境具备 dghs-imgutils 时可补跑 CCIP。"
+                if fallback_complete
+                else "独立 venv 安装 dghs-imgutils 后重跑 gate；在装好前必须以 VLM 并排裁决兜底身份轴。"
+            ),
+            evidence_family="vlm_judge_fallback" if fallback_complete else "capability_degraded",
+        )
     if task_count and verdict_count == 0:
         add(
             findings,

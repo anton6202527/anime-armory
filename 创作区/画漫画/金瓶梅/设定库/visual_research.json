@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "comic_visual_research",
-  "status": "confirmed",
+  "status": "complete",
   "scope": "明代（词话本风俗背景，托宋写明）山东运河市镇（清河/临清一带）；第一季前5话；主要对象：武松、潘金莲、武大、王婆、张大户；紫石街街市、武大家、景阳冈、张大户宅。",
   "project_style_anchor_id": "STYLE_JPM_MING_GENRE_CINEMATIC",
   "sources": [
@@ -83,7 +83,7 @@
         "evidence_source_ids": ["PRIMARY_001", "PRIMARY_002"]
       },
       {
-        "dimension": "action_pacing",
+        "dimension": "composition",
         "decision": "动作与情欲张力都走『长蓄势+一瞬爆发/一瞬冻结』：打虎先榜文暮色铺陈后大格爆发；叔嫂戏靠座次与视线错位，全程无直露画面。",
         "evidence_source_ids": ["FILM_001"]
       }

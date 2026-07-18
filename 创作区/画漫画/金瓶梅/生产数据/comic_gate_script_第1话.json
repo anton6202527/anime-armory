@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第1话",
+  "stage": "script",
+  "created_at": "2026-07-18T13:13:31",
+  "verdict": "pass",
+  "summary": {
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "findings": [],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=1 block=0 warn=0"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "d6a6dd7c1179d1059b208dbf4a322b1d5218c5af83810372ca31004d0d5bbe12",
+        "size": 3141
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "6479a34dff8bfc4d3b47ab2a347266334f055dcb3362c7dbc6141a885729f299",
+        "size": 5582
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "8e842896f0def27175ee065bc5e755046154d3d3168eaa2d1c2262541c8baecd",
+        "size": 3288
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "cb5fdc36aac1520af4997b81c583c77def6ccee4c21266fbedb10850df353133",
+        "size": 7319
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "96c1a65eebb7db58583a978ff29a5e8fbbc0c59d80733e32ff6ebc80764036ad",
+        "size": 957
+      },
+      {
+        "path": "源本/金瓶梅.txt",
+        "exists": true,
+        "sha256": "e69cce6ea3585abaaa198df959ca75ad344aaf41e065675134936fb0bfacebad",
+        "size": 2595212
+      },
+      {
+        "path": "脚本/第1话/panel_script.json",
+        "exists": true,
+        "sha256": "45639ef413fb8f7e00fa92443119b12ce37348437a0944f301c83d4321cb5dc9",
+        "size": 123191
+      },
+      {
+        "path": "脚本/第1话/source_semantics.json",
+        "exists": true,
+        "sha256": "4175c237d60caa51cd5425bf1730f833e9c4edc95ceb143aa291397a779393cc",
+        "size": 60432
+      }
+    ],
+    "sha256": "3a4c7c58fc2062c05e2bfa42e5b1ff169ad428b4ceb1b15fbc595f4d9bf87ccf"
+  },
+  "receipt_id": "76aa11dd70a06df6dd98a64c27feafbbf8e8e16dacd36e8992d0bf2d9a0ae1e3"
+}

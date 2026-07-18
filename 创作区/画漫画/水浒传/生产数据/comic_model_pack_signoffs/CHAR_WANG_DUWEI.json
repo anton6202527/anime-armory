@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_WANG_DUWEI",
+  "tier": "named_minimal",
+  "model_pack_fingerprint": "87e2ed00da731e5edf327010db7fd67a9fa2cc7ca0a766c784a1e282c188a280",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+      "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_WANG_DUWEI__face.png",
+      "sha256": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "依据设定库/approval_delegation.json并排目检全部必需视图：同一面孔、头饰、服装、体态与宋画电影感连续；视图边界、手脚、文字水印及禁用项通过。",
+  "approved_at": "2026-07-18T02:33:14+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

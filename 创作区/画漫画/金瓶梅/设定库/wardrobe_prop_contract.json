@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "kind": "comic_wardrobe_prop_contract",
+  "status": "confirmed",
+  "default_policy": {
+    "mode": "recommended_unless_user_override",
+    "setting_profile": "historical_traceable",
+    "evidence_hierarchy": [
+      "A_physical_archaeology",
+      "B_contemporary_image",
+      "C_historical_text",
+      "D_museum_academic",
+      "E_production_reference",
+      "F_lead_only"
+    ],
+    "decision_axes": [
+      "era",
+      "polity_region",
+      "identity_rank",
+      "occasion_activity",
+      "season_climate",
+      "story_state",
+      "production_variant"
+    ],
+    "user_override": {
+      "allowed": true,
+      "requires_scope_and_reason": true
+    }
+  },
+  "world_context": {
+    "era": "明代万历词话本风俗口径（托宋写明）",
+    "date_range": "16世纪后期视觉物质语汇；剧情时代名义为宋徽宗政和年间",
+    "polity_region": "山东运河市镇（清河/阳谷文学空间）",
+    "historical_confidence": "medium",
+    "notes": "项目明确采用词话本所属明代市井物质语汇，不宣称为北宋精确复原；人物阶层、场合、劳动动作和剧情状态优先。"
+  },
+  "sources": [
+    {
+      "id": "SRC_SDM_MING_GARMENTS",
+      "title": "衣冠大成——明代服饰文化展（孔府旧藏明代服饰）",
+      "institution": "山东博物馆",
+      "url": "https://www.sdmuseum.com/",
+      "source_type": "museum_collection",
+      "accessed_at": "2026-07-18",
+      "usage": "明代成衣层次、裁剪、织物与女装袄裙/比甲结构入口",
+      "rights_boundary": "facts_only_no_image_attachment"
+    },
+    {
+      "id": "SRC_LNM_QIUYING_SCROLL",
+      "title": "仇英本《清明上河图》",
+      "institution": "辽宁省博物馆",
+      "url": "https://www.lnmuseum.com.cn/",
+      "source_type": "contemporary_image",
+      "accessed_at": "2026-07-18",
+      "usage": "明代市镇职业、阶层、街市形制、挑担与日常服装轮廓",
+      "rights_boundary": "facts_only_no_image_attachment"
+    },
+    {
+      "id": "SRC_NMC_COSTUME_MING",
+      "title": "中国古代服饰文化展——明代服饰",
+      "institution": "中国国家博物馆",
+      "url": "https://www.chnmuseum.cn/portals/0/web/zt/202102gdfsh/",
+      "source_type": "museum_research",
+      "accessed_at": "2026-07-18",
+      "usage": "明代圆领、带具、服色等级和普通百姓棉布普及的综合证据入口",
+      "rights_boundary": "facts_only_no_image_attachment"
+    },
+    {
+      "id": "SRC_JPM_SOURCE",
+      "title": "《金瓶梅词话》项目公版源本第一回",
+      "institution": "项目公版文本",
+      "url": "源本/金瓶梅.txt",
+      "source_type": "historical_text",
+      "accessed_at": "2026-07-18",
+      "usage": "梢棒、烊饼担、帘子、酒具、人物服装色彩与动作的剧情事实",
+      "rights_boundary": "public_domain_story_facts"
+    }
+  ],
+  "wardrobe": [
+    {
+      "character_id": "CHAR_PAN_JINLIAN",
+      "outfit_id": "OUTFIT_BASE",
+      "name": "紫石街常服",
+      "silhouette": "上身收敛、长裙垂地，纤长但不影楼夸张",
+      "collar_neckline": "月白交领右衽短袄，黛青比甲开合固定",
+      "closure": "右衽内系，比甲素面敞合；不生成外露盘扣、蝴蝶结绳扣或拉链",
+      "materials": ["哑光棉布", "低光细绢", "青铜簪"],
+      "evidence_refs": ["SRC_SDM_MING_GARMENTS", "SRC_LNM_QIUYING_SCROLL", "SRC_NMC_COSTUME_MING", "SRC_JPM_SOURCE"],
+      "forbidden": ["清宫发饰", "唐式高胸裙", "外露盘扣或绳结扣", "露骨装束", "影视版整套复刻"],
+      "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_WU_SONG",
+      "outfit_id": "OUTFIT_BASE",
+      "name": "归乡打虎行装",
+      "silhouette": "肩宽腰窄、窄袖短褐与裹腿，山行格斗不拖地；中性定妆不披斗篷或肩巾",
+      "collar_neckline": "靛青交领/斜襟窄领，全话方向固定",
+      "closure": "右衽内系与深色腰带",
+      "materials": ["粗细混织棉麻", "旧革", "油布"],
+      "evidence_refs": ["SRC_LNM_QIUYING_SCROLL", "SRC_NMC_COSTUME_MING", "SRC_JPM_SOURCE"],
+      "forbidden": ["铠甲", "仙侠长袍", "现代武术服", "影视武松套装"],
+      "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_WU_SONG",
+      "outfit_id": "OUTFIT_DUTOU_WINTER",
+      "name": "巡捕都头冬装",
+      "silhouette": "鹦哥绿冬袄、深腰带、黑网巾与油靴，小吏实用而非将军华服",
+      "collar_neckline": "窄圆领或项目固定的小交领，由服装锚一次锁定",
+      "closure": "侧系隐藏，腰带高度固定",
+      "materials": ["哑光紵丝", "棉絮", "皮革"],
+      "evidence_refs": ["SRC_SDM_MING_GARMENTS", "SRC_NMC_COSTUME_MING", "SRC_JPM_SOURCE"],
+      "forbidden": ["清式补服", "顶戴", "将军铠甲", "龙纹", "过度织金"],
+      "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_WU_DA",
+      "outfit_id": "OUTFIT_BASE",
+      "name": "烊饼贩常服",
+      "silhouette": "成年矮小、微驼，土黄短衫与褐色长裤；双肩略受长期挑担影响但保持无道具中性站姿",
+      "collar_neckline": "窄交领右衽",
+      "closure": "布带系结，结位固定",
+      "materials": ["棉布", "粗麻"],
+      "evidence_refs": ["SRC_LNM_QIUYING_SCROLL", "SRC_NMC_COSTUME_MING", "SRC_JPM_SOURCE"],
+      "forbidden": ["儿童装", "怪物化", "中性定妆携带挑担或烊饼", "富户锦袍", "清装"],
+      "status": "confirmed"
+    },
+    {
+      "character_id": "CHAR_WANG_PO",
+      "outfit_id": "OUTFIT_BASE",
+      "name": "茶坊日常常服",
+      "silhouette": "干瘦、利落，深棕斜襟袄、灰青长裙、围裙与深色包头",
+      "collar_neckline": "斜襟方向和领宽固定",
+      "closure": "内系布结，围裙系结在后腰",
+      "materials": ["深棕棉布", "灰青粗布"],
+      "evidence_refs": ["SRC_LNM_QIUYING_SCROLL", "SRC_NMC_COSTUME_MING", "SRC_JPM_SOURCE"],
+      "forbidden": ["妖婆黑袍", "豪门锦绣", "大量金银", "清式包头"],
+      "status": "confirmed"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "PROP_SHAOBANG",
+      "name": "榆木梢棒",
+      "function": "武松上冈防身，P008 砸中枯枝后折断并推动徒手打虎",
+      "dimensions": "与武松齐眉，两手握持；断后两截长度不对称",
+      "construction": "素面榆木棒身，有手汗磨损、木结和断口木纤维",
+      "materials": ["榆木"],
+      "interaction_grip": "P003-P007 双手/单手按动作转换；P008 双手抡击后断裂；P009 弃于画左后无法自愈",
+      "production_variants": ["hero", "stunt", "duplicate"],
+      "evidence_refs": ["SRC_JPM_SOURCE", "SRC_LNM_QIUYING_SCROLL"],
+      "forbidden": ["金属武器", "雕花神兵", "折断后自愈", "随机变长"],
+      "status": "confirmed"
+    },
+    {
+      "prop_id": "PROP_CAKE_POLE",
+      "name": "烊饼挑担",
+      "function": "武大谋生和本分性格的常驻道具",
+      "dimensions": "挑担略宽于武大展肩，两只竹筐至膝旁，不拖地",
+      "construction": "硬木挑担、竹编筐、布盖和绳系，左右筐容量接近",
+      "materials": ["硬木", "竹编", "棉布", "麻绳"],
+      "interaction_grip": "主要压在右肩，武大右手稳担、左手招徕；放下时两筐同时着地",
+      "production_variants": ["hero", "stunt", "background", "duplicate"],
+      "evidence_refs": ["SRC_LNM_QIUYING_SCROLL", "SRC_JPM_SOURCE"],
+      "forbidden": ["手提菜篮", "现代金属扁担", "筐子随机增减", "无肩部接触点"],
+      "status": "confirmed"
+    },
+    {
+      "prop_id": "PROP_RED_CURTAIN",
+      "name": "红褐竹帘",
+      "function": "武家边界、金莲唯一可支配的窗口和第二话祸事入口",
+      "dimensions": "覆盖一扇临街门的竹帘，帘子下沿至膝下，帘竿比门洞略宽",
+      "construction": "红褐色细竹条编成，左下一处小缺口，上方帘竿与绳环结构固定",
+      "materials": ["染色竹条", "麻绳", "木制帘竿"],
+      "interaction_grip": "金莲用右手推起帘子；P044 松手使帘子自然落下",
+      "production_variants": ["hero", "background", "duplicate"],
+      "evidence_refs": ["SRC_LNM_QIUYING_SCROLL", "SRC_JPM_SOURCE"],
+      "forbidden": ["现代布窗帘", "随机竹条密度", "缺口位置跳变", "帘子上出现可读字"],
+      "status": "confirmed"
+    },
+    {
+      "prop_id": "PROP_WINE_SET",
+      "name": "雪夜酒具",
+      "function": "雪夜叔嫂对峙的动作节拍器，残酒泼地是拒绝的视觉落点",
+      "dimensions": "酒注可单手持，四只小盏、两只菜碟，桌面留有安全的动作空间",
+      "construction": "素胎粗瓷酒注、无字小盏与菜碟，釉面哑光微有手工不均",
+      "materials": ["粗瓷", "竹木桌面"],
+      "interaction_grip": "金莲右手持注、左手递盏；武松右手夺盏并向画左地面泼出残酒",
+      "production_variants": ["hero", "stunt", "duplicate"],
+      "evidence_refs": ["SRC_LNM_QIUYING_SCROLL", "SRC_JPM_SOURCE"],
+      "forbidden": ["可读文字", "现代玻璃杯", "西式高脚杯", "杯盏数量随机增减"],
+      "status": "confirmed"
+    }
+  ],
+  "overrides": []
+}

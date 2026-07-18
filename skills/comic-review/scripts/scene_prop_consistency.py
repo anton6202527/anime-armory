@@ -125,6 +125,20 @@ def asset_anchor_paths(root: Path, registry: dict[str, Any], ref_id: str, limit:
             raw = item.get("path") if isinstance(item, dict) else item
             if isinstance(raw, str) and raw.strip():
                 candidates.append(raw)
+    # Outfit IDs are child records of character assets in registry v2, not
+    # top-level assets.  Treating every OUTFIT_* reference as top-level made
+    # valid, reviewed outfit anchors appear missing in scene/prop QA and left
+    # their contact sheets without a reference tile.
+    if ref_id.startswith("OUTFIT_"):
+        for owner in assets.values():
+            if not isinstance(owner, dict):
+                continue
+            outfits = owner.get("outfits") if isinstance(owner.get("outfits"), dict) else {}
+            outfit = outfits.get(ref_id) if isinstance(outfits.get(ref_id), dict) else {}
+            for item in outfit.get("reference_images") or []:
+                raw = item.get("path") if isinstance(item, dict) else item
+                if isinstance(raw, str) and raw.strip():
+                    candidates.append(raw)
     shared = root / "出图" / "共享" / "图片"
     for suffix in ("__anchor.png", ".png"):
         candidates.append(str(shared / f"{ref_id}{suffix}"))

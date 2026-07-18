@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_PAN_JINLIAN",
+  "tier": "core_full",
+  "model_pack_fingerprint": "861bffe468c4ce50f8c84d0a40641173c990f5fb7fdb4b38c0e6a83098cf6f34",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+      "sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "front",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+        "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__three_quarter.png",
+      "sha256": "0257280477992a9fee5d9725c963e9a50ae8b12a2d027a4c4083b2fa88dfa596",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+        "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "side",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__side.png",
+      "sha256": "160585bb74d6b22545a0d5cecb1e0284fcbfa794b7ab7ef846fec705e57a436d",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "side",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+        "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "back",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__back.png",
+      "sha256": "0cb0125035c28769effd88e0f5bd790f8daae9cb3ceb73097ad71d4f2b5b71f6",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "back",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+        "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+      "sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+      "width": 2048,
+      "height": 2048,
+      "source_view": "face",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+        "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "制作代理（用户授权）",
+  "reason": "并排复核当前必需视图：主体身份、视图标签、全身基线、服装标志、手足/四足与中性姿态可读；已处理武大与猛虎45度视图问题。授权依据：设定库/approval_delegation.json。",
+  "approved_at": "2026-07-18T04:47:59+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

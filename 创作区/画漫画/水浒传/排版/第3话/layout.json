@@ -1,0 +1,3378 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第3话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第3话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 6228,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 judgment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "judgment"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 236,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P002",
+          "x": 72,
+          "y": 1124,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 judgment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "judgment"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1316,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 2140,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 judgment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "judgment"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2324,
+                "w": 712,
+                "h": 644
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.narration",
+              "rect": {
+                "x": 185,
+                "y": 2183,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B003N1",
+              "type": "narration",
+              "content_ref": "panel:P003.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 2188,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 72,
+          "y": 3088,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 judgment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "judgment"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3296,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 3139,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 3136,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P005",
+          "x": 126,
+          "y": 4184,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 judgment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "judgment"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4352,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 72,
+          "y": 5052,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 judgment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "judgment"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5275,
+                "w": 777,
+                "h": 783
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 136,
+                "y": 5106,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 5106,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 5100,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B006S2",
+              "type": "sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5974,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 5556,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arrival",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arrival"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 209,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 185,
+                "y": 71,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B007N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P008",
+          "x": 126,
+          "y": 976,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arrival",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arrival"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1157,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 185,
+                "y": 1019,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B008N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1024,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 126,
+          "y": 1924,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arrival",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arrival"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2105,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.narration",
+              "rect": {
+                "x": 185,
+                "y": 1967,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009N1",
+              "type": "narration",
+              "content_ref": "panel:P009.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1972,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 126,
+          "y": 2872,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arrival",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arrival"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3053,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.narration",
+              "rect": {
+                "x": 185,
+                "y": 2915,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B010N1",
+              "type": "narration",
+              "content_ref": "panel:P010.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 2920,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 126,
+          "y": 3820,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arrival",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arrival"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3986,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P012",
+          "x": 126,
+          "y": 4688,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arrival",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arrival"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4855,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4727,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 172,
+              "y": 4734,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 5692,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 handoff_two_entry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "handoff_two_entry"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 220,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P014",
+          "x": 126,
+          "y": 1044,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 handoff_two_entry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "handoff_two_entry"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1210,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1082,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "董将士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "董将士"
+              },
+              "x": 172,
+              "y": 1090,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 126,
+          "y": 1912,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 handoff_two_entry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "handoff_two_entry"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2094,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 185,
+                "y": 1954,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1960,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 2860,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 handoff_two_entry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "handoff_two_entry"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3068,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 2911,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 2911,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2908,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B016D2",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "董将士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "董将士"
+              },
+              "x": 598,
+              "y": 2908,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P017",
+          "x": 126,
+          "y": 3956,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 handoff_two_entry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "handoff_two_entry"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4122,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3994,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B017D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 172,
+              "y": 4002,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P018",
+          "x": 126,
+          "y": 4824,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 handoff_two_entry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "handoff_two_entry"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4992,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_004",
+      "source_name_page_id": "SCROLL_004",
+      "width": 1440,
+      "height": 6068,
+      "reading_order": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 belonging",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "belonging"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 220,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P020",
+          "x": 126,
+          "y": 1044,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 belonging",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "belonging"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1228,
+                "w": 712,
+                "h": 644
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 185,
+                "y": 1087,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 1087,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B020N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1092,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B020D2",
+              "type": "dialogue",
+              "content_ref": "panel:P020.dialogue:1",
+              "speaker": "小苏学士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "小苏学士"
+              },
+              "x": 652,
+              "y": 1092,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P021",
+          "x": 72,
+          "y": 1992,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 belonging",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "belonging"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2184,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P022",
+          "x": 72,
+          "y": 3008,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 belonging",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "belonging"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3200,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3055,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B022D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "王都尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王都尉"
+              },
+              "x": 120,
+              "y": 3056,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P023",
+          "x": 72,
+          "y": 4024,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 belonging",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "belonging"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4232,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 136,
+                "y": 4075,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B023N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4072,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P024",
+          "x": 126,
+          "y": 5120,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 belonging",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "belonging"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5303,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.narration",
+              "rect": {
+                "x": 185,
+                "y": 5163,
+                "w": 475,
+                "h": 303
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B024N1",
+              "type": "narration",
+              "content_ref": "panel:P024.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 5168,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_005",
+      "source_name_page_id": "SCROLL_005",
+      "width": 1440,
+      "height": 5612,
+      "reading_order": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "panels": [
+        {
+          "panel_id": "P025",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 study_discovery",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "study_discovery"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 210,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.narration",
+              "rect": {
+                "x": 185,
+                "y": 70,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B025N1",
+              "type": "narration",
+              "content_ref": "panel:P025.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P026",
+          "x": 72,
+          "y": 976,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 study_discovery",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "study_discovery"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1168,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P027",
+          "x": 126,
+          "y": 1992,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 study_discovery",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "study_discovery"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2158,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P028",
+          "x": 126,
+          "y": 2860,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 study_discovery",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "study_discovery"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3026,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P029",
+          "x": 126,
+          "y": 3728,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 study_discovery",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "study_discovery"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3894,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P030",
+          "x": 72,
+          "y": 4596,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 study_discovery",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "study_discovery"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4786,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_006",
+      "source_name_page_id": "SCROLL_006",
+      "width": 1440,
+      "height": 5840,
+      "reading_order": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "panels": [
+        {
+          "panel_id": "P031",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 missed_ball",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "missed_ball"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 194,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 69,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B031D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P032",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 missed_ball",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "missed_ball"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1062,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 937,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B032D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "王都尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王都尉"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P033",
+          "x": 72,
+          "y": 1764,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 missed_ball",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "missed_ball"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1969,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.narration",
+              "rect": {
+                "x": 136,
+                "y": 1815,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B033N1",
+              "type": "narration",
+              "content_ref": "panel:P033.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1812,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P034",
+          "x": 126,
+          "y": 2860,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 missed_ball",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "missed_ball"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3026,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P035",
+          "x": 72,
+          "y": 3728,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 missed_ball",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "missed_ball"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3917,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P036",
+          "x": 72,
+          "y": 4744,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 missed_ball",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "missed_ball"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4950,
+                "w": 777,
+                "h": 724
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 4794,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B036S1",
+              "type": "sfx",
+              "content_ref": "panel:P036.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5586,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_007",
+      "source_name_page_id": "SCROLL_007",
+      "width": 1440,
+      "height": 5840,
+      "reading_order": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "panels": [
+        {
+          "panel_id": "P037",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 feigned_modesty",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "feigned_modesty"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 233,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B037S1",
+              "type": "sfx",
+              "content_ref": "panel:P037.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P038",
+          "x": 72,
+          "y": 1124,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 feigned_modesty",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "feigned_modesty"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1329,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1175,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B038S1",
+              "type": "sfx",
+              "content_ref": "panel:P038.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1966,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P039",
+          "x": 72,
+          "y": 2220,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 feigned_modesty",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "feigned_modesty"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2409,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2267,
+                "w": 518,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B039D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              },
+              "x": 120,
+              "y": 2268,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P040",
+          "x": 126,
+          "y": 3236,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 feigned_modesty",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "feigned_modesty"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3402,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3277,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B040D1",
+              "type": "dialogue",
+              "content_ref": "panel:P040.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 172,
+              "y": 3282,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P041",
+          "x": 126,
+          "y": 4104,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 feigned_modesty",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "feigned_modesty"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4270,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4145,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B041D1",
+              "type": "dialogue",
+              "content_ref": "panel:P041.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              },
+              "x": 172,
+              "y": 4150,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P042",
+          "x": 126,
+          "y": 4972,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 feigned_modesty",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "feigned_modesty"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5140,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 5012,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B042D1",
+              "type": "dialogue",
+              "content_ref": "panel:P042.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 172,
+              "y": 5018,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_008",
+      "source_name_page_id": "SCROLL_008",
+      "width": 1440,
+      "height": 4408,
+      "reading_order": [
+        "P043",
+        "P044",
+        "P045",
+        "P046"
+      ],
+      "panels": [
+        {
+          "panel_id": "P043",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 234,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 78,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B043S1",
+              "type": "sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P044",
+          "x": 72,
+          "y": 1124,
+          "w": 1296,
+          "h": 996,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1321,
+                "w": 777,
+                "h": 696
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1172,
+                "w": 518,
+                "h": 332
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B044D1",
+              "type": "dialogue",
+              "content_ref": "panel:P044.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              },
+              "x": 120,
+              "y": 1172,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P045",
+          "x": 72,
+          "y": 2176,
+          "w": 1296,
+          "h": 1080,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2390,
+                "w": 777,
+                "h": 755
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2228,
+                "w": 518,
+                "h": 360
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:2",
+              "rect": {
+                "x": 784,
+                "y": 2228,
+                "w": 518,
+                "h": 360
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B045D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              },
+              "x": 120,
+              "y": 2224,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B045D2",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:2",
+              "speaker": "王都尉",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王都尉"
+              },
+              "x": 598,
+              "y": 2224,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P046",
+          "x": 72,
+          "y": 3312,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P046 decision",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P046",
+              "story_function": "decision"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3519,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.narration",
+              "rect": {
+                "x": 136,
+                "y": 3361,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B046N1",
+              "type": "narration",
+              "content_ref": "panel:P046.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 3360,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第3话/panel_script.json",
+    "panel_script_sha256": "59c390221e00c26b00af5b642de65498789e6ad6e106f83aaf8a5708672d8622",
+    "name_board": "排版/第3话/name_board.json",
+    "name_board_sha256": "6bcd04de052cfad35d4aee22fa76fef2ce1de6bf983d869a8101dd9e53e7505e",
+    "name_approval_subject_sha256": "66654c755cd0bb8fd26924d175657e6f64cdbfd7ac8fe56dd0127b5c9fa917c1",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-18T03:14:59.683603+00:00",
+    "note": "场景标签调整后复核版式。",
+    "subject_sha256": "9c5df1d80ace43e06737b76189ab5eb9b26707c513fc43464152c1cc42d51bb2",
+    "panel_script_sha256": "59c390221e00c26b00af5b642de65498789e6ad6e106f83aaf8a5708672d8622",
+    "name_board_sha256": "6bcd04de052cfad35d4aee22fa76fef2ce1de6bf983d869a8101dd9e53e7505e",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

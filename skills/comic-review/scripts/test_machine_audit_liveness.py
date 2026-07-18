@@ -67,3 +67,28 @@ def test_full_vlm_coverage_with_ccip_is_quiet(tmp_path: Path) -> None:
     gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"pillow": True, "ccip": True}}, findings, notes)
     assert findings == []
     assert any("vlm judge coverage: 2/2" in note for note in notes)
+
+
+def test_full_vlm_coverage_downgrades_missing_ccip_to_info(tmp_path: Path) -> None:
+    write_tasks_file(tmp_path, "第1话", 2)
+    verdicts = {
+        "verdicts": [
+            {
+                "task_id": f"T{i}", "panel_sha256": "x", "task_sha256": f"ts{i}",
+                "references_sha256": {}, "verdict": "pass",
+                "evaluator": {"model": "multimodal-reviewer", "version": "2026-07-18"},
+            }
+            for i in range(2)
+        ]
+    }
+    (tmp_path / "生产数据" / "comic_vlm_judge_verdicts_第1话.json").write_text(
+        json.dumps(verdicts), encoding="utf-8"
+    )
+    findings: list = []
+    notes: list = []
+    gate.check_machine_audit_liveness(
+        tmp_path, "第1话", {"capabilities": {"pillow": True, "ccip": False}}, findings, notes
+    )
+    assert len(findings) == 1
+    assert findings[0]["code"] == "identity_similarity_engine_degraded"
+    assert findings[0]["severity"] == "info"

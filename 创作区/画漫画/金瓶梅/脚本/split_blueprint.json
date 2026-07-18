@@ -91,6 +91,14 @@
           "reason": "雪夜掷杯斥嫂（P036）碎其幻想；反诬（P039）离间兄弟得逞，但她要的人彻底走了。"
         },
         {
+          "entity_id": "CHAR_PAN_JINLIAN",
+          "field": "visual_state",
+          "from": "布裙荆钗仍难掩姿色，帘下嗑瓜子露金莲。",
+          "to": "帘下常服，眉眼间怨毒渐显。",
+          "panel_id": "P044",
+          "reason": "雪夜被斥与反诬赶走武松后，P044 以红帘和收紧的眉眼完成可见状态转变。"
+        },
+        {
           "entity_id": "CHAR_WU_DA",
           "field": "story_state",
           "from": "本分懦弱的炊饼贩，被街坊呼作三寸丁谷树皮，携女迁居清河避是非。",

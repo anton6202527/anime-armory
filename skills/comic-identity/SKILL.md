@@ -105,7 +105,7 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 
 ```bash
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 outfits \
-  --bindings CHAR_JYC=OUTFIT_TRAVEL,CHAR_PEI=OUTFIT_COURT --ratio 3:4 --max-attempts 2
+  --bindings CHAR_JYC=OUTFIT_TRAVEL,CHAR_PEI=OUTFIT_COURT --backend auto --ratio 3:4 --max-attempts 2
 ```
 
 强情绪格已绑定结构化 `EXPR_` 但该表情还没有真实锚图时，以已采纳
@@ -117,7 +117,7 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
   --bindings CHAR_JYC=EXPR_TERRIFIED --backend auto --ratio 1:1 --max-attempts 2
 ```
 
-`outfits` 强制消费 `wardrobe_standard`，用 front 锁脸/年龄/体态，原始画幅偏离时同样只做 `contain_and_pad_no_crop`；产物记入该角色 `outfits[OUTFIT_ID].reference_images`。生成或采纳角色 `front` 时，流程也会自动把它登记为 `default_binding.outfit_id` 的首张真实服装参考；非默认换装不能偷用这张图。恢复运行时从不可覆盖的 attempt ledger 读取累计尝试数；旧版 manifest 的已用次数会一次性迁入总账。`--max-attempts` 始终是跨运行、跨后续批次的总上限；覆盖 manifest 前先归档旧快照，不能因重启、换一组 binding 或生成其它服装而重置预算或丢失失败证据。
+`outfits` 强制消费 `wardrobe_standard`，用 front 锁脸/年龄/体态；`--backend auto` 严格沿用项目已选渠道，也可显式指定 `dreamina`/`codex`，不会静默换后端。原始画幅偏离时同样只做 `contain_and_pad_no_crop`；产物记入该角色 `outfits[OUTFIT_ID].reference_images`。生成或采纳角色 `front` 时，流程也会自动把它登记为 `default_binding.outfit_id` 的首张真实服装参考；非默认换装不能偷用这张图。恢复运行时从不可覆盖的 attempt ledger 读取累计尝试数；旧版 manifest 的已用次数会一次性迁入总账。`--max-attempts` 始终是跨运行、跨后续批次的总上限；覆盖 manifest 前先归档旧快照，不能因重启、换一组 binding 或生成其它服装而重置预算或丢失失败证据。
 
 生成完先做确定性技术检查，再由人或用户明确授权的制作代理并排确认角色、视图标签、比例、基线、服装标志与中性姿态。签收绑定当前全部视图 SHA，不能用旧 receipt 放行新图片：
 
@@ -155,12 +155,33 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
   --backend codex --characters CHAR_JYC,CHAR_PEI --views front,three_quarter,side,back,face --allow-text-anchor
 ```
 
+项目已选即梦且已有正式风格锚时，首张 `front` 可把风格锚作为真实 `style_only` 图生图种子；
+后续视图改用该角色已生成的 `front` 锁身份：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
+  --backend dreamina --characters CHAR_JYC --views front,three_quarter,side,back,face \
+  --allow-text-anchor --model-version 5.0 --resolution-type 2k
+```
+
 生成妖物、场景、道具等非人物共享锚点：
 
 ```bash
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
   --refs MON_TIGER,LOC_STREET,PROP_SWORD
 ```
+
+`anchors --backend auto` 会严格沿用项目 `_设置.md` 的生图渠道；显式使用即梦 5.0 时：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
+  --backend dreamina --model-version 5.0 --resolution-type 2k \
+  --refs STYLE_CLASSIC_V1 --candidate-count 2 --ratio 4:5 --max-attempts 2
+```
+
+即梦首张风格锚没有图片附件时走官方 CLI `text2image`；后续场景/道具锚已有正式风格锚时走
+`image2image` 并把风格锚作为真实 `style_only` 附件。官方比例不含 4:5 时，适配层提交 3:4，
+落图后只做 `contain_and_pad_no_crop` 恢复目标画布，并在 manifest 同时记录 requested/submitted ratio。
 
 风格锚或其它共享资产需要先并排选稿时，用候选批次模式；它只写入
 `出图/共享/candidates/` 与候选 manifest，不会把未审核图片登记成正式锚点：
@@ -228,7 +249,7 @@ python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名"
 1. 先判定题材的服饰道路线。有明确历史时空默认 `historical_traceable`，架空历史用 `historical_inspired`/`hybrid`，现代和幻想分别用 `contemporary`/`fictional`；按 `wardrobe_props.py check --strict` 后再定妆或生成关键道具。若本话还没有 `出图/第N话/prompt/panel_jobs.json`，再用 `comic-image` 的 `build_panel_jobs.py` 生成并跑 `report --write`。若有 `missing_refs`，先补共享参考，不要合成。
 2. 对常驻角色和关键资产建立锚点。短 demo 可从已采纳面板种 `__anchor.png`；默认长线口径应换成正面/45度/侧面/背面和关键表情的专门定妆图。用 `views` 子命令从当前 anchor 生成并登记多视图；`--backend auto` 会优先用可用后端，必要时可显式指定 `dreamina`。
    - `STYLE_` 风格锚必须生成单幅非叙事校准画，同时可读人物脸/手、线条层级、肤色、衣料与场景材质、三值明暗和特效边缘；不得用含义不明的抽象图、拼贴或角色卡代替。`FX_`/`VFX_` 锚则单独校准形状语言、运动方向、色域和留白关系。
-   - 从源小说、源剧本或古文直接开画时，若还没有任何可采纳角色图：项目已有当前有效的模型/渠道/费用范围授权时可沉默沿用；否则先由用户确认图像生成成本。之后显式传 `--allow-text-anchor`，让 Codex 根据 `story_bible.md` 和 `identity_registry.json` 生成第一张 `front` 定妆；后续视图再以这张 front 为参考锚点。
+   - 从源小说、源剧本或古文直接开画时，若还没有任何可采纳角色图：项目已有当前有效的模型/渠道/费用范围授权时可沉默沿用；否则先由用户确认图像生成成本。之后显式传 `--allow-text-anchor`，让当前已选后端根据 `story_bible.md` 和 `identity_registry.json` 生成第一张 `front` 定妆；Codex 以文字设定配合真实 `style_only` 附件起种，即梦以正式风格锚作为 `image2image` 的真实 `style_only` 种子。后续视图统一改用该角色 front 锁身份。
    - 若项目已有可用 `STYLE_` 风格锚，文字生成首张 `front` 时必须把它作为真实 `style_only` 图片附件，并记录路径与 SHA-256；提示中明确禁止继承风格锚人物的脸、发型、服装、体态、姿态和构图。风格锚不能冒充角色身份锚。
    - 对公版经典、历史题材或已有多版影视改编的项目，首张文字定妆前必须完成项目 `设定库/visual_research.json`，并运行 `python3 skills/comic/scripts/visual_research_contract.py <作品根> check --strict --json`；人读笔记可另存 `设定库/视觉参考研究.md`，registry `notes` 只引用该合同，不得取代。优先源本、学术/博物馆/权威资料、官方/资料库式影视条目；只抽取服制、阶层、场景、道具和叙事功能。不要上传或复刻影视剧照，不要求画成某演员，不复制具体构图、镜头、服饰组合或露骨尺度。
    - `views` 默认对非 `front` 视图优先使用已存在的 `front` 定妆图作为参考锚点，避免原剧情格的坐跪、挥砍、裁切等动作姿态污染多视图；需要强制用原始锚点时传 `--no-prefer-front-anchor`。

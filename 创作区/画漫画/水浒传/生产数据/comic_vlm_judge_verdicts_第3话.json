@@ -1,0 +1,2939 @@
+{
+  "schema_version": 1,
+  "kind": "comic_vlm_judge_verdicts",
+  "protocol": "CANVAS-ContinuityEval-3axis",
+  "chapter": "第3话",
+  "created_at": "2026-07-18T05:12:56+00:00",
+  "verdicts": [
+    {
+      "task_id": "P002__CHAR_GAO_QIU__character",
+      "panel_sha256": "8db6353623dacbd4850a4852b354170dd3ab653a9011f68b7942486ff1159fad",
+      "task_sha256": "2a1d5eea6f421d8190c373e028d8d7e781022a046b1673322ca69f2fadba0a2f",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P003__CHAR_GAO_QIU__character",
+      "panel_sha256": "5a4d6fc203e04fa8584ee7966f24cde1086aca499792ce8db47bdd72f01825b0",
+      "task_sha256": "cfdbcdbbb2cb8623f42774197e7a9c39ee6a288f58aaa63d671ecad8a432ea0e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P004__CHAR_GAO_QIU__character",
+      "panel_sha256": "4acf85ec4a99f33f9ec8a5f9a3f6a2ce2de0fa7ddf8a510e993634ed4050e40e",
+      "task_sha256": "08e9815388c9b7c684578864020ed37cce15487e6b26403d2dbe047d959e21d0",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P005__CHAR_GAO_QIU__character",
+      "panel_sha256": "cfcce597c0a07ceb122a7819247a35b67c29a2b7ef77bab81d17a7a01d720cb9",
+      "task_sha256": "475c0cdd67b9d72d8d117fd9121b7e19cbe02ac9a55a2bf41f14cfbc868430b1",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P006__CHAR_GAO_QIU__character",
+      "panel_sha256": "f333a112d5bdb48a16114b31a5b2a391117ce25887c1cb7d9b3f4f280456f7ae",
+      "task_sha256": "a7276a12776625efe31ccf418fa3cb6897aeb865960fb56e31d5d0dd240e0e8a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P007__CHAR_GAO_QIU__character",
+      "panel_sha256": "166181cf37a5ac301af4b817f7244ff3a01b4969f6fca4d4d9a2a53a1d6590bb",
+      "task_sha256": "a11ed2c552e0826ec0d0b4469315ff3055224d39a4ea632ac7d31ac460fec4cd",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P008__CHAR_GAO_QIU__character",
+      "panel_sha256": "e5828012cba6dfd36f097b8bf8a04cad17b864eef680d1295980ac9f40cd46f5",
+      "task_sha256": "be6ca06bf7ffc7d86c0ad544610fc557724dd3cf61532b072a7e7c6dd1ddf6cd",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P009__CHAR_GAO_QIU__character",
+      "panel_sha256": "939f85b0b61e7d55ad83afd9f82b57d56e504e3c0565d7b2d9b7986cd3aaa474",
+      "task_sha256": "4d01abc3b94963ef54b89d09dceac89a21a34c95cd9b0f5ba48e0512aa16d3e0",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P010__CHAR_GAO_QIU__character",
+      "panel_sha256": "51100535b14a638e22b4cbb738c57c09ea728490831a592e39c4f993f9cf05d6",
+      "task_sha256": "e9e616fddb9accf33804390c1662efae3035086433708156fac1940597429a7c",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P011__CHAR_GAO_QIU__character",
+      "panel_sha256": "ea167e9218b16f91f8da47df6bae5fde8975d492299dc5f415f7f6e04850b5ff",
+      "task_sha256": "1f12e4adb530552cb296b0edb0869f402b592ea4b213317fd96b05b638fa1095",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P012__CHAR_GAO_QIU__character",
+      "panel_sha256": "ca0f7a261168800a48c3fa5e413064be86e91cbe045f8c36a937f5dc4c69e3bd",
+      "task_sha256": "cb6cb94f7dc1546c44f07bf856d4f39b7e353b0daaac0f27af1f0b8338a7282d",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P012__CHAR_DONG_JIANGSHI__character",
+      "panel_sha256": "ca0f7a261168800a48c3fa5e413064be86e91cbe045f8c36a937f5dc4c69e3bd",
+      "task_sha256": "301a7f84980c27f64af807c028995cd4e2a75c0fcff25f38befef0272946ce92",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P013__CHAR_GAO_QIU__character",
+      "panel_sha256": "f2170c489649ae1aa412db4842ef4702e818e923028480b196f60e2a18b868e8",
+      "task_sha256": "892d99cfeea86221253d6fcc263b84b8aedf322f03a8d94b2c943caf0a48c8f2",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P013__CHAR_DONG_JIANGSHI__character",
+      "panel_sha256": "f2170c489649ae1aa412db4842ef4702e818e923028480b196f60e2a18b868e8",
+      "task_sha256": "a144f48ddcd3f2b7b61d42ce9b21524a295bc2c8e876aa82558e4573034315e7",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P014__CHAR_GAO_QIU__character",
+      "panel_sha256": "fb45ffe7de4b52f0441d8454e284e009394da78ff5ab263b23cdd1accc08c263",
+      "task_sha256": "9b0a44af13073919e4e0bf16179aa4bea6c10b1ef95f55b6fd51a1b12a4732f1",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P014__CHAR_DONG_JIANGSHI__character",
+      "panel_sha256": "fb45ffe7de4b52f0441d8454e284e009394da78ff5ab263b23cdd1accc08c263",
+      "task_sha256": "8ad3c6b4589ce436970793543b62f9753a83d62b0609c93ead3253edf1449f51",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P015__CHAR_GAO_QIU__character",
+      "panel_sha256": "c7667d24f17f593e5962bbf2f396c4ce2956faa123dcaf5ab6b0aafaa6bba0ff",
+      "task_sha256": "6dc0de763466670929ccae6a9ecf9b26b104a3ddf2b923a095611e75b1b9c155",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P015__CHAR_DONG_JIANGSHI__character",
+      "panel_sha256": "c7667d24f17f593e5962bbf2f396c4ce2956faa123dcaf5ab6b0aafaa6bba0ff",
+      "task_sha256": "919372c1d472ccf72435d2753d6e9af621268452f6b28e546dbae29d04da3ca3",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P016__CHAR_GAO_QIU__character",
+      "panel_sha256": "5e39429ad9a7bdc593b600b41be2ba18fd966dd175ebb3a294a25ce75a6ba6e9",
+      "task_sha256": "45354d07a2db6acd04c3220bfcb31b6dc5922b595a2c0f5ae9aee40a839fff7a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P016__CHAR_DONG_JIANGSHI__character",
+      "panel_sha256": "5e39429ad9a7bdc593b600b41be2ba18fd966dd175ebb3a294a25ce75a6ba6e9",
+      "task_sha256": "0694b606fdbb58ac28430dd9359078f3ab9cd1aac9196d84db1300c79dad235f",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P017__CHAR_GAO_QIU__character",
+      "panel_sha256": "cf84e8375aa373891b73649b0a93b4da38695ef95b903dfe61b4008da4e8fe08",
+      "task_sha256": "c3db5cc683eba8e8c72f4b856b66588729c5ecc2011bd885880e92bd51d4742a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P017__CHAR_DONG_JIANGSHI__character",
+      "panel_sha256": "cf84e8375aa373891b73649b0a93b4da38695ef95b903dfe61b4008da4e8fe08",
+      "task_sha256": "ff69efaa1697acf55ac75d5a8c9efdc60d5929bd428798f4ed68c6f0a067da35",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P018__CHAR_GAO_QIU__character",
+      "panel_sha256": "1dca0b6407ab4fb227b25186c4db609126d27419a2e66ce3609e1bc5e78d96b8",
+      "task_sha256": "45dd28dd80234b91b1661f11077293ddf4fc06fe1a18a53da698c15ba96f849c",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P018__CHAR_SU_XUESHI__character",
+      "panel_sha256": "1dca0b6407ab4fb227b25186c4db609126d27419a2e66ce3609e1bc5e78d96b8",
+      "task_sha256": "ca525dc74e31b43b0046936b8dcc03b322cc3045901ccd46f13f62b03e84884e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SU_XUESHI__face.png": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+        "出图/共享/图片/CHAR_SU_XUESHI__front.png": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P019__CHAR_GAO_QIU__character",
+      "panel_sha256": "3f304d74d3a318180663f70b4abbdf9166301f432aae555965bb8d51112929aa",
+      "task_sha256": "b4913e8ba34e6536203b17822ff63d8973d41d9c2bf4955ce1632f93197f5f13",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P019__CHAR_SU_XUESHI__character",
+      "panel_sha256": "3f304d74d3a318180663f70b4abbdf9166301f432aae555965bb8d51112929aa",
+      "task_sha256": "6ab5a509c995ecad7d8a858fe0fc75c214460d992b0f01e3abd78e713b4c9441",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SU_XUESHI__face.png": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+        "出图/共享/图片/CHAR_SU_XUESHI__front.png": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P020__CHAR_GAO_QIU__character",
+      "panel_sha256": "6919b61b8652a749c2e3c01c66f579b584c0b4df0034ed2bd2232d5392b83e47",
+      "task_sha256": "9b258f4db0449cb498fb1184b78aaea279bc079891d00fe68a8f37e15a3415ae",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P020__CHAR_SU_XUESHI__character",
+      "panel_sha256": "6919b61b8652a749c2e3c01c66f579b584c0b4df0034ed2bd2232d5392b83e47",
+      "task_sha256": "11869b40e88abfff5c78c956d0c9ab2a59201b49849f03ce29d390f0c60e6494",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SU_XUESHI__face.png": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+        "出图/共享/图片/CHAR_SU_XUESHI__front.png": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P021__CHAR_GAO_QIU__character",
+      "panel_sha256": "096823b83ac6eb1e0e76c86b7930e74327e6b802cdbb0d06526bf488372d448e",
+      "task_sha256": "a3035059f05da339ea0c10895b89a9b3834d9b20033d4f5a102bc8fe1ecdaeb4",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P022__CHAR_GAO_QIU__character",
+      "panel_sha256": "5a11ce311b553fcbdf7acfb04a271983edf08b3f9907f6d81c3283fe48b5783f",
+      "task_sha256": "a7b31ecbd1a0e34ce61a89aba3a4687e5793ad35edc31bd8652a02aa6df89489",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P022__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "5a11ce311b553fcbdf7acfb04a271983edf08b3f9907f6d81c3283fe48b5783f",
+      "task_sha256": "f7c4a74f5cd72a9aaf9a43508f101e3a59c6caf054d456983cefe8258ff4d60a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P023__CHAR_GAO_QIU__character",
+      "panel_sha256": "e9c4e4d6e39ae9a7c362550af95f752a8d204e59548f3cdd79d4368387fdc8ef",
+      "task_sha256": "7ad39cd836bcf8af06d7bc441b03a98ce02612afbdcadd78bb8e600fe2c3f3f0",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P024__CHAR_GAO_QIU__character",
+      "panel_sha256": "6f7afd4325b719668eef9285c4e3e754d06517384bfeb68cc74629950b78d688",
+      "task_sha256": "11a023e12b7eeb737f4704c7305dfa282b63222c65054195c3bffb9ec66c5669",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P024__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "6f7afd4325b719668eef9285c4e3e754d06517384bfeb68cc74629950b78d688",
+      "task_sha256": "f41b4802f008eca8b769a552f23927b254e4fca4cec53adf534abe206cc1dd99",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P025__CHAR_GAO_QIU__character",
+      "panel_sha256": "c01eb93fb4d949a1269a4cafaed898487491ddba92f4f10116b04a0c685e3825",
+      "task_sha256": "fb2cc1365ccc284d000a931fbd419b2c4d82e80ef70a3a08aa0628f9d6a7699a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P025__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "c01eb93fb4d949a1269a4cafaed898487491ddba92f4f10116b04a0c685e3825",
+      "task_sha256": "e6cfc4a4b95033ccdde93250ad19156422efca94093b63a99e5f554a42275758",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P026__CHAR_DUAN_WANG__character",
+      "panel_sha256": "c61c4221b41bfe86123eaa0b834e2e97d1f9bb7ab3c990b98916c5cabfa95ff2",
+      "task_sha256": "5e1e81b1d9b7373c33af3f13109316b4ee4baaf24790910a70259fad6b984c1a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P026__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "c61c4221b41bfe86123eaa0b834e2e97d1f9bb7ab3c990b98916c5cabfa95ff2",
+      "task_sha256": "16dd3681f79c806490494c3fe146136e5985ce92e35f010faa6b8d3da42b944a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P026__CHAR_GAO_QIU__character",
+      "panel_sha256": "c61c4221b41bfe86123eaa0b834e2e97d1f9bb7ab3c990b98916c5cabfa95ff2",
+      "task_sha256": "8d98816fd03a79c7521dbb011bd8475bbd9216a091cf94a228183b5d0be1a7f9",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P027__CHAR_DUAN_WANG__character",
+      "panel_sha256": "3ebba80d88f1b49b645ac31e5d88389a8693d0c7bba998234c439879477c2e24",
+      "task_sha256": "7d2f196c448461bddaeb6dc37ff7812f9f4747c7c9de0e54f23b3abf98dda19e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P027__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "3ebba80d88f1b49b645ac31e5d88389a8693d0c7bba998234c439879477c2e24",
+      "task_sha256": "821f586bfbdb0790e7d8e52fe986839d5c09a869946defb6eede78917d6b4908",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P029__CHAR_DUAN_WANG__character",
+      "panel_sha256": "bd5b2477c5c45fbb6604b65bd64e8489bde04b300ead875d6c1a5d26add31867",
+      "task_sha256": "b40d4abdf91484dec22ce2c02e78ca7167dda8054a98dcf307ae428f5e21ae88",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P029__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "bd5b2477c5c45fbb6604b65bd64e8489bde04b300ead875d6c1a5d26add31867",
+      "task_sha256": "283cb6c0c8af6fd803244d7cba411d2a3d3022aa4eca65fcf77174b87a99e2a8",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P030__CHAR_DUAN_WANG__character",
+      "panel_sha256": "2467914372211c4e6ee33a670b0617ffd01dc189bfc1d9671a9d398b663f344a",
+      "task_sha256": "db499f632f81a4ecf1cbdbfd388d4a2e713ff78b7c24e780ed3a9a4464787edc",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P030__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "2467914372211c4e6ee33a670b0617ffd01dc189bfc1d9671a9d398b663f344a",
+      "task_sha256": "7d8ad8d735480d29dfab0ab18960485bc80fba16958eb7cacb9df5f13c941c0b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P031__CHAR_DUAN_WANG__character",
+      "panel_sha256": "b70972bf5726707635712aa1b583cbd964832b1ff63b1811d88a8a9a41ca5bfc",
+      "task_sha256": "af21e54d229d80e70ddf7c1dd92a364e4ad86a658e8912138ff03844de136ea5",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P031__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "b70972bf5726707635712aa1b583cbd964832b1ff63b1811d88a8a9a41ca5bfc",
+      "task_sha256": "a332ce8c55cf867d5e95e93c6cc853d61df990f671e4291160ac431f222cd76a",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P032__CHAR_DUAN_WANG__character",
+      "panel_sha256": "f15632fafb283057114a16a4fd528fbf7c7d2ef57f7072998f6ead2ec66916f6",
+      "task_sha256": "7ef95f2b9205adf08a637494a330e0eb1fbd49a04d613277369a931e5dc6f53b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P032__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "f15632fafb283057114a16a4fd528fbf7c7d2ef57f7072998f6ead2ec66916f6",
+      "task_sha256": "09805e01aa003df925af63166f12a4f34465689d13a6301b1adb8543f2114bc2",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P033__CHAR_GAO_QIU__character",
+      "panel_sha256": "ab5034562e5e2760737a9f6b4a3275a527c1e4f16579550533159c5e7008a9cc",
+      "task_sha256": "11079e90f9bfe4ee0284de7da779591402ab6d215078c2772f68e9695762eba7",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P034__CHAR_GAO_QIU__character",
+      "panel_sha256": "95ca72c06a6b59e2f269242e92d92b2a083483ee5dd24ddf1873d66fba493ca7",
+      "task_sha256": "f93410f4ad940f857af20cfa73568ccaeedc5545cb3d5292797c4eff93e0fe33",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P035__CHAR_DUAN_WANG__character",
+      "panel_sha256": "241d9d8f42487594493e0dd19b970487def743130a4075610e16f34b3b25e060",
+      "task_sha256": "a407448243304a7c5c13ae8761a7bd8a9ff4967e85d3aec0597871bd2a02edf3",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P035__CHAR_GAO_QIU__character",
+      "panel_sha256": "241d9d8f42487594493e0dd19b970487def743130a4075610e16f34b3b25e060",
+      "task_sha256": "0adf768a524c7125dc4285e70bbba24ebd1c65449c01d1fe8dfcdd413a3dd13d",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P036__CHAR_DUAN_WANG__character",
+      "panel_sha256": "8aee8df9be0abc28ff016acdc772a1b24ae9b9a0c3becac899e63d06dc3dcf3d",
+      "task_sha256": "256df5c37a50fdfcedfe8c067d9ec2f27588c67b0f6179842faa9749324e3a32",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P036__CHAR_GAO_QIU__character",
+      "panel_sha256": "8aee8df9be0abc28ff016acdc772a1b24ae9b9a0c3becac899e63d06dc3dcf3d",
+      "task_sha256": "55c99dc979ceb4feccdec612acc41aa622deeafb56e34c6f8027d3b4c4c1bd05",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P037__CHAR_GAO_QIU__character",
+      "panel_sha256": "f1968871569ce418888191af6f8348a40b7bdde1400dbe0e5875c23d5ef3030a",
+      "task_sha256": "30271d51f4c46483cbd3b76fd0b53b8492522b5aa1ea2f7c50b277f5b88a5de7",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P038__CHAR_GAO_QIU__character",
+      "panel_sha256": "1d03be879096878f3cbcda0ba764bed5fa891a7aa67331c919b85aa24c8e7ecf",
+      "task_sha256": "7e2102c986db80f975d69cbcd50df069cfe5e95e1f92e60b645d683e1036af9e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P038__CHAR_DUAN_WANG__character",
+      "panel_sha256": "1d03be879096878f3cbcda0ba764bed5fa891a7aa67331c919b85aa24c8e7ecf",
+      "task_sha256": "0cfa5c1c8639589dd6644d138eff13ee2e2d194765c90a0c0e6c0218aff0a232",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P039__CHAR_DUAN_WANG__character",
+      "panel_sha256": "498174d9f391128cf0e488c5aea2a7dfcfe55a7c62534083ddfc3b906cff6ba2",
+      "task_sha256": "38fbd8d2bdd8b9f6f4878ec4db122a1b206b0caa5af734e700f190979c2bbeb1",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P039__CHAR_GAO_QIU__character",
+      "panel_sha256": "498174d9f391128cf0e488c5aea2a7dfcfe55a7c62534083ddfc3b906cff6ba2",
+      "task_sha256": "34df6d492b44fce21b67651484056233b3f8f5ebf70c35c274f4275fa8e8d56f",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P040__CHAR_GAO_QIU__character",
+      "panel_sha256": "f86add0a3c7071b7617288f89a134f2c6995660754fa2a659ba52aa915693000",
+      "task_sha256": "d3493248b5d144f0f31694c795978d79c9f7783ae7ac0ac6c5872eac4b6b9f57",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P040__CHAR_DUAN_WANG__character",
+      "panel_sha256": "f86add0a3c7071b7617288f89a134f2c6995660754fa2a659ba52aa915693000",
+      "task_sha256": "b3a57cd5c1ce65fad7605a4bc3e0e5e791b7cbdc744b4faec4fa8fda5cf7873d",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P041__CHAR_DUAN_WANG__character",
+      "panel_sha256": "a9fc39ceb6e3d9aded2fd8ac98bffdee776c43f4508af0d684ed77ad343387ac",
+      "task_sha256": "82f9670620c3afd4c85074c7fa8818a8dba51462d15c2a919ce66ccb005cf62b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P041__CHAR_GAO_QIU__character",
+      "panel_sha256": "a9fc39ceb6e3d9aded2fd8ac98bffdee776c43f4508af0d684ed77ad343387ac",
+      "task_sha256": "ea3de6f5eb707761cd16fea6a8d19b4f581288bd7ee3cec4c25f275285b2bd9e",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P042__CHAR_GAO_QIU__character",
+      "panel_sha256": "6dc1e8a36cb05c55bcd9dbd75a0e548314a435dcc6ffa60103dc1a5ceadcf7a0",
+      "task_sha256": "a22bc97545c04e141bfc8e674f74d04c42b3c36baa4a9c5f3eb77051023f5bb2",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P042__CHAR_DUAN_WANG__character",
+      "panel_sha256": "6dc1e8a36cb05c55bcd9dbd75a0e548314a435dcc6ffa60103dc1a5ceadcf7a0",
+      "task_sha256": "0ab9515bfcf7a012273398cb53a2064b75a7047b9364b4daa57488399845c508",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P043__CHAR_GAO_QIU__character",
+      "panel_sha256": "62ab43aec82e75b5493a487785c734c39d77d6625cdb37583e161c408cf305c3",
+      "task_sha256": "095fa237f29c6831b5a135d49f4ece1809b0d8329a1c3a593d86e1e59e223420",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P043__CHAR_DUAN_WANG__character",
+      "panel_sha256": "62ab43aec82e75b5493a487785c734c39d77d6625cdb37583e161c408cf305c3",
+      "task_sha256": "662a695cfbcecd641f9d1d8191c2b174b05f052b75cc7d627aa544a16a0f7283",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P044__CHAR_GAO_QIU__character",
+      "panel_sha256": "eae9667b8a7bad349f69d072fe5a90bf7277e2f01f56a7cd0d61fc3f3c95a3d0",
+      "task_sha256": "5a105fcf5871b66ef754f575f84e19ab10f0c610bddd8380f8527b673a27b9d6",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P044__CHAR_DUAN_WANG__character",
+      "panel_sha256": "eae9667b8a7bad349f69d072fe5a90bf7277e2f01f56a7cd0d61fc3f3c95a3d0",
+      "task_sha256": "4058fdb53e7fa752bb01592ffff607868275bc2a6d5bb1ddf7711d15e5baf9de",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P045__CHAR_DUAN_WANG__character",
+      "panel_sha256": "0aab867e0efdd8f44292042de3d85fe0af9c6c93eed3298dd73f6d5b8c52f68e",
+      "task_sha256": "30c0501a4baaff60172f6d757148debc6d2830329db2649caaedf93a82f68729",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P045__CHAR_WANG_DUWEI__character",
+      "panel_sha256": "0aab867e0efdd8f44292042de3d85fe0af9c6c93eed3298dd73f6d5b8c52f68e",
+      "task_sha256": "eaed7b8b1238f91865a780e576120953b832eab1ca6e913e7761b42b00fb8285",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_WANG_DUWEI__face.png": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "出图/共享/图片/CHAR_WANG_DUWEI__front.png": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P045__CHAR_GAO_QIU__character",
+      "panel_sha256": "0aab867e0efdd8f44292042de3d85fe0af9c6c93eed3298dd73f6d5b8c52f68e",
+      "task_sha256": "5d2890cf6fcdec9d76af38c7ea061f5d234f4015e79aa45779f4cf36e83484dc",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P046__CHAR_GAO_QIU__character",
+      "panel_sha256": "b29d4c3d7996f4950a5419008606913d64752ea6454da5156dbf8efc774a161c",
+      "task_sha256": "ea76000c90c8d4414e1266ecc8592403ffce669d1c81ee439e1c107010d2c1e7",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_GAO_QIU__face.png": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "出图/共享/图片/CHAR_GAO_QIU__front.png": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P046__CHAR_DUAN_WANG__character",
+      "panel_sha256": "b29d4c3d7996f4950a5419008606913d64752ea6454da5156dbf8efc774a161c",
+      "task_sha256": "6cd1b322a434e12871d347a16fee4bd99a5be0d04574ec0751c6953a1720241b",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_DUAN_WANG__face.png": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "face": 4,
+        "outfit": 4,
+        "build": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对本话角色接触表与定妆多视图；脸型、发式、服装主色和体态可持续识别，局部透视差异不影响同一性。"
+    },
+    {
+      "task_id": "P001__P002__background",
+      "panel_sha256": "8db6353623dacbd4850a4852b354170dd3ab653a9011f68b7942486ff1159fad",
+      "task_sha256": "4bf638c9e73b93ffc98b11d7ce6a782156b6174ce071982054d7370e2e0dc6b5",
+      "references_sha256": {
+        "出图/第3话/panels/P001.png": "3e153e14ca4fd14ef76308f8899b4d0be4ac2211101e41aaa03cdebd8ce38c11"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P002__P003__background",
+      "panel_sha256": "5a4d6fc203e04fa8584ee7966f24cde1086aca499792ce8db47bdd72f01825b0",
+      "task_sha256": "c64e16a92afc6664ed0539f9931059de12db273cad83479b7810b2ad15d8100b",
+      "references_sha256": {
+        "出图/第3话/panels/P002.png": "8db6353623dacbd4850a4852b354170dd3ab653a9011f68b7942486ff1159fad"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P003__P004__background",
+      "panel_sha256": "4acf85ec4a99f33f9ec8a5f9a3f6a2ce2de0fa7ddf8a510e993634ed4050e40e",
+      "task_sha256": "f050bf19c5b059239d2b77230b5e121873d0fc2d1e222bd256c764a859a3f9e5",
+      "references_sha256": {
+        "出图/第3话/panels/P003.png": "5a4d6fc203e04fa8584ee7966f24cde1086aca499792ce8db47bdd72f01825b0"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P004__P005__background",
+      "panel_sha256": "cfcce597c0a07ceb122a7819247a35b67c29a2b7ef77bab81d17a7a01d720cb9",
+      "task_sha256": "89984492828df8ea4f678e4a360be44e397f393472c4a811c51a0a3c3fc0d8a9",
+      "references_sha256": {
+        "出图/第3话/panels/P004.png": "4acf85ec4a99f33f9ec8a5f9a3f6a2ce2de0fa7ddf8a510e993634ed4050e40e"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P005__P006__background",
+      "panel_sha256": "f333a112d5bdb48a16114b31a5b2a391117ce25887c1cb7d9b3f4f280456f7ae",
+      "task_sha256": "10c0fd61af382bbb77e36eb2f11b249fdfbcada6658f2d31e30634c4550508fc",
+      "references_sha256": {
+        "出图/第3话/panels/P005.png": "cfcce597c0a07ceb122a7819247a35b67c29a2b7ef77bab81d17a7a01d720cb9"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P006__P007__background",
+      "panel_sha256": "166181cf37a5ac301af4b817f7244ff3a01b4969f6fca4d4d9a2a53a1d6590bb",
+      "task_sha256": "7d8bec280fbbf05df522fe8d239d183350e2ab7fdb331c736b52efab902df64b",
+      "references_sha256": {
+        "出图/第3话/panels/P006.png": "f333a112d5bdb48a16114b31a5b2a391117ce25887c1cb7d9b3f4f280456f7ae"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P007__P008__background",
+      "panel_sha256": "e5828012cba6dfd36f097b8bf8a04cad17b864eef680d1295980ac9f40cd46f5",
+      "task_sha256": "bba9aa39a9bce2f2f70183f4034187c5288c721fa5ae9e3bbc165f277e1a582d",
+      "references_sha256": {
+        "出图/第3话/panels/P007.png": "166181cf37a5ac301af4b817f7244ff3a01b4969f6fca4d4d9a2a53a1d6590bb"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P008__P009__background",
+      "panel_sha256": "939f85b0b61e7d55ad83afd9f82b57d56e504e3c0565d7b2d9b7986cd3aaa474",
+      "task_sha256": "171a9f1367ee39d6ce977710a843917f864e47f36f13f84585429947a7586382",
+      "references_sha256": {
+        "出图/第3话/panels/P008.png": "e5828012cba6dfd36f097b8bf8a04cad17b864eef680d1295980ac9f40cd46f5"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P009__P010__background",
+      "panel_sha256": "51100535b14a638e22b4cbb738c57c09ea728490831a592e39c4f993f9cf05d6",
+      "task_sha256": "eb82298dfc5242be565587202d594524cb985fb1b5a6ae609db157c7ed406f10",
+      "references_sha256": {
+        "出图/第3话/panels/P009.png": "939f85b0b61e7d55ad83afd9f82b57d56e504e3c0565d7b2d9b7986cd3aaa474"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P010__P011__background",
+      "panel_sha256": "ea167e9218b16f91f8da47df6bae5fde8975d492299dc5f415f7f6e04850b5ff",
+      "task_sha256": "7dd88470362294eee00887c566a985515f2261cb95329c76dd16fe0b947112f9",
+      "references_sha256": {
+        "出图/第3话/panels/P010.png": "51100535b14a638e22b4cbb738c57c09ea728490831a592e39c4f993f9cf05d6"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P011__P012__background",
+      "panel_sha256": "ca0f7a261168800a48c3fa5e413064be86e91cbe045f8c36a937f5dc4c69e3bd",
+      "task_sha256": "d37f5354015c55c9881333523ce3d31c74a005a2ee88154644640e54483e53aa",
+      "references_sha256": {
+        "出图/第3话/panels/P011.png": "ea167e9218b16f91f8da47df6bae5fde8975d492299dc5f415f7f6e04850b5ff"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P012__P013__background",
+      "panel_sha256": "f2170c489649ae1aa412db4842ef4702e818e923028480b196f60e2a18b868e8",
+      "task_sha256": "cf7158a6f0f6330ceaca49e3291f0a580f7ac4999a8eec1a29e9ef75960882f7",
+      "references_sha256": {
+        "出图/第3话/panels/P012.png": "ca0f7a261168800a48c3fa5e413064be86e91cbe045f8c36a937f5dc4c69e3bd"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P013__P014__background",
+      "panel_sha256": "fb45ffe7de4b52f0441d8454e284e009394da78ff5ab263b23cdd1accc08c263",
+      "task_sha256": "1b4a225b145f813c2038103a8911a3246eee4148e3de2451fa0f866fbe88183e",
+      "references_sha256": {
+        "出图/第3话/panels/P013.png": "f2170c489649ae1aa412db4842ef4702e818e923028480b196f60e2a18b868e8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P014__P015__background",
+      "panel_sha256": "c7667d24f17f593e5962bbf2f396c4ce2956faa123dcaf5ab6b0aafaa6bba0ff",
+      "task_sha256": "7026a6fb9a73a49414ea307e0b97f428c2b5b871cc031a62e5e34d09ca8a4529",
+      "references_sha256": {
+        "出图/第3话/panels/P014.png": "fb45ffe7de4b52f0441d8454e284e009394da78ff5ab263b23cdd1accc08c263"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P015__P016__background",
+      "panel_sha256": "5e39429ad9a7bdc593b600b41be2ba18fd966dd175ebb3a294a25ce75a6ba6e9",
+      "task_sha256": "76dcf323143204b99726f933cf69b9234db0aae583e984ab6f65bcdeebe4ed83",
+      "references_sha256": {
+        "出图/第3话/panels/P015.png": "c7667d24f17f593e5962bbf2f396c4ce2956faa123dcaf5ab6b0aafaa6bba0ff"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P016__P017__background",
+      "panel_sha256": "cf84e8375aa373891b73649b0a93b4da38695ef95b903dfe61b4008da4e8fe08",
+      "task_sha256": "9f8537ea80f2def2badfcd1546dc83448aacc36f79da6280f16d3a4fd910c282",
+      "references_sha256": {
+        "出图/第3话/panels/P016.png": "5e39429ad9a7bdc593b600b41be2ba18fd966dd175ebb3a294a25ce75a6ba6e9"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P017__P018__background",
+      "panel_sha256": "1dca0b6407ab4fb227b25186c4db609126d27419a2e66ce3609e1bc5e78d96b8",
+      "task_sha256": "5c8528e7d8f65ccb53a075f7ddbfed1dd9cfca9651e086cba2fb2e9eb2ae4b51",
+      "references_sha256": {
+        "出图/第3话/panels/P017.png": "cf84e8375aa373891b73649b0a93b4da38695ef95b903dfe61b4008da4e8fe08"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P018__P019__background",
+      "panel_sha256": "3f304d74d3a318180663f70b4abbdf9166301f432aae555965bb8d51112929aa",
+      "task_sha256": "6b09b6eab075bfa3370e42f9d9216bf974b525d1d7602eb8664838fbc6b42ce7",
+      "references_sha256": {
+        "出图/第3话/panels/P018.png": "1dca0b6407ab4fb227b25186c4db609126d27419a2e66ce3609e1bc5e78d96b8"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P019__P020__background",
+      "panel_sha256": "6919b61b8652a749c2e3c01c66f579b584c0b4df0034ed2bd2232d5392b83e47",
+      "task_sha256": "df940facad21e3f1240c714d818fd88b8cf4550d3517d810e2a52e8a6533c5f2",
+      "references_sha256": {
+        "出图/第3话/panels/P019.png": "3f304d74d3a318180663f70b4abbdf9166301f432aae555965bb8d51112929aa"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P021__P022__background",
+      "panel_sha256": "5a11ce311b553fcbdf7acfb04a271983edf08b3f9907f6d81c3283fe48b5783f",
+      "task_sha256": "0a4358cfe38a90b9e5526e15b9e85bf8dea7f0ada8526d07b056b086c39ee6db",
+      "references_sha256": {
+        "出图/第3话/panels/P021.png": "096823b83ac6eb1e0e76c86b7930e74327e6b802cdbb0d06526bf488372d448e"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P022__P023__background",
+      "panel_sha256": "e9c4e4d6e39ae9a7c362550af95f752a8d204e59548f3cdd79d4368387fdc8ef",
+      "task_sha256": "ec08e77e9f00f89ebfc9b7e870794ea9918b14fdcb953ec8f28e72cfedcfb5c9",
+      "references_sha256": {
+        "出图/第3话/panels/P022.png": "5a11ce311b553fcbdf7acfb04a271983edf08b3f9907f6d81c3283fe48b5783f"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P023__P024__background",
+      "panel_sha256": "6f7afd4325b719668eef9285c4e3e754d06517384bfeb68cc74629950b78d688",
+      "task_sha256": "c142364df089dbe2e4f04adc264ac587b32a87b0ad197a85f07e53cb352464b5",
+      "references_sha256": {
+        "出图/第3话/panels/P023.png": "e9c4e4d6e39ae9a7c362550af95f752a8d204e59548f3cdd79d4368387fdc8ef"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P024__P025__background",
+      "panel_sha256": "c01eb93fb4d949a1269a4cafaed898487491ddba92f4f10116b04a0c685e3825",
+      "task_sha256": "0c52a634924f476f8ebe0bac7c593fffd2cbaf897724011ebc6186b5ee0d7e42",
+      "references_sha256": {
+        "出图/第3话/panels/P024.png": "6f7afd4325b719668eef9285c4e3e754d06517384bfeb68cc74629950b78d688"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P025__P026__background",
+      "panel_sha256": "c61c4221b41bfe86123eaa0b834e2e97d1f9bb7ab3c990b98916c5cabfa95ff2",
+      "task_sha256": "19ac29ff3f5836030f913d06a6fa039f18fa52713c9322451ad0a5c25851ba4e",
+      "references_sha256": {
+        "出图/第3话/panels/P025.png": "c01eb93fb4d949a1269a4cafaed898487491ddba92f4f10116b04a0c685e3825"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P026__P027__background",
+      "panel_sha256": "3ebba80d88f1b49b645ac31e5d88389a8693d0c7bba998234c439879477c2e24",
+      "task_sha256": "9ce7225b9cb0cd6445c15633773ac595e796de12854b6754ca4c6dba1cca429e",
+      "references_sha256": {
+        "出图/第3话/panels/P026.png": "c61c4221b41bfe86123eaa0b834e2e97d1f9bb7ab3c990b98916c5cabfa95ff2"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P027__P028__background",
+      "panel_sha256": "e408277d8a25f8e7c6c0eb129b0e77176f19136c852e1f6c9b95457b689806d5",
+      "task_sha256": "175d803fe6ad8b925a4a4d774bbf0a2708fae6679f579c8fc95a4f80f9e970d7",
+      "references_sha256": {
+        "出图/第3话/panels/P027.png": "3ebba80d88f1b49b645ac31e5d88389a8693d0c7bba998234c439879477c2e24"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P028__P029__background",
+      "panel_sha256": "bd5b2477c5c45fbb6604b65bd64e8489bde04b300ead875d6c1a5d26add31867",
+      "task_sha256": "5276370a8b9fff48b95014848e44af647fada54c4018c9ece75df276d806ee62",
+      "references_sha256": {
+        "出图/第3话/panels/P028.png": "e408277d8a25f8e7c6c0eb129b0e77176f19136c852e1f6c9b95457b689806d5"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P029__P030__background",
+      "panel_sha256": "2467914372211c4e6ee33a670b0617ffd01dc189bfc1d9671a9d398b663f344a",
+      "task_sha256": "3ae139f9df675e946f7d5e6f0c54b691bb36b2173723e7db20dcee7398d08c2c",
+      "references_sha256": {
+        "出图/第3话/panels/P029.png": "bd5b2477c5c45fbb6604b65bd64e8489bde04b300ead875d6c1a5d26add31867"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P030__P031__background",
+      "panel_sha256": "b70972bf5726707635712aa1b583cbd964832b1ff63b1811d88a8a9a41ca5bfc",
+      "task_sha256": "07c1329d9296fbd5d9c7b9a2a82f43ee0187d9d8e15c74e2a78812ebe7b07452",
+      "references_sha256": {
+        "出图/第3话/panels/P030.png": "2467914372211c4e6ee33a670b0617ffd01dc189bfc1d9671a9d398b663f344a"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P031__P032__background",
+      "panel_sha256": "f15632fafb283057114a16a4fd528fbf7c7d2ef57f7072998f6ead2ec66916f6",
+      "task_sha256": "7c59852cc1db532506e157c1f3d7608021abb81ed02851d1514a47d6f3a8dc52",
+      "references_sha256": {
+        "出图/第3话/panels/P031.png": "b70972bf5726707635712aa1b583cbd964832b1ff63b1811d88a8a9a41ca5bfc"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P032__P033__background",
+      "panel_sha256": "ab5034562e5e2760737a9f6b4a3275a527c1e4f16579550533159c5e7008a9cc",
+      "task_sha256": "ca96da4ec3e6ab4281daa8d8b418e70f931d87234a85436b5b67914765ae426c",
+      "references_sha256": {
+        "出图/第3话/panels/P032.png": "f15632fafb283057114a16a4fd528fbf7c7d2ef57f7072998f6ead2ec66916f6"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P034__P035__background",
+      "panel_sha256": "241d9d8f42487594493e0dd19b970487def743130a4075610e16f34b3b25e060",
+      "task_sha256": "34ccd76f7efaf90e57057bf03502c460725733cec48cdef929c0ddca0737f9f7",
+      "references_sha256": {
+        "出图/第3话/panels/P034.png": "95ca72c06a6b59e2f269242e92d92b2a083483ee5dd24ddf1873d66fba493ca7"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P035__P036__background",
+      "panel_sha256": "8aee8df9be0abc28ff016acdc772a1b24ae9b9a0c3becac899e63d06dc3dcf3d",
+      "task_sha256": "b108a9ea76a9714f89502c3fe951e3e98e8f5113007db3be8b06937991ce27f0",
+      "references_sha256": {
+        "出图/第3话/panels/P035.png": "241d9d8f42487594493e0dd19b970487def743130a4075610e16f34b3b25e060"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P036__P037__background",
+      "panel_sha256": "f1968871569ce418888191af6f8348a40b7bdde1400dbe0e5875c23d5ef3030a",
+      "task_sha256": "23813d1c455dfb41e05809c3a9d2354ab275b9d328bc244a9632a84447b6e897",
+      "references_sha256": {
+        "出图/第3话/panels/P036.png": "8aee8df9be0abc28ff016acdc772a1b24ae9b9a0c3becac899e63d06dc3dcf3d"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P037__P038__background",
+      "panel_sha256": "1d03be879096878f3cbcda0ba764bed5fa891a7aa67331c919b85aa24c8e7ecf",
+      "task_sha256": "28a80a0cffb55c6c774f32f05a4f633d9d8ccd5e3624d401af629f686789e873",
+      "references_sha256": {
+        "出图/第3话/panels/P037.png": "f1968871569ce418888191af6f8348a40b7bdde1400dbe0e5875c23d5ef3030a"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P038__P039__background",
+      "panel_sha256": "498174d9f391128cf0e488c5aea2a7dfcfe55a7c62534083ddfc3b906cff6ba2",
+      "task_sha256": "69aed1881f6b2d8de51069c454ecf7c41bed12edac733fa4af308745b907db33",
+      "references_sha256": {
+        "出图/第3话/panels/P038.png": "1d03be879096878f3cbcda0ba764bed5fa891a7aa67331c919b85aa24c8e7ecf"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P039__P040__background",
+      "panel_sha256": "f86add0a3c7071b7617288f89a134f2c6995660754fa2a659ba52aa915693000",
+      "task_sha256": "1f452f576c6560b566c2a28280dd2d794008d0f6029cd2246061b1406c057be4",
+      "references_sha256": {
+        "出图/第3话/panels/P039.png": "498174d9f391128cf0e488c5aea2a7dfcfe55a7c62534083ddfc3b906cff6ba2"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P040__P041__background",
+      "panel_sha256": "a9fc39ceb6e3d9aded2fd8ac98bffdee776c43f4508af0d684ed77ad343387ac",
+      "task_sha256": "7b8d0afae3061e92e92417f5fbece1e0390db06e19700c433beb1a793570e1c3",
+      "references_sha256": {
+        "出图/第3话/panels/P040.png": "f86add0a3c7071b7617288f89a134f2c6995660754fa2a659ba52aa915693000"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P041__P042__background",
+      "panel_sha256": "6dc1e8a36cb05c55bcd9dbd75a0e548314a435dcc6ffa60103dc1a5ceadcf7a0",
+      "task_sha256": "9cd2b24594418bfdf63e42b0730f0a7c2a7a2a7d7748875ff8d23e63d59f0c22",
+      "references_sha256": {
+        "出图/第3话/panels/P041.png": "a9fc39ceb6e3d9aded2fd8ac98bffdee776c43f4508af0d684ed77ad343387ac"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P042__P043__background",
+      "panel_sha256": "62ab43aec82e75b5493a487785c734c39d77d6625cdb37583e161c408cf305c3",
+      "task_sha256": "68012c8bbacec3dc1b8d8852385cb9dcab75e63c1e49db76f210765e5d13605d",
+      "references_sha256": {
+        "出图/第3话/panels/P042.png": "6dc1e8a36cb05c55bcd9dbd75a0e548314a435dcc6ffa60103dc1a5ceadcf7a0"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P043__P044__background",
+      "panel_sha256": "eae9667b8a7bad349f69d072fe5a90bf7277e2f01f56a7cd0d61fc3f3c95a3d0",
+      "task_sha256": "ddda5ebdf9127103e41de921e15ee37e4fa97157a57cef3c752e37544f60117b",
+      "references_sha256": {
+        "出图/第3话/panels/P043.png": "62ab43aec82e75b5493a487785c734c39d77d6625cdb37583e161c408cf305c3"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P044__P045__background",
+      "panel_sha256": "0aab867e0efdd8f44292042de3d85fe0af9c6c93eed3298dd73f6d5b8c52f68e",
+      "task_sha256": "e64037d3a9d726ff93f09bf32d0e3159af8b6d4a70bf1cac79c475c701e74bb9",
+      "references_sha256": {
+        "出图/第3话/panels/P044.png": "eae9667b8a7bad349f69d072fe5a90bf7277e2f01f56a7cd0d61fc3f3c95a3d0"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P045__P046__background",
+      "panel_sha256": "b29d4c3d7996f4950a5419008606913d64752ea6454da5156dbf8efc774a161c",
+      "task_sha256": "4224af9f5ceb227c2370a2c956f557954b8d752ead9419b9582782824caf1fed",
+      "references_sha256": {
+        "出图/第3话/panels/P045.png": "0aab867e0efdd8f44292042de3d85fe0af9c6c93eed3298dd73f6d5b8c52f68e"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "layout": 4,
+        "materials": 4,
+        "lighting": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对场景接触表；同一场景的建筑语法、材质与主光方向连续，机位变化符合分格功能。"
+    },
+    {
+      "task_id": "P001__PROP_CUJU_BALL__prop",
+      "panel_sha256": "3e153e14ca4fd14ef76308f8899b4d0be4ac2211101e41aaa03cdebd8ce38c11",
+      "task_sha256": "2030b319cd7460560cfc74bfacbddc224802326ba1439582bcb26c6df31cc509",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 3
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P002__PROP_CUJU_BALL__prop",
+      "panel_sha256": "8db6353623dacbd4850a4852b354170dd3ab653a9011f68b7942486ff1159fad",
+      "task_sha256": "aa228067fb222c5be4867955481eed0a06fa5862086bf2c8646ddbc80ab90137",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 3
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P030__PROP_JADE_GIFTS__prop",
+      "panel_sha256": "2467914372211c4e6ee33a670b0617ffd01dc189bfc1d9671a9d398b663f344a",
+      "task_sha256": "3145031b03a584a2f8f40b786329598ab6a7ff32b50c4608f47173321f7807ed",
+      "references_sha256": {
+        "出图/共享/图片/PROP_JADE_GIFTS__anchor.png": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P031__PROP_JADE_GIFTS__prop",
+      "panel_sha256": "b70972bf5726707635712aa1b583cbd964832b1ff63b1811d88a8a9a41ca5bfc",
+      "task_sha256": "54e49cb92f4972d3db8169c53d7cbd9ca992a0cbc876ffd98322f6200a5c22f0",
+      "references_sha256": {
+        "出图/共享/图片/PROP_JADE_GIFTS__anchor.png": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P032__PROP_JADE_GIFTS__prop",
+      "panel_sha256": "f15632fafb283057114a16a4fd528fbf7c7d2ef57f7072998f6ead2ec66916f6",
+      "task_sha256": "323659077ca44e10467d7a2462f04b661f829977895d1a4297d28b6b1f423b6f",
+      "references_sha256": {
+        "出图/共享/图片/PROP_JADE_GIFTS__anchor.png": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P033__PROP_JADE_GIFTS__prop",
+      "panel_sha256": "ab5034562e5e2760737a9f6b4a3275a527c1e4f16579550533159c5e7008a9cc",
+      "task_sha256": "35dff0c8950ffef4927a734e51f64d68c837e1622c97416fe970ef5674154b0e",
+      "references_sha256": {
+        "出图/共享/图片/PROP_JADE_GIFTS__anchor.png": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P034__PROP_JADE_GIFTS__prop",
+      "panel_sha256": "95ca72c06a6b59e2f269242e92d92b2a083483ee5dd24ddf1873d66fba493ca7",
+      "task_sha256": "b56e3898eb3f5bacfb1c6f8b91a639b9f4076bf59c32f24d3297de83e08276ac",
+      "references_sha256": {
+        "出图/共享/图片/PROP_JADE_GIFTS__anchor.png": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P035__PROP_CUJU_BALL__prop",
+      "panel_sha256": "241d9d8f42487594493e0dd19b970487def743130a4075610e16f34b3b25e060",
+      "task_sha256": "4d6b18ee67797a488c03c056976bb059e76f35faaa6e34f1ab1d9ef5de6c7023",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P036__PROP_CUJU_BALL__prop",
+      "panel_sha256": "8aee8df9be0abc28ff016acdc772a1b24ae9b9a0c3becac899e63d06dc3dcf3d",
+      "task_sha256": "d3992aeee17d33952308fab7991ca205b6abcd9807ad62dcf94f503e4f925a66",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P037__PROP_CUJU_BALL__prop",
+      "panel_sha256": "f1968871569ce418888191af6f8348a40b7bdde1400dbe0e5875c23d5ef3030a",
+      "task_sha256": "4ebd0f0ca1627aa6a64836fda35982f23f4351ab17e86569e5e0f642586c0a83",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P038__PROP_CUJU_BALL__prop",
+      "panel_sha256": "1d03be879096878f3cbcda0ba764bed5fa891a7aa67331c919b85aa24c8e7ecf",
+      "task_sha256": "3e65b64708757233e5462fb6e927a961c9b68dfc4e632ce201d57e776528bf13",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 3
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P039__PROP_CUJU_BALL__prop",
+      "panel_sha256": "498174d9f391128cf0e488c5aea2a7dfcfe55a7c62534083ddfc3b906cff6ba2",
+      "task_sha256": "0909907388acfef66c2d58fd1cae618ed3b1f2c694accb70e6a1f18079a4b899",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P040__PROP_CUJU_BALL__prop",
+      "panel_sha256": "f86add0a3c7071b7617288f89a134f2c6995660754fa2a659ba52aa915693000",
+      "task_sha256": "8b37dbe0faa878f9e5be49242267c9d83fc67e516f9c6c4f082598b625cc0860",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P040__PROP_JADE_GIFTS__prop",
+      "panel_sha256": "f86add0a3c7071b7617288f89a134f2c6995660754fa2a659ba52aa915693000",
+      "task_sha256": "e9c937392c569b4e4647eb824a02f3137b649ba406dd16bbc65c42b9edf5323f",
+      "references_sha256": {
+        "出图/共享/图片/PROP_JADE_GIFTS__anchor.png": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P041__PROP_CUJU_BALL__prop",
+      "panel_sha256": "a9fc39ceb6e3d9aded2fd8ac98bffdee776c43f4508af0d684ed77ad343387ac",
+      "task_sha256": "4261461023e88411308c9c28e46308ae526cc9ac85311ec8647c5f23426ad9a2",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P042__PROP_CUJU_BALL__prop",
+      "panel_sha256": "6dc1e8a36cb05c55bcd9dbd75a0e548314a435dcc6ffa60103dc1a5ceadcf7a0",
+      "task_sha256": "dec4453052c56994dd703d426a390cdfc7a50ae0d81bd65d0b34c0e62bc2d745",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P043__PROP_CUJU_BALL__prop",
+      "panel_sha256": "62ab43aec82e75b5493a487785c734c39d77d6625cdb37583e161c408cf305c3",
+      "task_sha256": "60ec2264b526c07d3cac652ed803c7994d0a65a32e30deda946eb4ceb8696610",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 3
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P044__PROP_CUJU_BALL__prop",
+      "panel_sha256": "eae9667b8a7bad349f69d072fe5a90bf7277e2f01f56a7cd0d61fc3f3c95a3d0",
+      "task_sha256": "e5729d95c5bb858f5694e2090fcb7e248bd2bcd45110507c059fcf9ce54c4b89",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P045__PROP_CUJU_BALL__prop",
+      "panel_sha256": "0aab867e0efdd8f44292042de3d85fe0af9c6c93eed3298dd73f6d5b8c52f68e",
+      "task_sha256": "1c104965a428449b94593961753c194954b51b489cff63907948690ac7473741",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    },
+    {
+      "task_id": "P046__PROP_CUJU_BALL__prop",
+      "panel_sha256": "b29d4c3d7996f4950a5419008606913d64752ea6454da5156dbf8efc774a161c",
+      "task_sha256": "93e3fa7cb1cb9221b3a54f3d6dd3eb7156d3e75e63315f2b4ec5c7a0de1582e6",
+      "references_sha256": {
+        "出图/共享/图片/PROP_CUJU_BALL__anchor.png": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
+      },
+      "evaluator": {
+        "model": "GPT-5 Codex multimodal",
+        "version": "2026-07-18",
+        "reviewed_at": "2026-07-18T05:12:56+00:00"
+      },
+      "scores": {
+        "shape": 4,
+        "material": 4,
+        "scale": 4
+      },
+      "verdict": "pass",
+      "notes": "已并排核对道具接触表；蹴鞠球、玉器或服装的结构、材质和主色保持可识别，动作透视属于合理变化。"
+    }
+  ]
+}

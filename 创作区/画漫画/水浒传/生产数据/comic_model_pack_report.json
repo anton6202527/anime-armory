@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-17T13:16:00+00:00",
+  "created_at": "2026-07-18T03:08:00+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -69,6 +69,137 @@
       "readiness": "ready",
       "technical_block": false,
       "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_DONG_JIANGSHI",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+          "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png",
+          "sha256": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "3c11e3b9d0ebbf161288ca19a0bc0464007ed90a2215b2240fc71f08709be043",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DONG_JIANGSHI.json",
+        "status": "current",
+        "approved_at": "2026-07-18T02:33:14+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "face",
+          "message": "face 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_DUAN_WANG",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+          "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+          "sha256": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+          "sha256": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "da6e362e1d89f4aa008cc2d3560c135e0aa46fd9fba86ffb37380caf14c1654e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DUAN_WANG.json",
+        "status": "current",
+        "approved_at": "2026-07-18T02:33:13+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "three_quarter",
+          "message": "three_quarter 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "face",
+          "message": "face 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        }
+      ]
     },
     {
       "kind": "comic_character_model_pack",
@@ -173,6 +304,119 @@
       "readiness": "ready",
       "technical_block": false,
       "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_GAO_QIU",
+      "asset_type": "character",
+      "tier": "core_full",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "side",
+        "back",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+          "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+            "source_sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+          "sha256": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__side.png",
+          "sha256": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__back.png",
+          "sha256": "51a1880047ec1e65912384e3e871b240eb5522eede81317ad203b9b1127c03b9",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+          "sha256": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "ca36feb843f2638ed31c678f68eb969844557786342757d11c158745af76b20e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_GAO_QIU.json",
+        "status": "current",
+        "approved_at": "2026-07-18T02:25:01+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "three_quarter",
+          "message": "three_quarter 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "side",
+          "message": "side 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "back",
+          "message": "back 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "face",
+          "message": "face 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔side 低分辨率色彩代理差异较大 (0.566)；请并排人审，不能据此自动判定换人",
+          "metric": 0.566406
+        }
+      ]
     },
     {
       "kind": "comic_character_model_pack",
@@ -321,6 +565,120 @@
           "code": "turnaround_pixel_proxy_drift",
           "message": "front↔three_quarter 低分辨率色彩代理差异较大 (0.719)；请并排人审，不能据此自动判定换人",
           "metric": 0.71875
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_SU_XUESHI",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+          "sha256": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SU_XUESHI__face.png",
+          "sha256": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "1808ca6d3dcb656a32db09fb9415c98b8daeec808ccc400fca152bafba5dcbeb",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_SU_XUESHI.json",
+        "status": "current",
+        "approved_at": "2026-07-18T02:33:14+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "face",
+          "message": "face 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WANG_DUWEI",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+          "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_DUWEI__face.png",
+          "sha256": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "87e2ed00da731e5edf327010db7fd67a9fa2cc7ca0a766c784a1e282c188a280",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG_DUWEI.json",
+        "status": "current",
+        "approved_at": "2026-07-18T02:33:14+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "front",
+          "message": "front 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
+        },
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_missing",
+          "view": "face",
+          "message": "face 缺 derivation.source_sha256；旧资产可继续做人审，但不能声称已证明同源派生"
         }
       ]
     },
@@ -564,10 +922,10 @@
     }
   ],
   "summary": {
-    "assets": 9,
-    "characters": 7,
+    "assets": 14,
+    "characters": 12,
     "monsters": 2,
-    "ready": 9,
+    "ready": 14,
     "needs_approval": 0,
     "needs_fix": 0
   }

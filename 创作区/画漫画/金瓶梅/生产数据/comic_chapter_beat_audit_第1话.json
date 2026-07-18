@@ -1,0 +1,38 @@
+{
+  "kind": "comic_chapter_beat_audit",
+  "version": 2,
+  "chapter": "第1话",
+  "generated_at": "2026-07-18T05:19:38+00:00",
+  "profile": {
+    "chapter_type": "serial",
+    "format_profile": "vertical_serial",
+    "ending_mode": "cliffhanger",
+    "target_platform": "通用"
+  },
+  "thresholds": {
+    "soft_budget": [
+      40.0,
+      48.0
+    ],
+    "budget_unit": "panels",
+    "climax_band": [
+      0.5,
+      0.85
+    ],
+    "policy": "格数与高潮位置仅为 heuristic/platform WARN；剧情闭环和合同事实优先。"
+  },
+  "summary": {
+    "panels": 44,
+    "must": 0,
+    "warn": 1,
+    "info": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "confidence": "heuristic",
+      "code": "no_climax_panel",
+      "message": "未标出高潮/转折/兑现格；请人工确认节拍不是平推。"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_WU_DA",
+  "tier": "recurring_standard",
+  "model_pack_fingerprint": "41fc895e9c63aa42b8a4a5561a66bee0db02dcc405371e5a210921fe0c5eeae5",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_WU_DA__front.png",
+      "sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "front",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+        "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+      "sha256": "821882b418c8f3dd5fc1141a988fbe0713513788c3f15b853d9f332e92ebe2b8",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+        "source_sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_WU_DA__face.png",
+      "sha256": "d9e63cf51c71bea75ed9d7c1d8f54aaeef4cbb9d00d0cb552e452b66367fa910",
+      "width": 2048,
+      "height": 2048,
+      "source_view": "face",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+        "source_sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "制作代理（用户授权）",
+  "reason": "并排复核当前必需视图：主体身份、视图标签、全身基线、服装标志、手足/四足与中性姿态可读；已处理武大与猛虎45度视图问题。授权依据：设定库/approval_delegation.json。",
+  "approved_at": "2026-07-18T04:48:00+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

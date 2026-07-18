@@ -1,0 +1,77 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第3话",
+  "stage": "script",
+  "created_at": "2026-07-18T11:04:07",
+  "verdict": "pass",
+  "summary": {
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "findings": [],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=3 block=0 warn=0"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+        "size": 1814
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
+        "size": 3638
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
+        "size": 2817
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "e7158b1f97865e37e74bc52757291d6ff707f5902ee498f6d40cf8af7ea7695d",
+        "size": 19156
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "ebe8158f2bcc1e6fb974161f0e11b27d44b808f1611f60029bbfd581e38705b6",
+        "size": 1212
+      },
+      {
+        "path": "源本/水浒传.docx",
+        "exists": true,
+        "sha256": "dbee5369b3fc152b340d0629eb0eb16af05c15c01e1ffba02fcd636688fc7d52",
+        "size": 1211659
+      },
+      {
+        "path": "脚本/第3话/panel_script.json",
+        "exists": true,
+        "sha256": "50b06320729daaf000ad4f274a34937449be0c9dc31649461ba541f833446d0f",
+        "size": 191347
+      },
+      {
+        "path": "脚本/第3话/source_semantics.json",
+        "exists": true,
+        "sha256": "dade86757d6b9023f9e0d2e48933dd5f44995d7a6259816bc67942247ca400ac",
+        "size": 110513
+      }
+    ],
+    "sha256": "cdee79979d5d52ada2fe6f1a46ed5a70a15e328e19f8bfdb579e04ff7feb0074"
+  },
+  "receipt_id": "8ad6a4c2f91a7e970d14dfac7efe5d20aeca898b51a94514929cb46a657cf335"
+}

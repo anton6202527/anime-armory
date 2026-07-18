@@ -26,7 +26,11 @@ if str(SCRIPT_DIR) not in sys.path:
 import codex_panel_runner as shared  # noqa: E402
 
 
-DREAMINA_MODEL = "Seedream 5.0"
+# Keep the runner label identical to comic-settings/build_panel_jobs.  The
+# official CLI calls the service Dreamina; using the adjacent product name
+# "Seedream" here made valid Dreamina 5.0 job packs fail the backend guard
+# before submission.
+DREAMINA_MODEL = "Dreamina 5.0"
 DREAMINA_CHANNEL = "Dreamina/即梦官方 CLI"
 DREAMINA_REFERENCE_LIMIT = 10
 DREAMINA_RATIOS = {
@@ -504,7 +508,7 @@ def main() -> int:
         prompt = build_prompt(job, records, ratio, correction=args.correction)
         prompt_path = root / "出图" / args.chapter / "prompt" / "dreamina" / f"{panel_id}.txt"
         prompt_path.parent.mkdir(parents=True, exist_ok=True)
-        prompt_path.write_text(prompt + "\n", encoding="utf-8")
+        prompt_path.write_text(prompt.rstrip() + "\n", encoding="utf-8")
         image_paths = [Path(record["abs_path"]) for record in records]
         started = time.monotonic()
         last_error = ""

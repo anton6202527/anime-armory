@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_DUAN_WANG",
+  "tier": "recurring_standard",
+  "model_pack_fingerprint": "da6e362e1d89f4aa008cc2d3560c135e0aa46fd9fba86ffb37380caf14c1654e",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+      "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+      "sha256": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+      "sha256": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "依据设定库/approval_delegation.json并排目检全部必需视图：同一面孔、头饰、服装、体态与宋画电影感连续；视图边界、手脚、文字水印及禁用项通过。",
+  "approved_at": "2026-07-18T02:33:13+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

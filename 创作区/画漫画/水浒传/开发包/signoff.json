@@ -4,10 +4,10 @@
   "decision": "approved",
   "reviewer": "Codex制作代理",
   "role": "用户授权制作代理",
-  "time": "2026-07-17T05:24:00Z",
-  "reason": "用户于 2026-07-17 明确要求开始第2话制作；第2话边界沿用已由出品人 lalala 批准的 season_arc，不并入高俅正式出场。",
+  "time": "2026-07-18T11:02:00+08:00",
+  "reason": "用户于 2026-07-18 明确要求按最新 comic skill 继续制作下一话；第3话边界沿用已由出品人 lalala 批准的 season_arc，严格消费S011–S027，不提前消费第4话的即位、升迁和王进冲突。",
   "amended_by": "Codex制作代理",
-  "amendment_reason": "在已批准前5话季弧内新增第2话正式 chapter contract，将 coverage_scope 推进到第2章；第1话合同与成品不变。",
+  "amendment_reason": "在已批准前5话季弧内新增第3话正式 chapter contract，以源语义分段例外解决第2话与第3话共用第2章的覆盖边界；第1–2话合同与成品不变。",
   "authorization_path": "设定库/approval_delegation.json",
   "prior_human_signoff": {
     "reviewer": "lalala",
@@ -18,6 +18,6 @@
   "file_sha256": {
     "adaptation_strategy": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
     "season_arc": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
-    "split_blueprint": "0c5ab1d10cecd1ec7dc89646875efc522fd911242b2fdda1080f274f7414922a"
+    "split_blueprint": "e7158b1f97865e37e74bc52757291d6ff707f5902ee498f6d40cf8af7ea7695d"
   }
 }

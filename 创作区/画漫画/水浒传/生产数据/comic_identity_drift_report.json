@@ -1,17 +1,18 @@
 {
   "kind": "comic_identity_drift_report",
   "version": 1,
-  "generated_at": "2026-07-17T13:54:11+00:00",
+  "generated_at": "2026-07-18T05:35:36+00:00",
   "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
   "summary": {
-    "chapters_scanned": 2,
-    "characters_tracked": 9,
+    "chapters_scanned": 3,
+    "characters_tracked": 14,
     "characters_with_drift": 0,
     "characters_block": 0
   },
   "chapters": [
     "第1话",
-    "第2话"
+    "第2话",
+    "第3话"
   ],
   "characters": [
     {
@@ -23,6 +24,34 @@
       "chapter_status": {
         "第1话": "ok",
         "第2话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_DONG_JIANGSHI",
+      "appeared_chapters": [
+        "第3话"
+      ],
+      "chapter_status": {
+        "第3话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_DUAN_WANG",
+      "appeared_chapters": [
+        "第3话"
+      ],
+      "chapter_status": {
+        "第3话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],
@@ -61,6 +90,20 @@
       "recommendation": null
     },
     {
+      "char_id": "CHAR_GAO_QIU",
+      "appeared_chapters": [
+        "第3话"
+      ],
+      "chapter_status": {
+        "第3话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
       "char_id": "CHAR_HONG_XIN",
       "appeared_chapters": [
         "第1话",
@@ -83,6 +126,34 @@
       ],
       "chapter_status": {
         "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_SU_XUESHI",
+      "appeared_chapters": [
+        "第3话"
+      ],
+      "chapter_status": {
+        "第3话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_WANG_DUWEI",
+      "appeared_chapters": [
+        "第3话"
+      ],
+      "chapter_status": {
+        "第3话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],

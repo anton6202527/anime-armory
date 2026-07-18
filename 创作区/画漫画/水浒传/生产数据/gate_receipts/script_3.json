@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_receipt",
+  "receipt_id": "f0be39d13d7bb954e7a3a2439921f54e000da57c86ba7f261a437af1f92169db",
+  "chapter": "3",
+  "stage": "script",
+  "created_at": "2026-07-18T10:58:24",
+  "verdict": "block",
+  "execution_authorized": false,
+  "inputs_fingerprint_sha256": "48f88f0adc988ffc0419e53a40966502f3a3f0c4852baf6ada64b902189dc1ba",
+  "panel_jobs_sha256": "",
+  "artifacts": {
+    "panel_jobs_path": "出图/3/prompt/panel_jobs.json",
+    "panel_jobs_sha256": ""
+  },
+  "report_path": "生产数据/comic_gate_script_3.json",
+  "report_sha256": "d4e15faa8ee0c9c8708c9665d6717bb0c5d826e1f57769b9b2c12ae862505270"
+}

@@ -2,10 +2,10 @@
   "kind": "comic_split_blueprint",
   "version": 2,
   "status": "confirmed",
-  "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。第1话完整覆盖原第一回，保留‘金光散去’的回末钩子。",
+  "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。第3话以高俅从市井帮闲进入端王权力轨道为完整闭环，在‘正式索为亲随’处收束，不抢跑第4话的端王即位、高俅升迁与报复王进。",
   "coverage_scope": {
     "planned_through": "第2章",
-    "reason": "第1话整话生产链已验收通过；当前滚动制作第2话，完整消费第2章源覆盖账，其中高俅正式出场及后续内容明确标记为后文带出。"
+    "reason": "第1–2话整话生产链已验收通过；当前滚动制作第3话，消费第2章S011–S027，以端王正式索高俅为亲随完成闭环；S028起的即位、升迁和王进线留给第4话。"
   },
   "chapters": [
     {
@@ -258,6 +258,135 @@
           },
           "PROP_IMPERIAL_EDICT": {
             "location": "收藏于上清宫御书匣。"
+          }
+        }
+      },
+      "status": "confirmed"
+    },
+    {
+      "chapter": "第3话",
+      "working_title": "球落端王府",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_CH003",
+          "source_path": "源本/水浒传.docx",
+          "start": "第2章",
+          "end": "第2章",
+          "coverage_exception": "第2话与第3话共用第2章源范围，但源语义账分段消费：第2话只消费S003–S010，第3话只消费S011–S027，其余段落按season_arc后文带出，不重复改编。"
+        }
+      ],
+      "reader_promise": "看一个被市井与正经门第层层排斥的浪荡子，如何只凭一脚蹴进最危险的权力门缝。",
+      "core_conflict": "高俅要在汴京求得容身之处，但每个看清他品性的人都只想将他转送出门；他的蹴球才能却恰好命中端王的偏好。",
+      "turning_point": "气球滚到高俅脚边，他以鸳鸯拐将球送回端王，从送礼亲随瞬间变成被权力直接看见的人。",
+      "payoff": "端王越过王都尉正式索要高俅为亲随；高俅站在门内，那只球成为第一枚开始咬合的权力齿轮。",
+      "ending_mode": "decision",
+      "budget": {
+        "unit": "panels",
+        "target": 46,
+        "soft_range": [42, 50]
+      },
+      "entry_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "东京浮浪帮闲，会蹴气球却无信行，被断配后刚因大赦返京。",
+            "visual_state": "二十余岁，清瘦灵活，旧布圆领短袍、软幞巾、布革混合腰带与磨损靴，背负小包裹。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "尚未即位的亲王，聪明俊俏，酷爱球戏、书画与精巧玩器。"
+          }
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "STORY_CHAPTER",
+          "field": "state",
+          "from": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。",
+          "to": "人间因果链已从高俅被端王选中启动，微小偏好开始与最高权力接驳。",
+          "panel_id": "P046",
+          "reason": "端王公开索要高俅为亲随，他的市井技艺正式进入宫府权力系统。"
+        },
+        {
+          "entity_id": "CHAR_GAO_QIU",
+          "field": "story_state",
+          "from": "东京浮浪帮闲，会蹴气球却无信行，被断配后刚因大赦返京。",
+          "to": "凭蹴球与逢迎获得端王直接青睐，已被正式索为王府亲随。",
+          "panel_id": "P045",
+          "reason": "王都尉当席应允将他留在端王府伏侍。"
+        },
+        {
+          "entity_id": "CHAR_GAO_QIU",
+          "field": "visual_state",
+          "from": "二十余岁，清瘦灵活，旧布圆领短袍、软幞巾、布革混合腰带与磨损靴，背负小包裹。",
+          "to": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。",
+          "panel_id": "P023",
+          "reason": "王都尉收留后给予府内亲随身份与穿着。"
+        },
+        {
+          "entity_id": "CHAR_DUAN_WANG",
+          "field": "story_state",
+          "from": "尚未即位的亲王，聪明俊俏，酷爱球戏、书画与精巧玩器。",
+          "to": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。",
+          "panel_id": "P045",
+          "reason": "端王的个人偏好第一次对高俅的命运产生制度性效力。"
+        },
+        {
+          "entity_id": "WORLD_ORDER",
+          "field": "state",
+          "from": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。",
+          "to": "汴京表面繁华如常，权力体系却已向蹴球与媚上的私人偏好打开入口。",
+          "panel_id": "P046",
+          "reason": "贵族之间以人情转送亲随，技艺取悦取代品德成为晋身标准。"
+        }
+      ],
+      "exit_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "人间因果链已从高俅被端王选中启动，微小偏好开始与最高权力接驳。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "汴京表面繁华如常，权力体系却已向蹴球与媚上的私人偏好打开入口。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "凭蹴球与逢迎获得端王直接青睐，已被正式索为王府亲随。",
+            "visual_state": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。"
           }
         }
       },

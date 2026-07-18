@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_GAO_QIU",
+  "tier": "core_full",
+  "model_pack_fingerprint": "ca36feb843f2638ed31c678f68eb969844557786342757d11c158745af76b20e",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+      "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+        "source_sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+      "sha256": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "side",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__side.png",
+      "sha256": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "back",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__back.png",
+      "sha256": "51a1880047ec1e65912384e3e871b240eb5522eede81317ad203b9b1127c03b9",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+      "sha256": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "依据设定库/approval_delegation.json并排审阅front/three_quarter/side/back/face：五官、软巾、清瘦长腿、服装层级与材质一致；three_quarter采用第二个有效结果，视图角度合格；色彩代理差异来自侧面留白与线色变化，不构成换人。",
+  "approved_at": "2026-07-18T02:25:01+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

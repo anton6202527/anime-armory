@@ -63,8 +63,9 @@ VIEW_RATIOS = {
 CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
 CODEX_EXECUTION_MODE = "isolated_ephemeral_workdir"
-DREAMINA_MODEL = "Dreamina image2image"
+DREAMINA_MODEL = "Dreamina"
 DREAMINA_CHANNEL = "Dreamina official CLI"
+DREAMINA_RATIOS = {"21:9", "16:9", "3:2", "4:3", "1:1", "3:4", "2:3", "9:16"}
 
 
 def load_json(path: Path) -> dict:
@@ -179,6 +180,36 @@ def load_registry(root: Path) -> dict:
 def codex_version() -> str:
     proc = subprocess.run(["codex", "--version"], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     return (proc.stdout or proc.stderr or "codex unknown").strip().splitlines()[0]
+
+
+def dreamina_version() -> str:
+    if not shutil.which("dreamina"):
+        return "unavailable"
+    proc = subprocess.run(
+        ["dreamina", "version"],
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    return (proc.stdout or proc.stderr or "dreamina unknown").strip().splitlines()[0]
+
+
+def dreamina_submitted_ratio(requested_ratio: str) -> str:
+    """Resolve an official Dreamina ratio while preserving the requested canvas."""
+    ratio = str(requested_ratio or "").strip()
+    if ratio in DREAMINA_RATIOS:
+        return ratio
+    if ratio == "4:5":
+        # The official CLI does not expose 4:5.  Submit 3:4, then use the
+        # existing contain-and-pad-no-crop normalizer to restore 4:5.
+        return "3:4"
+    raise SystemExit(
+        f"Dreamina official CLI does not support ratio={ratio!r}; "
+        f"supported: {','.join(sorted(DREAMINA_RATIOS))} "
+        "(4:5 may use the audited 3:4 + contain/pad adapter)"
+    )
 
 
 def codex_image_feature_status() -> str:
@@ -826,6 +857,92 @@ def submit_id_from(text: str) -> str:
     return ""
 
 
+def run_dreamina_text_image(
+    prompt: str,
+    out_path: Path,
+    *,
+    timeout_sec: int,
+    poll_sec: int,
+    model_version: str,
+    resolution_type: str,
+    ratio: str,
+) -> tuple[bool, str, str]:
+    """Generate a first anchor through Dreamina text2image, then download it."""
+    started_at = time.monotonic()
+    temp_root = Path(tempfile.gettempdir()) / "comic_identity_dreamina"
+    temp_root.mkdir(parents=True, exist_ok=True)
+    download_dir = temp_root / f"{out_path.stem}_text_download"
+    if download_dir.exists():
+        shutil.rmtree(download_dir)
+    download_dir.mkdir(parents=True, exist_ok=True)
+    cmd = [
+        "dreamina",
+        "text2image",
+        "--prompt",
+        prompt,
+        "--ratio",
+        ratio,
+        "--poll",
+        str(max(0, min(poll_sec, timeout_sec))),
+    ]
+    if model_version:
+        cmd.extend(["--model_version", model_version])
+    if resolution_type:
+        cmd.extend(["--resolution_type", resolution_type])
+    try:
+        proc = subprocess.run(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=timeout_sec,
+        )
+    except subprocess.TimeoutExpired:
+        return False, "", f"dreamina text2image timed out after {timeout_sec}s"
+    combined = "\n".join(p for p in (proc.stdout, proc.stderr) if p)
+    if proc.returncode != 0:
+        return False, "", f"dreamina text2image exit {proc.returncode}: {combined[-4000:]}"
+    submit_id = submit_id_from(combined)
+    if not submit_id:
+        return False, "", f"dreamina output did not include submit_id: {combined[-2000:]}"
+
+    qout = ""
+    while True:
+        remaining = timeout_sec - (time.monotonic() - started_at)
+        if remaining <= 0:
+            return False, submit_id, (
+                f"dreamina query_result produced no image before the {timeout_sec}s total timeout: "
+                f"{qout[-2000:]}"
+            )
+        try:
+            query = subprocess.run(
+                ["dreamina", "query_result", "--submit_id", submit_id, "--download_dir", str(download_dir)],
+                stdin=subprocess.DEVNULL,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+                timeout=max(1, int(remaining)),
+            )
+        except subprocess.TimeoutExpired:
+            return False, submit_id, f"dreamina query_result timed out after {timeout_sec}s total"
+        qout = "\n".join(p for p in (query.stdout, query.stderr) if p)
+        if query.returncode != 0:
+            return False, submit_id, f"dreamina query_result exit {query.returncode}: {qout[-4000:]}"
+        candidates = image_candidates(download_dir)
+        if candidates:
+            break
+        remaining = timeout_sec - (time.monotonic() - started_at)
+        if remaining <= 0:
+            continue
+        time.sleep(min(5.0, remaining))
+    if not materialize_png(candidates[0], out_path):
+        return False, submit_id, f"downloaded result is not a valid image or PNG conversion failed: {candidates[0]}"
+    return True, submit_id, ""
+
+
 def run_dreamina_image(
     prompt: str,
     anchor: Path,
@@ -837,6 +954,7 @@ def run_dreamina_image(
     resolution_type: str,
     ratio: str,
 ) -> tuple[bool, str, str]:
+    started_at = time.monotonic()
     temp_root = Path(tempfile.gettempdir()) / "comic_identity_dreamina"
     temp_root.mkdir(parents=True, exist_ok=True)
     download_dir = temp_root / f"{out_path.stem}_download"
@@ -877,24 +995,41 @@ def run_dreamina_image(
     submit_id = submit_id_from(combined)
     if not submit_id:
         return False, "", f"dreamina output did not include submit_id: {combined[-2000:]}"
-    try:
-        query = subprocess.run(
-            ["dreamina", "query_result", "--submit_id", submit_id, "--download_dir", str(download_dir)],
-            stdin=subprocess.DEVNULL,
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            check=False,
-            timeout=timeout_sec,
-        )
-    except subprocess.TimeoutExpired:
-        return False, submit_id, f"dreamina query_result timed out after {timeout_sec}s"
-    qout = "\n".join(p for p in (query.stdout, query.stderr) if p)
-    if query.returncode != 0:
-        return False, submit_id, f"dreamina query_result exit {query.returncode}: {qout[-4000:]}"
-    candidates = image_candidates(download_dir)
-    if not candidates:
-        return False, submit_id, f"dreamina query_result downloaded no image files: {qout[-2000:]}"
+    # ``image2image --poll`` may return successfully while the remote task is
+    # still queued.  A single immediate query used to turn that valid pending
+    # task into a false failure.  Keep querying the same submit_id until an
+    # artifact arrives or the caller's total timeout is exhausted; never
+    # resubmit here, which would waste attempts and weaken identity consistency.
+    qout = ""
+    while True:
+        remaining = timeout_sec - (time.monotonic() - started_at)
+        if remaining <= 0:
+            return False, submit_id, (
+                f"dreamina query_result produced no image before the {timeout_sec}s total timeout: "
+                f"{qout[-2000:]}"
+            )
+        try:
+            query = subprocess.run(
+                ["dreamina", "query_result", "--submit_id", submit_id, "--download_dir", str(download_dir)],
+                stdin=subprocess.DEVNULL,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+                timeout=max(1, int(remaining)),
+            )
+        except subprocess.TimeoutExpired:
+            return False, submit_id, f"dreamina query_result timed out after {timeout_sec}s total"
+        qout = "\n".join(p for p in (query.stdout, query.stderr) if p)
+        if query.returncode != 0:
+            return False, submit_id, f"dreamina query_result exit {query.returncode}: {qout[-4000:]}"
+        candidates = image_candidates(download_dir)
+        if candidates:
+            break
+        remaining = timeout_sec - (time.monotonic() - started_at)
+        if remaining <= 0:
+            continue
+        time.sleep(min(5.0, remaining))
     if not materialize_png(candidates[0], out_path):
         return False, submit_id, f"downloaded result is not a valid image or PNG conversion failed: {candidates[0]}"
     return True, submit_id, ""
@@ -2347,8 +2482,12 @@ def generate_anchor_candidates(
     candidate_count: int,
     max_attempts: int,
     timeout_sec: int,
+    poll_sec: int,
     ratio: str,
     visual_style: str,
+    backend: str,
+    model_version: str,
+    resolution_type: str,
     backend_version: str,
 ) -> int:
     """Generate review candidates without adopting them into the identity registry."""
@@ -2358,6 +2497,9 @@ def generate_anchor_candidates(
     ready_count = 0
     failed_count = 0
     items: list[dict[str, Any]] = []
+    channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
+    model = f"Dreamina {model_version}" if backend == "dreamina" else CODEX_MODEL
+    submitted_ratio = dreamina_submitted_ratio(ratio) if backend == "dreamina" else ratio
 
     for ref_id in refs:
         asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
@@ -2379,7 +2521,7 @@ def generate_anchor_candidates(
                 root,
                 chapter,
                 ref_id,
-                f"anchor_candidate_{candidate_index:02d}_codex",
+                f"anchor_candidate_{candidate_index:02d}_{backend}",
                 prompt,
             )
             out_dir = root / "出图" / "共享" / "candidates" / ref_id / "anchor" / batch_id
@@ -2387,31 +2529,83 @@ def generate_anchor_candidates(
             out_path = out_dir / f"candidate_{candidate_index:02d}.png"
             ready = False
             last_error = ""
-            for attempt in range(1, max(1, max_attempts) + 1):
-                proc = run_codex_image(
-                    prompt,
-                    repo,
-                    timeout_sec,
-                    [style_reference] if use_style_reference and style_reference else [],
+            while True:
+                attempt_id, attempt = begin_generation_attempt(
+                    root,
+                    chapter,
+                    generation_kind="anchor_candidate",
+                    asset_id=ref_id,
+                    variant=f"anchor_candidate_{candidate_index:02d}",
+                    max_attempts_total=max_attempts,
+                    backend=channel,
+                    model=model,
+                    prompt_sha256=prompt_sha256,
                 )
-                if proc.returncode != 0:
-                    last_error = format_failure(proc)
-                    print(
-                        f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
-                        f"attempt {attempt}/{max_attempts}: {last_error}",
-                        flush=True,
-                    )
-                    continue
+                if not attempt_id:
+                    last_error = f"累计尝试次数已达授权上限 {attempt}/{max_attempts}；未发起新的生图请求"
+                    break
                 pending = out_dir / f".candidate_{candidate_index:02d}__pending.png"
                 pending.unlink(missing_ok=True)
-                if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
-                    last_error = "codex completed but no valid image_generation_end PNG was available"
-                    print(
-                        f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
-                        f"attempt {attempt}/{max_attempts}: {last_error}",
-                        flush=True,
-                    )
-                    continue
+                submit_id = ""
+                if backend == "dreamina":
+                    if use_style_reference and style_reference:
+                        ok, submit_id, last_error = run_dreamina_image(
+                            prompt,
+                            style_reference,
+                            pending,
+                            timeout_sec=timeout_sec,
+                            poll_sec=poll_sec,
+                            model_version=model_version,
+                            resolution_type=resolution_type,
+                            ratio=submitted_ratio,
+                        )
+                    else:
+                        ok, submit_id, last_error = run_dreamina_text_image(
+                            prompt,
+                            pending,
+                            timeout_sec=timeout_sec,
+                            poll_sec=poll_sec,
+                            model_version=model_version,
+                            resolution_type=resolution_type,
+                            ratio=submitted_ratio,
+                        )
+                    if not ok or not png_valid(pending):
+                        finish_generation_attempt(root, chapter, attempt_id, status="failed", error=last_error)
+                        print(
+                            f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
+                            f"attempt {attempt}/{max_attempts}: {last_error}",
+                            flush=True,
+                        )
+                        continue
+                else:
+                    try:
+                        proc = run_codex_image(
+                            prompt,
+                            repo,
+                            timeout_sec,
+                            [style_reference] if use_style_reference and style_reference else [],
+                        )
+                    except KeyboardInterrupt:
+                        finish_generation_attempt(root, chapter, attempt_id, status="interrupted", error="interrupted")
+                        raise
+                    if proc.returncode != 0:
+                        last_error = format_failure(proc)
+                        finish_generation_attempt(root, chapter, attempt_id, status="failed", error=last_error)
+                        print(
+                            f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
+                            f"attempt {attempt}/{max_attempts}: {last_error}",
+                            flush=True,
+                        )
+                        continue
+                    if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
+                        last_error = "codex completed but no valid image_generation_end PNG was available"
+                        finish_generation_attempt(root, chapter, attempt_id, status="failed", error=last_error)
+                        print(
+                            f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
+                            f"attempt {attempt}/{max_attempts}: {last_error}",
+                            flush=True,
+                        )
+                        continue
                 raw_canvas_path = ""
                 canvas_normalization: dict[str, Any] = {}
                 dims = png_dimensions(pending)
@@ -2431,13 +2625,16 @@ def generate_anchor_candidates(
                     "path": rel_to_root(root, out_path),
                     "sha256": file_sha256(out_path),
                     "ratio": ratio,
-                    "backend": CODEX_CHANNEL,
-                    "model": CODEX_MODEL,
+                    "submitted_ratio": submitted_ratio,
+                    "backend": channel,
+                    "model": model,
                     "backend_version": backend_version,
                     "prompt_path": prompt_path,
                     "prompt_sha256": prompt_sha256,
                     "adopted": False,
                 }
+                if submit_id:
+                    row["submit_id"] = submit_id
                 if raw_canvas_path:
                     row.update({
                         "raw_canvas_path": raw_canvas_path,
@@ -2454,6 +2651,14 @@ def generate_anchor_candidates(
                     )
                 items.append(row)
                 append_event(root, row)
+                finish_generation_attempt(
+                    root,
+                    chapter,
+                    attempt_id,
+                    status="succeeded",
+                    artifact_path=rel_to_root(root, out_path),
+                    artifact_sha256=file_sha256(out_path),
+                )
                 ready_count += 1
                 ready = True
                 print(f"[ok] {ref_id} candidate {candidate_index} -> {row['path']}", flush=True)
@@ -2467,8 +2672,9 @@ def generate_anchor_candidates(
                     "candidate_index": candidate_index,
                     "candidate_count": candidate_count,
                     "ratio": ratio,
-                    "backend": CODEX_CHANNEL,
-                    "model": CODEX_MODEL,
+                    "submitted_ratio": submitted_ratio,
+                    "backend": channel,
+                    "model": model,
                     "error": last_error,
                     "adopted": False,
                 }
@@ -2485,9 +2691,13 @@ def generate_anchor_candidates(
         "refs": refs,
         "candidate_count_per_ref": candidate_count,
         "ratio": ratio,
-        "backend": CODEX_CHANNEL,
-        "model": CODEX_MODEL,
-        "execution_mode": CODEX_EXECUTION_MODE,
+        "submitted_ratio": submitted_ratio,
+        "backend": channel,
+        "model": model,
+        "backend_version": backend_version,
+        "execution_mode": CODEX_EXECUTION_MODE if backend == "codex" else "dreamina_official_cli",
+        "max_attempts_total": max_attempts,
+        "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, chapter)),
         "generated": ready_count,
         "failed": failed_count,
         "adopted": False,
@@ -2511,14 +2721,27 @@ def generate_anchors(args: argparse.Namespace) -> int:
     refs = parse_csv(args.refs, default_refs)
     if not refs:
         raise SystemExit("no non-CHAR assets found; pass --refs REF_ID")
-    if not shutil.which("codex"):
-        raise SystemExit("codex not found in PATH")
+    requested_backend = str(getattr(args, "backend", "codex") or "codex")
+    if requested_backend == "auto":
+        setting_channel = read_setting(root, "生图渠道", "")
+        backend = "dreamina" if any(token in setting_channel.lower() for token in ("dreamina", "即梦")) else "codex"
+    else:
+        backend = requested_backend
+    tool = "dreamina" if backend == "dreamina" else "codex"
+    if not shutil.which(tool):
+        raise SystemExit(f"项目选定的共享锚后端 {tool} 不在 PATH；不会静默切换渠道")
 
     shared_dir = root / "出图" / "共享" / "图片"
     shared_dir.mkdir(parents=True, exist_ok=True)
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
-    codex_backend_version = codex_version()
+    backend_version = dreamina_version() if backend == "dreamina" else codex_version()
     requested_ratio = str(getattr(args, "ratio", "4:5") or "4:5")
+    submitted_ratio = dreamina_submitted_ratio(requested_ratio) if backend == "dreamina" else requested_ratio
+    poll_sec = int(getattr(args, "poll_sec", 180) or 180)
+    model_version = str(getattr(args, "model_version", "5.0") or "5.0")
+    resolution_type = str(getattr(args, "resolution_type", "2k") or "2k")
+    channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
+    model = f"Dreamina {model_version}" if backend == "dreamina" else CODEX_MODEL
     candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
     if candidate_count:
         return generate_anchor_candidates(
@@ -2530,9 +2753,13 @@ def generate_anchors(args: argparse.Namespace) -> int:
             candidate_count=candidate_count,
             max_attempts=args.max_attempts,
             timeout_sec=args.timeout_sec,
+            poll_sec=poll_sec,
             ratio=requested_ratio,
             visual_style=visual_style,
-            backend_version=codex_backend_version,
+            backend=backend,
+            model_version=model_version,
+            resolution_type=resolution_type,
+            backend_version=backend_version,
         )
     style_reference = project_style_anchor(root, registry)
     generated = 0
@@ -2547,8 +2774,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
             source = existing_anchor_source(root, asset, dest) or {
                 "kind": "existing_text_anchor",
                 "chapter": args.chapter,
-                "backend": CODEX_CHANNEL,
-                "model": CODEX_MODEL,
+                "backend": channel,
+                "model": model,
             }
             source = dict(source)
             dims = png_dimensions(dest)
@@ -2595,7 +2822,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
             style_reference_attached=use_style_reference,
             aspect_ratio=requested_ratio,
         )
-        prompt_path, prompt_sha256 = prompt_snapshot(root, args.chapter, ref_id, "anchor_codex", prompt)
+        prompt_path, prompt_sha256 = prompt_snapshot(root, args.chapter, ref_id, f"anchor_{backend}", prompt)
         ready = False
         last_error = ""
         attempts_used = 0
@@ -2607,8 +2834,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 asset_id=ref_id,
                 variant="anchor",
                 max_attempts_total=args.max_attempts,
-                backend=CODEX_CHANNEL,
-                model=CODEX_MODEL,
+                backend=channel,
+                model=model,
                 prompt_sha256=prompt_sha256,
             )
             attempts_used = attempt
@@ -2621,11 +2848,13 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "attempt": attempt,
                 "attempts_used": attempt,
                 "attempts_authorized": args.max_attempts,
-                "backend": CODEX_CHANNEL,
-                "model": CODEX_MODEL,
-                "backend_version": codex_backend_version,
+                "backend": channel,
+                "model": model,
+                "backend_version": backend_version,
                 "prompt_path": prompt_path,
                 "prompt_sha256": prompt_sha256,
+                "requested_ratio": requested_ratio,
+                "submitted_ratio": submitted_ratio,
             }
             if use_style_reference and style_reference:
                 source.update(
@@ -2635,23 +2864,63 @@ def generate_anchors(args: argparse.Namespace) -> int:
                         "style_reference_role": "style_only",
                     }
                 )
-            try:
-                proc = run_codex_image(prompt, repo, args.timeout_sec, [style_reference] if use_style_reference and style_reference else [])
-            except KeyboardInterrupt:
-                finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
-                raise
-            if proc.returncode != 0:
-                last_error = format_failure(proc)
-                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
-                print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
-                continue
             candidate = dest.with_name(f".{dest.stem}__pending.png")
             candidate.unlink(missing_ok=True)
-            if not decode_image_event(proc.stdout, candidate):
-                last_error = "codex completed but no image_generation_end payload was available"
-                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
-                print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
-                continue
+            submit_id = ""
+            if backend == "dreamina":
+                if use_style_reference and style_reference:
+                    ok, submit_id, last_error = run_dreamina_image(
+                        prompt,
+                        style_reference,
+                        candidate,
+                        timeout_sec=args.timeout_sec,
+                        poll_sec=poll_sec,
+                        model_version=model_version,
+                        resolution_type=resolution_type,
+                        ratio=submitted_ratio,
+                    )
+                else:
+                    ok, submit_id, last_error = run_dreamina_text_image(
+                        prompt,
+                        candidate,
+                        timeout_sec=args.timeout_sec,
+                        poll_sec=poll_sec,
+                        model_version=model_version,
+                        resolution_type=resolution_type,
+                        ratio=submitted_ratio,
+                    )
+                if not ok or not png_valid(candidate):
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {ref_id} dreamina attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+                source.update(
+                    {
+                        "model_version": model_version,
+                        "resolution_type": resolution_type,
+                        "submit_id": submit_id,
+                    }
+                )
+            else:
+                try:
+                    proc = run_codex_image(
+                        prompt,
+                        repo,
+                        args.timeout_sec,
+                        [style_reference] if use_style_reference and style_reference else [],
+                    )
+                except KeyboardInterrupt:
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                    raise
+                if proc.returncode != 0:
+                    last_error = format_failure(proc)
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+                if not decode_image_event(proc.stdout, candidate) or not png_valid(candidate):
+                    last_error = "codex completed but no image_generation_end payload was available"
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
             dims = png_dimensions(candidate)
             if dims and target_canvas_for_ratio(dims, requested_ratio) != dims:
                 raw_stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
@@ -2676,13 +2945,17 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "ref_id": ref_id,
                 "path": rel_to_root(root, dest),
                 "sha256": file_sha256(dest),
-                "backend": CODEX_CHANNEL,
-                "model": CODEX_MODEL,
-                "backend_version": codex_backend_version,
+                "backend": channel,
+                "model": model,
+                "backend_version": backend_version,
                 "attempt": attempt,
                 "prompt_path": prompt_path,
                 "prompt_sha256": prompt_sha256,
+                "requested_ratio": requested_ratio,
+                "submitted_ratio": submitted_ratio,
             }
+            if submit_id:
+                row["submit_id"] = submit_id
             for key in (
                 "style_reference_path",
                 "style_reference_sha256",
@@ -2714,8 +2987,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "ts": dt.datetime.now().isoformat(timespec="seconds"),
                 "status": "reference_anchor_failed",
                 "ref_id": ref_id,
-                "backend": CODEX_CHANNEL,
-                "model": CODEX_MODEL,
+                "backend": channel,
+                "model": model,
                 "attempts_used": attempts_used,
                 "attempts_authorized": args.max_attempts,
                 "error": last_error,
@@ -2733,9 +3006,12 @@ def generate_anchors(args: argparse.Namespace) -> int:
         "chapter": args.chapter,
         "created_at": dt.datetime.now().isoformat(timespec="seconds"),
         "refs": refs,
-        "backend": CODEX_CHANNEL,
-        "model": CODEX_MODEL,
-        "execution_mode": CODEX_EXECUTION_MODE,
+        "backend": channel,
+        "model": model,
+        "backend_version": backend_version,
+        "requested_ratio": requested_ratio,
+        "submitted_ratio": submitted_ratio,
+        "execution_mode": CODEX_EXECUTION_MODE if backend == "codex" else "dreamina_official_cli",
         "max_attempts_total": args.max_attempts,
         "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, args.chapter)),
         "previous_manifest_archive": previous_manifest_archive,
@@ -3278,15 +3554,25 @@ def migrate_outfit_attempts_from_manifest(
 def generate_outfit_references(args: argparse.Namespace) -> int:
     root = Path(args.project_root).expanduser().resolve()
     repo = repo_root(root)
-    if not shutil.which("codex"):
-        raise SystemExit("codex not found in PATH")
+    if args.backend == "auto":
+        selected_channel = read_setting(root, "生图渠道", "")
+        backend = "dreamina" if any(token in selected_channel.lower() for token in ("dreamina", "即梦")) else "codex"
+    else:
+        backend = args.backend
+    tool = "dreamina" if backend == "dreamina" else "codex"
+    if not shutil.which(tool):
+        raise SystemExit(f"项目选定的换装锚后端 {tool} 不在 PATH；不会静默切换渠道")
     registry = load_registry(root)
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     bindings = parse_outfit_bindings(args.bindings)
     shared_dir = root / "出图" / "共享" / "图片"
     shared_dir.mkdir(parents=True, exist_ok=True)
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
-    backend_version = codex_version()
+    backend_version = dreamina_version() if backend == "dreamina" else codex_version()
+    channel = DREAMINA_CHANNEL if backend == "dreamina" else CODEX_CHANNEL
+    model = f"Dreamina {args.model_version}" if backend == "dreamina" else CODEX_MODEL
+    requested_ratio = str(args.ratio or "3:4")
+    submitted_ratio = dreamina_submitted_ratio(requested_ratio) if backend == "dreamina" else requested_ratio
     generated = 0
     skipped = 0
     failed = 0
@@ -3366,7 +3652,7 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
             root,
             args.chapter,
             character_id,
-            f"outfit_{outfit_id}_codex",
+            f"outfit_{outfit_id}_{backend}",
             prompt,
         )
         ready = False
@@ -3380,48 +3666,72 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
                 asset_id=character_id,
                 variant=outfit_id,
                 max_attempts_total=args.max_attempts,
-                backend=CODEX_CHANNEL,
-                model=CODEX_MODEL,
+                backend=channel,
+                model=model,
                 prompt_sha256=prompt_sha,
             )
             attempts_used = attempt
             if not attempt_id:
                 last_error = f"累计尝试次数已达授权上限 {attempt}/{args.max_attempts}；未发起新的生图请求"
                 break
-            try:
-                proc = run_codex_image(prompt, repo, args.timeout_sec, [front])
-            except KeyboardInterrupt:
-                finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
-                raise
-            if proc.returncode != 0:
-                last_error = format_failure(proc)
-                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
-                print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
-                continue
             pending = dest.with_name(f".{dest.stem}__pending.png")
             pending.unlink(missing_ok=True)
-            if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
-                last_error = "codex completed but no valid image_generation_end PNG was available"
-                finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
-                print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
-                continue
+            submit_id = ""
+            if backend == "dreamina":
+                ok, submit_id, last_error = run_dreamina_image(
+                    prompt,
+                    front,
+                    pending,
+                    timeout_sec=args.timeout_sec,
+                    poll_sec=args.poll_sec,
+                    model_version=args.model_version,
+                    resolution_type=args.resolution_type,
+                    ratio=submitted_ratio,
+                )
+                if not ok:
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+            else:
+                try:
+                    proc = run_codex_image(prompt, repo, args.timeout_sec, [front])
+                except KeyboardInterrupt:
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="interrupted", error="interrupted")
+                    raise
+                if proc.returncode != 0:
+                    last_error = format_failure(proc)
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
+                if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
+                    last_error = "codex completed but no valid image_generation_end PNG was available"
+                    finish_generation_attempt(root, args.chapter, attempt_id, status="failed", error=last_error)
+                    print(f"[retry] {character_id}/{outfit_id} attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
+                    continue
             source: dict[str, Any] = {
                 "kind": "generated_outfit_reference",
                 "character_id": character_id,
                 "outfit_id": outfit_id,
                 "chapter": args.chapter,
                 "attempt": attempt,
-                "backend": CODEX_CHANNEL,
-                "model": CODEX_MODEL,
+                "backend": channel,
+                "model": model,
                 "backend_version": backend_version,
                 "identity_anchor_path": rel_to_root(root, front),
                 "identity_anchor_sha256": file_sha256(front),
                 "prompt_path": prompt_path,
                 "prompt_sha256": prompt_sha,
-                "ratio": args.ratio,
+                "requested_ratio": requested_ratio,
+                "submitted_ratio": submitted_ratio,
                 "attempts_used": attempt,
                 "attempts_authorized": args.max_attempts,
             }
+            if backend == "dreamina":
+                source.update({
+                    "model_version": args.model_version,
+                    "resolution_type": args.resolution_type,
+                    "submit_id": submit_id,
+                })
             target_canvas = png_dimensions(front)
             if target_canvas and png_dimensions(pending) != target_canvas:
                 raw_stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
@@ -3482,9 +3792,12 @@ def generate_outfit_references(args: argparse.Namespace) -> int:
         "chapter": args.chapter,
         "created_at": dt.datetime.now().isoformat(timespec="seconds"),
         "bindings": [{"character_id": cid, "outfit_id": oid} for cid, oid in bindings],
-        "backend": CODEX_CHANNEL,
-        "model": CODEX_MODEL,
-        "execution_mode": CODEX_EXECUTION_MODE,
+        "backend": channel,
+        "model": model,
+        "model_version": args.model_version if backend == "dreamina" else "",
+        "execution_mode": CODEX_EXECUTION_MODE if backend == "codex" else "dreamina_official_cli",
+        "requested_ratio": requested_ratio,
+        "submitted_ratio": submitted_ratio,
         "max_attempts_total": args.max_attempts,
         "attempt_ledger": rel_to_root(root, generation_attempt_ledger_path(root, args.chapter)),
         "previous_manifest_archive": previous_manifest_archive,
@@ -3648,6 +3961,20 @@ def generate_views(args: argparse.Namespace) -> int:
                 if view == "front" and args.allow_text_anchor and "codex" in available:
                     use_text_anchor = True
                     anchor_kind = "text_prompt_seed"
+                elif (
+                    view == "front"
+                    and args.allow_text_anchor
+                    and "dreamina" in available
+                    and style_reference
+                    and png_valid(style_reference)
+                ):
+                    # Dreamina text-seeded character fronts still need a real
+                    # image2image attachment.  The adopted STYLE_ anchor fills
+                    # that role as style_only; it is never an identity source.
+                    use_text_anchor = True
+                    anchor = style_reference
+                    anchor_is_valid = True
+                    anchor_kind = "style_only_text_prompt_seed"
                 else:
                     print(f"[fail] {character_id} {view}: anchor missing or invalid: {anchor}", flush=True)
                     failed += 1
@@ -3664,7 +3991,11 @@ def generate_views(args: argparse.Namespace) -> int:
                     )
                     continue
             anchor_rel = rel_to_root(root, anchor) if anchor_is_valid else ""
-            backend_candidates = ["codex"] if use_text_anchor else available
+            backend_candidates = (
+                ["dreamina"]
+                if use_text_anchor and anchor_kind == "style_only_text_prompt_seed"
+                else (["codex"] if use_text_anchor else available)
+            )
             prompt_by_backend = {
                 "codex": (
                     character_text_anchor_prompt(
@@ -3684,13 +4015,23 @@ def generate_views(args: argparse.Namespace) -> int:
                         backend="codex",
                     )
                 ),
-                "dreamina": character_view_prompt(
-                    character_id,
-                    view,
-                    notes,
-                    visual_style=visual_style,
-                    asset_contract=asset_contract,
-                    backend="dreamina",
+                "dreamina": (
+                    character_text_anchor_prompt(
+                        character_id,
+                        notes,
+                        visual_style=visual_style,
+                        asset_contract=asset_contract,
+                        style_reference_attached=bool(style_reference),
+                    )
+                    if use_text_anchor
+                    else character_view_prompt(
+                        character_id,
+                        view,
+                        notes,
+                        visual_style=visual_style,
+                        asset_contract=asset_contract,
+                        backend="dreamina",
+                    )
                 ),
             }
             prompt_records = {
@@ -3711,7 +4052,7 @@ def generate_views(args: argparse.Namespace) -> int:
                 for backend in backend_candidates:
                     last_backend = backend
                     backend_label = CODEX_CHANNEL if backend == "codex" else DREAMINA_CHANNEL
-                    model_label = CODEX_MODEL if backend == "codex" else DREAMINA_MODEL
+                    model_label = CODEX_MODEL if backend == "codex" else f"Dreamina {args.model_version}"
                     attempt_id, attempt = begin_generation_attempt(
                         root,
                         args.chapter,
@@ -3781,9 +4122,17 @@ def generate_views(args: argparse.Namespace) -> int:
                         ratio = args.face_ratio if view == "face" else args.ratio
                         if not ratio:
                             ratio = VIEW_RATIOS.get(view, "3:4")
+                        if use_text_anchor and style_reference:
+                            source.update(
+                                {
+                                    "style_reference_path": rel_to_root(root, style_reference),
+                                    "style_reference_sha256": file_sha256(style_reference),
+                                    "style_reference_role": "style_only",
+                                }
+                            )
                         ok, submit_id, error = run_dreamina_image(
                             prompt_by_backend["dreamina"],
-                            anchor,
+                            style_reference if use_text_anchor and style_reference else anchor,
                             candidate,
                             timeout_sec=args.timeout_sec,
                             poll_sec=args.poll_sec,
@@ -3794,7 +4143,7 @@ def generate_views(args: argparse.Namespace) -> int:
                         source.update(
                             {
                                 "backend": DREAMINA_CHANNEL,
-                                "model": DREAMINA_MODEL,
+                                "model": f"Dreamina {args.model_version}",
                                 "model_version": args.model_version,
                                 "resolution_type": args.resolution_type,
                                 "ratio": ratio,
@@ -3979,9 +4328,18 @@ def main() -> int:
         default=0,
         help="每个 REF_ID 生成指定数量的待审候选；候选不写入正式 registry",
     )
-    p_anchors.add_argument("--ratio", default="4:5", help="Codex 候选锚点画幅；默认 4:5")
+    p_anchors.add_argument(
+        "--backend",
+        choices=("auto", "codex", "dreamina"),
+        default="auto",
+        help="auto 严格沿用项目已选生图渠道，不静默切换",
+    )
+    p_anchors.add_argument("--ratio", default="4:5", help="共享锚点目标画幅；默认 4:5")
     p_anchors.add_argument("--max-attempts", type=int, default=1)
-    p_anchors.add_argument("--timeout-sec", type=int, default=240)
+    p_anchors.add_argument("--timeout-sec", type=int, default=600)
+    p_anchors.add_argument("--poll-sec", type=int, default=180, help="Dreamina 轮询秒数")
+    p_anchors.add_argument("--model-version", default="5.0", help="Dreamina 具体模型版本")
+    p_anchors.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
     p_anchors.set_defaults(func=generate_anchors)
 
     p_adopt_anchor = sub.add_parser("adopt-anchor", help="采纳已人工选中的共享锚或角色 front 候选")
@@ -3999,9 +4357,14 @@ def main() -> int:
         help="逗号分隔 CHAR_ID=OUTFIT_ID，如 CHAR_A=OUTFIT_TRAVEL",
     )
     p_outfits.add_argument("--overwrite", action="store_true", help="覆盖已有服装参考")
+    p_outfits.add_argument("--backend", choices=("auto", "codex", "dreamina"), default="auto",
+                           help="auto 严格沿用项目已选生图渠道，不静默切换")
     p_outfits.add_argument("--ratio", default="3:4", help="服装全身参考画幅")
     p_outfits.add_argument("--max-attempts", type=int, default=1)
-    p_outfits.add_argument("--timeout-sec", type=int, default=240)
+    p_outfits.add_argument("--timeout-sec", type=int, default=600)
+    p_outfits.add_argument("--poll-sec", type=int, default=180, help="Dreamina 轮询秒数")
+    p_outfits.add_argument("--model-version", default="5.0", help="Dreamina image2image 模型版本")
+    p_outfits.add_argument("--resolution-type", default="2k", help="Dreamina 输出规格")
     p_outfits.set_defaults(func=generate_outfit_references)
 
     p_expressions = sub.add_parser("expressions", help="基于已采纳 face/front 生成结构化表情锚")

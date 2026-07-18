@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "kind": "comic_continuity_audit",
-  "created_at": "2026-07-17T13:36:49+00:00",
+  "created_at": "2026-07-18T05:34:10+00:00",
   "project_root": ".",
-  "through_chapter": "第2话",
+  "through_chapter": "第3话",
   "summary": {
-    "chapters": 2,
+    "chapters": 3,
     "block": 0,
     "warn": 0,
     "info": 0
@@ -147,6 +147,97 @@
           },
           "PROP_IMPERIAL_EDICT": {
             "location": "收藏于上清宫御书匣。"
+          }
+        }
+      }
+    },
+    {
+      "chapter": "第3话",
+      "panel_script_path": "脚本/第3话/panel_script.json",
+      "panel_script_sha256": "59c390221e00c26b00af5b642de65498789e6ad6e106f83aaf8a5708672d8622",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "天罡地煞的来历已揭明，洪信成功隐瞒真相，神话灾变将转入具体人间命运。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "京师瘟疫平息、官家秩序恢复如常，但一百零八星的长期因果已不可逆。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "东京浮浪帮闲，会蹴气球却无信行，被断配后刚因大赦返京。",
+            "visual_state": "二十余岁，清瘦灵活，旧布圆领短袍、软幞巾、布革混合腰带与磨损靴，背负小包裹。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "尚未即位的亲王，聪明俊俏，酷爱球戏、书画与精巧玩器。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "人间因果链已从高俅被端王选中启动，微小偏好开始与最高权力接驳。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "汴京表面繁华如常，权力体系却已向蹴球与媚上的私人偏好打开入口。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "凭蹴球与逢迎获得端王直接青睐，已被正式索为王府亲随。",
+            "visual_state": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "人间因果链已从高俅被端王选中启动，微小偏好开始与最高权力接驳。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "汴京表面繁华如常，权力体系却已向蹴球与媚上的私人偏好打开入口。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "凭蹴球与逢迎获得端王直接青睐，已被正式索为王府亲随。",
+            "visual_state": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。"
           }
         }
       }

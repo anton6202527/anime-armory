@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第3话",
+  "panel_id": "P039",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 10,
+  "references": [
+    {
+      "id": "CHAR_DUAN_WANG",
+      "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+      "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+      "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_DUAN_WANG_COURT",
+      "path": "出图/共享/图片/LOC_DUAN_WANG_COURT__anchor.png",
+      "sha256": "63d060ad2b751bc33efbd5237d537dcb2a4632a0a38bea3cd2261f5903602c7e",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_CUJU_BALL",
+      "path": "出图/共享/图片/PROP_CUJU_BALL__anchor.png",
+      "sha256": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_DUAN_WANG",
+      "path": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+      "sha256": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+      "sha256": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_DUAN_WANG",
+      "path": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+      "sha256": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe",
+      "role": "three_quarter",
+      "required": false
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__OUTFIT_WANG_ATTENDANT.png",
+      "sha256": "9f796a51a74cee3672c6bbdfafa275b1193afea4ae1d8a2e3183d90e66cfbaaf",
+      "role": "outfit",
+      "required": false
+    },
+    {
+      "id": "CHAR_GAO_QIU",
+      "path": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+      "sha256": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T12:42:53"
+}

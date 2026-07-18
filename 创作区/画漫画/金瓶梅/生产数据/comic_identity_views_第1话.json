@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-18T12:46:58",
+  "characters": [
+    "CHAR_WU_DA",
+    "MON_JINGYANG_TIGER"
+  ],
+  "views": [
+    "three_quarter"
+  ],
+  "backend": "dreamina",
+  "attempted_backends": [
+    "dreamina"
+  ],
+  "codex_execution_mode": "",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_views_第1话__20260718T124658251061.json",
+  "previous_manifest_sha256": "e2dfaeb5db7667ce45f8d309c9be26d56d2d6a6589fb363d3b965426267df3f3",
+  "contact_sheet": "生产数据/comic_identity_views_第1话_contact_sheet.jpg",
+  "generated": 2,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-18T12:46:04",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_WU_DA",
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+      "sha256": "821882b418c8f3dd5fc1141a988fbe0713513788c3f15b853d9f332e92ebe2b8",
+      "anchor_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 2,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "8977c04c-b17c-466a-9536-3126ce9d7f1e",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_DA__three_quarter_dreamina__20260718T124507668732.md",
+      "prompt_sha256": "eca691c4bd2348824d94e49b8b986576c0e0319a4549ff0dd0488e7d164f8cb6",
+      "archived_previous_path": "出图/共享/candidates/CHAR_WU_DA/three_quarter/20260718T124604182404__b32cd12fe241.png"
+    },
+    {
+      "ts": "2026-07-18T12:46:58",
+      "status": "character_view_ready",
+      "ref_id": "MON_JINGYANG_TIGER",
+      "view": "three_quarter",
+      "path": "出图/共享/图片/MON_JINGYANG_TIGER__three_quarter.png",
+      "sha256": "ace3e8de6b47d87913592cc9993647f99ac142570ec1e8d202c559deadeb39cd",
+      "anchor_path": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 2,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "50151b28-ff8d-4e3a-8487-feb877658d84",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_JINGYANG_TIGER__three_quarter_dreamina__20260718T124604302555.md",
+      "prompt_sha256": "4d75743bf3f34bce6980e297705a9e67f77ff0ca26aaa0eca75fa59d8000ed4b",
+      "archived_previous_path": "出图/共享/candidates/MON_JINGYANG_TIGER/three_quarter/20260718T124658051271__25fddb6c2342.png"
+    }
+  ]
+}

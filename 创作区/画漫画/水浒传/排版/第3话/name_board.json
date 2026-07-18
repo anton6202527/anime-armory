@@ -1,0 +1,2912 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第3话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 judgment",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:重揭示长停顿；P002:重揭示长停顿；P003:连续推进；P004:重揭示长停顿；P005:连续推进；P006:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "汴京暮色上空一颗暗金星芒坠入瓦舍，落地视觉匹配切成一只赭褐皮蹴鞠球。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 129,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 86,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 384,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅在瓦舍人群间以脚背稳稳托球，清瘦长腿与单侧嘴角先被看见。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 441,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 696,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "短兵、乐器、相扑绳与笔墨在画面四角形成杂艺蒙太奇，高俅从中穿过。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_N1",
+              "type": "narration",
+              "content_ref": "panel:P003.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 734,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.narration",
+              "rect": {
+                "x": 185,
+                "y": 705,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 913,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅掌心掠过仁义礼智信五枚无字木牌，却一枚不取，转身追逐酒局。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 970,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 927,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1225,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "酒楼帘幕后，高俅把富家子弟引向骰盅、歌席和挥霍的人群。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1263,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1442,
+            "w": 1296,
+            "h": 286
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "开封府阴影中只见杖影落下，高俅咬牙伏地，避免展示血腥。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P006_S1",
+              "type": "sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1499,
+                "w": 777,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "judgment"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 arrival",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:连续推进；P008:连续推进；P009:连续推进；P010:连续推进；P011:连续推进；P012:连续推进",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "城门在身后闭合，高俅背小包袱独自走入冷灰驿道。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P007_N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 122,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 185,
+                "y": 84,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 352,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "三轮季节叠影掠过临淮客舍窗格，高俅在窗边练脚步。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 402,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 185,
+                "y": 364,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "赦令卷轴只作无字纹理从官差手中展开，阳光越过门槛。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_N1",
+              "type": "narration",
+              "content_ref": "panel:P009.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 682,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.narration",
+              "rect": {
+                "x": 185,
+                "y": 644,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "柳家人的手把空白荐书、盘缠和小包袱递给高俅，高俅压住喜色。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P010_N1",
+              "type": "narration",
+              "content_ref": "panel:P010.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 962,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.narration",
+              "rect": {
+                "x": 185,
+                "y": 924,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "高俅沿河桥向汴京城门走去，荐书贴身收好。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1242,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1472,
+            "w": 1188,
+            "h": 256
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "金梁桥下药铺门帘被掀开，高俅抱拳投帖，董将士在柜后抬眼。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1523,
+                "w": 712,
+                "h": 179
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1484,
+                "w": 475,
+                "h": 85
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "arrival"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 handoff_two_entry",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P018",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ]
+      },
+      "gutter_intent": "P013:重揭示长停顿；P014:连续推进；P015:连续推进；P016:重揭示长停顿；P017:连续推进；P018:连续推进",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "董将士看信后侧目打量高俅，孩子的剪影从后帘探出又被他挡回。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 137,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 424,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "董将士换上笑脸引高俅入内，手却牢牢按着通往内院的门。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "董将士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "董将士"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 467,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 434,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 668,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "十余只空碗与日影叠化，高俅安坐，董将士在远处焦虑踱步。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 711,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 185,
+                "y": 678,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 912,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "董将士将一套整洁衣物和第二封空白荐书推到高俅面前。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P016_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "董将士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "董将士"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 977,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 928,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 928,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1264,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "高俅立即起身作揖，嘴角一侧上挑，双手稳接荐书。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P017_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1307,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1274,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1508,
+            "w": 1188,
+            "h": 220
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "学士府外，高俅在门阶下候见，小苏学士从帘后看完荐书。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1552,
+                "w": 712,
+                "h": 154
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P018",
+          "story_function": "handoff_two_entry"
+        },
+        "payoff": {
+          "panel_id": "P019",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_004",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P024 belonging",
+      "eye_flow_path": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P019",
+        "exit_panel_id": "P024",
+        "path": [
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024"
+        ]
+      },
+      "gutter_intent": "P019:重揭示长停顿；P020:连续推进；P021:重揭示长停顿；P022:重揭示长停顿；P023:重揭示长停顿；P024:连续推进",
+      "panels": [
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "小苏学士把荐书合上，目光越过高俅投向更高的一扇府门。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 129,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 384,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "第三封空白荐书落到高俅掌中，小苏学士保持疏离。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P020_N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P020_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P020.dialogue:1",
+              "speaker": "小苏学士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "小苏学士"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 422,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 185,
+                "y": 393,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 393,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 601,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "三扇门的叠影在高俅身后次第合拢，前方驸马府门开启。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 658,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 913,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王都尉在前厅接过荐书，见高俅姿态机敏，当即露出兴味。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P022_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "王都尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王都尉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 970,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 927,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1225,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅换上青灰亲随长袍，空白素木令牌垂在腰侧，镜面只映同一张脸。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P023_N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1282,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 136,
+                "y": 1239,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1537,
+            "w": 1188,
+            "h": 191
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "高俅捧物穿行府内，门房和仆从自然让路，他已像府中家人。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P024_N1",
+              "type": "narration",
+              "content_ref": "panel:P024.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1575,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.narration",
+              "rect": {
+                "x": 185,
+                "y": 1546,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P024",
+          "story_function": "belonging"
+        },
+        "payoff": {
+          "panel_id": "P025",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_005",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P030 study_discovery",
+      "eye_flow_path": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P025",
+        "exit_panel_id": "P030",
+        "path": [
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030"
+        ]
+      },
+      "gutter_intent": "P025:连续推进；P026:重揭示长停顿；P027:连续推进；P028:连续推进；P029:连续推进；P030:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P025",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "府中摆宴，王都尉立在宴厅中轴吩咐，高俅在画左候命。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P025_N1",
+              "type": "narration",
+              "content_ref": "panel:P025.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 115,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.narration",
+              "rect": {
+                "x": 185,
+                "y": 82,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P026",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 316,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "端王步入宴厅，年轻俊秀而克制，目光先扫过乐器与球具。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 381,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P027",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 668,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "宝鼎轻烟、金瓶花枝、乐工剪影和席面冷暖交错，人物不看镜头。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 711,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P028",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "珍馐器皿、银丝鲊与规整座次以克制近景掠过，画面边缘只留无脸宾客袖口，不出现具名人物面部。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 955,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P029",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1156,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "歌舞长袖掠过前景，端王与王都尉谈笑，宴席声场推向高潮。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1199,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P030",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1400,
+            "w": 1296,
+            "h": 328
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "宴后端王走入书院，忽然停在案前一对羊脂玉卧狮旁。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1465,
+                "w": 777,
+                "h": 229
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P030",
+          "story_function": "study_discovery"
+        },
+        "payoff": {
+          "panel_id": "P031",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_006",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P036 missed_ball",
+      "eye_flow_path": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P031",
+        "exit_panel_id": "P036",
+        "path": [
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036"
+        ]
+      },
+      "gutter_intent": "P031:连续推进；P032:连续推进；P033:重揭示长停顿；P034:连续推进；P035:重揭示长停顿；P036:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P031",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "端王双手托起一只玉狮，另一只仍在案上，数量关系清楚。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P031_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 112,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 82,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P032",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 301,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "王都尉指向空金盒，示意另有玉龙笔架相配。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P032_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "王都尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王都尉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 341,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 311,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P033",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 530,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "次日，高俅双臂稳抱金盒与黄罗包袱走出驸马府，两狮一龙收纳关系明确。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P033_N1",
+              "type": "narration",
+              "content_ref": "panel:P033.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 590,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.narration",
+              "rect": {
+                "x": 136,
+                "y": 545,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P034",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 861,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "端王府内门开启，高俅在画左候见区停步，堂候官接走礼盒。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 901,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P035",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1090,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "庭心端王与近侍踢宋代赭褐皮球，廊下高俅垂手等候。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1150,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P036",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1421,
+            "w": 1296,
+            "h": 307
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "端王一脚漏接，皮球沿石地从画右滚向画左，运动轨迹清楚。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P036_S1",
+              "type": "sfx",
+              "content_ref": "panel:P036.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1482,
+                "w": 777,
+                "h": 214
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1436,
+                "w": 518,
+                "h": 102
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P036",
+          "story_function": "missed_ball"
+        },
+        "payoff": {
+          "panel_id": "P037",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_007",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P042 feigned_modesty",
+      "eye_flow_path": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P037",
+        "exit_panel_id": "P042",
+        "path": [
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042"
+        ]
+      },
+      "gutter_intent": "P037:重揭示长停顿；P038:重揭示长停顿；P039:重揭示长停顿；P040:连续推进；P041:连续推进；P042:连续推进",
+      "panels": [
+        {
+          "panel_id": "P037",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "极近景：赭褐皮球抵到高俅薄底靴前，脚背与球明确接触。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P037_S1",
+              "type": "sfx",
+              "content_ref": "panel:P037.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P038",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 403,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅脚尖轻挑、侧身一转，以鸳鸯拐将球弧线送回端王，手脚完整。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P038_S1",
+              "type": "sfx",
+              "content_ref": "panel:P038.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 463,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P039",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 734,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "端王稳稳接球，第一次正眼看向廊下高俅；球停在他脚边。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P039_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 794,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 749,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P040",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1065,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "高俅俯身但不跪倒，王府空白令牌可见，堂候官在远处收存玉盒。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P040_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P040.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1105,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1075,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P041",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1294,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "端王以脚尖压球，目光不离高俅，示意他近前。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P041_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P041.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1334,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1304,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P042",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "连续推进",
+          "camera_hint": "高俅抬眼估量端王神色，嘴上谦退，身体已向球场倾斜。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P042_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P042.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P042",
+          "story_function": "feigned_modesty"
+        },
+        "payoff": {
+          "panel_id": "P043",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_008",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P046 decision",
+      "eye_flow_path": [
+        "P043",
+        "P044",
+        "P045",
+        "P046"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P043",
+        "exit_panel_id": "P046",
+        "path": [
+          "P043",
+          "P044",
+          "P045",
+          "P046"
+        ]
+      },
+      "gutter_intent": "P043:重揭示长停顿；P044:重揭示长停顿；P045:重揭示长停顿；P046:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P043",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高俅束起前襟连续控球，脚背、膝腿与皮球接触点逐次清楚，端王在画右追看。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P043_S1",
+              "type": "sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 150,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 91,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P044",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 492,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "暮色落入廊庑，端王把皮球递回高俅，命人设席留宿。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P044_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P044.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 570,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 511,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P045",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 912,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "次日王都尉到府，端王与他对坐，高俅静立画左后方。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P045_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "端王",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "端王"
+              }
+            },
+            {
+              "balloon_id": "P045_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:2",
+              "speaker": "王都尉",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王都尉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 990,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 931,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:2",
+              "rect": {
+                "x": 784,
+                "y": 931,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        },
+        {
+          "panel_id": "P046",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1332,
+            "w": 1296,
+            "h": 396
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "外门余光在高俅身后合拢；端王留在画右，前景赭褐皮球静止，暗金星点映在球面。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P046_N1",
+              "type": "narration",
+              "content_ref": "panel:P046.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1411,
+                "w": 777,
+                "h": 277
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.narration",
+              "rect": {
+                "x": 136,
+                "y": 1351,
+                "w": 518,
+                "h": 132
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "动作线沿真实球路，禁游戏UI、发光法器、现代球场特效和无来源粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P046",
+          "story_function": "decision"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "显式effects_plan: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第3话/panel_script.json",
+    "panel_script_sha256": "59c390221e00c26b00af5b642de65498789e6ad6e106f83aaf8a5708672d8622",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-18T03:14:59.394183+00:00",
+    "note": "场景人读名称去除误触发实体名后复核签收。",
+    "subject_sha256": "66654c755cd0bb8fd26924d175657e6f64cdbfd7ac8fe56dd0127b5c9fa917c1",
+    "panel_script_sha256": "59c390221e00c26b00af5b642de65498789e6ad6e106f83aaf8a5708672d8622",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

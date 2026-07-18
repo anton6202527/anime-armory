@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P012",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 6,
+  "references": [
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__front.png",
+      "sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_QINGHE_COUNTY_STREET",
+      "path": "出图/共享/图片/LOC_QINGHE_COUNTY_STREET__anchor.png",
+      "sha256": "f4497aac652b9dcba0a2ad603777b6aa0ccd5e31b9f52940f26521bb60579668",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_CAKE_POLE",
+      "path": "出图/共享/图片/PROP_CAKE_POLE__anchor.png",
+      "sha256": "7f00f0420092cabb4d9e6080cb389b117d7bf3058ba0eb0b806d279a632da55f",
+      "role": "prop",
+      "required": true
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__face.png",
+      "sha256": "d9e63cf51c71bea75ed9d7c1d8f54aaeef4cbb9d00d0cb552e452b66367fa910",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_WU_DA",
+      "path": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+      "sha256": "821882b418c8f3dd5fc1141a988fbe0713513788c3f15b853d9f332e92ebe2b8",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T13:34:16"
+}

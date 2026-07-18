@@ -1,0 +1,726 @@
+{
+  "schema_version": 1,
+  "kind": "comic_review",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
+  "chapter": "第3话",
+  "created_at": "2026-07-18T13:27:49",
+  "verdict": "pass",
+  "settings": {
+    "定妆级别": "长线专门定妆+高一致性",
+    "参考一致性策略": "共享参考图",
+    "年龄形态继承": "开启",
+    "角色一致性硬闸": "开启",
+    "风格锚": "STYLE_SHUIHU_SONG_CINEMATIC",
+    "文字语言": "中文",
+    "合规用途": "demo学习"
+  },
+  "summary": {
+    "panel_count": 46,
+    "issue_count": 21,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 21
+  },
+  "artifacts": {
+    "panel_script": "脚本/第3话/panel_script.json",
+    "source_semantics": "脚本/第3话/source_semantics.json",
+    "layout": "排版/第3话/layout.json",
+    "lettering": "排版/第3话/lettering.json",
+    "manifest": "排版/第3话/export_manifest.json",
+    "identity_report": "生产数据/comic_identity_report_第3话.json",
+    "style_report": "生产数据/comic_style_consistency_第3话.json",
+    "character_report": "生产数据/comic_character_consistency_第3话.json",
+    "rendered": [
+      {
+        "path": "排版/第3话/长图/longstrip.png",
+        "panel_ids": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012",
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018",
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024",
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030",
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036",
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042",
+          "P043",
+          "P044",
+          "P045",
+          "P046"
+        ],
+        "size": {
+          "width": 1440,
+          "height": 45412
+        },
+        "format": "png"
+      }
+    ],
+    "lettering_slot_qc": {
+      "path": "生产数据/qa_previews/第3话_lettering_slots.jpg",
+      "items": 36,
+      "missing_slots": []
+    },
+    "qa_preview": "生产数据/qa_previews/第3话_longstrip_preview.webp",
+    "contact_sheet": "生产数据/panel_contact_sheet_第3话.jpg"
+  },
+  "raw_bubble_candidates": [
+    {
+      "panel_id": "P012",
+      "path": "出图/第3话/panels/P012.png",
+      "components": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 636,
+          "h": 170,
+          "area": 63191
+        },
+        {
+          "x": 0,
+          "y": 249,
+          "w": 178,
+          "h": 136,
+          "area": 5274
+        },
+        {
+          "x": 76,
+          "y": 628,
+          "w": 118,
+          "h": 66,
+          "area": 3895
+        }
+      ]
+    },
+    {
+      "panel_id": "P020",
+      "path": "出图/第3话/panels/P020.png",
+      "components": [
+        {
+          "x": 393,
+          "y": 594,
+          "w": 113,
+          "h": 49,
+          "area": 3607
+        }
+      ]
+    },
+    {
+      "panel_id": "P029",
+      "path": "出图/第3话/panels/P029.png",
+      "components": [
+        {
+          "x": 0,
+          "y": 215,
+          "w": 160,
+          "h": 284,
+          "area": 19007
+        },
+        {
+          "x": 113,
+          "y": 398,
+          "w": 663,
+          "h": 440,
+          "area": 62248
+        },
+        {
+          "x": 900,
+          "y": 732,
+          "w": 287,
+          "h": 106,
+          "area": 19602
+        }
+      ]
+    },
+    {
+      "panel_id": "P034",
+      "path": "出图/第3话/panels/P034.png",
+      "components": [
+        {
+          "x": 732,
+          "y": 64,
+          "w": 205,
+          "h": 121,
+          "area": 9672
+        }
+      ]
+    },
+    {
+      "panel_id": "P036",
+      "path": "出图/第3话/panels/P036.png",
+      "components": [
+        {
+          "x": 496,
+          "y": 218,
+          "w": 272,
+          "h": 143,
+          "area": 18655
+        }
+      ]
+    },
+    {
+      "panel_id": "P038",
+      "path": "出图/第3话/panels/P038.png",
+      "components": [
+        {
+          "x": 1017,
+          "y": 0,
+          "w": 278,
+          "h": 129,
+          "area": 23991
+        }
+      ]
+    },
+    {
+      "panel_id": "P039",
+      "path": "出图/第3话/panels/P039.png",
+      "components": [
+        {
+          "x": 469,
+          "y": 0,
+          "w": 270,
+          "h": 56,
+          "area": 9885
+        },
+        {
+          "x": 280,
+          "y": 121,
+          "w": 126,
+          "h": 99,
+          "area": 5729
+        },
+        {
+          "x": 955,
+          "y": 135,
+          "w": 105,
+          "h": 86,
+          "area": 3849
+        }
+      ]
+    },
+    {
+      "panel_id": "P040",
+      "path": "出图/第3话/panels/P040.png",
+      "components": [
+        {
+          "x": 227,
+          "y": 141,
+          "w": 212,
+          "h": 101,
+          "area": 10095
+        },
+        {
+          "x": 740,
+          "y": 141,
+          "w": 217,
+          "h": 103,
+          "area": 11644
+        },
+        {
+          "x": 1069,
+          "y": 141,
+          "w": 118,
+          "h": 76,
+          "area": 3479
+        }
+      ]
+    },
+    {
+      "panel_id": "P042",
+      "path": "出图/第3话/panels/P042.png",
+      "components": [
+        {
+          "x": 254,
+          "y": 0,
+          "w": 638,
+          "h": 230,
+          "area": 63228
+        }
+      ]
+    },
+    {
+      "panel_id": "P043",
+      "path": "出图/第3话/panels/P043.png",
+      "components": [
+        {
+          "x": 194,
+          "y": 51,
+          "w": 145,
+          "h": 62,
+          "area": 4250
+        },
+        {
+          "x": 955,
+          "y": 51,
+          "w": 143,
+          "h": 62,
+          "area": 4330
+        },
+        {
+          "x": 0,
+          "y": 83,
+          "w": 83,
+          "h": 153,
+          "area": 10184
+        }
+      ]
+    }
+  ],
+  "accepted_raw_bubble_candidates": [
+    {
+      "panel_id": "P012",
+      "path": "出图/第3话/panels/P012.png",
+      "components": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 636,
+          "h": 170,
+          "area": 63191
+        },
+        {
+          "x": 0,
+          "y": 249,
+          "w": 178,
+          "h": 136,
+          "area": 5274
+        },
+        {
+          "x": 76,
+          "y": 628,
+          "w": 118,
+          "h": 66,
+          "area": 3895
+        }
+      ]
+    },
+    {
+      "panel_id": "P020",
+      "path": "出图/第3话/panels/P020.png",
+      "components": [
+        {
+          "x": 393,
+          "y": 594,
+          "w": 113,
+          "h": 49,
+          "area": 3607
+        }
+      ]
+    },
+    {
+      "panel_id": "P029",
+      "path": "出图/第3话/panels/P029.png",
+      "components": [
+        {
+          "x": 0,
+          "y": 215,
+          "w": 160,
+          "h": 284,
+          "area": 19007
+        },
+        {
+          "x": 113,
+          "y": 398,
+          "w": 663,
+          "h": 440,
+          "area": 62248
+        },
+        {
+          "x": 900,
+          "y": 732,
+          "w": 287,
+          "h": 106,
+          "area": 19602
+        }
+      ]
+    },
+    {
+      "panel_id": "P034",
+      "path": "出图/第3话/panels/P034.png",
+      "components": [
+        {
+          "x": 732,
+          "y": 64,
+          "w": 205,
+          "h": 121,
+          "area": 9672
+        }
+      ]
+    },
+    {
+      "panel_id": "P036",
+      "path": "出图/第3话/panels/P036.png",
+      "components": [
+        {
+          "x": 496,
+          "y": 218,
+          "w": 272,
+          "h": 143,
+          "area": 18655
+        }
+      ]
+    },
+    {
+      "panel_id": "P038",
+      "path": "出图/第3话/panels/P038.png",
+      "components": [
+        {
+          "x": 1017,
+          "y": 0,
+          "w": 278,
+          "h": 129,
+          "area": 23991
+        }
+      ]
+    },
+    {
+      "panel_id": "P039",
+      "path": "出图/第3话/panels/P039.png",
+      "components": [
+        {
+          "x": 469,
+          "y": 0,
+          "w": 270,
+          "h": 56,
+          "area": 9885
+        },
+        {
+          "x": 280,
+          "y": 121,
+          "w": 126,
+          "h": 99,
+          "area": 5729
+        },
+        {
+          "x": 955,
+          "y": 135,
+          "w": 105,
+          "h": 86,
+          "area": 3849
+        }
+      ]
+    },
+    {
+      "panel_id": "P040",
+      "path": "出图/第3话/panels/P040.png",
+      "components": [
+        {
+          "x": 227,
+          "y": 141,
+          "w": 212,
+          "h": 101,
+          "area": 10095
+        },
+        {
+          "x": 740,
+          "y": 141,
+          "w": 217,
+          "h": 103,
+          "area": 11644
+        },
+        {
+          "x": 1069,
+          "y": 141,
+          "w": 118,
+          "h": 76,
+          "area": 3479
+        }
+      ]
+    },
+    {
+      "panel_id": "P042",
+      "path": "出图/第3话/panels/P042.png",
+      "components": [
+        {
+          "x": 254,
+          "y": 0,
+          "w": 638,
+          "h": 230,
+          "area": 63228
+        }
+      ]
+    },
+    {
+      "panel_id": "P043",
+      "path": "出图/第3话/panels/P043.png",
+      "components": [
+        {
+          "x": 194,
+          "y": 51,
+          "w": 145,
+          "h": 62,
+          "area": 4250
+        },
+        {
+          "x": 955,
+          "y": 51,
+          "w": 143,
+          "h": 62,
+          "area": 4330
+        },
+        {
+          "x": 0,
+          "y": 83,
+          "w": 83,
+          "h": 153,
+          "area": 10184
+        }
+      ]
+    }
+  ],
+  "style_consistency": {
+    "verdict": "pass",
+    "summary": {
+      "panel_count": 46,
+      "finding_count": 11,
+      "block_count": 0,
+      "warn_count": 0,
+      "info_count": 11
+    }
+  },
+  "character_consistency": {
+    "verdict": "pass",
+    "summary": {
+      "character_count": 5,
+      "panel_binding_count": 75,
+      "finding_count": 0,
+      "block_count": 0,
+      "warn_count": 0,
+      "info_count": 0
+    },
+    "contact_sheet": "生产数据/qa_previews/第3话_character_consistency_contact_sheet.jpg"
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P012.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为空白荐书纸面、药包和天光，不是气泡/文字框；药铺重制版已无店招文字。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P020.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为人物手持空白荐书与街巷天光，不是烘焙气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P029.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为宴舞长袖的计划内白色动势前景，不是气泡或文字容器。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P034.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为黄罗礼包与庭院亮部，不是气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P036.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为廊下天光和石地留白，不是气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P038.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为庭院亮空与球路负空间，不含气泡、文字框或可读字。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P039.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为庭院白墙、日光与铺地，不是气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P040.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为廊柱间天光与远处无字礼盒，不是气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P042.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为逆光庭院与石地负空间，不是气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第3话/panels/P043.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：放大复核为殿檐天光与脚—球周围留白，不是气泡。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P002.png",
+      "reason": "风格指纹内聚度 0.4662 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P003.png",
+      "reason": "风格指纹内聚度 0.6437 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P004.png",
+      "reason": "风格指纹内聚度 0.7645 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P006.png",
+      "reason": "风格指纹内聚度 0.7774 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P007.png",
+      "reason": "风格指纹内聚度 0.7181 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P016.png",
+      "reason": "风格指纹内聚度 0.6959 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P017.png",
+      "reason": "风格指纹内聚度 0.7606 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P019.png",
+      "reason": "风格指纹内聚度 0.7618 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P022.png",
+      "reason": "风格指纹内聚度 0.7740 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第3话/panels/P030.png",
+      "reason": "风格指纹内聚度 0.7716 明显低于本话中位 0.8288，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/共享/style_baseline.json",
+      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8523，风格锚可能已失去约束力。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "confidence": "heuristic"
+    }
+  ],
+  "notes": [
+    "已刷新风格一致性报告：生产数据/comic_style_consistency_第3话.md",
+    "已刷新角色一致性报告：生产数据/comic_character_consistency_第3话.md",
+    "demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",
+    "已刷新 QA 长图预览：生产数据/qa_previews/第3话_longstrip_preview.webp",
+    "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第3话.jpg"
+  ],
+  "progress_written": true
+}

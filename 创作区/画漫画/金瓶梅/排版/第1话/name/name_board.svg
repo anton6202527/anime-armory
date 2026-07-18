@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">黑地上一道冷白刀影横过画面，断裂的青铜簪和空金盏沿红褐竹帘滑落…</text>
+<rect x="46" y="140" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="155">P002</text>
+<text class="note" x="51" y="170">竖向鸟瞰的清河县：运河、城门、市集和县衙层层下降，粮价籌与无字…</text>
+<rect x="57" y="218" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="233">P003</text>
+<text class="note" x="62" y="248">武松背小包袱，横拖齐眉榆木梢棒，独自走在秋日山路，远处山冈上已…</text>
+<rect x="68" y="272" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="287">P004</text>
+<text class="note" x="73" y="291">山神庙前无字榜文占据画左，武松画右一手扶梢棒、一手揭起榜角，看…</text>
+<rect x="57" y="305" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="320">P005</text>
+<text class="note" x="62" y="335">落日压在山脊后，武松把梢棒倚在枯松旁，侧坐卧牛青石、俯首喘息，…</text>
+<rect x="46" y="359" width="264" height="70" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="374">P006</text>
+<text class="note" x="51" y="389">黄叶被狂风卷起，吊睛白额虎从画右后的乱树跃出，四爪即将落地；武…</text>
+<text class="note" x="38" y="448">hook: P006 monster_reveal</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="374" y="62" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="77">P007</text>
+<text class="note" x="379" y="92">主画面中猛虎尾如铁棒从画右横剪，武松带棒向画左后压身闪过；上方…</text>
+<rect x="374" y="127" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="142">P008</text>
+<text class="note" x="379" y="157">武松双手抡棒砍下，棒头却砸中画右枯松横枝，木纤维在画中炸开；猛…</text>
+<rect x="374" y="193" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="208">P009</text>
+<text class="note" x="379" y="223">武松在画左上方俯压猛虎，左手按住虎后颈皮、左膝压虎肩背，右拳正…</text>
+<rect x="374" y="258" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="273">P010</text>
+<text class="note" x="379" y="288">长竖格上段，猛虎闭眼侧卧黄草，武松坐在青石旁喘息；下段县衙堂前…</text>
+<rect x="374" y="324" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="339">P011</text>
+<text class="note" x="379" y="354">清河县主街上，武松穿鹦哥绿都头冬装坐于花红软轿，画左右的街坊引…</text>
+<rect x="385" y="389" width="242" height="40" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="404">P012</text>
+<text class="note" x="390" y="419">武大在画左前沿放下烊饼担，仰头望向轿中的武松，嘴边还沾着面粉，…</text>
+<text class="note" x="366" y="448">hook: P012 brother_reveal</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="724" y="62" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="729" y="77">P013</text>
+<text class="note" x="729" y="81">张宅明厅中案，画左是临街房钥与武大的烊饼筐，画右是钱串、未题字…</text>
+<rect x="713" y="94" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="109">P014</text>
+<text class="note" x="718" y="124">青年潘金莲在画右窗下抱琵琶端坐，只看向自己按弦的左手；画左前景…</text>
+<rect x="713" y="152" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="167">P015</text>
+<text class="note" x="718" y="182">张宅门槛下，潘金莲画右侧身伏坐，只露完整的脸、肩背与抓紧地面的…</text>
+<rect x="702" y="210" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="225">P016</text>
+<text class="note" x="707" y="240">潘金莲穿克制暗朱嫁衣站画面中后，武大画左前双手接过房钥和房奁契…</text>
+<rect x="713" y="294" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="309">P017</text>
+<text class="note" x="718" y="324">武家小屋内，武大画左抱着新蒸的烊饼笼向金莲笑，金莲画右站在窗边…</text>
+<rect x="702" y="352" width="264" height="77" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="367">P018</text>
+<text class="note" x="707" y="382">红褐竹帘占画面中心，金莲在画左帘内侧靠门框嗑瓜子，眼神看向画右…</text>
+<text class="note" x="694" y="448">hook: P018 motif_planting</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="57" y="520" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="535">P019</text>
+<text class="note" x="62" y="550">武大画左弯腰系起烊饼筐，正要搜索搬家用绳；金莲画右把一小串钱放…</text>
+<rect x="46" y="570" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="585">P020</text>
+<text class="note" x="51" y="600">紫石街新屋全景：武大画下挑起烊饼担出门，金莲画上站在小凳上，亲…</text>
+<rect x="46" y="644" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="659">P021</text>
+<text class="note" x="51" y="674">武松从软轿上跨下，画右俯身双手握住武大的双手；武大画左仰头笑得…</text>
+<rect x="57" y="717" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="732">P022</text>
+<text class="note" x="62" y="747">武大在茶坊门外画左拱手，王婆画右把竹篮接过来，脸上笑、眼神却越…</text>
+<rect x="46" y="768" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="783">P023</text>
+<text class="note" x="51" y="798">武家楼上入口，武松画右侧身抱拳行礼，金莲画左在红帘后走出、双手…</text>
+<rect x="57" y="842" width="242" height="45" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="857">P024</text>
+<text class="note" x="62" y="872">金莲画左站在桌旁，武松画右坐在楼上客位，武大从画下楼梯上来，双…</text>
+<text class="note" x="38" y="906">hook: P024 family_triangular_blocking</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="385" y="520" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="535">P025</text>
+<text class="note" x="390" y="550">方桌中景，武大画下主位笑着挙杯，金莲画左为武松添菜，武松画右双…</text>
+<rect x="385" y="574" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="589">P026</text>
+<text class="note" x="390" y="604">饭后窗边，金莲画左整理空酒盏，侧脸看向画右武松；武松画右站起抱…</text>
+<rect x="385" y="628" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="643">P027</text>
+<text class="note" x="390" y="658">武松画右手抱铺盖卷、左手提小包袱跨过武家门槛，金莲画左双手接住…</text>
+<rect x="374" y="682" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="697">P028</text>
+<text class="note" x="379" y="712">长竖格三层：上层邻里在门前笑谈，中层武松把一匹彩缎放在桌上，金…</text>
+<rect x="385" y="760" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="775">P029</text>
+<text class="note" x="390" y="790">夜色门前，金莲画左内侧提灯推起红帘，武松画右外侧站在门槛外解下…</text>
+<rect x="374" y="815" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="830">P030</text>
+<text class="note" x="379" y="845">瑞雪满城，紫石街屋檐、竹幌与石路全被雪柔化，行人只留少量剪影；…</text>
+<text class="note" x="366" y="906">hook: P030 weather_turn</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="713" y="520" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="535">P031</text>
+<text class="note" x="718" y="550">大雪的茶坊门口，金莲画左把几枚钱放进王婆画右托起的手心，王婆另…</text>
+<rect x="702" y="568" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="583">P032</text>
+<text class="note" x="707" y="598">武松客房无人全景：前后两道门闩已落，方桌居中，素胎酒注、四盏两…</text>
+<rect x="713" y="637" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="652">P033</text>
+<text class="note" x="718" y="667">前门内外，武松画右从雪中进门，右手自己取下落雪氈笠；金莲画左伸…</text>
+<rect x="702" y="685" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="700">P034</text>
+<text class="note" x="707" y="715">雪夜客房侧面中景，金莲画左坐炉边，右手把一盏酒递过方桌中线；武…</text>
+<rect x="702" y="755" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="770">P035</text>
+<text class="note" x="707" y="785">武松画右已站起，右手夺过酒盏向画左地面一泼，酒水在炉火前划出亮…</text>
+<rect x="702" y="824" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="839">P036</text>
+<text class="note" x="707" y="854">武松画右站得笔直，左手张开立在两人之间示停，右手收在腰侧并未举…</text>
+<text class="note" x="694" y="906">hook: P036 turning_point_confrontation</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="57" y="978" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="993">P037</text>
+<text class="note" x="62" y="1008">金莲画左蹲身把酒盏一只只收回托盘，脸上热红未退、眼神却已冷下来…</text>
+<rect x="57" y="1032" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1047">P038</text>
+<text class="note" x="62" y="1062">武大画左推门入室，肩上挑担满是雪，两竹筐稳稳放下；金莲画右坐在…</text>
+<rect x="46" y="1086" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1101">P039</text>
+<text class="note" x="51" y="1116">金莲画右从凳上起身，一手指向画上楼梯通往武松客房的方向，另一手…</text>
+<rect x="57" y="1164" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1179">P040</text>
+<text class="note" x="62" y="1194">武松客房，武松画右坐在床沿、俯身系紧油靴带，脸转向画右门口而不…</text>
+<rect x="57" y="1218" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1233">P041</text>
+<text class="note" x="62" y="1248">上下双层：上层金莲画右侧脸对武大冷声说话，画左武大惶然看门；下…</text>
+<rect x="46" y="1273" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1288">P042</text>
+<text class="note" x="51" y="1303">武松画右把铺盖卷交给画外土兵的扁担，左手张开示意哥哥停步；武大…</text>
+<text class="note" x="38" y="1364">hook: P042 separation_payoff</text>
+<rect x="356" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="962">SCROLL_008 scroll</text>
+<rect x="374" y="978" width="264" height="180" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="993">P043</text>
+<text class="note" x="379" y="1008">武大画左坐在门槛里，手中拿着一只未穿上的布鞋，看向画右外雪地上…</text>
+<rect x="374" y="1164" width="264" height="181" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1179">P044</text>
+<text class="note" x="379" y="1194">红褐竹帘从画面上方缓慢落下，金莲站在帘后暗处，脸大半已被竹条阴…</text>
+<text class="note" x="366" y="1364">hook: P044 cliffhanger</text>
+</svg>

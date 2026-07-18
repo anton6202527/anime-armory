@@ -1,9 +1,2210 @@
 {
   "schema_version": 2,
   "kind": "comic_identity_registry",
-  "assets": {},
+  "assets": {
+    "CHAR_PAN_JINLIAN": {
+      "id": "CHAR_PAN_JINLIAN",
+      "type": "character",
+      "display_name": "潘金莲",
+      "character_dna": "长圆鹅蛋脸；细长丹凤眼且眼距略窄；细直鼻梁；唇峰分明；中高发际线；乌发半高髻、额前稀薄碎发、两侧长鬓发收束至背后；纤长体态；紧张时先收下颌再抬眼",
+      "variant_policy": "年龄与情绪变化必须继承脸型、眼型眼距、发际线、半高髻轮廓与身材比例；服装变化只替换 outfit 层",
+      "forbidden_inheritance": "不得继承演员脸、风格锚人物、临时手持物、挑逗姿势、露骨尺度、清宫发饰",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "年龄与情绪变化必须继承脸型、眼型眼距、发际线、半高髻轮廓与身材比例；服装变化只替换 outfit 层",
+          "forbidden": "不得继承演员脸、风格锚人物、临时手持物、挑逗姿势、露骨尺度、清宫发饰",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "紫石街常服",
+          "description": "轮廓:上身收敛、长裙垂地，纤长但不影楼夸张；领襟:月白交领右衽短袄，黛青比甲开合固定；开合:右衽内系，比甲素面敞合；不生成外露盘扣、蝴蝶结绳扣或拉链；材料:哑光棉布、低光细绢、青铜簪",
+          "forbidden": "清宫发饰；唐式高胸裙；外露盘扣或绳结扣；露骨装束；影视版整套复刻",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+              "sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_PAN_JINLIAN"
+              },
+              "updated_at": "2026-07-18T12:22:38"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_PAN_JINLIAN",
+            "outfit_id": "OUTFIT_BASE",
+            "name": "紫石街常服",
+            "silhouette": "上身收敛、长裙垂地，纤长但不影楼夸张",
+            "collar_neckline": "月白交领右衽短袄，黛青比甲开合固定",
+            "closure": "右衽内系，比甲素面敞合；不生成外露盘扣、蝴蝶结绳扣或拉链",
+            "materials": [
+              "哑光棉布",
+              "低光细绢",
+              "青铜簪"
+            ],
+            "evidence_refs": [
+              "SRC_SDM_MING_GARMENTS",
+              "SRC_LNM_QIUYING_SCROLL",
+              "SRC_NMC_COSTUME_MING",
+              "SRC_JPM_SOURCE"
+            ],
+            "forbidden": [
+              "清宫发饰",
+              "唐式高胸裙",
+              "外露盘扣或绳结扣",
+              "露骨装束",
+              "影视版整套复刻"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        },
+        "EXPR_EAGER": {
+          "id": "EXPR_EAGER",
+          "name": "压住急切的欢喜",
+          "emotion": "eager",
+          "intensity": "medium",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PAN_JINLIAN__EXPR_EAGER.png",
+              "sha256": "31fbcf462c501465846368f45fe1a7f28f67e7fad76ff750d9cef548130f488d",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_PAN_JINLIAN",
+                "expression_id": "EXPR_EAGER",
+                "chapter": "第1话",
+                "attempt": 2,
+                "attempts_used": 2,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+                "identity_anchor_sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__expression_EXPR_EAGER_dreamina__20260718T130315796075.md",
+                "prompt_sha256": "5e51b429fc7f73dd9c7a3fe5851ce797efbc5ccbb233be52b4acafabfb83f426",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "20f2da83-a75b-4c29-9590-6f591b871af0"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-18T13:05:32"
+            }
+          ],
+          "status": "ready"
+        },
+        "EXPR_HUMILIATED": {
+          "id": "EXPR_HUMILIATED",
+          "name": "羞愤",
+          "emotion": "humiliated_anger",
+          "intensity": "high",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PAN_JINLIAN__EXPR_HUMILIATED.png",
+              "sha256": "3db75ad5adf1968a9815c05a69bfb0e373d1dccfe1e72863a609affd0b5d5221",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_PAN_JINLIAN",
+                "expression_id": "EXPR_HUMILIATED",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+                "identity_anchor_sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__expression_EXPR_HUMILIATED_dreamina__20260718T130532738608.md",
+                "prompt_sha256": "a30bd004fdf5d036a02f4e3aeef55844aa38007d5d327d424c107e4b93813203",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "e008f065-6fc4-45e0-9bf0-559fad431263"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-18T13:06:27"
+            }
+          ],
+          "status": "ready"
+        },
+        "EXPR_TEARFUL": {
+          "id": "EXPR_TEARFUL",
+          "name": "哭诉",
+          "emotion": "tearful_accusation",
+          "intensity": "high",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PAN_JINLIAN__EXPR_TEARFUL.png",
+              "sha256": "d18e36beb6a48ecb04f0d38acbc47b618b830474d819949f6c0c0a2cec12b101",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_PAN_JINLIAN",
+                "expression_id": "EXPR_TEARFUL",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+                "identity_anchor_sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__expression_EXPR_TEARFUL_dreamina__20260718T130627753680.md",
+                "prompt_sha256": "faaddb93189d040222931b34578456c72934ea2cf9cf73d6e31dc260d27e4273",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "7c990866-515d-477f-8cf8-37b487de1119"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-18T13:07:27"
+            }
+          ],
+          "status": "ready"
+        },
+        "EXPR_RESENTFUL": {
+          "id": "EXPR_RESENTFUL",
+          "name": "帘下怨毒",
+          "emotion": "cold_resentment",
+          "intensity": "high",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PAN_JINLIAN__EXPR_RESENTFUL.png",
+              "sha256": "3c7e02f9c6ef32c3b375968dcbc240f81404a15a4afd64537138ff2d726f165c",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_PAN_JINLIAN",
+                "expression_id": "EXPR_RESENTFUL",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+                "identity_anchor_sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__expression_EXPR_RESENTFUL_dreamina__20260718T130727449451.md",
+                "prompt_sha256": "f4c3b277fac80b705942043a7815bc5ad743dea153a950fa347da4378986b3f3",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "09e3c525-1c89-4dac-b186-123ba4cde6bd"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-18T13:08:31"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_SNOW_NIGHT": {
+          "id": "STATE_SNOW_NIGHT",
+          "name": "雪夜温酒",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_EAGER",
+          "transient": true,
+          "continuity_contract": "P031-P035 延续同一常服、发髻和炉火暖光，只改眼神与手部动作"
+        },
+        "STATE_REBUFFED": {
+          "id": "STATE_REBUFFED",
+          "name": "被斥后羞愤",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_HUMILIATED",
+          "transient": true,
+          "continuity_contract": "P036-P037 脸部红潮与泼酒地面连续，不改发髻服装"
+        },
+        "STATE_FALSE_ACCUSATION": {
+          "id": "STATE_FALSE_ACCUSATION",
+          "name": "哭诉反诬",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_TEARFUL",
+          "transient": true,
+          "continuity_contract": "P038-P043 眼红泪痕延续，衣饰与雪夜相同"
+        },
+        "STATE_CURTAIN_RESENTMENT": {
+          "id": "STATE_CURTAIN_RESENTMENT",
+          "name": "帘下怨毒",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_RESENTFUL",
+          "transient": false,
+          "continuity_contract": "P044 锁定为下话入场视觉状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+          "sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__front_dreamina__20260718T122138472307.md",
+            "prompt_sha256": "502111f0e66360b3e67dffd2f275fc1dd0fd2a2886635effa6ac7a63a4bb088e",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "8b5030f0-0a35-4eb9-9164-9451878198a0",
+            "archived_previous_path": "出图/共享/candidates/CHAR_PAN_JINLIAN/front/20260718T122238511902__a244939582f7.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:22:38"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_PAN_JINLIAN__three_quarter.png",
+          "sha256": "0257280477992a9fee5d9725c963e9a50ae8b12a2d027a4c4083b2fa88dfa596",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__three_quarter_dreamina__20260718T123025596394.md",
+            "prompt_sha256": "fd17592033fc7fde233d9a745f9b49c4e679b4007ab607b555c5c8ec486fce7f",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "953000a3-1f31-4ffc-ad18-2df9c7662ef4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:31:23"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_PAN_JINLIAN__side.png",
+          "sha256": "160585bb74d6b22545a0d5cecb1e0284fcbfa794b7ab7ef846fec705e57a436d",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__side_dreamina__20260718T123124091939.md",
+            "prompt_sha256": "6941bbfd19895b3abcfb671176b9429aabbeeb813802ad0c9512952eef56a3d1",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "67af55ad-a3ad-42b7-be96-c0085b82119c"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:32:20"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_PAN_JINLIAN__back.png",
+          "sha256": "0cb0125035c28769effd88e0f5bd790f8daae9cb3ceb73097ad71d4f2b5b71f6",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__back_dreamina__20260718T123221066486.md",
+            "prompt_sha256": "1ae96c04d33c6109381f741b1069eca1d79c2413e6266f922baf9c65b6f47fe7",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "c998912c-8b2f-4bc4-9544-9dba85b84ff4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:33:12"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png",
+          "sha256": "d4357bd7648bdfb921db156ffa1e7644a6f3f2ff4ee815d519f92b1bf9c0a99e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PAN_JINLIAN__face_dreamina__20260718T123312334930.md",
+            "prompt_sha256": "840ec5a691dd1fe590e8a06747e7143812369da733420a1699a0748e29ec66f5",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "05dd50e0-2914-4adc-ad2f-8475ac4f42c0"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+            "source_sha256": "cc64d185ae39b3a7e6c0b21712e4d7f5606b172bfaefa12b38dafe4fbd118af2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 2048,
+            "height": 2048
+          },
+          "updated_at": "2026-07-18T12:33:58"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:33:58",
+      "views": {
+        "front": "出图/共享/图片/CHAR_PAN_JINLIAN__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_PAN_JINLIAN__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_PAN_JINLIAN__side.png",
+        "back": "出图/共享/图片/CHAR_PAN_JINLIAN__back.png",
+        "face": "出图/共享/图片/CHAR_PAN_JINLIAN__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "861bffe468c4ce50f8c84d0a40641173c990f5fb7fdb4b38c0e6a83098cf6f34",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-18T04:47:59+00:00"
+      }
+    },
+    "CHAR_WU_SONG": {
+      "id": "CHAR_WU_SONG",
+      "type": "character",
+      "display_name": "武松",
+      "character_dna": "偏长国字脸；宽颌骨；浓直眉；内双眼且眼距正常；宽直鼻梁；齐整发际线；高髻束巾；肩宽腰窄；角色左颧外侧一条极浅短疤",
+      "variant_policy": "布衣行客与巡捕都头装必须继承同一脸、体态和短疤；打虎污损只改状态层",
+      "forbidden_inheritance": "不得继承演员脸、风格锚人物、秃头长披发、超级英雄肌肉、临时梢棒或站位；左颧浅疤不得左右镜像或扩大成血腥伤口",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "布衣行客与巡捕都头装必须继承同一脸、体态和短疤；打虎污损只改状态层",
+          "forbidden": "不得继承演员脸、风格锚人物、秃头长披发、超级英雄肌肉、临时梢棒或站位",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "归乡打虎行装",
+          "description": "轮廓:肩宽腰窄、窄袖短褐与裹腿，山行格斗不拖地；中性定妆不披斗篷或肩巾；领襟:靛青交领/斜襟窄领，全话方向固定；开合:右衽内系与深色腰带；材料:粗细混织棉麻、旧革、油布",
+          "forbidden": "铠甲；仙侠长袍；现代武术服；影视武松套装",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+              "sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WU_SONG"
+              },
+              "updated_at": "2026-07-18T12:23:42"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WU_SONG",
+            "outfit_id": "OUTFIT_BASE",
+            "name": "归乡打虎行装",
+            "silhouette": "肩宽腰窄、窄袖短褐与裹腿，山行格斗不拖地；中性定妆不披斗篷或肩巾",
+            "collar_neckline": "靛青交领/斜襟窄领，全话方向固定",
+            "closure": "右衽内系与深色腰带",
+            "materials": [
+              "粗细混织棉麻",
+              "旧革",
+              "油布"
+            ],
+            "evidence_refs": [
+              "SRC_LNM_QIUYING_SCROLL",
+              "SRC_NMC_COSTUME_MING",
+              "SRC_JPM_SOURCE"
+            ],
+            "forbidden": [
+              "铠甲",
+              "仙侠长袍",
+              "现代武术服",
+              "影视武松套装"
+            ],
+            "status": "confirmed"
+          }
+        },
+        "OUTFIT_DUTOU_WINTER": {
+          "id": "OUTFIT_DUTOU_WINTER",
+          "name": "巡捕都头冬装",
+          "description": "轮廓:鹦哥绿冬袄、深腰带、黑网巾与油靴，小吏实用而非将军华服；领襟:窄圆领或项目固定的小交领，由服装锚一次锁定；开合:侧系隐藏，腰带高度固定；材料:哑光紵丝、棉絮、皮革",
+          "forbidden": "清式补服；顶戴；将军铠甲；龙纹；过度织金",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WU_SONG__OUTFIT_DUTOU_WINTER.png",
+              "sha256": "27c5ba1fb9d6c41566d200288ddb3b17946ba4a42ccb592124d584434e4bdd58",
+              "view": "front",
+              "source": {
+                "kind": "generated_outfit_reference",
+                "character_id": "CHAR_WU_SONG",
+                "outfit_id": "OUTFIT_DUTOU_WINTER",
+                "chapter": "第1话",
+                "attempt": 1,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "backend_version": "{",
+                "identity_anchor_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+                "identity_anchor_sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__outfit_OUTFIT_DUTOU_WINTER_dreamina__20260718T130105394652.md",
+                "prompt_sha256": "35d6910a23671f4efb40bc4827a000e405541af42f8dd3130df977564e3e0d8b",
+                "requested_ratio": "3:4",
+                "submitted_ratio": "3:4",
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "df6a005f-c6e9-4b26-871a-36bcc0f6a801"
+              },
+              "updated_at": "2026-07-18T13:02:03"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WU_SONG",
+            "outfit_id": "OUTFIT_DUTOU_WINTER",
+            "name": "巡捕都头冬装",
+            "silhouette": "鹦哥绿冬袄、深腰带、黑网巾与油靴，小吏实用而非将军华服",
+            "collar_neckline": "窄圆领或项目固定的小交领，由服装锚一次锁定",
+            "closure": "侧系隐藏，腰带高度固定",
+            "materials": [
+              "哑光紵丝",
+              "棉絮",
+              "皮革"
+            ],
+            "evidence_refs": [
+              "SRC_SDM_MING_GARMENTS",
+              "SRC_NMC_COSTUME_MING",
+              "SRC_JPM_SOURCE"
+            ],
+            "forbidden": [
+              "清式补服",
+              "顶戴",
+              "将军铠甲",
+              "龙纹",
+              "过度织金"
+            ],
+            "status": "confirmed"
+          },
+          "updated_at": "2026-07-18T13:02:03"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        },
+        "EXPR_ALERT": {
+          "id": "EXPR_ALERT",
+          "name": "骤见猛虎",
+          "emotion": "alert_fear_controlled",
+          "intensity": "high",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WU_SONG__EXPR_ALERT.png",
+              "sha256": "464157ddc6333ba83feb4e15d9e75a5e4eec9f20ceeaec4971ec8ed0d454b777",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_WU_SONG",
+                "expression_id": "EXPR_ALERT",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_WU_SONG__face.png",
+                "identity_anchor_sha256": "99589699539b14eef8e3a0a2a4f42d8cab6379a417686b89dcc5a7b95da8e997",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__expression_EXPR_ALERT_dreamina__20260718T130831993692.md",
+                "prompt_sha256": "91b9417719211fde9e6563ee3f64b8ee6728546783d81b64a99318edabc7767a",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "570e057c-5988-4fc3-9391-3b2f393f3b70"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-18T13:09:31"
+            }
+          ],
+          "status": "ready"
+        },
+        "EXPR_ANGRY": {
+          "id": "EXPR_ANGRY",
+          "name": "斥嫂怒意",
+          "emotion": "righteous_anger",
+          "intensity": "high",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WU_SONG__EXPR_ANGRY.png",
+              "sha256": "5db6567b97d2333b8344b3e95e9f3b5f5c046e24739cf278a77d7114ccaed6f4",
+              "source": {
+                "kind": "generated_expression_reference",
+                "character_id": "CHAR_WU_SONG",
+                "expression_id": "EXPR_ANGRY",
+                "chapter": "第1话",
+                "attempt": 1,
+                "attempts_used": 1,
+                "attempts_authorized": 2,
+                "backend": "Dreamina official CLI",
+                "model": "Dreamina 5.0",
+                "identity_anchor_path": "出图/共享/图片/CHAR_WU_SONG__face.png",
+                "identity_anchor_sha256": "99589699539b14eef8e3a0a2a4f42d8cab6379a417686b89dcc5a7b95da8e997",
+                "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__expression_EXPR_ANGRY_dreamina__20260718T130931794684.md",
+                "prompt_sha256": "254dd8ee11a2dbb86cacdcf79347b9c08af1622417354efb2f6f0fa8028ee8cb",
+                "ratio": "1:1",
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "submit_id": "6ce8dfd9-e4af-4462-b01f-f4ad3331240f"
+              },
+              "canvas": {
+                "width": 2048,
+                "height": 2048
+              },
+              "updated_at": "2026-07-18T13:10:41"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_TIGER_ALERT": {
+          "id": "STATE_TIGER_ALERT",
+          "name": "打虎警戒",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_ALERT",
+          "transient": true,
+          "continuity_contract": "P006-P010 延续同一行装、汗水、泥尘和梢棒损坏状态"
+        },
+        "STATE_DUTOU": {
+          "id": "STATE_DUTOU",
+          "name": "巡捕都头",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_DUTOU_WINTER",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "P011-P044 使用同一都头冬装，无梢棒"
+        },
+        "STATE_REBUKE": {
+          "id": "STATE_REBUKE",
+          "name": "雪夜斥嫂",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_DUTOU_WINTER",
+          "expression_id": "EXPR_ANGRY",
+          "transient": true,
+          "continuity_contract": "P035-P037 怒意与重心起身动作连续，不改脸和服装"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+          "sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__front_dreamina__20260718T122238595144.md",
+            "prompt_sha256": "7326886f135612e56d1abd3f078d1fcbc67bd86f5fdccf2141aa5f41f5d92bdb",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "012b2ef8-af84-479c-9af7-c6a983c616bc",
+            "archived_previous_path": "出图/共享/candidates/CHAR_WU_SONG/front/20260718T122342431082__fadd19c2f0b0.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:23:42"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WU_SONG__three_quarter.png",
+          "sha256": "6869416a47189d105e948ef195f45ccece7cbfef7bc5347653c8c44b79a56660",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__three_quarter_dreamina__20260718T123359173991.md",
+            "prompt_sha256": "b6f99a8c2077265a5d0942b931a2d844ebf536393657e94bd3066147c0523899",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "740674c0-99f2-4867-b0ee-8866f94141b5"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "source_sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:34:50"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_WU_SONG__side.png",
+          "sha256": "3768407f4133c05e37a46d5a32029e6e8c23520bc3557721e276dfd43ce81975",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__side_dreamina__20260718T123450768105.md",
+            "prompt_sha256": "e253ebc6c6175b3620dff0601c5c061500a024e5a9179d1a8fa2ae3106c2864f",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "affa6cc7-36df-4fca-9ebc-5a122eabddcf"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "source_sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:35:47"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_WU_SONG__back.png",
+          "sha256": "9fa0b4221d8ea0151f3bdf97aef32142eff79b7a65aa722788d9c0a4f949ce19",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__back_dreamina__20260718T123547349445.md",
+            "prompt_sha256": "a40d7a780ab56ee4f3e064e6728008c966bb07ec9ffe535f7dcd4cdd38a3e85c",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "d062f531-8fdf-4f30-82dc-2152d78b2afc"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "source_sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:36:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WU_SONG__face.png",
+          "sha256": "99589699539b14eef8e3a0a2a4f42d8cab6379a417686b89dcc5a7b95da8e997",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_SONG__face_dreamina__20260718T123641144509.md",
+            "prompt_sha256": "e0c2998701c9a156b8f234565d7baf552745e506a58005e5b9dbe27b9438e364",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "b86052b9-1649-4608-babd-a98b7c691471"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WU_SONG__front.png",
+            "source_sha256": "70de900ef91e500c32bab023a6affb5fe3606721b41052faa941be2cc7ba8608",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 2048,
+            "height": 2048
+          },
+          "updated_at": "2026-07-18T12:37:39"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T13:02:03",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WU_SONG__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_WU_SONG__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_WU_SONG__side.png",
+        "back": "出图/共享/图片/CHAR_WU_SONG__back.png",
+        "face": "出图/共享/图片/CHAR_WU_SONG__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "e27577f09d1d8cd44f3b027989d68cdfae1641e47ffa7442d8c33374ef62f164",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-18T04:47:59+00:00"
+      }
+    },
+    "CHAR_WU_DA": {
+      "id": "CHAR_WU_DA",
+      "type": "character",
+      "display_name": "武大",
+      "character_dna": "偏短椭圆脸；眉眼距略宽；圆鼻头；嘴角平直；发际线稍高；黑网巾束发；成年人短身窄肩比例；微驼背；同框只到武松肩下；肩部长期受炊饼担压低",
+      "variant_policy": "跨话保持成年矮小体态、偏短椭圆脸与驼背；不得儿童化或怪物化",
+      "forbidden_inheritance": "不得继承演员脸、儿童身体、怪物比例、临时担子或单格受力姿态",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "跨话保持成年矮小体态、偏短椭圆脸与驼背；不得儿童化或怪物化",
+          "forbidden": "不得继承演员脸、儿童身体、怪物比例、临时担子或单格受力姿态",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "烊饼贩常服",
+          "description": "轮廓:成年矮小、微驼，土黄短衫与褐色长裤；双肩略受长期挑担影响但保持无道具中性站姿；领襟:窄交领右衽；开合:布带系结，结位固定；材料:棉布、粗麻",
+          "forbidden": "儿童装；怪物化；中性定妆携带挑担或烊饼；富户锦袍；清装",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WU_DA__front.png",
+              "sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WU_DA"
+              },
+              "updated_at": "2026-07-18T12:24:43"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WU_DA",
+            "outfit_id": "OUTFIT_BASE",
+            "name": "烊饼贩常服",
+            "silhouette": "成年矮小、微驼，土黄短衫与褐色长裤；双肩略受长期挑担影响但保持无道具中性站姿",
+            "collar_neckline": "窄交领右衽",
+            "closure": "布带系结，结位固定",
+            "materials": [
+              "棉布",
+              "粗麻"
+            ],
+            "evidence_refs": [
+              "SRC_LNM_QIUYING_SCROLL",
+              "SRC_NMC_COSTUME_MING",
+              "SRC_JPM_SOURCE"
+            ],
+            "forbidden": [
+              "儿童装",
+              "怪物化",
+              "中性定妆携带挑担或烊饼",
+              "富户锦袍",
+              "清装"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WU_DA__front.png",
+          "sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_DA__front_dreamina__20260718T122342495000.md",
+            "prompt_sha256": "c2482d25bf282b5f0470ee54ccd13e178a1412641a93558c31202568ddf5de9f",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "b5220e1d-5a07-45d8-be7b-ccf8dfc06327",
+            "archived_previous_path": "出图/共享/candidates/CHAR_WU_DA/front/20260718T122443377794__562de2c1cffe.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:24:43"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WU_DA__face.png",
+          "sha256": "d9e63cf51c71bea75ed9d7c1d8f54aaeef4cbb9d00d0cb552e452b66367fa910",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_DA__face_dreamina__20260718T123918180760.md",
+            "prompt_sha256": "a94d156309ee1e8c9f69473b88161685d92e361cc8a55f8150fa3695ec479bd8",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "a6ad0cc4-6807-42a8-9d19-349e7b047fb1"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+            "source_sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 2048,
+            "height": 2048
+          },
+          "updated_at": "2026-07-18T12:40:17"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+          "sha256": "821882b418c8f3dd5fc1141a988fbe0713513788c3f15b853d9f332e92ebe2b8",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WU_DA__three_quarter_dreamina__20260718T124507668732.md",
+            "prompt_sha256": "eca691c4bd2348824d94e49b8b986576c0e0319a4549ff0dd0488e7d164f8cb6",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "8977c04c-b17c-466a-9536-3126ce9d7f1e",
+            "archived_previous_path": "出图/共享/candidates/CHAR_WU_DA/three_quarter/20260718T124604182404__b32cd12fe241.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WU_DA__front.png",
+            "source_sha256": "1b611be45d6da1684eeccd884c5f0a7575e37191b8690ba774e80dc9bdf69f6c",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:46:04"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:46:04",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WU_DA__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_WU_DA__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_WU_DA__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "41fc895e9c63aa42b8a4a5561a66bee0db02dcc405371e5a210921fe0c5eeae5",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-18T04:48:00+00:00"
+      }
+    },
+    "CHAR_WANG_PO": {
+      "id": "CHAR_WANG_PO",
+      "type": "character",
+      "display_name": "王婆",
+      "character_dna": "窄长脸；眼角细纹；高鼻梁；薄唇；灰黑发用深色布帕包住；干瘦体态；笑时眼神仍在打量",
+      "variant_policy": "后续算计升级仍继承窄脸、包头轮廓、眼角细纹和干瘦体态",
+      "forbidden_inheritance": "不得继承演员脸、妖婆脸、豪门首饰、临时酒肉或金银",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "后续算计升级仍继承窄脸、包头轮廓、眼角细纹和干瘦体态",
+          "forbidden": "不得继承演员脸、妖婆脸、豪门首饰、临时酒肉或金银",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "茶坊日常常服",
+          "description": "轮廓:干瘦、利落，深棕斜襟袄、灰青长裙、围裙与深色包头；领襟:斜襟方向和领宽固定；开合:内系布结，围裙系结在后腰；材料:深棕棉布、灰青粗布",
+          "forbidden": "妖婆黑袍；豪门锦绣；大量金银；清式包头",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_PO__front.png",
+              "sha256": "330f44fe2416d561af3dbb729e6ba152d03532cb394fb54237888ee054448d1a",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WANG_PO"
+              },
+              "updated_at": "2026-07-18T12:16:47"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WANG_PO",
+            "outfit_id": "OUTFIT_BASE",
+            "name": "茶坊日常常服",
+            "silhouette": "干瘦、利落，深棕斜襟袄、灰青长裙、围裙与深色包头",
+            "collar_neckline": "斜襟方向和领宽固定",
+            "closure": "内系布结，围裙系结在后腰",
+            "materials": [
+              "深棕棉布",
+              "灰青粗布"
+            ],
+            "evidence_refs": [
+              "SRC_LNM_QIUYING_SCROLL",
+              "SRC_NMC_COSTUME_MING",
+              "SRC_JPM_SOURCE"
+            ],
+            "forbidden": [
+              "妖婆黑袍",
+              "豪门锦绣",
+              "大量金银",
+              "清式包头"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_PO__front.png",
+          "sha256": "330f44fe2416d561af3dbb729e6ba152d03532cb394fb54237888ee054448d1a",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WANG_PO__front_dreamina__20260718T121545574098.md",
+            "prompt_sha256": "a576ebc1ac2c7b3204f83b51cde4d2aa022ed06ea6db707728e963dcdc89b818",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "042463fa-ce72-4eb9-ba7f-f326ea9bd5af"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:16:47"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_PO__face.png",
+          "sha256": "0bf6f6d1e4d7098c688ca154987a949d0e1ef22efe12cf9fecc197240573722b",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_WANG_PO__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WANG_PO__face_dreamina__20260718T124244037328.md",
+            "prompt_sha256": "98b801855e23b43d5654e9f588ebd0fc51d2fabec310faa7c436c2b3f9f045a9",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "f8b61d6a-4780-4aa1-8163-5edaea964036"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_WANG_PO__front.png",
+            "source_sha256": "330f44fe2416d561af3dbb729e6ba152d03532cb394fb54237888ee054448d1a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 2048,
+            "height": 2048
+          },
+          "updated_at": "2026-07-18T12:43:33"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:43:33",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WANG_PO__front.png",
+        "face": "出图/共享/图片/CHAR_WANG_PO__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "46b74726cf56d4987563cfccee5372164d1db1f8c27c3a6c83cf1601d4acd57a",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-18T04:48:00+00:00"
+      }
+    },
+    "MON_JINGYANG_TIGER": {
+      "id": "MON_JINGYANG_TIGER",
+      "type": "monster",
+      "display_name": "景阳冈吊睛白额虎",
+      "character_dna": "成年华南虎；四足承重；连续脊柱；额部白斑与黑纹位置固定；角色左耳尖小缺口；真实虎体态",
+      "variant_policy": "扑掀剪与受伤状态均继承同一条纹、白额和左耳缺口；只改变姿态、泥尘和疲劳",
+      "forbidden_inheritance": "不得人立、多爪、断脊、狼脸、剑齿、妖兽化或随机血腥残肢",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "扑掀剪与受伤状态均继承同一条纹、白额和左耳缺口；只改变姿态、泥尘和疲劳",
+          "forbidden": "不得人立、多爪、断脊、狼脸、剑齿、妖兽化或随机血腥残肢",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+          "sha256": "c1de266586bbe1ed04d61861b7ad9b9a267b6c8dce83925a45223d827ac37201",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_JINGYANG_TIGER__front_dreamina__20260718T121647669271.md",
+            "prompt_sha256": "fb29ca7dd2ebd950f402c0b4903fbb663e823e3d22511e8b31b4f1726217d495",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "72a619fc-58fa-4ef6-bf33-dd0fc430c31e"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "source_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:17:39"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_JINGYANG_TIGER__face.png",
+          "sha256": "5ea7db9ae65babd18e302a29f99884dd47a73171616a260698a40bf21c7de967",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_JINGYANG_TIGER__face_dreamina__20260718T124122061989.md",
+            "prompt_sha256": "94fd20d90ac79c99f5e662f36fa1c9985b17b78a2efb9beb48a6a9addd27f315",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "1:1",
+            "submit_id": "7daf5526-b055-4a54-84e2-861d271ce55a"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+            "source_sha256": "c1de266586bbe1ed04d61861b7ad9b9a267b6c8dce83925a45223d827ac37201",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 2048,
+            "height": 2048
+          },
+          "updated_at": "2026-07-18T12:42:12"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_JINGYANG_TIGER__three_quarter.png",
+          "sha256": "ace3e8de6b47d87913592cc9993647f99ac142570ec1e8d202c559deadeb39cd",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 2,
+            "attempts_used": 2,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_JINGYANG_TIGER__three_quarter_dreamina__20260718T124604302555.md",
+            "prompt_sha256": "4d75743bf3f34bce6980e297705a9e67f77ff0ca26aaa0eca75fa59d8000ed4b",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "50151b28-ff8d-4e3a-8487-feb877658d84",
+            "archived_previous_path": "出图/共享/candidates/MON_JINGYANG_TIGER/three_quarter/20260718T124658051271__25fddb6c2342.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+            "source_sha256": "c1de266586bbe1ed04d61861b7ad9b9a267b6c8dce83925a45223d827ac37201",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T12:46:58"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:46:58",
+      "views": {
+        "front": "出图/共享/图片/MON_JINGYANG_TIGER__front.png",
+        "three_quarter": "出图/共享/图片/MON_JINGYANG_TIGER__three_quarter.png",
+        "face": "出图/共享/图片/MON_JINGYANG_TIGER__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "78f6e9960bfcdbfae781dbdfc65dfd882534a64045e19c1c3023d3901aec1109",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-18T04:48:00+00:00"
+      }
+    },
+    "STYLE_JPM_MING_GENRE_CINEMATIC": {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "type": "style",
+      "display_name": "明代风俗工笔重彩电影感",
+      "description": "仇英本明代市镇形制与青绿设色为环境基底，写实国漫人物，绢本矿物色，电影级天光/雪光/炉火动机光，含蓄留白世情叙事",
+      "notes": "视觉研究合同：设定库/visual_research.json；只继承线条、色域、材质、明暗和空间层次，不继承校准图人物身份或构图",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+          "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/STYLE_JPM_MING_GENRE_CINEMATIC/anchor/20260718T120740/candidate_02.png",
+            "candidate_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "reviewer": "制作代理（用户授权）",
+            "reviewer_role": "制作代理",
+            "decision": "approved",
+            "reason": "并排复核候选1/2后采纳候选2：全身比例、双手、衣料与屋脊材质清楚，黑灰亮三值层级完整，适合作为线条/上色/材质校准；明确不继承候选人物的脸、发型、服装、体态与构图。授权依据：设定库/approval_delegation.json。",
+            "reviewed_at": "2026-07-18T12:12:42",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-18T12:12:42"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:12:42",
+      "anchor_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "primary_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e"
+    },
+    "LOC_JINGYANGGANG": {
+      "id": "LOC_JINGYANGGANG",
+      "type": "location",
+      "display_name": "景阳冈",
+      "description": "十月晚景黄草山冈；卧牛青石画左、枯松画右后、上冈方向画右上；暮色冷雾和晚霞余光",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_JINGYANGGANG__anchor.png",
+          "sha256": "d0ed9055b6515c968fe80060bb5ed534e44cbba02e03a719a5e1e579906874ec",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_JINGYANGGANG__anchor_dreamina__20260718T124948882242.md",
+            "prompt_sha256": "6af098884ac3e0ebdf0d65e44dee4ef0daa6ce993d437b95c9a51fa7b9987ff8",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "6a801a44-6f5b-436b-b4eb-148b85318256",
+            "raw_canvas_path": "出图/共享/candidates/LOC_JINGYANGGANG/anchor/20260718T125047785161__raw_canvas.png",
+            "raw_canvas_sha256": "2f0e62d4d1a361b0dc0c3581836b53cd528b92f3731fbab42d50da2b2658aefc",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:50:48"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:50:48",
+      "anchor_path": "出图/共享/图片/LOC_JINGYANGGANG__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_JINGYANGGANG__anchor.png",
+      "sha256": "d0ed9055b6515c968fe80060bb5ed534e44cbba02e03a719a5e1e579906874ec"
+    },
+    "LOC_QINGHE_ZISHI_STREET": {
+      "id": "LOC_QINGHE_ZISHI_STREET",
+      "type": "location",
+      "display_name": "清河紫石街",
+      "description": "明代运河市镇风俗街；竹帘、布幌、挑檐铺面与炊饼摊构成竖向步移景异",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+          "sha256": "1dbb3efc2763366fb371b91acb809604c9693ea9975a85e0c593c1aad76aded7",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_QINGHE_ZISHI_STREET__anchor_dreamina__20260718T125048034147.md",
+            "prompt_sha256": "262dc77eaa7a39453cd8d276bfe9d053439d030ab9f0f8daf218463f510411b8",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "9aeb49a1-4b18-4bb0-9ead-f45d2ac3ff00",
+            "raw_canvas_path": "出图/共享/candidates/LOC_QINGHE_ZISHI_STREET/anchor/20260718T125152533043__raw_canvas.png",
+            "raw_canvas_sha256": "6bdcb6cd3a9019a9c385b1d58c7e6050e2079776b0766f88ffeb02fdabcd23be",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:51:52"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:51:52",
+      "anchor_path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+      "sha256": "1dbb3efc2763366fb371b91acb809604c9693ea9975a85e0c593c1aad76aded7"
+    },
+    "LOC_ZHANG_MANSION": {
+      "id": "LOC_ZHANG_MANSION",
+      "type": "location",
+      "display_name": "张大户宅",
+      "description": "前店后院深宅；前厅明亮、内室帘幕压暗；用契纸、房奁、嫁衣表达钱权处置",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_ZHANG_MANSION__anchor.png",
+          "sha256": "a32ef252c2fcf39ab90783a6db0bca564f79c3927675ed9681b50fd24c84c3aa",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_ZHANG_MANSION__anchor_dreamina__20260718T125152801109.md",
+            "prompt_sha256": "32f44b28b8a081ae53ec5a8ba84f8e3c7f3286ee3bf458f163d55f9d33459196",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "d43193c1-acd1-4cd7-9cde-21798bea4554",
+            "raw_canvas_path": "出图/共享/candidates/LOC_ZHANG_MANSION/anchor/20260718T125247638275__raw_canvas.png",
+            "raw_canvas_sha256": "6561317366c9eb1a0ce3fdb571136875d5a93c19f273c95f0f75cbe2a7b4d6c8",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:52:47"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:52:47",
+      "anchor_path": "出图/共享/图片/LOC_ZHANG_MANSION__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_ZHANG_MANSION__anchor.png",
+      "sha256": "a32ef252c2fcf39ab90783a6db0bca564f79c3927675ed9681b50fd24c84c3aa"
+    },
+    "LOC_WU_HOME": {
+      "id": "LOC_WU_HOME",
+      "type": "location",
+      "display_name": "武大家",
+      "description": "紫石街两层小宅；前门临街、灶房画左后、楼梯画右、武松客房楼上画右、红竹帘画左前",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_WU_HOME__anchor.png",
+          "sha256": "0b172d373b0d6ad365285ed655f6e30b087ddf5d85679908ae3fa7a018047b8c",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_WU_HOME__anchor_dreamina__20260718T125247886355.md",
+            "prompt_sha256": "17b87c49d6e8238b9c0c4d0466f47ce98ebe614e4b254b67ebb99bdaba78bccd",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "5356a891-cb14-4c28-9aa0-7a1664bcd49c",
+            "raw_canvas_path": "出图/共享/candidates/LOC_WU_HOME/anchor/20260718T125339688613__raw_canvas.png",
+            "raw_canvas_sha256": "f0d0772ef757f99d44079b3e7dd04cb9959c7939fcaae798649f3431c73f1207",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:53:39"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:53:39",
+      "anchor_path": "出图/共享/图片/LOC_WU_HOME__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_WU_HOME__anchor.png",
+      "sha256": "0b172d373b0d6ad365285ed655f6e30b087ddf5d85679908ae3fa7a018047b8c"
+    },
+    "LOC_QINGHE_COUNTY_STREET": {
+      "id": "LOC_QINGHE_COUNTY_STREET",
+      "type": "location",
+      "display_name": "清河县前主街",
+      "description": "县衙通往县前客店的主街；花红软轿由画右上行至画左下，炊饼担从画左前截住",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_QINGHE_COUNTY_STREET__anchor.png",
+          "sha256": "f4497aac652b9dcba0a2ad603777b6aa0ccd5e31b9f52940f26521bb60579668",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_QINGHE_COUNTY_STREET__anchor_dreamina__20260718T125339934769.md",
+            "prompt_sha256": "028d9baebeebe7d94ba90e2402dde6467a43459a5137fc39ade1a0a4e97c5e58",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "43a8a5df-9013-4e84-904a-192ca97b5269",
+            "raw_canvas_path": "出图/共享/candidates/LOC_QINGHE_COUNTY_STREET/anchor/20260718T125445152485__raw_canvas.png",
+            "raw_canvas_sha256": "676958db08c351348b984f71b4ed221001d8311916870302865ba852e41d1f85",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:54:45"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:54:45",
+      "anchor_path": "出图/共享/图片/LOC_QINGHE_COUNTY_STREET__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_QINGHE_COUNTY_STREET__anchor.png",
+      "sha256": "f4497aac652b9dcba0a2ad603777b6aa0ccd5e31b9f52940f26521bb60579668"
+    },
+    "PROP_SHAOBANG": {
+      "id": "PROP_SHAOBANG",
+      "type": "prop",
+      "display_name": "榆木梢棒",
+      "description": "与武松齐眉长的榆木梢棒；P008砸中枯枝后断成两截，本话不复原",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_SHAOBANG__anchor.png",
+          "sha256": "e0c0a5f5350ac717f05aa40e28d75a6f0b4bec7c3f94dfd67724d2e7c76f5f2e",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_SHAOBANG__anchor_dreamina__20260718T125445415165.md",
+            "prompt_sha256": "bd385083b7ed733bdce3c35255005ce8088c938d395221ebf6c81e3d555a3cb2",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "c92b9fbe-4bce-4979-8d60-a05f2bca7c59",
+            "raw_canvas_path": "出图/共享/candidates/PROP_SHAOBANG/anchor/20260718T125543480385__raw_canvas.png",
+            "raw_canvas_sha256": "1e03178d07fd7f91d2c07cb9eeca6aa76f385ed79b039eca330dded6c3d1f6eb",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:55:43"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:55:43",
+      "prop_contract": "功能:武松上冈防身，P008 砸中枯枝后折断并推动徒手打虎；尺度:与武松齐眉，两手握持；断后两截长度不对称；结构:素面榆木棒身，有手汗磨损、木结和断口木纤维；材料:榆木；交互:P003-P007 双手/单手按动作转换；P008 双手抡击后断裂；P009 弃于画左后无法自愈；版本:hero、stunt、duplicate",
+      "forbidden_inheritance": "金属武器；雕花神兵；折断后自愈；随机变长",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_SHAOBANG",
+        "name": "榆木梢棒",
+        "function": "武松上冈防身，P008 砸中枯枝后折断并推动徒手打虎",
+        "dimensions": "与武松齐眉，两手握持；断后两截长度不对称",
+        "construction": "素面榆木棒身，有手汗磨损、木结和断口木纤维",
+        "materials": [
+          "榆木"
+        ],
+        "interaction_grip": "P003-P007 双手/单手按动作转换；P008 双手抡击后断裂；P009 弃于画左后无法自愈",
+        "production_variants": [
+          "hero",
+          "stunt",
+          "duplicate"
+        ],
+        "evidence_refs": [
+          "SRC_JPM_SOURCE",
+          "SRC_LNM_QIUYING_SCROLL"
+        ],
+        "forbidden": [
+          "金属武器",
+          "雕花神兵",
+          "折断后自愈",
+          "随机变长"
+        ],
+        "status": "confirmed"
+      },
+      "anchor_path": "出图/共享/图片/PROP_SHAOBANG__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_SHAOBANG__anchor.png",
+      "sha256": "e0c0a5f5350ac717f05aa40e28d75a6f0b4bec7c3f94dfd67724d2e7c76f5f2e"
+    },
+    "PROP_CAKE_POLE": {
+      "id": "PROP_CAKE_POLE",
+      "type": "prop",
+      "display_name": "炊饼挑担",
+      "description": "硬木挑担与两只竹编炊饼筐，肩部接触点固定",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_CAKE_POLE__anchor.png",
+          "sha256": "7f00f0420092cabb4d9e6080cb389b117d7bf3058ba0eb0b806d279a632da55f",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_CAKE_POLE__anchor_dreamina__20260718T125543722756.md",
+            "prompt_sha256": "4f7b8d29e924b92845e2771def14c2312df48c1389f6a6ce3079c32de2d9e89d",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "17c3a64c-6b04-4194-847e-e1632ed4dca8",
+            "raw_canvas_path": "出图/共享/candidates/PROP_CAKE_POLE/anchor/20260718T125628310861__raw_canvas.png",
+            "raw_canvas_sha256": "478d296c02def8d065410b04ba3121e0d8ba11639352c045be9796e7a96829bc",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:56:28"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:56:28",
+      "prop_contract": "功能:武大谋生和本分性格的常驻道具；尺度:挑担略宽于武大展肩，两只竹筐至膝旁，不拖地；结构:硬木挑担、竹编筐、布盖和绳系，左右筐容量接近；材料:硬木、竹编、棉布、麻绳；交互:主要压在右肩，武大右手稳担、左手招徕；放下时两筐同时着地；版本:hero、stunt、background、duplicate",
+      "forbidden_inheritance": "手提菜篮；现代金属扁担；筐子随机增减；无肩部接触点",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_CAKE_POLE",
+        "name": "烊饼挑担",
+        "function": "武大谋生和本分性格的常驻道具",
+        "dimensions": "挑担略宽于武大展肩，两只竹筐至膝旁，不拖地",
+        "construction": "硬木挑担、竹编筐、布盖和绳系，左右筐容量接近",
+        "materials": [
+          "硬木",
+          "竹编",
+          "棉布",
+          "麻绳"
+        ],
+        "interaction_grip": "主要压在右肩，武大右手稳担、左手招徕；放下时两筐同时着地",
+        "production_variants": [
+          "hero",
+          "stunt",
+          "background",
+          "duplicate"
+        ],
+        "evidence_refs": [
+          "SRC_LNM_QIUYING_SCROLL",
+          "SRC_JPM_SOURCE"
+        ],
+        "forbidden": [
+          "手提菜篮",
+          "现代金属扁担",
+          "筐子随机增减",
+          "无肩部接触点"
+        ],
+        "status": "confirmed"
+      },
+      "anchor_path": "出图/共享/图片/PROP_CAKE_POLE__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_CAKE_POLE__anchor.png",
+      "sha256": "7f00f0420092cabb4d9e6080cb389b117d7bf3058ba0eb0b806d279a632da55f"
+    },
+    "PROP_RED_CURTAIN": {
+      "id": "PROP_RED_CURTAIN",
+      "type": "prop",
+      "display_name": "红褐竹帘",
+      "description": "武家前门红褐竹帘，帘竿、编织密度和缺口固定，全季家门边界母题",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "sha256": "97afe1744b710dcc6c0e4951cef27c913feafabe1d94c456ad37bcb81a97eb69",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_RED_CURTAIN__anchor_dreamina__20260718T125628537027.md",
+            "prompt_sha256": "cce82af54f54315e43f474328990ca0b6c651d78b51c518e01ce8bc9eae56887",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "e885be75-0097-4925-95cd-a7ed6f46f86c",
+            "raw_canvas_path": "出图/共享/candidates/PROP_RED_CURTAIN/anchor/20260718T125724983192__raw_canvas.png",
+            "raw_canvas_sha256": "711ff6d52182a369b03e68e8ae074ab2e96241b459a974b61f59ebdc6378e81f",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:57:25"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:57:25",
+      "prop_contract": "功能:武家边界、金莲唯一可支配的窗口和第二话祸事入口；尺度:覆盖一扇临街门的竹帘，帘子下沿至膝下，帘竿比门洞略宽；结构:红褐色细竹条编成，左下一处小缺口，上方帘竿与绳环结构固定；材料:染色竹条、麻绳、木制帘竿；交互:金莲用右手推起帘子；P044 松手使帘子自然落下；版本:hero、background、duplicate",
+      "forbidden_inheritance": "现代布窗帘；随机竹条密度；缺口位置跳变；帘子上出现可读字",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_RED_CURTAIN",
+        "name": "红褐竹帘",
+        "function": "武家边界、金莲唯一可支配的窗口和第二话祸事入口",
+        "dimensions": "覆盖一扇临街门的竹帘，帘子下沿至膝下，帘竿比门洞略宽",
+        "construction": "红褐色细竹条编成，左下一处小缺口，上方帘竿与绳环结构固定",
+        "materials": [
+          "染色竹条",
+          "麻绳",
+          "木制帘竿"
+        ],
+        "interaction_grip": "金莲用右手推起帘子；P044 松手使帘子自然落下",
+        "production_variants": [
+          "hero",
+          "background",
+          "duplicate"
+        ],
+        "evidence_refs": [
+          "SRC_LNM_QIUYING_SCROLL",
+          "SRC_JPM_SOURCE"
+        ],
+        "forbidden": [
+          "现代布窗帘",
+          "随机竹条密度",
+          "缺口位置跳变",
+          "帘子上出现可读字"
+        ],
+        "status": "confirmed"
+      },
+      "anchor_path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "sha256": "97afe1744b710dcc6c0e4951cef27c913feafabe1d94c456ad37bcb81a97eb69"
+    },
+    "PROP_WINE_SET": {
+      "id": "PROP_WINE_SET",
+      "type": "prop",
+      "display_name": "雪夜酒具",
+      "description": "素胎粗瓷酒注、四只小盏与两只菜碟；无任何可读文字",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png",
+          "sha256": "e7ed0854026d52fd17d7e1cba527e5394afbfbb86584e7911c7ae28985f6afb0",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_WINE_SET__anchor_dreamina__20260718T125725236375.md",
+            "prompt_sha256": "9e204e705489016e22b2ea5627c6e9c5d9222338b4ca8566a43b204f50c73500",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+            "style_reference_sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "0767eeed-d53d-4059-b60a-c94b60f35ed7",
+            "raw_canvas_path": "出图/共享/candidates/PROP_WINE_SET/anchor/20260718T125818742273__raw_canvas.png",
+            "raw_canvas_sha256": "0650ab1a8dba196669d5192660fb6e43efcdf4ea905d06bc656bdc6fe7cf0e92",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-18T12:58:19"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T12:58:19",
+      "prop_contract": "功能:雪夜叔嫂对峙的动作节拍器，残酒泼地是拒绝的视觉落点；尺度:酒注可单手持，四只小盏、两只菜碟，桌面留有安全的动作空间；结构:素胎粗瓷酒注、无字小盏与菜碟，釉面哑光微有手工不均；材料:粗瓷、竹木桌面；交互:金莲右手持注、左手递盏；武松右手夺盏并向画左地面泼出残酒；版本:hero、stunt、duplicate",
+      "forbidden_inheritance": "可读文字；现代玻璃杯；西式高脚杯；杯盏数量随机增减",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_WINE_SET",
+        "name": "雪夜酒具",
+        "function": "雪夜叔嫂对峙的动作节拍器，残酒泼地是拒绝的视觉落点",
+        "dimensions": "酒注可单手持，四只小盏、两只菜碟，桌面留有安全的动作空间",
+        "construction": "素胎粗瓷酒注、无字小盏与菜碟，釉面哑光微有手工不均",
+        "materials": [
+          "粗瓷",
+          "竹木桌面"
+        ],
+        "interaction_grip": "金莲右手持注、左手递盏；武松右手夺盏并向画左地面泼出残酒",
+        "production_variants": [
+          "hero",
+          "stunt",
+          "duplicate"
+        ],
+        "evidence_refs": [
+          "SRC_LNM_QIUYING_SCROLL",
+          "SRC_JPM_SOURCE"
+        ],
+        "forbidden": [
+          "可读文字",
+          "现代玻璃杯",
+          "西式高脚杯",
+          "杯盏数量随机增减"
+        ],
+        "status": "confirmed"
+      },
+      "anchor_path": "出图/共享/图片/PROP_WINE_SET__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_WINE_SET__anchor.png",
+      "sha256": "e7ed0854026d52fd17d7e1cba527e5394afbfbb86584e7911c7ae28985f6afb0"
+    }
+  },
   "schema_meta": {
     "initialized_at": "2026-07-17",
     "initialized_by": "comic init_project bootstrap"
-  }
+  },
+  "updated_at": "2026-07-18T04:29:57.197048+00:00"
 }

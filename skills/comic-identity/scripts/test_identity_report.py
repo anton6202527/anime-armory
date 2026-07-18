@@ -498,6 +498,180 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
     assert registry["assets"]["CHAR_A"]["status"] == "needs_fix"
 
 
+def test_views_can_generate_dreamina_front_from_style_only_seed(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "项目"
+    style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
+    style_path.parent.mkdir(parents=True)
+    style_path.write_bytes(PNG_1X1)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.write_text(
+        json.dumps(
+            {
+                "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                    },
+                    "CHAR_A": {
+                        "id": "CHAR_A",
+                        "type": "character",
+                        "display_name": "甲",
+                        "character_dna": "方脸，高髻，灰衣。",
+                        "reference_images": [],
+                        "views": {},
+                    },
+                }
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    calls: list[tuple[Path, str]] = []
+
+    def fake_run_dreamina_image(
+        prompt: str,
+        anchor: Path,
+        out_path: Path,
+        *,
+        timeout_sec: int,
+        poll_sec: int,
+        model_version: str,
+        resolution_type: str,
+        ratio: str,
+    ) -> tuple[bool, str, str]:
+        calls.append((anchor, prompt))
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(PNG_1X1)
+        return True, "submit-char-a", ""
+
+    monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
+    monkeypatch.setattr(identity, "run_dreamina_image", fake_run_dreamina_image)
+
+    rc = identity.generate_views(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "characters": "CHAR_A",
+                "views": "front",
+                "backend": "dreamina",
+                "overwrite": False,
+                "candidate_count": 0,
+                "candidate_indices": "",
+                "max_attempts": 1,
+                "timeout_sec": 10,
+                "poll_sec": 2,
+                "model_version": "5.0",
+                "resolution_type": "2k",
+                "ratio": "3:4",
+                "face_ratio": "1:1",
+                "prefer_front_anchor": True,
+                "allow_text_anchor": True,
+            },
+        )()
+    )
+
+    assert rc == 0
+    assert calls and calls[0][0] == style_path
+    assert "本次没有已采纳角色图片作为附件" in calls[0][1]
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    source = registry["assets"]["CHAR_A"]["reference_images"][0]["source"]
+    assert source["anchor_kind"] == "style_only_text_prompt_seed"
+    assert source["backend"] == identity.DREAMINA_CHANNEL
+    assert source["model"] == "Dreamina 5.0"
+    assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
+    assert source["style_reference_role"] == "style_only"
+    assert source["submit_id"] == "submit-char-a"
+
+
+def test_outfits_can_generate_with_dreamina_and_keep_channel_provenance(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "项目"
+    front = root / "出图" / "共享" / "图片" / "CHAR_A__front.png"
+    front.parent.mkdir(parents=True)
+    front.write_bytes(PNG_1X1)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 2,
+                "assets": {
+                    "CHAR_A": {
+                        "id": "CHAR_A",
+                        "type": "character",
+                        "display_name": "甲",
+                        "character_dna": "方脸，高髻。",
+                        "outfits": {
+                            "OUTFIT_WINTER": {
+                                "id": "OUTFIT_WINTER",
+                                "wardrobe_standard": "深蓝交领冬衣，窄袖，无披风。",
+                                "reference_images": [],
+                            }
+                        },
+                    }
+                },
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    calls: list[tuple[Path, str]] = []
+
+    def fake_run_dreamina_image(
+        prompt: str,
+        anchor: Path,
+        out_path: Path,
+        *,
+        timeout_sec: int,
+        poll_sec: int,
+        model_version: str,
+        resolution_type: str,
+        ratio: str,
+    ) -> tuple[bool, str, str]:
+        calls.append((anchor, ratio))
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(PNG_1X1)
+        return True, "submit-outfit-a", ""
+
+    monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
+    monkeypatch.setattr(identity, "dreamina_version", lambda: "dreamina test")
+    monkeypatch.setattr(identity, "run_dreamina_image", fake_run_dreamina_image)
+
+    rc = identity.generate_outfit_references(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "bindings": "CHAR_A=OUTFIT_WINTER",
+                "backend": "dreamina",
+                "overwrite": False,
+                "ratio": "3:4",
+                "max_attempts": 1,
+                "timeout_sec": 10,
+                "poll_sec": 2,
+                "model_version": "5.0",
+                "resolution_type": "2k",
+            },
+        )()
+    )
+
+    assert rc == 0
+    assert calls == [(front, "3:4")]
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    source = registry["assets"]["CHAR_A"]["outfits"]["OUTFIT_WINTER"]["reference_images"][0]["source"]
+    assert source["backend"] == identity.DREAMINA_CHANNEL
+    assert source["model"] == "Dreamina 5.0"
+    assert source["submit_id"] == "submit-outfit-a"
+    assert source["identity_anchor_path"] == "出图/共享/图片/CHAR_A__front.png"
+    manifest = json.loads((root / "生产数据" / "comic_identity_outfits_第1话.json").read_text(encoding="utf-8"))
+    assert manifest["execution_mode"] == "dreamina_official_cli"
+    assert manifest["backend"] == identity.DREAMINA_CHANNEL
+
+
 def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     (root / "出图" / "共享").mkdir(parents=True)
@@ -572,6 +746,88 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
     assert source["style_reference_role"] == "style_only"
     assert source["prompt_sha256"]
     assert (root / source["prompt_path"]).is_file()
+
+
+def test_anchors_generate_non_character_with_dreamina_style_reference(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "项目"
+    style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
+    style_path.parent.mkdir(parents=True)
+    style_path.write_bytes(PNG_1X1)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.write_text(
+        json.dumps(
+            {
+                "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                    },
+                    "PROP_A": {
+                        "id": "PROP_A",
+                        "type": "prop",
+                        "display_name": "旧木牌",
+                        "prop_contract": "木牌完整，边缘磨损，不生成可读文字。",
+                        "reference_images": [],
+                    },
+                }
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    calls: list[tuple[Path, str]] = []
+
+    def fake_run_dreamina_image(
+        prompt: str,
+        anchor: Path,
+        out_path: Path,
+        *,
+        timeout_sec: int,
+        poll_sec: int,
+        model_version: str,
+        resolution_type: str,
+        ratio: str,
+    ) -> tuple[bool, str, str]:
+        calls.append((anchor, ratio))
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(PNG_1X1)
+        return True, "submit-prop-a", ""
+
+    monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
+    monkeypatch.setattr(identity, "dreamina_version", lambda: "dreamina test")
+    monkeypatch.setattr(identity, "run_dreamina_image", fake_run_dreamina_image)
+
+    rc = identity.generate_anchors(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "refs": "PROP_A",
+                "overwrite": False,
+                "candidate_count": 0,
+                "backend": "dreamina",
+                "ratio": "4:5",
+                "max_attempts": 1,
+                "timeout_sec": 10,
+                "poll_sec": 2,
+                "model_version": "5.0",
+                "resolution_type": "2k",
+            },
+        )()
+    )
+
+    assert rc == 0
+    assert calls == [(style_path, "3:4")]
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    source = registry["assets"]["PROP_A"]["reference_images"][0]["source"]
+    assert source["backend"] == identity.DREAMINA_CHANNEL
+    assert source["model"] == "Dreamina 5.0"
+    assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
+    assert source["submit_id"] == "submit-prop-a"
+    assert source["submitted_ratio"] == "3:4"
 
 
 def test_monster_anchor_prompt_consumes_character_dna_and_does_not_force_tail() -> None:
@@ -658,6 +914,87 @@ def test_anchor_candidate_batch_does_not_adopt_unreviewed_images(tmp_path: Path,
     assert manifest["generated"] == 3
     assert manifest["failed"] == 0
     assert manifest["adopted"] is False
+
+
+def test_anchor_candidate_batch_uses_dreamina_text2image_and_records_ratio_adapter(
+    tmp_path: Path, monkeypatch
+) -> None:
+    root = tmp_path / "项目"
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "display_name": "风格校准锚",
+                        "style_contract": "低饱和矿物色、清楚线条与三值明暗。",
+                        "reference_images": [],
+                    }
+                }
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    calls: list[tuple[str, str, str, str]] = []
+
+    def fake_run_dreamina_text_image(
+        prompt: str,
+        out_path: Path,
+        *,
+        timeout_sec: int,
+        poll_sec: int,
+        model_version: str,
+        resolution_type: str,
+        ratio: str,
+    ) -> tuple[bool, str, str]:
+        calls.append((prompt, model_version, resolution_type, ratio))
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(PNG_1X1)
+        return True, "submit-style-a", ""
+
+    monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/dreamina" if name == "dreamina" else None)
+    monkeypatch.setattr(identity, "dreamina_version", lambda: "dreamina test")
+    monkeypatch.setattr(identity, "run_dreamina_text_image", fake_run_dreamina_text_image)
+
+    rc = identity.generate_anchors(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "refs": "STYLE_A",
+                "overwrite": False,
+                "candidate_count": 1,
+                "backend": "dreamina",
+                "ratio": "4:5",
+                "max_attempts": 1,
+                "timeout_sec": 10,
+                "poll_sec": 2,
+                "model_version": "5.0",
+                "resolution_type": "2k",
+            },
+        )()
+    )
+
+    assert rc == 0
+    assert len(calls) == 1
+    assert calls[0][1:] == ("5.0", "2k", "3:4")
+    manifest_path = next((root / "生产数据").glob("comic_identity_anchor_candidates_第1话_*.json"))
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["backend"] == identity.DREAMINA_CHANNEL
+    assert manifest["model"] == "Dreamina 5.0"
+    assert manifest["ratio"] == "4:5"
+    assert manifest["submitted_ratio"] == "3:4"
+    assert manifest["items"][0]["submit_id"] == "submit-style-a"
+    ledger = json.loads((root / "生产数据" / "comic_identity_attempt_ledger_第1话.json").read_text(encoding="utf-8"))
+    assert ledger["attempts"][0]["backend"] == identity.DREAMINA_CHANNEL
+    assert ledger["attempts"][0]["status"] == "succeeded"
+    assert "anchor_path" not in json.loads(registry_path.read_text(encoding="utf-8"))["assets"]["STYLE_A"]
 
 
 def test_adopt_anchor_candidate_binds_human_review_and_sha(tmp_path: Path) -> None:

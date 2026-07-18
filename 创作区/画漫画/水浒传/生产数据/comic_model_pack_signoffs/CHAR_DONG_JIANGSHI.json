@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_DONG_JIANGSHI",
+  "tier": "named_minimal",
+  "model_pack_fingerprint": "3c11e3b9d0ebbf161288ca19a0bc0464007ed90a2215b2240fc71f08709be043",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+      "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png",
+      "sha256": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "",
+      "derivation": {}
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "依据设定库/approval_delegation.json并排目检全部必需视图：同一面孔、头饰、服装、体态与宋画电影感连续；视图边界、手脚、文字水印及禁用项通过。",
+  "approved_at": "2026-07-18T02:33:14+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

@@ -68,7 +68,7 @@ def test_build_prompt_accepts_dreamina_compiled_job() -> None:
             "version": runner.shared.COMPILER_VERSION,
             "profile_version": "test",
             "profile": "zh_comic_reference_first",
-            "backend": "seedream",
+            "backend": "dreamina",
             "language": "zh",
         },
         "submit_prompt": submit_prompt,

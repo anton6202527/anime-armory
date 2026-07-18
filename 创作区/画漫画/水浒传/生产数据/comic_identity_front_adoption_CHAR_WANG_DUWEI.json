@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-18T10:12:41",
+  "ref_id": "CHAR_WANG_DUWEI",
+  "candidate_path": "出图/共享/candidates/CHAR_WANG_DUWEI/front/20260718__dreamina5__candidate1.png",
+  "candidate_sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+  "adopted_path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+  "adopted_sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "宽圆脸、卧蚕、丰厚鼻头、略丰腴体态与驸马礼服均符合合同。 依据设定库/approval_delegation.json签收。",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

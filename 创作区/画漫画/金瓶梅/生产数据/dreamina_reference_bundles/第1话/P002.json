@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P002",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 3,
+  "references": [
+    {
+      "id": "STYLE_JPM_MING_GENRE_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_JPM_MING_GENRE_CINEMATIC__anchor.png",
+      "sha256": "b5c33a39b7d8a2e0d6128100a004db7b057d977411f7d67be259e49db89e2e1e",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_QINGHE_ZISHI_STREET",
+      "path": "出图/共享/图片/LOC_QINGHE_ZISHI_STREET__anchor.png",
+      "sha256": "1dbb3efc2763366fb371b91acb809604c9693ea9975a85e0c593c1aad76aded7",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "LOC_QINGHE_COUNTY_STREET",
+      "path": "出图/共享/图片/LOC_QINGHE_COUNTY_STREET__anchor.png",
+      "sha256": "f4497aac652b9dcba0a2ad603777b6aa0ccd5e31b9f52940f26521bb60579668",
+      "role": "location",
+      "required": true
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T13:19:39"
+}

@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">汴京暮色上空一颗暗金星芒坠入瓦舍，落地视觉匹配切成一只赭褐皮蹴…</text>
+<rect x="46" y="131" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="146">P002</text>
+<text class="note" x="51" y="161">高俅在瓦舍人群间以脚背稳稳托球，清瘦长腿与单侧嘴角先被看见。</text>
+<rect x="57" y="200" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="215">P003</text>
+<text class="note" x="62" y="230">短兵、乐器、相扑绳与笔墨在画面四角形成杂艺蒙太奇，高俅从中穿过。</text>
+<rect x="46" y="248" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="263">P004</text>
+<text class="note" x="51" y="278">高俅掌心掠过仁义礼智信五枚无字木牌，却一枚不取，转身追逐酒局。</text>
+<rect x="57" y="318" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="333">P005</text>
+<text class="note" x="62" y="348">酒楼帘幕后，高俅把富家子弟引向骰盅、歌席和挥霍的人群。</text>
+<rect x="46" y="366" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="381">P006</text>
+<text class="note" x="51" y="396">开封府阴影中只见杖影落下，高俅咬牙伏地，避免展示血腥。</text>
+<text class="note" x="38" y="448">hook: P006 judgment</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="385" y="62" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="77">P007</text>
+<text class="note" x="390" y="92">城门在身后闭合，高俅背小包袱独自走入冷灰驿道。</text>
+<rect x="385" y="124" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="139">P008</text>
+<text class="note" x="390" y="154">三轮季节叠影掠过临淮客舍窗格，高俅在窗边练脚步。</text>
+<rect x="385" y="186" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="201">P009</text>
+<text class="note" x="390" y="216">赦令卷轴只作无字纹理从官差手中展开，阳光越过门槛。</text>
+<rect x="385" y="248" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="263">P010</text>
+<text class="note" x="390" y="278">柳家人的手把空白荐书、盘缠和小包袱递给高俅，高俅压住喜色。</text>
+<rect x="385" y="310" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="325">P011</text>
+<text class="note" x="390" y="340">高俅沿河桥向汴京城门走去，荐书贴身收好。</text>
+<rect x="385" y="373" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="388">P012</text>
+<text class="note" x="390" y="403">金梁桥下药铺门帘被掀开，高俅抱拳投帖，董将士在柜后抬眼。</text>
+<text class="note" x="366" y="448">hook: P012 arrival</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="702" y="62" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="77">P013</text>
+<text class="note" x="707" y="92">董将士看信后侧目打量高俅，孩子的剪影从后帘探出又被他挡回。</text>
+<rect x="713" y="140" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="155">P014</text>
+<text class="note" x="718" y="170">董将士换上笑脸引高俅入内，手却牢牢按着通往内院的门。</text>
+<rect x="713" y="194" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="209">P015</text>
+<text class="note" x="718" y="224">十余只空碗与日影叠化，高俅安坐，董将士在远处焦虑踱步。</text>
+<rect x="702" y="248" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="263">P016</text>
+<text class="note" x="707" y="278">董将士将一套整洁衣物和第二封空白荐书推到高俅面前。</text>
+<rect x="713" y="326" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="341">P017</text>
+<text class="note" x="718" y="356">高俅立即起身作揖，嘴角一侧上挑，双手稳接荐书。</text>
+<rect x="713" y="381" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="396">P018</text>
+<text class="note" x="718" y="411">学士府外，高俅在门阶下候见，小苏学士从帘后看完荐书。</text>
+<text class="note" x="694" y="448">hook: P018 handoff_two_entry</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="46" y="520" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="535">P019</text>
+<text class="note" x="51" y="550">小苏学士把荐书合上，目光越过高俅投向更高的一扇府门。</text>
+<rect x="57" y="589" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="604">P020</text>
+<text class="note" x="62" y="619">第三封空白荐书落到高俅掌中，小苏学士保持疏离。</text>
+<rect x="46" y="637" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="652">P021</text>
+<text class="note" x="51" y="667">三扇门的叠影在高俅身后次第合拢，前方驸马府门开启。</text>
+<rect x="46" y="706" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="721">P022</text>
+<text class="note" x="51" y="736">王都尉在前厅接过荐书，见高俅姿态机敏，当即露出兴味。</text>
+<rect x="46" y="776" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="791">P023</text>
+<text class="note" x="51" y="806">高俅换上青灰亲随长袍，空白素木令牌垂在腰侧，镜面只映同一张脸。</text>
+<rect x="57" y="845" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="860">P024</text>
+<text class="note" x="62" y="875">高俅捧物穿行府内，门房和仆从自然让路，他已像府中家人。</text>
+<text class="note" x="38" y="906">hook: P024 belonging</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="385" y="520" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="535">P025</text>
+<text class="note" x="390" y="550">府中摆宴，王都尉立在宴厅中轴吩咐，高俅在画左候命。</text>
+<rect x="374" y="574" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="589">P026</text>
+<text class="note" x="379" y="604">端王步入宴厅，年轻俊秀而克制，目光先扫过乐器与球具。</text>
+<rect x="385" y="652" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="667">P027</text>
+<text class="note" x="390" y="682">宝鼎轻烟、金瓶花枝、乐工剪影和席面冷暖交错，人物不看镜头。</text>
+<rect x="385" y="706" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="721">P028</text>
+<text class="note" x="390" y="736">珍馐器皿、银丝鲊与规整座次以克制近景掠过，画面边缘只留无脸宾客…</text>
+<rect x="385" y="760" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="775">P029</text>
+<text class="note" x="390" y="790">歌舞长袖掠过前景，端王与王都尉谈笑，宴席声场推向高潮。</text>
+<rect x="374" y="815" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="830">P030</text>
+<text class="note" x="379" y="845">宴后端王走入书院，忽然停在案前一对羊脂玉卧狮旁。</text>
+<text class="note" x="366" y="906">hook: P030 study_discovery</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="713" y="520" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="535">P031</text>
+<text class="note" x="718" y="550">端王双手托起一只玉狮，另一只仍在案上，数量关系清楚。</text>
+<rect x="713" y="570" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="585">P032</text>
+<text class="note" x="718" y="600">王都尉指向空金盒，示意另有玉龙笔架相配。</text>
+<rect x="702" y="621" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="636">P033</text>
+<text class="note" x="707" y="651">次日，高俅双臂稳抱金盒与黄罗包袱走出驸马府，两狮一龙收纳关系明…</text>
+<rect x="713" y="695" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="710">P034</text>
+<text class="note" x="718" y="725">端王府内门开启，高俅在画左候见区停步，堂候官接走礼盒。</text>
+<rect x="702" y="746" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="761">P035</text>
+<text class="note" x="707" y="776">庭心端王与近侍踢宋代赭褐皮球，廊下高俅垂手等候。</text>
+<rect x="702" y="819" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="834">P036</text>
+<text class="note" x="707" y="849">端王一脚漏接，皮球沿石地从画右滚向画左，运动轨迹清楚。</text>
+<text class="note" x="694" y="906">hook: P036 missed_ball</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="46" y="978" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="993">P037</text>
+<text class="note" x="51" y="1008">极近景：赭褐皮球抵到高俅薄底靴前，脚背与球明确接触。</text>
+<rect x="46" y="1051" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1066">P038</text>
+<text class="note" x="51" y="1081">高俅脚尖轻挑、侧身一转，以鸳鸯拐将球弧线送回端王，手脚完整。</text>
+<rect x="46" y="1125" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1140">P039</text>
+<text class="note" x="51" y="1155">端王稳稳接球，第一次正眼看向廊下高俅；球停在他脚边。</text>
+<rect x="57" y="1198" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1213">P040</text>
+<text class="note" x="62" y="1228">高俅俯身但不跪倒，王府空白令牌可见，堂候官在远处收存玉盒。</text>
+<rect x="57" y="1249" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1264">P041</text>
+<text class="note" x="62" y="1279">端王以脚尖压球，目光不离高俅，示意他近前。</text>
+<rect x="57" y="1300" width="242" height="45" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1315">P042</text>
+<text class="note" x="62" y="1330">高俅抬眼估量端王神色，嘴上谦退，身体已向球场倾斜。</text>
+<text class="note" x="38" y="1364">hook: P042 feigned_modesty</text>
+<rect x="356" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="962">SCROLL_008 scroll</text>
+<rect x="374" y="978" width="264" height="87" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="993">P043</text>
+<text class="note" x="379" y="1008">高俅束起前襟连续控球，脚背、膝腿与皮球接触点逐次清楚，端王在画…</text>
+<rect x="374" y="1071" width="264" height="87" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1086">P044</text>
+<text class="note" x="379" y="1101">暮色落入廊庑，端王把皮球递回高俅，命人设席留宿。</text>
+<rect x="374" y="1164" width="264" height="87" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1179">P045</text>
+<text class="note" x="379" y="1194">次日王都尉到府，端王与他对坐，高俅静立画左后方。</text>
+<rect x="374" y="1258" width="264" height="88" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1273">P046</text>
+<text class="note" x="379" y="1288">外门余光在高俅身后合拢；端王留在画右，前景赭褐皮球静止，暗金星…</text>
+<text class="note" x="366" y="1364">hook: P046 decision</text>
+</svg>

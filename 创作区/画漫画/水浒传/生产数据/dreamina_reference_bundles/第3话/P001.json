@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第3话",
+  "panel_id": "P001",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 3,
+  "references": [
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_BIANJING_MARKET",
+      "path": "出图/共享/图片/LOC_BIANJING_MARKET__anchor.png",
+      "sha256": "d87afd1c04f7f8adcb709405b0a2d19c1015274f86ca1b0125bbece04b68acfa",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_CUJU_BALL",
+      "path": "出图/共享/图片/PROP_CUJU_BALL__anchor.png",
+      "sha256": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b",
+      "role": "prop",
+      "required": true
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-18T12:57:35"
+}

@@ -3498,11 +3498,1947 @@
       "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
       "primary_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
       "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795"
+    },
+    "CHAR_GAO_QIU": {
+      "id": "CHAR_GAO_QIU",
+      "type": "character",
+      "display_name": "高俅",
+      "description": "汴京浮浪帮闲，凭蹴鞠进入端王府，长线权力反派",
+      "character_dna": "二十四岁左右，窄长鹅蛋脸但下颌微方，内窄外挑的细长眼、正常眼距，左眉略高，薄直鼻梁，嘴角习惯性一侧上挑；黑发高束小髻，清瘦柔韧、腿长脚背灵活，手指细长；不得演员脸、奸臣白脸谱或妖异眼妆",
+      "variant_policy": "落魄布衣、王府亲随与后续官服始终继承窄长脸、眼型眼距、左高眉、单侧嘴角和清瘦长腿体态；年龄与权势只改变饱满度、妆整度、服装与姿态",
+      "forbidden_inheritance": "不继承影视演员肖像、现代足球员造型、临时包袱、气球、跪姿或未来官帽官服",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "落魄布衣、王府亲随与后续官服始终继承窄长脸、眼型眼距、左高眉、单侧嘴角和清瘦长腿体态；年龄与权势只改变饱满度、妆整度、服装与姿态",
+          "forbidden": "不继承影视演员肖像、现代足球员造型、临时包袱、气球、跪姿或未来官帽官服",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+              "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_GAO_QIU"
+              },
+              "updated_at": "2026-07-18T10:12:41"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_STREET_WANDERER": {
+          "id": "OUTFIT_STREET_WANDERER",
+          "name": "汴京落魄帮闲装",
+          "description": "身份场合:无业帮闲、赦后返京者；层次:素中衣、旧灰褐圆领短袍、便于动作的长裤；轮廓:清瘦长腿、短袍收袖，下摆不过膝，能清楚读出腿脚动作；领襟:窄圆领，不露现代内搭领；开合:侧系与革布混合带固定，禁正中拉链盘扣；袖摆:窄袖露腕，踢球时不遮手；腰带:旧布带夹窄革条；冠帽:黑色软幞巾/便帽，小髻不散乱；鞋履:深褐薄底旧靴，鞋头与磨损位置固定；材料:粗细混织布、旧革；色域:灰褐、旧青、泥褐；状态:street_play、punished、return_dust",
+          "forbidden": "现代足球服；仙侠束袖；华贵锦袍；影视版高俅套装；提前穿官服",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+              "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+              "source": {
+                "kind": "adopted_character_front_as_outfit",
+                "character_id": "CHAR_GAO_QIU",
+                "outfit_id": "OUTFIT_STREET_WANDERER"
+              },
+              "derivation": {
+                "method": "adopted_existing_view",
+                "source_path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+                "source_sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+                "crop_box": []
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:12:41"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_GAO_QIU",
+            "outfit_id": "OUTFIT_STREET_WANDERER",
+            "name": "汴京落魄帮闲装",
+            "identity_rank": "无业帮闲、赦后返京者",
+            "occasion_activity": [
+              "瓦舍蹴鞠",
+              "背包袱返京",
+              "药铺投奔"
+            ],
+            "layers": [
+              "素中衣",
+              "旧灰褐圆领短袍",
+              "便于动作的长裤"
+            ],
+            "silhouette": "清瘦长腿、短袍收袖，下摆不过膝，能清楚读出腿脚动作",
+            "collar_neckline": "窄圆领，不露现代内搭领",
+            "closure": "侧系与革布混合带固定，禁正中拉链盘扣",
+            "sleeves": "窄袖露腕，踢球时不遮手",
+            "hem": "膝上至膝附近",
+            "waist_belt": "旧布带夹窄革条",
+            "headwear": [
+              "黑色软幞巾/便帽，小髻不散乱"
+            ],
+            "footwear": [
+              "深褐薄底旧靴，鞋头与磨损位置固定"
+            ],
+            "materials": [
+              "粗细混织布",
+              "旧革"
+            ],
+            "palette": [
+              "灰褐",
+              "旧青",
+              "泥褐"
+            ],
+            "patterns": [
+              "无华纹"
+            ],
+            "permanent_accessories": [],
+            "removable_accessories": [
+              "小包袱"
+            ],
+            "state_variants": [
+              "street_play",
+              "punished",
+              "return_dust"
+            ],
+            "continuity_keys": [
+              "圆领宽度",
+              "软巾折角",
+              "腰带高度",
+              "靴磨损",
+              "包袱是否在身"
+            ],
+            "forbidden": [
+              "现代足球服",
+              "仙侠束袖",
+              "华贵锦袍",
+              "影视版高俅套装",
+              "提前穿官服"
+            ],
+            "uncertain": [
+              "原著未给落魄期服装细节，按北宋市井行动服语法原创"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          }
+        },
+        "OUTFIT_WANG_ATTENDANT": {
+          "id": "OUTFIT_WANG_ATTENDANT",
+          "name": "王都尉府亲随装",
+          "description": "身份场合:驸马府内亲随，非官员；层次:素中衣、青灰窄袖圆领长袍、便于运动的长裤；轮廓:仍保持清瘦长腿；衣长至小腿，运动时可束前襟但不得变短打武服；领襟:窄圆领，领缘深一阶；开合:侧系隐蔽，腰带固定；袖摆:窄袖不过手；腰带:深灰窄革带，悬小型府内令牌；冠帽:深色软巾，折角与街装一致但更整洁；鞋履:黑褐薄底靴，保持同一鞋头；材料:哑光细布、窄革带、木/铜令牌；色域:青灰、墨黑、少量暗赭；佩饰:王府亲随令牌；状态:mansion_clean、gift_delivery、cuju_active",
+          "forbidden": "官员幞头与品服；甲胄；现代运动服；随机龙纹；把球或玉器固化为饰品",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_GAO_QIU__OUTFIT_WANG_ATTENDANT.png",
+              "sha256": "9f796a51a74cee3672c6bbdfafa275b1193afea4ae1d8a2e3183d90e66cfbaaf",
+              "view": "front",
+              "source": {
+                "kind": "dreamina_image2image",
+                "model": "Dreamina 5.0",
+                "submit_id": "3706446d-7acb-4e66-9680-fa586a7856cd"
+              },
+              "updated_at": "2026-07-18T11:05:00+08:00"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_GAO_QIU",
+            "outfit_id": "OUTFIT_WANG_ATTENDANT",
+            "name": "王都尉府亲随装",
+            "identity_rank": "驸马府内亲随，非官员",
+            "occasion_activity": [
+              "府内出入",
+              "送玉器",
+              "端王府候见",
+              "蹴鞠"
+            ],
+            "layers": [
+              "素中衣",
+              "青灰窄袖圆领长袍",
+              "便于运动的长裤"
+            ],
+            "silhouette": "仍保持清瘦长腿；衣长至小腿，运动时可束前襟但不得变短打武服",
+            "collar_neckline": "窄圆领，领缘深一阶",
+            "closure": "侧系隐蔽，腰带固定",
+            "sleeves": "窄袖不过手",
+            "hem": "小腿中下段；蹴鞠时前襟束入腰带",
+            "waist_belt": "深灰窄革带，悬小型府内令牌",
+            "headwear": [
+              "深色软巾，折角与街装一致但更整洁"
+            ],
+            "footwear": [
+              "黑褐薄底靴，保持同一鞋头"
+            ],
+            "materials": [
+              "哑光细布",
+              "窄革带",
+              "木/铜令牌"
+            ],
+            "palette": [
+              "青灰",
+              "墨黑",
+              "少量暗赭"
+            ],
+            "patterns": [
+              "无大纹样"
+            ],
+            "permanent_accessories": [
+              "王府亲随令牌"
+            ],
+            "removable_accessories": [
+              "送礼时金盒黄罗包袱"
+            ],
+            "state_variants": [
+              "mansion_clean",
+              "gift_delivery",
+              "cuju_active"
+            ],
+            "continuity_keys": [
+              "脸与体态不变",
+              "软巾折角",
+              "圆领宽度",
+              "令牌位置",
+              "前襟束起状态",
+              "靴形"
+            ],
+            "forbidden": [
+              "官员幞头与品服",
+              "甲胄",
+              "现代运动服",
+              "随机龙纹",
+              "把球或玉器固化为饰品"
+            ],
+            "uncertain": [
+              "亲随服为证据约束下原创，不宣称具体王府制服复原"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_STREET_WANDERER": {
+          "id": "STATE_STREET_WANDERER",
+          "name": "汴京落魄帮闲状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_STREET_WANDERER",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        },
+        "STATE_WANG_ATTENDANT": {
+          "id": "STATE_WANG_ATTENDANT",
+          "name": "王府亲随状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_WANG_ATTENDANT",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+          "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+          "source": {
+            "kind": "human_selected_dreamina_front",
+            "chapter": "第3话",
+            "candidate_path": "出图/共享/candidates/CHAR_GAO_QIU/front/20260718__dreamina5__candidate1.png",
+            "candidate_sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "原创面孔、窄长脸与清瘦长腿符合DNA；落魄帮闲装、全身手脚、3:4与禁用项通过。 依据设定库/approval_delegation.json签收。",
+            "reviewed_at": "2026-07-18T10:12:41",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "f90b9dfb-2d15-443c-bd92-34ad879ac1aa"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+            "source_sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:12:41"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+          "sha256": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+          "source": {
+            "kind": "dreamina_late_result_recovered",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "cca41505-9ce4-46ac-8077-bf3d9087e2b3",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:18:00+08:00"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__side.png",
+          "sha256": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8",
+          "source": {
+            "kind": "dreamina_late_result_recovered",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "de36740d-606c-4c77-9285-b5274671728c",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:18:00+08:00"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__back.png",
+          "sha256": "51a1880047ec1e65912384e3e871b240eb5522eede81317ad203b9b1127c03b9",
+          "source": {
+            "kind": "dreamina_late_result_recovered",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "97fe9efc-abe9-4085-96d5-97550e26cba4",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:18:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+          "sha256": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+          "source": {
+            "kind": "dreamina_late_result_recovered",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "71942f6f-a95c-446c-b64c-3c4d743e328a",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:18:00+08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T10:18:00+08:00",
+      "views": {
+        "front": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_GAO_QIU__side.png",
+        "back": "出图/共享/图片/CHAR_GAO_QIU__back.png",
+        "face": "出图/共享/图片/CHAR_GAO_QIU__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "ca36feb843f2638ed31c678f68eb969844557786342757d11c158745af76b20e",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-18T02:25:02+00:00"
+      }
+    },
+    "CHAR_DUAN_WANG": {
+      "id": "CHAR_DUAN_WANG",
+      "type": "character",
+      "display_name": "端王赵佶",
+      "description": "尚未即位的端王，喜好书画玩器与蹴鞠",
+      "character_dna": "十九岁左右，偏长的清秀圆脸、宽额、眉眼舒展，眼尾微垂而目光敏锐，鼻梁细直，唇形清楚；黑发藏于软纱唐巾，身高中等偏高、肩窄腰直、动作轻快讲究；原创面孔，不得套用徽宗画像或影视演员脸",
+      "variant_policy": "端王运动常服与后续帝王形态共享脸型、五官比例、宽额和修长体态；即位只改变冠服、成熟度与权力姿态",
+      "forbidden_inheritance": "不继承馆藏帝王画像人脸、影视演员肖像、现代运动装、临时玉器和蹴鞠球",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "端王运动常服与后续帝王形态共享脸型、五官比例、宽额和修长体态；即位只改变冠服、成熟度与权力姿态",
+          "forbidden": "不继承馆藏帝王画像人脸、影视演员肖像、现代运动装、临时玉器和蹴鞠球",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+              "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "f5330e3a-eb90-49bb-866c-39a0b0bc7304",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            },
+            {
+              "view": "three_quarter",
+              "path": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+              "sha256": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "46b0d01c-611d-478f-b7f8-b9a38fae64b6",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            },
+            {
+              "view": "face",
+              "path": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+              "sha256": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "4fb53591-f9dc-4050-946a-c9ef4e402ca7",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+              "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_DUAN_WANG"
+              },
+              "updated_at": "2026-07-18T10:12:41"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_PRINCE_CUJU": {
+          "id": "OUTFIT_PRINCE_CUJU",
+          "name": "端王蹴鞠常服",
+          "description": "身份场合:未即位亲王，王府内庭运动场合；层次:素色中衣、低饱和紫色圆领绣纹长袍、便于束起前襟的内层裤装；轮廓:修长肩窄，长袍以腰绦束起前襟，仍有亲王层级但不作皇帝冕服；领襟:圆领，领袖局部隐金而非满身金线；开合:侧系与双穗绦固定；袖摆:袖量中等，蹴鞠时收于腕上不遮手；腰带:文武双穗绦的保守视觉转译，穗位跨格固定；冠帽:软纱唐巾，非皇帝通天冠/冕冠；鞋履:深紫黑靴，鞋面少量金线飞凤纹，纹样位置固定；材料:哑光绢、局部金线、丝绦；色域:低饱和黛紫、墨黑、暗金点色；佩饰:软纱唐巾、双穗绦；状态:court_cuju、gift_received、banquet_request",
+          "forbidden": "皇帝冕服；明清龙袍；满金戏服；现代运动鞋；影视演员脸或徽宗画像脸",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+              "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "f5330e3a-eb90-49bb-866c-39a0b0bc7304",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_DUAN_WANG",
+            "outfit_id": "OUTFIT_PRINCE_CUJU",
+            "name": "端王蹴鞠常服",
+            "identity_rank": "未即位亲王，王府内庭运动场合",
+            "occasion_activity": [
+              "王府蹴鞠",
+              "接见送礼亲随",
+              "留客"
+            ],
+            "layers": [
+              "素色中衣",
+              "低饱和紫色圆领绣纹长袍",
+              "便于束起前襟的内层裤装"
+            ],
+            "silhouette": "修长肩窄，长袍以腰绦束起前襟，仍有亲王层级但不作皇帝冕服",
+            "collar_neckline": "圆领，领袖局部隐金而非满身金线",
+            "closure": "侧系与双穗绦固定",
+            "sleeves": "袖量中等，蹴鞠时收于腕上不遮手",
+            "hem": "近踝；运动时前襟束入腰绦",
+            "waist_belt": "文武双穗绦的保守视觉转译，穗位跨格固定",
+            "headwear": [
+              "软纱唐巾，非皇帝通天冠/冕冠"
+            ],
+            "footwear": [
+              "深紫黑靴，鞋面少量金线飞凤纹，纹样位置固定"
+            ],
+            "materials": [
+              "哑光绢",
+              "局部金线",
+              "丝绦"
+            ],
+            "palette": [
+              "低饱和黛紫",
+              "墨黑",
+              "暗金点色"
+            ],
+            "patterns": [
+              "克制龙纹仅依原文作亲王叙事标识，数量和位置固定，不扩散到全袍"
+            ],
+            "permanent_accessories": [
+              "软纱唐巾",
+              "双穗绦"
+            ],
+            "removable_accessories": [],
+            "state_variants": [
+              "court_cuju",
+              "gift_received",
+              "banquet_request"
+            ],
+            "continuity_keys": [
+              "唐巾轮廓",
+              "圆领宽度",
+              "龙纹位置",
+              "双穗位置",
+              "前襟束起方式",
+              "靴面凤纹"
+            ],
+            "forbidden": [
+              "皇帝冕服",
+              "明清龙袍",
+              "满金戏服",
+              "现代运动鞋",
+              "影视演员脸或徽宗画像脸"
+            ],
+            "uncertain": [
+              "原文服饰具有后世叙事成分，项目只保留身份与动作信息并按宋代克制美学转译"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_PRINCE_CUJU": {
+          "id": "STATE_PRINCE_CUJU",
+          "name": "端王蹴鞠状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_PRINCE_CUJU",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+          "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "f5330e3a-eb90-49bb-866c-39a0b0bc7304",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+          "sha256": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "46b0d01c-611d-478f-b7f8-b9a38fae64b6",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+          "sha256": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "4fb53591-f9dc-4050-946a-c9ef4e402ca7",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T10:28:00+08:00",
+      "views": {
+        "front": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_DUAN_WANG__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "da6e362e1d89f4aa008cc2d3560c135e0aa46fd9fba86ffb37380caf14c1654e",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-18T02:33:13+00:00"
+      }
+    },
+    "CHAR_WANG_DUWEI": {
+      "id": "CHAR_WANG_DUWEI",
+      "type": "character",
+      "display_name": "王都尉",
+      "description": "哲宗妹夫、神宗驸马，高俅与端王之间的人情中介",
+      "character_dna": "三十五岁左右，面形圆润偏宽，卧蚕明显、眉毛浓而弧度温和，鼻头丰厚，短须修整整齐；中等身高略丰腴，举止雅惯而圆滑；原创面孔，不得演员脸",
+      "variant_policy": "宴席与书院场景共享宽圆脸、卧蚕、丰厚鼻头、整齐短须与略丰腴体态；只切换礼服状态",
+      "forbidden_inheritance": "不继承影视演员、端王脸型、临时酒杯、玉器或宴席姿势",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "宴席与书院场景共享宽圆脸、卧蚕、丰厚鼻头、整齐短须与略丰腴体态；只切换礼服状态",
+          "forbidden": "不继承影视演员、端王脸型、临时酒杯、玉器或宴席姿势",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+              "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "text2image-front",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            },
+            {
+              "view": "face",
+              "path": "出图/共享/图片/CHAR_WANG_DUWEI__face.png",
+              "sha256": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "15e0679b-1b28-4053-bbdf-dcd29dbcc2c8",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+              "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WANG_DUWEI"
+              },
+              "updated_at": "2026-07-18T10:12:41"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_PRINCE_CONSORT_HOST": {
+          "id": "OUTFIT_PRINCE_CONSORT_HOST",
+          "name": "王都尉宴客礼服",
+          "description": "身份场合:神宗驸马、哲宗妹夫，府宴主人；层次:素中衣、暗赭红圆领礼袍、克制外层披衫可选；轮廓:略丰腴但衣线垂直，靠材质和带具读出贵族身份；领襟:圆领，领袖隐约织金；开合:侧系隐藏；袖摆:中等宽袖，端杯与递物时露手；腰带:深色革带配少量玉质带饰；冠帽:深色展脚幞头，翼长固定；鞋履:黑色礼靴；材料:哑光绢、局部织金、玉/革；色域:暗赭红、烟黑、少量玉白；佩饰:官带、展脚幞头；状态:birthday_host、study_gift、prince_banquet",
+          "forbidden": "明清补服；皇帝龙纹；满身珠玉；影视版驸马造型",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+              "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "text2image-front",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_WANG_DUWEI",
+            "outfit_id": "OUTFIT_PRINCE_CONSORT_HOST",
+            "name": "王都尉宴客礼服",
+            "identity_rank": "神宗驸马、哲宗妹夫，府宴主人",
+            "occasion_activity": [
+              "寿宴主位",
+              "书院赏玩",
+              "端王府赴宴"
+            ],
+            "layers": [
+              "素中衣",
+              "暗赭红圆领礼袍",
+              "克制外层披衫可选"
+            ],
+            "silhouette": "略丰腴但衣线垂直，靠材质和带具读出贵族身份",
+            "collar_neckline": "圆领，领袖隐约织金",
+            "closure": "侧系隐藏",
+            "sleeves": "中等宽袖，端杯与递物时露手",
+            "hem": "近踝",
+            "waist_belt": "深色革带配少量玉质带饰",
+            "headwear": [
+              "深色展脚幞头，翼长固定"
+            ],
+            "footwear": [
+              "黑色礼靴"
+            ],
+            "materials": [
+              "哑光绢",
+              "局部织金",
+              "玉/革"
+            ],
+            "palette": [
+              "暗赭红",
+              "烟黑",
+              "少量玉白"
+            ],
+            "patterns": [
+              "低对比团花或无纹"
+            ],
+            "permanent_accessories": [
+              "官带",
+              "展脚幞头"
+            ],
+            "removable_accessories": [],
+            "state_variants": [
+              "birthday_host",
+              "study_gift",
+              "prince_banquet"
+            ],
+            "continuity_keys": [
+              "幞头翼长",
+              "短须",
+              "圆领",
+              "带饰数量",
+              "袖口暗纹"
+            ],
+            "forbidden": [
+              "明清补服",
+              "皇帝龙纹",
+              "满身珠玉",
+              "影视版驸马造型"
+            ],
+            "uncertain": [
+              "具体礼服品级未在原文说明，采取低风险贵族常礼服设计"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_PRINCE_CONSORT_HOST": {
+          "id": "STATE_PRINCE_CONSORT_HOST",
+          "name": "驸马府主宴客状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_PRINCE_CONSORT_HOST",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+          "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "text2image-front",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_WANG_DUWEI__face.png",
+          "sha256": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "15e0679b-1b28-4053-bbdf-dcd29dbcc2c8",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T10:28:00+08:00",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+        "face": "出图/共享/图片/CHAR_WANG_DUWEI__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "87e2ed00da731e5edf327010db7fd67a9fa2cc7ca0a766c784a1e282c188a280",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-18T02:33:14+00:00"
+      }
+    },
+    "CHAR_DONG_JIANGSHI": {
+      "id": "CHAR_DONG_JIANGSHI",
+      "type": "character",
+      "display_name": "董将士",
+      "description": "金梁桥药铺主人，碍于人情短留高俅后转荐",
+      "character_dna": "四十余岁，方脸、浓直眉、眼袋轻重不一，鼻翼宽，唇厚；中等结实体态，常有审慎防备的侧目；原创面孔",
+      "variant_policy": "药铺与送别场景继承方脸、浓直眉、宽鼻翼和结实体态",
+      "forbidden_inheritance": "不继承影视演员、高俅脸、药包、书信或临时动作",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "药铺与送别场景继承方脸、浓直眉、宽鼻翼和结实体态",
+          "forbidden": "不继承影视演员、高俅脸、药包、书信或临时动作",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+              "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "text2image-front",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            },
+            {
+              "view": "face",
+              "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png",
+              "sha256": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "aabd9fcd-4330-40da-8bcc-127a0f68019b",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+              "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_DONG_JIANGSHI"
+              },
+              "updated_at": "2026-07-18T10:12:41"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_APOTHECARY_HOST": {
+          "id": "OUTFIT_APOTHECARY_HOST",
+          "name": "药铺东家常服",
+          "description": "身份场合:金梁桥药铺主人、城市中等家产者；层次:素中衣、深茶色交领长衫、劳动时可加素围布；轮廓:结实体态、长衫收袖，既可经营也可会客；领襟:交领方向固定；开合:右衽布结；袖摆:中窄袖；腰带:素革带/布带；冠帽:深色软巾；鞋履:布履；材料:细麻布、素革；色域:深茶、烟灰、旧麻；状态:shop_work、guest_formal",
+          "forbidden": "官服；豪商满金；现代药店白衣",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+              "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "text2image-front",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_DONG_JIANGSHI",
+            "outfit_id": "OUTFIT_APOTHECARY_HOST",
+            "name": "药铺东家常服",
+            "identity_rank": "金梁桥药铺主人、城市中等家产者",
+            "occasion_activity": [
+              "药铺接信",
+              "家中留客",
+              "转荐送别"
+            ],
+            "layers": [
+              "素中衣",
+              "深茶色交领长衫",
+              "劳动时可加素围布"
+            ],
+            "silhouette": "结实体态、长衫收袖，既可经营也可会客",
+            "collar_neckline": "交领方向固定",
+            "closure": "右衽布结",
+            "sleeves": "中窄袖",
+            "hem": "小腿下段",
+            "waist_belt": "素革带/布带",
+            "headwear": [
+              "深色软巾"
+            ],
+            "footwear": [
+              "布履"
+            ],
+            "materials": [
+              "细麻布",
+              "素革"
+            ],
+            "palette": [
+              "深茶",
+              "烟灰",
+              "旧麻"
+            ],
+            "patterns": [
+              "无显纹"
+            ],
+            "permanent_accessories": [],
+            "removable_accessories": [
+              "药铺围布"
+            ],
+            "state_variants": [
+              "shop_work",
+              "guest_formal"
+            ],
+            "continuity_keys": [
+              "交领方向",
+              "软巾",
+              "围布是否在身",
+              "腰带"
+            ],
+            "forbidden": [
+              "官服",
+              "豪商满金",
+              "现代药店白衣"
+            ],
+            "uncertain": [
+              "原文只给职业与住址，服装为北宋城市商户语法原创"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_APOTHECARY_HOST": {
+          "id": "STATE_APOTHECARY_HOST",
+          "name": "药铺主人状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_APOTHECARY_HOST",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+          "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "text2image-front",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png",
+          "sha256": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "aabd9fcd-4330-40da-8bcc-127a0f68019b",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T10:28:00+08:00",
+      "views": {
+        "front": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+        "face": "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "3c11e3b9d0ebbf161288ca19a0bc0464007ed90a2215b2240fc71f08709be043",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-18T02:33:14+00:00"
+      }
+    },
+    "CHAR_SU_XUESHI": {
+      "id": "CHAR_SU_XUESHI",
+      "type": "character",
+      "display_name": "小苏学士",
+      "description": "短时转荐高俅的文士",
+      "character_dna": "三十余岁，瘦长脸、高额、细直眉、眼神清醒克制，短髭疏淡；身材清瘦挺直，手部文士化；原创面孔，不映射具体历史肖像",
+      "variant_policy": "府内会见场景继承瘦长脸、高额、细眉、疏淡短髭与清瘦体态",
+      "forbidden_inheritance": "不继承苏轼或苏辙历史画像、影视演员、书信与临时坐姿",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "府内会见场景继承瘦长脸、高额、细眉、疏淡短髭与清瘦体态",
+          "forbidden": "不继承苏轼或苏辙历史画像、影视演员、书信与临时坐姿",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+              "sha256": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "text2image-front",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            },
+            {
+              "view": "face",
+              "path": "出图/共享/图片/CHAR_SU_XUESHI__face.png",
+              "sha256": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "bb057717-06b6-4045-9283-0af3d247f6bf",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+              "sha256": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_SU_XUESHI"
+              },
+              "updated_at": "2026-07-18T10:12:41"
+            }
+          ],
+          "status": "ready"
+        },
+        "OUTFIT_SCHOLAR_HOME": {
+          "id": "OUTFIT_SCHOLAR_HOME",
+          "name": "学士府常服",
+          "description": "身份场合:文士，在私宅短暂会客；层次:素中衣、青褐圆领/交领文士长衫；轮廓:清瘦挺直、长衫简净，以巾帽和持信动作读出文士；领襟:低窄圆领或固定交领方案，以front锁定；开合:侧系隐藏；袖摆:中等袖量；腰带:素色细带；冠帽:黑色文士巾；鞋履:黑履；材料:哑光细布、绢；色域:青褐、墨灰、旧白；佩饰:文士巾；状态:home_receive",
+          "forbidden": "官员朝服；苏轼苏辙画像复刻；影视文士套装",
+          "reference_images": [
+            {
+              "view": "front",
+              "path": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+              "sha256": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad",
+              "source": {
+                "kind": "dreamina_identity_view",
+                "chapter": "第3话",
+                "backend": "即梦官方 CLI",
+                "model": "Dreamina 5.0",
+                "submit_id": "text2image-front",
+                "reviewer": "Codex制作代理",
+                "decision": "approved"
+              },
+              "canvas": {
+                "width": 1728,
+                "height": 2304
+              },
+              "updated_at": "2026-07-18T10:28:00+08:00"
+            }
+          ],
+          "status": "ready",
+          "wardrobe_standard": {
+            "character_id": "CHAR_SU_XUESHI",
+            "outfit_id": "OUTFIT_SCHOLAR_HOME",
+            "name": "学士府常服",
+            "identity_rank": "文士，在私宅短暂会客",
+            "occasion_activity": [
+              "府内阅信",
+              "转荐"
+            ],
+            "layers": [
+              "素中衣",
+              "青褐圆领/交领文士长衫"
+            ],
+            "silhouette": "清瘦挺直、长衫简净，以巾帽和持信动作读出文士",
+            "collar_neckline": "低窄圆领或固定交领方案，以front锁定",
+            "closure": "侧系隐藏",
+            "sleeves": "中等袖量",
+            "hem": "近踝",
+            "waist_belt": "素色细带",
+            "headwear": [
+              "黑色文士巾"
+            ],
+            "footwear": [
+              "黑履"
+            ],
+            "materials": [
+              "哑光细布",
+              "绢"
+            ],
+            "palette": [
+              "青褐",
+              "墨灰",
+              "旧白"
+            ],
+            "patterns": [
+              "无华纹"
+            ],
+            "permanent_accessories": [
+              "文士巾"
+            ],
+            "removable_accessories": [],
+            "state_variants": [
+              "home_receive"
+            ],
+            "continuity_keys": [
+              "领型",
+              "文士巾轮廓",
+              "袖宽",
+              "短髭"
+            ],
+            "forbidden": [
+              "官员朝服",
+              "苏轼苏辙画像复刻",
+              "影视文士套装"
+            ],
+            "uncertain": [
+              "人物具体历史身份在不同版本解读有差异，仅按原文功能作原创短时人物"
+            ],
+            "evidence_refs": [
+              "SRC_DPM_QINGMING",
+              "SRC_NMC_COSTUME",
+              "SRC_SHUIHU_SOURCE"
+            ],
+            "status": "confirmed"
+          }
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_SCHOLAR_HOME": {
+          "id": "STATE_SCHOLAR_HOME",
+          "name": "学士居家会客状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_SCHOLAR_HOME",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "本话连续出场沿用该服装状态；仅由分格脚本显式切换"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+          "sha256": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "text2image-front",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SU_XUESHI__face.png",
+          "sha256": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+          "source": {
+            "kind": "dreamina_identity_view",
+            "chapter": "第3话",
+            "backend": "即梦官方 CLI",
+            "model": "Dreamina 5.0",
+            "submit_id": "bb057717-06b6-4045-9283-0af3d247f6bf",
+            "reviewer": "Codex制作代理",
+            "decision": "approved"
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-18T10:28:00+08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T10:28:00+08:00",
+      "views": {
+        "front": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+        "face": "出图/共享/图片/CHAR_SU_XUESHI__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "1808ca6d3dcb656a32db09fb9415c98b8daeec808ccc400fca152bafba5dcbeb",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-18T02:33:14+00:00"
+      }
+    },
+    "LOC_BIANJING_MARKET": {
+      "id": "LOC_BIANJING_MARKET",
+      "type": "location",
+      "display_name": "汴京市井与金梁桥",
+      "description": "北宋汴京瓦舍、街巷、金梁桥药铺连续空间，低饱和繁华与阶层压力并存",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/LOC_BIANJING_MARKET__anchor.png",
+          "sha256": "d87afd1c04f7f8adcb709405b0a2d19c1015274f86ca1b0125bbece04b68acfa",
+          "view": "anchor",
+          "source": {
+            "kind": "dreamina_image2image",
+            "model": "Dreamina 5.0",
+            "submit_id": "1c614b91-f769-4ff0-8e0b-328ba294260b"
+          }
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T02:05:45+00:00"
+    },
+    "LOC_WANG_DUWEI_MANSION": {
+      "id": "LOC_WANG_DUWEI_MANSION",
+      "type": "location",
+      "display_name": "王都尉府",
+      "description": "北宋驸马府的前院、宴厅与书院连续空间，克制华贵",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/LOC_WANG_DUWEI_MANSION__anchor.png",
+          "sha256": "934176408eaab21e08cd7d998a60443aad3c1778be78f5ac1d80dd95d696a45a",
+          "view": "anchor",
+          "source": {
+            "kind": "dreamina_text2image",
+            "model": "Dreamina 5.0"
+          }
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T02:05:46+00:00"
+    },
+    "LOC_DUAN_WANG_COURT": {
+      "id": "LOC_DUAN_WANG_COURT",
+      "type": "location",
+      "display_name": "端王府蹴鞠庭院",
+      "description": "端王尚未即位时期的王府内庭，庭心可蹴鞠，廊庑与内门轴线固定",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/LOC_DUAN_WANG_COURT__anchor.png",
+          "sha256": "63d060ad2b751bc33efbd5237d537dcb2a4632a0a38bea3cd2261f5903602c7e",
+          "view": "anchor",
+          "source": {
+            "kind": "dreamina_text2image",
+            "model": "Dreamina 5.0"
+          }
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T02:05:46+00:00"
+    },
+    "PROP_CUJU_BALL": {
+      "id": "PROP_CUJU_BALL",
+      "type": "prop",
+      "display_name": "宋代蹴鞠球",
+      "description": "皮革缝制圆球，尺寸、缝片与磨损跨格固定",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/PROP_CUJU_BALL__anchor.png",
+          "sha256": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b",
+          "view": "anchor",
+          "source": {
+            "kind": "dreamina_text2image",
+            "model": "Dreamina 5.0"
+          }
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T02:05:47+00:00",
+      "prop_standard": {
+        "prop_id": "PROP_CUJU_BALL",
+        "name": "端王府蹴鞠球（气毬/天下圆）",
+        "function": "高俅被端王看见并进入权力轨道的核心触发物",
+        "ownership": "端王府球具；P025由端王漏接滚至高俅脚边",
+        "era_region": "北宋汴京端王府",
+        "dimensions": "直径约20厘米的手工皮球视觉尺度，始终小于现代足球夸张比例",
+        "construction": "多片鞣革缝合成圆球，缝线与充气口采用保守原创结构",
+        "materials": [
+          "鞣革",
+          "麻线",
+          "内胆不外露"
+        ],
+        "moving_parts": [
+          "球体滚动与弹跳"
+        ],
+        "interaction_grip": "以脚背、脚外侧、膝腿控制；关键格必须显示脚—球接触或明确运动轨迹",
+        "inscription_policy": "无现代商标、数字、队徽或可读文字",
+        "state_variants": [
+          "mansion_play",
+          "roll_to_gao",
+          "yuanyang_turn",
+          "skill_display"
+        ],
+        "production_variants": [
+          "hero",
+          "stunt",
+          "duplicate"
+        ],
+        "continuity_keys": [
+          "皮片数量感",
+          "主缝线走向",
+          "赭褐色",
+          "磨损斑",
+          "尺寸",
+          "每格球路"
+        ],
+        "forbidden": [
+          "黑白现代足球拼片",
+          "塑料光泽",
+          "发光特效",
+          "现代队徽",
+          "无接触悬浮"
+        ],
+        "uncertain": [
+          "北宋蹴鞠球具体皮片结构存在文献与复原差异，项目按可证皮革圆球语法保守设计"
+        ],
+        "evidence_refs": [
+          "SRC_DPM_QINGMING",
+          "SRC_SHUIHU_SOURCE"
+        ],
+        "status": "confirmed"
+      },
+      "prop_contract": "功能:高俅被端王看见并进入权力轨道的核心触发物；尺度:直径约20厘米的手工皮球视觉尺度，始终小于现代足球夸张比例；结构:多片鞣革缝合成圆球，缝线与充气口采用保守原创结构；材料:鞣革、麻线、内胆不外露；交互:以脚背、脚外侧、膝腿控制；关键格必须显示脚—球接触或明确运动轨迹；题字:无现代商标、数字、队徽或可读文字；状态:mansion_play、roll_to_gao、yuanyang_turn、skill_display；版本:hero、stunt、duplicate",
+      "forbidden_inheritance": "黑白现代足球拼片；塑料光泽；发光特效；现代队徽；无接触悬浮",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_CUJU_BALL",
+        "name": "端王府蹴鞠球（气毬/天下圆）",
+        "function": "高俅被端王看见并进入权力轨道的核心触发物",
+        "ownership": "端王府球具；P025由端王漏接滚至高俅脚边",
+        "era_region": "北宋汴京端王府",
+        "dimensions": "直径约20厘米的手工皮球视觉尺度，始终小于现代足球夸张比例",
+        "construction": "多片鞣革缝合成圆球，缝线与充气口采用保守原创结构",
+        "materials": [
+          "鞣革",
+          "麻线",
+          "内胆不外露"
+        ],
+        "moving_parts": [
+          "球体滚动与弹跳"
+        ],
+        "interaction_grip": "以脚背、脚外侧、膝腿控制；关键格必须显示脚—球接触或明确运动轨迹",
+        "inscription_policy": "无现代商标、数字、队徽或可读文字",
+        "state_variants": [
+          "mansion_play",
+          "roll_to_gao",
+          "yuanyang_turn",
+          "skill_display"
+        ],
+        "production_variants": [
+          "hero",
+          "stunt",
+          "duplicate"
+        ],
+        "continuity_keys": [
+          "皮片数量感",
+          "主缝线走向",
+          "赭褐色",
+          "磨损斑",
+          "尺寸",
+          "每格球路"
+        ],
+        "forbidden": [
+          "黑白现代足球拼片",
+          "塑料光泽",
+          "发光特效",
+          "现代队徽",
+          "无接触悬浮"
+        ],
+        "uncertain": [
+          "北宋蹴鞠球具体皮片结构存在文献与复原差异，项目按可证皮革圆球语法保守设计"
+        ],
+        "evidence_refs": [
+          "SRC_DPM_QINGMING",
+          "SRC_SHUIHU_SOURCE"
+        ],
+        "status": "confirmed"
+      }
+    },
+    "PROP_JADE_GIFTS": {
+      "id": "PROP_JADE_GIFTS",
+      "type": "prop",
+      "display_name": "玉狮镇纸与玉龙笔架",
+      "description": "一对羊脂玉狮镇纸与一个玉龙笔架，金盒黄罗包袱的数量和收纳关系固定",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/PROP_JADE_GIFTS__anchor.png",
+          "sha256": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914",
+          "view": "anchor",
+          "source": {
+            "kind": "dreamina_image2image",
+            "model": "Dreamina 5.0",
+            "submit_id": "c7101561-57a6-4d01-a4a4-8c3a57106ad4"
+          }
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-18T02:05:47+00:00",
+      "prop_standard": {
+        "prop_id": "PROP_JADE_GIFTS",
+        "name": "玉狮镇纸、玉龙笔架与金盒黄罗包袱",
+        "function": "王都尉投端王所好的礼物，并将高俅送入端王府",
+        "ownership": "王都尉府藏品；P024承诺相赠，P025由高俅送入端王府后交堂候官收存",
+        "era_region": "北宋汴京王都尉府—端王府",
+        "dimensions": "玉狮一对各约掌长，玉龙笔架约前臂一半长；三件可共同置入小金盒",
+        "construction": "一对羊脂玉卧狮镇纸、单件横向玉龙笔架；内衬金盒，外包黄罗并系结",
+        "materials": [
+          "羊脂玉视觉材质",
+          "鎏金或金色盒体",
+          "黄罗织物",
+          "软质内衬"
+        ],
+        "moving_parts": [
+          "金盒开合",
+          "黄罗系结"
+        ],
+        "interaction_grip": "端王双手赏玉狮；高俅双臂稳持包盒；开盒后数量必须为两狮一笔架",
+        "inscription_policy": "无随机题字、印款或现代标签",
+        "state_variants": [
+          "study_display_two_lions",
+          "promised_dragon",
+          "boxed_delivery",
+          "palace_received"
+        ],
+        "production_variants": [
+          "hero",
+          "duplicate"
+        ],
+        "continuity_keys": [
+          "两狮一龙数量",
+          "玉白色温",
+          "玉狮姿态成对",
+          "笔架横向轮廓",
+          "金盒尺寸",
+          "黄罗结位",
+          "收存状态"
+        ],
+        "forbidden": [
+          "翡翠帝王绿",
+          "透明玻璃感",
+          "现代首饰盒",
+          "随机文字",
+          "把玉龙画成活龙或法器发光"
+        ],
+        "uncertain": [
+          "原文只明确材质、题材与包装，具体雕刻纹样按宋代克制器物美学原创"
+        ],
+        "evidence_refs": [
+          "SRC_SHUIHU_SOURCE",
+          "SRC_NMC_COSTUME"
+        ],
+        "status": "confirmed"
+      },
+      "prop_contract": "功能:王都尉投端王所好的礼物，并将高俅送入端王府；尺度:玉狮一对各约掌长，玉龙笔架约前臂一半长；三件可共同置入小金盒；结构:一对羊脂玉卧狮镇纸、单件横向玉龙笔架；内衬金盒，外包黄罗并系结；材料:羊脂玉视觉材质、鎏金或金色盒体、黄罗织物、软质内衬；交互:端王双手赏玉狮；高俅双臂稳持包盒；开盒后数量必须为两狮一笔架；题字:无随机题字、印款或现代标签；状态:study_display_two_lions、promised_dragon、boxed_delivery、palace_received；版本:hero、duplicate",
+      "forbidden_inheritance": "翡翠帝王绿；透明玻璃感；现代首饰盒；随机文字；把玉龙画成活龙或法器发光",
+      "wardrobe_prop_standard": {
+        "prop_id": "PROP_JADE_GIFTS",
+        "name": "玉狮镇纸、玉龙笔架与金盒黄罗包袱",
+        "function": "王都尉投端王所好的礼物，并将高俅送入端王府",
+        "ownership": "王都尉府藏品；P024承诺相赠，P025由高俅送入端王府后交堂候官收存",
+        "era_region": "北宋汴京王都尉府—端王府",
+        "dimensions": "玉狮一对各约掌长，玉龙笔架约前臂一半长；三件可共同置入小金盒",
+        "construction": "一对羊脂玉卧狮镇纸、单件横向玉龙笔架；内衬金盒，外包黄罗并系结",
+        "materials": [
+          "羊脂玉视觉材质",
+          "鎏金或金色盒体",
+          "黄罗织物",
+          "软质内衬"
+        ],
+        "moving_parts": [
+          "金盒开合",
+          "黄罗系结"
+        ],
+        "interaction_grip": "端王双手赏玉狮；高俅双臂稳持包盒；开盒后数量必须为两狮一笔架",
+        "inscription_policy": "无随机题字、印款或现代标签",
+        "state_variants": [
+          "study_display_two_lions",
+          "promised_dragon",
+          "boxed_delivery",
+          "palace_received"
+        ],
+        "production_variants": [
+          "hero",
+          "duplicate"
+        ],
+        "continuity_keys": [
+          "两狮一龙数量",
+          "玉白色温",
+          "玉狮姿态成对",
+          "笔架横向轮廓",
+          "金盒尺寸",
+          "黄罗结位",
+          "收存状态"
+        ],
+        "forbidden": [
+          "翡翠帝王绿",
+          "透明玻璃感",
+          "现代首饰盒",
+          "随机文字",
+          "把玉龙画成活龙或法器发光"
+        ],
+        "uncertain": [
+          "原文只明确材质、题材与包装，具体雕刻纹样按宋代克制器物美学原创"
+        ],
+        "evidence_refs": [
+          "SRC_SHUIHU_SOURCE",
+          "SRC_NMC_COSTUME"
+        ],
+        "status": "confirmed"
+      }
     }
   },
   "schema_meta": {
     "initialized_at": "2026-07-14T04:04:20+00:00",
     "initialized_by": "registry_v2 init"
   },
-  "updated_at": "2026-07-15T06:04:12.467973+00:00"
+  "updated_at": "2026-07-18T02:08:52.909694+00:00"
 }

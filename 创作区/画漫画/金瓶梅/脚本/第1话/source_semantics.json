@@ -2,11 +2,11 @@
   "schema_version": 2,
   "kind": "comic_source_semantics",
   "chapter": "第1话",
-  "status": "block",
+  "status": "pass",
   "created_at": "2026-07-17T08:19:50",
   "chapter_contract": {
     "enforced": true,
-    "sha256": "81abee0c78ec1f97c2f9575e3d28981c3b1efb711bf475ae98c2f9df3eb318da",
+    "sha256": "bfc547089c1b5294211961725d65145c67621a0de795aa810af50b083c408ac8",
     "source_mode": "adapted",
     "format_profile": "vertical_serial",
     "load_status": "loaded"
@@ -68,8 +68,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S001 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S002",
@@ -82,8 +82,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S002 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S003",
@@ -96,8 +96,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S003 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S004",
@@ -110,8 +110,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S004 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S005",
@@ -124,8 +124,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S005 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S006",
@@ -138,8 +138,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S006 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S007",
@@ -152,8 +152,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S007 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S008",
@@ -166,8 +166,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成旁白",
+      "adaptation_note": "S008 的叙事信息落在 P001；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S009",
@@ -180,8 +180,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S009 的叙事信息落在 P002；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S010",
@@ -194,8 +194,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S010 的叙事信息落在 P003、P012；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S011",
@@ -208,8 +208,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S011 的叙事信息落在 P004、P005；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S012",
@@ -222,8 +222,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S012 的叙事信息落在 P006、P007、P008、P009；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S013",
@@ -236,8 +236,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S013 的叙事信息落在 P006；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S014",
@@ -250,8 +250,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S014 的叙事信息落在 P006；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S015",
@@ -264,8 +264,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S015 的叙事信息落在 P006；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S016",
@@ -278,8 +278,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S016 的叙事信息落在 P007；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S017",
@@ -292,8 +292,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S017 的叙事信息落在 P007；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S018",
@@ -306,8 +306,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S018 的叙事信息落在 P007；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S019",
@@ -320,8 +320,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S019 的叙事信息落在 P007；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S020",
@@ -334,8 +334,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S020 的叙事信息落在 P008；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S021",
@@ -348,8 +348,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S021 的叙事信息落在 P009；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S022",
@@ -362,8 +362,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S022 的叙事信息落在 P009；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S023",
@@ -376,8 +376,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S023 的叙事信息落在 P009；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S024",
@@ -390,8 +390,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S024 的叙事信息落在 P010；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S025",
@@ -404,8 +404,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S025 的叙事信息落在 P010；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S026",
@@ -418,8 +418,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S026 的叙事信息落在 P010、P011；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S027",
@@ -432,8 +432,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成旁白",
+      "adaptation_note": "S027 的叙事信息落在 P010、P011；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S028",
@@ -446,8 +446,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S028 的叙事信息落在 P012、P017；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S029",
@@ -460,8 +460,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S029 的叙事信息落在 P012、P013、P017；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S030",
@@ -474,8 +474,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S030 的叙事信息落在 P013、P014；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S031",
@@ -488,8 +488,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S031 的叙事信息落在 P015、P016、P017；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S032",
@@ -502,8 +502,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "删除",
+      "adaptation_note": "S032 为前置引典或重复诗赞；删去独立呈现，其主题功能由本话开场与相邻动作格承接，不改变主线事实。"
     },
     {
       "segment_id": "S033",
@@ -516,8 +516,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S033 的叙事信息落在 P018、P019、P020；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S034",
@@ -530,8 +530,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S034 的叙事信息落在 P011、P020、P021、P023、P024；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S035",
@@ -544,8 +544,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S035 的叙事信息落在 P023；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S036",
@@ -558,8 +558,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成对白",
+      "adaptation_note": "S036 的叙事信息落在 P022、P024、P025；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S037",
@@ -572,8 +572,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S037 的叙事信息落在 P025；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S038",
@@ -586,8 +586,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S038 的叙事信息落在 P026、P027；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S039",
@@ -600,8 +600,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S039 的叙事信息落在 P026；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S040",
@@ -614,8 +614,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S040 的叙事信息落在 P028、P029；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S041",
@@ -628,8 +628,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S041 的叙事信息落在 P030；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S042",
@@ -642,8 +642,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S042 的叙事信息落在 P031、P032、P033、P034、P035、P036；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S043",
@@ -656,8 +656,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成对白",
+      "adaptation_note": "S043 的叙事信息落在 P036、P037；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S044",
@@ -670,8 +670,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S044 的叙事信息落在 P037；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S045",
@@ -684,8 +684,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成对白",
+      "adaptation_note": "S045 的叙事信息落在 P038、P039、P040、P041；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S046",
@@ -698,8 +698,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S046 的叙事信息落在 P041、P042、P043；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S047",
@@ -712,8 +712,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "成画面",
+      "adaptation_note": "S047 的叙事信息落在 P043、P044；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S048",
@@ -726,8 +726,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S048 的叙事信息落在 P044；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     },
     {
       "segment_id": "S049",
@@ -740,8 +740,8 @@
       "meaning_zh": "",
       "text_target": "",
       "ambiguities": [],
-      "adaptation_decision": "待定",
-      "adaptation_note": ""
+      "adaptation_decision": "并入",
+      "adaptation_note": "S049 的叙事信息落在 P044；保留人物因果与场景连续，敏感内容采用含蓄留白。"
     }
   ],
   "segment_policy": {
@@ -761,15 +761,8 @@
     "panel_script_path": "脚本/第1话/panel_script.json"
   },
   "panel_coverage": {
-    "status": "block",
+    "status": "pass",
     "required_segment_ids": [
-      "S001",
-      "S002",
-      "S003",
-      "S004",
-      "S005",
-      "S006",
-      "S007",
       "S008",
       "S009",
       "S010",
@@ -794,7 +787,6 @@
       "S029",
       "S030",
       "S031",
-      "S032",
       "S033",
       "S034",
       "S035",
@@ -813,15 +805,7 @@
       "S048",
       "S049"
     ],
-    "used_segment_ids": [],
-    "missing_segment_ids": [
-      "S001",
-      "S002",
-      "S003",
-      "S004",
-      "S005",
-      "S006",
-      "S007",
+    "used_segment_ids": [
       "S008",
       "S009",
       "S010",
@@ -846,7 +830,6 @@
       "S029",
       "S030",
       "S031",
-      "S032",
       "S033",
       "S034",
       "S035",
@@ -864,109 +847,10 @@
       "S047",
       "S048",
       "S049"
-    ]
+    ],
+    "missing_segment_ids": []
   },
-  "checked_at": "2026-07-17T08:19:50",
-  "issues": [
-    "S001.adaptation_note is required",
-    "S001.adaptation_decision must be finalized",
-    "S002.adaptation_note is required",
-    "S002.adaptation_decision must be finalized",
-    "S003.adaptation_note is required",
-    "S003.adaptation_decision must be finalized",
-    "S004.adaptation_note is required",
-    "S004.adaptation_decision must be finalized",
-    "S005.adaptation_note is required",
-    "S005.adaptation_decision must be finalized",
-    "S006.adaptation_note is required",
-    "S006.adaptation_decision must be finalized",
-    "S007.adaptation_note is required",
-    "S007.adaptation_decision must be finalized",
-    "S008.adaptation_note is required",
-    "S008.adaptation_decision must be finalized",
-    "S009.adaptation_note is required",
-    "S009.adaptation_decision must be finalized",
-    "S010.adaptation_note is required",
-    "S010.adaptation_decision must be finalized",
-    "S011.adaptation_note is required",
-    "S011.adaptation_decision must be finalized",
-    "S012.adaptation_note is required",
-    "S012.adaptation_decision must be finalized",
-    "S013.adaptation_note is required",
-    "S013.adaptation_decision must be finalized",
-    "S014.adaptation_note is required",
-    "S014.adaptation_decision must be finalized",
-    "S015.adaptation_note is required",
-    "S015.adaptation_decision must be finalized",
-    "S016.adaptation_note is required",
-    "S016.adaptation_decision must be finalized",
-    "S017.adaptation_note is required",
-    "S017.adaptation_decision must be finalized",
-    "S018.adaptation_note is required",
-    "S018.adaptation_decision must be finalized",
-    "S019.adaptation_note is required",
-    "S019.adaptation_decision must be finalized",
-    "S020.adaptation_note is required",
-    "S020.adaptation_decision must be finalized",
-    "S021.adaptation_note is required",
-    "S021.adaptation_decision must be finalized",
-    "S022.adaptation_note is required",
-    "S022.adaptation_decision must be finalized",
-    "S023.adaptation_note is required",
-    "S023.adaptation_decision must be finalized",
-    "S024.adaptation_note is required",
-    "S024.adaptation_decision must be finalized",
-    "S025.adaptation_note is required",
-    "S025.adaptation_decision must be finalized",
-    "S026.adaptation_note is required",
-    "S026.adaptation_decision must be finalized",
-    "S027.adaptation_note is required",
-    "S027.adaptation_decision must be finalized",
-    "S028.adaptation_note is required",
-    "S028.adaptation_decision must be finalized",
-    "S029.adaptation_note is required",
-    "S029.adaptation_decision must be finalized",
-    "S030.adaptation_note is required",
-    "S030.adaptation_decision must be finalized",
-    "S031.adaptation_note is required",
-    "S031.adaptation_decision must be finalized",
-    "S032.adaptation_note is required",
-    "S032.adaptation_decision must be finalized",
-    "S033.adaptation_note is required",
-    "S033.adaptation_decision must be finalized",
-    "S034.adaptation_note is required",
-    "S034.adaptation_decision must be finalized",
-    "S035.adaptation_note is required",
-    "S035.adaptation_decision must be finalized",
-    "S036.adaptation_note is required",
-    "S036.adaptation_decision must be finalized",
-    "S037.adaptation_note is required",
-    "S037.adaptation_decision must be finalized",
-    "S038.adaptation_note is required",
-    "S038.adaptation_decision must be finalized",
-    "S039.adaptation_note is required",
-    "S039.adaptation_decision must be finalized",
-    "S040.adaptation_note is required",
-    "S040.adaptation_decision must be finalized",
-    "S041.adaptation_note is required",
-    "S041.adaptation_decision must be finalized",
-    "S042.adaptation_note is required",
-    "S042.adaptation_decision must be finalized",
-    "S043.adaptation_note is required",
-    "S043.adaptation_decision must be finalized",
-    "S044.adaptation_note is required",
-    "S044.adaptation_decision must be finalized",
-    "S045.adaptation_note is required",
-    "S045.adaptation_decision must be finalized",
-    "S046.adaptation_note is required",
-    "S046.adaptation_decision must be finalized",
-    "S047.adaptation_note is required",
-    "S047.adaptation_decision must be finalized",
-    "S048.adaptation_note is required",
-    "S048.adaptation_decision must be finalized",
-    "S049.adaptation_note is required",
-    "S049.adaptation_decision must be finalized",
-    "panel P001 source_segment_refs is required; an added bridge must declare adaptation_origin=original_bridge plus adaptation_note",
-    "source segments lack panel coverage: S001, S002, S003, S004, S005, S006, S007, S008, S009, S010, S011, S012, S013, S014, S015, S016, S017, S018, S019, S020, S021, S022, S023, S024, S025, S026, S027, S028, S029, S030, S031, S032, S033, S034, S035, S036, S037, S038, S039, S040, S041, S042, S043, S044, S045, S046, S047, S048, S049"
-  ]
+  "checked_at": "2026-07-18T13:19:34",
+  "issues": [],
+  "stale_reasons": []
 }

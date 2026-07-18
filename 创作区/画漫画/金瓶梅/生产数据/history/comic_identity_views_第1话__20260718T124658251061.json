@@ -1,0 +1,46 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-18T12:43:33",
+  "characters": [
+    "CHAR_WANG_PO"
+  ],
+  "views": [
+    "face"
+  ],
+  "backend": "dreamina",
+  "attempted_backends": [
+    "dreamina"
+  ],
+  "codex_execution_mode": "",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_views_第1话__20260718T124333434061.json",
+  "previous_manifest_sha256": "31c942e0b572893023d4cf2a3133703e1b7e4ad2376c83353a2237aaee5e23dd",
+  "contact_sheet": "生产数据/comic_identity_views_第1话_contact_sheet.jpg",
+  "generated": 1,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-18T12:43:33",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_WANG_PO",
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_WANG_PO__face.png",
+      "sha256": "0bf6f6d1e4d7098c688ca154987a949d0e1ef22efe12cf9fecc197240573722b",
+      "anchor_path": "出图/共享/图片/CHAR_WANG_PO__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "1:1",
+      "submit_id": "f8b61d6a-4780-4aa1-8163-5edaea964036",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_WANG_PO__face_dreamina__20260718T124244037328.md",
+      "prompt_sha256": "98b801855e23b43d5654e9f588ebd0fc51d2fabec310faa7c436c2b3f9f045a9"
+    }
+  ]
+}

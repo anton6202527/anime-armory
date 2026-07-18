@@ -1,0 +1,272 @@
+{
+  "kind": "comic_entity_presence_audit",
+  "version": 1,
+  "generated_at": "2026-07-18T05:34:14+00:00",
+  "chapter": "第3话",
+  "summary": {
+    "panels": 46,
+    "registry_entities": 31,
+    "panels_with_schedule": 0,
+    "must": 0,
+    "warn": 0,
+    "info": 3
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "code": "mentioned_not_bound",
+      "panel_id": "P016",
+      "entity": "CHAR_SU_XUESHI",
+      "message": "P016 台词/旁白提到「小苏学士」（registry 实体 CHAR_SU_XUESHI）但未绑定；若仅口头提及可忽略，若要入画需补 references。"
+    },
+    {
+      "severity": "info",
+      "code": "mentioned_not_bound",
+      "panel_id": "P020",
+      "entity": "CHAR_WANG_DUWEI",
+      "message": "P020 台词/旁白提到「王都尉」（registry 实体 CHAR_WANG_DUWEI）但未绑定；若仅口头提及可忽略，若要入画需补 references。"
+    },
+    {
+      "severity": "info",
+      "code": "mentioned_not_bound",
+      "panel_id": "P040",
+      "entity": "CHAR_WANG_DUWEI",
+      "message": "P040 台词/旁白提到「王都尉」（registry 实体 CHAR_WANG_DUWEI）但未绑定；若仅口头提及可忽略，若要入画需补 references。"
+    }
+  ],
+  "derived_schedule": {
+    "P001": [
+      "LOC_BIANJING_MARKET",
+      "PROP_CUJU_BALL"
+    ],
+    "P002": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET",
+      "PROP_CUJU_BALL"
+    ],
+    "P003": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P004": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P005": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P006": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P007": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P008": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P009": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P010": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P011": [
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P012": [
+      "CHAR_DONG_JIANGSHI",
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P013": [
+      "CHAR_DONG_JIANGSHI",
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P014": [
+      "CHAR_DONG_JIANGSHI",
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P015": [
+      "CHAR_DONG_JIANGSHI",
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P016": [
+      "CHAR_DONG_JIANGSHI",
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P017": [
+      "CHAR_DONG_JIANGSHI",
+      "CHAR_GAO_QIU",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P018": [
+      "CHAR_GAO_QIU",
+      "CHAR_SU_XUESHI",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P019": [
+      "CHAR_GAO_QIU",
+      "CHAR_SU_XUESHI",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P020": [
+      "CHAR_GAO_QIU",
+      "CHAR_SU_XUESHI",
+      "LOC_BIANJING_MARKET"
+    ],
+    "P021": [
+      "CHAR_GAO_QIU",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P022": [
+      "CHAR_GAO_QIU",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P023": [
+      "CHAR_GAO_QIU",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P024": [
+      "CHAR_GAO_QIU",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P025": [
+      "CHAR_GAO_QIU",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P026": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P027": [
+      "CHAR_DUAN_WANG",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P028": [
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P029": [
+      "CHAR_DUAN_WANG",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION"
+    ],
+    "P030": [
+      "CHAR_DUAN_WANG",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION",
+      "PROP_JADE_GIFTS"
+    ],
+    "P031": [
+      "CHAR_DUAN_WANG",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION",
+      "PROP_JADE_GIFTS"
+    ],
+    "P032": [
+      "CHAR_DUAN_WANG",
+      "CHAR_WANG_DUWEI",
+      "LOC_WANG_DUWEI_MANSION",
+      "PROP_JADE_GIFTS"
+    ],
+    "P033": [
+      "CHAR_GAO_QIU",
+      "LOC_WANG_DUWEI_MANSION",
+      "PROP_JADE_GIFTS"
+    ],
+    "P034": [
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_JADE_GIFTS"
+    ],
+    "P035": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P036": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P037": [
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P038": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P039": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P040": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL",
+      "PROP_JADE_GIFTS"
+    ],
+    "P041": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P042": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P043": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P044": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P045": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "CHAR_WANG_DUWEI",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ],
+    "P046": [
+      "CHAR_DUAN_WANG",
+      "CHAR_GAO_QIU",
+      "LOC_DUAN_WANG_COURT",
+      "PROP_CUJU_BALL"
+    ]
+  }
+}
