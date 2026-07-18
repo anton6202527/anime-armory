@@ -2266,6 +2266,36 @@ def test_face_reference_coverage_skips_per_target_faceless_reaction_anchor(tmp_p
     assert coverage["skipped"][0]["reason"] == "faceless_reaction_anchor"
 
 
+def test_storyboard_anchor_focus_refs_exempts_basin_detail_insert(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    storyboard = root / "脚本" / ep / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP07",
+        "continuity": {"anchors": [{
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+            "at_sec": 2.4,
+        }]},
+        "shots": [{
+            "t": "2.4-3.9s",
+            "lens": "ECU insert·固定慢推",
+            "desc": "水滴滑过破损盆底，一缕青金幽光从细纹中亮起",
+        }],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    registry = root / "出图" / "共享" / "identity_registry.json"
+    registry.parent.mkdir(parents=True)
+    registry.write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+
+    refs = image_qc._storyboard_anchor_focus_refs(
+        root, ep, "出图/第1集/图片/EP01_CLIP07_a1.png", ["CHAR_01/常态"]
+    )
+
+    assert refs == ["__STORYBOARD_FACE_EXEMPT_DETAIL__"]
+
+
 def test_face_reference_coverage_prefers_exact_png_over_clip_worst(tmp_path: Path) -> None:
     png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_冷开场_mid.png"
     png.parent.mkdir(parents=True)

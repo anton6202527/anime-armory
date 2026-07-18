@@ -589,6 +589,42 @@ def test_shot_character_map_uses_timed_reaction_anchor_focus(tmp_path):
     assert shot_map["图片/EP01_CLIP02_a2.png"] == ["贺平生_常态"]
 
 
+def test_shot_character_map_skips_prop_detail_insert_face(tmp_path):
+    import json
+    import face_consistency as fc
+
+    root = tmp_path
+    ep = "第1集"
+    prompt_dir = root / "出图" / ep / "prompt"
+    prompt_dir.mkdir(parents=True)
+    reg_dir = root / "出图" / "共享"
+    reg_dir.mkdir(parents=True)
+    (reg_dir / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生", "forms": [{"form": "常态", "asset_key": "贺平生_常态"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    (prompt_dir / "01_分镜出图.md").write_text("\n".join([
+        "## Clip 07",
+        "目标：出图/第1集/图片/EP01_CLIP07.png 出图/第1集/图片/EP01_CLIP07_a1.png",
+        "**资产身份注册层**：`CHAR_01/常态`。",
+    ]), encoding="utf-8")
+    storyboard = root / "脚本" / ep / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP07",
+        "firstframe_png": "出图/第1集/图片/EP01_CLIP07.png",
+        "continuity": {"anchors": [{"anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png", "at_sec": 2.4}]},
+        "shots": [
+            {"t": "0-2.4s", "lens": "MS", "desc": "贺平生抱盆转身"},
+            {"t": "2.4-3.9s", "lens": "ECU insert", "desc": "水滴滑过破损盆底，细纹亮起"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+
+    shot_map = fc.shot_character_map(str(root), ep)
+
+    assert shot_map["图片/EP01_CLIP07.png"] == ["贺平生_常态"]
+    assert "图片/EP01_CLIP07_a1.png" not in shot_map
+
+
 def test_shot_character_map_explicit_star_overrides_primary_slot_text(tmp_path):
     import json
     import face_consistency as fc

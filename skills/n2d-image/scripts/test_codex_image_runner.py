@@ -1308,6 +1308,42 @@ def test_firstframe_uses_first_faceless_storyboard_subshot_only(tmp_path: Path) 
     assert "所有具名人物" in prompt
 
 
+def test_storyboard_prop_and_hand_insert_is_detail_face_exempt(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP06",
+        "character_ids": ["CHAR_01"],
+        "continuity": {"anchors": [{
+            "at_sec": 2.0,
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+        }]},
+        "shots": [
+            {"t": "0-2.0s", "lens": "CU", "desc": "贺平生视线下移"},
+            {"t": "2.0-4.5s", "lens": "insert·水面上方固定", "desc": "清水下的破损黑盆卡在砂石间，少年单手伸入浅水"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_06", title="## 镜头 6",
+        body="**目标落档**：`出图/第1集/图片/EP01_CLIP06_a1.png`\n",
+        target_line="`出图/第1集/图片/EP01_CLIP06_a1.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_06_a1", clip="Clip_06", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP06_a1.png", section=section,
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+
+    assert beat["detail_insert"] is True
+    assert beat["focus_ids"] == []
+
+
 def test_firstframe_does_not_render_video_jump_cuts_as_triptych(tmp_path: Path) -> None:
     storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
     storyboard.parent.mkdir(parents=True)

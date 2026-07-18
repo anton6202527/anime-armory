@@ -1258,7 +1258,7 @@ def _storyboard_anchor_focus_refs(
             if (
                 not focus_ids
                 and re.search(r"insert|ECU|局部|特写", lens, re.I)
-                and re.search(r"掌心|手指|手背|手腕|脚|鞋|桶|扁担|道具|物件|伤口", desc)
+                and re.search(r"掌心|手指|手背|手腕|单手|双手|右手|左手|脚|鞋|桶|盆|容器|器具|扁担|道具|物件|伤口|水下", desc)
             ):
                 return ["__STORYBOARD_FACE_EXEMPT_DETAIL__"]
             if not (
