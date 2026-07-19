@@ -3,7 +3,7 @@
   "kind": "comic_vlm_judge_tasks",
   "protocol": "CANVAS-ContinuityEval-3axis",
   "chapter": "第4话",
-  "created_at": "2026-07-19T10:03:28",
+  "created_at": "2026-07-19T10:26:47",
   "axes": [
     "character_identity",
     "background_continuity",
@@ -41,7 +41,7 @@
       "panel": {
         "panel_id": "P001",
         "path": "出图/第4话/panels/P001.png",
-        "sha256": "4aa90890afb436f2120430a2345ee5536fe75271bc7a3d373841b38499988025"
+        "sha256": "24bfcbcf33986adcc0fc64fb9612fa8a661313e19a16973a092727e46cb8d75b"
       },
       "subject": "CHAR_GAO_QIU",
       "references": [
@@ -57,7 +57,7 @@
         "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
         "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
       },
-      "task_sha256": "da1811ba9dafa1efb19f4fbb7923460b850c9794e4d91d97bde0958892e9d8fd"
+      "task_sha256": "5fad69a4ef758dfccecda4001e864fa4c2f39e6085fa6852c8bfa22bae6bf05c"
     },
     {
       "task_id": "P001__CHAR_DUAN_WANG__character",
@@ -65,7 +65,7 @@
       "panel": {
         "panel_id": "P001",
         "path": "出图/第4话/panels/P001.png",
-        "sha256": "4aa90890afb436f2120430a2345ee5536fe75271bc7a3d373841b38499988025"
+        "sha256": "24bfcbcf33986adcc0fc64fb9612fa8a661313e19a16973a092727e46cb8d75b"
       },
       "subject": "CHAR_DUAN_WANG",
       "references": [
@@ -79,7 +79,7 @@
         "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
         "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
       },
-      "task_sha256": "a70c61874b689086e3c073b3979df8db94ce7b4204b73554942d5f0d09212566"
+      "task_sha256": "a2b7095c9f7756192d4c1aecc41d509098ef2a9c37f302e393c17199e5c62f59"
     },
     {
       "task_id": "P002__CHAR_GAO_QIU__character",
@@ -133,7 +133,7 @@
       "panel": {
         "panel_id": "P003",
         "path": "出图/第4话/panels/P003.png",
-        "sha256": "f9312ca5f851297671fca6d275c0c12a2ef01f2c6c9c54352803799ff73a5518"
+        "sha256": "affd33d1787919861b694e3b5fe9fbf7ab72c4ee09c9a9effaf1e68d476be63c"
       },
       "subject": "CHAR_GAO_QIU",
       "references": [
@@ -149,7 +149,7 @@
         "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
         "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
       },
-      "task_sha256": "f1d3f1cf0e3b6ef09b47bba171fcb97e410b083a49728271f010d02122168298"
+      "task_sha256": "8f7063ffb78430d051f4e226a64eaeeec9d99f92aac587d5f77fbeb6baf3dfb2"
     },
     {
       "task_id": "P003__CHAR_DUAN_WANG__character",
@@ -157,7 +157,7 @@
       "panel": {
         "panel_id": "P003",
         "path": "出图/第4话/panels/P003.png",
-        "sha256": "f9312ca5f851297671fca6d275c0c12a2ef01f2c6c9c54352803799ff73a5518"
+        "sha256": "affd33d1787919861b694e3b5fe9fbf7ab72c4ee09c9a9effaf1e68d476be63c"
       },
       "subject": "CHAR_DUAN_WANG",
       "references": [
@@ -171,7 +171,7 @@
         "出图/共享/图片/CHAR_DUAN_WANG__front.png": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
         "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe"
       },
-      "task_sha256": "00c3b527167c844273f569d49abc675b42623eb323e66fd209bbaac207e032e4"
+      "task_sha256": "3ccff2210f4a598a69915ce937b891d8135565f8c635779aad04298916f213e4"
     },
     {
       "task_id": "P007__CHAR_DUAN_WANG__character",
@@ -595,7 +595,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第4话/panels/P018.png",
-        "sha256": "591ee9b559e61920963973dfb14a6c3fc7473e5b19d0833a8bb6d5d638b634f0"
+        "sha256": "4c1801e1b2733593c921b6c98d2be3bdbe5dedfe748972cd66dfdc2b473b254e"
       },
       "subject": "CHAR_GAO_QIU",
       "references": [
@@ -611,7 +611,7 @@
         "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
         "出图/共享/图片/CHAR_GAO_QIU__side.png": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8"
       },
-      "task_sha256": "da7a0d531bd075dcbea948c7b37e4e09c22116b703ea4fb95b1d62e97b8bb300"
+      "task_sha256": "f1a3381712e54629397b9e5207763aa3781f86baeea2d0a9665e3b0955700c55"
     },
     {
       "task_id": "P019__CHAR_GAO_QIU__character",
@@ -1649,12 +1649,12 @@
       "references": [
         "出图/第4话/panels/P001.png"
       ],
-      "reference_sha256": "4aa90890afb436f2120430a2345ee5536fe75271bc7a3d373841b38499988025",
+      "reference_sha256": "24bfcbcf33986adcc0fc64fb9612fa8a661313e19a16973a092727e46cb8d75b",
       "question": "这两格同属场景锚 LOC_DUAN_WANG_COURT（前格 P001 → 本格 P002）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第4话/panels/P001.png": "4aa90890afb436f2120430a2345ee5536fe75271bc7a3d373841b38499988025"
+        "出图/第4话/panels/P001.png": "24bfcbcf33986adcc0fc64fb9612fa8a661313e19a16973a092727e46cb8d75b"
       },
-      "task_sha256": "9a5da32602ebf2f20051c10883765d6ba953d6249fc6aa1b3fde840a1d926ab1"
+      "task_sha256": "8c945c9d321d97f6da1f2af94a505a684a6485a71ab414f4d1f03e5c57cbd7d8"
     },
     {
       "task_id": "P002__P003__background",
@@ -1662,7 +1662,7 @@
       "panel": {
         "panel_id": "P003",
         "path": "出图/第4话/panels/P003.png",
-        "sha256": "f9312ca5f851297671fca6d275c0c12a2ef01f2c6c9c54352803799ff73a5518"
+        "sha256": "affd33d1787919861b694e3b5fe9fbf7ab72c4ee09c9a9effaf1e68d476be63c"
       },
       "subject": "LOC_DUAN_WANG_COURT",
       "references": [
@@ -1673,7 +1673,7 @@
       "references_sha256": {
         "出图/第4话/panels/P002.png": "ee4e355a31bdfc948d60dddc4765338e1fcae32be046e8e865271713c58d7242"
       },
-      "task_sha256": "18d0a6f904e93410fdbc513f5fefa91a0ce1c8ebd21da674c7d9c383b1e39a2c"
+      "task_sha256": "3dde500d5871d4c4100931b9e8f2bc86118d92d1de902cdb522e80a77314fd61"
     },
     {
       "task_id": "P004__P005__background",
@@ -1687,12 +1687,12 @@
       "references": [
         "出图/第4话/panels/P004.png"
       ],
-      "reference_sha256": "5379848d7cc1c7ae764e09655ec049458e8d5d8dce9388a6b53738dc8eecef7f",
+      "reference_sha256": "af2fc2e431c9dccf14cdff2decd3918dffbb61d45e2616df5217f036780650d8",
       "question": "这两格同属场景锚 LOC_ZICHEN_HALL（前格 P004 → 本格 P005）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
       "references_sha256": {
-        "出图/第4话/panels/P004.png": "5379848d7cc1c7ae764e09655ec049458e8d5d8dce9388a6b53738dc8eecef7f"
+        "出图/第4话/panels/P004.png": "af2fc2e431c9dccf14cdff2decd3918dffbb61d45e2616df5217f036780650d8"
       },
-      "task_sha256": "fb3b7ed3d36a20d857814594de06a041ad738c5c8b5ebe521da8da906bda90ff"
+      "task_sha256": "b692c56d1a121f0362cc5c188b2c5c83e6ed4495e712f675cf866b5f254207ba"
     },
     {
       "task_id": "P005__P006__background",
@@ -1928,7 +1928,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第4话/panels/P018.png",
-        "sha256": "591ee9b559e61920963973dfb14a6c3fc7473e5b19d0833a8bb6d5d638b634f0"
+        "sha256": "4c1801e1b2733593c921b6c98d2be3bdbe5dedfe748972cd66dfdc2b473b254e"
       },
       "subject": "LOC_ZICHEN_HALL",
       "references": [
@@ -1939,7 +1939,7 @@
       "references_sha256": {
         "出图/第4话/panels/P017.png": "3da67f04b672206a79c8049c9c6505104e5b3f38ba9859798da05d51b57301a4"
       },
-      "task_sha256": "49d08cd9d8debbc1febaf4024c25f153e8a911ba0d6ded6adb8de3e86235ce01"
+      "task_sha256": "d185991656cc9674b9ca8ba529b6d5955d19263aee2b27a44ac8ec15e6620b9d"
     },
     {
       "task_id": "P019__P020__background",
@@ -2459,7 +2459,7 @@
       "panel": {
         "panel_id": "P018",
         "path": "出图/第4话/panels/P018.png",
-        "sha256": "591ee9b559e61920963973dfb14a6c3fc7473e5b19d0833a8bb6d5d638b634f0"
+        "sha256": "4c1801e1b2733593c921b6c98d2be3bdbe5dedfe748972cd66dfdc2b473b254e"
       },
       "subject": "PROP_MILITARY_ROSTER",
       "references": [
@@ -2469,7 +2469,7 @@
       "references_sha256": {
         "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2"
       },
-      "task_sha256": "c6bda5ed6d40743fc7e789c1dc633c276b9b8d2978863eb4a114756ea92e0686"
+      "task_sha256": "d99aacec38d2c12a523505023019f5b2ffdda2e2ec179569aec61b5086265f04"
     },
     {
       "task_id": "P019__PROP_MILITARY_ROSTER__prop",

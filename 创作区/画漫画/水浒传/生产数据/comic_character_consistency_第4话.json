@@ -3,7 +3,7 @@
   "kind": "comic_character_consistency",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第4话",
-  "created_at": "2026-07-19T10:03:31",
+  "created_at": "2026-07-19T10:26:49",
   "available": true,
   "capabilities": {
     "pillow": true,
@@ -103,21 +103,21 @@
         {
           "panel_id": "P001",
           "face": {
-            "score": 0.8208,
+            "score": 0.7054,
             "reference": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.795,
-            "reference": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+            "score": 0.7238,
+            "reference": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.8086,
+            "score": 0.7921,
             "reference": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
             "available": true,
             "floor": 0.42,
@@ -151,21 +151,21 @@
         {
           "panel_id": "P003",
           "face": {
-            "score": 0.8149,
-            "reference": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+            "score": 0.8145,
+            "reference": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.7439,
-            "reference": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+            "score": 0.7136,
+            "reference": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.8295,
+            "score": 0.8164,
             "reference": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
             "available": true,
             "floor": 0.42,
@@ -561,22 +561,22 @@
         {
           "panel_id": "P001",
           "face": {
-            "score": 0.8226,
-            "reference": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+            "score": 0.8286,
+            "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.7821,
-            "reference": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+            "score": 0.7737,
+            "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.8296,
-            "reference": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+            "score": 0.836,
+            "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.42,
             "floor_source": "fixed"
@@ -609,21 +609,21 @@
         {
           "panel_id": "P003",
           "face": {
-            "score": 0.853,
-            "reference": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+            "score": 0.8586,
+            "reference": "出图/共享/图片/CHAR_GAO_QIU__face.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.8483,
-            "reference": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+            "score": 0.7322,
+            "reference": "出图/共享/图片/CHAR_GAO_QIU__face.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.8308,
+            "score": 0.8108,
             "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.42,
@@ -873,21 +873,21 @@
         {
           "panel_id": "P018",
           "face": {
-            "score": 0.8548,
+            "score": 0.8842,
             "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.5,
             "floor_source": "fixed"
           },
           "hair": {
-            "score": 0.6995,
+            "score": 0.8164,
             "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.46,
             "floor_source": "fixed"
           },
           "outfit": {
-            "score": 0.8747,
+            "score": 0.809,
             "reference": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
             "available": true,
             "floor": 0.42,

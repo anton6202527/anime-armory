@@ -3,7 +3,7 @@
   "kind": "comic_scene_prop_consistency",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第4话",
-  "created_at": "2026-07-19T10:03:38",
+  "created_at": "2026-07-19T10:26:56",
   "available": true,
   "verdict": "pass",
   "summary": {
@@ -120,7 +120,7 @@
           "path": "出图/第4话/panels/P003.png"
         }
       ],
-      "layout_cohesion_floor": 0.9824,
+      "layout_cohesion_floor": 0.9894,
       "contact_sheet": "生产数据/qa_previews/第4话_scene_LOC_DUAN_WANG_COURT_sheet.jpg"
     },
     {
@@ -236,7 +236,7 @@
           "path": "出图/第4话/panels/P018.png"
         }
       ],
-      "layout_cohesion_floor": 0.9625,
+      "layout_cohesion_floor": 0.9608,
       "contact_sheet": "生产数据/qa_previews/第4话_scene_LOC_ZICHEN_HALL_sheet.jpg"
     }
   ],
