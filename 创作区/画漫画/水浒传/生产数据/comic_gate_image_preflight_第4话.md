@@ -1,6 +1,6 @@
 # 漫画 Gate — image_preflight — 第4话
 
-- 生成时间：2026-07-18T18:54:10
+- 生成时间：2026-07-19T10:15:01
 - 结论：warn
 - block/warn/info：0 / 18 / 1
 

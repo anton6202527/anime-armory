@@ -339,19 +339,19 @@
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
       "model_version": "5.0",
-      "generated_at": "2026-07-18T15:47:47",
+      "generated_at": "2026-07-19T10:06:22",
       "backend_version": "{",
-      "artifact_sha256": "4aa90890afb436f2120430a2345ee5536fe75271bc7a3d373841b38499988025",
+      "artifact_sha256": "24bfcbcf33986adcc0fc64fb9612fa8a661313e19a16973a092727e46cb8d75b",
       "attempt": 1,
-      "submit_id": "4ec4dc44-e78f-44be-b2b2-191521638136",
+      "submit_id": "f86b1405-4202-4d71-9695-447775914d63",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 9,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P001.json",
       "prompt_snapshot": "出图/第4话/prompt/dreamina/P001.txt",
-      "prompt_snapshot_sha256": "d5c5832c9e4254f88b70375055ebbb591046e3de3cdd334effe556575df521b2",
-      "raw_candidate_path": "出图/第4话/candidates/P001/20260718T154627_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "6aa055e2e1ac7643f8725ed9b9f09083596a5f995f02d70718df4e9620bd7335",
+      "raw_candidate_path": "出图/第4话/candidates/P001/20260719T100502_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -371,7 +371,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第4话",
         "panel_id": "P001",
-        "created_at": "2026-07-18T15:47:47",
+        "created_at": "2026-07-19T10:06:22",
         "verdict": "pass",
         "path": "出图/第4话/panels/P001.png",
         "size": {
@@ -390,7 +390,14 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "execution_prompt_mode": "compiled_full",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第4话/candidates/P001/P001_20260719_100622_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P002",
@@ -1085,19 +1092,19 @@
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
       "model_version": "5.0",
-      "generated_at": "2026-07-18T15:50:29",
+      "generated_at": "2026-07-19T10:07:42",
       "backend_version": "{",
-      "artifact_sha256": "f9312ca5f851297671fca6d275c0c12a2ef01f2c6c9c54352803799ff73a5518",
+      "artifact_sha256": "affd33d1787919861b694e3b5fe9fbf7ab72c4ee09c9a9effaf1e68d476be63c",
       "attempt": 1,
-      "submit_id": "88dd5bd9-f6e6-4aac-b7c2-6e7bf7fcbd22",
+      "submit_id": "96b2acb6-fd6e-4e7e-b59c-dce1c6b54b65",
       "service_ratio": "3:2",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 9,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P003.json",
       "prompt_snapshot": "出图/第4话/prompt/dreamina/P003.txt",
-      "prompt_snapshot_sha256": "a7b6d523dcf262ed0fbb74de42faa37afa4e1558140c95ea4144bc32e10bbbed",
-      "raw_candidate_path": "出图/第4话/candidates/P003/20260718T154911_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "ba9f1bf71baf8aae642e2d9b6b5880498a667bea4bf6df978770912da567f8f4",
+      "raw_candidate_path": "出图/第4话/candidates/P003/20260719T100623_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -1117,8 +1124,8 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第4话",
         "panel_id": "P003",
-        "created_at": "2026-07-18T15:50:29",
-        "verdict": "pass",
+        "created_at": "2026-07-19T10:07:42",
+        "verdict": "warn",
         "path": "出图/第4话/panels/P003.png",
         "size": {
           "width": 1188,
@@ -1133,10 +1140,38 @@
         "reference_input_count": 9,
         "omitted_attachment_count": 0,
         "omitted_attachment_ids": [],
-        "blank_region_candidates": [],
-        "issues": [],
-        "manual_review_required": false
-      }
+        "blank_region_candidates": [
+          {
+            "x": 132,
+            "y": 0,
+            "w": 347,
+            "h": 149,
+            "area": 21306
+          },
+          {
+            "x": 732,
+            "y": 70,
+            "w": 147,
+            "h": 84,
+            "area": 5160
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 2 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": true
+      },
+      "execution_prompt_mode": "compiled_full",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第4话/candidates/P003/P003_20260719_100742_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P004",
@@ -1330,19 +1365,19 @@
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
       "model_version": "5.0",
-      "generated_at": "2026-07-18T15:51:52",
+      "generated_at": "2026-07-19T10:16:06",
       "backend_version": "{",
-      "artifact_sha256": "5379848d7cc1c7ae764e09655ec049458e8d5d8dce9388a6b53738dc8eecef7f",
+      "artifact_sha256": "af2fc2e431c9dccf14cdff2decd3918dffbb61d45e2616df5217f036780650d8",
       "attempt": 1,
-      "submit_id": "43f5def8-dc4c-458a-b2d1-b69637bf4871",
+      "submit_id": "07aed9a4-0c5b-4136-91d6-91e063650185",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 2,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P004.json",
       "prompt_snapshot": "出图/第4话/prompt/dreamina/P004.txt",
-      "prompt_snapshot_sha256": "38699ecb24ab80842b6943d0b4f068c1796a90fad63e1ca9dc09e3c6cdb554fb",
-      "raw_candidate_path": "出图/第4话/candidates/P004/20260718T155029_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "6367f259dd22453efbcf0c405e0386f55b41960090400df5ec79647ebe6d646a",
+      "raw_candidate_path": "出图/第4话/candidates/P004/20260719T101501_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -1362,7 +1397,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第4话",
         "panel_id": "P004",
-        "created_at": "2026-07-18T15:51:52",
+        "created_at": "2026-07-19T10:16:06",
         "verdict": "pass",
         "path": "出图/第4话/panels/P004.png",
         "size": {
@@ -1381,7 +1416,18 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "execution_prompt_mode": "compiled_full",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第4话/candidates/P004/P004_20260719_100847_previous_backend_or_take.png"
+        },
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第4话/candidates/P004/P004_20260719_101604_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P005",
@@ -6069,19 +6115,19 @@
       "source": "Dreamina/即梦官方 CLI",
       "model": "Dreamina 5.0",
       "model_version": "5.0",
-      "generated_at": "2026-07-18T16:32:30",
+      "generated_at": "2026-07-19T10:10:00",
       "backend_version": "{",
-      "artifact_sha256": "591ee9b559e61920963973dfb14a6c3fc7473e5b19d0833a8bb6d5d638b634f0",
+      "artifact_sha256": "4c1801e1b2733593c921b6c98d2be3bdbe5dedfe748972cd66dfdc2b473b254e",
       "attempt": 1,
-      "submit_id": "c26f0104-993c-4b5e-81a0-0d64007f31f5",
+      "submit_id": "873e4cda-cd3b-4bd1-877a-79d0d2210486",
       "service_ratio": "4:3",
       "resolution_type": "2k",
       "reference_input_mode": "dreamina_image2image_images",
       "reference_input_count": 7,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P018.json",
       "prompt_snapshot": "出图/第4话/prompt/dreamina/P018.txt",
-      "prompt_snapshot_sha256": "54e914f8024b901a9022cb244383bdafea80fdfb20fb234fed522cbb65854ef5",
-      "raw_candidate_path": "出图/第4话/candidates/P018/20260718T163111_attempt1_dreamina_raw.png",
+      "prompt_snapshot_sha256": "0e722902ab33f30e6b8b74bbffaa7fe7ca0d33ea935ba296894544a44b04ddff",
+      "raw_candidate_path": "出图/第4话/candidates/P018/20260719T100847_attempt1_dreamina_raw.png",
       "canvas_normalization": {
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {
@@ -6101,7 +6147,7 @@
         "kind": "comic_panel_post_qc",
         "chapter": "第4话",
         "panel_id": "P018",
-        "created_at": "2026-07-18T16:32:30",
+        "created_at": "2026-07-19T10:10:00",
         "verdict": "pass",
         "path": "出图/第4话/panels/P018.png",
         "size": {
@@ -6120,7 +6166,14 @@
         "blank_region_candidates": [],
         "issues": [],
         "manual_review_required": false
-      }
+      },
+      "execution_prompt_mode": "compiled_full",
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传/出图/第4话/candidates/P018/P018_20260719_100959_previous_backend_or_take.png"
+        }
+      ]
     },
     {
       "panel_id": "P019",

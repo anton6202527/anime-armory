@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第4话",
-  "created_at": "2026-07-18T18:53:06",
+  "created_at": "2026-07-19T10:16:47",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -3116,7 +3116,7 @@
     },
     {
       "panel_id": "P037",
-      "status": "failed",
+      "status": "ready",
       "valid_reference_count": 6,
       "valid_references": [
         {
@@ -3151,12 +3151,12 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 2,
+      "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P037.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 4
     },
     {
       "panel_id": "P038",
