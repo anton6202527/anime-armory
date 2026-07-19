@@ -364,7 +364,7 @@
         "当——"
       ],
       "lettering_plan": "中文简体字置于预留负空间；不压脸、手、军籍、官印或母子动作；原始图不得生成任何文字。",
-      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；无文字、无水印、无日文、无现代物件；清代龙袍朝冠；明代翼善冠；满屏金色；随机可读字",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；空御座、无人丧殿、素白丧幡、冷晨光；前景严格继承 PROP_CUJU_BALL 的赭褐单色鞣革、麻线与非现代皮片结构；无文字、无水印、无日文、无现代物件；严禁清代龙袍朝冠、明代翼善冠、辫发、满屏金色、随机可读字与现代足球式五/六边形拼片",
       "layout_weight": "heavy",
       "panel_shape": "tall",
       "border_style": "borderless",
@@ -378,7 +378,8 @@
       "scene_family": "LOC_ZICHEN_HALL",
       "references": [
         "STYLE_SHUIHU_SONG_CINEMATIC",
-        "LOC_ZICHEN_HALL"
+        "LOC_ZICHEN_HALL",
+        "PROP_CUJU_BALL"
       ],
       "gaze_target": "人物注视戏内对手、权力位置、门口、行进方向或关键道具。",
       "eyeline_direction": "御座画上、高俅画下；徽宗看向画下，高俅看向画上。",

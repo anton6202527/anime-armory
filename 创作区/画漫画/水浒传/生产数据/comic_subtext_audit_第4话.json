@@ -1,7 +1,7 @@
 {
   "kind": "comic_subtext_audit",
   "version": 1,
-  "generated_at": "2026-07-19T02:16:47+00:00",
+  "generated_at": "2026-07-19T05:41:32+00:00",
   "chapter": "第4话",
   "thresholds": {
     "on_the_nose_rate_warn": 0.35,

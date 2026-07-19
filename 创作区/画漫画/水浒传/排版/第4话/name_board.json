@@ -3275,7 +3275,7 @@
   },
   "upstream_receipt": {
     "panel_script": "脚本/第4话/panel_script.json",
-    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "panel_script_sha256": "3e6f3b6cd30fb2403011494771e23f4825b139484e60031d5c1ec7df30262351",
     "settings": "_设置.md",
     "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
   },
@@ -3283,10 +3283,10 @@
     "kind": "comic_name_board_approval",
     "status": "approved",
     "reviewed_by": "Codex制作代理",
-    "reviewed_at": "2026-07-18T07:45:33.256777+00:00",
-    "note": "状态合同措辞对齐前话退出态后复核通过。",
-    "subject_sha256": "e7bc91dcd88c8263e6071b8e2e51894e7d81b8c25eebf5ab44e0f3857b66aaf2",
-    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "reviewed_at": "2026-07-19T05:34:53.495356+00:00",
+    "note": "",
+    "subject_sha256": "48f58437808897efa1716796f84238e51dd4e9ddf68cc95c7db6f9f8fd5d4d72",
+    "panel_script_sha256": "3e6f3b6cd30fb2403011494771e23f4825b139484e60031d5c1ec7df30262351",
     "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
   },
   "validation": {

@@ -3,7 +3,7 @@
   "kind": "comic_panel_post_qc",
   "chapter": "第4话",
   "panel_id": "P004",
-  "created_at": "2026-07-19T10:16:06",
+  "created_at": "2026-07-19T13:38:53",
   "verdict": "pass",
   "path": "出图/第4话/panels/P004.png",
   "size": {
@@ -14,9 +14,9 @@
     "width": 1296,
     "height": 1120
   },
-  "declared_reference_count": 2,
-  "declared_reference_binding_count": 2,
-  "reference_input_count": 2,
+  "declared_reference_count": 3,
+  "declared_reference_binding_count": 3,
+  "reference_input_count": 3,
   "omitted_attachment_count": 0,
   "omitted_attachment_ids": [],
   "blank_region_candidates": [],

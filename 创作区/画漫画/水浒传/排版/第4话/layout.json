@@ -3796,10 +3796,10 @@
   ],
   "upstream_receipt": {
     "panel_script": "脚本/第4话/panel_script.json",
-    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
+    "panel_script_sha256": "3e6f3b6cd30fb2403011494771e23f4825b139484e60031d5c1ec7df30262351",
     "name_board": "排版/第4话/name_board.json",
-    "name_board_sha256": "c7dc2d99d5c18e424513fbe76ff043f61c2c496632e7a80cc858098fb5479ff5",
-    "name_approval_subject_sha256": "e7bc91dcd88c8263e6071b8e2e51894e7d81b8c25eebf5ab44e0f3857b66aaf2",
+    "name_board_sha256": "efda3a69b4ee558773bb93e6b22026eb93fb5a7d71cbc889262a88c3893b9e43",
+    "name_approval_subject_sha256": "48f58437808897efa1716796f84238e51dd4e9ddf68cc95c7db6f9f8fd5d4d72",
     "settings": "_设置.md",
     "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
     "legacy_name_waiver": false
@@ -3808,11 +3808,11 @@
     "kind": "comic_layout_approval",
     "status": "approved",
     "reviewed_by": "Codex制作代理",
-    "reviewed_at": "2026-07-18T07:45:33.374936+00:00",
-    "note": "状态合同措辞对齐后46格排版复核通过。",
-    "subject_sha256": "28636bb400548981d7ed549a31bc1569ec18354874360f02079648d15a4b7c42",
-    "panel_script_sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c",
-    "name_board_sha256": "c7dc2d99d5c18e424513fbe76ff043f61c2c496632e7a80cc858098fb5479ff5",
+    "reviewed_at": "2026-07-19T05:34:53.640073+00:00",
+    "note": "",
+    "subject_sha256": "048be30c27fe47284c27d2aec2414cb41a0851e2d3394e4120b31cfdd5b65355",
+    "panel_script_sha256": "3e6f3b6cd30fb2403011494771e23f4825b139484e60031d5c1ec7df30262351",
+    "name_board_sha256": "efda3a69b4ee558773bb93e6b22026eb93fb5a7d71cbc889262a88c3893b9e43",
     "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
   },
   "validation": {

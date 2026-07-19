@@ -2,13 +2,13 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第4话",
-  "generated_at": "2026-07-18T07:45:34+00:00",
+  "generated_at": "2026-07-19T05:35:06+00:00",
   "inputs": {
     "files": [
       {
         "path": "脚本/第4话/panel_script.json",
         "exists": true,
-        "sha256": "cdbaf7495240cfc94ded34468ff597a4400b9bab36f480285246db506949276c"
+        "sha256": "3e6f3b6cd30fb2403011494771e23f4825b139484e60031d5c1ec7df30262351"
       },
       {
         "path": "出图/共享/identity_registry.json",
@@ -46,7 +46,7 @@
       "inputs_fingerprint": null
     }
   },
-  "inputs_fingerprint": "18bed6921dfd1527971b5546d0d9c3676ce7109dfb068dd5411c95f0f1fbfd11",
+  "inputs_fingerprint": "5627e052371cc9c1a8870cbbc7d8676bda10fe8c0d31a17b11e208eef02b01b6",
   "backend": {
     "adapter_id": "dreamina_image2image",
     "model": "Dreamina 5.0",
@@ -788,8 +788,8 @@
       "multi_subject": null,
       "attachment_plan": {
         "limit": 10,
-        "required_count": 2,
-        "selected_count": 2,
+        "required_count": 3,
+        "selected_count": 3,
         "selected": [
           {
             "id": "STYLE_SHUIHU_SONG_CINEMATIC",
@@ -804,6 +804,13 @@
             "path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
             "required": true,
             "sha256": "7596bb41dca0bab5d6f72dcd87e1a048ef64fdff85269676c211f79681048c3e"
+          },
+          {
+            "id": "PROP_CUJU_BALL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_CUJU_BALL__anchor.png",
+            "required": true,
+            "sha256": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
           }
         ],
         "missing_required": [],
@@ -813,7 +820,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "145cc42e23717a3c5d449cb119eccf7bac0b98790cb94d4a58dfabbb01380642"
+      "panel_plan_sha256": "aa663007597fed101be2b9f964b2313ca4515875d7beb538eb6f3a1d17666bf6"
     },
     {
       "panel_id": "P005",
@@ -9028,5 +9035,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "3e217729d980ef9f1e672155c86846229a2ab6a42fb6da8ee438cec8b2a4e5f3"
+  "plan_sha256": "fd90237ae499956ba7b8bcd0a1684e8ccc1cc4c48638762ea6f5ce5942bbf34f"
 }

@@ -3,8 +3,8 @@
   "kind": "comic_review",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第4话",
-  "created_at": "2026-07-18T19:02:00",
-  "verdict": "block",
+  "created_at": "2026-07-19T13:41:28",
+  "verdict": "revise",
   "settings": {
     "定妆级别": "长线专门定妆+高一致性",
     "参考一致性策略": "共享参考图",
@@ -16,8 +16,8 @@
   },
   "summary": {
     "panel_count": 46,
-    "issue_count": 23,
-    "block_count": 4,
+    "issue_count": 19,
+    "block_count": 0,
     "warn_count": 19,
     "info_count": 0
   },
@@ -30,9 +30,70 @@
     "identity_report": "生产数据/comic_identity_report_第4话.json",
     "style_report": "生产数据/comic_style_consistency_第4话.json",
     "character_report": "生产数据/comic_character_consistency_第4话.json",
-    "rendered": [],
-    "lettering_slot_qc": {},
-    "qa_preview": "",
+    "rendered": [
+      {
+        "path": "排版/第4话/长图/longstrip.png",
+        "panel_ids": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012",
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018",
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024",
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030",
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036",
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042",
+          "P043",
+          "P044",
+          "P045",
+          "P046"
+        ],
+        "size": {
+          "width": 1440,
+          "height": 47604
+        },
+        "format": "png"
+      }
+    ],
+    "lettering_slot_qc": {
+      "path": "生产数据/qa_previews/第4话_lettering_slots.jpg",
+      "items": 51,
+      "missing_slots": []
+    },
+    "qa_preview": "生产数据/qa_previews/第4话_longstrip_preview.webp",
     "contact_sheet": "生产数据/panel_contact_sheet_第4话.jpg"
   },
   "raw_bubble_candidates": [
@@ -46,6 +107,26 @@
           "w": 262,
           "h": 193,
           "area": 21880
+        }
+      ]
+    },
+    {
+      "panel_id": "P003",
+      "path": "出图/第4话/panels/P003.png",
+      "components": [
+        {
+          "x": 131,
+          "y": 0,
+          "w": 351,
+          "h": 150,
+          "area": 21262
+        },
+        {
+          "x": 730,
+          "y": 71,
+          "w": 205,
+          "h": 116,
+          "area": 6719
         }
       ]
     },
@@ -181,46 +262,10 @@
   },
   "issues": [
     {
-      "severity": "block",
-      "category": "missing_artifact",
-      "artifact": "排版/第4话/lettering.json",
-      "reason": "审查必需文件缺失",
-      "return_to": "comic-compose",
-      "suggested_fix": "补齐文件后重新运行 comic-review",
-      "confidence": "deterministic"
-    },
-    {
-      "severity": "block",
-      "category": "missing_artifact",
-      "artifact": "排版/第4话/export_manifest.json",
-      "reason": "审查必需文件缺失",
-      "return_to": "comic-compose",
-      "suggested_fix": "补齐文件后重新运行 comic-review",
-      "confidence": "deterministic"
-    },
-    {
-      "severity": "block",
-      "category": "export",
-      "artifact": "排版/第4话/export_manifest.json",
-      "reason": "manifest 缺少 layout 中的 panel：P001, P002, P003, P004, P005, P006, P007, P008, P009, P010, P011, P012, P013, P014, P015, P016, P017, P018, P019, P020, P021, P022, P023, P024, P025, P026, P027, P028, P029, P030, P031, P032, P033, P034, P035, P036, P037, P038, P039, P040, P041, P042, P043, P044, P045, P046",
-      "return_to": "comic-compose",
-      "suggested_fix": "重新导出 manifest/长图",
-      "confidence": "deterministic"
-    },
-    {
-      "severity": "block",
-      "category": "export",
-      "artifact": "排版/第4话/export_manifest.json",
-      "reason": "未登记实际渲染导出物",
-      "return_to": "comic-compose",
-      "suggested_fix": "运行 export_longstrip.py --render",
-      "confidence": "deterministic"
-    },
-    {
       "severity": "warn",
       "category": "image",
       "artifact": "出图/第4话/panels",
-      "reason": "原始面板图疑似烘焙了空白气泡/文字容器：P002, P008, P009, P012, P015, P016, P021",
+      "reason": "原始面板图疑似烘焙了空白气泡/文字容器：P002, P003, P008, P009, P012, P015, P016, P021",
       "return_to": "comic-image",
       "suggested_fix": "后续重抽这些格时要求无字画面、无空白气泡，只保留低细节留白；系统绘卷等叙事道具可人工豁免",
       "confidence": "deterministic"
@@ -228,8 +273,17 @@
     {
       "severity": "warn",
       "category": "style",
+      "artifact": "出图/第4话/panels/P004.png",
+      "reason": "风格指纹内聚度 0.7898 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
       "artifact": "出图/第4话/panels/P005.png",
-      "reason": "风格指纹内聚度 0.7680 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7683 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -238,7 +292,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P007.png",
-      "reason": "风格指纹内聚度 0.7062 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7043 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -247,7 +301,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P013.png",
-      "reason": "风格指纹内聚度 0.7811 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7799 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -256,7 +310,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P014.png",
-      "reason": "风格指纹内聚度 0.7801 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7800 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -265,7 +319,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P016.png",
-      "reason": "风格指纹内聚度 0.7923 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7907 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -274,7 +328,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P023.png",
-      "reason": "风格指纹内聚度 0.7474 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7441 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -283,7 +337,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P027.png",
-      "reason": "风格指纹内聚度 0.7897 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7871 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -292,7 +346,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P028.png",
-      "reason": "风格指纹内聚度 0.7623 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7607 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -301,7 +355,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P030.png",
-      "reason": "风格指纹内聚度 0.7506 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7476 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -310,7 +364,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P032.png",
-      "reason": "风格指纹内聚度 0.7805 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7775 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -319,7 +373,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P043.png",
-      "reason": "风格指纹内聚度 0.7085 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7030 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -328,7 +382,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P044.png",
-      "reason": "风格指纹内聚度 0.7933 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7901 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -337,16 +391,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/第4话/panels/P045.png",
-      "reason": "风格指纹内聚度 0.7301 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
-      "return_to": "comic-image",
-      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
-      "confidence": "heuristic"
-    },
-    {
-      "severity": "warn",
-      "category": "style",
-      "artifact": "出图/第4话/panels/P046.png",
-      "reason": "风格指纹内聚度 0.8016 明显低于本话中位 0.8422，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7292 明显低于本话中位 0.8326，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-image",
       "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
       "confidence": "heuristic"
@@ -355,7 +400,7 @@
       "severity": "warn",
       "category": "style",
       "artifact": "出图/共享/style_baseline.json",
-      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8777，风格锚可能已失去约束力。",
+      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8730，风格锚可能已失去约束力。",
       "return_to": "comic-image",
       "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
       "confidence": "heuristic"
@@ -393,6 +438,8 @@
     "已刷新角色一致性报告：生产数据/comic_character_consistency_第4话.md",
     "demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。",
     "demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",
+    "已刷新 QA 长图预览：生产数据/qa_previews/第4话_longstrip_preview.webp",
     "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第4话.jpg"
   ]
 }

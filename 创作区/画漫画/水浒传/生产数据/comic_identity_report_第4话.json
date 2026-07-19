@@ -3,11 +3,11 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第4话",
-  "created_at": "2026-07-19T10:16:47",
+  "created_at": "2026-07-19T13:41:32",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
-    "reference_count": 10,
+    "reference_count": 11,
     "panel_count": 46,
     "missing_ref_count": 0,
     "rerun_target_count": 0,
@@ -1375,7 +1375,7 @@
     {
       "panel_id": "P004",
       "status": "ready",
-      "valid_reference_count": 2,
+      "valid_reference_count": 3,
       "valid_references": [
         {
           "id": "STYLE_SHUIHU_SONG_CINEMATIC",
@@ -1386,10 +1386,15 @@
           "id": "LOC_ZICHEN_HALL",
           "path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
           "sha256": "7596bb41dca0bab5d6f72dcd87e1a048ef64fdff85269676c211f79681048c3e"
+        },
+        {
+          "id": "PROP_CUJU_BALL",
+          "path": "出图/共享/图片/PROP_CUJU_BALL__anchor.png",
+          "sha256": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 2,
+      "generated_reference_input_count": 3,
       "reference_manifest": "生产数据/dreamina_reference_bundles/第4话/P004.json",
       "stale_generated_refs": [],
       "needs_rerun": false,

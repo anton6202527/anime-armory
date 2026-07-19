@@ -5,9 +5,22 @@
   "scope": "project",
   "authorization": {
     "authorized_by": "lalala",
-    "instruction": "如果 Codex 不能继续生图，则使用即梦继续；预算充足。",
-    "authorized_at": "2026-07-16",
+    "instruction": "如果 Codex 不能继续生图，则使用即梦继续；预算充足。2026-07-19 追加授权：P004 纠偏无上限，抽到满意为止。",
+    "authorized_at": "2026-07-19",
     "routine_switch_requires_new_approval": false
+  },
+  "panel_exceptions": {
+    "第4话/P004": {
+      "authorized_by": "lalala",
+      "authorized_at": "2026-07-19",
+      "max_attempts": null,
+      "instruction": "无上限，抽到满意为止",
+      "required_reference_ids": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "PROP_CUJU_BALL"
+      ]
+    }
   },
   "primary": {
     "channel": "内置 imagegen",
@@ -41,6 +54,6 @@
   },
   "stop_rule": {
     "trigger": "即梦同一资产 variant 累计 2 次仍无有效 PNG，或出现授权/合规/账户阻断",
-    "action": "停止该 variant，保留证据并继续不依赖它的可逆工作；不得伪造 ready"
+    "action": "除 panel_exceptions 明确覆盖的目标外，停止该 variant，保留证据并继续不依赖它的可逆工作；不得伪造 ready"
   }
 }

@@ -1,8 +1,8 @@
 # 漫画场景/道具一致性报告 — 第4话
 
-- 生成时间：2026-07-19T10:26:56
+- 生成时间：2026-07-19T13:42:11
 - 结论：pass
-- 场景锚：4 | 道具：8
+- 场景锚：4 | 道具：9
 - block/warn：0 / 0
 
 ## 场景锚
@@ -25,6 +25,7 @@
 | OUTFIT_PRINCE_CUJU | 1 | 4 | 生产数据/qa_previews/第4话_prop_OUTFIT_PRINCE_CUJU_sheet.jpg |
 | OUTFIT_WANG_ATTENDANT | 1 | 12 | 生产数据/qa_previews/第4话_prop_OUTFIT_WANG_ATTENDANT_sheet.jpg |
 | OUTFIT_WANG_HOME | 1 | 9 | 生产数据/qa_previews/第4话_prop_OUTFIT_WANG_HOME_sheet.jpg |
+| PROP_CUJU_BALL | 1 | 1 | 生产数据/qa_previews/第4话_prop_PROP_CUJU_BALL_sheet.jpg |
 | PROP_MILITARY_ROSTER | 1 | 16 | 生产数据/qa_previews/第4话_prop_PROP_MILITARY_ROSTER_sheet.jpg |
 
 ## Findings
@@ -33,4 +34,4 @@
 
 ## 记录
 
-- VLM 三轴裁决进度：0/128（生产数据/comic_vlm_judge_verdicts_第4话.json）。
+- VLM 三轴裁决进度：0/129（生产数据/comic_vlm_judge_verdicts_第4话.json）。

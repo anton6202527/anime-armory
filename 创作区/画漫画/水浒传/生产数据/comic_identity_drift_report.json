@@ -1,18 +1,19 @@
 {
   "kind": "comic_identity_drift_report",
   "version": 1,
-  "generated_at": "2026-07-18T05:35:36+00:00",
+  "generated_at": "2026-07-19T05:42:50+00:00",
   "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
   "summary": {
-    "chapters_scanned": 3,
-    "characters_tracked": 14,
-    "characters_with_drift": 0,
+    "chapters_scanned": 4,
+    "characters_tracked": 16,
+    "characters_with_drift": 1,
     "characters_block": 0
   },
   "chapters": [
     "第1话",
     "第2话",
-    "第3话"
+    "第3话",
+    "第4话"
   ],
   "characters": [
     {
@@ -48,10 +49,12 @@
     {
       "char_id": "CHAR_DUAN_WANG",
       "appeared_chapters": [
-        "第3话"
+        "第3话",
+        "第4话"
       ],
       "chapter_status": {
-        "第3话": "ok"
+        "第3话": "ok",
+        "第4话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],
@@ -92,10 +95,12 @@
     {
       "char_id": "CHAR_GAO_QIU",
       "appeared_chapters": [
-        "第3话"
+        "第3话",
+        "第4话"
       ],
       "chapter_status": {
-        "第3话": "ok"
+        "第3话": "ok",
+        "第4话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],
@@ -154,6 +159,39 @@
       ],
       "chapter_status": {
         "第3话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_WANG_JIN",
+      "appeared_chapters": [
+        "第4话"
+      ],
+      "chapter_status": {
+        "第4话": "warn"
+      },
+      "first_bad_chapter": "第4话",
+      "warn_or_block_chapters": [
+        "第4话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "face_fingerprint_low",
+        "outfit_fingerprint_low"
+      ],
+      "recommendation": "CHAR_WANG_JIN：第4话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
+    },
+    {
+      "char_id": "CHAR_WANG_MOTHER",
+      "appeared_chapters": [
+        "第4话"
+      ],
+      "chapter_status": {
+        "第4话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],
