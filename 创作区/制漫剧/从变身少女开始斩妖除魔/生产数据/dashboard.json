@@ -1,16 +1,133 @@
 {
   "alert_counts": {
-    "critical": 0,
-    "warn": 0
+    "critical": 1,
+    "warn": 1
   },
-  "alerts": [],
+  "alerts": [
+    {
+      "kind": "qa_blockers",
+      "level": "critical",
+      "message": "QA 阻断 74 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "scope": "totals",
+      "threshold": 0,
+      "value": 74
+    },
+    {
+      "episode": "第1集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第1集 QA 阻断 74 项",
+      "scope": "第1集",
+      "threshold": 0,
+      "value": 74
+    }
+  ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.0,
+      "blockers_per_attempt": 0.7184,
       "completion_rate": null,
-      "consistency_blockers": 0,
-      "consistency_ledger": {},
-      "consistency_warnings": 1,
+      "consistency_blockers": 6,
+      "consistency_ledger": {
+        "counts": {
+          "block": 6,
+          "high": 0,
+          "medium": 16
+        },
+        "delivery_surface": {
+          "blocking_counts": {
+            "block": 6,
+            "high": 0
+          },
+          "required_domains": [
+            "剧情",
+            "角色",
+            "资产",
+            "镜头",
+            "音频",
+            "字幕",
+            "合规",
+            "生产操作"
+          ],
+          "status": "blocked"
+        },
+        "path": "生产数据/consistency_ledger_第1集.json",
+        "row_count": 14,
+        "severe_rows": [
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "CHAR_01",
+            "kind": "character",
+            "name": "姜月初",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "CHAR_02",
+            "kind": "character",
+            "name": "裴长青",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "CHAR_04",
+            "kind": "character",
+            "name": "虎山神",
+            "overall": "warn",
+            "prevent": "ok"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "LOC_01",
+            "kind": "scene",
+            "name": "荒野押解/虎妖现场",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "WEAPON_01",
+            "kind": "weapon",
+            "name": "横刀",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "PROP_横刀",
+            "kind": "prop",
+            "name": "横刀",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "PROP_断刀",
+            "kind": "prop",
+            "name": "断刀",
+            "overall": "medium",
+            "prevent": "medium"
+          },
+          {
+            "contract": "ok",
+            "detect": "warn",
+            "id": "PROP_翻覆囚车",
+            "kind": "prop",
+            "name": "翻覆囚车",
+            "overall": "medium",
+            "prevent": "medium"
+          }
+        ]
+      },
+      "consistency_warnings": 151,
       "cost_by_provider": {
         "dreamina_official_cli:image": 20.0
       },
@@ -20,15 +137,15 @@
       "cost_totals": {
         "image": 20.0
       },
-      "deliverable_pass_rate": 0.6602,
+      "deliverable_pass_rate": 0.0,
       "duration_hms": "2h17m31s",
       "duration_sec": 8251.05,
       "elapsed_per_finished_min_sec": 3812.693,
       "episode": "第1集",
-      "event_count": 124,
+      "event_count": 270,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
-      "final_pass_rate": 0.6602,
+      "final_pass_rate": 0.0,
       "follow_next_rate": null,
       "generation_attempts": 103,
       "generation_fails": 35,
@@ -45,14 +162,63 @@
       "one_pass_rate": 0.301,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 0,
-      "qa_blockers_historical": 15,
+      "qa_blockers": 74,
+      "qa_blockers_historical": 83,
       "qa_gate_passes": 1,
-      "qa_gate_runs": 1,
-      "qa_infos": 48,
-      "qa_warnings": 4,
-      "qa_warnings_historical": 3,
-      "recent_blockers": [],
+      "qa_gate_runs": 2,
+      "qa_infos": 65,
+      "qa_warnings": 63,
+      "qa_warnings_historical": 62,
+      "recent_blockers": [
+        {
+          "dim": "预防式合同",
+          "loc": "PROP_断刀",
+          "msg": "reference_slot_gate: 道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "PROP_横刀",
+          "msg": "reference_slot_gate: 道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "PROP_翻覆囚车",
+          "msg": "reference_slot_gate: 道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_反面.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "预防式合同",
+          "loc": "PROP_虎首",
+          "msg": "reference_slot_gate: 道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "生图AI一致性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "msg": "同项目/同集混用多个生图模型/渠道（codex、dreamina）；混用会让同角色脸型/服装/画风跨镜漂移。请把 _设置.md 与所有 prompt 统一到同一组生图模型/渠道后再出图。",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "生图后端基线",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
+          "msg": "production_events 显示本集实际出图后端（codex）与项目锁定基线（dreamina）不一致——基线对账只比 _设置.md 声明，这里比**真实落档事件**：声明没改但实际换了后端=视觉 DNA 漂移、跨集脸/画风裂。请把生成统一回基线后端重出，或先跑 `n2d-update media` 形成重制计划 + `record-baseline --force` 更新基线。",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "生产锁版账",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_locks_check_image_preflight_第1集.json",
+          "msg": "image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：_设置.md, 出图/共享/identity_registry.json, 生产数据/identity_adapter_matrix.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集 --stage image_preflight --write-missing`。",
+          "stage": "image_preflight"
+        },
+        {
+          "dim": "生图后端适配",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "msg": "生图后端「Dreamina/即梦官方 CLI」缺少本次官方 API/CLI 刷新证据：no per-run official API refresh evidence。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`python3 skills/n2d/_lib/image_backend_adapter.py record-refresh <作品根> --backend \"Dreamina/即梦官方 CLI\" --source \"<官方文档或CLI/API证据>\" --source-url \"<链接或留空>\" --evidence-kind official_docs --note \"<本次能力结论>\"`。证据文件：创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_backend_capabilities/dreamina.json。未刷新不得开跑，避免旧 API 或能力误判造成整集返工。",
+          "stage": "image_preflight"
+        }
+      ],
       "recoup_ratio": {},
       "redraw_categories": {
         "face_consistency": 2,
@@ -97,6 +263,17 @@
           "qa_warnings": 1,
           "redraw_count": 9
         },
+        "image_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 68,
+          "qa_infos": 17,
+          "qa_warnings": 59,
+          "redraw_count": 0
+        },
         "image_prompt_preflight": {
           "duration_sec": 0.0,
           "generation_attempts": 0,
@@ -106,6 +283,19 @@
           "qa_blockers": 0,
           "qa_infos": 17,
           "qa_warnings": 3,
+          "redraw_count": 0
+        },
+        "review": {
+          "consistency_blockers": 6,
+          "consistency_warnings": 150,
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 6,
+          "qa_infos": 0,
+          "qa_warnings": 0,
           "redraw_count": 0
         },
         "script_stage1": {
@@ -120,7 +310,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.0388
+      "warnings_per_attempt": 0.6117
     },
     {
       "blockers_per_attempt": null,
@@ -619,7 +809,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-16T12:17:34+00:00",
+  "generated_at": "2026-07-19T12:43:22+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1097,33 +1287,33 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
   "totals": {
-    "blockers_per_attempt": 0.0,
-    "consistency_blockers": 0,
+    "blockers_per_attempt": 0.7184,
+    "consistency_blockers": 6,
     "consistency_ledger_counts": {
-      "block": 0,
+      "block": 6,
       "high": 0,
-      "medium": 0
+      "medium": 16
     },
-    "consistency_warnings": 1,
+    "consistency_warnings": 151,
     "cost_per_finished_min": {
       "image": 9.241717
     },
     "cost_totals": {
       "image": 20.0
     },
-    "deliverable_pass_rate": 0.6602,
+    "deliverable_pass_rate": 0.0,
     "duration_hms": "2h17m31s",
     "duration_sec": 8251.05,
     "elapsed_per_finished_min_sec": 3812.693,
     "episode_count": 10,
-    "event_count": 124,
+    "event_count": 270,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
-    "final_pass_rate": 0.6602,
+    "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 1,
-      "gates_passed_per_day": 0.5,
+      "gates_passed_per_day": 0.198,
       "measurement_start": "2026-07-14T11:33:02+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
@@ -1135,11 +1325,11 @@
     "generation_passes": 68,
     "one_pass_count": 31,
     "one_pass_rate": 0.301,
-    "qa_blockers": 0,
-    "qa_blockers_historical": 15,
-    "qa_infos": 48,
-    "qa_warnings": 4,
-    "qa_warnings_historical": 3,
+    "qa_blockers": 74,
+    "qa_blockers_historical": 83,
+    "qa_infos": 65,
+    "qa_warnings": 63,
+    "qa_warnings_historical": 62,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 2,
@@ -1157,7 +1347,7 @@
     "release_spend_totals": {},
     "runtime_hms": "2m10s",
     "runtime_sec": 129.846,
-    "warnings_per_attempt": 0.0388
+    "warnings_per_attempt": 0.6117
   },
   "version": 1
 }

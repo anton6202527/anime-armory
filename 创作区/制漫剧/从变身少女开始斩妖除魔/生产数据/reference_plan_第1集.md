@@ -2,7 +2,7 @@
 
 - root: 创作区/制漫剧/从变身少女开始斩妖除魔
 - episode: 第1集
-- 生图后端: GPT Image 2（渠道 Codex CLI）（codex · 策略 multi_reference）
+- 生图后端: 即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI）（dreamina · 策略 multi_reference_sticky_reference）
 - 镜头数: 13 ｜ 弱后端×大变化镜: 0
 
 > 定妆照对 AI 只是固定板式；本表按**每镜变化量 + 后端能力**给参考处方。建议侧车，人审后落进 `01_分镜出图.md`；gate 在 image_preflight 对账。

@@ -1,21 +1,21 @@
 {
-  "event_count": 31,
+  "event_count": 33,
   "kind": "n2d_flow_telemetry",
-  "last_event_at": "2026-07-15T15:10:59+0800",
+  "last_event_at": "2026-07-19T20:43:22+0800",
   "milestone_count": 6,
   "milestones": {
     "supervisor_dispatch_planned": 6
   },
-  "next_action_count": 25,
+  "next_action_count": 27,
   "orchestrator_latency_ms": {
-    "max": 10132.77,
-    "p50": 2609.796,
-    "p95": 8574.589
+    "max": 92788.1,
+    "p50": 2645.241,
+    "p95": 65289.602
   },
   "prework": {
     "cache_hit_rate": 0.0,
     "cache_hits": 0,
-    "total": 328
+    "total": 366
   },
   "stage_transitions": {
     "image_prompt->image": 1,
@@ -23,16 +23,16 @@
     "script_stage2->image_prompt": 1
   },
   "stages": {
-    "image": 7,
+    "image": 9,
     "image_prompt": 1,
     "script_stage1": 17,
     "script_stage2": 6
   },
   "stop_reasons": {
-    "blocked_by_entry_check": 6,
+    "blocked_by_entry_check": 8,
     "needs_agent_gen": 2,
     "prework_failed": 17
   },
-  "updated_at": "2026-07-15T15:10:59+0800",
+  "updated_at": "2026-07-19T20:43:22+0800",
   "version": 1
 }

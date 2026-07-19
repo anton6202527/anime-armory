@@ -3,12 +3,8 @@
   "blocked": true,
   "blockers": [
     {
-      "message": "引用槽位合同结构已确认；当前缺的是共享定妆/场景/道具的真实图片，不是合同文本。保持逐镜付费生图阻断，先完成共享资产自举：风格锚 → 主角正面 → 五角独立图/turnaround/六联表，每张机器 QC + 实际查看通过后才下一张。当前无付费授权时只可 dry-run；获明确授权且确认 style_identity_lock 后，首张命令：`python3 skills/n2d-image/scripts/codex_image_runner.py \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集 --shared-targets all --max-shared-targets 1`。",
-      "step": "preventive_contracts"
-    },
-    {
-      "message": "生产锁版账未通过（image）：style_identity_lock status 不是 confirmed。先确认相关 lock，或在 creative_decisions.jsonl 记录解锁/最小返工范围后再继续。",
-      "step": "production_locks"
+      "message": "skill 更新影响当前集，需先执行/确认重制计划：/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.md。统一修复/预检入口：python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集 --stage image --write-missing --json 已自动执行 repair_preflight（block）：update_plan: /Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.md；报告：/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/repair_preflight_image_第1集.json",
+      "step": "blocked_by_entry_check"
     }
   ],
   "category": "contract_or_gate",
@@ -31,14 +27,14 @@
     "return_to_stage": "image_prompt",
     "stage": "image_preflight"
   },
-  "generated_at": "2026-07-15T15:10:59+0800",
-  "headline": "第1集 出图：确定性前置失败",
+  "generated_at": "2026-07-19T20:43:22+0800",
+  "headline": "第1集 出图：入口检查未放行",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-image",
   "repair_commands": [
     "n2d-image 创作区/制漫剧/从变身少女开始斩妖除魔 第1集"
   ],
   "stage_key": "image",
-  "stop_reason": "prework_failed",
+  "stop_reason": "blocked_by_entry_check",
   "version": 1
 }

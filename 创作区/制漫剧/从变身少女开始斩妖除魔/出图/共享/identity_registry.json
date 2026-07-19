@@ -986,11 +986,13 @@
               "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
               "status": "ready",
               "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-19T12:44:36.981489+00:00"
               },
               "visual_review": {
-                "status": "accepted",
+                "status": "ready",
                 "verdict": "pass",
                 "character_id": "CHAR_02",
                 "form": "常态",
@@ -1017,7 +1019,13 @@
                   "kind": "explicit_current_pixels_acceptance",
                   "accepted_current_pixels": true
                 },
-                "note": "已查看1672x941当前原始像素；年轻男性身份区分明确，束发与玄黑暗红劲装稳定，伤臂绷带和保护性屈曲合理，双手、双腿、长摆与双靴完整接地，无裁切、多肢、猎奇或背景漂移。"
+                "note": "已查看1672x941当前原始像素；年轻男性身份区分明确，束发与玄黑暗红劲装稳定，伤臂绷带和保护性屈曲合理，双手、双腿、长摆与双靴完整接地，无裁切、多肢、猎奇或背景漂移。",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared visual_review reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981530+00:00"
+                }
               }
             },
             "outfit": {
@@ -1033,6 +1041,12 @@
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-19T12:44:36.981669+00:00"
               }
             },
             "half_body": {
@@ -1048,6 +1062,12 @@
                   1,
                   1
                 ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-19T12:44:36.981688+00:00"
               }
             },
             "face_anchor_refs": [
@@ -1066,11 +1086,13 @@
                   ]
                 },
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981705+00:00"
                 },
                 "visual_review": {
-                  "status": "accepted",
+                  "status": "ready",
                   "verdict": "pass",
                   "character_id": "CHAR_02",
                   "form": "常态",
@@ -1096,7 +1118,13 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。"
+                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-07-19T12:44:36.981717+00:00"
+                  }
                 }
               }
             ],
@@ -1117,11 +1145,13 @@
                 },
                 "emotion": "基础",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981756+00:00"
                 },
                 "visual_review": {
-                  "status": "accepted",
+                  "status": "ready",
                   "verdict": "pass",
                   "character_id": "CHAR_02",
                   "form": "常态",
@@ -1147,7 +1177,13 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。"
+                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-07-19T12:44:36.981768+00:00"
+                  }
                 }
               }
             ]
@@ -1159,11 +1195,13 @@
                 "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
                 "status": "ready",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981805+00:00"
                 },
                 "visual_review": {
-                  "status": "accepted",
+                  "status": "ready",
                   "verdict": "pass",
                   "character_id": "CHAR_02",
                   "form": "常态",
@@ -1190,7 +1228,13 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "已查看1672x941当前原始像素；年轻男性身份区分明确，束发与玄黑暗红劲装稳定，伤臂绷带和保护性屈曲合理，双手、双腿、长摆与双靴完整接地，无裁切、多肢、猎奇或背景漂移。"
+                  "note": "已查看1672x941当前原始像素；年轻男性身份区分明确，束发与玄黑暗红劲装稳定，伤臂绷带和保护性屈曲合理，双手、双腿、长摆与双靴完整接地，无裁切、多肢、猎奇或背景漂移。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-07-19T12:44:36.981815+00:00"
+                  }
                 }
               },
               "half_body": {
@@ -1206,6 +1250,12 @@
                     1,
                     1
                   ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981846+00:00"
                 }
               }
             },
@@ -1225,11 +1275,13 @@
                   ]
                 },
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981856+00:00"
                 },
                 "visual_review": {
-                  "status": "accepted",
+                  "status": "ready",
                   "verdict": "pass",
                   "character_id": "CHAR_02",
                   "form": "常态",
@@ -1255,7 +1307,13 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。"
+                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-07-19T12:44:36.981866+00:00"
+                  }
                 }
               }
             ],
@@ -1276,11 +1334,13 @@
                 },
                 "emotion": "基础",
                 "human_review": {
-                  "status": "pending",
-                  "reason": "Codex text-generated character candidate requires human approval before ready"
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-19T12:44:36.981936+00:00"
                 },
                 "visual_review": {
-                  "status": "accepted",
+                  "status": "ready",
                   "verdict": "pass",
                   "character_id": "CHAR_02",
                   "form": "常态",
@@ -1306,7 +1366,13 @@
                     "kind": "explicit_current_pixels_acceptance",
                     "accepted_current_pixels": true
                   },
-                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。"
+                  "note": "同源127px原脸经官方RealESRGAN_x4plus神经超分至1024；未启用GFPGAN/face enhance/face swap。InsightFace相对主母本cosine=0.9277；实际像素目视确认同一脸、布巾与交领连续，通用模型肤色和衣料过渡自然，无明显锐化光环。",
+                  "human_review": {
+                    "status": "accepted",
+                    "reviewer": "image_qc.mark_finalized",
+                    "reason": "shared visual_review reference passed finalized review",
+                    "reviewed_at": "2026-07-19T12:44:36.981957+00:00"
+                  }
                 }
               }
             ],
@@ -1452,8 +1518,12 @@
           "signature_equipment": [
             "WEAPON_01"
           ],
-          "self_check_passed": false,
-          "self_check_note": "PNG exists but requires explicit visual/QC signoff"
+          "self_check_passed": true,
+          "self_check_note": "PNG exists but requires explicit visual/QC signoff",
+          "self_check_at": "2026-07-19T12:44:36+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "anchor_sha": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3",
+          "artifact_sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3"
         }
       ],
       "asset_bundle": {

@@ -196,9 +196,9 @@
           },
           "human_review": {
             "status": "accepted",
-            "reason": "shared reference promoted to ready after reviewed shared generation",
-            "reviewed_by": "skills/n2d-image/scripts/codex_image_runner.py",
-            "reviewed_at": "2026-07-16T13:51:47+00:00"
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-19T12:44:37.080853+00:00"
           }
         },
         "scale_ref": {
@@ -310,7 +310,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "weapon_profile": {
         "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
@@ -353,7 +353,10 @@
             "max_ratio": 0.0
           }
         ]
-      }
+      },
+      "artifact_sha256": "cb194704b70ee11165f1112e90db21074ced9316baa8c0183888b58ad432f159",
+      "self_check_at": "2026-07-19T12:44:37+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_横刀",
@@ -378,9 +381,9 @@
           },
           "human_review": {
             "status": "accepted",
-            "reason": "shared reference promoted to ready after reviewed shared generation",
-            "reviewed_by": "skills/n2d-image/scripts/codex_image_runner.py",
-            "reviewed_at": "2026-07-16T13:51:47+00:00"
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-19T12:44:37.181762+00:00"
           }
         },
         "scale_ref": {
@@ -466,7 +469,7 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
+      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "唐制语汇直身单刃、细黑缠柄，克制实战刀；至少做完整侧视、握持角度、落地角度。",
@@ -519,7 +522,10 @@
             "max_ratio": 0.0
           }
         ]
-      }
+      },
+      "artifact_sha256": "cb194704b70ee11165f1112e90db21074ced9316baa8c0183888b58ad432f159",
+      "self_check_at": "2026-07-19T12:44:37+00:00",
+      "self_check_by": "image_qc.mark_finalized"
     },
     {
       "id": "PROP_断刀",

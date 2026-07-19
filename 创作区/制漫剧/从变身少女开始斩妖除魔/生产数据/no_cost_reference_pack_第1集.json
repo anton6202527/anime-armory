@@ -21,8 +21,8 @@
     "asset_targets": 31,
     "character_targets": 28,
     "multi_subject_targets": 24,
-    "planned": 83,
-    "ready": 0,
+    "planned": 53,
+    "ready": 30,
     "total": 83
   },
   "targets": [
@@ -32,7 +32,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "front",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -40,7 +40,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -48,7 +48,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "side",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -56,7 +56,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "rear_three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -64,7 +64,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "back",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -72,7 +72,7 @@
       "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
       "scope": "character",
       "slot": "turnaround",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -80,7 +80,7 @@
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -88,7 +88,7 @@
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -96,7 +96,7 @@
       "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
       "scope": "character",
       "slot": "expression_bank",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_01/常态",
@@ -112,7 +112,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "front",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_02/常态",
@@ -152,7 +152,7 @@
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_02/常态",
@@ -160,11 +160,11 @@
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_02/常态",
-      "path": "出图/共享/图片/定妆_CHAR_02__常态.png",
+      "path": "出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png",
       "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
       "scope": "character",
       "slot": "expression_bank",
@@ -184,7 +184,7 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "front",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
@@ -192,31 +192,31 @@
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
-      "path": "出图/共享/图片/定妆_CHAR_04_常态_side.png",
+      "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "side",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
-      "path": "出图/共享/图片/定妆_CHAR_04_常态_rear_three_quarter.png",
+      "path": "出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "rear_three_quarter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
-      "path": "出图/共享/图片/定妆_CHAR_04_常态_back.png",
+      "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
       "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
       "scope": "character",
       "slot": "back",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
@@ -224,7 +224,7 @@
       "reason": "服装/体态参考，防止镜头内换身材或换衣。",
       "scope": "character",
       "slot": "half_body_or_full_body",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
@@ -232,7 +232,7 @@
       "reason": "脸部特写锚，近景/反打/表情镜必用。",
       "scope": "character",
       "slot": "face_anchor_refs",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "CHAR_04/常态",
@@ -256,7 +256,7 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "wide_plate",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "LOC_01",
@@ -264,7 +264,7 @@
       "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
       "scope": "asset",
       "slot": "reverse_angle",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "LOC_01",
@@ -288,7 +288,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_横刀",
@@ -312,7 +312,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_断刀",
@@ -336,7 +336,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_翻覆囚车",
@@ -360,7 +360,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "VFX_系统面板",
@@ -384,7 +384,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "VFX_百妖谱",
@@ -408,7 +408,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "VFX_道行灌注",
@@ -432,7 +432,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "PROP_虎首",
@@ -456,7 +456,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "VFX_黑妖血",
@@ -480,7 +480,7 @@
       "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
       "scope": "asset",
       "slot": "primary",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "owner": "VFX_道行反噬",

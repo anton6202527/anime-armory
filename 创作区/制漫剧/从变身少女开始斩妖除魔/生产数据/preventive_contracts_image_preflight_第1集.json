@@ -4,58 +4,8 @@
   "findings": [
     {
       "gate": "reference_slot_gate",
-      "loc": "CHAR_01",
-      "message": "核心/出场角色 CHAR_01 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_01/反噬跪地态",
-      "message": "核心/出场角色 CHAR_01/反噬跪地态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_01/囚途染血态",
-      "message": "核心/出场角色 CHAR_01/囚途染血态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_01/囚途残损态",
-      "message": "核心/出场角色 CHAR_01/囚途残损态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "CHAR_01/战后染血反噬态",
-      "message": "核心/出场角色 CHAR_01/战后染血反噬态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
       "loc": "PROP_断刀",
-      "message": "道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_手持.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在",
+      "message": "道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -65,7 +15,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_横刀",
-      "message": "道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_手持.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在",
+      "message": "道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -75,7 +25,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_翻覆囚车",
-      "message": "道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_手持.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_手持.png 不存在",
+      "message": "道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_反面.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -85,57 +35,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_虎首",
-      "message": "道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "VFX_百妖谱",
-      "message": "道具/场景 VFX_百妖谱 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_百妖谱.png 不存在；出图/共享/图片/定妆_特效_百妖谱.png 不存在；出图/共享/图片/定妆_特效_百妖谱.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "VFX_系统面板",
-      "message": "道具/场景 VFX_系统面板 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在；出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在；出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "VFX_道行反噬",
-      "message": "道具/场景 VFX_道行反噬 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_道行反噬.png 不存在；出图/共享/图片/定妆_特效_道行反噬.png 不存在；出图/共享/图片/定妆_特效_道行反噬.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "VFX_道行灌注",
-      "message": "道具/场景 VFX_道行灌注 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_道行灌注.png 不存在；出图/共享/图片/定妆_特效_道行灌注.png 不存在；出图/共享/图片/定妆_特效_道行灌注.png 不存在",
-      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-      "owner": "制片主任/场记",
-      "return_to_stage": "image_prompt",
-      "root_cause_layer": "production_breakdown",
-      "severity": "block"
-    },
-    {
-      "gate": "reference_slot_gate",
-      "loc": "VFX_黑妖血",
-      "message": "道具/场景 VFX_黑妖血 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_黑妖血.png 不存在；出图/共享/图片/定妆_特效_黑妖血.png 不存在；出图/共享/图片/定妆_特效_黑妖血.png 不存在",
+      "message": "道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -146,14 +46,14 @@
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-07-16T08:37:03+00:00",
+  "generated_at": "2026-07-19T12:42:46+00:00",
   "kind": "n2d_preventive_contract_report",
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "scaffolded": false,
   "stage": "image_preflight",
   "status": "blocked",
   "summary": {
-    "block": 14,
+    "block": 4,
     "info": 0,
     "warn": 0
   },

@@ -31,29 +31,29 @@
   "episode": "第1集",
   "files": [
     {
-      "bytes": 2424,
+      "bytes": 3572,
       "exists": true,
-      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=source_analysis\n- 基础视觉风格: 国漫写实角色审美 + 电影级布光与镜头语言  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=inferred_from_request\n- 画幅: 9:16  # source=project_default\n- 字幕语言: 中文  # source=source_analysis\n- 合规用途: internal_only  # source=safety_default\n- 题材: 自定义（系统流+修仙+志怪悬疑）  # source=source_analysis\n- 脸一致性机检后端: styleid  # source=explicit_user\n- N2D_STYLEID_MODEL: kwanY/styleid  # source=explicit_user\n\n[RECENT CORRECTIONS — provenance only, non-authoritative, bounded]\n- 2026-07-14 数据校正：本地源副本折叠相邻重复章名后为819个唯一章节、约185.5万规范化正文字符；830只表示章号上界/当前粗切估集数，先前“830章、约565万字”不再作为生产事实\n\nraw audit history omitted: records_seen=14, corrections_included=1/3",
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=source_analysis\n- 基础视觉风格: 国漫写实角色审美 + 电影级布光与镜头语言  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=inferred_from_request\n- 画幅: 9:16  # source=project_default\n- 字幕语言: 中文  # source=source_analysis\n- 合规用途: internal_only  # source=safety_default\n- 题材: 自定义（系统流+修仙+志怪悬疑）  # source=source_analysis\n- 脸一致性机检后端: styleid  # source=explicit_user\n- N2D_STYLEID_MODEL: kwanY/styleid  # source=explicit_user\n- 生图模型: Seedream 5.0  # source=explicit_user\n- 生图AI: Dreamina/即梦官方 CLI  # source=explicit_user\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 逐个  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n\n[RECENT CORRECTIONS — provenance only, non-authoritative, bounded]\n- 2026-07-14 数据校正：本地源副本折叠相邻重复章名后为819个唯一章节、约185.5万规范化正文字符；830只表示章号上界/当前粗切估集数，先前“830章、约565万字”不再作为生产事实\n\nraw audit history omitted: records_seen=21, corrections_included=1/3",
       "preview_policy": "settings_region_plus_bounded_corrections",
       "relpath": "_设置.md",
-      "sha256": "5a665841c40e6ec856b1e20e0c582746f69033f53ecb5fff3b709dbf0bd7182b"
+      "sha256": "006f1dd2c6eb8d2b655dada432c513ebdbd38c9424e68c65ea880b4539fb7e1a"
     },
     {
       "bytes": 1695,
       "exists": true,
-      "preview": "# 从变身少女开始斩妖除魔 — 生产进度\n已粗切 **10** 集（本地规范源共 819 个唯一章节；人工批准的首10集覆盖原著第1–18章，全书计划已重编号为约822集；第11集从原著第19章 / U002459 连续承接）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 5481 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 0/114 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 5122 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 5214 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4374 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5044 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4578 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 4313 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 4292 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 从变身少女开始斩妖除魔 — 生产进度\n已粗切 **10** 集（本地规范源共 819 个唯一章节；人工批准的首10集覆盖原著第1–18章，全书计划已重编号为约822集；第11集从原著第19章 / U002459 连续承接）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 5481 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/78 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 5122 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 5214 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4374 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5044 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4578 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 4313 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 4292 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
       "relpath": "_进度.md",
-      "sha256": "87c4de61003f266341e52acfe2ecb4256461b796e2b9112e16cfa9a11aea169c"
+      "sha256": "fa263aa8048040bf828fee64dc8e7809073a282d056a29284729573401a42f8a"
     },
     {
-      "bytes": 452883,
+      "bytes": 457345,
       "exists": true,
       "preview": "# 第1集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第1集.json`；content_hash=28e2f5e993017147\n- 核心看点：audience_payoff=杀人悬念中段兑现，二十年道行一刀斩虎，百妖谱把短期爆发变成长期能力，结尾回扣命债。；category=残酷生存选择 + 系统首启 + 一刀反杀；why_watch=刚穿越成罪臣之女的姜月初，必须先杀救过自己的濒死镇魔卫，才有资格挥刀斩妖。\n- 首屏钩子：content_promise=她为什么必须先杀一个人，才能活着斩妖？；content_proposition=她为什么必须先杀一个人，才能活着斩妖？；expected_metric=primary=retention_3s；target=0.8；hook_type=反差/危机；muted_readable=True；muted_safe=True；muted_safe_proof=人类刀口、发抖握刀手、濒死者和后景虎妖形成清楚三角关系，关声也能读懂反差。；onscreen_duration_sec=3.0…\n  - Pacing: primary=100% compressed=0%；主时长=EP01_CLIP01,EP01_CLIP02,EP01_CLIP03,EP01_CLIP04,EP01_CLIP05,EP01_CLIP06,EP01_CLIP07,EP01_CLIP08；primary_runtime_focus=EP01_CLIP01；EP01_CLIP05；EP01_CLIP07；EP01_CLIP08；EP01_CLIP10；EP01_CLIP11；EP01_CLIP12；EP01_CLIP13；selective_runtime=EP01_CLIP02；EP01_CLIP03；EP01_CLIP04…\n  - R01: hook_id=OPEN_01；hook_type=反差；opened_at=EP01_CLIP01；payoff_clip=EP01_CLIP08；payoff_due=EP01_CLIP08；payoff_evidence=百妖谱要求斩杀生物换道行，她道歉后向裴长青落刀。；payoff_status=paid；promise=姜月初为何把刀对准人而不是妖；promise_type=opening_hook\n  - R02: hook_id=MID_01；hook_type=危机；opened_at=EP01_CLIP05；payoff_clip=EP01_CLIP10；payoff_due=EP01_CLIP10；payoff_evidence=姜月初用二十年道行完成一刀斩首。；payoff_status=paid；promise=虎山神为何复生，二人如何活命；promise_type=threat_reversal\n  - R03: hook_id=MID_02；hook_type=信息；opened_at=EP01_CLIP07；payoff_clip=EP01_CLIP12；payoff_due=EP01_CLIP12；payoff_evidence=摹影完成，猛虎快刀圆满并进入闻弦初境。；payoff_status=paid；promise=百妖谱怎样把妖物能力长期留下；promise_type=mechanism_reveal\n  - R04: delayed_payoff_ep=第2集；hook_id=TAIL_01；hook_type=情绪冲突；opened_at=EP01_CLIP13；payoff_status=open；promise=姜月初如何偿还裴长青的命债，他是否存在复生可能；promise_type=cliffhanger；status=open\n  - Q01: expected_next_handling=本集兑现/推进；question_context=人倒叙钩 → 15s虎妖/镇魔司死局 → 虎妖复生 → 系统生机 → 杀裴反转 → 二十年一刀斩虎 → 摹影升级 →；question_id=Q01；signal=系统；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=队正。我得往南。扶我走，我替你脱籍。 [镜头7·姜月初·怀疑盘算·慢] 自由身？|| 你拿什么保？ [镜头8·裴长青；question_id=Q02；signal=怀疑；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=得干净些。莫再挣扎，|| 我替你们立块碑。 [镜头16·系统·中性清晰·慢] 百妖谱开启。斩杀生物，可得道行。 ⚡；question_id=Q03；signal=系统；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=百妖谱开启。斩杀生物，可得道行。 ⚡钩子 [镜头17·系统·中性清晰·慢] 道行可尽付一击；亦可用妖血为墨，收录其；question_id=Q04；signal=系统；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_contex\n...",
       "relpath": "出图/第1集/prompt/01_分镜出图.md",
-      "sha256": "067376f06c94086b9b94641f7db4a0e1d10296b365cdba50a2a6dccfbec706d2"
+      "sha256": "b4c00b8f90f24ae73b485a4e96cc8cceab6b931eed7ccd0c1114cf6e5128800e"
     },
     {
-      "bytes": 43958,
+      "bytes": 121788,
       "exists": true,
       "preview": {
         "kind": "n2d_identity_registry",
@@ -67,10 +67,10 @@
         "version": 1
       },
       "relpath": "出图/共享/identity_registry.json",
-      "sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f"
+      "sha256": "b1d02f048ac5328bd5b69502d8723ef1ef4e7bb10fae16a7d1b4f56c4608321d"
     },
     {
-      "bytes": 36431,
+      "bytes": 54568,
       "exists": true,
       "preview": {
         "kind": "n2d_asset_reference_registry",
@@ -84,7 +84,7 @@
         "version": 1
       },
       "relpath": "出图/共享/asset_registry.json",
-      "sha256": "429364543fcb5ed59d11c984ec9ac0c51b3e3b64329a24edc5b6879363d51fee"
+      "sha256": "dca449d354c602100cfee4516c95105e8ded49503b4503b5db42a17fa16b840e"
     },
     {
       "exists": false,
@@ -125,7 +125,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "f17dcc844417dd089d891639300604430ec0fe7be0c38e6fc130f668454f3d6d"
+      "sha256": "22a1e6776e0df561cb5d8657c9bb0158beecec32a4de1d1c48f195754cbce50a"
     }
   ],
   "genre_pack_context": {
@@ -133,7 +133,7 @@
       "reason": "storyboard 中已有镜头命中题材高风险场景。",
       "state": "scene_archetypes_triggered",
       "storyboard_clip_count": 13,
-      "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
+      "storyboard_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
       "storyboard_state": "ready",
       "triggered": true
     },
@@ -330,7 +330,7 @@
       }
     ],
     "episode": "第1集",
-    "generated_at": "2026-07-15T07:10:57+00:00",
+    "generated_at": "2026-07-19T12:42:03+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -654,7 +654,7 @@
         "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。 | 题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。 | 悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
       }
     },
-    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
     "stage_key": "image",
     "status": "warn",
     "summary": {
@@ -697,6 +697,10 @@
         "source": "safety_default",
         "value": "internal_only"
       },
+      "图片验收模式": {
+        "source": "explicit_user",
+        "value": "逐张机器QC+实际目视"
+      },
       "基础视觉风格": {
         "source": "explicit_user",
         "value": "国漫写实角色审美 + 电影级布光与镜头语言"
@@ -704,6 +708,18 @@
       "字幕语言": {
         "source": "source_analysis",
         "value": "中文"
+      },
+      "生图AI": {
+        "source": "explicit_user",
+        "value": "Dreamina/即梦官方 CLI"
+      },
+      "生图模型": {
+        "source": "explicit_user",
+        "value": "Seedream 5.0"
+      },
+      "生成粒度": {
+        "source": "explicit_user",
+        "value": "逐个"
       },
       "画幅": {
         "source": "project_default",
@@ -716,6 +732,10 @@
       "视频模型路由": {
         "source": "inferred_from_request",
         "value": "自动按镜头路由"
+      },
+      "重抽预算策略": {
+        "source": "explicit_user",
+        "value": "预算充足"
       },
       "项目规模": {
         "source": "source_analysis",
@@ -739,10 +759,10 @@
       "format": "record_section",
       "full_history_omitted": true,
       "limit": 3,
-      "records_seen": 14
+      "records_seen": 21
     },
     "source_path": "_设置.md",
-    "source_sha256": "5a665841c40e6ec856b1e20e0c582746f69033f53ecb5fff3b709dbf0bd7182b",
+    "source_sha256": "006f1dd2c6eb8d2b655dada432c513ebdbd38c9424e68c65ea880b4539fb7e1a",
     "status": "ok",
     "version": 1
   },

@@ -3,7 +3,7 @@
     "reason": "storyboard 中已有镜头命中题材高风险场景。",
     "state": "scene_archetypes_triggered",
     "storyboard_clip_count": 13,
-    "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
+    "storyboard_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
     "storyboard_state": "ready",
     "triggered": true
   },
@@ -200,7 +200,7 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-15T07:10:57+00:00",
+  "generated_at": "2026-07-19T12:42:03+00:00",
   "genre": {
     "genre_key": "chuanyue",
     "label": "穿越",
@@ -524,7 +524,7 @@
       "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。 | 题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。 | 悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
     }
   },
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "stage_key": "image",
   "status": "warn",
   "summary": {
