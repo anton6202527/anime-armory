@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第6话",
+  "panel_id": "P004",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 4,
+  "references": [
+    {
+      "id": "CHAR_SHI_TAIGONG",
+      "path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+      "sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHI_MANOR",
+      "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+      "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_SHI_TAIGONG",
+      "path": "出图/共享/图片/CHAR_SHI_TAIGONG__face.png",
+      "sha256": "09699eecc9a002db135c6adcd30082b613ba022c07b31e80060cbf5903061129",
+      "role": "face",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-19T17:37:05"
+}

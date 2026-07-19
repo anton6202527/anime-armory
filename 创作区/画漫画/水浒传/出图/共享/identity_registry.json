@@ -7151,6 +7151,55 @@
       "anchor_path": "出图/共享/图片/LOC_SHI_TRAINING_YARD__anchor.png",
       "primary_path": "出图/共享/图片/LOC_SHI_TRAINING_YARD__anchor.png",
       "sha256": "5fd6d47385d1ad9b719ed09a2b45a48e0af36bbcd4660b8bf05d1dc303ee0e3c"
+    },
+    "LOC_SHI_ANCESTRAL_GRAVE": {
+      "id": "LOC_SHI_ANCESTRAL_GRAVE",
+      "type": "location",
+      "display_name": "史家村西祖坟",
+      "description": "史家村西山坡祖坟群；北宋乡村土冢、松柏、送葬山路与新坟空位；阴天冷灰漫射光；无人物、无文字、无明清石牌楼。",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_SHI_ANCESTRAL_GRAVE__anchor.png",
+          "sha256": "408f8414cb74986489c9095645208d0abbc43508fb170f9f1e8748644b06bb1c",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第6话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第6话/LOC_SHI_ANCESTRAL_GRAVE__anchor_dreamina__20260719T172932442574.md",
+            "prompt_sha256": "c80e86274cac7a5298436029804e833ed7fbbb3ca2992aa2f9ee63061556785d",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "36bd16e0-77b9-4dec-a6b0-dac8f1050e98",
+            "raw_canvas_path": "出图/共享/candidates/LOC_SHI_ANCESTRAL_GRAVE/anchor/20260719T173028826156__raw_canvas.png",
+            "raw_canvas_sha256": "da3a928b79420b0a456cd7b881d9d12ba6a04040a20c51c24584f5208b0fb47e",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-19T17:30:29"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T17:30:29",
+      "anchor_path": "出图/共享/图片/LOC_SHI_ANCESTRAL_GRAVE__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_SHI_ANCESTRAL_GRAVE__anchor.png",
+      "sha256": "408f8414cb74986489c9095645208d0abbc43508fb170f9f1e8748644b06bb1c"
     }
   },
   "schema_meta": {

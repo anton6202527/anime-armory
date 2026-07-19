@@ -1,0 +1,3018 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第6话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 training_start",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:顺读推进；P002:顺读推进；P003:顺读推进；P004:顺读推进；P005:顺读推进；P006:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "晨光里史进再次向王进行拜师礼，旧花棒横放在脚边。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P001_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 142,
+                "w": 777,
+                "h": 245
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 450,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进扶起史进，手掌按住他的肩，示意先收傲气。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 496,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 461,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史太公在草堂向王进讲述儿子自幼只爱枪棒。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 757,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 722,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 972,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "墙上旧衣与练武器械并置，史太公说起亡妻被气病离世。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1018,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 983,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1233,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史太公郑重请托，王进拱手应下。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P005.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1279,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1244,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1494,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进把史进的花棒放回兵器架，取下一杆朴素长枪。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1540,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1505,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "training_start"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 training",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:顺读推进；P008:顺读推进；P009:顺读推进；P010:顺读推进；P011:顺读推进；P012:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 253
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进扎马步持矛，王进用竹条校正前手高度。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P007_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P007.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 122,
+                "w": 648,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 84,
+                "w": 432,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 352,
+            "w": 1080,
+            "h": 253
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "重锤落下扬尘，史进双臂震颤仍守住下盘。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 402,
+                "w": 648,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 632,
+            "w": 1080,
+            "h": 253
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "弓弦拉满，箭簇对准远处草靶中心。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 682,
+                "w": 648,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 644,
+                "w": 432,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 912,
+            "w": 1080,
+            "h": 253
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进拨开史进短弩的偏斜机括，示意呼吸节奏。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P010_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P010.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 962,
+                "w": 648,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 924,
+                "w": 432,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 1192,
+            "w": 1080,
+            "h": 253
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "长鞭绕桩，鞭梢贴地扫过却不缠腿。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1242,
+                "w": 648,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 1472,
+            "w": 1080,
+            "h": 256
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "双简交错挡住木刀，史进第一次稳稳接住。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1523,
+                "w": 648,
+                "h": 179
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 1484,
+                "w": 432,
+                "h": 85
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "training"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 training_peak",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P018",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ]
+      },
+      "gutter_intent": "P013:顺读推进；P014:顺读推进；P015:顺读推进；P016:顺读推进；P017:顺读推进；P018:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 190
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "双剑在夕光中一攻一守，脚下落叶被带起。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 110,
+                "w": 648,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 289,
+            "w": 1080,
+            "h": 190
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "铁链锤绕过木桩，史进急收腕避免反伤。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 327,
+                "w": 648,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 298,
+                "w": 432,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 506,
+            "w": 1080,
+            "h": 190
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "月牙挝与长斧在兵器架前逐一掠过，形成器械蒙太奇。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 544,
+                "w": 648,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 723,
+            "w": 1080,
+            "h": 190
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进持戈踏步，王进从侧后方压低他的肩。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 761,
+                "w": 648,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 732,
+                "w": 432,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 940,
+            "w": 1080,
+            "h": 190
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "盾牌顶住长戟，史进借步卸力而非硬扛。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P017_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 978,
+                "w": 648,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 949,
+                "w": 432,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1157,
+            "w": 1296,
+            "h": 571
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "长枪对长棒在雨中连续交击，史进已能守住三合。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1271,
+                "w": 777,
+                "h": 399
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P018",
+          "story_function": "training_peak"
+        },
+        "payoff": {
+          "panel_id": "P019",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_004",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P024 decision",
+      "eye_flow_path": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P019",
+        "exit_panel_id": "P024",
+        "path": [
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024"
+        ]
+      },
+      "gutter_intent": "P019:顺读推进；P020:顺读推进；P021:顺读推进；P022:顺读推进；P023:顺读推进；P024:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 169
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "春日练枪，院墙外新柳刚抽芽。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P019_N1",
+              "type": "narration",
+              "content_ref": "panel:P019.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 105,
+                "w": 648,
+                "h": 118
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.narration",
+              "rect": {
+                "x": 234,
+                "y": 80,
+                "w": 432,
+                "h": 56
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 268,
+            "w": 1080,
+            "h": 169
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "夏日花影从席前移到阶下，空茶盏旁汗水滴落。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P020_N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 301,
+                "w": 648,
+                "h": 118
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 234,
+                "y": 276,
+                "w": 432,
+                "h": 56
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 464,
+            "w": 1080,
+            "h": 169
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "秋风卷叶，史进闭眼听棒风，从容侧步避开。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P021_N1",
+              "type": "narration",
+              "content_ref": "panel:P021.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 497,
+                "w": 648,
+                "h": 118
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P021.narration",
+              "rect": {
+                "x": 234,
+                "y": 472,
+                "w": 432,
+                "h": 56
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 660,
+            "w": 1188,
+            "h": 338
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "同样长棒再交锋，史进稳稳封住王进三路变化。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P022_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 727,
+                "w": 712,
+                "h": 236
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 676,
+                "w": 475,
+                "h": 112
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1025,
+            "w": 1188,
+            "h": 338
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "夜里王进独坐灯下，看着延安方向的旧路引与行囊。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P023_N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1092,
+                "w": 712,
+                "h": 236
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 185,
+                "y": 1041,
+                "w": 475,
+                "h": 112
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1390,
+            "w": 1188,
+            "h": 338
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进向史进提出离庄，史进神色骤变。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P024_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P024.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1457,
+                "w": 712,
+                "h": 236
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1406,
+                "w": 475,
+                "h": 112
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P024",
+          "story_function": "decision"
+        },
+        "payoff": {
+          "panel_id": "P025",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_005",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P030 gift",
+      "eye_flow_path": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P025",
+        "exit_panel_id": "P030",
+        "path": [
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030"
+        ]
+      },
+      "gutter_intent": "P025:顺读推进；P026:顺读推进；P027:顺读推进；P028:顺读推进；P029:顺读推进；P030:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P025",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进拦在门前，双手抱拳恳求师父终身留下。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P025_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P025.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 122,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 84,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P026",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 352,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进把高俅追捕文书的记忆压在桌上，摇头。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P026_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P026.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 402,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 364,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P027",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "地图上延安边塞被王进指住，窗外夜风掀帘。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P027_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 682,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 644,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P028",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进垂下拳头，明白再留就是害师父。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P028_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P028.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 962,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 924,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P029",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "草堂设下送行宴，四人围桌却无人真正动筷。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1242,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P030",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1472,
+            "w": 1188,
+            "h": 256
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史太公托出两匹缎子和一盘花银，王进连忙推辞。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P030_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P030.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1523,
+                "w": 712,
+                "h": 179
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P030.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1484,
+                "w": 475,
+                "h": 85
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P030",
+          "story_function": "gift"
+        },
+        "payoff": {
+          "panel_id": "P031",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_006",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P036 parting",
+      "eye_flow_path": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P031",
+        "exit_panel_id": "P036",
+        "path": [
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036"
+        ]
+      },
+      "gutter_intent": "P031:顺读推进；P032:顺读推进；P033:顺读推进；P034:顺读推进；P035:顺读推进；P036:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P031",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进双手奉上行囊，眼神停在师父磨旧的袖口。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P031_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 122,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 84,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P032",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 352,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "天未亮，王进束紧担子，史进亲自为马扣好鞍带。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 402,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P033",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王母气色已复，坐上马背向史太公深深行礼。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P033_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P033.dialogue:1",
+              "speaker": "王母",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王母"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 682,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 644,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P034",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "庄门打开，晨雾里王进母子启程，史家父子立在门内。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P034_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P034.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 962,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P034.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 924,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P035",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进替师父挑担，陪着马沿山路默默走出十里。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P035_N1",
+              "type": "narration",
+              "content_ref": "panel:P035.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1242,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P035.narration",
+              "rect": {
+                "x": 185,
+                "y": 1204,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P036",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1472,
+            "w": 1188,
+            "h": 256
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "路岔口，王进接回担子，史进仍不肯松手。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P036_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P036.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1523,
+                "w": 712,
+                "h": 179
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1484,
+                "w": 475,
+                "h": 85
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P036",
+          "story_function": "parting"
+        },
+        "payoff": {
+          "panel_id": "P037",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_007",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P042 illness",
+      "eye_flow_path": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P037",
+        "exit_panel_id": "P042",
+        "path": [
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042"
+        ]
+      },
+      "gutter_intent": "P037:重揭示长停顿；P038:顺读推进；P039:顺读推进；P040:顺读推进；P041:顺读推进；P042:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P037",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "史进跪在尘土中叩别，王进扶他不起，王母在马上回望。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P037_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P037.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 142,
+                "w": 777,
+                "h": 245
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P038",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 450,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进挑担随马远去，史进与庄客立在路上直到人影消失。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P038_N1",
+              "type": "narration",
+              "content_ref": "panel:P038.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 496,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.narration",
+              "rect": {
+                "x": 185,
+                "y": 461,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P039",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进独自回到空下来的较场，把师父用过的长棒放正。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 757,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P040",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 972,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "半夜更鼓，史进一人起身练枪，动作比从前沉静。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1018,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P041",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1233,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "白日庄后，史进骑马引弓，箭中远靶。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1279,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P042",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1494,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史太公在内室忽然咳倒，药碗跌碎，史进冲来扶住。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P042_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P042.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1540,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1505,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P042",
+          "story_function": "illness"
+        },
+        "payoff": {
+          "panel_id": "P043",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_008",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P048 ending_promise",
+      "eye_flow_path": [
+        "P043",
+        "P044",
+        "P045",
+        "P046",
+        "P047",
+        "P048"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P043",
+        "exit_panel_id": "P048",
+        "path": [
+          "P043",
+          "P044",
+          "P045",
+          "P046",
+          "P047",
+          "P048"
+        ]
+      },
+      "gutter_intent": "P043:顺读推进；P044:重揭示长停顿；P045:顺读推进；P046:顺读推进；P047:顺读推进；P048:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P043",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "不同医士轮番把脉，史进守在榻边一夜未合眼。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P043_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P043.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 110,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 81,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P044",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 289,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "清晨烛火熄灭，史进握着父亲渐冷的手，屋内极静。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 346,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P045",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 601,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "素幡垂下，棺椁停在草堂，史进披麻跪在灵前。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P045_N1",
+              "type": "narration",
+              "content_ref": "panel:P045.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 639,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.narration",
+              "rect": {
+                "x": 185,
+                "y": 610,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P046",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 818,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "三四百史家庄户尽皆挂孝，送棺队伍沿村西山路而上。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 875,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P047",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1130,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "黄土落在祖坟新冢上，史进双手捧土，九龙刺青被孝衣遮住。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P047_N1",
+              "type": "narration",
+              "content_ref": "panel:P047.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1187,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P047.narration",
+              "rect": {
+                "x": 136,
+                "y": 1144,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P048",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1442,
+            "w": 1296,
+            "h": 286
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "暮色中史进独立庄门，身后无人管业，手中却握稳师父留下的长枪。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P048_N1",
+              "type": "narration",
+              "content_ref": "panel:P048.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1499,
+                "w": 777,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.narration",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、兵器风、雨雪、落叶与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P048",
+          "story_function": "ending_promise"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "显式effects_plan: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第6话/panel_script.json",
+    "panel_script_sha256": "65804f3936c9bb8cd62d1ccf07ff74f21e2cbe916b532f0fcdc516fb5c924bfe",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-19T09:28:30.519764+00:00",
+    "note": "",
+    "subject_sha256": "c0ab60baa938bfe94afb6710882082bd8354074f268d202cb3e64fa45f0604c2",
+    "panel_script_sha256": "65804f3936c9bb8cd62d1ccf07ff74f21e2cbe916b532f0fcdc516fb5c924bfe",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

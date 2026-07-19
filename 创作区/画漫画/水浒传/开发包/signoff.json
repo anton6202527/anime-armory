@@ -4,10 +4,10 @@
   "decision": "approved",
   "reviewer": "Codex制作代理",
   "role": "用户授权制作代理",
-  "time": "2026-07-19T15:10:00+08:00",
-  "reason": "用户明确要求继续且不要停，直到第5话整话制作完毕；制作代理在已批准前5话季弧内确认第5话S038–S054边界。",
+  "time": "2026-07-19T18:20:00+08:00",
+  "reason": "用户要求继续下一话；按既有项目授权完成第6话章节闭环与生产合同签收。",
   "amended_by": "Codex制作代理",
-  "amendment_reason": "新增第5话正式chapter contract；第1–4话合同与成品不变。",
+  "amendment_reason": "新增第6话正式chapter contract；第1–5话合同与成品不变。",
   "authorization_path": "设定库/approval_delegation.json",
   "prior_human_signoff": {
     "reviewer": "lalala",
@@ -18,6 +18,6 @@
   "file_sha256": {
     "adaptation_strategy": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
     "season_arc": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
-    "split_blueprint": "42575d208c817d45534a10e748dad2571975a3b9a101c5484dcf058ed107c911"
+    "split_blueprint": "a88bf2a886396506b87ba1f33a8d281fe37f7edbaff553a12e592bf1f1d97cf2"
   }
 }

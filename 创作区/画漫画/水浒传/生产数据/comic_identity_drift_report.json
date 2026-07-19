@@ -1,12 +1,12 @@
 {
   "kind": "comic_identity_drift_report",
   "version": 1,
-  "generated_at": "2026-07-19T08:59:42+00:00",
+  "generated_at": "2026-07-19T10:54:22+00:00",
   "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
   "summary": {
-    "chapters_scanned": 5,
+    "chapters_scanned": 6,
     "characters_tracked": 18,
-    "characters_with_drift": 3,
+    "characters_with_drift": 4,
     "characters_block": 0
   },
   "chapters": [
@@ -14,7 +14,8 @@
     "第2话",
     "第3话",
     "第4话",
-    "第5话"
+    "第5话",
+    "第6话"
   ],
   "characters": [
     {
@@ -144,35 +145,46 @@
     {
       "char_id": "CHAR_SHI_JIN",
       "appeared_chapters": [
-        "第5话"
+        "第5话",
+        "第6话"
       ],
       "chapter_status": {
-        "第5话": "warn"
+        "第5话": "warn",
+        "第6话": "warn"
       },
       "first_bad_chapter": "第5话",
       "warn_or_block_chapters": [
-        "第5话"
+        "第5话",
+        "第6话"
       ],
       "block_chapters": [],
       "codes": [
         "face_fingerprint_low",
         "hair_fingerprint_low"
       ],
-      "recommendation": "CHAR_SHI_JIN：仅 第5话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+      "recommendation": "CHAR_SHI_JIN：跨 2 话反复漂移（第5话、第6话）——补专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可本线外训练后把产出登记为 registry 参考。"
     },
     {
       "char_id": "CHAR_SHI_TAIGONG",
       "appeared_chapters": [
-        "第5话"
+        "第5话",
+        "第6话"
       ],
       "chapter_status": {
-        "第5话": "ok"
+        "第5话": "ok",
+        "第6话": "warn"
       },
-      "first_bad_chapter": null,
-      "warn_or_block_chapters": [],
+      "first_bad_chapter": "第6话",
+      "warn_or_block_chapters": [
+        "第6话"
+      ],
       "block_chapters": [],
-      "codes": [],
-      "recommendation": null
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low",
+        "outfit_fingerprint_low"
+      ],
+      "recommendation": "CHAR_SHI_TAIGONG：第6话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
     },
     {
       "char_id": "CHAR_SU_XUESHI",
@@ -206,16 +218,19 @@
       "char_id": "CHAR_WANG_JIN",
       "appeared_chapters": [
         "第4话",
-        "第5话"
+        "第5话",
+        "第6话"
       ],
       "chapter_status": {
         "第4话": "warn",
-        "第5话": "warn"
+        "第5话": "warn",
+        "第6话": "warn"
       },
       "first_bad_chapter": "第4话",
       "warn_or_block_chapters": [
         "第4话",
-        "第5话"
+        "第5话",
+        "第6话"
       ],
       "block_chapters": [],
       "codes": [
@@ -223,17 +238,19 @@
         "hair_fingerprint_low",
         "outfit_fingerprint_low"
       ],
-      "recommendation": "CHAR_WANG_JIN：第4话、第5话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
+      "recommendation": "CHAR_WANG_JIN：第4话、第5话、第6话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
     },
     {
       "char_id": "CHAR_WANG_MOTHER",
       "appeared_chapters": [
         "第4话",
-        "第5话"
+        "第5话",
+        "第6话"
       ],
       "chapter_status": {
         "第4话": "ok",
-        "第5话": "warn"
+        "第5话": "warn",
+        "第6话": "ok"
       },
       "first_bad_chapter": "第5话",
       "warn_or_block_chapters": [
