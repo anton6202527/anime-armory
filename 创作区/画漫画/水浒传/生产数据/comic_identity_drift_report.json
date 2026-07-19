@@ -1,19 +1,20 @@
 {
   "kind": "comic_identity_drift_report",
   "version": 1,
-  "generated_at": "2026-07-19T05:42:50+00:00",
+  "generated_at": "2026-07-19T08:59:42+00:00",
   "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
   "summary": {
-    "chapters_scanned": 4,
-    "characters_tracked": 16,
-    "characters_with_drift": 1,
+    "chapters_scanned": 5,
+    "characters_tracked": 18,
+    "characters_with_drift": 3,
     "characters_block": 0
   },
   "chapters": [
     "第1话",
     "第2话",
     "第3话",
-    "第4话"
+    "第4话",
+    "第5话"
   ],
   "characters": [
     {
@@ -96,11 +97,13 @@
       "char_id": "CHAR_GAO_QIU",
       "appeared_chapters": [
         "第3话",
-        "第4话"
+        "第4话",
+        "第5话"
       ],
       "chapter_status": {
         "第3话": "ok",
-        "第4话": "ok"
+        "第4话": "ok",
+        "第5话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],
@@ -139,6 +142,39 @@
       "recommendation": null
     },
     {
+      "char_id": "CHAR_SHI_JIN",
+      "appeared_chapters": [
+        "第5话"
+      ],
+      "chapter_status": {
+        "第5话": "warn"
+      },
+      "first_bad_chapter": "第5话",
+      "warn_or_block_chapters": [
+        "第5话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_SHI_JIN：仅 第5话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+    },
+    {
+      "char_id": "CHAR_SHI_TAIGONG",
+      "appeared_chapters": [
+        "第5话"
+      ],
+      "chapter_status": {
+        "第5话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
       "char_id": "CHAR_SU_XUESHI",
       "appeared_chapters": [
         "第3话"
@@ -169,35 +205,47 @@
     {
       "char_id": "CHAR_WANG_JIN",
       "appeared_chapters": [
-        "第4话"
+        "第4话",
+        "第5话"
       ],
       "chapter_status": {
-        "第4话": "warn"
+        "第4话": "warn",
+        "第5话": "warn"
       },
       "first_bad_chapter": "第4话",
       "warn_or_block_chapters": [
-        "第4话"
+        "第4话",
+        "第5话"
       ],
       "block_chapters": [],
       "codes": [
         "face_fingerprint_low",
+        "hair_fingerprint_low",
         "outfit_fingerprint_low"
       ],
-      "recommendation": "CHAR_WANG_JIN：第4话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
+      "recommendation": "CHAR_WANG_JIN：第4话、第5话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
     },
     {
       "char_id": "CHAR_WANG_MOTHER",
       "appeared_chapters": [
-        "第4话"
+        "第4话",
+        "第5话"
       ],
       "chapter_status": {
-        "第4话": "ok"
+        "第4话": "ok",
+        "第5话": "warn"
       },
-      "first_bad_chapter": null,
-      "warn_or_block_chapters": [],
+      "first_bad_chapter": "第5话",
+      "warn_or_block_chapters": [
+        "第5话"
+      ],
       "block_chapters": [],
-      "codes": [],
-      "recommendation": null
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low",
+        "outfit_fingerprint_low"
+      ],
+      "recommendation": "CHAR_WANG_MOTHER：第5话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
     },
     {
       "char_id": "CHAR_WEN_YANBO",

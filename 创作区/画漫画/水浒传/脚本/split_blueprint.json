@@ -5,7 +5,7 @@
   "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。第3话以高俅从市井帮闲进入端王权力轨道为完整闭环，在‘正式索为亲随’处收束。第4话消费S028–S037，以端王即位、高俅升迁和借公权报复王进为闭环，在王进母子决定夜逃处收束；实际离京与史家村留给第5话。",
   "coverage_scope": {
     "planned_through": "第2章",
-    "reason": "第1–3话整话生产链已验收通过；当前滚动制作第4话，消费第2章S028–S037，以端王即位、高俅升迁并借公权报复王进为闭环，在王进母子决定夜逃处收束；S038起的实际离京与史家村留给第5话。"
+    "reason": "第1–4话整话生产链已验收通过；当前滚动制作第5话，消费第2章S038–S054，以王进母子智脱监视、逃离东京、投宿史家村并一招折服史进为闭环；S055起的正式授艺与半年后离别留给后续话次。"
   },
   "chapters": [
     {
@@ -30,7 +30,10 @@
       "budget": {
         "unit": "panels",
         "target": 48,
-        "soft_range": [44, 52]
+        "soft_range": [
+          44,
+          52
+        ]
       },
       "entry_state": {
         "entities": {
@@ -286,7 +289,10 @@
       "budget": {
         "unit": "panels",
         "target": 46,
-        "soft_range": [42, 50]
+        "soft_range": [
+          42,
+          50
+        ]
       },
       "entry_state": {
         "entities": {
@@ -415,7 +421,10 @@
       "budget": {
         "unit": "panels",
         "target": 46,
-        "soft_range": [42, 50]
+        "soft_range": [
+          42,
+          50
+        ]
       },
       "entry_state": {
         "entities": {
@@ -440,7 +449,7 @@
           },
           "CHAR_GAO_QIU": {
             "story_state": "凭蹴球与逢迎获得端王直接青睐，已被正式索为王府亲随。",
-          "visual_state": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。"
+            "visual_state": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。"
           },
           "CHAR_DUAN_WANG": {
             "story_state": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。",
@@ -457,21 +466,21 @@
         }
       },
       "continuity_delta": [
-    {
-      "entity_id": "CHAR_DUAN_WANG",
-      "field": "story_state",
+        {
+          "entity_id": "CHAR_DUAN_WANG",
+          "field": "story_state",
           "from": "亲眼验证高俅球技与逢迎能力，已将他索为私人亲随。",
           "to": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
           "panel_id": "P008",
-      "reason": "端王从私人亲王成为能够授予官位的天子。"
-    },
-    {
-      "entity_id": "CHAR_DUAN_WANG",
-      "field": "visual_state",
-      "from": "仍是未即位亲王，保留年轻清俊面孔与亲王常服。",
-      "to": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。",
-      "panel_id": "P008",
-      "reason": "即位礼仪以冠服完成身份跃迁，但人物永久脸型与修长体态不变。"
+          "reason": "端王从私人亲王成为能够授予官位的天子。"
+        },
+        {
+          "entity_id": "CHAR_DUAN_WANG",
+          "field": "visual_state",
+          "from": "仍是未即位亲王，保留年轻清俊面孔与亲王常服。",
+          "to": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。",
+          "panel_id": "P008",
+          "reason": "即位礼仪以冠服完成身份跃迁，但人物永久脸型与修长体态不变。"
         },
         {
           "entity_id": "CHAR_GAO_QIU",
@@ -484,42 +493,42 @@
         {
           "entity_id": "CHAR_GAO_QIU",
           "field": "visual_state",
-      "from": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。",
+          "from": "脸与身形不变，换为王都尉府亲随的青灰窄袖圆领袍，腰间系令牌，已不再背行李。",
           "to": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。",
           "panel_id": "P017",
           "reason": "高俅以新官服完成从亲随到掌军新贵的视觉跃迁。"
         },
-    {
-      "entity_id": "CHAR_WANG_JIN",
-      "field": "story_state",
+        {
+          "entity_id": "CHAR_WANG_JIN",
+          "field": "story_state",
           "from": "八十万禁军教头，因病告假在家，尚不知道新任殿帅与自家有旧仇。",
           "to": "认出高俅的报复意图，已与母亲决定设法摆脱监视、夜逃延安。",
           "panel_id": "P046",
-      "reason": "王进确认无法凭官理自保，选择离开体制以保全母亲。"
-    },
-    {
-      "entity_id": "CHAR_WANG_JIN",
-      "field": "visual_state",
-      "from": "三十余岁，病中面色苍白但体格端正，家居素袍下仍有军人肩背。",
-      "to": "病色未退，回家后换回素色家居袍，神情由克制转为警觉决绝。",
-      "panel_id": "P044",
-      "reason": "抱病应召时换教头当值服，受辱返家后换回家居袍，病色与同一身体持续。"
-    },
-    {
-      "entity_id": "CHAR_WANG_MOTHER",
-      "field": "story_state",
-      "from": "王进六十余岁的老母，与儿子相依为命。",
-      "to": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
-      "panel_id": "P046",
-      "reason": "她听清制度性威胁后主动提出走为上，并参与确定逃亡方向。"
-    },
-    {
-      "entity_id": "CHAR_WANG_MOTHER",
-      "field": "visual_state",
-      "from": "银灰发髻、朴素交领袄裙、布鞋，行动略缓。",
-      "to": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。",
-      "panel_id": "P046",
-      "reason": "决定夜逃后只新增收拢细软动作，永久外形与家居服不变。"
+          "reason": "王进确认无法凭官理自保，选择离开体制以保全母亲。"
+        },
+        {
+          "entity_id": "CHAR_WANG_JIN",
+          "field": "visual_state",
+          "from": "三十余岁，病中面色苍白但体格端正，家居素袍下仍有军人肩背。",
+          "to": "病色未退，回家后换回素色家居袍，神情由克制转为警觉决绝。",
+          "panel_id": "P044",
+          "reason": "抱病应召时换教头当值服，受辱返家后换回家居袍，病色与同一身体持续。"
+        },
+        {
+          "entity_id": "CHAR_WANG_MOTHER",
+          "field": "story_state",
+          "from": "王进六十余岁的老母，与儿子相依为命。",
+          "to": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
+          "panel_id": "P046",
+          "reason": "她听清制度性威胁后主动提出走为上，并参与确定逃亡方向。"
+        },
+        {
+          "entity_id": "CHAR_WANG_MOTHER",
+          "field": "visual_state",
+          "from": "银灰发髻、朴素交领袄裙、布鞋，行动略缓。",
+          "to": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。",
+          "panel_id": "P046",
+          "reason": "决定夜逃后只新增收拢细软动作，永久外形与家居服不变。"
         },
         {
           "entity_id": "WORLD_ORDER",
@@ -574,6 +583,212 @@
           "CHAR_WANG_MOTHER": {
             "story_state": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
             "visual_state": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。"
+          }
+        }
+      },
+      "status": "confirmed"
+    },
+    {
+      "chapter": "第5话",
+      "working_title": "夜走史家村",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_CH005",
+          "source_path": "源本/水浒传.docx",
+          "start": "第2章",
+          "end": "第2章",
+          "coverage_exception": "第2至第5话共用第2章源范围但按源语义分段独立消费：第5话只消费S038–S054；S001–S037已由前话消费，S055以后后文带出。"
+        }
+      ],
+      "reader_promise": "看王进如何在高俅的追捕网合拢前带母亲逃出东京，又如何在陌生庄院用一招真功夫赢得新的立足之地。",
+      "core_conflict": "王进既要骗开监视、护送病弱母亲脱离东京，又不能暴露身份；抵达史家村后，史进的傲气又迫使他在继续隐匿与出手自证之间选择。",
+      "turning_point": "史进挥棒猛攻，王进先退后进，以虚劈诱架、回棒直搠，一招缴械将史进掀翻。",
+      "payoff": "史进从恼怒挑战转为心服拜师；王进坦白禁军教头身份与逃亡缘由，在追捕路上获得暂时庇护，也把真本事传向下一位江湖人物。",
+      "ending_mode": "closure_with_new_promise",
+      "budget": {
+        "unit": "panels",
+        "target": 48,
+        "soft_range": [
+          44,
+          52
+        ]
+      },
+      "entry_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "高俅的升迁已逼出第一名离京者，神话因果落成普通人的流亡选择。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "私人恩宠已转化为军府公权，旧怨可以借点名、军法与监视合法施压。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "经枢密院入名和随驾迁转，半年内升任殿帅府太尉。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "认出高俅的报复意图，已与母亲决定设法摆脱监视、夜逃延安。",
+            "visual_state": "病色未退，回家后换回素色家居袍，神情由克制转为警觉决绝。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
+            "visual_state": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "史家村少庄主，恃七八位师父所授花棒而自负。",
+            "visual_state": "十八九岁、银盘面皮、上身九龙刺青；赤膊在后槽练棒。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "史家村庄主，尚未结识王进母子。",
+            "visual_state": "年近六旬、须发皆白、暖帽宽衫、皂丝绦与熟皮靴。"
+          }
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "CHAR_WANG_JIN",
+          "field": "story_state",
+          "from": "认出高俅的报复意图，已与母亲决定设法摆脱监视、夜逃延安。",
+          "to": "已智脱两名牌军、逃出东京并在史家村以真功夫折服史进，暂获史太公庇护。",
+          "panel_id": "P048",
+          "reason": "逃亡行动完成第一段闭环，并建立师徒关系。"
+        },
+        {
+          "entity_id": "CHAR_WANG_JIN",
+          "field": "visual_state",
+          "from": "病色未退，回家后换回素色家居袍，神情由克制转为警觉决绝。",
+          "to": "旅尘与病后疲色仍在，身份坦白后姿态由戒备转为克制从容。",
+          "panel_id": "P048",
+          "reason": "逃亡与坦白改变气色姿态但不改变身份外形。"
+        },
+        {
+          "entity_id": "CHAR_WANG_MOTHER",
+          "field": "story_state",
+          "from": "得知高俅寻仇，与儿子共同决定离京投奔延安。",
+          "to": "已随王进逃出东京，在史家村因鞍马劳顿发病后得到医治与安顿。",
+          "panel_id": "P030",
+          "reason": "身体风险让逃亡暂停并获得民间庇护。"
+        },
+        {
+          "entity_id": "CHAR_WANG_MOTHER",
+          "field": "visual_state",
+          "from": "银灰发髻、朴素交领袄裙不变，开始收拢细软但尚未出门。",
+          "to": "银灰发髻与朴素衣着不变，鞍马劳顿后的虚弱逐渐缓解。",
+          "panel_id": "P033",
+          "reason": "医治只改变气色，不改变永久外形。"
+        },
+        {
+          "entity_id": "CHAR_GAO_QIU",
+          "field": "story_state",
+          "from": "经枢密院入名和随驾迁转，半年内升任殿帅府太尉。",
+          "to": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+          "panel_id": "P018",
+          "reason": "私人报复升级为跨州公权追捕。"
+        },
+        {
+          "entity_id": "CHAR_SHI_JIN",
+          "field": "story_state",
+          "from": "史家村少庄主，恃七八位师父所授花棒而自负。",
+          "to": "被王进一招缴械后心服拜师，首次承认真本事高于虚名。",
+          "panel_id": "P046",
+          "reason": "败而能拜使其进入真正成长线。"
+        },
+        {
+          "entity_id": "CHAR_SHI_JIN",
+          "field": "visual_state",
+          "from": "十八九岁、银盘面皮、上身九龙刺青；赤膊在后槽练棒。",
+          "to": "十八九岁、银盘面皮、同一九龙刺青；挑战时赤膊，拜师时重新穿衣。",
+          "panel_id": "P048",
+          "reason": "服装变化不改变同脸同体态同刺青。"
+        },
+        {
+          "entity_id": "CHAR_SHI_TAIGONG",
+          "field": "story_state",
+          "from": "史家村庄主，尚未结识王进母子。",
+          "to": "收留王进母子、为王母治病，并欣然促成王进指教师进。",
+          "panel_id": "P047",
+          "reason": "从陌生庄主转为恩人和师徒促成者。"
+        },
+        {
+          "entity_id": "WORLD_ORDER",
+          "field": "state",
+          "from": "私人恩宠已转化为军府公权，旧怨可以借点名、军法与监视合法施压。",
+          "to": "殿帅府追捕文书已扩散诸州，但民间庄院的善意与真本事暂时接住被体制驱逐的人。",
+          "panel_id": "P048",
+          "reason": "公权追捕与江湖庇护第一次正面对照。"
+        },
+        {
+          "entity_id": "STORY_CHAPTER",
+          "field": "state",
+          "from": "高俅的升迁已逼出第一名离京者，神话因果落成普通人的流亡选择。",
+          "to": "逃亡者在史家村留下第一段武艺传承，逼上江湖的因果开始连接下一位人物。",
+          "panel_id": "P048",
+          "reason": "个人逃亡转成江湖人物链。"
+        }
+      ],
+      "exit_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "逃亡者在史家村留下第一段武艺传承，逼上江湖的因果开始连接下一位人物。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "殿帅府追捕文书已扩散诸州，但民间庄院的善意与真本事暂时接住被体制驱逐的人。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已智脱两名牌军、逃出东京并在史家村以真功夫折服史进，暂获史太公庇护。",
+            "visual_state": "旅尘与病后疲色仍在，身份坦白后姿态由戒备转为克制从容。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "已随王进逃出东京，在史家村因鞍马劳顿发病后得到医治与安顿。",
+            "visual_state": "银灰发髻与朴素衣着不变，鞍马劳顿后的虚弱逐渐缓解。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "被王进一招缴械后心服拜师，首次承认真本事高于虚名。",
+            "visual_state": "十八九岁、银盘面皮、同一九龙刺青；挑战时赤膊，拜师时重新穿衣。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "收留王进母子、为王母治病，并欣然促成王进指教师进。",
+            "visual_state": "年近六旬、须发皆白、暖帽宽衫、皂丝绦与熟皮靴。"
           }
         }
       },

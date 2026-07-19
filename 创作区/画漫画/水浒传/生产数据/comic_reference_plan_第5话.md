@@ -1,0 +1,33 @@
+# 逐格参考规划（事前处方）· 第5话
+
+- 后端 dreamina_image2image（持久主体 False·单角色参考上限 5）
+- 含角色格 41 · 需处理 28 · warn 28 · info 0
+
+- ⚠️ `same_frame_color_collision` P005 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P011 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P012 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P013 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P014 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P019 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P020 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P021 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P022 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P027 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P028 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P029·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P029·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P029 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P030·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P030·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P030 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P031 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P032·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P032·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P032 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P033 多人同框主色撞色（易串脸）：CHAR_WANG_MOTHER↔CHAR_WANG_JIN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P038·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P038·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P038 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P047·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P047·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P047 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_SHI_TAIGONG（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。

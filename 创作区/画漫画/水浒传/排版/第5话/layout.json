@@ -1,0 +1,3502 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第5话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第5话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 5006,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1050,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 preparation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "preparation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 235,
+                "w": 777,
+                "h": 732
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 78,
+                "w": 518,
+                "h": 350
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 78,
+                "w": 518,
+                "h": 350
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B001D2",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 598,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P002",
+          "x": 126,
+          "y": 1106,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 preparation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "preparation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1273,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1145,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 1152,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P003",
+          "x": 180,
+          "y": 1974,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 preparation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "preparation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 2095,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 180,
+          "y": 2622,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 preparation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "preparation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 2743,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P005",
+          "x": 126,
+          "y": 3270,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 preparation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "preparation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3437,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3309,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005D1",
+              "type": "dialogue",
+              "content_ref": "panel:P005.dialogue:1",
+              "speaker": "王母",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王母"
+              },
+              "x": 172,
+              "y": 3316,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 4138,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 preparation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "preparation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4303,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 5256,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 195,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P008",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1063,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 935,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B008D1",
+              "type": "dialogue",
+              "content_ref": "panel:P008.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 180,
+          "y": 1764,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1885,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 126,
+          "y": 2412,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2595,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 2455,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B010S1",
+              "type": "sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3134,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 126,
+          "y": 3360,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3543,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 3403,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011S1",
+              "type": "sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4082,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P012",
+          "x": 126,
+          "y": 4308,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4489,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.narration",
+              "rect": {
+                "x": 185,
+                "y": 4350,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012N1",
+              "type": "narration",
+              "content_ref": "panel:P012.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4356,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 5596,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 threat",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "threat"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 208,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 71,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013S1",
+              "type": "sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 750,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P014",
+          "x": 72,
+          "y": 976,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 threat",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "threat"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1183,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1026,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1026,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 120,
+              "y": 1024,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B014S2",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1818,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 126,
+          "y": 2044,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 threat",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "threat"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2209,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P016",
+          "x": 126,
+          "y": 2912,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 threat",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "threat"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3077,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2951,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "李牌",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李牌"
+              },
+              "x": 172,
+              "y": 2958,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P017",
+          "x": 126,
+          "y": 3780,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 threat",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "threat"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3945,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3819,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B017D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              },
+              "x": 172,
+              "y": 3826,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P018",
+          "x": 126,
+          "y": 4648,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 threat",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "threat"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4828,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.narration",
+              "rect": {
+                "x": 185,
+                "y": 4691,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B018N1",
+              "type": "narration",
+              "content_ref": "panel:P018.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4696,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_004",
+      "source_name_page_id": "SCROLL_004",
+      "width": 1440,
+      "height": 5086,
+      "reading_order": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 establishing",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "establishing"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 211,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.narration",
+              "rect": {
+                "x": 185,
+                "y": 71,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B019N1",
+              "type": "narration",
+              "content_ref": "panel:P019.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P020",
+          "x": 126,
+          "y": 976,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 establishing",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "establishing"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1143,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1015,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B020D1",
+              "type": "dialogue",
+              "content_ref": "panel:P020.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 1022,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P021",
+          "x": 126,
+          "y": 1844,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 establishing",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "establishing"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2011,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P022",
+          "x": 72,
+          "y": 2712,
+          "w": 1296,
+          "h": 1050,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 establishing",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "establishing"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2919,
+                "w": 777,
+                "h": 732
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2762,
+                "w": 518,
+                "h": 350
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B022D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 120,
+              "y": 2760,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P023",
+          "x": 180,
+          "y": 3790,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 establishing",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "establishing"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 3911,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P024",
+          "x": 180,
+          "y": 4438,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 establishing",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "establishing"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 4561,
+                "w": 648,
+                "h": 430
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_005",
+      "source_name_page_id": "SCROLL_005",
+      "width": 1440,
+      "height": 4796,
+      "reading_order": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "panels": [
+        {
+          "panel_id": "P025",
+          "x": 180,
+          "y": 28,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 hospitality",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "hospitality"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 150,
+                "w": 648,
+                "h": 432
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P026",
+          "x": 180,
+          "y": 676,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 hospitality",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "hospitality"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 798,
+                "w": 648,
+                "h": 432
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P027",
+          "x": 126,
+          "y": 1324,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 hospitality",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "hospitality"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1489,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1365,
+                "w": 475,
+                "h": 279
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B027D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 1370,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P028",
+          "x": 126,
+          "y": 2192,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 hospitality",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "hospitality"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2357,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P029",
+          "x": 126,
+          "y": 3060,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 hospitality",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "hospitality"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3225,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3101,
+                "w": 475,
+                "h": 279
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B029D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              },
+              "x": 172,
+              "y": 3106,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P030",
+          "x": 126,
+          "y": 3928,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 hospitality",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "hospitality"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4096,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_006",
+      "source_name_page_id": "SCROLL_006",
+      "width": 1440,
+      "height": 5096,
+      "reading_order": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "panels": [
+        {
+          "panel_id": "P031",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 assessment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "assessment"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 195,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B031D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P032",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 assessment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "assessment"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1063,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 935,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B032D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P033",
+          "x": 126,
+          "y": 1764,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 assessment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "assessment"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1947,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.narration",
+              "rect": {
+                "x": 185,
+                "y": 1807,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B033N1",
+              "type": "narration",
+              "content_ref": "panel:P033.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1812,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P034",
+          "x": 180,
+          "y": 2712,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 assessment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "assessment"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 2833,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P035",
+          "x": 126,
+          "y": 3360,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 assessment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "assessment"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3527,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P036",
+          "x": 126,
+          "y": 4228,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 assessment",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "assessment"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4393,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4267,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B036D1",
+              "type": "dialogue",
+              "content_ref": "panel:P036.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 4274,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_007",
+      "source_name_page_id": "SCROLL_007",
+      "width": 1440,
+      "height": 5396,
+      "reading_order": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "panels": [
+        {
+          "panel_id": "P037",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 194,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B037D1",
+              "type": "dialogue",
+              "content_ref": "panel:P037.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P038",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1062,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 935,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B038D1",
+              "type": "dialogue",
+              "content_ref": "panel:P038.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P039",
+          "x": 126,
+          "y": 1764,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1930,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1803,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B039D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 1810,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P040",
+          "x": 126,
+          "y": 2632,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2798,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2671,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B040D1",
+              "type": "dialogue",
+              "content_ref": "panel:P040.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 2678,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P041",
+          "x": 126,
+          "y": 3500,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3681,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 3543,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B041S1",
+              "type": "sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4222,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P042",
+          "x": 126,
+          "y": 4448,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4631,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 4491,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B042S1",
+              "type": "sfx",
+              "content_ref": "panel:P042.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5170,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_008",
+      "source_name_page_id": "SCROLL_008",
+      "width": 1440,
+      "height": 5972,
+      "reading_order": [
+        "P043",
+        "P044",
+        "P045",
+        "P046",
+        "P047",
+        "P048"
+      ],
+      "panels": [
+        {
+          "panel_id": "P043",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 210,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 73,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B043S1",
+              "type": "sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 750,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P044",
+          "x": 72,
+          "y": 976,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1181,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1027,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B044S1",
+              "type": "sfx",
+              "content_ref": "panel:P044.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1818,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P045",
+          "x": 72,
+          "y": 2072,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2277,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2123,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 2123,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B045D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 120,
+              "y": 2120,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B045S2",
+              "type": "sfx",
+              "content_ref": "panel:P045.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2914,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P046",
+          "x": 126,
+          "y": 3140,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3306,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3181,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B046D1",
+              "type": "dialogue",
+              "content_ref": "panel:P046.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 3186,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P047",
+          "x": 126,
+          "y": 4008,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4174,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P047.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4049,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B047D1",
+              "type": "dialogue",
+              "content_ref": "panel:P047.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 172,
+              "y": 4054,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P048",
+          "x": 72,
+          "y": 4876,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5082,
+                "w": 777,
+                "h": 724
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.narration",
+              "rect": {
+                "x": 136,
+                "y": 4926,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 4926,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B048N1",
+              "type": "narration",
+              "content_ref": "panel:P048.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4924,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B048D2",
+              "type": "dialogue",
+              "content_ref": "panel:P048.dialogue:1",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              },
+              "x": 598,
+              "y": 4924,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第5话/panel_script.json",
+    "panel_script_sha256": "8d7e450749bf02a01d8608d0b1c52276bdaaedc6b1c1180a90fa121de89f2077",
+    "name_board": "排版/第5话/name_board.json",
+    "name_board_sha256": "803f21761be9e862d2e8294dde7d7a6077d1df3d74fbea02f631abb96af3aeaa",
+    "name_approval_subject_sha256": "474f076c2d5a4129af3923acd810c270c917402feecf759c2d15e120bcef5832",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-19T07:06:41.638374+00:00",
+    "note": "",
+    "subject_sha256": "dbeefc11088a8384df3c7133f357248868b907a32f54a74e547f295f26c1c2f8",
+    "panel_script_sha256": "8d7e450749bf02a01d8608d0b1c52276bdaaedc6b1c1180a90fa121de89f2077",
+    "name_board_sha256": "803f21761be9e862d2e8294dde7d7a6077d1df3d74fbea02f631abb96af3aeaa",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

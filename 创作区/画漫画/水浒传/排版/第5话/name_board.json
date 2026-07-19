@@ -1,0 +1,3012 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第5话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 preparation",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:顺读推进；P002:顺读推进；P003:顺读推进；P004:顺读推进；P005:顺读推进；P006:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 414
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进在烛下把写着“还愿”的纸折好，门外两名牌军的影子压住门槛。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P001_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 154,
+                "w": 777,
+                "h": 289
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 92,
+                "w": 518,
+                "h": 138
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 92,
+                "w": 518,
+                "h": 138
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 513,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进隔门吩咐张牌明早开庙、备三牲，语气平静，手却按住收好的路引。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 568,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 526,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 816,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "张牌端碗应下，另一名牌军李牌在门侧狐疑看王进。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 843,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 981,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "张牌提灯走入夜巷，王进从门缝确认他走远。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1008,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1146,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "屋内烛火压低，王进与母亲把衣物、细软和银两摊在床边。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P005.dialogue:1",
+              "speaker": "王母",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王母"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1201,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1159,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1449,
+            "w": 1188,
+            "h": 279
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进把细软扎成一担，另装两个马料袋，绳结一寸寸勒紧。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1504,
+                "w": 712,
+                "h": 195
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "preparation"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 departure",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:顺读推进；P008:顺读推进；P009:顺读推进；P010:顺读推进；P011:顺读推进；P012:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王母摸过住了多年的旧桌，最终收回手，只带一只旧包袱。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 127,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 375,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "五更前王进唤醒李牌，把银子递给他，仍用岳庙祭品作借口。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P008.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 430,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 388,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 678,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "李牌揣银出门，窄巷尽头天色尚黑；王进在后门无声落闩。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 705,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 843,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进在后槽给马搭上料袋和包袱，逐一拉紧绳索。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P010_S1",
+              "type": "sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 898,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 856,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1146,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "他扶母亲上马，一手稳住老人肘弯，一手牵住缰绳。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P011_S1",
+              "type": "sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1201,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 1159,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1449,
+            "w": 1188,
+            "h": 279
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "母子回望锁住的前后门，旧家沉在五更阴影里。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_N1",
+              "type": "narration",
+              "content_ref": "panel:P012.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1504,
+                "w": 712,
+                "h": 195
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.narration",
+              "rect": {
+                "x": 185,
+                "y": 1462,
+                "w": 475,
+                "h": 93
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "departure"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 threat",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P018",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ]
+      },
+      "gutter_intent": "P013:顺读推进；P014:顺读推进；P015:顺读推进；P016:顺读推进；P017:顺读推进；P018:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进挑担跟在马后，从西华门下贴着晨雾出城。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P013_S1",
+              "type": "sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 118,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 83,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 333,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "城门在身后缩小，母子沿官道向西，第一线晨光落在路上。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            },
+            {
+              "balloon_id": "P014_S1",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 403,
+                "w": 777,
+                "h": 245
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 350,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 350,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "岳庙香案前，张牌与李牌守着煮熟祭品，日影已经过午。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 757,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 972,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "两人奔回王家，只见铁锁冰冷、门缝积尘，人马全无。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "李牌",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李牌"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1018,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 983,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1233,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "殿帅府公案上，高俅听完首告骤然拍案，追捕文书铺开。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P017_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "高俅",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "高俅"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1279,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1244,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1494,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "朱印重重压在“捉拿逃军王进”的文书上，驿卒接令奔出。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P018_N1",
+              "type": "narration",
+              "content_ref": "panel:P018.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1540,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.narration",
+              "rect": {
+                "x": 185,
+                "y": 1505,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P018",
+          "story_function": "threat"
+        },
+        "payoff": {
+          "panel_id": "P019",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_004",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P024 establishing",
+      "eye_flow_path": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P019",
+        "exit_panel_id": "P024",
+        "path": [
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024"
+        ]
+      },
+      "gutter_intent": "P019:顺读推进；P020:顺读推进；P021:顺读推进；P022:顺读推进；P023:顺读推进；P024:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "官道四季般切换：母子饥餐渴饮，夜住晓行，衣上积满旅尘。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P019_N1",
+              "type": "narration",
+              "content_ref": "panel:P019.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 127,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.narration",
+              "rect": {
+                "x": 185,
+                "y": 85,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 375,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进指向远山，告诉母亲延安已近，紧绷的肩背第一次松下。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P020_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P020.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 430,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 388,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 678,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "暮色压下，官道前后不见村店，母亲伏在马上显出疲态。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 733,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 981,
+            "w": 1296,
+            "h": 414
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "黑林深处忽然亮起一点暖灯，柳枝之间露出土墙庄院。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P022_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1063,
+                "w": 777,
+                "h": 289
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1001,
+                "w": 518,
+                "h": 138
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 1422,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史家庄前通官道、后靠溪冈，土墙与大柳树把庄院围住。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1449,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 1587,
+            "w": 1080,
+            "h": 141
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "柳烟和绿荫笼罩屋舍，灯火从层层院落透出。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1615,
+                "w": 648,
+                "h": 98
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P024",
+          "story_function": "establishing"
+        },
+        "payoff": {
+          "panel_id": "P025",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_005",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P030 hospitality",
+      "eye_flow_path": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P025",
+        "exit_panel_id": "P030",
+        "path": [
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030"
+        ]
+      },
+      "gutter_intent": "P025:顺读推进；P026:顺读推进；P027:顺读推进；P028:顺读推进；P029:顺读推进；P030:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P025",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 152
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "牛羊绕过屋角，鹅鸭穿过打麦场，庄客收拢农具。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 102,
+                "w": 648,
+                "h": 106
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P026",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 251,
+            "w": 1080,
+            "h": 152
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "广田与仓廒延向远处，成群庄客进出有序。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 281,
+                "w": 648,
+                "h": 106
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P027",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 430,
+            "w": 1188,
+            "h": 304
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进在庄门外放下担子施礼，请庄客通报借宿。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P027_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 490,
+                "w": 712,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 445,
+                "w": 475,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P028",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 761,
+            "w": 1188,
+            "h": 304
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "庄门打开，庄客引母子穿过打麦场；马拴在柳树旁。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 821,
+                "w": 712,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P029",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1092,
+            "w": 1188,
+            "h": 304
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "草堂内史太公起身迎客，白须暖帽、宽衫皂绦，神态温厚。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P029_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1152,
+                "w": 712,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1107,
+                "w": 475,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P030",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1423,
+            "w": 1188,
+            "h": 305
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "四样菜蔬与一盘牛肉摆上长桌，王进母子拘谨谢席。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1484,
+                "w": 712,
+                "h": 213
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P030",
+          "story_function": "hospitality"
+        },
+        "payoff": {
+          "panel_id": "P031",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_006",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P036 assessment",
+      "eye_flow_path": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P031",
+        "exit_panel_id": "P036",
+        "path": [
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036"
+        ]
+      },
+      "gutter_intent": "P031:顺读推进；P032:顺读推进；P033:顺读推进；P034:顺读推进；P035:顺读推进；P036:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P031",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "次晨客房内王母捂住心口低声呻吟，王进跪在床边扶她。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P031_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 127,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 85,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P032",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 375,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史太公在门前听见，立即叫庄客进县抓药，让母子安心住下。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P032_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 430,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 388,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P033",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 678,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "药碗、晨昏窗影与王母渐稳的呼吸叠成五七日流逝。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P033_N1",
+              "type": "narration",
+              "content_ref": "panel:P033.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 733,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P033.narration",
+              "rect": {
+                "x": 185,
+                "y": 691,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P034",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 981,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进收拾担子准备告辞，去后槽看马时忽听木棒破风。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1008,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P035",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1146,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进赤膊立在空地，九龙刺青随肩背发力，长棒舞成圆轮。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1201,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P036",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1449,
+            "w": 1188,
+            "h": 279
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进抱臂看了半晌，目光落在史进转身时敞开的中门。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P036_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P036.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1504,
+                "w": 712,
+                "h": 195
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P036.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1462,
+                "w": 475,
+                "h": 93
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P036",
+          "story_function": "assessment"
+        },
+        "payoff": {
+          "panel_id": "P037",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_007",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P042 action",
+      "eye_flow_path": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P037",
+        "exit_panel_id": "P042",
+        "path": [
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042"
+        ]
+      },
+      "gutter_intent": "P037:顺读推进；P038:顺读推进；P039:顺读推进；P040:顺读推进；P041:顺读推进；P042:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P037",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进猛然停棒，棒梢直指王进，怒意和不服写在脸上。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P037_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P037.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 122,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 84,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P038",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 352,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史太公赶来按下史进棒头，向王进拱手询问是否懂枪棒。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P038_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P038.dialogue:1",
+              "speaker": "史太公",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史太公"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 402,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P038.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 364,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P039",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进偏过脸不肯拜，双手重新握紧长棒。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P039_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 682,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 644,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P040",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进从兵器架取一条素棒，只摆出克制旗鼓，不抢先攻。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P040_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P040.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 962,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 924,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P041",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进把棒舞成风车，踏碎尘土直奔王进中门。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P041_S1",
+              "type": "sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1242,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 1204,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P042",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1472,
+            "w": 1188,
+            "h": 256
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进拖棒后退半步，引史进追入预留空位。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P042_S1",
+              "type": "sfx",
+              "content_ref": "panel:P042.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1523,
+                "w": 712,
+                "h": 179
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 1484,
+                "w": 475,
+                "h": 85
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P042",
+          "story_function": "action"
+        },
+        "payoff": {
+          "panel_id": "P043",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_008",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P048 ending_promise",
+      "eye_flow_path": [
+        "P043",
+        "P044",
+        "P045",
+        "P046",
+        "P047",
+        "P048"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P043",
+        "exit_panel_id": "P048",
+        "path": [
+          "P043",
+          "P044",
+          "P045",
+          "P046",
+          "P047",
+          "P048"
+        ]
+      },
+      "gutter_intent": "P043:顺读推进；P044:重揭示长停顿；P045:顺读推进；P046:顺读推进；P047:顺读推进；P048:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P043",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王进回身高举长棒作势下劈，史进本能横棒上架。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P043_S1",
+              "type": "sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 112,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 82,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P044",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 301,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "王进的棒并未落下，腕势一掣，棒端从史进空门直搠胸前。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P044_S1",
+              "type": "sfx",
+              "content_ref": "panel:P044.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 361,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 316,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P045",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 632,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "双棒一缴，史进手中棒飞落一旁，整个人扑地后倒；王进及时扶住。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P045_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            },
+            {
+              "balloon_id": "P045_S1",
+              "type": "sfx",
+              "content_ref": "panel:P045.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 692,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 647,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 647,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P046",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 963,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进爬起后亲自搬凳请王进坐下，收起傲气俯身拜师。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P046_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P046.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1003,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P046.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 973,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P047",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "后堂宴席上王进坦白姓名与高俅旧仇，史太公父子神色由惊转敬。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P047_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P047.dialogue:1",
+              "speaker": "王进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1232,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P047.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1202,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P048",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1421,
+            "w": 1296,
+            "h": 307
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "史进重新整衣再拜，王进扶他起身；两条练武长棒并排靠在晨光中的兵器架。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P048_N1",
+              "type": "narration",
+              "content_ref": "panel:P048.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P048_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P048.dialogue:1",
+              "speaker": "王进",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1482,
+                "w": 777,
+                "h": 214
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.narration",
+              "rect": {
+                "x": 136,
+                "y": 1436,
+                "w": 518,
+                "h": 102
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 1436,
+                "w": 518,
+                "h": 102
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用尘土、衣摆、棒风、门响与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P048",
+          "story_function": "ending_promise"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "显式effects_plan: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第5话/panel_script.json",
+    "panel_script_sha256": "8d7e450749bf02a01d8608d0b1c52276bdaaedc6b1c1180a90fa121de89f2077",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-19T07:06:41.462169+00:00",
+    "note": "",
+    "subject_sha256": "474f076c2d5a4129af3923acd810c270c917402feecf759c2d15e120bcef5832",
+    "panel_script_sha256": "8d7e450749bf02a01d8608d0b1c52276bdaaedc6b1c1180a90fa121de89f2077",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

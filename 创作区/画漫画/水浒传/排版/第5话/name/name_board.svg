@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="92" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">王进在烛下把写着“还愿”的纸折好，门外两名牌军的影子压住门槛。</text>
+<rect x="57" y="160" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="175">P002</text>
+<text class="note" x="62" y="190">王进隔门吩咐张牌明早开庙、备三牲，语气平静，手却按住收好的路引。</text>
+<rect x="68" y="227" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="242">P003</text>
+<text class="note" x="73" y="250">张牌端碗应下，另一名牌军李牌在门侧狐疑看王进。</text>
+<rect x="68" y="264" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="279">P004</text>
+<text class="note" x="73" y="287">张牌提灯走入夜巷，王进从门缝确认他走远。</text>
+<rect x="57" y="300" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="315">P005</text>
+<text class="note" x="62" y="330">屋内烛火压低，王进与母亲把衣物、细软和银两摊在床边。</text>
+<rect x="57" y="368" width="242" height="62" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="383">P006</text>
+<text class="note" x="62" y="398">王进把细软扎成一担，另装两个马料袋，绳结一寸寸勒紧。</text>
+<text class="note" x="38" y="448">hook: P006 preparation</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="385" y="62" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="77">P007</text>
+<text class="note" x="390" y="92">王母摸过住了多年的旧桌，最终收回手，只带一只旧包袱。</text>
+<rect x="385" y="129" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="144">P008</text>
+<text class="note" x="390" y="159">五更前王进唤醒李牌，把银子递给他，仍用岳庙祭品作借口。</text>
+<rect x="396" y="196" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="211">P009</text>
+<text class="note" x="401" y="219">李牌揣银出门，窄巷尽头天色尚黑；王进在后门无声落闩。</text>
+<rect x="385" y="233" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="248">P010</text>
+<text class="note" x="390" y="263">王进在后槽给马搭上料袋和包袱，逐一拉紧绳索。</text>
+<rect x="385" y="300" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="315">P011</text>
+<text class="note" x="390" y="330">他扶母亲上马，一手稳住老人肘弯，一手牵住缰绳。</text>
+<rect x="385" y="368" width="242" height="62" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="383">P012</text>
+<text class="note" x="390" y="398">母子回望锁住的前后门，旧家沉在五更阴影里。</text>
+<text class="note" x="366" y="448">hook: P012 departure</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="713" y="62" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="77">P013</text>
+<text class="note" x="718" y="92">王进挑担跟在马后，从西华门下贴着晨雾出城。</text>
+<rect x="702" y="120" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="135">P014</text>
+<text class="note" x="707" y="150">城门在身后缩小，母子沿官道向西，第一线晨光落在路上。</text>
+<rect x="713" y="204" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="219">P015</text>
+<text class="note" x="718" y="234">岳庙香案前，张牌与李牌守着煮熟祭品，日影已经过午。</text>
+<rect x="713" y="262" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="277">P016</text>
+<text class="note" x="718" y="292">两人奔回王家，只见铁锁冰冷、门缝积尘，人马全无。</text>
+<rect x="713" y="320" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="335">P017</text>
+<text class="note" x="718" y="350">殿帅府公案上，高俅听完首告骤然拍案，追捕文书铺开。</text>
+<rect x="713" y="378" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="393">P018</text>
+<text class="note" x="718" y="408">朱印重重压在“捉拿逃军王进”的文书上，驿卒接令奔出。</text>
+<text class="note" x="694" y="448">hook: P018 threat</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="57" y="520" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="535">P019</text>
+<text class="note" x="62" y="550">官道四季般切换：母子饥餐渴饮，夜住晓行，衣上积满旅尘。</text>
+<rect x="57" y="587" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="602">P020</text>
+<text class="note" x="62" y="617">王进指向远山，告诉母亲延安已近，紧绷的肩背第一次松下。</text>
+<rect x="57" y="654" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="669">P021</text>
+<text class="note" x="62" y="684">暮色压下，官道前后不见村店，母亲伏在马上显出疲态。</text>
+<rect x="46" y="722" width="264" height="92" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="737">P022</text>
+<text class="note" x="51" y="752">黑林深处忽然亮起一点暖灯，柳枝之间露出土墙庄院。</text>
+<rect x="68" y="820" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="835">P023</text>
+<text class="note" x="73" y="843">史家庄前通官道、后靠溪冈，土墙与大柳树把庄院围住。</text>
+<rect x="68" y="856" width="220" height="31" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="871">P024</text>
+<text class="note" x="73" y="880">柳烟和绿荫笼罩屋舍，灯火从层层院落透出。</text>
+<text class="note" x="38" y="906">hook: P024 establishing</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="396" y="520" width="220" height="33" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="535">P025</text>
+<text class="note" x="401" y="546">牛羊绕过屋角，鹅鸭穿过打麦场，庄客收拢农具。</text>
+<rect x="396" y="559" width="220" height="33" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="574">P026</text>
+<text class="note" x="401" y="585">广田与仓廒延向远处，成群庄客进出有序。</text>
+<rect x="385" y="599" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="614">P027</text>
+<text class="note" x="390" y="629">王进在庄门外放下担子施礼，请庄客通报借宿。</text>
+<rect x="385" y="673" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="688">P028</text>
+<text class="note" x="390" y="703">庄门打开，庄客引母子穿过打麦场；马拴在柳树旁。</text>
+<rect x="385" y="746" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="761">P029</text>
+<text class="note" x="390" y="776">草堂内史太公起身迎客，白须暖帽、宽衫皂绦，神态温厚。</text>
+<rect x="385" y="820" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="835">P030</text>
+<text class="note" x="390" y="850">四样菜蔬与一盘牛肉摆上长桌，王进母子拘谨谢席。</text>
+<text class="note" x="366" y="906">hook: P030 hospitality</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="713" y="520" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="535">P031</text>
+<text class="note" x="718" y="550">次晨客房内王母捂住心口低声呻吟，王进跪在床边扶她。</text>
+<rect x="713" y="587" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="602">P032</text>
+<text class="note" x="718" y="617">史太公在门前听见，立即叫庄客进县抓药，让母子安心住下。</text>
+<rect x="713" y="654" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="669">P033</text>
+<text class="note" x="718" y="684">药碗、晨昏窗影与王母渐稳的呼吸叠成五七日流逝。</text>
+<rect x="724" y="722" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="729" y="737">P034</text>
+<text class="note" x="729" y="745">王进收拾担子准备告辞，去后槽看马时忽听木棒破风。</text>
+<rect x="713" y="758" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="773">P035</text>
+<text class="note" x="718" y="788">史进赤膊立在空地，九龙刺青随肩背发力，长棒舞成圆轮。</text>
+<rect x="713" y="826" width="242" height="62" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="841">P036</text>
+<text class="note" x="718" y="856">王进抱臂看了半晌，目光落在史进转身时敞开的中门。</text>
+<text class="note" x="694" y="906">hook: P036 assessment</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="57" y="978" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="993">P037</text>
+<text class="note" x="62" y="1008">史进猛然停棒，棒梢直指王进，怒意和不服写在脸上。</text>
+<rect x="57" y="1040" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1055">P038</text>
+<text class="note" x="62" y="1070">史太公赶来按下史进棒头，向王进拱手询问是否懂枪棒。</text>
+<rect x="57" y="1102" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1117">P039</text>
+<text class="note" x="62" y="1132">史进偏过脸不肯拜，双手重新握紧长棒。</text>
+<rect x="57" y="1164" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1179">P040</text>
+<text class="note" x="62" y="1194">王进从兵器架取一条素棒，只摆出克制旗鼓，不抢先攻。</text>
+<rect x="57" y="1226" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1241">P041</text>
+<text class="note" x="62" y="1256">史进把棒舞成风车，踏碎尘土直奔王进中门。</text>
+<rect x="57" y="1289" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1304">P042</text>
+<text class="note" x="62" y="1319">王进拖棒后退半步，引史进追入预留空位。</text>
+<text class="note" x="38" y="1364">hook: P042 action</text>
+<rect x="356" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="962">SCROLL_008 scroll</text>
+<rect x="385" y="978" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="993">P043</text>
+<text class="note" x="390" y="1008">王进回身高举长棒作势下劈，史进本能横棒上架。</text>
+<rect x="374" y="1028" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1043">P044</text>
+<text class="note" x="379" y="1058">王进的棒并未落下，腕势一掣，棒端从史进空门直搠胸前。</text>
+<rect x="374" y="1102" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1117">P045</text>
+<text class="note" x="379" y="1132">双棒一缴，史进手中棒飞落一旁，整个人扑地后倒；王进及时扶住。</text>
+<rect x="385" y="1175" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1190">P046</text>
+<text class="note" x="390" y="1205">史进爬起后亲自搬凳请王进坐下，收起傲气俯身拜师。</text>
+<rect x="385" y="1226" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1241">P047</text>
+<text class="note" x="390" y="1256">后堂宴席上王进坦白姓名与高俅旧仇，史太公父子神色由惊转敬。</text>
+<rect x="374" y="1277" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1292">P048</text>
+<text class="note" x="379" y="1307">史进重新整衣再拜，王进扶他起身；两条练武长棒并排靠在晨光中的兵…</text>
+<text class="note" x="366" y="1364">hook: P048 ending_promise</text>
+</svg>

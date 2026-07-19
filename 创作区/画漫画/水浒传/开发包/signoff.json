@@ -4,10 +4,10 @@
   "decision": "approved",
   "reviewer": "Codex制作代理",
   "role": "用户授权制作代理",
-  "time": "2026-07-18T14:18:55+08:00",
-  "reason": "用户于 2026-07-18 明确要求按最新 comic skill 继续制作下一话；第4话边界沿用已由出品人 lalala 批准的 season_arc，严格消费S028–S037，在王进母子决定夜逃处收束，不提前消费第5话的实际离京与史家村。",
+  "time": "2026-07-19T15:10:00+08:00",
+  "reason": "用户明确要求继续且不要停，直到第5话整话制作完毕；制作代理在已批准前5话季弧内确认第5话S038–S054边界。",
   "amended_by": "Codex制作代理",
-  "amendment_reason": "在已批准前5话季弧内新增第4话正式 chapter contract，以源语义分段例外解决第2至第4话共用第2章的覆盖边界；第1–3话合同与成品不变。",
+  "amendment_reason": "新增第5话正式chapter contract；第1–4话合同与成品不变。",
   "authorization_path": "设定库/approval_delegation.json",
   "prior_human_signoff": {
     "reviewer": "lalala",
@@ -18,6 +18,6 @@
   "file_sha256": {
     "adaptation_strategy": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
     "season_arc": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
-    "split_blueprint": "f98bf3be4b3aceab8d6dde88b673de8b8efee63fcbb04cab6c2f7e6f0a0a34bc"
+    "split_blueprint": "42575d208c817d45534a10e748dad2571975a3b9a101c5484dcf058ed107c911"
   }
 }

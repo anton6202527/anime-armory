@@ -1,0 +1,89 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第5话",
+  "created_at": "2026-07-19T15:14:13",
+  "characters": [
+    "CHAR_SHI_JIN"
+  ],
+  "views": [
+    "front",
+    "three_quarter",
+    "face"
+  ],
+  "backend": "dreamina",
+  "attempted_backends": [
+    "dreamina"
+  ],
+  "codex_execution_mode": "",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第5话.json",
+  "previous_manifest_archive": "",
+  "previous_manifest_sha256": "",
+  "contact_sheet": "生产数据/comic_identity_views_第5话_contact_sheet.jpg",
+  "generated": 3,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-19T15:12:21",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_SHI_JIN",
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+      "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "anchor_kind": "style_only_text_prompt_seed",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "911e3ba2-e466-4e84-a4a6-50c992e5ef8b",
+      "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "style_reference_role": "style_only",
+      "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__front_dreamina__20260719T151117728306.md",
+      "prompt_sha256": "960ee6333df4adc2c1d3ad1d8d5b11fe72f5c005217f6eebb11c0caba817e44e"
+    },
+    {
+      "ts": "2026-07-19T15:13:18",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_SHI_JIN",
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+      "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+      "anchor_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "81954225-9781-4854-a328-6f4a1ee0eef5",
+      "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__three_quarter_dreamina__20260719T151221530348.md",
+      "prompt_sha256": "e975180cab2317c2bca672d58a8acd25b8f353b68c85007b6fd5b76d7d2ad402"
+    },
+    {
+      "ts": "2026-07-19T15:14:12",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_SHI_JIN",
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+      "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+      "anchor_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "attempt": 1,
+      "model_version": "5.0",
+      "resolution_type": "2k",
+      "ratio": "3:4",
+      "submit_id": "c64c72a1-122c-40a0-bb52-bca84f0894ba",
+      "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__face_dreamina__20260719T151318665454.md",
+      "prompt_sha256": "3472b3c8ef38c0822edee9508d9078756e2e597bf01f8edcfb008938e2a49add"
+    }
+  ]
+}

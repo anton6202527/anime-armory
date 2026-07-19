@@ -1,0 +1,2300 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第5话",
+  "stage": "image_preflight",
+  "created_at": "2026-07-19T16:47:20",
+  "verdict": "warn",
+  "summary": {
+    "finding_count": 33,
+    "block_count": 0,
+    "warn_count": 32,
+    "info_count": 1
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "ending_mode_mismatch",
+      "artifact": "生产数据/comic_chapter_beat_audit_第5话.json",
+      "reason": "合同 ending_mode=closure_with_new_promise，末格 story_function=ending_promise；期望候选为 ['hook', 'new_promise', 'resolution']。这是编辑复核提示，不是硬闸。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "climax_at_tail",
+      "artifact": "生产数据/comic_chapter_beat_audit_第5话.json",
+      "reason": "高潮候选在 94%；确认中段是否有足够支撑。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "mentioned_not_bound",
+      "artifact": "生产数据/comic_entity_presence_audit_第5话.json",
+      "reason": "P003 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "mentioned_not_bound",
+      "artifact": "生产数据/comic_entity_presence_audit_第5话.json",
+      "reason": "P018 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "mentioned_not_bound",
+      "artifact": "生产数据/comic_entity_presence_audit_第5话.json",
+      "reason": "P047 画面描述提到「高俅」（registry 实体 CHAR_GAO_QIU），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P005 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P011 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P012 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P013 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P014 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P019 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P020 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P021 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P022 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P027 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P028 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P029·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P029·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P029 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P030·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P030·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P030 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P031 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P032·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P032·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P032 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P033 多人同框主色撞色（易串脸）：CHAR_WANG_MOTHER↔CHAR_WANG_JIN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P038·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P038·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P038 多人同框主色撞色（易串脸）：CHAR_SHI_TAIGONG↔CHAR_WANG_JIN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P047·史太公：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P047·史太公：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第5话.json",
+      "reason": "P047 多人同框主色撞色（易串脸）：CHAR_WANG_JIN↔CHAR_SHI_TAIGONG（同主色「白」）、CHAR_WANG_JIN↔CHAR_WANG_MOTHER（同主色「白」）、CHAR_SHI_TAIGONG↔CHAR_WANG_MOTHER（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    }
+  ],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=5 block=0 warn=0",
+    "缩略分镜/name board 审批合同: pass",
+    "排版审批合同: pass",
+    "原稿收尾合同: pass",
+    "backend adapter: dreamina_image2image; reference_image_limit=10; persistent_subject=False",
+    "角色注册表 v2: pass",
+    "角色多视图技术齐套与人审签收: pass",
+    "chapter_beat_audit: must=0 warn=1（advisory·不阻断）",
+    "setup_payoff_ledger: must=0 warn=0（advisory·不阻断）",
+    "reentry_context_audit: must=0 warn=0（advisory·不阻断）",
+    "entity_presence_audit: must=0 warn=3（advisory·不阻断）",
+    "redundancy_audit: must=0 warn=0（advisory·不阻断）",
+    "subtext_audit: must=0 warn=0（advisory·不阻断）",
+    "reference_planner: 含角色格 41 需处理 28；处方 SHA 已校验"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+        "size": 1814
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
+        "size": 3638
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
+        "size": 2817
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "42575d208c817d45534a10e748dad2571975a3b9a101c5484dcf058ed107c911",
+        "size": 40279
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "b615c1fd3e6f375f1ad021d9fb28f32216dcf69c36526616dc2467db6a960685",
+        "size": 1023
+      },
+      {
+        "path": "源本/水浒传.docx",
+        "exists": true,
+        "sha256": "dbee5369b3fc152b340d0629eb0eb16af05c15c01e1ffba02fcd636688fc7d52",
+        "size": 1211659
+      },
+      {
+        "path": "脚本/第5话/panel_script.json",
+        "exists": true,
+        "sha256": "8d7e450749bf02a01d8608d0b1c52276bdaaedc6b1c1180a90fa121de89f2077",
+        "size": 199443
+      },
+      {
+        "path": "脚本/第5话/source_semantics.json",
+        "exists": true,
+        "sha256": "7f67c3083c5fd484de0ea20e317fe282900aedf3fe9fc26791578b4c220400f6",
+        "size": 111493
+      },
+      {
+        "path": "排版/第5话/name_board.json",
+        "exists": true,
+        "sha256": "803f21761be9e862d2e8294dde7d7a6077d1df3d74fbea02f631abb96af3aeaa",
+        "size": 91965
+      },
+      {
+        "path": "排版/第5话/layout.json",
+        "exists": true,
+        "sha256": "973015f060c1a83e36d70fc5d1a733ee2d9062c4235c53be9656f307e61e0eeb",
+        "size": 103623
+      },
+      {
+        "path": "出图/第5话/finishing/finishing_plan.json",
+        "exists": true,
+        "sha256": "1412cdaa4d6d3c7e8afa01c9f754520dad0d36cd65a1e371cb6357d4ffae671f",
+        "size": 145007
+      },
+      {
+        "path": "出图/共享/identity_registry.json",
+        "exists": true,
+        "sha256": "de1eaf7de1e481fb25dc375cc55a1a7cdeb1869cae4b8d5821371ea1018f3eb2",
+        "size": 310573
+      },
+      {
+        "path": "生产数据/comic_model_pack_report.json",
+        "exists": true,
+        "sha256": "c752995bd31363ccfd59a0df297033a11a567984e3a011370c71de6ed2ad5b61",
+        "size": 43545
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_ABBOT_SHANGQING.json",
+        "exists": true,
+        "sha256": "3094b1f28176ec037f2f7d6b80854368fe8309a3afdacd1c29e3e91d93f00a9d",
+        "size": 2517
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DONG_JIANGSHI.json",
+        "exists": true,
+        "sha256": "570de835cadd83373a7a2419183cccb8bfbcdf6f100d3bd87bfe0b50cb4a589d",
+        "size": 1465
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DUAN_WANG.json",
+        "exists": true,
+        "sha256": "a27f18656dfdf130cf844a95ac692c60ff70782b73060c24e15b3965821c55fb",
+        "size": 1749
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_EMPEROR_RENZONG.json",
+        "exists": true,
+        "sha256": "5b8f4e10ad0f59d7d0b0dc7c16af64f01a9a0593f3a1c451f7a9ac74eec27551",
+        "size": 1956
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_FAN_ZHONGYAN.json",
+        "exists": true,
+        "sha256": "e7ff24f8e65ca4fe0995354e6dad18ff0a2feb6dbbdc7aa71273af22a06163a0",
+        "size": 1935
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_GAO_QIU.json",
+        "exists": true,
+        "sha256": "82f663b01ecab5b5d8af317274c38063f7c605d964fff2b592447632f3dc152c",
+        "size": 2603
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_HONG_XIN.json",
+        "exists": true,
+        "sha256": "f38b26af6e25cd90d71cc6c748bc88b507da31eb5746c1a7e39768cefa8e8726",
+        "size": 2368
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_MASTER_XUJING.json",
+        "exists": true,
+        "sha256": "e5e4e96cc79ea72628174a01c405ec251b4f2561eee0bc15879ef288840b72af",
+        "size": 2403
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_SHI_JIN.json",
+        "exists": true,
+        "sha256": "80f5a4b4826421ab48b85a4383db56f6173411f54ef7cfe1754940b6745d62d3",
+        "size": 2441
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_SHI_TAIGONG.json",
+        "exists": true,
+        "sha256": "3e36051b51781b3feec1d8934c4f6897618807e2b90825a0162735e4aade289a",
+        "size": 1886
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_SU_XUESHI.json",
+        "exists": true,
+        "sha256": "7cb6890b78f9b095e1cf87549dc34602de43d7647b5de8c6f1047486f06f862f",
+        "size": 1453
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG_DUWEI.json",
+        "exists": true,
+        "sha256": "82d8915a95dc9c80a0354629bc78bf0feb13d4fdc30dd39d53244bb4a82cd769",
+        "size": 1456
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG_JIN.json",
+        "exists": true,
+        "sha256": "68b267827d267ce0221fd50c6b8648556a421a7bc39b8439e03efcae5ca6cca8",
+        "size": 2565
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG_MOTHER.json",
+        "exists": true,
+        "sha256": "570e6a3b1d5bee25041abe42954d8e3451c2823d11d1a1c2d08e7a7c00aaa87a",
+        "size": 2005
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WEN_YANBO.json",
+        "exists": true,
+        "sha256": "97068207ede6262ca8ad345ab2567f3590fe7795a51ba90dd0b60a8f21a1dc7d",
+        "size": 1920
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_ZHAO_ZHE.json",
+        "exists": true,
+        "sha256": "cd93409d1a32f2efd9afb429555980270a3fb920ab5367eb06f408a9d4a1a4d7",
+        "size": 1915
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/MON_SNOW_SERPENT.json",
+        "exists": true,
+        "sha256": "b66f8fa2852edb6dd01da7209370bc949c8be2890cea58ccf6790b75e0024046",
+        "size": 2490
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/MON_WHITE_TIGER.json",
+        "exists": true,
+        "sha256": "40ed97b2ca6acdfdf1a2cb93754868ac0a1e245d3302c5beda73cef419e247b4",
+        "size": 2482
+      },
+      {
+        "path": "生产数据/comic_memory_anchor_第5话.json",
+        "exists": false
+      },
+      {
+        "path": "生产数据/comic_reference_plan_第5话.json",
+        "exists": true,
+        "sha256": "66d6924018b2f6a714245e6dc48bec26a5f485dfeb405588b3dc11e494bbb81d",
+        "size": 358948
+      },
+      {
+        "path": "出图/第5话/prompt/panel_jobs.json",
+        "exists": true,
+        "sha256": "ea168d7dad985cb3fa3cd16cfed204479490df27fea4a39fb919ba5e6067ec00",
+        "size": 1297085
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__front.png",
+        "exists": true,
+        "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+        "size": 1869835
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN.png",
+        "exists": true,
+        "sha256": "86b0478e013b57680a79bec74af32b5a368dbca824bde536fce5d9d0a6fbbaf7",
+        "size": 992262
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__OUTFIT_MOUNTAIN_PLAIN_dreamina-fallback__20260716T181048002621.md",
+        "exists": true,
+        "sha256": "2ce106889b07f448768bb55f974ee7befa30df5c525abcb252ac1cd7423bf5ba",
+        "size": 5914
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_HONG_XIN/OUTFIT_MOUNTAIN_PLAIN/20260716T181134094729__dreamina5.png",
+        "exists": true,
+        "sha256": "74d65f91677d3fbb1a940c9a6bda90b1d16cd0a89d5a8bb3ee942aa870b3a572",
+        "size": 2169733
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_TERRIFIED.png",
+        "exists": true,
+        "sha256": "5a798a56e592967d2e3664db7c633664ec663d59c148dd3b0ce837d10a22cb2f",
+        "size": 3014505
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__face.png",
+        "exists": true,
+        "sha256": "858700e5976f72b5b70c3c5f57aabf9128da33437d883f32f6e4dd1d2a78186d",
+        "size": 2208444
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__expression_EXPR_TERRIFIED_dreamina__20260717T175558046459.md",
+        "exists": true,
+        "sha256": "8ae0fac65ff964cf9168c99fa9036b184a4cabce6156b7b83ed89fdb735856f5",
+        "size": 4506
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__EXPR_STUNNED.png",
+        "exists": true,
+        "sha256": "1fa172b10d5c96aaa234a75ca78a6dbf6d9b9db0c70cc6d34700d35047a58ac4",
+        "size": 2587240
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__expression_EXPR_STUNNED_dreamina__20260717T140451058118.md",
+        "exists": true,
+        "sha256": "d632411344e4c362a091756031514ba2fd97b3e0ecee5c48296fe51022b94634",
+        "size": 4500
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__face_codex__20260715T110126328187.md",
+        "exists": true,
+        "sha256": "cbb556d6f010858b8424bbc5d57f48dc62dba2c20cdddbd351abe9eb348aa784",
+        "size": 4284
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__three_quarter.png",
+        "exists": true,
+        "sha256": "e309afcd3c8268bb6807dfa8ff830fe72c96ee51bc255a0c84535972fa8bb3b1",
+        "size": 1431916
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_HONG_XIN/three_quarter/20260715T111850033753__raw_canvas.png",
+        "exists": true,
+        "sha256": "33ab4a4708f2fe229c8e4af175ba7af5990835c3d0711833291b56433d4c3945",
+        "size": 1800741
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_HONG_XIN/front/20260714T193946/candidate_04.png",
+        "exists": true,
+        "sha256": "b894b065bb5f695c2a926f9a8b692a81610627a3f77e29f457dd04441d829a1f",
+        "size": 1869835
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__side.png",
+        "exists": true,
+        "sha256": "712637d9296c5af739354cbfab30eb38edae81d461e68b71e2dcaa082de62b4c",
+        "size": 887918
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__side_dreamina__20260717T141441461337.md",
+        "exists": true,
+        "sha256": "020f823adf313556e66648b5b18628cbaffbbde75fbb994518f0c020d1399b11",
+        "size": 6017
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_HONG_XIN/side/20260717T141614242228__raw_canvas.png",
+        "exists": true,
+        "sha256": "813c351bb50beea7a3666a2dd6721a6b8cc2917347a1d16edeef6bfa0bb7d657",
+        "size": 1734366
+      },
+      {
+        "path": "出图/共享/图片/CHAR_HONG_XIN__back.png",
+        "exists": true,
+        "sha256": "f99fc8667d233a9ea351e87690924608d82cb75a4f7b1278ed30131829ac6b1b",
+        "size": 1342239
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_HONG_XIN__back_dreamina__20260717T141614407670.md",
+        "exists": true,
+        "sha256": "d2209b03a02a103d9aab8cbd64b90ec6f1255e285b78a9ca5bca7d16fe2e30dc",
+        "size": 6017
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_HONG_XIN/back/20260717T141708370952__raw_canvas.png",
+        "exists": true,
+        "sha256": "3a88b9969973184c8637a20e8ef1708ac7096c49ff7b4189ac87bba14e592b92",
+        "size": 2912998
+      },
+      {
+        "path": "出图/共享/图片/CHAR_MASTER_XUJING__front.png",
+        "exists": true,
+        "sha256": "a265909a8760eb249da01883ebf7cdd8b08cdc471888986b897efd40c769d9c6",
+        "size": 1847502
+      },
+      {
+        "path": "出图/共享/图片/CHAR_MASTER_XUJING__face.png",
+        "exists": true,
+        "sha256": "ccaf799c4a1dce87c090b1af3e5f5f86b363d9feaa8fcb630131502fff228dcd",
+        "size": 2454310
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_MASTER_XUJING__face_codex__20260715T110849879927.md",
+        "exists": true,
+        "sha256": "9e33a36c84a5c33ae43fb1e44e2cb9a17d9902a731a3a5bfd564432051ac1521",
+        "size": 3946
+      },
+      {
+        "path": "出图/共享/图片/CHAR_MASTER_XUJING__three_quarter.png",
+        "exists": true,
+        "sha256": "4306b8deb338c813f0f3b6e1cf65288d1c18074d2def71cc491b25e903480f51",
+        "size": 1418989
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_MASTER_XUJING/three_quarter/20260715T111850224378__raw_canvas.png",
+        "exists": true,
+        "sha256": "68c5b5b0649ced7365dafa91c08ba9a378cc2538c72148e642dbbda90acd000c",
+        "size": 2026381
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_MASTER_XUJING/front/20260714T195217/candidate_03.png",
+        "exists": true,
+        "sha256": "a265909a8760eb249da01883ebf7cdd8b08cdc471888986b897efd40c769d9c6",
+        "size": 1847502
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+        "exists": true,
+        "sha256": "9e9f0f2e943aaae3bba1d38f857f9d4c12dc8b46f1f337bdf18180c79ba100ca",
+        "size": 1541168
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__front_dreamina-fallback-corrective__20260716T182834460473.md",
+        "exists": true,
+        "sha256": "4298ce3486de27a8e88c931fc7fe11fd3b92fc790669a2571e09b110e7134921",
+        "size": 5106
+      },
+      {
+        "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+        "exists": true,
+        "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+        "size": 2858977
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/front/20260716T182834497189__dreamina5_attempt2.png",
+        "exists": true,
+        "sha256": "882c410db15aff8e475442988ff42701e0796c9c817cd104a9b6aa4ecf37a0d3",
+        "size": 3242886
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__three_quarter.png",
+        "exists": true,
+        "sha256": "6f8e56244c7b2185a55f17cef059b71e2df63533a66d01ab2048d2e0df8f0436",
+        "size": 1438587
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__three_quarter_dreamina-fallback__20260716T183640032555.md",
+        "exists": true,
+        "sha256": "84ed314fcf0fbacfec0018e2196d3bc37830eec7d273b17125c5a6583dece38d",
+        "size": 5543
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/three_quarter/20260716T183640054236__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "8cdb4d5012513122c9382017938f040f85e8ef759c73d8580f5d180da3b8f022",
+        "size": 2897949
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__face.png",
+        "exists": true,
+        "sha256": "0d9c1c0c58ef537262a6efc5b5070c95890a21ef3ca9711d36dfb37e0f8acf68",
+        "size": 1466173
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_ABBOT_SHANGQING__face_dreamina-fallback__20260716T183640033668.md",
+        "exists": true,
+        "sha256": "c7090edde96b35cc720937d3ae2f1611856e47a09b77c1c55316f7e272859f0f",
+        "size": 5433
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/face/20260716T183640054318__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "b0d3ee3c867f6fefcf5d33aaf27b8575e0b3694fa3fe8b1432e3d212426e56d3",
+        "size": 3139784
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__side.png",
+        "exists": true,
+        "sha256": "663578048a2ce49fd65ffd43e10252d85ad38d888403e4ca00916f293c3e805f",
+        "size": 1474075
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_ABBOT_SHANGQING__side_dreamina__20260717T141708539282.md",
+        "exists": true,
+        "sha256": "7d95bc4c47ca578026c69f011017e1137e4bcb80aec4cabf34c6c1fcd650f0ec",
+        "size": 5536
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/side/20260717T141838146448__raw_canvas.png",
+        "exists": true,
+        "sha256": "f41d7843226fb15e85f2e357796add9be90b51cea14db5c130b930165fb07cda",
+        "size": 2987819
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ABBOT_SHANGQING__back.png",
+        "exists": true,
+        "sha256": "5086c9cbc8f0f9bd6f4a4f51c540f98823ee47fcebe6869d45d850476f68dac5",
+        "size": 1313840
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_ABBOT_SHANGQING__back_dreamina__20260717T141838323888.md",
+        "exists": true,
+        "sha256": "e91ce56b82341687a8036020cc083b0c242645c3e68acc7af71d85b8f246d8e6",
+        "size": 5536
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ABBOT_SHANGQING/back/20260717T141957317790__raw_canvas.png",
+        "exists": true,
+        "sha256": "9725963b73518e4c42c5b2cc72d2aa2364bb97c94a731ba0514c1d826ea763a5",
+        "size": 2529510
+      },
+      {
+        "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+        "exists": true,
+        "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+        "size": 2004944
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_EMPEROR_RENZONG__front_builtin-imagegen__20260716T111340.md",
+        "exists": true,
+        "sha256": "294530bee136acd997565a2aafc72fa1e75d9bb1210b6c64900ff137744d6aab",
+        "size": 4599
+      },
+      {
+        "path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/exec-17305360-62bd-42cc-a769-57038c6f985d.png",
+        "exists": true,
+        "sha256": "82861402cc382bfe97a43213e3b7f2003495d1d09cb92c64fa6b87db8cdfff02",
+        "size": 2004944
+      },
+      {
+        "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__face.png",
+        "exists": true,
+        "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898",
+        "size": 2198041
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_EMPEROR_RENZONG__face_builtin-imagegen__20260716T140435.md",
+        "exists": true,
+        "sha256": "c611d0c4de650320c88e34b5872bfae9335c05f80580ca378ff2cd9d70387897",
+        "size": 5223
+      },
+      {
+        "path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/exec-af40eaf9-e6bb-4220-84ce-a86e4c0bbffe.png",
+        "exists": true,
+        "sha256": "8f37800f5c3ebd76b10a6614d4c304ffae6964ea72dbb0cace88bf52be5b0898",
+        "size": 2198041
+      },
+      {
+        "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__three_quarter.png",
+        "exists": true,
+        "sha256": "62a96c9c4166bae73c6d2b4c1161d9f4c791a34a904de1f7bca7b5c9001d45b0",
+        "size": 1530805
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_EMPEROR_RENZONG__three_quarter_dreamina__20260717T141957694230.md",
+        "exists": true,
+        "sha256": "4f5e00b554d5768df90dc676479a61b45fa840747fa784bd5e4f542e9c475d38",
+        "size": 5315
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_EMPEROR_RENZONG/three_quarter/20260717T142052347796__raw_canvas.png",
+        "exists": true,
+        "sha256": "3a046e24ec0a116819b9fb34c8cd4886013c46ea261c279042ced7c064d38be7",
+        "size": 3415126
+      },
+      {
+        "path": "出图/共享/图片/CHAR_EMPEROR_RENZONG__side.png",
+        "exists": true,
+        "sha256": "a184a5a3f547a52f925e770c8a4fbfdc1dc0c355d8b94ad745eeee60ddf767ad",
+        "size": 1138203
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第2话/CHAR_EMPEROR_RENZONG__side_dreamina__20260717T142052542969.md",
+        "exists": true,
+        "sha256": "8b1a646efc0e080673d749a6a9eb3295a832a3c90473d84b53e9e938485ac7fc",
+        "size": 5308
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_EMPEROR_RENZONG/side/20260717T142218522731__raw_canvas.png",
+        "exists": true,
+        "sha256": "2cbba4189c1763a2e4ade12183fa8a732871d8e32074e28e36b1f362562374e4",
+        "size": 2168169
+      },
+      {
+        "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png",
+        "exists": true,
+        "sha256": "5aeb61351c3b1123698eb3e5a1ffdd0366fb609238203c716093cd19f3ee885b",
+        "size": 1623099
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__front_dreamina-fallback__20260716T183640038789.md",
+        "exists": true,
+        "sha256": "db75a5a2d40043cc2f2f07311b63169e7298a0c734bf2b4b06f6ca889ff27ae2",
+        "size": 4099
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/front/20260716T183640055350__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "4bf6ef3eb6633c54cdfbe4e32aa4609156afb3cc9166659df0a6072c52d0df8b",
+        "size": 3299621
+      },
+      {
+        "path": "出图/共享/图片/CHAR_FAN_ZHONGYAN__face.png",
+        "exists": true,
+        "sha256": "08df4832416ce0989409d29da16f79babfbfe855de35b03b60d038e68ad0f135",
+        "size": 1413656
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_FAN_ZHONGYAN__face_dreamina-fallback__20260716T184600329287.md",
+        "exists": true,
+        "sha256": "3615d190e3c747764cf7539d587baee0733454c12bb00e2609407f352a2e1355",
+        "size": 4714
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_FAN_ZHONGYAN/face/20260716T184600338401__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "3fb49b9ac3707f1745a8dc1b66f2db2f2003010b5d74144e7cfabca1164edc18",
+        "size": 2891555
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ZHAO_ZHE__front.png",
+        "exists": true,
+        "sha256": "e48dec237e54fc3cd483d13594729318d3a751688f4a4dda2f3ab41dd5728928",
+        "size": 1457635
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__front_dreamina-fallback__20260716T183640037595.md",
+        "exists": true,
+        "sha256": "34e5c4250428e4634ae579cb64ff4c088f74f637ad1f73eb0df8384d6f09ee1c",
+        "size": 3818
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ZHAO_ZHE/front/20260716T183640055084__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "f316f0ea3a18cbc5d96f73cd958ac4d2ce8d3a93691ede45d10ffefeb4725ccd",
+        "size": 2868969
+      },
+      {
+        "path": "出图/共享/图片/CHAR_ZHAO_ZHE__face.png",
+        "exists": true,
+        "sha256": "8588ebc6dd698db1d942e0ee94069d54b7021d69000cfbf050a84b788a58f6cc",
+        "size": 1230806
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHAO_ZHE__face_dreamina-fallback__20260716T184600326690.md",
+        "exists": true,
+        "sha256": "d6bf786e55cd1841c15fd55cf97e7cbef83b9ff4d71f162ac60769b56de186bd",
+        "size": 4433
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_ZHAO_ZHE/face/20260716T184600338302__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "cd0a83969a954f4c24fceb425ecb3f354e2cffaed674a87829e451a335cef403",
+        "size": 2416284
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WEN_YANBO__front.png",
+        "exists": true,
+        "sha256": "f2f807a5fb2d3cca29b43f6fa53a9a30b8cccef38f15e49175601965c91885f6",
+        "size": 1368586
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__front_dreamina-fallback__20260716T183640038189.md",
+        "exists": true,
+        "sha256": "55608ec9f763c50eccd80c20eb7854425e4dcaa93c3150ea0b657387aea92884",
+        "size": 3859
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_WEN_YANBO/front/20260716T183640055260__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "41322a47d4d042d9051210f44414c9b4a8ea239ad2e5e7f74730906380bead96",
+        "size": 2669201
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WEN_YANBO__face.png",
+        "exists": true,
+        "sha256": "1019f7641e6763576795c7a22eae96d390e661a3fca3b00584f66313c5afe9e5",
+        "size": 1964376
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/CHAR_WEN_YANBO__face_dreamina-fallback__20260716T184600328360.md",
+        "exists": true,
+        "sha256": "fac0dac1748fec94ca306986c9e38db188a00e0146ff33a0e447b79ecd9693d1",
+        "size": 4474
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_WEN_YANBO/face/20260716T184600338362__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "019cb2db102142cad5e416dbbd70ea5901a29147574eb1c8faa5e01fa94ae420",
+        "size": 4153619
+      },
+      {
+        "path": "出图/共享/图片/MON_WHITE_TIGER__front.png",
+        "exists": true,
+        "sha256": "6a9f73472b8e08376309d41ca79f24051297fbbdfa6d43dbb3057015c840438c",
+        "size": 2001702
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__front_dreamina-fallback__20260716T182434209543.md",
+        "exists": true,
+        "sha256": "40c79fc00af2628f24c2cc339e67023a76493d1ddd675c19bcf4b55ef47b7ed4",
+        "size": 2834
+      },
+      {
+        "path": "出图/共享/candidates/MON_WHITE_TIGER/front/20260716T182434213467__dreamina5.png",
+        "exists": true,
+        "sha256": "393545ea27f365422a9467b88187338f3df7b5e37a62fbc12ef1072d0727603e",
+        "size": 4502800
+      },
+      {
+        "path": "出图/共享/图片/MON_WHITE_TIGER__three_quarter.png",
+        "exists": true,
+        "sha256": "93ae3b93a742db5ea825c8937bb3f14be7c1241bcaacc203970986bbe9128d07",
+        "size": 1869252
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__three_quarter_dreamina-fallback__20260716T183640034379.md",
+        "exists": true,
+        "sha256": "d036519446cab85ef522100bea3fcad82733dee451b1533db702a2a0ba616f87",
+        "size": 3659
+      },
+      {
+        "path": "出图/共享/candidates/MON_WHITE_TIGER/three_quarter/20260716T183640054384__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "cdc362f98c0204699702ae2601dafb8ca8b6ab927a34cd4f17929e20ce1a523e",
+        "size": 4286022
+      },
+      {
+        "path": "出图/共享/图片/MON_WHITE_TIGER__face.png",
+        "exists": true,
+        "sha256": "3fa67b59c7e736bf7413fbb1997e4c5d52f908f01f4a70c3e397916095502d59",
+        "size": 2410614
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/MON_WHITE_TIGER__face_dreamina-fallback__20260716T183640035043.md",
+        "exists": true,
+        "sha256": "c51f4ef6d9e0360b70d30d78bfc569b95f064fe3aee19c8f685f6b784a3bd38f",
+        "size": 3530
+      },
+      {
+        "path": "出图/共享/candidates/MON_WHITE_TIGER/face/20260716T183640054439__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "9c77ef8eaac35aeaa86418955428ede1098c12a8cff66f3805e19a7ecd8fb29f",
+        "size": 5567099
+      },
+      {
+        "path": "出图/共享/图片/MON_SNOW_SERPENT__front.png",
+        "exists": true,
+        "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+        "size": 2482822
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__front_builtin-imagegen__20260716T153024257496.md",
+        "exists": true,
+        "sha256": "a625db5d2e5e8b7aaaa0ef60de5d1ab2f5193095230a96eb6d93482e7d0e6dda",
+        "size": 3332
+      },
+      {
+        "path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_dX5akyqUv91I05S4gZOGBk1J.png",
+        "exists": true,
+        "sha256": "0a0e4f506b0592e5601c72a082bd2559c0232e7e767b391c204f60f6938af496",
+        "size": 2482822
+      },
+      {
+        "path": "出图/共享/图片/MON_SNOW_SERPENT__three_quarter.png",
+        "exists": true,
+        "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b",
+        "size": 2296340
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__three_quarter_builtin-imagegen__20260716T174155892226.md",
+        "exists": true,
+        "sha256": "6bd89434fbfb502c441d1fc5315469442b626a7209bba02d59a20e1f059f701c",
+        "size": 4483
+      },
+      {
+        "path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_zEkTedp0PQtZKjubWULs90xf.png",
+        "exists": true,
+        "sha256": "5d6ee3556672392d866d9ec577ca8de7b9505d8c777643a492fc24c29798850b",
+        "size": 2296340
+      },
+      {
+        "path": "出图/共享/图片/MON_SNOW_SERPENT__face.png",
+        "exists": true,
+        "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0",
+        "size": 2377416
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/MON_SNOW_SERPENT__face_builtin-imagegen__20260716T180128465142.md",
+        "exists": true,
+        "sha256": "aa721088f25d24be20a212db2d25c7a806a27aa69eb1a6d8d306ee316b6de289",
+        "size": 3554
+      },
+      {
+        "path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/call_WQQHeg5ZrfmXkyKmqZec6cGq.png",
+        "exists": true,
+        "sha256": "4fbf9cf51a865ca41969439752bd72f7ab2a6b3c7179d1ce4b6e2e665636ecc0",
+        "size": 2377416
+      },
+      {
+        "path": "出图/共享/图片/LOC_ZICHEN_HALL__anchor.png",
+        "exists": true,
+        "sha256": "7596bb41dca0bab5d6f72dcd87e1a048ef64fdff85269676c211f79681048c3e",
+        "size": 2428988
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/LOC_ZICHEN_HALL__anchor_dreamina-fallback-3x4__20260716T182834466121.md",
+        "exists": true,
+        "sha256": "f92459b4b201723e8d0d9e2c91ba1a357eaa48df73690c2749c37dacb2d66522",
+        "size": 1963
+      },
+      {
+        "path": "出图/共享/candidates/LOC_ZICHEN_HALL/anchor/20260716T182834505442__dreamina5_attempt2.png",
+        "exists": true,
+        "sha256": "83b98941b975d124f6e8403b69dc311b00bef910d8357090c17fc507e0f06e9d",
+        "size": 5374559
+      },
+      {
+        "path": "出图/共享/图片/LOC_CAPITAL_PLAGUE_STREET__anchor.png",
+        "exists": true,
+        "sha256": "eb9f630c05fa4082f2dfbc21f6264d938ddac5b888475010126b58dee63ed042",
+        "size": 2384192
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/LOC_CAPITAL_PLAGUE_STREET__anchor_dreamina-fallback__20260716T183640036423.md",
+        "exists": true,
+        "sha256": "5dd8ad97a224741fa53a257705088a3786e45044f608c66acf5dd90c49c3edd0",
+        "size": 2081
+      },
+      {
+        "path": "出图/共享/candidates/LOC_CAPITAL_PLAGUE_STREET/anchor/20260716T183640054753__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "4d2fea43caefd0f97e675dcad83fd421faa3f02e8466049bcba1e433602a88bb",
+        "size": 5483167
+      },
+      {
+        "path": "出图/共享/图片/LOC_LONGHUSHAN_PATH__anchor.png",
+        "exists": true,
+        "sha256": "cfd924682a3c4382806206fcbf49093c0ef829d9af734c944639a47e6cad26e7",
+        "size": 3165217
+      },
+      {
+        "path": "出图/共享/图片/LOC_SHANGQING_PALACE__anchor.png",
+        "exists": true,
+        "sha256": "cfdabe60dc88efa15bcb97d1c9fb5c19c6ed2f697e1134283c29ade0f9f4a539",
+        "size": 2492623
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/LOC_SHANGQING_PALACE__anchor_dreamina-fallback-3x4__20260716T182834464742.md",
+        "exists": true,
+        "sha256": "20ffddf56ce523ea024e453113ef56272c956a2b849f1e5689e47adff95983e4",
+        "size": 1980
+      },
+      {
+        "path": "出图/共享/candidates/LOC_SHANGQING_PALACE/anchor/20260716T182834503800__dreamina5_attempt2.png",
+        "exists": true,
+        "sha256": "4d9093b384a4d1d3ad79093a46cc0fedef2f1a3c546b72b5cd4271b09fff61f9",
+        "size": 5478869
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/LOC_LONGHUSHAN_PATH__anchor_codex__20260715T141738773872.md",
+        "exists": true,
+        "sha256": "334bdc5227e6abaf164163c96f3d5b25ae61585db1955b92ba3ae8436b466b0e",
+        "size": 1871
+      },
+      {
+        "path": "出图/共享/candidates/LOC_LONGHUSHAN_PATH/anchor/20260715T145028485752__60838da435f1.png",
+        "exists": true,
+        "sha256": "60838da435f1d89383f41678a31623bfee37b92fbd68a18ca02c99a61a8e3db3",
+        "size": 3585700
+      },
+      {
+        "path": "出图/共享/图片/LOC_FUMO_HALL_EXTERIOR__anchor.png",
+        "exists": true,
+        "sha256": "ccd358cb0812002d2e39466ef14dec4f5ef8f6d323bc5650fdae44be28261ed3",
+        "size": 2299169
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_EXTERIOR__anchor_dreamina-fallback__20260716T183640035547.md",
+        "exists": true,
+        "sha256": "215d8fa36742a867a2d2c691d82af87f73a413d330b99abc61ff6f0a23ae81e9",
+        "size": 2006
+      },
+      {
+        "path": "出图/共享/candidates/LOC_FUMO_HALL_EXTERIOR/anchor/20260716T183640054546__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "038099800dacdb2e8b14867b67d471c04cb44fc8f2e58bcec43834fbb6fbfef2",
+        "size": 5437774
+      },
+      {
+        "path": "出图/共享/图片/LOC_FUMO_HALL_INTERIOR__anchor.png",
+        "exists": true,
+        "sha256": "04bc3d47d2cde98090847fb049b6814264cb5060a45deda953460b4b5900d6cd",
+        "size": 1520039
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/LOC_FUMO_HALL_INTERIOR__anchor_dreamina-fallback-corrective__20260716T184600329806.md",
+        "exists": true,
+        "sha256": "ca9d871250f93dc6b20fcee12a554bc70058ced4da8719e65fabb918339c2bbd",
+        "size": 2272
+      },
+      {
+        "path": "出图/共享/candidates/LOC_FUMO_HALL_INTERIOR/anchor/20260716T184600338433__dreamina5_attempt2.png",
+        "exists": true,
+        "sha256": "79cfe0702aa82152aad51b66b041432c3c82dbcc4147d4c4ba3ca1c599dd8c25",
+        "size": 3052322
+      },
+      {
+        "path": "出图/共享/图片/PROP_IMPERIAL_EDICT__anchor.png",
+        "exists": true,
+        "sha256": "05704e577cecc97fbad2f1c75e1b3e50aaccdcaf03687fc8fe1b0752cd59822d",
+        "size": 1255217
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/PROP_IMPERIAL_EDICT__anchor_dreamina-fallback-3x4__20260716T182834467372.md",
+        "exists": true,
+        "sha256": "670c923d776afa10b9a9313b666e1a0375ffcc1ce7c14b4229745f391385fab5",
+        "size": 2185
+      },
+      {
+        "path": "出图/共享/candidates/PROP_IMPERIAL_EDICT/anchor/20260716T182834528448__dreamina5_attempt2.png",
+        "exists": true,
+        "sha256": "424c22cf46aaf6144a426e4d3a9dd7f711ebaff9edfbbad8e191538520869ff9",
+        "size": 2622704
+      },
+      {
+        "path": "出图/共享/图片/PROP_SILVER_CENSER__anchor.png",
+        "exists": true,
+        "sha256": "dd92d434df480a7475b5dd2fe59565f4e5fb8dbbbfc3860a959a18784728d3d8",
+        "size": 1405391
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/PROP_SILVER_CENSER__anchor_dreamina-fallback-3x4__20260716T182834468701.md",
+        "exists": true,
+        "sha256": "f9d8b9c2fd076c3fe26bf9db157c5119872cdbe8a72185d71b8dae3569fef657",
+        "size": 2163
+      },
+      {
+        "path": "出图/共享/candidates/PROP_SILVER_CENSER/anchor/20260716T182834545795__dreamina5_attempt2.png",
+        "exists": true,
+        "sha256": "ebd63a889ef1bb51db21b022fe78ee3f415cdfe227b81a786fcc7948d5702fb8",
+        "size": 2835742
+      },
+      {
+        "path": "出图/共享/图片/PROP_FUMO_SEALS__anchor.png",
+        "exists": true,
+        "sha256": "ace7c3338ab22e4d9ead44491548bbd21cd7ff41ff28e50eebe51947483e5170",
+        "size": 2748560
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/PROP_FUMO_SEALS__anchor_builtin-imagegen__20260716T143517104414.md",
+        "exists": true,
+        "sha256": "2dfc7a1bea8e35d6a366a42d657be5ea816185fb60823f07a16bdf627f8d9ff8",
+        "size": 2833
+      },
+      {
+        "path": "/Users/wesley/.codex/generated_images/019f5e63-b671-71f1-8d6f-3bd062c3af07/exec-e196de9c-a2af-441c-ac6f-ed50ab44ba76.png",
+        "exists": true,
+        "sha256": "380d8d7f41665bcdaa2841319267c1ba23078b9bc3fa3af7f05e153e892ecc04",
+        "size": 2782793
+      },
+      {
+        "path": "出图/共享/candidates/PROP_FUMO_SEALS/anchor/raw/20260716T151828__380d8d7f4166.png",
+        "exists": true,
+        "sha256": "380d8d7f41665bcdaa2841319267c1ba23078b9bc3fa3af7f05e153e892ecc04",
+        "size": 2782793
+      },
+      {
+        "path": "出图/共享/图片/PROP_STONE_STELE__anchor.png",
+        "exists": true,
+        "sha256": "5addda0baaee81e10065a0f6f4b2ae67b489f859b5b9aaa4f933d79ca6a03776",
+        "size": 1352147
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第1话/PROP_STONE_STELE__anchor_dreamina-fallback__20260716T183640036947.md",
+        "exists": true,
+        "sha256": "52b7f08d45cf1bc5768f294b213755c9e585a61d4601da8c4876afb5297a4fd6",
+        "size": 2254
+      },
+      {
+        "path": "出图/共享/candidates/PROP_STONE_STELE/anchor/20260716T183640054958__dreamina5_attempt1.png",
+        "exists": true,
+        "sha256": "68118fa1b74b0a2cb2dc321dade89a0a7d9393a1198949951834e8ce99ad153b",
+        "size": 2941739
+      },
+      {
+        "path": "出图/共享/candidates/STYLE_SHUIHU_SONG_CINEMATIC/anchor/20260714T152245/candidate_03.png",
+        "exists": true,
+        "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+        "size": 2858977
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__front.png",
+        "exists": true,
+        "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "size": 2722595
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__OUTFIT_WANG_ATTENDANT.png",
+        "exists": true,
+        "sha256": "9f796a51a74cee3672c6bbdfafa275b1193afea4ae1d8a2e3183d90e66cfbaaf",
+        "size": 3523044
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__OUTFIT_DIANSHUAI_TAIWEI.png",
+        "exists": true,
+        "sha256": "19f7ce4b11321a35f8dc35bb33fd0cfc344601c2f2fcb59f7b7883bbe416258b",
+        "size": 2489246
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_GAO_QIU/front/20260718__dreamina5__candidate1.png",
+        "exists": true,
+        "sha256": "886dd2e6ac73768360301d67246d765cffcabb7356953f604484e6dc7792cad9",
+        "size": 2722595
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__three_quarter.png",
+        "exists": true,
+        "sha256": "4f7a5bb89008f954e07b64f9504190cbb718515a5a3621e5aa1e20ed200c0efc",
+        "size": 3898239
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__side.png",
+        "exists": true,
+        "sha256": "ee8a602b86bff789c64bda32bdb85a2c1551523cf58711ac10a566d56efbbfa8",
+        "size": 3517684
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__back.png",
+        "exists": true,
+        "sha256": "51a1880047ec1e65912384e3e871b240eb5522eede81317ad203b9b1127c03b9",
+        "size": 3641377
+      },
+      {
+        "path": "出图/共享/图片/CHAR_GAO_QIU__face.png",
+        "exists": true,
+        "sha256": "df63972f4d82978b6ad3c686be959ce5ed846f834e24508e913def76c5ca4ac5",
+        "size": 2737169
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DUAN_WANG__front.png",
+        "exists": true,
+        "sha256": "fddaaa59cc5da737ed94a1d121a7d2da16a1040fafd0c337989a57c47823cdc5",
+        "size": 2600386
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DUAN_WANG__three_quarter.png",
+        "exists": true,
+        "sha256": "870ebd3b6bf675ef62daec215c7093c1509363f582b493c9de38d2bb447da5fe",
+        "size": 2825933
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DUAN_WANG__face.png",
+        "exists": true,
+        "sha256": "818e61c0ff9ac369bea661beb3af33e448a34b3ea072cf0cd23f5382e7473583",
+        "size": 4649060
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DUAN_WANG__OUTFIT_EMPEROR_ACCESSION.png",
+        "exists": true,
+        "sha256": "a4cde3154fe6c69e22a761c4af63a103cb413fe6f6ea2fd992bcefc8789ffe7d",
+        "size": 2458442
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_DUWEI__front.png",
+        "exists": true,
+        "sha256": "8f80e34c0e97d21b67e9619c2c136c60d239078028328c90658439fb380ccbab",
+        "size": 2579141
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_DUWEI__face.png",
+        "exists": true,
+        "sha256": "0d66870c440c1f027432026f3b3b58eee6a9f59498ccdb63f2cf6ded520fb184",
+        "size": 3141814
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__front.png",
+        "exists": true,
+        "sha256": "bc2a5c3df706407f83518c017c4d2d586329fb2c20748b125ec7f872d21bdd0d",
+        "size": 4289401
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DONG_JIANGSHI__face.png",
+        "exists": true,
+        "sha256": "29447a07922fd22059fba1442d91a42e092cfc0a080e5a991595809a13ee2b53",
+        "size": 4132063
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SU_XUESHI__front.png",
+        "exists": true,
+        "sha256": "bc2f72d9ac5a1f10a3458ee4bf4450bcc849731310f73062c87f42c1ff1bcfad",
+        "size": 3204945
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SU_XUESHI__face.png",
+        "exists": true,
+        "sha256": "322d73a03b2c975d67ab6eae24902a258509d9d403ff64e0cd47ee9b0b05c8ca",
+        "size": 4523119
+      },
+      {
+        "path": "出图/共享/图片/LOC_BIANJING_MARKET__anchor.png",
+        "exists": true,
+        "sha256": "d87afd1c04f7f8adcb709405b0a2d19c1015274f86ca1b0125bbece04b68acfa",
+        "size": 5382658
+      },
+      {
+        "path": "出图/共享/图片/LOC_WANG_DUWEI_MANSION__anchor.png",
+        "exists": true,
+        "sha256": "934176408eaab21e08cd7d998a60443aad3c1778be78f5ac1d80dd95d696a45a",
+        "size": 8626924
+      },
+      {
+        "path": "出图/共享/图片/LOC_DUAN_WANG_COURT__anchor.png",
+        "exists": true,
+        "sha256": "63d060ad2b751bc33efbd5237d537dcb2a4632a0a38bea3cd2261f5903602c7e",
+        "size": 5882848
+      },
+      {
+        "path": "出图/共享/图片/PROP_CUJU_BALL__anchor.png",
+        "exists": true,
+        "sha256": "f3886f6adc362c89cfb1710ba2c69f0e18a3b3a9e11ac3ce4d3cdf9ba69f913b",
+        "size": 3885271
+      },
+      {
+        "path": "出图/共享/图片/PROP_JADE_GIFTS__anchor.png",
+        "exists": true,
+        "sha256": "59623024981e032ad53476636933a046ad346161336d166c90aadcb2d0180914",
+        "size": 3735248
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_JIN__front.png",
+        "exists": true,
+        "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+        "size": 1705198
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_JIN__OUTFIT_IMPERIAL_INSTRUCTOR.png",
+        "exists": true,
+        "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+        "size": 1705198
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_JIN__OUTFIT_WANG_HOME.png",
+        "exists": true,
+        "sha256": "e627ce22ecfc485be6e3a9c97aa12eb9fedc49dda9df9bc9b0a44563cd260c0f",
+        "size": 2340933
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_WANG_JIN/front/20260718__dreamina5__concise_recovery2.png",
+        "exists": true,
+        "sha256": "4eecd1b1867145d06de83bea47ba521e1032e18a763bee7a966b1836b9589bf2",
+        "size": 1705198
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_JIN__three_quarter.png",
+        "exists": true,
+        "sha256": "09a2c6b987e705675b6822c12331c2f27f5cead71d5abffbc1143bf63bf4fa5b",
+        "size": 2091039
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_JIN__face.png",
+        "exists": true,
+        "sha256": "cac2ca341f55fea13db3e094f508f54482238fa75b80b7040b21fcb2bcc63ba6",
+        "size": 3880466
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_MOTHER__front.png",
+        "exists": true,
+        "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+        "size": 2757557
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_MOTHER__OUTFIT_ELDER_HOME.png",
+        "exists": true,
+        "sha256": "2b6f1b63b8b4dd561c02ea568c7f73ed9cedb4d2c14623cb186d05f07f655957",
+        "size": 2757557
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__front_dreamina__20260718T145816650628.md",
+        "exists": true,
+        "sha256": "98e034e370e7296857fddfc5397de632d7af2fab5e1e92f24cbc7f9654662937",
+        "size": 3305
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_MOTHER__three_quarter.png",
+        "exists": true,
+        "sha256": "6d4e0ffabbeb303889fa9e4b6e797852047f260125965bedb006048a89ef52c4",
+        "size": 3010437
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__three_quarter_dreamina__20260718T145923677127.md",
+        "exists": true,
+        "sha256": "e61eca9a1132b9e8d8b13dffb1959c81ffa3c4db498fa04f6cbd47fcea7f10ab",
+        "size": 4028
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG_MOTHER__face.png",
+        "exists": true,
+        "sha256": "e4295aa885ec2cab47e34bf883920ee5e769b48be92f1ee3f931ea02e94e0257",
+        "size": 4024257
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第4话/CHAR_WANG_MOTHER__face_dreamina__20260718T150025395677.md",
+        "exists": true,
+        "sha256": "7c22327e35f369ea79a340580a225b2425cd43a4129e55fdd7243387198a923f",
+        "size": 3918
+      },
+      {
+        "path": "出图/共享/图片/LOC_DIANSHUAI_HALL__anchor.png",
+        "exists": true,
+        "sha256": "56f5ac1b596ed5d8cc5dc0b66e7c396043b6c2303bee3c033337362a5b6aada1",
+        "size": 5266984
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第4话/LOC_DIANSHUAI_HALL__anchor_dreamina__20260718T150726660953.md",
+        "exists": true,
+        "sha256": "829457452b3d048c21a6fcfafe503f7c0e2a5731019e35398ca114394f27cb37",
+        "size": 1937
+      },
+      {
+        "path": "出图/共享/candidates/LOC_DIANSHUAI_HALL/anchor/20260718T150822496814__raw_canvas.png",
+        "exists": true,
+        "sha256": "22ae7c19b3efac80be04ef2f1fd2f85d756ab89dbafc2cdd9fb88a501386792c",
+        "size": 4858472
+      },
+      {
+        "path": "出图/共享/图片/LOC_WANG_JIN_HOME__anchor.png",
+        "exists": true,
+        "sha256": "b9917bd1c8db9b8505b1638fb15d0ba566630acd94a77965052e1a55ed191dfc",
+        "size": 3947832
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第4话/LOC_WANG_JIN_HOME__anchor_dreamina__20260718T150823208874.md",
+        "exists": true,
+        "sha256": "a51a7e713a24c63425e751e917bae3bcbfab801b35d7d90342124420b341b8d0",
+        "size": 1903
+      },
+      {
+        "path": "出图/共享/candidates/LOC_WANG_JIN_HOME/anchor/20260718T150928660209__raw_canvas.png",
+        "exists": true,
+        "sha256": "7da8d96c57686d6985b9c658ce350ce7e2d160b746aeaa48e7b262db2a597944",
+        "size": 3686595
+      },
+      {
+        "path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
+        "exists": true,
+        "sha256": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2",
+        "size": 4709042
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第4话/PROP_MILITARY_ROSTER__anchor_dreamina__20260718T150929301479.md",
+        "exists": true,
+        "sha256": "b25207c6f35e46d21d66c4c42501d292e75965062b8296361ddec6acb6873da8",
+        "size": 2430
+      },
+      {
+        "path": "出图/共享/candidates/PROP_MILITARY_ROSTER/anchor/20260718T151027511370__raw_canvas.png",
+        "exists": true,
+        "sha256": "f5aedffead1be9f5c71c1ae0bce563c0f325ad833e140cb76d8366bf48758881",
+        "size": 4428997
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "exists": true,
+        "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "size": 3288170
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__front_dreamina__20260719T151117728306.md",
+        "exists": true,
+        "sha256": "960ee6333df4adc2c1d3ad1d8d5b11fe72f5c005217f6eebb11c0caba817e44e",
+        "size": 2791
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+        "exists": true,
+        "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+        "size": 3039182
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__three_quarter_dreamina__20260719T151221530348.md",
+        "exists": true,
+        "sha256": "e975180cab2317c2bca672d58a8acd25b8f353b68c85007b6fd5b76d7d2ad402",
+        "size": 3508
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "exists": true,
+        "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "size": 4693747
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__face_dreamina__20260719T151318665454.md",
+        "exists": true,
+        "sha256": "3472b3c8ef38c0822edee9508d9078756e2e597bf01f8edcfb008938e2a49add",
+        "size": 3398
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+        "exists": true,
+        "sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+        "size": 3437894
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_TAIGONG__front_dreamina__20260719T151434162744.md",
+        "exists": true,
+        "sha256": "d47118be08e5d389a29ab7f57b3ca46e89a64d12575dfa559408b29e29058b6a",
+        "size": 2678
+      },
+      {
+        "path": "出图/共享/图片/CHAR_SHI_TAIGONG__face.png",
+        "exists": true,
+        "sha256": "09699eecc9a002db135c6adcd30082b613ba022c07b31e80060cbf5903061129",
+        "size": 2667009
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_TAIGONG__face_dreamina__20260719T151536338410.md",
+        "exists": true,
+        "sha256": "4c399d53331147aa4b7bea8ee3ce377f9bbfe3f680a220c1517c6a23a33b2c9c",
+        "size": 3285
+      },
+      {
+        "path": "出图/共享/图片/LOC_YUE_TEMPLE__anchor.png",
+        "exists": true,
+        "sha256": "a881f6592b56656699b25522e2b7f5ffbca4c4540f24eb3dd6ac408a9030d31d",
+        "size": 5476398
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/LOC_YUE_TEMPLE__anchor_dreamina__20260719T150708313126.md",
+        "exists": true,
+        "sha256": "61cc34cf2b38788615a36f2c184fd9d125bf805220517b3f3bf236ef1b972b65",
+        "size": 1840
+      },
+      {
+        "path": "出图/共享/candidates/LOC_YUE_TEMPLE/anchor/20260719T150810436586__raw_canvas.png",
+        "exists": true,
+        "sha256": "8c10a9bacdf5a73495a825c5f35f3e67c9ab2b98005f5e205562aff5041280c1",
+        "size": 5096126
+      },
+      {
+        "path": "出图/共享/图片/LOC_ESCAPE_ROAD__anchor.png",
+        "exists": true,
+        "sha256": "a550262155717ebc5ad446fe40ec8e27159e5423f2021d36f6f27ade70da9d4d",
+        "size": 5691232
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/LOC_ESCAPE_ROAD__anchor_dreamina__20260719T150810724208.md",
+        "exists": true,
+        "sha256": "cabfa252afb3652826c1b5553c2887a603c8e2ff29433f26dff8cfd6742f1422",
+        "size": 1853
+      },
+      {
+        "path": "出图/共享/candidates/LOC_ESCAPE_ROAD/anchor/20260719T150908203970__raw_canvas.png",
+        "exists": true,
+        "sha256": "70443b6027f5c2c92cc9e2217db95a7d0c5b9203fedb1383f87ad169a123f17d",
+        "size": 5456835
+      },
+      {
+        "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+        "exists": true,
+        "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
+        "size": 6906290
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/LOC_SHI_MANOR__anchor_dreamina__20260719T150908453376.md",
+        "exists": true,
+        "sha256": "cc77677c0ac83efa7b08db6ac342ec5ab629c2ac66b045cdfd286e5b3d058e05",
+        "size": 1848
+      },
+      {
+        "path": "出图/共享/candidates/LOC_SHI_MANOR/anchor/20260719T151007898798__raw_canvas.png",
+        "exists": true,
+        "sha256": "5e526ea463eb63c0b03b236ed4c5d81e5ecc19e4868bb5a98e55bc9c7cf1f309",
+        "size": 6732803
+      },
+      {
+        "path": "出图/共享/图片/LOC_SHI_TRAINING_YARD__anchor.png",
+        "exists": true,
+        "sha256": "5fd6d47385d1ad9b719ed09a2b45a48e0af36bbcd4660b8bf05d1dc303ee0e3c",
+        "size": 5030378
+      },
+      {
+        "path": "生产数据/comic_identity_prompts/第5话/LOC_SHI_TRAINING_YARD__anchor_dreamina__20260719T151008185894.md",
+        "exists": true,
+        "sha256": "9176f7f82f93dc177d2c87d22edb7dda3d43324ef379b72949359a92e939e83b",
+        "size": 1862
+      },
+      {
+        "path": "出图/共享/candidates/LOC_SHI_TRAINING_YARD/anchor/20260719T151104619264__raw_canvas.png",
+        "exists": true,
+        "sha256": "79463f9343bf9c87483ded1e891577318c521722f0bda73137af31b0c0606e5d",
+        "size": 4700807
+      },
+      {
+        "path": "出图/第5话/panels/P001.png",
+        "exists": true,
+        "sha256": "82b70ec1db3ea53c1d03bcadb3474c4e2b236480d43256fea35b76cadaafd053",
+        "size": 1775071
+      },
+      {
+        "path": "出图/第5话/candidates/P001/20260719T153226_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "6c51fa6688d7e5a0392f6bc4292564613c33634b90f445f25e338e0b4d333203",
+        "size": 4140168
+      },
+      {
+        "path": "出图/第5话/panels/P002.png",
+        "exists": true,
+        "sha256": "72026cb8c2b7826d65630b9fb11e563db8c2ef3d5ec84a8707eaa05eff48ff80",
+        "size": 1103594
+      },
+      {
+        "path": "出图/第5话/candidates/P002/20260719T153356_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0a41b7f2b750dea099741bd8644bd1dc095f3cab64b7919fbe6f688756b3318e",
+        "size": 3438524
+      },
+      {
+        "path": "出图/第5话/panels/P003.png",
+        "exists": true,
+        "sha256": "6d1fd82bcdc1b056578f7227a59a1258319d08b5f08264facf795e8cdc49f0fe",
+        "size": 959883
+      },
+      {
+        "path": "出图/第5话/candidates/P003/20260719T153529_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "c2aa813d8a0d3ebcdd00890a6f9d65b37baa5772820b5f6d4efefad2874b1030",
+        "size": 4224484
+      },
+      {
+        "path": "出图/第5话/panels/P004.png",
+        "exists": true,
+        "sha256": "57f50567df0cef028ef43f044aef143742515aee117f1ac5adc710e6fe3e6d11",
+        "size": 882588
+      },
+      {
+        "path": "出图/第5话/candidates/P004/20260719T153708_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "a811248a190f4bf3fa17e6724abde24b1eeb57cf474708edcb6a15f7e791b195",
+        "size": 3723946
+      },
+      {
+        "path": "出图/第5话/panels/P005.png",
+        "exists": true,
+        "sha256": "84b19da5bef731a1cd4a95bf10f61949cd148af855d841b4bfa22efca9ee893d",
+        "size": 1228818
+      },
+      {
+        "path": "出图/第5话/candidates/P005/20260719T153906_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b01492cfdffca2898cbd590f8d137ff4ac19a377284d3c660f11055d35991767",
+        "size": 4169943
+      },
+      {
+        "path": "出图/第5话/panels/P006.png",
+        "exists": true,
+        "sha256": "449fbbf764548e65fc980a28eb7876fd95c8e1a0bb3477b49c247831e00cdcd3",
+        "size": 1203018
+      },
+      {
+        "path": "出图/第5话/candidates/P006/20260719T154026_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "dd8c7ad7030fc92eeb693b71e8561c2d45d330c0f7444a4f7e8b2d7a00702113",
+        "size": 3995001
+      },
+      {
+        "path": "出图/第5话/panels/P007.png",
+        "exists": true,
+        "sha256": "e0606666b7953a94a8e8a3dbdf1219280c5d82972a926e561e28ce8ffa5ce7e0",
+        "size": 1308875
+      },
+      {
+        "path": "出图/第5话/candidates/P007/20260719T154157_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "60f3c9c7fd1797513e61dda249b1b6a861538ca07c00e8daf61608081bde8cc3",
+        "size": 4264060
+      },
+      {
+        "path": "出图/第5话/panels/P008.png",
+        "exists": true,
+        "sha256": "47ee242aa4dfbbff4f9aa7627e198fa459eac074d5f4108a89150bee2b556d83",
+        "size": 1202924
+      },
+      {
+        "path": "出图/第5话/candidates/P008/20260719T154319_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "2f43cb57046cf41747e74c40429b78de3aa4ed7add806700699f60c0ffc30860",
+        "size": 3922425
+      },
+      {
+        "path": "出图/第5话/panels/P009.png",
+        "exists": true,
+        "sha256": "80f6d6eba21e77c710ea37547a083b0fbc70f9452595143dbabf73cdaa451ac1",
+        "size": 905699
+      },
+      {
+        "path": "出图/第5话/candidates/P009/20260719T154453_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "5c743a23ef6e550b4afb064f5f98df51ce23e8639d085452fe950a37b27be0ec",
+        "size": 4023322
+      },
+      {
+        "path": "出图/第5话/panels/P010.png",
+        "exists": true,
+        "sha256": "a2206984d99010e43375433b83fb190ff2ecba43703cf46b64c6d1c8bc449cea",
+        "size": 1414770
+      },
+      {
+        "path": "出图/第5话/candidates/P010/20260719T154623_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "548c7475d41b324e176c3bb0bc940d578fa367a97366a3e3a5897ff9e28c0eb1",
+        "size": 4009388
+      },
+      {
+        "path": "出图/第5话/panels/P011.png",
+        "exists": true,
+        "sha256": "1313a182b3efaea3f6de8475c3085de97d4be01e6c01081cd5cd45adaaa4f6e0",
+        "size": 1149286
+      },
+      {
+        "path": "出图/第5话/candidates/P011/20260719T154759_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "5251fcef61e9418238f2cfa63b3c5f8d14cde111d08b4ef887d68662bc1ce4ad",
+        "size": 3142877
+      },
+      {
+        "path": "出图/第5话/panels/P012.png",
+        "exists": true,
+        "sha256": "0557830202e695551f6f3d9342d8d246c28e8dab058d2cdad66411008d03ee8f",
+        "size": 1230334
+      },
+      {
+        "path": "出图/第5话/candidates/P012/20260719T154923_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "db4046bb2e870b91723436f7d13255be58ac54236d9ff52944e0fdedd78daca2",
+        "size": 3796322
+      },
+      {
+        "path": "出图/第5话/panels/P013.png",
+        "exists": true,
+        "sha256": "911be58ef8385c8e76d6735cb7b3c939eccd395daf04f3df6703c07a56fb7354",
+        "size": 1479326
+      },
+      {
+        "path": "出图/第5话/candidates/P013/20260719T155055_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0e21d2b04eaa104e9170565fdb14d2418d580750e4170a27dffe24a3b128deed",
+        "size": 4458672
+      },
+      {
+        "path": "出图/第5话/panels/P014.png",
+        "exists": true,
+        "sha256": "b19210bb70b74416b8040d3beb17d759d14146f3d4499d57808fd9b97ede797f",
+        "size": 1692309
+      },
+      {
+        "path": "出图/第5话/candidates/P014/20260719T155222_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "a48e55fd1d5d0d54a1ecf7a98b89efe33cb22b99ae33e3f6f5b0cc58592dbfc4",
+        "size": 4146449
+      },
+      {
+        "path": "出图/第5话/panels/P015.png",
+        "exists": true,
+        "sha256": "da47efc1391b3eb50e2e565bb162b63bc70e8c0fa1fa6f5b35bc7991b2ba8108",
+        "size": 1698404
+      },
+      {
+        "path": "出图/第5话/candidates/P015/20260719T155357_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "a18c8c3bbff32ca2692462eb4d956afc06a9abee63ded02ae9148ab6de5c1752",
+        "size": 6042124
+      },
+      {
+        "path": "出图/第5话/panels/P016.png",
+        "exists": true,
+        "sha256": "fa35f05666c2102f122e08e8fbf54e43c25378aaa700962c7cbf8ddb5ba5bd7d",
+        "size": 1348926
+      },
+      {
+        "path": "出图/第5话/candidates/P016/20260719T155518_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "925ecdf3780db41c55a75fabc2410d537614f777d34bc186b4c6cccda9f24b99",
+        "size": 4237999
+      },
+      {
+        "path": "出图/第5话/panels/P017.png",
+        "exists": true,
+        "sha256": "17f845d7d2d6b7490c2a3f0c0e7f9644efc56b6af3f7dae627560de5b079c69a",
+        "size": 1310459
+      },
+      {
+        "path": "出图/第5话/candidates/P017/20260719T155622_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "ba5016f00c1fc9af744a32fabd3fe06ea2359114d88a8348d80fe3fce8bba2c7",
+        "size": 4223922
+      },
+      {
+        "path": "出图/第5话/panels/P018.png",
+        "exists": true,
+        "sha256": "b4e55c558eb1a1f7c1fa605e29fcd5708fb8909cfe22954a80f3ec8b3c18cadc",
+        "size": 1462359
+      },
+      {
+        "path": "出图/第5话/candidates/P018/20260719T155749_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0dce0a4faa288ed3e2dc424e0fce663a3ac3a9032506b2c7295101fcc96f5b81",
+        "size": 4185027
+      },
+      {
+        "path": "出图/第5话/panels/P019.png",
+        "exists": true,
+        "sha256": "4be6a515fc3c4cfba515c540871a09530b29af41d4fcd04a02c06f72c8f5a4f8",
+        "size": 1508961
+      },
+      {
+        "path": "出图/第5话/candidates/P019/20260719T155923_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "5f8bf20d634b203452f0c162abc83808af2476bf2ae64fb09ec8a71f330d38a8",
+        "size": 4475639
+      },
+      {
+        "path": "出图/第5话/panels/P020.png",
+        "exists": true,
+        "sha256": "03267830a78dd592684ca90edf8b96ff7eef9d774cab6cf78701e4771ace4c53",
+        "size": 1376183
+      },
+      {
+        "path": "出图/第5话/candidates/P020/20260719T160049_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "d4b111a2998393d47118f0740a8eb076d9a6d9417b4bc3f0c445e0017028e8bb",
+        "size": 4624992
+      },
+      {
+        "path": "出图/第5话/panels/P021.png",
+        "exists": true,
+        "sha256": "5f3f0fd63a2a18b5469aa4900ddbba98113dc6068862156a8689f75cfd59652c",
+        "size": 1309824
+      },
+      {
+        "path": "出图/第5话/candidates/P021/20260719T160218_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "3131003ebced156d5da02c1f763a6d66e0f01d96abc3c15ca9ecfdfef9e694c9",
+        "size": 4427470
+      },
+      {
+        "path": "出图/第5话/panels/P022.png",
+        "exists": true,
+        "sha256": "b8ee9fb23b9a9eb69cc2346d9c3774513b0570e2772dc806283c3c557512feaf",
+        "size": 1999389
+      },
+      {
+        "path": "出图/第5话/candidates/P022/20260719T160340_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "5711266047f966b12a319a1d789a7609e54d3bfb6e6337a6075b5f3d470d36e3",
+        "size": 4756447
+      },
+      {
+        "path": "出图/第5话/panels/P023.png",
+        "exists": true,
+        "sha256": "cac96dd4d8cde79b686fb74c5390d897d3f88ad49778b19067fe9e033c8e8976",
+        "size": 1140758
+      },
+      {
+        "path": "出图/第5话/candidates/P023/20260719T160504_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "20c0840a41c9cd8a70cf01d0e72e67743bf077473e333423069896ec7876b7c5",
+        "size": 5088159
+      },
+      {
+        "path": "出图/第5话/panels/P024.png",
+        "exists": true,
+        "sha256": "303f4defbba996f6f69cc61232b0508abc822ec4e2eda7a42044f839bd2d643b",
+        "size": 1154872
+      },
+      {
+        "path": "出图/第5话/candidates/P024/20260719T160613_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "f4d0cc5ff32db306921e031852e084995e5b112cad8492e43ba5cfc4516bb804",
+        "size": 5210529
+      },
+      {
+        "path": "出图/第5话/panels/P025.png",
+        "exists": true,
+        "sha256": "aa3e980153f3ad50499b308f10655ed4c7c5299b5b3b3cc8814a139e4b5c8250",
+        "size": 1253669
+      },
+      {
+        "path": "出图/第5话/candidates/P025/20260719T160725_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "cec9ce465c98df93918ee7ac6510243e3aff5e5a304f2910d9794337f9904deb",
+        "size": 5652733
+      },
+      {
+        "path": "出图/第5话/panels/P026.png",
+        "exists": true,
+        "sha256": "f9ddbd746e31d7433b536e64270e01b59157e2a43f2289a03b88c62c9badc96c",
+        "size": 1000808
+      },
+      {
+        "path": "出图/第5话/candidates/P026/20260719T160835_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "72e562e88b1460def1a99b413bee3599e6fda2a03a013811cc6ff647fdc45915",
+        "size": 4544482
+      },
+      {
+        "path": "出图/第5话/panels/P027.png",
+        "exists": true,
+        "sha256": "be6663be92bfcaa9efe992e913f8a75bbdc3ceca261f838e23fc75d5d0d6b232",
+        "size": 1654786
+      },
+      {
+        "path": "出图/第5话/candidates/P027/20260719T160946_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "9f5c62116e75ab798fe728935f10178506cd6d30d6b59662d3df26c3abf0c4ed",
+        "size": 6743978
+      },
+      {
+        "path": "出图/第5话/panels/P028.png",
+        "exists": true,
+        "sha256": "5fddf73461a388b9dce41f8a216a5142b939f122d87bbb27ba27f77d26318412",
+        "size": 1639323
+      },
+      {
+        "path": "出图/第5话/candidates/P028/20260719T161110_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0bc709e1b4b478c4ef5e111f6abedf8ececed574f697f5fe4d0db38531df49ab",
+        "size": 6196059
+      },
+      {
+        "path": "出图/第5话/panels/P029.png",
+        "exists": true,
+        "sha256": "536bb1fa1f9b7ea085e69e11ecbc11418da6121eaf2522b1211387c11e10a870",
+        "size": 1339324
+      },
+      {
+        "path": "出图/第5话/candidates/P029/20260719T161238_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b4f95060a922bd113c6d2f4f8defd6f1efa4faa08892659708d4cb13072994ab",
+        "size": 4487356
+      },
+      {
+        "path": "出图/第5话/panels/P030.png",
+        "exists": true,
+        "sha256": "f3a868df0464dff061125d8f6c23ae7565561440e2f45306de4f894f536115d2",
+        "size": 1329928
+      },
+      {
+        "path": "出图/第5话/candidates/P030/20260719T161400_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "89e1be2f3ad293f4824a7b60d345faa4b214fc97c412233234b562f04eac9ced",
+        "size": 4533653
+      },
+      {
+        "path": "出图/第5话/panels/P031.png",
+        "exists": true,
+        "sha256": "27c0b9ef9187daed5636e6234ada8ce8632f4b8e4a55f735ce34a9426f8bfcff",
+        "size": 1347882
+      },
+      {
+        "path": "出图/第5话/candidates/P031/20260719T161524_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "c35584692d916a18baa313c25081f275224d4a0998c2ed38eff033898f69fba5",
+        "size": 4696394
+      },
+      {
+        "path": "出图/第5话/panels/P032.png",
+        "exists": true,
+        "sha256": "4561147f9a54ede54421b5210c68c149635e61fcaf3414233be222df3e5f7923",
+        "size": 1529111
+      },
+      {
+        "path": "出图/第5话/candidates/P032/20260719T161644_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "a77c4c0c2af9bc26e9b5e7e251b147562e044397359130366fb8b8a0e3ccec86",
+        "size": 5203738
+      },
+      {
+        "path": "出图/第5话/panels/P033.png",
+        "exists": true,
+        "sha256": "4d19213eb203f1faca8626b21aef6b24f6eebcada4219b6c0e974212998f19b2",
+        "size": 1271276
+      },
+      {
+        "path": "出图/第5话/candidates/P033/20260719T161816_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "e783cb274a89a547e8d9effbf91a37c93cb09e2739a43653538a8dd7842eac8b",
+        "size": 3460629
+      },
+      {
+        "path": "出图/第5话/panels/P034.png",
+        "exists": true,
+        "sha256": "aa5cff37cb60905c7264e141768645f19f2bb9a6b6528dccba4486afe5d17d92",
+        "size": 758847
+      },
+      {
+        "path": "出图/第5话/candidates/P034/20260719T161950_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "bfc2e683c2c20c400d7b602477d47265ac4c548f05978a56f586ebfb2dc47203",
+        "size": 2849719
+      },
+      {
+        "path": "出图/第5话/panels/P035.png",
+        "exists": true,
+        "sha256": "6ff66c52d212f5e41a5e42eac03f2d69326244ad7bf5c2decb2feb3311c9c163",
+        "size": 1568942
+      },
+      {
+        "path": "出图/第5话/candidates/P035/20260719T162116_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0335fb268efbb4cfd279d7ce28288e275a80eaa3a5b4bc8cfafb67686204783b",
+        "size": 5154874
+      },
+      {
+        "path": "出图/第5话/panels/P037.png",
+        "exists": true,
+        "sha256": "39654d7e9f8fbe33065f72a35d6d5535fc1c23fc41eba35a6ab12bc9cb1df051",
+        "size": 1349286
+      },
+      {
+        "path": "出图/第5话/candidates/P037/20260719T162758_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "cf08c5ac9bb62fad0186fd52f68891ae95af4e00a9ddad1191e918442b09ec62",
+        "size": 4440432
+      },
+      {
+        "path": "出图/第5话/panels/P038.png",
+        "exists": true,
+        "sha256": "96eb5a346e39959c12afc0bbde31f3bc83f824a48d36b8698b9cb6b7786334ad",
+        "size": 1353936
+      },
+      {
+        "path": "出图/第5话/candidates/P038/20260719T162928_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "f97d76ba1e0b6e67487424bfb11d894a8fd778137d32fd234b8e301b9abf0733",
+        "size": 4439078
+      },
+      {
+        "path": "出图/第5话/panels/P039.png",
+        "exists": true,
+        "sha256": "173849c26b5cf891353294d2ea2deefbeaeb6b9bbd6ad5c60f175ff14ed04c22",
+        "size": 1666918
+      },
+      {
+        "path": "出图/第5话/candidates/P039/20260719T163058_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "4437f0770c626a386b207cacc05407abaa3c4dbc2f301a62fb3fef5fc3be85ef",
+        "size": 5520487
+      },
+      {
+        "path": "出图/第5话/panels/P040.png",
+        "exists": true,
+        "sha256": "67a37229b7175a2aaefb3cb2fcc6c55618d0a1e42c91ea425366c0ac4e0732a0",
+        "size": 1383334
+      },
+      {
+        "path": "出图/第5话/candidates/P040/20260719T163213_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "bffb4e16b673c64f944ab4fe44eb7565c7aa7f738aefea2b38c951c94f24cef6",
+        "size": 4623860
+      },
+      {
+        "path": "出图/第5话/panels/P041.png",
+        "exists": true,
+        "sha256": "727a293ae4e43a91cd97da8c3db0555cc82a4693a26c816084a1c25dceb5900f",
+        "size": 1644160
+      },
+      {
+        "path": "出图/第5话/candidates/P041/20260719T163347_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "5d94f92bc495634ce6df7074e9f0636b0578669dfcdafea272eb7d9e683f224b",
+        "size": 5210953
+      },
+      {
+        "path": "出图/第5话/panels/P042.png",
+        "exists": true,
+        "sha256": "e48c9c2139f42de3fe7842aa6c6d44ed3db7e493c29ab52b5c83fe22806cff35",
+        "size": 1384574
+      },
+      {
+        "path": "出图/第5话/candidates/P042/20260719T163520_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "0fdb265c724c999c153c69a3fa046c43b74993737a1d904b13701960f7d6873d",
+        "size": 4010064
+      },
+      {
+        "path": "出图/第5话/panels/P043.png",
+        "exists": true,
+        "sha256": "61bfb1cb56959158795d83b647f1168c8b1b4f7db941b270a3d2f4666fc1ac32",
+        "size": 1335049
+      },
+      {
+        "path": "出图/第5话/candidates/P043/20260719T163659_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "ac5d0254cab867e6d27cf42f25e8ceaa6244c98018d12902f56caa5441b1b503",
+        "size": 3775509
+      },
+      {
+        "path": "出图/第5话/panels/P044.png",
+        "exists": true,
+        "sha256": "4a8da15e9c2bc4114b84a0812a0feeed4ba2e924ca17713d1be82002b118d9ff",
+        "size": 1746370
+      },
+      {
+        "path": "出图/第5话/candidates/P044/20260719T163840_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "cca3857d4b0fdc643085615b36040e37d6f099a93f42efa04992476243a66a8f",
+        "size": 4239168
+      },
+      {
+        "path": "出图/第5话/panels/P045.png",
+        "exists": true,
+        "sha256": "575a7b99f817a116161bb1fac9949c11ab5f2c0e7aa93f9a26d7759193b46ec5",
+        "size": 1893589
+      },
+      {
+        "path": "出图/第5话/candidates/P045/20260719T164006_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "136214b0d57e76a4be00fa571db4c70af662d8a48ca03e4a46103497ae828ba7",
+        "size": 4557899
+      },
+      {
+        "path": "出图/第5话/panels/P046.png",
+        "exists": true,
+        "sha256": "667d09e2c5b8150d7418f57fea3c23a0124669475c8a35303ad42625d0317105",
+        "size": 1273794
+      },
+      {
+        "path": "出图/第5话/candidates/P046/20260719T164133_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "a75f7330365658f3a54fff22ecece42f8dbdc4afb435e9a71a891a8d3d4e1616",
+        "size": 4135317
+      },
+      {
+        "path": "出图/第5话/panels/P047.png",
+        "exists": true,
+        "sha256": "7bf77819275fc0d86086d7cd9fea519403d592f9115c9a37986bbaf35774924a",
+        "size": 1215999
+      },
+      {
+        "path": "出图/第5话/candidates/P047/20260719T164304_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "b01fabd7fffc2213c50c3625bcd5fc06157ae1b795499fb222773485c2385f21",
+        "size": 4041899
+      },
+      {
+        "path": "出图/第5话/panels/P048.png",
+        "exists": true,
+        "sha256": "c8516ac96645c81b5b82ad065b00382bcfe96fea08e8ca890e6b25b7c48080af",
+        "size": 1718363
+      },
+      {
+        "path": "出图/第5话/candidates/P048/20260719T164528_attempt1_dreamina_raw.png",
+        "exists": true,
+        "sha256": "978dc401e769564d4a8ac11e7560b0234784e92c0edb12f4ff3093f03c660fe6",
+        "size": 4149276
+      }
+    ],
+    "sha256": "5234c64d05a3cfaa358eed3a476b64b90b8c4faaf46a2f1d66aea68c186631f9"
+  },
+  "receipt_id": "30264b0c85ff32a69d497e99459fdb95f0364c4aed96d344d2c68f549b44ef6e"
+}

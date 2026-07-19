@@ -1,0 +1,258 @@
+{
+  "kind": "comic_entity_presence_audit",
+  "version": 1,
+  "generated_at": "2026-07-19T08:58:18+00:00",
+  "chapter": "第5话",
+  "summary": {
+    "panels": 48,
+    "registry_entities": 42,
+    "panels_with_schedule": 0,
+    "must": 0,
+    "warn": 3,
+    "info": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "mentioned_not_bound",
+      "panel_id": "P003",
+      "entity": "CHAR_WANG_JIN",
+      "message": "P003 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
+    },
+    {
+      "severity": "warn",
+      "code": "mentioned_not_bound",
+      "panel_id": "P018",
+      "entity": "CHAR_WANG_JIN",
+      "message": "P018 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
+    },
+    {
+      "severity": "warn",
+      "code": "mentioned_not_bound",
+      "panel_id": "P047",
+      "entity": "CHAR_GAO_QIU",
+      "message": "P047 画面描述提到「高俅」（registry 实体 CHAR_GAO_QIU），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
+    }
+  ],
+  "derived_schedule": {
+    "P001": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P002": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P003": [
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P004": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P005": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P006": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P007": [
+      "CHAR_WANG_MOTHER",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P008": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P009": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P010": [
+      "CHAR_WANG_JIN",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P011": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P012": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P013": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_ESCAPE_ROAD"
+    ],
+    "P014": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_ESCAPE_ROAD"
+    ],
+    "P015": [
+      "LOC_YUE_TEMPLE"
+    ],
+    "P016": [
+      "LOC_WANG_JIN_HOME"
+    ],
+    "P017": [
+      "CHAR_GAO_QIU",
+      "LOC_DIANSHUAI_HALL"
+    ],
+    "P018": [
+      "CHAR_GAO_QIU",
+      "LOC_DIANSHUAI_HALL"
+    ],
+    "P019": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_ESCAPE_ROAD"
+    ],
+    "P020": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_ESCAPE_ROAD"
+    ],
+    "P021": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_ESCAPE_ROAD"
+    ],
+    "P022": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P023": [
+      "LOC_SHI_MANOR"
+    ],
+    "P024": [
+      "LOC_SHI_MANOR"
+    ],
+    "P025": [
+      "LOC_SHI_MANOR"
+    ],
+    "P026": [
+      "LOC_SHI_MANOR"
+    ],
+    "P027": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P028": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P029": [
+      "CHAR_SHI_TAIGONG",
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P030": [
+      "CHAR_SHI_TAIGONG",
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P031": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P032": [
+      "CHAR_SHI_TAIGONG",
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P033": [
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P034": [
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P035": [
+      "CHAR_SHI_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P036": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P037": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P038": [
+      "CHAR_SHI_JIN",
+      "CHAR_SHI_TAIGONG",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P039": [
+      "CHAR_SHI_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P040": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P041": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P042": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P043": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P044": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P045": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P046": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ],
+    "P047": [
+      "CHAR_SHI_JIN",
+      "CHAR_SHI_TAIGONG",
+      "CHAR_WANG_JIN",
+      "CHAR_WANG_MOTHER",
+      "LOC_SHI_MANOR"
+    ],
+    "P048": [
+      "CHAR_SHI_JIN",
+      "CHAR_WANG_JIN",
+      "LOC_SHI_TRAINING_YARD"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-18T07:38:06+00:00",
+  "created_at": "2026-07-19T07:17:25+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -571,6 +571,139 @@
     {
       "kind": "comic_character_model_pack",
       "version": 1,
+      "character_id": "CHAR_SHI_JIN",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+          "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+          "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+          "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "881ff9ed33e4d571ac49513e9d951ec280b0a4e3b1510c68d6a58807ecc8b8d7",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_SHI_JIN.json",
+        "status": "current",
+        "approved_at": "2026-07-19T07:17:24+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_SHI_TAIGONG",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+          "sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "front",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SHI_TAIGONG__face.png",
+          "sha256": "09699eecc9a002db135c6adcd30082b613ba022c07b31e80060cbf5903061129",
+          "width": 1728,
+          "height": 2304,
+          "source_view": "face",
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+            "source_sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "4b38c115c9343a911c9f98724c6d26373345f517d604a7163124110a8dc97a0c",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_SHI_TAIGONG.json",
+        "status": "current",
+        "approved_at": "2026-07-19T07:17:24+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "deterministic",
+          "code": "model_pack_lineage_groups_differ",
+          "message": "required views 的 derivation.source_sha256 不同；需由人审确认确为同一母本/同一角色后签收"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
       "character_id": "CHAR_SU_XUESHI",
       "asset_type": "character",
       "tier": "named_minimal",
@@ -1056,10 +1189,10 @@
     }
   ],
   "summary": {
-    "assets": 16,
-    "characters": 14,
+    "assets": 18,
+    "characters": 16,
     "monsters": 2,
-    "ready": 16,
+    "ready": 18,
     "needs_approval": 0,
     "needs_fix": 0
   }

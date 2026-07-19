@@ -6569,6 +6569,588 @@
       "anchor_path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
       "primary_path": "出图/共享/图片/PROP_MILITARY_ROSTER__anchor.png",
       "sha256": "2a1d66ccad0c86930c41af96120b91576c56fc822d0d4bf7a5551e80aa0548d2"
+    },
+    "CHAR_SHI_JIN": {
+      "id": "CHAR_SHI_JIN",
+      "type": "character",
+      "display_name": "史进",
+      "description": "史家村少庄主，十八九岁，银盘面皮，精壮敏捷，上身九龙刺青，性烈而能服真本事",
+      "character_dna": "十八九岁；银盘般圆阔年轻面孔；浓直眉；高束黑发；精壮敏捷体态；上身九条青龙刺青为永久标志；少年锐气但不是粗豪中年脸",
+      "variant_policy": "赤膊练武与穿衣拜师必须保持同脸、同发式、同体态与同一九龙刺青位置；只改变服装和情绪",
+      "forbidden_inheritance": "影视演员脸；现代纹身风格；日式黑帮纹身；龙角魔龙；重甲；王进脸；临时木棒固化为身体标志",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "赤膊练武与穿衣拜师必须保持同脸、同发式、同体态与同一九龙刺青位置；只改变服装和情绪",
+          "forbidden": "影视演员脸；现代纹身风格；日式黑帮纹身；龙角魔龙；重甲；王进脸；临时木棒固化为身体标志",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+              "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_SHI_JIN"
+              },
+              "updated_at": "2026-07-19T15:12:21"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+          "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__front_dreamina__20260719T151117728306.md",
+            "prompt_sha256": "960ee6333df4adc2c1d3ad1d8d5b11fe72f5c005217f6eebb11c0caba817e44e",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "911e3ba2-e466-4e84-a4a6-50c992e5ef8b"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-19T15:12:21"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+          "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__three_quarter_dreamina__20260719T151221530348.md",
+            "prompt_sha256": "e975180cab2317c2bca672d58a8acd25b8f353b68c85007b6fd5b76d7d2ad402",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "81954225-9781-4854-a328-6f4a1ee0eef5"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-19T15:13:18"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+          "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_JIN__face_dreamina__20260719T151318665454.md",
+            "prompt_sha256": "3472b3c8ef38c0822edee9508d9078756e2e597bf01f8edcfb008938e2a49add",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "c64c72a1-122c-40a0-bb52-bca84f0894ba"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-19T15:14:12"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T15:14:12",
+      "views": {
+        "front": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_SHI_JIN__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "881ff9ed33e4d571ac49513e9d951ec280b0a4e3b1510c68d6a58807ecc8b8d7",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-19T07:17:24+00:00"
+      }
+    },
+    "CHAR_SHI_TAIGONG": {
+      "id": "CHAR_SHI_TAIGONG",
+      "type": "character",
+      "display_name": "史太公",
+      "description": "史家村庄主，年近六旬，须发皆白，温厚稳重",
+      "character_dna": "年近六旬；清癯长脸；须发皆白；温厚眼神；身形端正略瘦；遮尘暖帽、直缝宽衫、皂丝绦为本话识别组合",
+      "variant_policy": "接客、照料病人、观战与宴席均保持同脸同须发与稳重体态",
+      "forbidden_inheritance": "影视演员脸；清代瓜皮帽；豪商金玉满身；仙风道骨化；王进脸",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "接客、照料病人、观战与宴席均保持同脸同须发与稳重体态",
+          "forbidden": "影视演员脸；清代瓜皮帽；豪商金玉满身；仙风道骨化；王进脸",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+              "sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_SHI_TAIGONG"
+              },
+              "updated_at": "2026-07-19T15:15:36"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+          "sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "anchor_kind": "style_only_text_prompt_seed",
+            "view": "front",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_TAIGONG__front_dreamina__20260719T151434162744.md",
+            "prompt_sha256": "d47118be08e5d389a29ab7f57b3ca46e89a64d12575dfa559408b29e29058b6a",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "514c211f-8f5e-4e8f-9796-b47ed2b17527"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "source_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-19T15:15:36"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SHI_TAIGONG__face.png",
+          "sha256": "09699eecc9a002db135c6adcd30082b613ba022c07b31e80060cbf5903061129",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/CHAR_SHI_TAIGONG__face_dreamina__20260719T151536338410.md",
+            "prompt_sha256": "4c399d53331147aa4b7bea8ee3ce377f9bbfe3f680a220c1517c6a23a33b2c9c",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "4c1e8035-724e-4408-83c2-590845aeaf88"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+            "source_sha256": "992eb536b1c65b0b7714c1f5876a2cc9b900c7a77147256b764687f08afc14dd",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-19T15:16:28"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T15:16:28",
+      "views": {
+        "front": "出图/共享/图片/CHAR_SHI_TAIGONG__front.png",
+        "face": "出图/共享/图片/CHAR_SHI_TAIGONG__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "4b38c115c9343a911c9f98724c6d26373345f517d604a7163124110a8dc97a0c",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-19T07:17:24+00:00"
+      }
+    },
+    "LOC_YUE_TEMPLE": {
+      "id": "LOC_YUE_TEMPLE",
+      "type": "location",
+      "display_name": "酸枣门外岳庙",
+      "description": "宋代城外小庙，山门、香案、庙祝住处与牲礼准备区固定",
+      "notes": "第5话原创生产锚；外部研究仅research_only",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_YUE_TEMPLE__anchor.png",
+          "sha256": "a881f6592b56656699b25522e2b7f5ffbca4c4540f24eb3dd6ac408a9030d31d",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/LOC_YUE_TEMPLE__anchor_dreamina__20260719T150708313126.md",
+            "prompt_sha256": "61cc34cf2b38788615a36f2c184fd9d125bf805220517b3f3bf236ef1b972b65",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "ed9c907c-2fa0-4464-af8d-e941689a2491",
+            "raw_canvas_path": "出图/共享/candidates/LOC_YUE_TEMPLE/anchor/20260719T150810436586__raw_canvas.png",
+            "raw_canvas_sha256": "8c10a9bacdf5a73495a825c5f35f3e67c9ab2b98005f5e205562aff5041280c1",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-19T15:08:10"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T15:08:10",
+      "anchor_path": "出图/共享/图片/LOC_YUE_TEMPLE__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_YUE_TEMPLE__anchor.png",
+      "sha256": "a881f6592b56656699b25522e2b7f5ffbca4c4540f24eb3dd6ac408a9030d31d"
+    },
+    "LOC_ESCAPE_ROAD": {
+      "id": "LOC_ESCAPE_ROAD",
+      "type": "location",
+      "display_name": "东京至延安官道",
+      "description": "西华门、官道、野林与远山构成长途逃亡路线，低饱和晨昏变化",
+      "notes": "第5话原创生产锚；外部研究仅research_only",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_ESCAPE_ROAD__anchor.png",
+          "sha256": "a550262155717ebc5ad446fe40ec8e27159e5423f2021d36f6f27ade70da9d4d",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/LOC_ESCAPE_ROAD__anchor_dreamina__20260719T150810724208.md",
+            "prompt_sha256": "cabfa252afb3652826c1b5553c2887a603c8e2ff29433f26dff8cfd6742f1422",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "6daf9c6f-8533-4f51-b379-e795f3169bfd",
+            "raw_canvas_path": "出图/共享/candidates/LOC_ESCAPE_ROAD/anchor/20260719T150908203970__raw_canvas.png",
+            "raw_canvas_sha256": "70443b6027f5c2c92cc9e2217db95a7d0c5b9203fedb1383f87ad169a123f17d",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-19T15:09:08"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T15:09:08",
+      "anchor_path": "出图/共享/图片/LOC_ESCAPE_ROAD__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_ESCAPE_ROAD__anchor.png",
+      "sha256": "a550262155717ebc5ad446fe40ec8e27159e5423f2021d36f6f27ade70da9d4d"
+    },
+    "LOC_SHI_MANOR": {
+      "id": "LOC_SHI_MANOR",
+      "type": "location",
+      "display_name": "史家村庄院",
+      "description": "土墙围合、柳树林、打麦场、草堂、客房与后槽相互连通的大庄院",
+      "notes": "第5话原创生产锚；外部研究仅research_only",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+          "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/LOC_SHI_MANOR__anchor_dreamina__20260719T150908453376.md",
+            "prompt_sha256": "cc77677c0ac83efa7b08db6ac342ec5ab629c2ac66b045cdfd286e5b3d058e05",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "25cab3cb-aa15-459a-83b3-2823e65e0a7e",
+            "raw_canvas_path": "出图/共享/candidates/LOC_SHI_MANOR/anchor/20260719T151007898798__raw_canvas.png",
+            "raw_canvas_sha256": "5e526ea463eb63c0b03b236ed4c5d81e5ecc19e4868bb5a98e55bc9c7cf1f309",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-19T15:10:08"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T15:10:08",
+      "anchor_path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+      "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b"
+    },
+    "LOC_SHI_TRAINING_YARD": {
+      "id": "LOC_SHI_TRAINING_YARD",
+      "type": "location",
+      "display_name": "史家庄后槽练武场",
+      "description": "后槽马棚在画后，空地中央练棒，兵器架靠侧墙，观战位靠草堂",
+      "notes": "第5话原创生产锚；外部研究仅research_only",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_SHI_TRAINING_YARD__anchor.png",
+          "sha256": "5fd6d47385d1ad9b719ed09a2b45a48e0af36bbcd4660b8bf05d1dc303ee0e3c",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第5话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "backend_version": "{",
+            "prompt_path": "生产数据/comic_identity_prompts/第5话/LOC_SHI_TRAINING_YARD__anchor_dreamina__20260719T151008185894.md",
+            "prompt_sha256": "9176f7f82f93dc177d2c87d22edb7dda3d43324ef379b72949359a92e939e83b",
+            "requested_ratio": "4:5",
+            "submitted_ratio": "3:4",
+            "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+            "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "style_reference_role": "style_only",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "submit_id": "8af7c541-80d6-4873-9af7-9fab2d2f9591",
+            "raw_canvas_path": "出图/共享/candidates/LOC_SHI_TRAINING_YARD/anchor/20260719T151104619264__raw_canvas.png",
+            "raw_canvas_sha256": "79463f9343bf9c87483ded1e891577318c521722f0bda73137af31b0c0606e5d",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1728,
+              "source_height": 2304,
+              "target_width": 1844,
+              "target_height": 2305
+            }
+          },
+          "updated_at": "2026-07-19T15:11:04"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-19T15:11:04",
+      "anchor_path": "出图/共享/图片/LOC_SHI_TRAINING_YARD__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_SHI_TRAINING_YARD__anchor.png",
+      "sha256": "5fd6d47385d1ad9b719ed09a2b45a48e0af36bbcd4660b8bf05d1dc303ee0e3c"
     }
   },
   "schema_meta": {
