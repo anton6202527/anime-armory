@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-07-20T09:50:07+00:00",
+  "created_at": "2026-07-20T10:37:30+00:00",
   "episodes": [
     "第1集"
   ],
@@ -38,11 +38,11 @@
     "skills/n2d-image/scripts/asset_lifecycle.py": "187e032849448cdc3fe85e7437a7922ba01f5b2303ff9085df4f24058805ffcd",
     "skills/n2d-image/scripts/candidate_select.py": "ea378289fa05523d9bc2279133bcbac149685ca56966d4fead0f2ec97803d4b3",
     "skills/n2d-image/scripts/character_span.py": "9f2c3e7aa2deadbbe85c93ed067bb164754be64132e2df7ae9efd5ac2c682d69",
-    "skills/n2d-image/scripts/codex_image_runner.py": "cac5879ecfb0fe020a32b0c3d24de5f02dde713fd4fd2c499462f13abaf84bba",
+    "skills/n2d-image/scripts/codex_image_runner.py": "0f37949996b01149ea931472ea5c8355f78172801e5c740e1116891626f09c9f",
     "skills/n2d-image/scripts/cover_pack.py": "d28e040d2bce55e1a4df57f485f26d4fd5bb922a936a58104588fff23448de9c",
     "skills/n2d-image/scripts/derive_makeup_pack.py": "3cbd90d624778ffdd7313824428dfeebdd241f1a515ef0ce21e0c1582a3a574f",
     "skills/n2d-image/scripts/derive_scene_views.py": "310b74e5ade61cd9aef35391616ef10dd385a10a2eac89f4057e8d4fb5305aac",
-    "skills/n2d-image/scripts/dreamina_image_runner.py": "81289007bc72ff9af68341e3ce3e8a953bcee4e6e4bccc8a51ea105ca9692f15",
+    "skills/n2d-image/scripts/dreamina_image_runner.py": "619e3cacb0d5a17c26660ddcca18a5e01cd211d092114b569de37ee50916e1ee",
     "skills/n2d-image/scripts/face_drift_risk.py": "5e51ac470565bb5ccd72e58da2b3d3cbe7d5ca984f36331196b44aa7be535cec",
     "skills/n2d-image/scripts/image_prompt_metrics.py": "dbf846f0ec43962f4b87300fdd352374cf3f8594f8a0ac299e3077441d938eaf",
     "skills/n2d-image/scripts/image_prompt_pack.py": "bcce55150ed7541f5ef1d206b6dbff088e513793f524e8106b691263ae2f9c78",

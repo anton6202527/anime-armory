@@ -468,7 +468,7 @@ def run_qc(root: Path) -> Dict[str, Any]:
                         {"left_end": str(left_samples[-1]), "right_start": str(right_samples[0]),
                          "confidence": "heuristic"},
                     ))
-                # 同场景色跳：dHash 只抓灰度结构，调色/白平衡跳变要靠平均色距抓（n2d 同口径 0.12）。
+                # 同场景色跳：dHash 只抓灰度结构，调色/白平衡跳变要靠平均色距抓（兄弟线同口径 0.12）。
                 left_shot, right_shot = shots[index], shots[index + 1]
                 if _scene_label(left_shot) == _scene_label(right_shot):
                     cdist = _color_dist(_avg_rgb(left_samples[-1], Image), _avg_rgb(right_samples[0], Image))

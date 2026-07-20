@@ -480,6 +480,51 @@ def test_clip02_first_excludes_later_complete_hengdao_reference(
     assert weapon not in refs
 
 
+def test_clip04_first_includes_accepted_clip02_humanoid_tiger_pose(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    pose_source = image_dir / "Clip02_first.png"
+    pose_source.write_bytes(b"accepted full frame with humanoid tiger prone pose")
+    pose = (
+        tmp_path / "生产数据" / "reference_crops" / "第1集"
+        / "Clip02_tiger_prone_pose.png"
+    )
+    pose.parent.mkdir(parents=True)
+    pose.write_bytes(b"cropped humanoid tiger prone pose")
+    pose.with_suffix(".json").write_text(json.dumps({
+        "source": "出图/第1集/图片/Clip02_first.png",
+        "source_sha256": base.file_sha256(pose_source),
+        "output_sha256": base.file_sha256(pose),
+    }, ensure_ascii=False), encoding="utf-8")
+    face = tmp_path / "出图" / "共享" / "图片" / "CHAR_01_face.png"
+    face.parent.mkdir(parents=True)
+    face.write_bytes(b"face")
+    section = base.ClipSection(
+        clip="Clip_04", title="## 镜头 4",
+        body="50mm双人镜，伪死虎妖后景不消失。",
+        target_line="`出图/第1集/图片/Clip04_first.png`",
+    )
+    target = base.Target(
+        shot="Clip_04_first", clip="Clip_04", mode="firstframe",
+        rel_path="出图/第1集/图片/Clip04_first.png", section=section,
+    )
+    bundle = {"items": [{
+        "kind": "character", "id": "CHAR_01",
+        "paths": [str(face.relative_to(tmp_path))],
+    }]}
+    monkeypatch.setattr(dreamina, "_accepted_current_hash", lambda *_args: True)
+
+    refs = dreamina.select_dreamina_reference_paths(
+        target, bundle, [face], root=tmp_path, source_path=None,
+    )
+
+    assert pose in refs
+    assert face in refs
+    assert refs.index(pose) < refs.index(face)
+
+
 def test_firstframe_exact_state_relay_uses_previous_accepted_last_anchor_as_source(
     tmp_path: Path, monkeypatch,
 ) -> None:

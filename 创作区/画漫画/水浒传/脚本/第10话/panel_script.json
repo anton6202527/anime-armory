@@ -1,0 +1,3540 @@
+{
+  "schema_version": 2,
+  "kind": "comic_panel_script",
+  "chapter": "第10话",
+  "title": "拳打镇关西",
+  "working_title": "拳打镇关西",
+  "status": "confirmed",
+  "chapter_contract": {
+    "path": "脚本/split_blueprint.json",
+    "chapter_contract_sha256": "42f4a0ff0ebd6bad906fd7745ad2921fe484b65430f8b06fce9c8b05de59233b",
+    "status": "confirmed"
+  },
+  "source_semantics": "脚本/第10话/source_semantics.json",
+  "visual_contract": {
+    "style_baseline": "STYLE_SHUIHU_SONG_CINEMATIC",
+    "scene_anchors": {
+      "LOC_WEIZHOU_STREET": {
+        "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+        "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+        "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。"
+      },
+      "LOC_PAN_TAVERN": {
+        "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+        "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+        "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。"
+      },
+      "LOC_LU_INN": {
+        "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+        "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+        "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。"
+      },
+      "LOC_ZHUANGYUAN_BRIDGE": {
+        "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+        "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+        "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。"
+      }
+    },
+    "character_state_progression": {
+      "CHAR_LU_DA": "街头强邀→酒楼闻哭→怒极欲杀→赠银十五两→客店送行动手→状元桥消遣→三拳失手→弃官在逃",
+      "CHAR_SHI_JIN": "街头认师→酒楼同席→慷慨解囊十两→散席自投客店",
+      "CHAR_LI_ZHONG": "街头卖药→被强邀入席→凑银二两被掷还→散席自去",
+      "CHAR_JIN_CUILIAN": "隔壁啼哭→当面哭诉受骗→得银获救→五更随父出城",
+      "CHAR_JIN_LAO": "拍板卖唱→告知郑屠身份→得银十五两→次早脱身东归",
+      "CHAR_ZHENG_TU": "肉铺柜身安坐→被消遣切臊子→怒抢尖刀→当街毙命"
+    },
+    "character_integrity": "同一角色继承registry脸型、发式、体态、服装与标志；银两、拍板、药囊、朴刀、肉案与短棒等关键道具跨格连续。",
+    "gaze_policy": "眼神落在戏内对话者、银两、板壁后的哭声方向、拦阻者、肉案或逃走方向。",
+    "violence_policy": "本话含斗殴与致死结果，一律以动势、遮挡、逆光剪影和事后状态表达；禁止血液、伤口、断肢与尸体特写，禁止对郑屠面部创伤作近景描写。"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "opening_hook",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "走，寻个好去处吃三杯。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达挽着史进胳膊出了茶坊，两条大汉并肩踏进渭州午后的街市人流。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "none",
+      "spatial_relationships": "鲁达挽着史进胳膊出了茶坊，两条大汉并肩踏进渭州午后的街市人流。",
+      "blocking": "鲁达挽着史进胳膊出了茶坊，两条大汉并肩踏进渭州午后的街市人流。",
+      "staging": "鲁达挽着史进胳膊出了茶坊，两条大汉并肩踏进渭州午后的街市人流。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "走，寻个好去处吃三杯。"
+        }
+      ],
+      "narration": "渭州，六街三市。",
+      "narration_target": "渭州，六街三市。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "discovery",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "兄长，我们看一看。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "行不过三五十步，前方一簇人围住街心一块白地，史进停步侧头去看。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P001",
+      "spatial_relationships": "行不过三五十步，前方一簇人围住街心一块白地，史进停步侧头去看。",
+      "blocking": "行不过三五十步，前方一簇人围住街心一块白地，史进停步侧头去看。",
+      "staging": "行不过三五十步，前方一簇人围住街心一块白地，史进停步侧头去看。",
+      "dialogue": [
+        {
+          "speaker": "SHI_JIN",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "兄长，我们看一看。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "reveal",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "分开人众，白地中间立着一个使枪棒卖药的汉子，脚边摊十数个膏药、一盘上插着纸标儿，身侧倚着十来条棍棒。",
+      "characters": [],
+      "character_bindings": [],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P002",
+      "spatial_relationships": "分开人众，白地中间立着一个使枪棒卖药的汉子，脚边摊十数个膏药、一盘上插着纸标儿，身侧倚着十来条棍棒。",
+      "blocking": "分开人众，白地中间立着一个使枪棒卖药的汉子，脚边摊十数个膏药、一盘上插着纸标儿，身侧倚着十来条棍棒。",
+      "staging": "分开人众，白地中间立着一个使枪棒卖药的汉子，脚边摊十数个膏药、一盘上插着纸标儿，身侧倚着十来条棍棒。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "本格无具名角色，围观者与店伙计按无名配角处理，不继承任何具名身份。"
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "recognition",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "史进认出那张脸——正是当年教他开手的师父，江湖上唤作“打虎将”李忠。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P003",
+      "spatial_relationships": "史进认出那张脸——正是当年教他开手的师父，江湖上唤作“打虎将”李忠。",
+      "blocking": "史进认出那张脸——正是当年教他开手的师父，江湖上唤作“打虎将”李忠。",
+      "staging": "史进认出那张脸——正是当年教他开手的师父，江湖上唤作“打虎将”李忠。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "reunion",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "师父，多时不见！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "史进在人丛中扬手叫唤，李忠握着棍棒回头，认出这张久违的面孔。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P004",
+      "spatial_relationships": "史进在人丛中扬手叫唤，李忠握着棍棒回头，认出这张久违的面孔。",
+      "blocking": "史进在人丛中扬手叫唤，李忠握着棍棒回头，认出这张久违的面孔。",
+      "staging": "史进在人丛中扬手叫唤，李忠握着棍棒回头，认出这张久违的面孔。",
+      "dialogue": [
+        {
+          "speaker": "SHI_JIN",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "师父，多时不见！"
+        },
+        {
+          "speaker": "LI_ZHONG",
+          "speaker_id": "CHAR_LI_ZHONG",
+          "text_target": "贤弟，如何到这里？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "friction",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "待小子卖了膏药，讨了回钱，一同和提辖去。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达大手一挥要拉两人去吃酒，李忠却指着一地膏药面露难色，鲁达眉头立起。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P005",
+      "spatial_relationships": "鲁达大手一挥要拉两人去吃酒，李忠却指着一地膏药面露难色，鲁达眉头立起。",
+      "blocking": "鲁达大手一挥要拉两人去吃酒，李忠却指着一地膏药面露难色，鲁达眉头立起。",
+      "staging": "鲁达大手一挥要拉两人去吃酒，李忠却指着一地膏药面露难色，鲁达眉头立起。",
+      "dialogue": [
+        {
+          "speaker": "LI_ZHONG",
+          "speaker_id": "CHAR_LI_ZHONG",
+          "text_target": "待小子卖了膏药，讨了回钱，一同和提辖去。"
+        },
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "谁耐烦等你？去便同去！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "escalation",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "不去的，洒家便打！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达伸手把看热闹的人一推一交推得东倒西歪，粗声喝骂，围观圈瞬间散裂。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P006",
+      "spatial_relationships": "鲁达伸手把看热闹的人一推一交推得东倒西歪，粗声喝骂，围观圈瞬间散裂。",
+      "blocking": "鲁达伸手把看热闹的人一推一交推得东倒西歪，粗声喝骂，围观圈瞬间散裂。",
+      "staging": "鲁达伸手把看热闹的人一推一交推得东倒西歪，粗声喝骂，围观圈瞬间散裂。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "不去的，洒家便打！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [
+        {
+          "text_target": "哄——"
+        }
+      ],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "consequence",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "好急性的人。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "众人认得是鲁提辖，一哄都走；李忠敢怒不敢言，只得陪着笑收拢药囊。",
+      "characters": [
+        "CHAR_LI_ZHONG",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P007",
+      "spatial_relationships": "众人认得是鲁提辖，一哄都走；李忠敢怒不敢言，只得陪着笑收拢药囊。",
+      "blocking": "众人认得是鲁提辖，一哄都走；李忠敢怒不敢言，只得陪着笑收拢药囊。",
+      "staging": "众人认得是鲁提辖，一哄都走；李忠敢怒不敢言，只得陪着笑收拢药囊。",
+      "dialogue": [
+        {
+          "speaker": "LI_ZHONG",
+          "speaker_id": "CHAR_LI_ZHONG",
+          "text_target": "好急性的人。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_LI_ZHONG",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "transition",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "李忠把膏药盘、纸标儿和行头收进药囊，将十来条棍棒寄顿在街边铺檐下。",
+      "characters": [
+        "CHAR_LI_ZHONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018"
+      ],
+      "location": "LOC_WEIZHOU_STREET",
+      "scene_anchor_id": "LOC_WEIZHOU_STREET",
+      "spatial_layout": "城门在画下，六街三市向画上展开，州桥与酒楼望竿在画右，肉铺方向在画左上。",
+      "lighting_anchor": "午后柔暖日光从画左入，街巷阴影清楚，屋檐投影压住路面。",
+      "axis_eyeline": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "continuity_from": "P008",
+      "spatial_relationships": "李忠把膏药盘、纸标儿和行头收进药囊，将十来条棍棒寄顿在街边铺檐下。",
+      "blocking": "李忠把膏药盘、纸标儿和行头收进药囊，将十来条棍棒寄顿在街边铺檐下。",
+      "staging": "李忠把膏药盘、纸标儿和行头收进药囊，将十来条棍棒寄顿在街边铺檐下。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_WEIZHOU_STREET",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_WEIZHOU_STREET",
+        "CHAR_LI_ZHONG"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达一行由画下向画上穿街，围观人群面朝画心的白地。",
+      "character_integrity": "CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "establishing",
+      "source_excerpt": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同；S019：風拂煙籠錦斾揚，太平時節日初長。",
+      "meaning_zh": "S018：兩個挽了肐膊，出了茶坊來，上街行得三五十步，只見一簇眾人圍住白地上。史進道：「兄長，我們看一看。」分開人眾看時，中間裹一個人，仗著十來條棍棒；地上攤著十數個膏藥，一盤子盛著，插把紙標兒在上面，卻原來是江湖上使鎗棒賣藥的。史進看了，卻認的他，原來是教史進開手的師父，叫做「打虎將」李忠。史進就人叢中叫道：「師父，多時不見。」李忠道：「賢弟，如何到這裏？」魯提轄道：「既是史大郎的師父，同和俺去喫三杯。」李忠道：「待小子賣了膏藥，討了回錢，一同；S019：風拂煙籠錦斾揚，太平時節日初長。",
+      "text_target": "州桥下，潘家酒楼。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "三人转弯抹角来到州桥之下，潘家酒店门前望竿高挑，酒旆漾在空中飘荡。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S018",
+        "S019"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P009",
+      "spatial_relationships": "三人转弯抹角来到州桥之下，潘家酒店门前望竿高挑，酒旆漾在空中飘荡。",
+      "blocking": "三人转弯抹角来到州桥之下，潘家酒店门前望竿高挑，酒旆漾在空中飘荡。",
+      "staging": "三人转弯抹角来到州桥之下，潘家酒店门前望竿高挑，酒旆漾在空中飘荡。",
+      "dialogue": [],
+      "narration": "州桥下，潘家酒楼。",
+      "narration_target": "州桥下，潘家酒楼。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "atmosphere",
+      "source_excerpt": "S020：能添壯士英雄膽，善解佳人愁悶腸。；S021：三尺曉垂楊柳外，一竿斜插杏花旁。；S022：男兒未遂平生志，且樂高歌入醉鄉。",
+      "meaning_zh": "S020：能添壯士英雄膽，善解佳人愁悶腸。；S021：三尺曉垂楊柳外，一竿斜插杏花旁。；S022：男兒未遂平生志，且樂高歌入醉鄉。",
+      "text_target": "太平时节日初长。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "杨柳与杏花之间锦旆招展，日影初长，一派太平时节的市井酒肆远景。",
+      "characters": [],
+      "character_bindings": [],
+      "source_segment_refs": [
+        "S020",
+        "S021",
+        "S022"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P010",
+      "spatial_relationships": "杨柳与杏花之间锦旆招展，日影初长，一派太平时节的市井酒肆远景。",
+      "blocking": "杨柳与杏花之间锦旆招展，日影初长，一派太平时节的市井酒肆远景。",
+      "staging": "杨柳与杏花之间锦旆招展，日影初长，一派太平时节的市井酒肆远景。",
+      "dialogue": [],
+      "narration": "太平时节日初长。",
+      "narration_target": "太平时节日初长。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "本格无具名角色，围观者与店伙计按无名配角处理，不继承任何具名身份。"
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "seating",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "上到楼上拣个济楚阁儿坐下：鲁达坐了主位，李忠对席，史进下首。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P011",
+      "spatial_relationships": "上到楼上拣个济楚阁儿坐下：鲁达坐了主位，李忠对席，史进下首。",
+      "blocking": "上到楼上拣个济楚阁儿坐下：鲁达坐了主位，李忠对席，史进下首。",
+      "staging": "上到楼上拣个济楚阁儿坐下：鲁达坐了主位，李忠对席，史进下首。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "order",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "先打四角酒来，但有下饭，只顾卖来！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "酒保上前唱喏，认得是鲁提辖；鲁达把手一摆，只顾叫酒叫肉。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P012",
+      "spatial_relationships": "酒保上前唱喏，认得是鲁提辖；鲁达把手一摆，只顾叫酒叫肉。",
+      "blocking": "酒保上前唱喏，认得是鲁提辖；鲁达把手一摆，只顾叫酒叫肉。",
+      "staging": "酒保上前唱喏，认得是鲁提辖；鲁达把手一摆，只顾叫酒叫肉。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "先打四角酒来，但有下饭，只顾卖来！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "camaraderie",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "一桌菜蔬果品按酒摆开，三人酒至数杯，比划着枪法说得入港。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P013",
+      "spatial_relationships": "一桌菜蔬果品按酒摆开，三人酒至数杯，比划着枪法说得入港。",
+      "blocking": "一桌菜蔬果品按酒摆开，三人酒至数杯，比划着枪法说得入港。",
+      "staging": "一桌菜蔬果品按酒摆开，三人酒至数杯，比划着枪法说得入港。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "disruption",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "隔壁阁子里传出哽哽咽咽的啼哭，声音穿过板壁，三人笑声一顿。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P014",
+      "spatial_relationships": "隔壁阁子里传出哽哽咽咽的啼哭，声音穿过板壁，三人笑声一顿。",
+      "blocking": "隔壁阁子里传出哽哽咽咽的啼哭，声音穿过板壁，三人笑声一顿。",
+      "staging": "隔壁阁子里传出哽哽咽咽的啼哭，声音穿过板壁，三人笑声一顿。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [
+        {
+          "text_target": "呜——咽——"
+        }
+      ],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "anger",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达一把将碟儿盏儿尽数掼在楼板上，碎瓷四溅，酒水横流。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P015",
+      "spatial_relationships": "鲁达一把将碟儿盏儿尽数掼在楼板上，碎瓷四溅，酒水横流。",
+      "blocking": "鲁达一把将碟儿盏儿尽数掼在楼板上，碎瓷四溅，酒水横流。",
+      "staging": "鲁达一把将碟儿盏儿尽数掼在楼板上，碎瓷四溅，酒水横流。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [
+        {
+          "text_target": "哐啷！"
+        }
+      ],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P017",
+      "story_function": "confrontation",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "却教甚么人在间壁吱吱地哭，搅俺弟兄吃酒？",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "酒保慌忙上楼抄手陪话，鲁达气愤愤地瞪着他，指向那道板壁。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P016",
+      "spatial_relationships": "酒保慌忙上楼抄手陪话，鲁达气愤愤地瞪着他，指向那道板壁。",
+      "blocking": "酒保慌忙上楼抄手陪话，鲁达气愤愤地瞪着他，指向那道板壁。",
+      "staging": "酒保慌忙上楼抄手陪话，鲁达气愤愤地瞪着他，指向那道板壁。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "却教甚么人在间壁吱吱地哭，搅俺弟兄吃酒？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P018",
+      "story_function": "summon",
+      "source_excerpt": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "meaning_zh": "S023：三人上到潘家酒樓上，揀個濟楚閣兒裏坐下。魯提轄坐了主位，李忠對席，史進下首坐了。酒保唱了喏，認得是魯提轄，便道：「提轄官人，打多少酒？」魯達道：「先打四角酒來，一面鋪下菜蔬，果品，按酒。」又問道：「官人，喫甚下飯？」魯達道：「問甚麼？但有，只顧賣來，一發算錢還你。這廝只顧來聒噪。」酒保下去，隨即燙酒上來；但是下口肉食，只顧將來，擺一桌子。三個酒至數杯，正說些閒話，較量些鎗法，說得入港，只聽得隔壁閣子裏有人哽哽咽咽啼哭。魯達焦躁，便把碟兒",
+      "text_target": "可是作怪！你与我唤的他来。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "酒保躬身解说那是绰酒座儿唱曲的父女两人；鲁达抬手一挥，命他把人唤来。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S023"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P017",
+      "spatial_relationships": "酒保躬身解说那是绰酒座儿唱曲的父女两人；鲁达抬手一挥，命他把人唤来。",
+      "blocking": "酒保躬身解说那是绰酒座儿唱曲的父女两人；鲁达抬手一挥，命他把人唤来。",
+      "staging": "酒保躬身解说那是绰酒座儿唱曲的父女两人；鲁达抬手一挥，命他把人唤来。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "可是作怪！你与我唤的他来。"
+        }
+      ],
+      "narration": "唱曲的父子两人，一时间自苦了啼哭。",
+      "narration_target": "唱曲的父子两人，一时间自苦了啼哭。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P019",
+      "story_function": "entrance",
+      "source_excerpt": "S024：酒保去叫，不多時，只見兩個到來：前面一個十八九歲的婦人，背後一個五六十歲的老兒，手裏拿串拍板，都來到面前。看那婦人，雖無十分的容貌，也有些動人的顏色。但見：",
+      "meaning_zh": "S024：酒保去叫，不多時，只見兩個到來：前面一個十八九歲的婦人，背後一個五六十歲的老兒，手裏拿串拍板，都來到面前。看那婦人，雖無十分的容貌，也有些動人的顏色。但見：",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "阁儿门口进来两人：前面一个十八九岁的妇人，背后一个五六十岁的老儿，手里拿着一串拍板。",
+      "characters": [
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S024"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P018",
+      "spatial_relationships": "阁儿门口进来两人：前面一个十八九岁的妇人，背后一个五六十岁的老儿，手里拿着一串拍板。",
+      "blocking": "阁儿门口进来两人：前面一个十八九岁的妇人，背后一个五六十岁的老儿，手里拿着一串拍板。",
+      "staging": "阁儿门口进来两人：前面一个十八九岁的妇人，背后一个五六十岁的老儿，手里拿着一串拍板。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P020",
+      "story_function": "character_reveal",
+      "source_excerpt": "S025：鬅鬆雲髻，插一枝青玉簪兒；；S026：嬝娜纖腰，繫六幅紅羅裙子。",
+      "meaning_zh": "S025：鬅鬆雲髻，插一枝青玉簪兒；；S026：嬝娜纖腰，繫六幅紅羅裙子。",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "近景看那妇人：鬅鬆云髻上插一枝青玉簪儿，纤腰系着六幅红罗裙子。",
+      "characters": [
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S025",
+        "S026"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P019",
+      "spatial_relationships": "近景看那妇人：鬅鬆云髻上插一枝青玉簪儿，纤腰系着六幅红罗裙子。",
+      "blocking": "近景看那妇人：鬅鬆云髻上插一枝青玉簪儿，纤腰系着六幅红罗裙子。",
+      "staging": "近景看那妇人：鬅鬆云髻上插一枝青玉簪儿，纤腰系着六幅红罗裙子。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P021",
+      "story_function": "character_reveal",
+      "source_excerpt": "S027：素白舊衫籠雪體，淡黃軟襪襯弓鞋。；S028：蛾眉緊蹙，汪汪淚眼落珍珠；；S029：粉面低垂，細細香肌消玉雪。；S030：若非雨病雲愁，定是懷憂積恨。",
+      "meaning_zh": "S027：素白舊衫籠雪體，淡黃軟襪襯弓鞋。；S028：蛾眉緊蹙，汪汪淚眼落珍珠；；S029：粉面低垂，細細香肌消玉雪。；S030：若非雨病雲愁，定是懷憂積恨。",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "素白旧衫笼着清瘦身形，淡黄软袜配弓鞋；蛾眉紧蹙、粉面低垂，泪珠落在衣襟上。",
+      "characters": [
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S027",
+        "S028",
+        "S029",
+        "S030"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P020",
+      "spatial_relationships": "素白旧衫笼着清瘦身形，淡黄软袜配弓鞋；蛾眉紧蹙、粉面低垂，泪珠落在衣襟上。",
+      "blocking": "素白旧衫笼着清瘦身形，淡黄软袜配弓鞋；蛾眉紧蹙、粉面低垂，泪珠落在衣襟上。",
+      "staging": "素白旧衫笼着清瘦身形，淡黄软袜配弓鞋；蛾眉紧蹙、粉面低垂，泪珠落在衣襟上。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P022",
+      "story_function": "greeting",
+      "source_excerpt": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "meaning_zh": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "text_target": "你两个是那里人家？为甚啼哭？",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "妇人拭着眼泪上前深深道了三个万福，老儿也在一旁相见；鲁达按案发问。",
+      "characters": [
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S031"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P021",
+      "spatial_relationships": "妇人拭着眼泪上前深深道了三个万福，老儿也在一旁相见；鲁达按案发问。",
+      "blocking": "妇人拭着眼泪上前深深道了三个万福，老儿也在一旁相见；鲁达按案发问。",
+      "staging": "妇人拭着眼泪上前深深道了三个万福，老儿也在一旁相见；鲁达按案发问。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "你两个是那里人家？为甚啼哭？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P023",
+      "story_function": "testimony",
+      "source_excerpt": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "meaning_zh": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "text_target": "奴家是东京人氏，来这渭州投奔亲眷，不想搬移南京去了。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "翠莲垂手回话：本是东京人氏，随父母来渭州投奔亲眷，亲眷却已搬去南京。",
+      "characters": [
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S031"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P022",
+      "spatial_relationships": "翠莲垂手回话：本是东京人氏，随父母来渭州投奔亲眷，亲眷却已搬去南京。",
+      "blocking": "翠莲垂手回话：本是东京人氏，随父母来渭州投奔亲眷，亲眷却已搬去南京。",
+      "staging": "翠莲垂手回话：本是东京人氏，随父母来渭州投奔亲眷，亲眷却已搬去南京。",
+      "dialogue": [
+        {
+          "speaker": "JIN_CUILIAN",
+          "speaker_id": "CHAR_JIN_CUILIAN",
+          "text_target": "奴家是东京人氏，来这渭州投奔亲眷，不想搬移南京去了。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P024",
+      "story_function": "reveal",
+      "source_excerpt": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "meaning_zh": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "text_target": "写了三千贯文书，虚钱实契，要了奴家身体。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "母亲染病死在客店，父女流落此地；本地财主“镇关西”郑大官人使强媒硬保，写三千贯虚钱实契要了她身体。",
+      "characters": [
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S031"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P023",
+      "spatial_relationships": "母亲染病死在客店，父女流落此地；本地财主“镇关西”郑大官人使强媒硬保，写三千贯虚钱实契要了她身体。",
+      "blocking": "母亲染病死在客店，父女流落此地；本地财主“镇关西”郑大官人使强媒硬保，写三千贯虚钱实契要了她身体。",
+      "staging": "母亲染病死在客店，父女流落此地；本地财主“镇关西”郑大官人使强媒硬保，写三千贯虚钱实契要了她身体。",
+      "dialogue": [
+        {
+          "speaker": "JIN_CUILIAN",
+          "speaker_id": "CHAR_JIN_CUILIAN",
+          "text_target": "写了三千贯文书，虚钱实契，要了奴家身体。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P025",
+      "story_function": "testimony",
+      "source_excerpt": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "meaning_zh": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "text_target": "未及三个月，被他家大娘子赶打出来。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "未及三个月，郑家大娘子生生把她赶打出来，不容完聚。",
+      "characters": [
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S031"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P024",
+      "spatial_relationships": "未及三个月，郑家大娘子生生把她赶打出来，不容完聚。",
+      "blocking": "未及三个月，郑家大娘子生生把她赶打出来，不容完聚。",
+      "staging": "未及三个月，郑家大娘子生生把她赶打出来，不容完聚。",
+      "dialogue": [],
+      "narration": "未及三个月，被他家大娘子赶打出来。",
+      "narration_target": "未及三个月，被他家大娘子赶打出来。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P026",
+      "story_function": "testimony",
+      "source_excerpt": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "meaning_zh": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "text_target": "当初不曾得他一文，如今那讨钱来还他？",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "店主人被著落追要原典身钱三千贯，老父懦弱，和他争执不得。",
+      "characters": [
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S031"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P025",
+      "spatial_relationships": "店主人被著落追要原典身钱三千贯，老父懦弱，和他争执不得。",
+      "blocking": "店主人被著落追要原典身钱三千贯，老父懦弱，和他争执不得。",
+      "staging": "店主人被著落追要原典身钱三千贯，老父懦弱，和他争执不得。",
+      "dialogue": [
+        {
+          "speaker": "JIN_CUILIAN",
+          "speaker_id": "CHAR_JIN_CUILIAN",
+          "text_target": "当初不曾得他一文，如今那讨钱来还他？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P027",
+      "story_function": "testimony",
+      "source_excerpt": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "meaning_zh": "S031：那婦人拭著眼淚，向前來深深的道了三個萬福。那老兒也都相見了。魯達問道：「你兩個是那裏人家？為甚啼哭？」那婦人便道：「官人不知，容奴告稟：奴家是東京人氏。因同父母來這渭州，投奔親眷，不想搬移南京去了。母親在客店裏染病身故，子父二人，流落在此生受。此間有個財主，叫做『鎮關西』鄭大官人，因見奴家，便使強媒硬保，要奴作妾。誰想寫了三千貫文書，虛錢實契，要了奴家身體。未及三個月，他家大娘子好生利害，將奴趕打出來，不容完聚，著落店主人家追要原典身錢",
+      "text_target": "怕他来讨时受羞耻，想起这苦楚来，无处告诉。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "父女只得在酒楼趕座子唱曲，每日所得大半还债；这两日酒客稀少，违了钱限。",
+      "characters": [
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S031"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P026",
+      "spatial_relationships": "父女只得在酒楼趕座子唱曲，每日所得大半还债；这两日酒客稀少，违了钱限。",
+      "blocking": "父女只得在酒楼趕座子唱曲，每日所得大半还债；这两日酒客稀少，违了钱限。",
+      "staging": "父女只得在酒楼趕座子唱曲，每日所得大半还债；这两日酒客稀少，违了钱限。",
+      "dialogue": [
+        {
+          "speaker": "JIN_CUILIAN",
+          "speaker_id": "CHAR_JIN_CUILIAN",
+          "text_target": "怕他来讨时受羞耻，想起这苦楚来，无处告诉。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P028",
+      "story_function": "inquiry",
+      "source_excerpt": "S032：魯提轄又問道：「你姓甚麼？在那個客店裏歇？那個『鎮關西』鄭大官人在那裏住？」；S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "meaning_zh": "S032：魯提轄又問道：「你姓甚麼？在那個客店裏歇？那個『鎮關西』鄭大官人在那裏住？」；S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "text_target": "你姓甚么？那个“镇关西”郑大官人在那里住？",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达沉着脸追问姓名住处，老儿躬身作答。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_JIN_LAO"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S032",
+        "S033"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P027",
+      "spatial_relationships": "鲁达沉着脸追问姓名住处，老儿躬身作答。",
+      "blocking": "鲁达沉着脸追问姓名住处，老儿躬身作答。",
+      "staging": "鲁达沉着脸追问姓名住处，老儿躬身作答。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "你姓甚么？那个“镇关西”郑大官人在那里住？"
+        },
+        {
+          "speaker": "JIN_LAO",
+          "speaker_id": "CHAR_JIN_LAO",
+          "text_target": "老汉姓金，孩儿小字翠莲。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_JIN_LAO"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P029",
+      "story_function": "reveal",
+      "source_excerpt": "S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "meaning_zh": "S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "text_target": "郑大官人，便是状元桥下卖肉的郑屠。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "老儿说出实情：那郑大官人便是状元桥下卖肉的郑屠。鲁达一听，脸色骤变。",
+      "characters": [
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S033"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P028",
+      "spatial_relationships": "老儿说出实情：那郑大官人便是状元桥下卖肉的郑屠。鲁达一听，脸色骤变。",
+      "blocking": "老儿说出实情：那郑大官人便是状元桥下卖肉的郑屠。鲁达一听，脸色骤变。",
+      "staging": "老儿说出实情：那郑大官人便是状元桥下卖肉的郑屠。鲁达一听，脸色骤变。",
+      "dialogue": [
+        {
+          "speaker": "JIN_LAO",
+          "speaker_id": "CHAR_JIN_LAO",
+          "text_target": "郑大官人，便是状元桥下卖肉的郑屠。"
+        },
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "呸！俺只道那个郑大官人，却原来是杀猪的郑屠！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_JIN_LAO",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P030",
+      "story_function": "rage",
+      "source_excerpt": "S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "meaning_zh": "S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "text_target": "你两个且在这里，等洒家去打死了那厮便来！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达猛地跳起，撞得酒桌一晃，回头看着史进、李忠撂下一句就要下楼。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S033"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P029",
+      "spatial_relationships": "鲁达猛地跳起，撞得酒桌一晃，回头看着史进、李忠撂下一句就要下楼。",
+      "blocking": "鲁达猛地跳起，撞得酒桌一晃，回头看着史进、李忠撂下一句就要下楼。",
+      "staging": "鲁达猛地跳起，撞得酒桌一晃，回头看着史进、李忠撂下一句就要下楼。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "你两个且在这里，等洒家去打死了那厮便来！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P031",
+      "story_function": "restraint",
+      "source_excerpt": "S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "meaning_zh": "S033：老兒答道：「老漢姓金，排行第二；孩兒小字翠蓮；鄭大官人，便是此間狀元橋下賣肉的鄭屠，綽號鎮關西。老漢父子兩個，只在前面東門裏魯家客店安下。」魯達聽了道：「呸！俺只道那個鄭大官人，卻原來是殺豬的鄭屠。這個腌臢潑才，投托著俺小种經略相公門下做個肉鋪戶，卻原來這等欺負人！」回頭看著李忠，史進道：「你兩個且在這裏，等洒家去打死了那廝便來。」史進，李忠抱住勸道：「哥哥息怒，明日卻理會。」兩個三回五次勸得他住。",
+      "text_target": "哥哥息怒，明日却理会。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "史进、李忠一左一右抱住鲁达臂膀，三回五次劝他坐下。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S033"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P030",
+      "spatial_relationships": "史进、李忠一左一右抱住鲁达臂膀，三回五次劝他坐下。",
+      "blocking": "史进、李忠一左一右抱住鲁达臂膀，三回五次劝他坐下。",
+      "staging": "史进、李忠一左一右抱住鲁达臂膀，三回五次劝他坐下。",
+      "dialogue": [
+        {
+          "speaker": "SHI_JIN",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "哥哥息怒，明日却理会。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P032",
+      "story_function": "resolve",
+      "source_excerpt": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "meaning_zh": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "text_target": "洒家与你些盘缠，明日便回东京去如何？",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达重新落座，转向金老，语气一转，说要给父女些盘缠回东京。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S034"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P031",
+      "spatial_relationships": "鲁达重新落座，转向金老，语气一转，说要给父女些盘缠回东京。",
+      "blocking": "鲁达重新落座，转向金老，语气一转，说要给父女些盘缠回东京。",
+      "staging": "鲁达重新落座，转向金老，语气一转，说要给父女些盘缠回东京。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "洒家与你些盘缠，明日便回东京去如何？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P033",
+      "story_function": "generosity",
+      "source_excerpt": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "meaning_zh": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "text_target": "洒家今日不曾多带得些出来，你有银子，借些与俺。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达从身边摸出五两来银子放在桌上，见不够，回头向史进开口借。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S034"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P032",
+      "spatial_relationships": "鲁达从身边摸出五两来银子放在桌上，见不够，回头向史进开口借。",
+      "blocking": "鲁达从身边摸出五两来银子放在桌上，见不够，回头向史进开口借。",
+      "staging": "鲁达从身边摸出五两来银子放在桌上，见不够，回头向史进开口借。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "洒家今日不曾多带得些出来，你有银子，借些与俺。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P034",
+      "story_function": "generosity",
+      "source_excerpt": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "meaning_zh": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "text_target": "直甚么，要哥哥还！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "史进解开包裹取出一锭十两银子拍在桌上，眼也不眨；李忠迟疑着摸出二两来。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S034"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P033",
+      "spatial_relationships": "史进解开包裹取出一锭十两银子拍在桌上，眼也不眨；李忠迟疑着摸出二两来。",
+      "blocking": "史进解开包裹取出一锭十两银子拍在桌上，眼也不眨；李忠迟疑着摸出二两来。",
+      "staging": "史进解开包裹取出一锭十两银子拍在桌上，眼也不眨；李忠迟疑着摸出二两来。",
+      "dialogue": [
+        {
+          "speaker": "SHI_JIN",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "直甚么，要哥哥还！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P035",
+      "story_function": "judgement",
+      "source_excerpt": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "meaning_zh": "S034：魯達又道：「老兒，你來，洒家與你些盤纏，明日便回東京去如何？」父子兩個告道：「若是能勾回鄉去時，便是重生父母，再長爺娘。只是店主人家如何肯放？鄭大官人須著落他要錢。」魯提轄道：「這個不妨事，俺自有道理。」便去身邊摸出五兩來銀子，放在桌上，看著史進道：「洒家今日不曾多帶得些出來，你有銀子，借些與俺，洒家明日便送還你。」史進道：「直甚麼，要哥哥還。」去包裹裏取出一綻十兩銀子，放在桌上。魯達看著李忠道：「你也借些出來與洒家。」李忠去身邊摸出二",
+      "text_target": "也是个不爽利的人。俺明日清早来，看那个店主人敢留你！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达把那二两银子径直丢还李忠，只将十五两推到金老面前，吩咐明早来发付。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S034"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P034",
+      "spatial_relationships": "鲁达把那二两银子径直丢还李忠，只将十五两推到金老面前，吩咐明早来发付。",
+      "blocking": "鲁达把那二两银子径直丢还李忠，只将十五两推到金老面前，吩咐明早来发付。",
+      "staging": "鲁达把那二两银子径直丢还李忠，只将十五两推到金老面前，吩咐明早来发付。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "也是个不爽利的人。俺明日清早来，看那个店主人敢留你！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_LI_ZHONG",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P036",
+      "story_function": "parting",
+      "source_excerpt": "S035：魯達把這二兩銀子丟還了李忠。三人再喫了兩角酒，下樓來叫道：「主人家，酒錢洒家明日重送來還你。」主人家連聲應道：「提轄只顧自去，但喫不妨，只怕提轄不來賒。」三個人出了潘家酒肆，到街上分手，史進，李忠各自投客店去了。只說魯提轄回到經略府前下處，到房裏，晚飯也不喫，氣憤憤的睡了。主人家又不敢問他。",
+      "meaning_zh": "S035：魯達把這二兩銀子丟還了李忠。三人再喫了兩角酒，下樓來叫道：「主人家，酒錢洒家明日重送來還你。」主人家連聲應道：「提轄只顧自去，但喫不妨，只怕提轄不來賒。」三個人出了潘家酒肆，到街上分手，史進，李忠各自投客店去了。只說魯提轄回到經略府前下處，到房裏，晚飯也不喫，氣憤憤的睡了。主人家又不敢問他。",
+      "text_target": "那一夜，鲁提辖翻来覆去，睡不安稳。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "金老父女拜谢下楼；三人也出了酒肆在街上分手，鲁达独自回下处，晚饭也不吃，气愤愤地睡了。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LI_ZHONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S035"
+      ],
+      "location": "LOC_PAN_TAVERN",
+      "scene_anchor_id": "LOC_PAN_TAVERN",
+      "spatial_layout": "州桥在画下，酒楼门面与望竿在画中，二层济楚阁儿在画上；阁内窗在画左、板壁在画右、酒桌居中。",
+      "lighting_anchor": "白日窗光由画左斜入照亮酒桌，阁内深处与板壁一侧留暖褐暗部。",
+      "axis_eyeline": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "continuity_from": "P035",
+      "spatial_relationships": "金老父女拜谢下楼；三人也出了酒肆在街上分手，鲁达独自回下处，晚饭也不吃，气愤愤地睡了。",
+      "blocking": "金老父女拜谢下楼；三人也出了酒肆在街上分手，鲁达独自回下处，晚饭也不吃，气愤愤地睡了。",
+      "staging": "金老父女拜谢下楼；三人也出了酒肆在街上分手，鲁达独自回下处，晚饭也不吃，气愤愤地睡了。",
+      "dialogue": [],
+      "narration": "那一夜，鲁提辖翻来覆去，睡不安稳。",
+      "narration_target": "那一夜，鲁提辖翻来覆去，睡不安稳。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PAN_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PAN_TAVERN",
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_LI_ZHONG",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达坐主位面向画下，李忠对席在画左，史进下首在画右；哭声来自画右板壁之外。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LI_ZHONG继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P037",
+      "story_function": "preparation",
+      "source_excerpt": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "meaning_zh": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "金老得了十五两银子回到客店安顿女儿，又出城远处觅下一辆车儿。",
+      "characters": [
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S036"
+      ],
+      "location": "LOC_LU_INN",
+      "scene_anchor_id": "LOC_LU_INN",
+      "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+      "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+      "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "continuity_from": "P036",
+      "spatial_relationships": "金老得了十五两银子回到客店安顿女儿，又出城远处觅下一辆车儿。",
+      "blocking": "金老得了十五两银子回到客店安顿女儿，又出城远处觅下一辆车儿。",
+      "staging": "金老得了十五两银子回到客店安顿女儿，又出城远处觅下一辆车儿。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_LU_INN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LU_INN",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "character_integrity": "CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P038",
+      "story_function": "preparation",
+      "source_excerpt": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "meaning_zh": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "次早五更，父女起来打火做饭，还了房宿钱，收拾停当只等天明。",
+      "characters": [
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S036"
+      ],
+      "location": "LOC_LU_INN",
+      "scene_anchor_id": "LOC_LU_INN",
+      "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+      "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+      "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "continuity_from": "P037",
+      "spatial_relationships": "次早五更，父女起来打火做饭，还了房宿钱，收拾停当只等天明。",
+      "blocking": "次早五更，父女起来打火做饭，还了房宿钱，收拾停当只等天明。",
+      "staging": "次早五更，父女起来打火做饭，还了房宿钱，收拾停当只等天明。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_LU_INN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LU_INN",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "character_integrity": "CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P039",
+      "story_function": "arrival",
+      "source_excerpt": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "meaning_zh": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "text_target": "那里是金老歇处？",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "天色微明，鲁达大踏步走进店堂，一声高叫惊起满店灯影。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S036"
+      ],
+      "location": "LOC_LU_INN",
+      "scene_anchor_id": "LOC_LU_INN",
+      "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+      "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+      "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "continuity_from": "P038",
+      "spatial_relationships": "天色微明，鲁达大踏步走进店堂，一声高叫惊起满店灯影。",
+      "blocking": "天色微明，鲁达大踏步走进店堂，一声高叫惊起满店灯影。",
+      "staging": "天色微明，鲁达大踏步走进店堂，一声高叫惊起满店灯影。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "那里是金老歇处？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_LU_INN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LU_INN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P040",
+      "story_function": "obstruction",
+      "source_excerpt": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "meaning_zh": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "text_target": "郑屠的钱，洒家自还他。你放这老儿还乡去！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "金老引女挑担才到门边，客店伙计横身拦住，指着门外说郑大官人的典身钱著落在他身上。",
+      "characters": [
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIN_LAO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIN_CUILIAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S036"
+      ],
+      "location": "LOC_LU_INN",
+      "scene_anchor_id": "LOC_LU_INN",
+      "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+      "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+      "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "continuity_from": "P039",
+      "spatial_relationships": "金老引女挑担才到门边，客店伙计横身拦住，指着门外说郑大官人的典身钱著落在他身上。",
+      "blocking": "金老引女挑担才到门边，客店伙计横身拦住，指着门外说郑大官人的典身钱著落在他身上。",
+      "staging": "金老引女挑担才到门边，客店伙计横身拦住，指着门外说郑大官人的典身钱著落在他身上。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "郑屠的钱，洒家自还他。你放这老儿还乡去！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_LU_INN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LU_INN",
+        "CHAR_JIN_LAO",
+        "CHAR_JIN_CUILIAN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "character_integrity": "CHAR_JIN_LAO继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_JIN_CUILIAN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P041",
+      "story_function": "violence",
+      "source_excerpt": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "meaning_zh": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "text_target": "",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达揸开五指一掌掴去，那伙计被打得转身踉跄扑向柜台；画面以挥掌动势、飞起的抹布与倾倒的凳子表现冲击结果，不作血腥特写。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S036"
+      ],
+      "location": "LOC_LU_INN",
+      "scene_anchor_id": "LOC_LU_INN",
+      "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+      "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+      "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "continuity_from": "P040",
+      "spatial_relationships": "鲁达揸开五指一掌掴去，那伙计被打得转身踉跄扑向柜台；画面以挥掌动势、飞起的抹布与倾倒的凳子表现冲击结果，不作血腥特写。",
+      "blocking": "鲁达揸开五指一掌掴去，那伙计被打得转身踉跄扑向柜台；画面以挥掌动势、飞起的抹布与倾倒的凳子表现冲击结果，不作血腥特写。",
+      "staging": "鲁达揸开五指一掌掴去，那伙计被打得转身踉跄扑向柜台；画面以挥掌动势、飞起的抹布与倾倒的凳子表现冲击结果，不作血腥特写。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [
+        {
+          "text_target": "啪！"
+        }
+      ],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_LU_INN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LU_INN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P042",
+      "story_function": "departure",
+      "source_excerpt": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "meaning_zh": "S036：再說金老得了這一十五兩銀子，回到店中，安頓了女兒。先去城外遠處覓下一輛車兒，回來收拾了行李，還了房宿錢，算清了柴米錢，只等來日天明。當夜無事，次早五更起來，子父兩個先打火做飯，喫罷，收拾了。天色微明，只見魯提轄大踏步走入店裏來，高聲叫道：「店小二，那裏是金老歇處？」小二哥道：「金公，提轄在此尋你。」金老開了房門，便道：「提轄官人，裏面請坐。」魯達道：「坐甚麼？你去便去，等甚麼？」金老引了女兒，挑了擔兒，作謝提轄，便待出門，店小二攔住道：",
+      "text_target": "约莫金公去得远了，鲁提辖方才起身。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "父女忙忙离店出城；鲁达却掇条凳子在店门口坐了两个时辰，直到算准车儿已走得远了才起身。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S036"
+      ],
+      "location": "LOC_LU_INN",
+      "scene_anchor_id": "LOC_LU_INN",
+      "spatial_layout": "客店门脸在画下，店堂长凳与柜台居中，客房门在画上；街道在画外画下。",
+      "lighting_anchor": "五更青灰天光由门口画下入，店内油灯暖光点在柜台一侧。",
+      "axis_eyeline": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "continuity_from": "P041",
+      "spatial_relationships": "父女忙忙离店出城；鲁达却掇条凳子在店门口坐了两个时辰，直到算准车儿已走得远了才起身。",
+      "blocking": "父女忙忙离店出城；鲁达却掇条凳子在店门口坐了两个时辰，直到算准车儿已走得远了才起身。",
+      "staging": "父女忙忙离店出城；鲁达却掇条凳子在店门口坐了两个时辰，直到算准车儿已走得远了才起身。",
+      "dialogue": [],
+      "narration": "约莫金公去得远了，鲁提辖方才起身。",
+      "narration_target": "约莫金公去得远了，鲁提辖方才起身。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_LU_INN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LU_INN",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "金老父女由画上房门走向画下店门，拦阻者横在中段，鲁达自画下门口切入。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P043",
+      "story_function": "arrival",
+      "source_excerpt": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "meaning_zh": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "text_target": "状元桥下。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "状元桥下郑屠肉铺开着两间门面，两副肉案上悬挂三五片猪肉，郑屠正在柜身内坐定看刀手卖肉。",
+      "characters": [
+        "CHAR_ZHENG_TU",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_ZHENG_TU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S037"
+      ],
+      "location": "LOC_ZHUANGYUAN_BRIDGE",
+      "scene_anchor_id": "LOC_ZHUANGYUAN_BRIDGE",
+      "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+      "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+      "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "continuity_from": "P042",
+      "spatial_relationships": "状元桥下郑屠肉铺开着两间门面，两副肉案上悬挂三五片猪肉，郑屠正在柜身内坐定看刀手卖肉。",
+      "blocking": "状元桥下郑屠肉铺开着两间门面，两副肉案上悬挂三五片猪肉，郑屠正在柜身内坐定看刀手卖肉。",
+      "staging": "状元桥下郑屠肉铺开着两间门面，两副肉案上悬挂三五片猪肉，郑屠正在柜身内坐定看刀手卖肉。",
+      "dialogue": [],
+      "narration": "状元桥下。",
+      "narration_target": "状元桥下。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_ZHUANGYUAN_BRIDGE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZHUANGYUAN_BRIDGE",
+        "CHAR_ZHENG_TU",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "character_integrity": "CHAR_ZHENG_TU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P044",
+      "story_function": "provocation",
+      "source_excerpt": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "meaning_zh": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "text_target": "要十斤精肉，切做臊子，不要见半点肥的。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达大剌剌坐在肉案边，要十斤精肉细细切做臊子，半点肥的都不许见；郑屠只得亲自动刀。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_ZHENG_TU"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHENG_TU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S037"
+      ],
+      "location": "LOC_ZHUANGYUAN_BRIDGE",
+      "scene_anchor_id": "LOC_ZHUANGYUAN_BRIDGE",
+      "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+      "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+      "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "continuity_from": "P043",
+      "spatial_relationships": "鲁达大剌剌坐在肉案边，要十斤精肉细细切做臊子，半点肥的都不许见；郑屠只得亲自动刀。",
+      "blocking": "鲁达大剌剌坐在肉案边，要十斤精肉细细切做臊子，半点肥的都不许见；郑屠只得亲自动刀。",
+      "staging": "鲁达大剌剌坐在肉案边，要十斤精肉细细切做臊子，半点肥的都不许见；郑屠只得亲自动刀。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "要十斤精肉，切做臊子，不要见半点肥的。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_ZHUANGYUAN_BRIDGE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZHUANGYUAN_BRIDGE",
+        "CHAR_LU_DA",
+        "CHAR_ZHENG_TU"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHENG_TU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P045",
+      "story_function": "provocation",
+      "source_excerpt": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "meaning_zh": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "text_target": "再要十斤寸金软骨，也要细细地剁做臊子。",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "十斤肥的切完，又要十斤寸金软骨；一早晨过去，郑屠满头是汗，笑意已经挂不住。",
+      "characters": [
+        "CHAR_ZHENG_TU",
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_ZHENG_TU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S037"
+      ],
+      "location": "LOC_ZHUANGYUAN_BRIDGE",
+      "scene_anchor_id": "LOC_ZHUANGYUAN_BRIDGE",
+      "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+      "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+      "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "continuity_from": "P044",
+      "spatial_relationships": "十斤肥的切完，又要十斤寸金软骨；一早晨过去，郑屠满头是汗，笑意已经挂不住。",
+      "blocking": "十斤肥的切完，又要十斤寸金软骨；一早晨过去，郑屠满头是汗，笑意已经挂不住。",
+      "staging": "十斤肥的切完，又要十斤寸金软骨；一早晨过去，郑屠满头是汗，笑意已经挂不住。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "再要十斤寸金软骨，也要细细地剁做臊子。"
+        },
+        {
+          "speaker": "ZHENG_TU",
+          "speaker_id": "CHAR_ZHENG_TU",
+          "text_target": "却不是特地来消遣我？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_ZHUANGYUAN_BRIDGE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZHUANGYUAN_BRIDGE",
+        "CHAR_ZHENG_TU",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "character_integrity": "CHAR_ZHENG_TU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P046",
+      "story_function": "trigger",
+      "source_excerpt": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "meaning_zh": "S037：且說鄭屠開著兩間門面，兩副肉案，懸掛著三五片豬肉。鄭屠正在門前櫃身內坐定，看那十來個刀手賣肉。魯達走到面前，叫聲：「鄭屠。」鄭屠看時，見是魯提轄，慌忙出櫃身來唱喏道：「提轄恕罪。」便叫副手掇條凳子來，「提轄請坐。」魯達坐下道：「奉著經略相公鈞旨，要十斤精肉，切做臊子，不要見半點肥的在上頭。」鄭屠道：「使得，你們快選好的，切十斤去。」魯提轄道：「不要那等腌臢們動手，你自與我切。」鄭屠道：「說得是。小人自切便了。」自去肉案上，揀下十斤精肉，",
+      "text_target": "洒家特地要消遣你！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达跳起身，两包臊子劈面打将过去，荷叶散开，肉末如一阵肉雨落满郑屠一头一脸。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_ZHENG_TU"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHENG_TU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S037"
+      ],
+      "location": "LOC_ZHUANGYUAN_BRIDGE",
+      "scene_anchor_id": "LOC_ZHUANGYUAN_BRIDGE",
+      "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+      "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+      "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "continuity_from": "P045",
+      "spatial_relationships": "鲁达跳起身，两包臊子劈面打将过去，荷叶散开，肉末如一阵肉雨落满郑屠一头一脸。",
+      "blocking": "鲁达跳起身，两包臊子劈面打将过去，荷叶散开，肉末如一阵肉雨落满郑屠一头一脸。",
+      "staging": "鲁达跳起身，两包臊子劈面打将过去，荷叶散开，肉末如一阵肉雨落满郑屠一头一脸。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "洒家特地要消遣你！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [
+        {
+          "text_target": "哗——"
+        }
+      ],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_ZHUANGYUAN_BRIDGE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZHUANGYUAN_BRIDGE",
+        "CHAR_LU_DA",
+        "CHAR_ZHENG_TU"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHENG_TU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P047",
+      "story_function": "climax",
+      "source_excerpt": "S038：鄭屠右手拿刀，左手便來要揪魯達，被這魯提轄就勢按住左手，趕將入去，望小腹上只一腳，騰地踢倒在當街上。魯達再入一步，踏住胸脯，提著那醋缽兒大小拳頭，看看這鄭屠道：「洒家始投老种經略相公，做到關西五路廉訪使，也不枉了叫做『鎮關西。』你是個賣肉的操刀屠戶，狗一般的人，也叫做『鎮關西！』你如何強騙了金翠蓮？」撲的只一拳，正打在鼻子上，打得鮮血迸流，鼻子歪在半邊，卻便似開了個油醬鋪，鹹的，酸的，辣的，一發都滾出來。鄭屠掙不起來，那把尖刀，也丟在一",
+      "meaning_zh": "S038：鄭屠右手拿刀，左手便來要揪魯達，被這魯提轄就勢按住左手，趕將入去，望小腹上只一腳，騰地踢倒在當街上。魯達再入一步，踏住胸脯，提著那醋缽兒大小拳頭，看看這鄭屠道：「洒家始投老种經略相公，做到關西五路廉訪使，也不枉了叫做『鎮關西。』你是個賣肉的操刀屠戶，狗一般的人，也叫做『鎮關西！』你如何強騙了金翠蓮？」撲的只一拳，正打在鼻子上，打得鮮血迸流，鼻子歪在半邊，卻便似開了個油醬鋪，鹹的，酸的，辣的，一發都滾出來。鄭屠掙不起來，那把尖刀，也丟在一",
+      "text_target": "你如何强骗了金翠莲！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "郑屠从肉案上抢过剔骨尖刀跳下当街，被鲁达就势按住左手、一脚踢倒，随即踏住胸脯举起醋钵儿大的拳头落下；以强逆光、拳影和围观者惊退的背影表现三拳结果，尖刀脱手滑落一旁，不作血腥或伤口特写。",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_ZHENG_TU"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHENG_TU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S038"
+      ],
+      "location": "LOC_ZHUANGYUAN_BRIDGE",
+      "scene_anchor_id": "LOC_ZHUANGYUAN_BRIDGE",
+      "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+      "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+      "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "continuity_from": "P046",
+      "spatial_relationships": "郑屠从肉案上抢过剔骨尖刀跳下当街，被鲁达就势按住左手、一脚踢倒，随即踏住胸脯举起醋钵儿大的拳头落下；以强逆光、拳影和围观者惊退的背影表现三拳结果，尖刀脱手滑落一旁，不作血腥或伤口特写。",
+      "blocking": "郑屠从肉案上抢过剔骨尖刀跳下当街，被鲁达就势按住左手、一脚踢倒，随即踏住胸脯举起醋钵儿大的拳头落下；以强逆光、拳影和围观者惊退的背影表现三拳结果，尖刀脱手滑落一旁，不作血腥或伤口特写。",
+      "staging": "郑屠从肉案上抢过剔骨尖刀跳下当街，被鲁达就势按住左手、一脚踢倒，随即踏住胸脯举起醋钵儿大的拳头落下；以强逆光、拳影和围观者惊退的背影表现三拳结果，尖刀脱手滑落一旁，不作血腥或伤口特写。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "你如何强骗了金翠莲！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [
+        {
+          "text_target": "咚！"
+        }
+      ],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "常规节奏",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_ZHUANGYUAN_BRIDGE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZHUANGYUAN_BRIDGE",
+        "CHAR_LU_DA",
+        "CHAR_ZHENG_TU"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHENG_TU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P048",
+      "story_function": "new_promise",
+      "source_excerpt": "S038：鄭屠右手拿刀，左手便來要揪魯達，被這魯提轄就勢按住左手，趕將入去，望小腹上只一腳，騰地踢倒在當街上。魯達再入一步，踏住胸脯，提著那醋缽兒大小拳頭，看看這鄭屠道：「洒家始投老种經略相公，做到關西五路廉訪使，也不枉了叫做『鎮關西。』你是個賣肉的操刀屠戶，狗一般的人，也叫做『鎮關西！』你如何強騙了金翠蓮？」撲的只一拳，正打在鼻子上，打得鮮血迸流，鼻子歪在半邊，卻便似開了個油醬鋪，鹹的，酸的，辣的，一發都滾出來。鄭屠掙不起來，那把尖刀，也丟在一",
+      "meaning_zh": "S038：鄭屠右手拿刀，左手便來要揪魯達，被這魯提轄就勢按住左手，趕將入去，望小腹上只一腳，騰地踢倒在當街上。魯達再入一步，踏住胸脯，提著那醋缽兒大小拳頭，看看這鄭屠道：「洒家始投老种經略相公，做到關西五路廉訪使，也不枉了叫做『鎮關西。』你是個賣肉的操刀屠戶，狗一般的人，也叫做『鎮關西！』你如何強騙了金翠蓮？」撲的只一拳，正打在鼻子上，打得鮮血迸流，鼻子歪在半邊，卻便似開了個油醬鋪，鹹的，酸的，辣的，一發都滾出來。鄭屠掙不起來，那把尖刀，也丟在一",
+      "text_target": "你诈死，洒家和你慢慢理会！",
+      "adaptation_note": "第10话主消费范围：街头重逢李忠、潘家酒楼闻哭、金氏父女哭诉、赠银送行与状元桥三拳。",
+      "description": "鲁达回头指着一动不动的郑屠骂了一句，转身大踏步离去；再一转，他已卷起包裹提着齐眉短棒，背影没入渭州南门外的路上。",
+      "characters": [
+        "CHAR_LU_DA"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LU_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S038"
+      ],
+      "location": "LOC_ZHUANGYUAN_BRIDGE",
+      "scene_anchor_id": "LOC_ZHUANGYUAN_BRIDGE",
+      "spatial_layout": "状元桥在画上，郑屠肉铺两间门面在画中，两副肉案与柜身在画右，当街空地在画下。",
+      "lighting_anchor": "上午硬白日光从画右入，肉案与铺檐形成强对比投影，当街地面高亮。",
+      "axis_eyeline": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "continuity_from": "P047",
+      "spatial_relationships": "鲁达回头指着一动不动的郑屠骂了一句，转身大踏步离去；再一转，他已卷起包裹提着齐眉短棒，背影没入渭州南门外的路上。",
+      "blocking": "鲁达回头指着一动不动的郑屠骂了一句，转身大踏步离去；再一转，他已卷起包裹提着齐眉短棒，背影没入渭州南门外的路上。",
+      "staging": "鲁达回头指着一动不动的郑屠骂了一句，转身大踏步离去；再一转，他已卷起包裹提着齐眉短棒，背影没入渭州南门外的路上。",
+      "dialogue": [
+        {
+          "speaker": "LU_DA",
+          "speaker_id": "CHAR_LU_DA",
+          "text_target": "你诈死，洒家和你慢慢理会！"
+        }
+      ],
+      "narration": "三拳之下，提辖没了，逃犯有了。",
+      "narration_target": "三拳之下，提辖没了，逃犯有了。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋关西州城市井服饰、建筑、器物与兵器；画面内禁止出现任何文字、招牌字样、印章字、水印或乱码；暴力只用动势、遮挡、剪影与后果表达，禁止血腥、伤口、断肢与尸体特写。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和器物接触点完整。",
+      "black_fill_plan": "室内暗部与街市投影不吞没脸、手、脚、银两、刀具与动作接触点。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用真实光影、尘土、酒气、炊烟、布料与拳脚速度线；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_ZHUANGYUAN_BRIDGE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZHUANGYUAN_BRIDGE",
+        "CHAR_LU_DA"
+      ],
+      "gaze_target": "人物注视戏内对话者、银两、刀案、拦阻者或行进目标。",
+      "eyeline_direction": "鲁达自画下当街面向画右的肉案，郑屠由柜身内向画下移动，围观者退到两侧。",
+      "character_integrity": "CHAR_LU_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    }
+  ]
+}

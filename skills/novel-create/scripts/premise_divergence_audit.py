@@ -4,7 +4,7 @@
 
 为什么：novel-create 的创意闸要求锁蓝图前给 **3 个差异化方向**且"不是同一方案的三种措辞"，
 但这一直是 prose 指令——LLM 完全可以交三条换汤不换药的 logline 而无人拦（mode collapse
-的典型形态）。对标 ad 线 `shot_variety_audit.py` 的重复对检测，把"三方案够不够散"做成
+的典型形态）。对标兄弟线镜头多样性审计（shot_variety_audit）的重复对检测，把"三方案够不够散"做成
 可机检的最低门槛。
 
 输入：`设定/premise_candidates.json`（立项访谈时落盘，schema 见下）。缺文件优雅跳过并

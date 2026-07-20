@@ -9100,6 +9100,273 @@
       "anchor_path": "出图/共享/图片/LOC_WEIZHOU_TEAHOUSE__anchor.png",
       "primary_path": "出图/共享/图片/LOC_WEIZHOU_TEAHOUSE__anchor.png",
       "sha256": "67ae7b1509a964c9a60d1f689745c844a3d7fadbda4be0589cb4bb10e45d1a35"
+    },
+    "CHAR_LI_ZHONG": {
+      "id": "CHAR_LI_ZHONG",
+      "type": "character",
+      "display_name": "李忠",
+      "description": "史进最早的开手师父，绰号“打虎将”；流落渭州街头使枪棒卖膏药糊口",
+      "character_dna": "四十上下清瘦精悍的江湖卖艺人；长条脸、颧骨略高、细长眼、稀疏短髭、常年风吹日晒的黄褐肤色；中等身量、筋肉紧实、手掌粗糙有茧；灰麻布交领短褐、深褐缠腰布带、绑腿与草鞋；精明谨慎、盘算钱财的市井江湖气质固定",
+      "variant_policy": "街头卖药、被强邀入席、酒楼凑银与散席自去各阶段均继承同一长条脸、细长眼、稀疏短髭、精瘦体态与灰麻短褐；只改变表情、姿势与手持的棍棒或药囊。",
+      "forbidden_inheritance": "不得继承演员脸、清代辫发、日式装束、现代服饰、可读文字、单格谄笑表情或临时手持物",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "街头卖药、被强邀入席、酒楼凑银与散席自去各阶段均继承同一长条脸、细长眼、稀疏短髭、精瘦体态与灰麻短褐；只改变表情、姿势与手持的棍棒或药囊。",
+          "forbidden": "不得继承演员脸、清代辫发、日式装束、现代服饰、可读文字、单格谄笑表情或临时手持物",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:19:43+00:00"
+    },
+    "CHAR_JIN_CUILIAN": {
+      "id": "CHAR_JIN_CUILIAN",
+      "type": "character",
+      "display_name": "金翠莲",
+      "description": "东京人金二之女，被镇关西郑屠虚钱实契强占又遭赶打，在潘家酒楼趕座子卖唱还债",
+      "character_dna": "十八九岁清秀女子；瓜子脸、蛾眉细长、丹凤眼、薄唇小口、面色苍白清瘦；鬅鬆云髻上插一枝青玉簪；素白旧衫、六幅红罗裙、淡黄软袜与弓鞋；柔弱含悲、低眉垂目的气质固定",
+      "variant_policy": "隔壁啼哭、当面哭诉、受赠得救与五更出城各阶段均继承同一瓜子脸、蛾眉丹凤眼、云髻青玉簪、素白旧衫与红罗裙；只改变表情、姿势与是否携带行李。",
+      "forbidden_inheritance": "不得继承演员脸、现代妆容与发型、日式和服、清代旗装旗头、暴露服装、可读文字或单格哭泣表情",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "隔壁啼哭、当面哭诉、受赠得救与五更出城各阶段均继承同一瓜子脸、蛾眉丹凤眼、云髻青玉簪、素白旧衫与红罗裙；只改变表情、姿势与是否携带行李。",
+          "forbidden": "不得继承演员脸、现代妆容与发型、日式和服、清代旗装旗头、暴露服装、可读文字或单格哭泣表情",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:19:43+00:00"
+    },
+    "CHAR_JIN_LAO": {
+      "id": "CHAR_JIN_LAO",
+      "type": "character",
+      "display_name": "金老",
+      "description": "东京人氏金二，携女来渭州投亲不遇、妻死客店，被郑屠逼债",
+      "character_dna": "五六十岁清瘦老者；长脸、深眼窝、额纹深刻、稀疏花白须发、背略佝偻；褪色灰褐交领布袍、布腰带、旧布鞋；手中常持一串木拍板；卑微谨慎、动辄作揖的市井卖唱老人气质固定",
+      "variant_policy": "酒楼卖唱、当面陈情、受赠拜谢与五更出城各阶段均继承同一长脸、深眼窝、花白稀须、佝偻背与灰褐布袍；只改变表情、姿势与是否挑担持拍板。",
+      "forbidden_inheritance": "不得继承演员脸、清代辫发、日式装束、现代服饰、僧道法衣、可读文字或单格叩拜姿势",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "酒楼卖唱、当面陈情、受赠拜谢与五更出城各阶段均继承同一长脸、深眼窝、花白稀须、佝偻背与灰褐布袍；只改变表情、姿势与是否挑担持拍板。",
+          "forbidden": "不得继承演员脸、清代辫发、日式装束、现代服饰、僧道法衣、可读文字或单格叩拜姿势",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:19:43+00:00"
+    },
+    "CHAR_ZHENG_TU": {
+      "id": "CHAR_ZHENG_TU",
+      "type": "character",
+      "display_name": "郑屠",
+      "description": "状元桥下卖肉的屠户，自号“镇关西”，托小种经略相公门下开肉铺",
+      "character_dna": "三十余岁膀阔腰圆的屠户；方阔大脸、粗黑浓眉、小眼、厚唇、短须茬、颈粗肩厚、肚腹壮实；油亮深褐短褐、粗麻围裙、袖口高挽露出粗壮小臂与厚实手掌；跋扈自得的市井恶霸气质固定",
+      "variant_policy": "柜身安坐、亲自切臊子、被激怒与当街冲突各阶段均继承同一方阔脸、粗眉小眼、厚唇短须、粗颈厚肩体态与短褐围裙；只改变表情、姿势与手持刀具。",
+      "forbidden_inheritance": "不得继承演员脸、清代辫发、日式装束、现代服饰、可读文字招牌、伤口血污特写或单格暴怒表情",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "柜身安坐、亲自切臊子、被激怒与当街冲突各阶段均继承同一方阔脸、粗眉小眼、厚唇短须、粗颈厚肩体态与短褐围裙；只改变表情、姿势与手持刀具。",
+          "forbidden": "不得继承演员脸、清代辫发、日式装束、现代服饰、可读文字招牌、伤口血污特写或单格暴怒表情",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:19:43+00:00"
+    },
+    "LOC_PAN_TAVERN": {
+      "id": "LOC_PAN_TAVERN",
+      "type": "location",
+      "display_name": "州桥下潘家酒楼",
+      "description": "北宋渭州州桥旁的二层酒楼：门前望竿高挑、素面布酒旆迎风，楼下厅堂与木梯，二层“济楚阁儿”内木格窗、板壁隔间、方木酒桌、条凳、陶酒注与碟盏；窗光由画左斜入，阁内深处留暖褐暗部；无人纯场景，酒旆、幌子、器皿与墙面一律素面，无文字无符号",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:20:14+00:00"
+    },
+    "LOC_LU_INN": {
+      "id": "LOC_LU_INN",
+      "type": "location",
+      "display_name": "渭州东门里鲁家客店",
+      "description": "北宋渭州城东门内的小客店：临街门脸与门槛、店堂长条木凳与柜台、后排客房木门、油灯与炊灶、墙角行李担架；五更青灰天光自门口入，柜台一侧一点油灯暖光；无人纯场景，幌子、柜面与器皿素面，无文字无符号",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:20:14+00:00"
+    },
+    "LOC_ZHUANGYUAN_BRIDGE": {
+      "id": "LOC_ZHUANGYUAN_BRIDGE",
+      "type": "location",
+      "display_name": "状元桥郑屠肉铺",
+      "description": "北宋渭州状元桥下的屠户肉铺：两间门面、两副厚木肉案、悬挂猪肉的铁钩横杆、柜身与铜钱匣、荷叶包与木砧、当街空地与石桥栏；上午硬白日光自画右入，铺檐投下强对比阴影；无人纯场景，招牌与幌子素面无文字，不出现血泊、内脏或伤口特写",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-20T12:20:14+00:00"
     }
   },
   "schema_meta": {

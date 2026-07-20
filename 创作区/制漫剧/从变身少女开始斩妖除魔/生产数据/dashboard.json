@@ -7,26 +7,26 @@
     {
       "kind": "qa_blockers",
       "level": "critical",
-      "message": "QA 阻断 5 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "message": "QA 阻断 9 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
       "scope": "totals",
       "threshold": 0,
-      "value": 5
+      "value": 9
     },
     {
       "episode": "第1集",
       "kind": "qa_blockers",
       "level": "warn",
-      "message": "第1集 QA 阻断 5 项",
+      "message": "第1集 QA 阻断 9 项",
       "scope": "第1集",
       "threshold": 0,
-      "value": 5
+      "value": 9
     }
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.0267,
+      "blockers_per_attempt": 0.0462,
       "completion_rate": null,
-      "consistency_blockers": 5,
+      "consistency_blockers": 8,
       "consistency_ledger": {
         "counts": {
           "block": 4,
@@ -127,7 +127,7 @@
           }
         ]
       },
-      "consistency_warnings": 161,
+      "consistency_warnings": 162,
       "cost_by_provider": {
         "dreamina_official_cli:image": 20.0
       },
@@ -138,49 +138,62 @@
         "image": 20.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "3h29m53s",
-      "duration_sec": 12592.509,
-      "elapsed_per_finished_min_sec": 5818.82,
+      "duration_hms": "3h50m24s",
+      "duration_sec": 13824.385,
+      "elapsed_per_finished_min_sec": 6388.053,
       "episode": "第1集",
-      "event_count": 277,
+      "event_count": 285,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 187,
-      "generation_fails": 58,
-      "generation_pass_rate": 0.6898,
-      "generation_passes": 129,
+      "generation_attempts": 195,
+      "generation_fails": 63,
+      "generation_pass_rate": 0.6769,
+      "generation_passes": 132,
       "image_qc_passive": {
-        "advisory": 11,
+        "advisory": 12,
         "freshness": "fresh",
-        "hard_blocks": 0,
+        "hard_blocks": 3,
         "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json"
       },
       "missing_deliverables": [],
       "one_pass_count": 53,
-      "one_pass_rate": 0.2834,
+      "one_pass_rate": 0.2718,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 5,
-      "qa_blockers_historical": 35,
+      "qa_blockers": 9,
+      "qa_blockers_historical": 39,
       "qa_gate_passes": 2,
       "qa_gate_runs": 2,
       "qa_infos": 85,
-      "qa_warnings": 63,
+      "qa_warnings": 64,
       "qa_warnings_historical": 52,
-      "recent_blockers": [],
+      "recent_blockers": [
+        {
+          "dim": "戏内视线与伪死眼态",
+          "loc": "出图/第1集/图片/Clip04_first.png",
+          "msg": "已查看当前4K原图：虎头人身卧倒巨躯、双人左右轴线、未接触状态和唯一完整横刀均已成立，断刀也已画外；但姜月初仍正面直视镜头，虎山神双眼未完全闭合。拒绝当前像素；基于本图做最小纠偏，只让姜月初看画面右上逃生方向、裴长青看画面左上戏内方向、虎妖双眼完全闭合，其他像素关系保持。",
+          "stage": "image"
+        },
+        {
+          "dim": "出图落档QC",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "msg": "image_qc standalone 报告有 3 个硬阻断但未见 dashboard image gate 入账；必须修复/重抽并重跑 `dashboard gate --stage image`。",
+          "stage": "image"
+        }
+      ],
       "recoup_ratio": {},
       "redraw_categories": {
-        "backend_migration": 19,
+        "backend_migration": 22,
         "face_consistency": 2,
         "other": 2,
         "prompt_conflict": 2,
         "prop_structure": 2,
         "reference_crop": 1
       },
-      "redraw_count": 28,
-      "redraw_rate": 0.1497,
+      "redraw_count": 31,
+      "redraw_rate": 0.159,
       "redraw_reasons": {
         "black demon blood became glossy tar/oil with excessive red neon": 1,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 CHAR_02::定妆_CHAR_02__常态_45度": 1,
@@ -189,6 +202,7 @@
         "dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_01_first": 1,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_02_first": 4,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_03_first": 1,
+        "dreamina-第1集 Dreamina image2image 真实参考图重出 Clip_04_first": 3,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 PROP_翻覆囚车::定妆_道具_翻覆囚车_反面": 1,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 PROP_虎首::定妆_道具_虎首_手持": 1,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 PROP_虎首::定妆_道具_虎首_比例": 1,
@@ -214,16 +228,17 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "consistency_warnings": 11,
-          "duration_sec": 12462.663,
-          "generation_attempts": 186,
-          "generation_fails": 58,
-          "generation_passes": 128,
+          "consistency_blockers": 3,
+          "consistency_warnings": 12,
+          "duration_sec": 13694.539,
+          "generation_attempts": 194,
+          "generation_fails": 63,
+          "generation_passes": 131,
           "missing_deliverables": 0,
-          "qa_blockers": 0,
+          "qa_blockers": 4,
           "qa_infos": 50,
-          "qa_warnings": 11,
-          "redraw_count": 28
+          "qa_warnings": 12,
+          "redraw_count": 31
         },
         "image_preflight": {
           "duration_sec": 0.0,
@@ -272,7 +287,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.3369
+      "warnings_per_attempt": 0.3282
     },
     {
       "blockers_per_attempt": null,
@@ -771,7 +786,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-20T10:09:22+00:00",
+  "generated_at": "2026-07-20T11:59:27+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1249,14 +1264,14 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "totals": {
-    "blockers_per_attempt": 0.0267,
-    "consistency_blockers": 5,
+    "blockers_per_attempt": 0.0462,
+    "consistency_blockers": 8,
     "consistency_ledger_counts": {
       "block": 4,
       "high": 0,
       "medium": 18
     },
-    "consistency_warnings": 161,
+    "consistency_warnings": 162,
     "cost_per_finished_min": {
       "image": 9.241717
     },
@@ -1264,45 +1279,45 @@
       "image": 20.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "3h29m53s",
-    "duration_sec": 12592.509,
-    "elapsed_per_finished_min_sec": 5818.82,
+    "duration_hms": "3h50m24s",
+    "duration_sec": 13824.385,
+    "elapsed_per_finished_min_sec": 6388.053,
     "episode_count": 10,
-    "event_count": 277,
+    "event_count": 285,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 2,
-      "gates_passed_per_day": 0.337,
+      "gates_passed_per_day": 0.332,
       "measurement_start": "2026-07-14T11:33:02+00:00",
       "time_to_first_episode_hms": "—",
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 187,
-    "generation_fails": 58,
-    "generation_pass_rate": 0.6898,
-    "generation_passes": 129,
+    "generation_attempts": 195,
+    "generation_fails": 63,
+    "generation_pass_rate": 0.6769,
+    "generation_passes": 132,
     "one_pass_count": 53,
-    "one_pass_rate": 0.2834,
-    "qa_blockers": 5,
-    "qa_blockers_historical": 35,
+    "one_pass_rate": 0.2718,
+    "qa_blockers": 9,
+    "qa_blockers_historical": 39,
     "qa_infos": 85,
-    "qa_warnings": 63,
+    "qa_warnings": 64,
     "qa_warnings_historical": 52,
     "recoup_ratio": {},
     "redraw_categories": {
-      "backend_migration": 19,
+      "backend_migration": 22,
       "face_consistency": 2,
       "other": 2,
       "prompt_conflict": 2,
       "prop_structure": 2,
       "reference_crop": 1
     },
-    "redraw_count": 28,
-    "redraw_rate": 0.1497,
+    "redraw_count": 31,
+    "redraw_rate": 0.159,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1310,7 +1325,7 @@
     "release_spend_totals": {},
     "runtime_hms": "2m10s",
     "runtime_sec": 129.846,
-    "warnings_per_attempt": 0.3369
+    "warnings_per_attempt": 0.3282
   },
   "version": 1
 }

@@ -252,6 +252,47 @@ def select_dreamina_reference_paths(
             "sequence": sequence,
             "_path": path,
         })
+    if target.shot == "Clip_04_first":
+        # The canonical CHAR_04 front/half-body cards prove the humanoid
+        # topology but do not prove the unusual prone pose.  Seedream tends to
+        # satisfy "tiger lying down" by collapsing it into an ordinary
+        # quadruped.  Reuse the exact-hash accepted S02A pixels as a dedicated
+        # pose/topology witness: they contain the same tiger-headed humanoid
+        # already lying in this location.  This remains reference evidence,
+        # not a continuity source, so Clip04 may still change the foreground
+        # blocking and remove the broken saber.
+        target_parts = Path(target.rel_path).parts
+        episode_name = target_parts[1] if len(target_parts) > 1 else ""
+        pose_source_rel = str(Path(target.rel_path).parent / "Clip02_first.png")
+        pose_source_path = root / pose_source_rel
+        pose_rel = str(
+            Path("生产数据") / "reference_crops" / episode_name
+            / "Clip02_tiger_prone_pose.png"
+        )
+        pose_path = root / pose_rel
+        pose_manifest_path = pose_path.with_suffix(".json")
+        pose_manifest: Mapping[str, Any] = {}
+        if pose_manifest_path.is_file():
+            try:
+                loaded = json.loads(pose_manifest_path.read_text(encoding="utf-8"))
+                pose_manifest = loaded if isinstance(loaded, Mapping) else {}
+            except (OSError, json.JSONDecodeError):
+                pose_manifest = {}
+        crop_fresh = (
+            pose_source_path.is_file()
+            and pose_path.is_file()
+            and str(pose_manifest.get("source") or "") == pose_source_rel
+            and str(pose_manifest.get("source_sha256") or "") == base.file_sha256(pose_source_path)
+            and str(pose_manifest.get("output_sha256") or "") == base.file_sha256(pose_path)
+        )
+        if crop_fresh and _accepted_current_hash(root, pose_source_rel):
+            rows.append({
+                "role": "source_frame",
+                "owner": "Clip_02_tiger_prone_pose",
+                "priority": 1,
+                "sequence": -1,
+                "_path": pose_path,
+            })
     if target.shot == "Clip_02_first" and "尸场空间一次建立" in str(target.section.body or ""):
         # S02A happens before the complete hengdao enters the visual beat.  The
         # merged Clip reference bundle also contains PROP_横刀/WEAPON_01 for

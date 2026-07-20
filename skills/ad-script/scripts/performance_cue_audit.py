@@ -6,7 +6,7 @@
 （"拧开瓶盖闻了一下"）、视线（"看向镜头外的孩子"）、情绪节拍（"松了口气"）。
 "表演自然点/开心点/要有高级感"是结果指令（result direction），演员演不了，AI 更演不了——
 AI 流水线里表演只存在于 prompt 文字里，storyboard 人物镜不写这三样，生成的人就是
-死脸假笑目光涣散（n2d 的 script_quality_gate 把 performance_cues 列为必填七字段之一，
+死脸假笑目光涣散（兄弟漫剧线的 script_quality_gate 把 performance_cues 列为必填七字段之一，
 广告线人物镜同理，只是 4-10 镜量级用 advisory 口径）。
 
 三轴机检（缺三轴 warn / 缺两轴 info / 无人物镜或 endcard 豁免）：

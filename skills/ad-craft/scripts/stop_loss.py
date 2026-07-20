@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""广告批量生成止损审计（n2d stop_loss 的广告薄版·本线自包含·advisory）。
+"""广告批量生成止损审计（兄弟线 stop_loss 思路的广告薄版·本线自包含·advisory）。
 
 为什么：AI 出图/出视频是按次计费的重抽循环，"再抽一次就好了"最烧钱。渲染器已把每次
 生成写进 `生产数据/production_events.jsonl`（stage=image/video·event=generation/submission·

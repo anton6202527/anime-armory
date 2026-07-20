@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_reference_crop",
+  "version": 1,
+  "source": "出图/第1集/图片/Clip02_first.png",
+  "source_sha256": "35883e0b4643d9ecae5acee7e5c109db0861a723dec620a615b9482951aba99d",
+  "crop_box_xywh": [
+    0,
+    400,
+    3040,
+    1400
+  ],
+  "purpose": "Clip_04_first CHAR_04 tiger-headed humanoid prone-pose evidence without foreground characters or broken saber",
+  "output": "生产数据/reference_crops/第1集/Clip02_tiger_prone_pose.png",
+  "output_sha256": "1c5c4ef43968d2a515b8ed1de45c66507572ee6ed9569ae2d5bda5b32cedd24a"
+}

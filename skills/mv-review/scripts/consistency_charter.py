@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """MV 一致性不变量 Charter —— enforcement（强制力）维度的单一持久意图源。
 
-背景（参照 n2d consistency_charter 的教训）：为一致性建的硬闸，最容易在后续"优化"里被
+背景（参照兄弟线 consistency_charter 的教训）：为一致性建的硬闸，最容易在后续"优化"里被
 **悄悄降级**——err 挪成 warn、新增一个 `is_demo` 豁免分支、检查整段被删——而没有任何测试
 因此变红，diff 看着人畜无害。mv 线 2026-07-16/17 两轮刚补了一批 load-bearing 闸
 （脸崩 hard block、定妆 readiness、降级具名放行、版权闸、picture_lock hash 链…），

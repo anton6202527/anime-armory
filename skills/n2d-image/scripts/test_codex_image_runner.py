@@ -2559,6 +2559,33 @@ def test_clip02_first_guard_forces_ten_minutes_earlier_corpse_field_establishing
     assert "85mm海报群像" in joined
 
 
+def test_clip04_first_guard_keeps_tiger_prone_and_broken_saber_offscreen() -> None:
+    section = codex_image_runner.ClipSection(
+        "Clip_04",
+        "## 镜头 4",
+        "50mm双人镜，姜月初绕到未伤右臂搀扶，伪死虎妖后景不消失。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "Clip_04_first",
+        "Clip_04",
+        "firstframe",
+        "出图/第1集/图片/Clip04_first.png",
+        section,
+    )
+
+    guards = codex_image_runner.model_facing_policy_guards(target, [])
+
+    joined = " ".join(guards[:3])
+    assert "两人尚未发生任何肢体接触或搀扶" in guards[0]
+    assert "虎头侧贴地、双眼闭合" in guards[1]
+    assert "两条人形手臂手掌" in guards[1]
+    assert "禁止直立、坐起、悬浮、睁眼" in guards[1]
+    assert "PROP_断刀已留在上一空间并保持画外" in guards[2]
+    assert "禁止地面断刀、第二把刀" in guards[2]
+    assert "不看镜头" in joined
+
+
 def test_shared_scene_baseline_excludes_baked_system_gold_vfx() -> None:
     section = codex_image_runner.ClipSection(
         "LOC_01",

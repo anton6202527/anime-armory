@@ -1,0 +1,22 @@
+{
+  "kind": "comic_reentry_context_audit",
+  "version": 1,
+  "generated_at": "2026-07-20T12:17:00+00:00",
+  "chapter": "第10话",
+  "prior_chapter": "第9话",
+  "skipped_reason": "",
+  "thresholds": {
+    "opening_window": 3
+  },
+  "summary": {
+    "panels": 48,
+    "prior_chapters": 9,
+    "known_entities": 56,
+    "chapter_entities": 6,
+    "must": 0,
+    "warn": 0,
+    "info": 0,
+    "skipped": false
+  },
+  "findings": []
+}

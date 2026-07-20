@@ -1,0 +1,262 @@
+{
+  "kind": "comic_entity_presence_audit",
+  "version": 1,
+  "generated_at": "2026-07-20T12:16:45+00:00",
+  "chapter": "第10话",
+  "summary": {
+    "panels": 48,
+    "registry_entities": 61,
+    "panels_with_schedule": 0,
+    "must": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "findings": [],
+  "derived_schedule": {
+    "P001": [
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P002": [
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P003": [
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P004": [
+      "CHAR_LI_ZHONG",
+      "CHAR_SHI_JIN",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P005": [
+      "CHAR_LI_ZHONG",
+      "CHAR_SHI_JIN",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P006": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P007": [
+      "CHAR_LU_DA",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P008": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P009": [
+      "CHAR_LI_ZHONG",
+      "LOC_WEIZHOU_STREET"
+    ],
+    "P010": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P011": [
+      "LOC_PAN_TAVERN"
+    ],
+    "P012": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P013": [
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P014": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P015": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P016": [
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P017": [
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P018": [
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P019": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "LOC_PAN_TAVERN"
+    ],
+    "P020": [
+      "CHAR_JIN_CUILIAN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P021": [
+      "CHAR_JIN_CUILIAN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P022": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P023": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P024": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P025": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P026": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P027": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P028": [
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P029": [
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P030": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P031": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P032": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P033": [
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P034": [
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P035": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "LOC_PAN_TAVERN"
+    ],
+    "P036": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LI_ZHONG",
+      "CHAR_LU_DA",
+      "CHAR_SHI_JIN",
+      "LOC_PAN_TAVERN"
+    ],
+    "P037": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "LOC_LU_INN"
+    ],
+    "P038": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "LOC_LU_INN"
+    ],
+    "P039": [
+      "CHAR_LU_DA",
+      "LOC_LU_INN"
+    ],
+    "P040": [
+      "CHAR_JIN_CUILIAN",
+      "CHAR_JIN_LAO",
+      "CHAR_LU_DA",
+      "LOC_LU_INN"
+    ],
+    "P041": [
+      "CHAR_LU_DA",
+      "LOC_LU_INN"
+    ],
+    "P042": [
+      "CHAR_LU_DA",
+      "LOC_LU_INN"
+    ],
+    "P043": [
+      "CHAR_LU_DA",
+      "CHAR_ZHENG_TU",
+      "LOC_ZHUANGYUAN_BRIDGE"
+    ],
+    "P044": [
+      "CHAR_LU_DA",
+      "CHAR_ZHENG_TU",
+      "LOC_ZHUANGYUAN_BRIDGE"
+    ],
+    "P045": [
+      "CHAR_LU_DA",
+      "CHAR_ZHENG_TU",
+      "LOC_ZHUANGYUAN_BRIDGE"
+    ],
+    "P046": [
+      "CHAR_LU_DA",
+      "CHAR_ZHENG_TU",
+      "LOC_ZHUANGYUAN_BRIDGE"
+    ],
+    "P047": [
+      "CHAR_LU_DA",
+      "CHAR_ZHENG_TU",
+      "LOC_ZHUANGYUAN_BRIDGE"
+    ],
+    "P048": [
+      "CHAR_LU_DA",
+      "LOC_ZHUANGYUAN_BRIDGE"
+    ]
+  }
+}
