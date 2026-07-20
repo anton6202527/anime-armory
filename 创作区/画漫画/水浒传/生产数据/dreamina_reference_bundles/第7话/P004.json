@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第7话",
+  "panel_id": "P004",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 7,
+  "references": [
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__front.png",
+      "sha256": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHI_THRESHING_GROUND",
+      "path": "出图/共享/图片/LOC_SHI_THRESHING_GROUND__anchor.png",
+      "sha256": "cac905ebe1f8cd107cb507b1ed5b3b4296959153edcfc1d9b6b2eff46482e596",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+      "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__face.png",
+      "sha256": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+      "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-20T10:24:10"
+}

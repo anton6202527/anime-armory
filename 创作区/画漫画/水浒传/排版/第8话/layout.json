@@ -1,0 +1,3450 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第8话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第8话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 5436,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 reflection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "reflection"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 219,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 74,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P002",
+          "x": 126,
+          "y": 1016,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 reflection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "reflection"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1181,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1055,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 1062,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 1884,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 reflection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "reflection"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2049,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1923,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B003D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 1930,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 126,
+          "y": 2752,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 reflection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "reflection"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2917,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2791,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 2798,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P005",
+          "x": 126,
+          "y": 3620,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 reflection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "reflection"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3800,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 3663,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 3668,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 4568,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 reflection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "reflection"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4733,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4607,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 4614,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 4796,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 180,
+          "y": 28,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 comic_relief",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "comic_relief"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 150,
+                "w": 648,
+                "h": 432
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P008",
+          "x": 180,
+          "y": 676,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 comic_relief",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "comic_relief"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 798,
+                "w": 648,
+                "h": 432
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 126,
+          "y": 1324,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 comic_relief",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "comic_relief"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1489,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1365,
+                "w": 475,
+                "h": 279
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 1370,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 126,
+          "y": 2192,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 comic_relief",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "comic_relief"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2357,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 126,
+          "y": 3060,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 comic_relief",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "comic_relief"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3225,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3101,
+                "w": 475,
+                "h": 279
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "朱武",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "朱武"
+              },
+              "x": 172,
+              "y": 3106,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P012",
+          "x": 126,
+          "y": 3928,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 comic_relief",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "comic_relief"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4096,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3969,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 3974,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 5316,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 temptation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "temptation"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 209,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.narration",
+              "rect": {
+                "x": 185,
+                "y": 71,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013N1",
+              "type": "narration",
+              "content_ref": "panel:P013.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P014",
+          "x": 126,
+          "y": 976,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 temptation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "temptation"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1142,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1015,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 1022,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 126,
+          "y": 1844,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 temptation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "temptation"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2010,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1883,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015D1",
+              "type": "dialogue",
+              "content_ref": "panel:P015.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 1890,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P016",
+          "x": 126,
+          "y": 2712,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 temptation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "temptation"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2878,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2751,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 2758,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P017",
+          "x": 126,
+          "y": 3580,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 temptation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "temptation"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3746,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3619,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B017D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "朱武",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "朱武"
+              },
+              "x": 172,
+              "y": 3626,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P018",
+          "x": 126,
+          "y": 4448,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 temptation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "temptation"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4615,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4487,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B018D1",
+              "type": "dialogue",
+              "content_ref": "panel:P018.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 4494,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_004",
+      "source_name_page_id": "SCROLL_004",
+      "width": 1440,
+      "height": 5016,
+      "reading_order": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "x": 180,
+          "y": 28,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 theft",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "theft"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 149,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P020",
+          "x": 126,
+          "y": 676,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 theft",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "theft"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 843,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P021",
+          "x": 126,
+          "y": 1544,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 theft",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "theft"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1711,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P022",
+          "x": 126,
+          "y": 2412,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 theft",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "theft"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2579,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2451,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B022D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              },
+              "x": 172,
+              "y": 2458,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P023",
+          "x": 126,
+          "y": 3280,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 theft",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "theft"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3447,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3319,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B023D1",
+              "type": "dialogue",
+              "content_ref": "panel:P023.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              },
+              "x": 172,
+              "y": 3326,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P024",
+          "x": 126,
+          "y": 4148,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 theft",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "theft"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4313,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_005",
+      "source_name_page_id": "SCROLL_005",
+      "width": 1440,
+      "height": 5532,
+      "reading_order": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "panels": [
+        {
+          "panel_id": "P025",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 awakening",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "awakening"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 220,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 75,
+                "w": 518,
+                "h": 319
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B025D1",
+              "type": "dialogue",
+              "content_ref": "panel:P025.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P026",
+          "x": 126,
+          "y": 1044,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 awakening",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "awakening"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1210,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1082,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B026D1",
+              "type": "dialogue",
+              "content_ref": "panel:P026.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              },
+              "x": 172,
+              "y": 1090,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P027",
+          "x": 72,
+          "y": 1912,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 awakening",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "awakening"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2104,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1959,
+                "w": 518,
+                "h": 319
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B027D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              },
+              "x": 120,
+              "y": 1960,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P028",
+          "x": 126,
+          "y": 2928,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 awakening",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "awakening"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3094,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2966,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B028D1",
+              "type": "dialogue",
+              "content_ref": "panel:P028.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              },
+              "x": 172,
+              "y": 2974,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P029",
+          "x": 126,
+          "y": 3796,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 awakening",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "awakening"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3962,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3834,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B029D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "华阴县尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "华阴县尉"
+              },
+              "x": 172,
+              "y": 3842,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P030",
+          "x": 126,
+          "y": 4664,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 awakening",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "awakening"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4832,
+                "w": 712,
+                "h": 588
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P030.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4706,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B030D1",
+              "type": "dialogue",
+              "content_ref": "panel:P030.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 4710,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_006",
+      "source_name_page_id": "SCROLL_006",
+      "width": 1440,
+      "height": 5016,
+      "reading_order": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "panels": [
+        {
+          "panel_id": "P031",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 feast_prep",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "feast_prep"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 195,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B031D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P032",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 feast_prep",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "feast_prep"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1063,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 935,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B032D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P033",
+          "x": 180,
+          "y": 1764,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 feast_prep",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "feast_prep"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1885,
+                "w": 648,
+                "h": 431
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P034",
+          "x": 126,
+          "y": 2412,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 feast_prep",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "feast_prep"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2579,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P034.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2451,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B034D1",
+              "type": "dialogue",
+              "content_ref": "panel:P034.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              },
+              "x": 172,
+              "y": 2458,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P035",
+          "x": 126,
+          "y": 3280,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 feast_prep",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "feast_prep"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3447,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P035.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3319,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B035D1",
+              "type": "dialogue",
+              "content_ref": "panel:P035.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 3326,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P036",
+          "x": 126,
+          "y": 4148,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 feast_prep",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "feast_prep"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4313,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_007",
+      "source_name_page_id": "SCROLL_007",
+      "width": 1440,
+      "height": 5516,
+      "reading_order": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "panels": [
+        {
+          "panel_id": "P037",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 bond",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "bond"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 235,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.narration",
+              "rect": {
+                "x": 136,
+                "y": 78,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B037N1",
+              "type": "narration",
+              "content_ref": "panel:P037.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P038",
+          "x": 126,
+          "y": 1096,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 bond",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "bond"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1261,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P039",
+          "x": 126,
+          "y": 1964,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 bond",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "bond"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2129,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2003,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B039D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 2010,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P040",
+          "x": 126,
+          "y": 2832,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 bond",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "bond"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2997,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P041",
+          "x": 126,
+          "y": 3700,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 bond",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "bond"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3880,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.narration",
+              "rect": {
+                "x": 185,
+                "y": 3743,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B041N1",
+              "type": "narration",
+              "content_ref": "panel:P041.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 3748,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P042",
+          "x": 126,
+          "y": 4648,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 bond",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "bond"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4813,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4687,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B042D1",
+              "type": "dialogue",
+              "content_ref": "panel:P042.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 4694,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_008",
+      "source_name_page_id": "SCROLL_008",
+      "width": 1440,
+      "height": 5760,
+      "reading_order": [
+        "P043",
+        "P044",
+        "P045",
+        "P046",
+        "P047",
+        "P048"
+      ],
+      "panels": [
+        {
+          "panel_id": "P043",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 194,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P044",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1062,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 937,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B044D1",
+              "type": "dialogue",
+              "content_ref": "panel:P044.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P045",
+          "x": 126,
+          "y": 1764,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1930,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1805,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B045D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              },
+              "x": 172,
+              "y": 1810,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P046",
+          "x": 72,
+          "y": 2632,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2821,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P047",
+          "x": 72,
+          "y": 3648,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3837,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P047.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3695,
+                "w": 518,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B047D1",
+              "type": "dialogue",
+              "content_ref": "panel:P047.dialogue:1",
+              "speaker": "华阴县尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "华阴县尉"
+              },
+              "x": 120,
+              "y": 3696,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P048",
+          "x": 72,
+          "y": 4664,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4870,
+                "w": 777,
+                "h": 724
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.narration",
+              "rect": {
+                "x": 136,
+                "y": 4714,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B048N1",
+              "type": "narration",
+              "content_ref": "panel:P048.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4712,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第8话/panel_script.json",
+    "panel_script_sha256": "38aa6adcf892e22ef90af1d696f82204c6c19b5ca27715591f941ac38a944000",
+    "name_board": "排版/第8话/name_board.json",
+    "name_board_sha256": "91e8efae9346860d1ababcb117386c7b1c96a45daf0af2842b39b919c47e364a",
+    "name_approval_subject_sha256": "086f772d47c946e672cf46f456bffedd15909bf8d14b3bd6c9168e32ccedc02b",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-20T04:21:44.000781+00:00",
+    "note": "",
+    "subject_sha256": "9e5869774c6ec2972ed6994378b78bf47a231eb7992026e5036e10b41edd2caa",
+    "panel_script_sha256": "38aa6adcf892e22ef90af1d696f82204c6c19b5ca27715591f941ac38a944000",
+    "name_board_sha256": "91e8efae9346860d1ababcb117386c7b1c96a45daf0af2842b39b919c47e364a",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

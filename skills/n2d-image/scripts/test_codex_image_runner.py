@@ -151,7 +151,8 @@ def test_codex_reference_cap_balances_two_characters_and_location() -> None:
     rows.extend([
         {"role": "style", "owner": "STYLE_ANCHOR", "rel_path": "style.png", "priority": 60, "sequence": 8},
         {"role": "asset", "owner": "LOC_01", "rel_path": "location.png", "priority": 100, "sequence": 9},
-        {"role": "asset", "owner": "PROP_01", "rel_path": "prop.png", "priority": 100, "sequence": 10},
+        {"role": "asset", "owner": "LOC_01", "rel_path": "location_reverse.png", "priority": 100, "sequence": 10},
+        {"role": "asset", "owner": "PROP_01", "rel_path": "prop.png", "priority": 100, "sequence": 11},
     ])
 
     selected = codex_image_runner.select_codex_reference_inputs(target, rows, 5)
@@ -218,6 +219,125 @@ def test_strict_pending_review_requires_later_hash_bound_acceptance(tmp_path: Pa
     assert codex_image_runner.strict_pending_image_review(
         tmp_path, "出图/共享/图片/b.png"
     ) is None
+
+
+def test_strict_pending_review_tracks_latest_successful_redraw(tmp_path: Path) -> None:
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    asset = "出图/共享/图片/a.png"
+    records = [
+        {
+            "stage": "image",
+            "event": "generation",
+            "generation": {"asset": asset, "status": "pass"},
+            "meta": {"artifact_sha256": "a" * 64},
+        },
+        {
+            "stage": "image",
+            "event": "qa",
+            "generation": {"asset": asset, "status": "rejected"},
+            "meta": {"artifact_sha256": "a" * 64},
+        },
+        {
+            "stage": "image",
+            "event": "redraw",
+            "generation": {"asset": asset, "status": "pass"},
+            "meta": {"artifact_sha256": "b" * 64},
+        },
+    ]
+    events.write_text(
+        "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/b.png"
+    ) == {"asset": asset, "artifact_sha256": "b" * 64}
+
+    accepted = {
+        "stage": "image",
+        "event": "qa",
+        "generation": {"asset": asset, "status": "accepted"},
+        "meta": {"artifact_sha256": "b" * 64},
+    }
+    with events.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(accepted, ensure_ascii=False) + "\n")
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/共享/图片/b.png"
+    ) is None
+
+
+def test_strict_pending_review_allows_explicitly_abandoned_optional_shared_view(
+    tmp_path: Path,
+) -> None:
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    asset = "出图/共享/图片/定妆_CHAR_02__常态_后45度.png"
+    artifact_sha = "c" * 64
+    records = [
+        {
+            "stage": "image",
+            "event": "redraw",
+            "generation": {"asset": asset, "status": "pass"},
+            "meta": {"artifact_sha256": artifact_sha},
+        },
+        {
+            "stage": "image",
+            "event": "qa",
+            "generation": {"asset": asset, "status": "rejected"},
+            "meta": {
+                "artifact_sha256": artifact_sha,
+                "accepted_current_pixels": False,
+                "terminal_disposition": "abandoned_optional",
+            },
+        },
+    ]
+    events.write_text(
+        "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records),
+        encoding="utf-8",
+    )
+    registry = tmp_path / "出图" / "共享" / "identity_registry.json"
+    registry.parent.mkdir(parents=True)
+    registry.write_text(
+        json.dumps(
+            {
+                "characters": [
+                    {
+                        "id": "CHAR_02",
+                        "library_tier": "named_minimal",
+                        "forms": [
+                            {
+                                "form": "常态",
+                                "reference_group": {
+                                    "rear_three_quarter": {
+                                        "path": asset,
+                                        "status": "planned",
+                                        "visual_review": {
+                                            "status": "rejected",
+                                            "png_sha256": artifact_sha,
+                                        },
+                                    }
+                                },
+                            }
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/第1集/图片/Clip01_first.png"
+    ) is None
+
+    (tmp_path / asset).parent.mkdir(parents=True, exist_ok=True)
+    (tmp_path / asset).write_bytes(b"still present")
+    assert codex_image_runner.strict_pending_image_review(
+        tmp_path, "出图/第1集/图片/Clip01_first.png"
+    ) == {"asset": asset, "artifact_sha256": artifact_sha}
 
 
 def test_run_target_image_qc_uses_selected_python(tmp_path: Path, monkeypatch) -> None:
@@ -715,6 +835,86 @@ def test_frame_count_line_can_supply_prompt_targets(tmp_path: Path) -> None:
     )
 
 
+def test_custom_named_action_anchors_are_all_resolved_in_declared_order(tmp_path: Path) -> None:
+    write_prompt(
+        tmp_path,
+        "## 镜头 8（EP01_CLIP08 · 动作硬切）\n"
+        "**目标落档**：`出图/第1集/图片/Clip08_first.png` "
+        "`出图/第1集/图片/EP01_CLIP08_anchor01.png` "
+        "`出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png` "
+        "`出图/第1集/图片/EP01_CLIP08_anchor02.png` "
+        "`出图/第1集/图片/Clip08_end.png`\n",
+    )
+    section = codex_image_runner.load_sections(tmp_path, "第1集")[0]
+
+    targets = codex_image_runner.build_targets(tmp_path, "第1集", ["Clip_08"])
+
+    assert [target.shot for target in targets] == [
+        "Clip_08",
+        "Clip_08_anchor01",
+        "Clip_08_anchor_cut_0360",
+        "Clip_08_anchor02",
+        "Clip_08_end",
+    ]
+    assert [target.mode for target in targets] == [
+        "firstframe", "midframe", "midframe", "midframe", "tailframe"
+    ]
+    assert codex_image_runner.target_for_shot(
+        "Clip_08_anchor_cut_0360", section, "第1集"
+    ).rel_path == "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png"
+
+
+def test_storyboard_anchor_beat_matches_custom_anchor_png(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(
+        json.dumps(
+            {
+                "clips": [
+                        {
+                            "id": "EP01_CLIP08",
+                            "shots": [
+                                {
+                                    "t": "3.6-4.2s",
+                                    "desc": "姜月初误杀后骤然抬眼。",
+                                    "lens": "CU",
+                                    "video_prompt": "固定机位，呼吸微动。",
+                                }
+                            ],
+                            "continuity": {
+                            "anchors": [
+                                {
+                                    "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+                                    "at_sec": 3.6,
+                                    "reason": "锁误杀反应硬切",
+                                    "use": "edit_cut",
+                                }
+                            ]
+                        },
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_08",
+        title="## Clip_08",
+        body="动作硬切。",
+        target_line="`出图/第1集/图片/Clip08_first.png` `出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png`",
+    )
+    target = codex_image_runner.target_for_shot(
+        "Clip_08_anchor_cut_0360", section, "第1集"
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+
+    assert beat["anchor_index"] == 1
+    assert beat["at_sec"] == 3.6
+    assert beat["desc"] == "姜月初误杀后骤然抬眼。"
+
+
 def test_covers_all_episode_targets_only_for_complete_target_set(tmp_path: Path) -> None:
     write_prompt(
         tmp_path,
@@ -1180,6 +1380,40 @@ def test_compiled_retry_keeps_actual_pixel_rejection_ahead_of_objective_truncati
     assert "木牌始终在少年胸前" in prompt
 
 
+def test_clip02_first_compiler_replaces_later_state_and_complete_weapon_clauses(tmp_path: Path) -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_02",
+        title="## 镜头 2",
+        body=(
+            "**剧本描述**：尸场空间一次建立。姜月初摸到囚服，压住惊惧。断刀封路，裴长青右前半跪。\n"
+            "主体：姜月初·精瘦横刀站姿；虎山神·傲慢捕食者姿态。\n"
+            "保持一致：WEAPON_01 完整横刀；CHAR_01: 面颊血污；CHAR_02: 被架起；CHAR_04: 带伤复生。\n"
+            "**专项镜头模板**：continuity_must=[\"起：姜月初刚在尸场醒来，未持刀\", \"止：断刀封路\"]；negative=[]。"
+        ),
+        target_line="`出图/第1集/图片/Clip02_first.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_02_first", "Clip_02", "firstframe",
+        "出图/第1集/图片/Clip02_first.png", section,
+    )
+
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="dreamina",
+        model="Seedream 5.0", channel="official_cli",
+    )
+    prompt = str(compiled.get("prompt") or "")
+
+    assert "35mm低机位广角" in prompt
+    assert "无血、空手、刚从尸堆侧躺撑起" in prompt
+    assert "虎头人身巨人形态在远后景水平倒地伪死" in prompt
+    assert "完整横刀尚未入画" in prompt
+    assert "四足普通老虎" in prompt
+    assert "CHAR_01: 面颊血污" not in prompt
+    assert "CHAR_02: 被架起" not in prompt
+    assert "CHAR_04: 带伤复生" not in prompt
+    assert "精瘦横刀站姿" not in prompt
+
+
 def test_continuity_must_rewrites_adult_minor_shoulder_contact_to_non_contact() -> None:
     body = (
         "十四岁少年与成年管事对话。\n"
@@ -1261,6 +1495,48 @@ def test_midframe_anchor_uses_subshot_starting_at_exact_edit_boundary(tmp_path: 
     assert "中锚动作状态替换铁律" in prompt
     assert "不得同时保留旧姿态/旧位置又新增一套新姿态/新位置" in prompt
     assert "道具总数量、拓扑与归属严格不变" in prompt
+
+
+def test_untimed_storyboard_subshots_map_first_and_midframe_deterministically(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP03",
+        "duration": 10.8,
+        "continuity": {"anchors": [{
+            "at_sec": 5.4,
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+            "source_duration": 10.8,
+        }]},
+        "shots": [
+            {"id": "S03A", "lens": "OTS/CU 85mm", "desc": "姜月初警惕讥诮。"},
+            {"id": "S03B", "lens": "OTS/MS 50mm", "desc": "裴长青报身份与条件。"},
+            {"id": "S03C", "lens": "CU 85mm", "desc": "主角转为盘算。"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text('{"characters": []}', encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_03", title="## 镜头 3", body="",
+        target_line="`出图/第1集/图片/Clip03_first.png`",
+    )
+    first = codex_image_runner.Target(
+        shot="Clip_03_first", clip="Clip_03", mode="firstframe",
+        rel_path="出图/第1集/图片/Clip03_first.png", section=section,
+    )
+    mid = codex_image_runner.Target(
+        shot="Clip_03_a1", clip="Clip_03", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP03_a1.png", section=section,
+    )
+
+    first_beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", first)
+    mid_beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", mid)
+
+    assert first_beat["desc"] == "姜月初警惕讥诮。"
+    assert first_beat["lens"] == "OTS/CU 85mm"
+    assert mid_beat["desc"] == "裴长青报身份与条件。"
+    assert mid_beat["lens"] == "OTS/MS 50mm"
 
 
 def test_firstframe_uses_first_faceless_storyboard_subshot_only(tmp_path: Path) -> None:
@@ -1619,6 +1895,19 @@ def test_shared_variant_note_specializes_spatial_map_and_scale_refs() -> None:
     assert "鞋靴" in codex_image_runner.shared_variant_note(
         "出图/共享/图片/定妆_CHAR_TEST_三视图.png"
     )
+    side = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_CHAR_TEST_侧.png"
+    )
+    assert "严格90°" in side
+    assert "只能看到一只眼" in side
+    assert "禁止前45°" in side
+    assert "禁止凭空新增疤痕" in side
+    back = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_CHAR_TEST_背.png"
+    )
+    assert "严格180°" in back
+    assert "脸、双眼、鼻梁、嘴唇" in back
+    assert "禁止后45°冒充正背面" in back
 
 
 def test_style_anchor_shared_aliases_include_short_names() -> None:
@@ -2216,6 +2505,58 @@ def test_broken_left_arm_guard_uses_character_left_and_preserves_limb_count() ->
     assert "按角色自身左右计" in guards
     assert "画面观者右侧" in guards
     assert "恰好两条手臂两只手" in guards
+
+
+def test_cold_open_blade_hook_guard_forces_insert_and_humanoid_tiger() -> None:
+    section = codex_image_runner.ClipSection(
+        "Clip_01",
+        "## 镜头 1",
+        "刀柄、发抖指节和衣料同轴。染血脸与后景虎妖巨影，痛苦但已决定。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "Clip_01_first",
+        "Clip_01",
+        "firstframe",
+        "出图/第1集/图片/Clip01_first.png",
+        section,
+    )
+
+    guards = codex_image_runner.model_facing_policy_guards(target, [])
+
+    assert "85mm ECU/CU叙事插入" in guards[0]
+    assert "刀尖悬停并明确指向" in guards[0]
+    assert "虎头人身、直立双腿" in guards[0]
+    assert "绝不是四足普通老虎" in guards[0]
+
+
+def test_clip02_first_guard_forces_ten_minutes_earlier_corpse_field_establishing_shot() -> None:
+    section = codex_image_runner.ClipSection(
+        "Clip_02",
+        "## 镜头 2",
+        "尸场空间一次建立。姜月初摸到囚服，压住惊惧。断刀封路，裴长青右前半跪。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "Clip_02_first",
+        "Clip_02",
+        "firstframe",
+        "出图/第1集/图片/Clip02_first.png",
+        section,
+    )
+
+    guards = codex_image_runner.model_facing_policy_guards(target, [])
+
+    joined = " ".join(guards[:3])
+    assert "35mm低机位广角尸场建立镜" in guards[0]
+    assert "空手摸无血残损囚服" in guards[0]
+    assert "水平倒地伪死的虎头人身巨人" in guards[1]
+    assert "两条人形手臂手掌" in guards[1]
+    assert "水平长虎身或普通老虎" in guards[1]
+    assert "禁止站立、复活、逼近" in guards[1]
+    assert "一截断刀插地封路" in guards[2]
+    assert "禁止完整长刀、第二把刀" in guards[2]
+    assert "85mm海报群像" in joined
 
 
 def test_shared_scene_baseline_excludes_baked_system_gold_vfx() -> None:
@@ -3934,7 +4275,10 @@ def test_rear_three_quarter_is_controlled_derivation_with_specific_guidance() ->
     )
     guidance = codex_image_runner.shared_variant_note(rel)
     assert "后3/4" in guidance
-    assert "不是前3/4" in guidance
+    assert "禁止前3/4" in guidance
+    assert "作为一个整体" in guidance
+    assert "禁止只有头部回转" in guidance
+    assert "不得画成脸颊树枝状黑线" in guidance
 
 
 def test_turnaround_guidance_requires_five_angle_alignment() -> None:

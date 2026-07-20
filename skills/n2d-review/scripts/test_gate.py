@@ -4998,6 +4998,24 @@ def test_image_ai_backend_mixing_across_latest_assets_is_blocked(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "混用" in f["msg"] for f in gate.findings)
 
 
+def test_image_ai_policy_ignores_shared_library_provider_history(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _write_image_backend_signoff(root, "dreamina")
+    _write_image_baseline(root, access="Dreamina", model="Seedream 5.0")
+    _append_image_event(root, "出图/共享/图片/定妆_旧角色.png", "Codex")
+    _append_image_event(root, "出图/共享/图片/定妆_新道具.png", "Dreamina")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert not any(
+        f["sev"] == gate.BLOCK and f["dim"] in {"生图AI一致性", "生图后端基线"}
+        for f in gate.findings
+    )
+
+
 def _write_disaster_failover(root: Path) -> None:
     compliance = root / "合规"
     compliance.mkdir(parents=True, exist_ok=True)
@@ -6606,6 +6624,28 @@ def test_generation_recipe_evidence_blocks_missing_release_fields(tmp_path):
     gate.check_generation_recipe_evidence(str(root), "第1集", "review")
 
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "生成配方证据" and "backend_version" in f["msg"] for f in gate.findings)
+
+
+def test_generation_recipe_preflight_ignores_legacy_shared_events_before_first_episode_image(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {
+            "asset": "出图/共享/图片/定妆_旧角色.png",
+            "provider": "Codex",
+            "status": "pass",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "image_preflight")
+
+    assert not any(f["dim"] == "生成配方证据" for f in gate.findings)
 
 
 def test_generation_recipe_evidence_blocks_final_media_without_event(tmp_path):

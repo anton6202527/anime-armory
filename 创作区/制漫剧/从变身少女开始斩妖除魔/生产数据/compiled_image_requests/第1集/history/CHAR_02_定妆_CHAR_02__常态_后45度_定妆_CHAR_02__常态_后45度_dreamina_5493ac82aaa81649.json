@@ -1,0 +1,171 @@
+{
+  "actual_submit_prompt": "生成中性生产级角色参考图：返工硬约束（最高优先级）：裴长青后45度第二版仍仅头转侧、躯干正背面对称，拒绝。；图片/定妆_CHAR_02__常态_后45度.png；本次目标是后3/4参考：同一角色同一服装，中性浅灰背景，头、颈、双肩线、胸腔、腰背、骨盆、膝盖和双脚作为一个整体，从严格正背面向同一侧旋转约45°… 主体：CHAR_02/常态；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼；二十出头；裴长青 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。；无固定配饰；若本镜另有道具，以分镜 prompt 为准；二十出头；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；裴长青 使用古装束发或布巾束发，发型轮廓跨镜保持 构图：具名短线角色最小参考板，不是完整主角设定表：中性正面、半身或全身服装锚、同源脸部特写；不前置表情九宫格、完整三视图或动作库，实际分镜出现近景/侧背/多集复用时再升档补齐。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为CHAR_02的character参考 图2作为CHAR_02的character参考 图3作为CHAR_02的character参考 图4作为CHAR_02的character参考 图5作为CHAR_02的character参考 图6作为CHAR_02的character参考 图7作为STYLE_ANCHOR的style参考 保持一致：二十出头；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；裴长青 使用古装束发或布巾束发，发型轮廓跨镜保持；裴长青 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。；无固定配饰… 返工硬约束（最高优先级）：裴长青后45度第二版仍仅头转侧、躯干正背面对称，拒绝 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：16:9 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；白衣仙女；正式制服提前出现；常态红发金瞳虎纹；巨型毛笔武器；金甲符牌；网红脸；虎妖萌宠化",
+  "actual_submit_prompt_chars": 1206,
+  "actual_submit_prompt_sha256": "7b073c96fa0b3120a38836e87383b0099e0db6d54eeb1417c920b511087d9124",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "生成中性生产级角色参考图：返工硬约束（最高优先级）：裴长青后45度第二版仍仅头转侧、躯干正背面对称，拒绝。；图片/定妆_CHAR_02__常态_后45度.png；本次目标是后3/4参考：同一角色同一服装，中性浅灰背景，头、颈、双肩线、胸腔、腰背、骨盆、膝盖和双脚作为一个整体，从严格正背面向同一侧旋转约45°… 主体：CHAR_02/常态；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼；二十出头；裴长青 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。；无固定配饰；若本镜另有道具，以分镜 prompt 为准；二十出头；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；裴长青 使用古装束发或布巾束发，发型轮廓跨镜保持 构图：具名短线角色最小参考板，不是完整主角设定表：中性正面、半身或全身服装锚、同源脸部特写；不前置表情九宫格、完整三视图或动作库，实际分镜出现近景/侧背/多集复用时再升档补齐。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为CHAR_02的character参考 图2作为CHAR_02的character参考 图3作为CHAR_02的character参考 图4作为CHAR_02的character参考 图5作为CHAR_02的character参考 图6作为CHAR_02的character参考 图7作为STYLE_ANCHOR的style参考 保持一致：二十出头；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；裴长青 使用古装束发或布巾束发，发型轮廓跨镜保持；裴长青 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。；无固定配饰… 返工硬约束（最高优先级）：裴长青后45度第二版仍仅头转侧、躯干正背面对称，拒绝 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：16:9 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；白衣仙女；正式制服提前出现；常态红发金瞳虎纹；巨型毛笔武器；金甲符牌；网红脸；虎妖萌宠化",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态.png",
+        "role": "character",
+        "sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_半身.png",
+        "role": "character",
+        "sha256": "99a27f73c7c91a6c8c7cc81c215d0b5991b197cc8c5f28cbbeabd4cc2f3d2fa6"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "64a936070c894623081e3a2969bc3fc513e7b90428911abd49dc161d4cadbbfe"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_45度.png",
+        "role": "character",
+        "sha256": "bb6f5836c174310d37f205c8f1703535707b43ebfcb7f4f8b5019959b613bb38"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_侧.png",
+        "role": "character",
+        "sha256": "134242a0ae2436545d7c74e55b7ad0f3630e0977da6ca1ed71361eff33bcfc41"
+      },
+      {
+        "index": 6,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_背.png",
+        "role": "character",
+        "sha256": "63275cc04a8bb60d2c1ab9b81c6b48490eef4ef421f77d4f62cb43ce18ed2704"
+      },
+      {
+        "index": 7,
+        "owner": "STYLE_ANCHOR",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+        "role": "style",
+        "sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "16:9",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "4k"
+    }
+  },
+  "compiler": {
+    "backend": "dreamina",
+    "channel": "official_cli",
+    "compiled_request_sha256": "5493ac82aaa816498671d51b76904b7542d662549b33a535278965986ec14b65",
+    "compiler_decisions": [],
+    "execution_context_sha256": "9c6758c6c77378656041ea29dd3f2a44479ef49bd46d763997fbe1b6155d0474",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_verbose:1206>1200",
+        "submit_prompt_many_clauses:38>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 38,
+      "constraint_compression": {
+        "policy_guard_input": 3,
+        "policy_guard_output": 3,
+        "preserve_input": 1,
+        "preserve_output": 1
+      },
+      "estimated_text_tokens": 302,
+      "negative_chars": 0,
+      "prompt_chars": 1206,
+      "reference_count": 7
+    },
+    "mode": "shared",
+    "model": "5.0",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "seedream_concise_natural_language",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成中性生产级角色参考图：返工硬约束（最高优先级）：裴长青后45度第二版仍仅头转侧、躯干正背面对称，拒绝。；图片/定妆_CHAR_02__常态_后45度.png；本次目标是后3/4参考：同一角色同一服装，中性浅灰背景，头、颈、双肩线、胸腔、腰背、骨盆、膝盖和双脚作为一个整体，从严格正背面向同一侧旋转约45°… 主体：CHAR_02/常态；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼；二十出头；裴长青 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。；无固定配饰；若本镜另有道具，以分镜 prompt 为准；二十出头；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；裴长青 使用古装束发或布巾束发，发型轮廓跨镜保持 构图：具名短线角色最小参考板，不是完整主角设定表：中性正面、半身或全身服装锚、同源脸部特写；不前置表情九宫格、完整三视图或动作库，实际分镜出现近景/侧背/多集复用时再升档补齐。中性表情，统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光，无窗、无房间、无家具、无剧情道具 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为CHAR_02的character参考 图2作为CHAR_02的character参考 图3作为CHAR_02的character参考 图4作为CHAR_02的character参考 图5作为CHAR_02的character参考 图6作为CHAR_02的character参考 图7作为STYLE_ANCHOR的style参考 保持一致：二十出头；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；裴长青 使用古装束发或布巾束发，发型轮廓跨镜保持；裴长青 穿低饱和古装衣袍，领口、袖口、腰带和下摆结构稳定，不出现现代服饰。；无固定配饰… 返工硬约束（最高优先级）：裴长青后45度第二版仍仅头转侧、躯干正背面对称，拒绝 共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；全身、角度和三视图从头到鞋靴完整可见 风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 画幅：16:9 限制：戏剧光；剧情动作/剧情状态；夸张表情；改年龄；改服装主色；网红脸同质化；文字/logo/水印；白衣仙女；正式制服提前出现；常态红发金瞳虎纹；巨型毛笔武器；金甲符牌；网红脸；虎妖萌宠化",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态.png",
+        "role": "character",
+        "sha256": "847cc51079a42de0d6ce48e0f1560046579c077723ae47f5bf017f68f39573a3"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_半身.png",
+        "role": "character",
+        "sha256": "99a27f73c7c91a6c8c7cc81c215d0b5991b197cc8c5f28cbbeabd4cc2f3d2fa6"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "64a936070c894623081e3a2969bc3fc513e7b90428911abd49dc161d4cadbbfe"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_45度.png",
+        "role": "character",
+        "sha256": "bb6f5836c174310d37f205c8f1703535707b43ebfcb7f4f8b5019959b613bb38"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_侧.png",
+        "role": "character",
+        "sha256": "134242a0ae2436545d7c74e55b7ad0f3630e0977da6ca1ed71361eff33bcfc41"
+      },
+      {
+        "index": 6,
+        "owner": "CHAR_02",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_02__常态_背.png",
+        "role": "character",
+        "sha256": "63275cc04a8bb60d2c1ab9b81c6b48490eef4ef421f77d4f62cb43ce18ed2704"
+      },
+      {
+        "index": 7,
+        "owner": "STYLE_ANCHOR",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png",
+        "role": "style",
+        "sha256": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "16:9",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "4k"
+    },
+    "source_contract_sha256": "4c42e006e818d44d6de805fa90db8117d902b0296d3c770d8a0f674c85eda283",
+    "source_contract_text_sha256": "9afe3c4315defbc82dfd8da9ef90814677ada857285b79af9310c10055297653",
+    "task_type": "character_catalog",
+    "version": 1
+  },
+  "created_at": "2026-07-20T06:31:19+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "b0b15edc98402eff5ee37c022b0b0b4f49f96e91a16b0a093fa01dab4ee1aff9",
+  "request_params_sha256": "7a5a106769f035a882eb01c487075277fe388b220c51f27d223361fce3c28524",
+  "shot": "CHAR_02::定妆_CHAR_02__常态_后45度",
+  "target": "出图/共享/图片/定妆_CHAR_02__常态_后45度.png",
+  "version": 1
+}

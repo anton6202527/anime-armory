@@ -428,6 +428,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
     event_path = _production_events_path(root)
     latest_success_events: Dict[str, Tuple[int, Dict[str, Any]]] = {}
     unkeyed_success_events: List[Tuple[int, Dict[str, Any], str]] = []
+    episode_image_prefix = f"出图/{ep}/图片/"
     for idx, event in enumerate(_load_production_events(root), start=1):
         if str(event.get("episode") or "").strip() != ep:
             continue
@@ -441,6 +442,13 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             continue
         asset = _event_asset_rel(root, event) or str(generation.get("asset") or "")
         if asset:
+            # Shared-library PNGs are reference inputs, not this episode's final
+            # image namespace.  A project may preserve already accepted shared
+            # references while producing all episode frames on the locked
+            # backend; counting those historical providers here creates a false
+            # "mixed episode output" block before the first Clip exists.
+            if not str(asset).replace("\\", "/").startswith(episode_image_prefix):
+                continue
             latest_success_events[asset] = (idx, event)
         else:
             unkeyed_success_events.append((idx, event, asset))

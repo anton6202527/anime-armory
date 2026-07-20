@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第8话",
+  "panel_id": "P021",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 4,
+  "references": [
+    {
+      "id": "CHAR_WANG_SI",
+      "path": "出图/共享/图片/CHAR_WANG_SI__front.png",
+      "sha256": "ae6d85d7727a5b5b636fd582d4cf7b9cec26d63958653b3210c84a00ff863ac9",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_PINE_GROVE",
+      "path": "出图/共享/图片/LOC_PINE_GROVE__anchor.png",
+      "sha256": "894542f4ce5d4d45d9d928ae143d9cf2a7cc37286037cd7204ef8eace057ad3b",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_WANG_SI",
+      "path": "出图/共享/图片/CHAR_WANG_SI__face.png",
+      "sha256": "90608380c211e1d5d6707ee9d4d16e36886c088c054c24f117f54317fc4790c6",
+      "role": "face",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-20T13:58:38"
+}

@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">盛夏打麦场柳荫下，独掌庄院的史进赤膊倚交床乘凉，忽见松林后有人…</text>
+<rect x="57" y="146" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="161">P002</text>
+<text class="note" x="62" y="176">史进跃过交床绕到树后，一把拦住精瘦猎户李吉。</text>
+<rect x="57" y="204" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="219">P003</text>
+<text class="note" x="62" y="234">李吉连忙作揖，指向庄内矮丘乙郎住处。</text>
+<rect x="57" y="262" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="277">P004</text>
+<text class="note" x="62" y="292">史进抱臂逼问为何近来不送野味，李吉的空猎囊垂在身后。</text>
+<rect x="57" y="320" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="335">P005</text>
+<text class="note" x="62" y="350">李吉压低声音，远处少华山峰被暑气笼罩。</text>
+<rect x="57" y="378" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="393">P006</text>
+<text class="note" x="62" y="408">画面切入少华山寨剪影、马匹与巡哨，三名首领的旗杆无文字。</text>
+<text class="note" x="38" y="448">hook: P006 threat_map</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="385" y="62" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="77">P007</text>
+<text class="note" x="390" y="92">史进转头望山，神情从无聊变为警醒，柳叶被风掀起。</text>
+<rect x="385" y="129" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="144">P008</text>
+<text class="note" x="390" y="159">史进回庄命人宰牛开酒，并点燃顺溜纸召集庄户。</text>
+<rect x="385" y="196" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="211">P009</text>
+<text class="note" x="390" y="226">三四百庄户在草堂与院中按长幼坐定，碗酒传开。</text>
+<rect x="385" y="264" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="279">P010</text>
+<text class="note" x="390" y="294">史进站在众人中央说明山寨威胁，手按桌上梆子。</text>
+<rect x="385" y="331" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="346">P011</text>
+<text class="note" x="390" y="361">老少庄户一齐举碗应诺，农具与棍棒靠墙成列。</text>
+<rect x="396" y="398" width="220" height="31" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="413">P012</text>
+<text class="note" x="401" y="422">史家庄连夜修墙、加固门闩、设梆子，史进巡视各处。</text>
+<text class="note" x="366" y="448">hook: P012 preparation</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="713" y="62" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="77">P013</text>
+<text class="note" x="718" y="92">少华山寨聚义厅内，朱武居中，陈达画左、杨春画右商议。</text>
+<rect x="713" y="124" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="139">P014</text>
+<text class="note" x="718" y="154">朱武近景：棕叶道服、鹿皮云冠、双刀在侧，指尖压住粗略山势图。</text>
+<rect x="713" y="186" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="201">P015</text>
+<text class="note" x="718" y="216">陈达猛拍桌案起身，丈八点钢矛斜靠柱边。</text>
+<rect x="713" y="248" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="263">P016</text>
+<text class="note" x="718" y="278">杨春长臂按住地图上通往史家村的窄路，神色冷静。</text>
+<rect x="713" y="310" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="325">P017</text>
+<text class="note" x="718" y="340">杨春指出史进是拦路大虫，朱武点头同意。</text>
+<rect x="713" y="373" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="388">P018</text>
+<text class="note" x="718" y="403">陈达推开二人，扛起长矛走向门外白马。</text>
+<text class="note" x="694" y="448">hook: P018 defiance</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="57" y="520" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="535">P019</text>
+<text class="note" x="62" y="550">陈达披甲上马，一百余喽啰鸣锣列队冲下山道。</text>
+<rect x="57" y="578" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="593">P020</text>
+<text class="note" x="62" y="608">庄客从村北飞奔入庄报告，史进猛地抬头。</text>
+<rect x="57" y="636" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="651">P021</text>
+<text class="note" x="62" y="666">木槌重击梆子，声浪传过庄前庄后，村民纷纷抓起枪棒。</text>
+<rect x="57" y="694" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="709">P022</text>
+<text class="note" x="62" y="724">史进系紧朱红甲与铁掩心，把三尖两刃四窍八环刀提起。</text>
+<rect x="46" y="752" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="767">P023</text>
+<text class="note" x="51" y="782">史进跨上火炭赤马，朱红甲、青锦袄与九龙刺青边缘形成完整战斗造型。</text>
+<rect x="57" y="836" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="851">P024</text>
+<text class="note" x="62" y="866">三四百庄户随史进涌向村北，前排壮健庄客列枪，后排乡夫持棒。</text>
+<text class="note" x="38" y="906">hook: P024 formation</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="385" y="520" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="535">P025</text>
+<text class="note" x="390" y="550">陈达骑高头白马冲下山坡，红甲与丈八点钢矛压住画面。</text>
+<rect x="385" y="582" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="597">P026</text>
+<text class="note" x="390" y="612">红马与白马隔路相对，两边人群在尘土中停下呐喊。</text>
+<rect x="385" y="644" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="659">P027</text>
+<text class="note" x="390" y="674">陈达马上欠身施礼，请求借道，不动村中一草一木。</text>
+<rect x="385" y="706" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="721">P028</text>
+<text class="note" x="390" y="736">史进横刀封路，指出自己现当里正，放行必连累村坊。</text>
+<rect x="374" y="768" width="264" height="84" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="783">P029</text>
+<text class="note" x="379" y="798">陈达怒挺长矛，史进抡刀催马，两骑同时冲向路心。</text>
+<rect x="396" y="859" width="220" height="28" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="874">P030</text>
+<text class="note" x="401" y="880">三尖刀与点钢矛第一次撞击，火星、尘土与马鬃齐飞。</text>
+<text class="note" x="366" y="906">hook: P030 combat</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="724" y="520" width="220" height="28" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="729" y="535">P031</text>
+<text class="note" x="729" y="541">陈达连刺史进心坎，史进侧身以刀环卸开矛锋。</text>
+<rect x="713" y="554" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="569">P032</text>
+<text class="note" x="718" y="584">久战后史进故意中门大开，陈达咬牙一矛直搠心窝。</text>
+<rect x="702" y="616" width="264" height="84" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="631">P033</text>
+<text class="note" x="707" y="646">史进闪腰夹臂，把陈达连人带势摘离嵌花鞍，白马从旁冲出。</text>
+<rect x="713" y="706" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="721">P034</text>
+<text class="note" x="718" y="736">陈达重落尘地，史进刀尖压住其胸前甲片，庄客蜂拥捆缚。</text>
+<rect x="713" y="768" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="783">P035</text>
+<text class="note" x="718" y="798">少华山喽啰溃散，村民举起枪棒欢呼，史进押俘回庄。</text>
+<rect x="713" y="831" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="846">P036</text>
+<text class="note" x="718" y="861">陈达被绑在庭心柱上，史进命人设酒赏众，神情仍怒。</text>
+<text class="note" x="694" y="906">hook: P036 prisoner</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="57" y="978" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="993">P037</text>
+<text class="note" x="62" y="1008">败兵牵空白马回寨，朱武与杨春同时起身。</text>
+<rect x="57" y="1036" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1051">P038</text>
+<text class="note" x="62" y="1066">杨春握紧大杆刀要尽数死拼，朱武抬手止住。</text>
+<rect x="57" y="1094" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1109">P039</text>
+<text class="note" x="62" y="1124">朱武贴近杨春耳边说出苦计，两人放下兵器、对视点头。</text>
+<rect x="57" y="1152" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1167">P040</text>
+<text class="note" x="62" y="1182">朱武杨春不带人马，步行来到史家庄门外，双双跪下。</text>
+<rect x="57" y="1210" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1225">P041</text>
+<text class="note" x="62" y="1240">史进披甲牵马正要迎敌，见二人跪地擎泪，停住脚步。</text>
+<rect x="46" y="1268" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="1283">P042</text>
+<text class="note" x="51" y="1298">朱武抬头陈述三人不求同日生、只愿同日死，杨春跪得笔直。</text>
+<text class="note" x="38" y="1364">hook: P042 oath</text>
+<rect x="356" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="962">SCROLL_008 scroll</text>
+<rect x="374" y="978" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="993">P043</text>
+<text class="note" x="379" y="1008">史进望向庭内被缚的陈达，又望两名请死者，握刀的手慢慢松开。</text>
+<rect x="385" y="1051" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1066">P044</text>
+<text class="note" x="390" y="1081">后厅中朱武杨春仍跪请绑缚，史进三次伸手扶起都被拒绝。</text>
+<rect x="385" y="1102" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1117">P045</text>
+<text class="note" x="390" y="1132">朱武与杨春相视一笑，眼中仍有泪，却毫无惧色。</text>
+<rect x="374" y="1153" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1168">P046</text>
+<text class="note" x="379" y="1183">史进亲手割断陈达身上绳索，陈达活动手腕后郑重抱拳。</text>
+<rect x="385" y="1226" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1241">P047</text>
+<text class="note" x="390" y="1256">四人在后厅同席饮酒，先前敌意化为克制敬重，兵器全留在席外。</text>
+<rect x="374" y="1277" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1292">P048</text>
+<text class="note" x="379" y="1307">暮色庄门外，少华山三杰回望抱拳，史进独立门内回礼，官道与山路分…</text>
+<text class="note" x="366" y="1364">hook: P048 ending_promise</text>
+</svg>

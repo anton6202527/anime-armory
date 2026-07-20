@@ -97,9 +97,7 @@
       "form": "常态",
       "library_tier": "named_minimal",
       "name": "裴长青",
-      "reference_gaps": [
-        "missing_3q_baseline"
-      ],
+      "reference_gaps": [],
       "scope": "陇右镇魔都司队正；押解队伍中唯一幸存的镇魔卫",
       "score": 45.6,
       "signals": {
@@ -113,8 +111,7 @@
       "suggestions": [
         "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
         "Dreamina/即梦参考框有粘性：切换角色前清空参考图；场景定妆必须清空人物参考。",
-        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
-        "当前角色库档位=named_minimal 且本档/本集镜头需要 3/4 侧脸：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。"
       ],
       "tier": "multi_reference"
     },
@@ -157,9 +154,9 @@
   "high": 0,
   "kind": "n2d_face_drift_risk",
   "medium": 2,
-  "missing_3q_baseline": 1,
+  "missing_3q_baseline": 0,
   "notes": [],
-  "prior_drift_available": false,
+  "prior_drift_available": true,
   "recurrence_reentries": 0,
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "shared_asset_face_risk": {

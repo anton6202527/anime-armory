@@ -2,8 +2,8 @@
   "episode": "第1集",
   "generated_at": "2026-07-15T03:30:38+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-15T07:48:24+00:00",
-  "last_confirmed_by": "用户（当前消息明确确认 style_identity_lock；导演/主创+制片人）",
+  "last_confirmed_at": "2026-07-20T08:18:37+00:00",
+  "last_confirmed_by": "Codex视觉执行者",
   "last_confirmed_lock_ids": [
     "style_identity_lock"
   ],
@@ -152,15 +152,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-15T07:48:24+00:00",
-      "approver": "用户（当前消息明确确认 style_identity_lock；导演/主创+制片人）",
+      "approved_at": "2026-07-20T08:18:37+00:00",
+      "approver": "Codex视觉执行者",
       "artifact_count": 4,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-15T07:48:11+00:00",
+          "mtime": "2026-07-16T06:39:39+00:00",
           "path": "_设置.md",
-          "sha256": "875974b51820182636174d3fb62e544a14f1be7ea393801cee3b08aceedf0140"
+          "sha256": "006f1dd2c6eb8d2b655dada432c513ebdbd38c9424e68c65ea880b4539fb7e1a"
         },
         {
           "exists": true,
@@ -170,15 +170,15 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-15T06:37:03+00:00",
+          "mtime": "2026-07-20T08:18:17+00:00",
           "path": "出图/共享/identity_registry.json",
-          "sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f"
+          "sha256": "0b0e81dbb73d6f8aeaba909e22509856461d3255e450606dbfa5fc03e0aae9af"
         },
         {
           "exists": true,
-          "mtime": "2026-07-15T07:10:57+00:00",
+          "mtime": "2026-07-20T04:23:17+00:00",
           "path": "生产数据/identity_adapter_matrix.json",
-          "sha256": "3bdbbea8b1ece751bea3884955247cc47b2fe5dfdeb1c546e7213b8f522fcd2d"
+          "sha256": "9dc0e111f2224432c7b4e2651c44dc70bed2437bbb51c723baa98cb4386b0234"
         }
       ],
       "episode": "第1集",
@@ -447,6 +447,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "draft",
-  "updated_at": "2026-07-15T07:48:24+00:00",
+  "updated_at": "2026-07-20T08:18:37+00:00",
   "version": 1
 }

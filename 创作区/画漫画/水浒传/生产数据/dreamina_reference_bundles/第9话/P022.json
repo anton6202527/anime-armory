@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第9话",
+  "panel_id": "P022",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 4,
+  "cli_image_input_count": 4,
+  "references": [
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+      "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+      "role": "three_quarter",
+      "required": true
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
+      "sha256": "f781b1fb77da39cbde0efe4c5a699b68e97198fda39ff41b33a1493010a7e47e",
+      "role": "three_quarter",
+      "required": true
+    },
+    {
+      "id": "LOC_SHI_MANOR",
+      "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+      "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+      "role": "front",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 4,
+  "omitted_attachments": [
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__front.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__face.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    }
+  ],
+  "created_at": "2026-07-20T17:58:03"
+}

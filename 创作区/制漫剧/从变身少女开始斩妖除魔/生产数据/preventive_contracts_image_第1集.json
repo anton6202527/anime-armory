@@ -5,7 +5,7 @@
     {
       "gate": "reference_slot_gate",
       "loc": "PROP_断刀",
-      "message": "道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在",
+      "message": "道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_手持.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在",
       "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
       "owner": "制片主任/场记",
       "return_to_stage": "image_prompt",
@@ -46,7 +46,7 @@
   "gates": [
     "reference_slot_gate"
   ],
-  "generated_at": "2026-07-17T04:54:36+00:00",
+  "generated_at": "2026-07-20T04:23:17+00:00",
   "kind": "n2d_preventive_contract_report",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "scaffolded": false,

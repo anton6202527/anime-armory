@@ -1,0 +1,737 @@
+{
+  "schema_version": 1,
+  "kind": "comic_lettering",
+  "chapter": "第8话",
+  "language_mode": "中文",
+  "text_metadata_version": 1,
+  "items": [
+    {
+      "item_id": "L001",
+      "panel_id": "P001",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "三位头领特送薄礼，谢大郎不杀之恩。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "三位头领特送薄礼，谢大郎不杀之恩。",
+      "tone": "",
+      "slot_id": "B001D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L002",
+      "panel_id": "P002",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "救人不是为金。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "救人不是为金。",
+      "tone": "",
+      "slot_id": "B002D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L003",
+      "panel_id": "P003",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "既是一片好意，便留下。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "既是一片好意，便留下。",
+      "tone": "",
+      "slot_id": "B003D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L004",
+      "panel_id": "P004",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "替我多谢三位头领。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "替我多谢三位头领。",
+      "tone": "",
+      "slot_id": "B004D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L005",
+      "panel_id": "P005",
+      "type": "narration",
+      "speaker": "",
+      "text": "礼物又来了。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S096：卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "礼物又来了。",
+      "slot_id": "B005N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L006",
+      "panel_id": "P006",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "他们敬我，我也该回奉。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "他们敬我，我也该回奉。",
+      "tone": "",
+      "slot_id": "B006D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L007",
+      "panel_id": "P009",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "小人一定送到。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "小人一定送到。",
+      "tone": "",
+      "slot_id": "B009D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L008",
+      "panel_id": "P011",
+      "type": "dialogue",
+      "speaker": "朱武",
+      "text": "史大郎的情，我们领了。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "史大郎的情，我们领了。",
+      "tone": "",
+      "slot_id": "B011D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L009",
+      "panel_id": "P012",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "再来一碗！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "再来一碗！",
+      "tone": "",
+      "slot_id": "B012D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L010",
+      "panel_id": "P013",
+      "type": "narration",
+      "speaker": "",
+      "text": "自此，史家庄与少华山往来不断。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "自此，史家庄与少华山往来不断。",
+      "slot_id": "B013N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L011",
+      "panel_id": "P014",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "今年中秋，请三位兄弟来赏月。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "今年中秋，请三位兄弟来赏月。",
+      "tone": "",
+      "slot_id": "B014D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L012",
+      "panel_id": "P015",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "亲手交给朱武，带回准信。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "亲手交给朱武，带回准信。",
+      "tone": "",
+      "slot_id": "B015D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L013",
+      "panel_id": "P016",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "十五夜，我们准到。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "十五夜，我们准到。",
+      "tone": "",
+      "slot_id": "B016D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L014",
+      "panel_id": "P017",
+      "type": "dialogue",
+      "speaker": "朱武",
+      "text": "这封回书，务必交到。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "这封回书，务必交到。",
+      "tone": "",
+      "slot_id": "B017D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L015",
+      "panel_id": "P018",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "只饮几碗，不误事！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "只饮几碗，不误事！",
+      "tone": "",
+      "slot_id": "B018D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L016",
+      "panel_id": "P022",
+      "type": "dialogue",
+      "speaker": "李吉",
+      "text": "王四？醒醒！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "王四？醒醒！",
+      "tone": "",
+      "slot_id": "B022D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L017",
+      "panel_id": "P023",
+      "type": "dialogue",
+      "speaker": "李吉",
+      "text": "这厮哪里来的许多银子？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "这厮哪里来的许多银子？",
+      "tone": "",
+      "slot_id": "B023D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L018",
+      "panel_id": "P025",
+      "type": "dialogue",
+      "speaker": "李吉",
+      "text": "朱武……陈达……杨春！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "朱武……陈达……杨春！",
+      "tone": "",
+      "slot_id": "B025D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L019",
+      "panel_id": "P026",
+      "type": "dialogue",
+      "speaker": "李吉",
+      "text": "我的大财，原来在这里。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "我的大财，原来在这里。",
+      "tone": "",
+      "slot_id": "B026D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L020",
+      "panel_id": "P027",
+      "type": "dialogue",
+      "speaker": "李吉",
+      "text": "史进，你倒和贼人来往！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "史进，你倒和贼人来往！",
+      "tone": "",
+      "slot_id": "B027D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L021",
+      "panel_id": "P028",
+      "type": "dialogue",
+      "speaker": "李吉",
+      "text": "小人有少华山贼人的真凭实据。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "小人有少华山贼人的真凭实据。",
+      "tone": "",
+      "slot_id": "B028D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L022",
+      "panel_id": "P029",
+      "type": "dialogue",
+      "speaker": "华阴县尉",
+      "text": "今夜拿人与赃证！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "今夜拿人与赃证！",
+      "tone": "",
+      "slot_id": "B029D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L023",
+      "panel_id": "P030",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "回书呢？银子呢？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "回书呢？银子呢？",
+      "tone": "",
+      "slot_id": "B030D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L024",
+      "panel_id": "P031",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "丢了回书，大郎必赶我出去。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "丢了回书，大郎必赶我出去。",
+      "tone": "",
+      "slot_id": "B031D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L025",
+      "panel_id": "P032",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "只说他们不曾写。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "只说他们不曾写。",
+      "tone": "",
+      "slot_id": "B032D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L026",
+      "panel_id": "P034",
+      "type": "dialogue",
+      "speaker": "王四",
+      "text": "既然准来赴席，何必回书？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "既然准来赴席，何必回书？",
+      "tone": "",
+      "slot_id": "B034D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L027",
+      "panel_id": "P035",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "不枉人叫你赛伯当。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "不枉人叫你赛伯当。",
+      "tone": "",
+      "slot_id": "B035D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L028",
+      "panel_id": "P037",
+      "type": "narration",
+      "speaker": "",
+      "text": "午夜初长，一轮月挂如银。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S101：午夜初長，黃昏已半，一輪月掛如銀。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "午夜初长，一轮月挂如银。",
+      "slot_id": "B037N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L029",
+      "panel_id": "P039",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "请入后园，今夜只论兄弟。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "请入后园，今夜只论兄弟。",
+      "tone": "",
+      "slot_id": "B039D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L030",
+      "panel_id": "P041",
+      "type": "narration",
+      "speaker": "",
+      "text": "彩霞照万里如银，素魄映千山似水。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S108：桂花離海嶠，雲葉散天衢。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "彩霞照万里如银，素魄映千山似水。",
+      "slot_id": "B041N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L031",
+      "panel_id": "P042",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "前日刀兵，今夜都付一杯。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "前日刀兵，今夜都付一杯。",
+      "tone": "",
+      "slot_id": "B042D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L032",
+      "panel_id": "P044",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "三位且坐，待我去看！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "三位且坐，待我去看！",
+      "tone": "",
+      "slot_id": "B044D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L033",
+      "panel_id": "P045",
+      "type": "dialogue",
+      "speaker": "史进",
+      "text": "不要开门！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "不要开门！",
+      "tone": "",
+      "slot_id": "B045D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L034",
+      "panel_id": "P047",
+      "type": "dialogue",
+      "speaker": "华阴县尉",
+      "text": "不要走了强贼！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "不要走了强贼！",
+      "tone": "",
+      "slot_id": "B047D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L035",
+      "panel_id": "P048",
+      "type": "narration",
+      "speaker": "",
+      "text": "一封回书，换来三百官兵。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S114：不是這夥人來捉史進，並三個頭領，有分教，史進先殺了一兩個人，結識了十數個好漢，直使天罡地煞，一齊相會。直教蘆花深處屯兵士，荷葉陰中治戰船。畢竟史進與三個頭領怎地脫身，且聽下回分解。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "一封回书，换来三百官兵。",
+      "slot_id": "B048N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    }
+  ],
+  "style_consistency": {
+    "baseline": "排版/lettering_style_baseline.json",
+    "dominant_styles": {
+      "dialogue": {
+        "font": "project_default",
+        "size": "44",
+        "direction": "horizontal",
+        "bubble": "round"
+      },
+      "narration": {
+        "font": "project_default",
+        "size": "42",
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    "mismatches": []
+  }
+}

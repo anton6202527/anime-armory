@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-16T02:31:04.948776+00:00",
+  "generated_at": "2026-07-20T08:18:37.480398+00:00",
   "identity_registry_path": "出图/共享/identity_registry.json",
-  "identity_registry_sha256": "d2fc59229b249797c3e006004e23db82b474c326d763e7c35e5d5add5bc95c20",
+  "identity_registry_sha256": "0b0e81dbb73d6f8aeaba909e22509856461d3255e450606dbfa5fc03e0aae9af",
   "kind": "n2d_identity_eval_pack",
   "rows": [
     {
@@ -50,22 +50,22 @@
             "neutral_or_declared_expression_lighting",
             "same_identity_as_canonical_face_anchor"
           ],
-          "decoded_pixel_fingerprint": "60b114bdf9cf7b0956b4e179ee57f62d4da27b35fe4b8dc86e77e925076be638",
+          "decoded_pixel_fingerprint": "fb2d8f45f1d6b7c0c3e3d0930b2c3da9a23aaa91bd4a27be06d80478818d00a5",
           "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
           "errors": [],
           "evidence_kind": "structured_executor_visual_review",
           "form": "常态",
           "human_signoff": false,
           "library_tier": "core_full",
-          "path": "出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
-          "registry_binding_fingerprint": "e316209101451a9c310dcae528cd60c814c590c6ff09f739186b8bfa1edbdadd",
+          "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+          "registry_binding_fingerprint": "73a6645e5147b4f77c581a49c9b6a18cdad21d9c7262a3c3d61ab4d6261f44b6",
           "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
           "review_contract": "n2d_expression_review_v1",
           "review_kind": "executor_visual",
-          "reviewed_at": "2026-07-15T10:38:32+00:00",
+          "reviewed_at": "2026-07-16T11:05:11+00:00",
           "reviewer": "Codex视觉执行者",
           "reviewer_role": "ai_visual_executor",
-          "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849",
+          "sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb",
           "status": "pass",
           "view": "expression"
         },

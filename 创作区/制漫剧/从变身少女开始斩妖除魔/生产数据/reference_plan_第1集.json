@@ -1,11 +1,11 @@
 {
   "kind": "n2d_reference_plan",
   "version": 1,
-  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "episode": "第1集",
-  "backend": "codex",
-  "backend_label": "GPT Image 2（渠道 Codex CLI）",
-  "backend_strategy": "multi_reference",
+  "backend": "dreamina",
+  "backend_label": "即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI）",
+  "backend_strategy": "multi_reference_sticky_reference",
   "clips": [
     {
       "clip_id": "EP01_CLIP01",
@@ -172,7 +172,7 @@
       "status": "ready",
       "available": true,
       "path": "生产数据/memory_anchor_plan_第1集.json",
-      "sha256": "87140f1341b027200e8891eb24f7df30d858a5edf2742fb192afa76b05095451",
+      "sha256": "4d5651ca716513ee92eaa4329087ef019e2b00f36699da077ebec9095aff6486",
       "required_rows": 0,
       "required_char_keys": [],
       "consumed_char_keys": [],
@@ -182,13 +182,13 @@
       "validated_reference_sha256_by_char": {},
       "errors": [],
       "source_fingerprint": {
-        "identity_drift_report_sha256": "4c30a6a6fa211ecec10dd3e296f88e5b87d2c89559ac62c277c689698f1710d7",
-        "identity_registry_sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f",
+        "identity_drift_report_sha256": "c047286a9682a933ee00e3e7d1d7ad9a33b9b49ae3b025abee0b897f4cc47428",
+        "identity_registry_sha256": "0b0e81dbb73d6f8aeaba909e22509856461d3255e450606dbfa5fc03e0aae9af",
         "storyboard_sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
       },
       "current_source_fingerprint": {
-        "identity_registry_sha256": "dd3b6779c2a85b07d39771f985e9857edc82ca10d0f238ef607e25537f889c2f",
-        "identity_drift_report_sha256": "4c30a6a6fa211ecec10dd3e296f88e5b87d2c89559ac62c277c689698f1710d7",
+        "identity_registry_sha256": "0b0e81dbb73d6f8aeaba909e22509856461d3255e450606dbfa5fc03e0aae9af",
+        "identity_drift_report_sha256": "c047286a9682a933ee00e3e7d1d7ad9a33b9b49ae3b025abee0b897f4cc47428",
         "storyboard_sha256": "71d0db586e945e8ed39160c42f1846f47289f355362663500783f31d7301d8b6"
       },
       "unconsumed_char_keys": []

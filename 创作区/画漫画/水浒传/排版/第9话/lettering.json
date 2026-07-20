@@ -1,0 +1,817 @@
+{
+  "schema_version": 1,
+  "kind": "comic_lettering",
+  "chapter": "第9话",
+  "language_mode": "中文",
+  "text_metadata_version": 1,
+  "items": [
+    {
+      "item_id": "L001",
+      "panel_id": "P001",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "宁同死，不卖友。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "宁同死，不卖友。",
+      "tone": "",
+      "slot_id": "B001D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L002",
+      "panel_id": "P002",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "把我们绑出去，保全大郎。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "把我们绑出去，保全大郎。",
+      "tone": "",
+      "slot_id": "B002D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L003",
+      "panel_id": "P003",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "我若死，与你们同死；活，便同活。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "我若死，与你们同死；活，便同活。",
+      "tone": "",
+      "slot_id": "B003D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L004",
+      "panel_id": "P004",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "半夜围庄，究竟为何？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "半夜围庄，究竟为何？",
+      "tone": "",
+      "slot_id": "B004D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L005",
+      "panel_id": "P005",
+      "type": "dialogue",
+      "speaker": "LI_JI",
+      "text": "原告李吉在此，回书便是铁证！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "原告李吉在此，回书便是铁证！",
+      "tone": "",
+      "slot_id": "B005D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L006",
+      "panel_id": "P006",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "李吉，你为何诬告平人？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "李吉，你为何诬告平人？",
+      "tone": "",
+      "slot_id": "B006D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L007",
+      "panel_id": "P007",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "小人醉后……忘了回书。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "小人醉后……忘了回书。",
+      "tone": "",
+      "slot_id": "B007D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L008",
+      "panel_id": "P009",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "先稳住他们，再借火开路。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "先稳住他们，再借火开路。",
+      "tone": "",
+      "slot_id": "B009D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L009",
+      "panel_id": "P010",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "能带的都带上。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "能带的都带上。",
+      "tone": "",
+      "slot_id": "B010D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L010",
+      "panel_id": "P011",
+      "type": "sfx",
+      "speaker": "",
+      "text": "火把噼啪",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "火把噼啪",
+      "slot_id": "B011S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L011",
+      "panel_id": "P012",
+      "type": "sfx",
+      "speaker": "",
+      "text": "铮",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "铮",
+      "slot_id": "B012S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L012",
+      "panel_id": "P013",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "今夜舍庄，换一条活路。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "今夜舍庄，换一条活路。",
+      "tone": "",
+      "slot_id": "B013D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L013",
+      "panel_id": "P013",
+      "type": "sfx",
+      "speaker": "",
+      "text": "轰",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "轰",
+      "slot_id": "B013S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L014",
+      "panel_id": "P014",
+      "type": "dialogue",
+      "speaker": "COUNTY_LIEUTENANT",
+      "text": "后面起火了！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "后面起火了！",
+      "tone": "",
+      "slot_id": "B014D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L015",
+      "panel_id": "P015",
+      "type": "sfx",
+      "speaker": "",
+      "text": "呼——",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "呼——",
+      "slot_id": "B015S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L016",
+      "panel_id": "P016",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "随我杀出去！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "随我杀出去！",
+      "tone": "",
+      "slot_id": "B016D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L017",
+      "panel_id": "P016",
+      "type": "sfx",
+      "speaker": "",
+      "text": "杀——",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "杀——",
+      "slot_id": "B016S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L018",
+      "panel_id": "P017",
+      "type": "sfx",
+      "speaker": "",
+      "text": "锵",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "锵",
+      "slot_id": "B017S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L019",
+      "panel_id": "P018",
+      "type": "sfx",
+      "speaker": "",
+      "text": "铛",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "铛",
+      "slot_id": "B018S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L020",
+      "panel_id": "P019",
+      "type": "dialogue",
+      "speaker": "ZHU_WU",
+      "text": "不要散，跟紧史大郎！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "不要散，跟紧史大郎！",
+      "tone": "",
+      "slot_id": "B019D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L021",
+      "panel_id": "P021",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "李吉！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "李吉！",
+      "tone": "",
+      "slot_id": "B021D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L022",
+      "panel_id": "P022",
+      "type": "sfx",
+      "speaker": "",
+      "text": "唰",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "唰",
+      "slot_id": "B022S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L023",
+      "panel_id": "P023",
+      "type": "sfx",
+      "speaker": "",
+      "text": "锵",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "锵",
+      "slot_id": "B023S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L024",
+      "panel_id": "P024",
+      "type": "dialogue",
+      "speaker": "COUNTY_LIEUTENANT",
+      "text": "撤！快撤！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "撤！快撤！",
+      "tone": "",
+      "slot_id": "B024D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L025",
+      "panel_id": "P027",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "总算杀出来了。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "总算杀出来了。",
+      "tone": "",
+      "slot_id": "B027D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L026",
+      "panel_id": "P029",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "庄院家私，都没了。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "庄院家私，都没了。",
+      "tone": "",
+      "slot_id": "B029D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L027",
+      "panel_id": "P030",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "我要去关西寻师父。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "我要去关西寻师父。",
+      "tone": "",
+      "slot_id": "B030D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L028",
+      "panel_id": "P031",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "留下做寨主，岂不快活？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "留下做寨主，岂不快活？",
+      "tone": "",
+      "slot_id": "B031D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L029",
+      "panel_id": "P032",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "清白之身，不肯落草。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "清白之身，不肯落草。",
+      "tone": "",
+      "slot_id": "B032D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L030",
+      "panel_id": "P035",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "诸位保重。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "诸位保重。",
+      "tone": "",
+      "slot_id": "B035D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L031",
+      "panel_id": "P037",
+      "type": "narration",
+      "speaker": "",
+      "text": "山高路远，只为寻师。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S009：崎嶇山嶺，寂寞孤村。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "山高路远，只为寻师。",
+      "slot_id": "B037N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L032",
+      "panel_id": "P039",
+      "type": "sfx",
+      "speaker": "",
+      "text": "喔——",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "喔——",
+      "slot_id": "B039S1",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L033",
+      "panel_id": "P040",
+      "type": "narration",
+      "speaker": "",
+      "text": "半月后，渭州。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S012：史進在路，免不得饑食渴飲，夜住曉行。獨自一個行了半月之上，來到渭州。「這裏也有一個經略府，莫非師父王教頭在這裏？」史進便入城來，看時，依然有六街三市。只見一個小小茶坊，正在路口。史進便入茶坊裏來，揀一副座位坐了。茶博士問道：「客官，喫甚茶？」史進道：「喫個泡茶。」茶博士點個泡茶，放在史進面前。史進問道：「這裏經略府在何處？」茶博士道：「只在前面便是。」史進道：「借問經略府內有個東京來的教頭王進麼？」茶博士道：「這府裏教頭極多，有三四個姓王的，不知那個是王進？」",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "半月后，渭州。",
+      "slot_id": "B040N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L034",
+      "panel_id": "P041",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "这里也有经略府。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "这里也有经略府。",
+      "tone": "",
+      "slot_id": "B041D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L035",
+      "panel_id": "P043",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "府里可有一位王进教头？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "府里可有一位王进教头？",
+      "tone": "",
+      "slot_id": "B043D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L036",
+      "panel_id": "P044",
+      "type": "dialogue",
+      "speaker": "SHI_JIN",
+      "text": "姓王的教头有三四个。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "姓王的教头有三四个。",
+      "tone": "",
+      "slot_id": "B044D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L037",
+      "panel_id": "P047",
+      "type": "dialogue",
+      "speaker": "LU_DA",
+      "text": "闻名不如见面！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "闻名不如见面！",
+      "tone": "",
+      "slot_id": "B047D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L038",
+      "panel_id": "P048",
+      "type": "dialogue",
+      "speaker": "LU_DA",
+      "text": "王教头在延安。走，先与洒家吃酒！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "王教头在延安。走，先与洒家吃酒！",
+      "tone": "",
+      "slot_id": "B048D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    }
+  ],
+  "style_consistency": {
+    "baseline": "排版/lettering_style_baseline.json",
+    "dominant_styles": {
+      "dialogue": {
+        "font": "project_default",
+        "size": "44",
+        "direction": "horizontal",
+        "bubble": "round"
+      },
+      "sfx": {
+        "font": "project_default",
+        "size": "72",
+        "direction": "horizontal",
+        "bubble": "none"
+      },
+      "narration": {
+        "font": "project_default",
+        "size": "42",
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    "mismatches": []
+  }
+}

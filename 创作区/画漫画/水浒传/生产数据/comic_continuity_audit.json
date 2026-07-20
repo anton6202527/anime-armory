@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "kind": "comic_continuity_audit",
-  "created_at": "2026-07-19T10:52:36+00:00",
+  "created_at": "2026-07-20T10:07:00+00:00",
   "project_root": ".",
-  "through_chapter": "第6话",
+  "through_chapter": "第9话",
   "summary": {
-    "chapters": 6,
+    "chapters": 9,
     "block": 0,
     "warn": 0,
     "info": 0
@@ -640,6 +640,624 @@
           "CHAR_SHI_TAIGONG": {
             "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
             "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          }
+        }
+      }
+    },
+    {
+      "chapter": "第7话",
+      "panel_script_path": "脚本/第7话/panel_script.json",
+      "panel_script_sha256": "f80cce16e9b7ba7d8516ef4218b16969911f96a80b52d28cf093d29ce1275881",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "王进留下真本事后继续流亡，史进则在送师与丧父之间从学徒走到独立。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "公权追捕仍在远处逼迫王进，而史进在失去师父与父亲后被迫独自承担庄院与自身选择。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "已尽得王进十八般武艺真传，又经历师父远行与父亲病逝，独自接掌史家庄。",
+            "visual_state": "同一银盘面皮与九龙刺青，技艺成熟；守丧时外罩素麻孝服。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "少华山首领，忧虑粮草与官府围剿。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "少华山二寨主，自恃武勇，执意借道史家村攻华阴县。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "少华山三寨主，主张避开史家村。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "史家村附近猎户，近来因少华山强人盘踞而不敢进山。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "史进击败陈达却因朱武、杨春舍命相救而释放少华山三杰，第一次以江湖义气压过官府奖赏。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "官府悬赏与民间自保之外，史进开始承认草泽义气，史家庄与少华山之间形成危险私交。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "独掌史家庄后组织村坊自保，生擒陈达；被朱武、杨春同生共死之义打动，释放三人并结下往来。",
+            "visual_state": "同一银盘面皮与九龙刺青；迎敌时穿朱红甲、青锦袄、抹绿靴，持三尖两刃四窍八环刀，骑火炭赤马。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "少华山首领，以同生共死的苦计救回陈达并赢得史进敬重。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "不听劝阻强闯史家村，被史进生擒，后由兄弟舍命相救获释。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "劝阻陈达未果，随后随朱武跪庄请死，救回兄弟。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "猎户，将少华山聚众与官府悬赏消息告知史进。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "史进击败陈达却因朱武、杨春舍命相救而释放少华山三杰，第一次以江湖义气压过官府奖赏。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "官府悬赏与民间自保之外，史进开始承认草泽义气，史家庄与少华山之间形成危险私交。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "独掌史家庄后组织村坊自保，生擒陈达；被朱武、杨春同生共死之义打动，释放三人并结下往来。",
+            "visual_state": "同一银盘面皮与九龙刺青；迎敌时穿朱红甲、青锦袄、抹绿靴，持三尖两刃四窍八环刀，骑火炭赤马。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "少华山首领，以同生共死的苦计救回陈达并赢得史进敬重。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "不听劝阻强闯史家村，被史进生擒，后由兄弟舍命相救获释。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "劝阻陈达未果，随后随朱武跪庄请死，救回兄弟。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "猎户，将少华山聚众与官府悬赏消息告知史进。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          }
+        }
+      }
+    },
+    {
+      "chapter": "第8话",
+      "panel_script_path": "脚本/第8话/panel_script.json",
+      "panel_script_sha256": "38aa6adcf892e22ef90af1d696f82204c6c19b5ca27715591f941ac38a944000",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "史进击败陈达却因朱武、杨春舍命相救而释放少华山三杰，第一次以江湖义气压过官府奖赏。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "官府悬赏与民间自保之外，史进开始承认草泽义气，史家庄与少华山之间形成危险私交。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "独掌史家庄后组织村坊自保，生擒陈达；被朱武、杨春同生共死之义打动，释放三人并结下往来。",
+            "visual_state": "同一银盘面皮与九龙刺青；迎敌时穿朱红甲、青锦袄、抹绿靴，持三尖两刃四窍八环刀，骑火炭赤马。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "少华山首领，以同生共死的苦计救回陈达并赢得史进敬重。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "不听劝阻强闯史家村，被史进生擒，后由兄弟舍命相救获释。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "劝阻陈达未果，随后随朱武跪庄请死，救回兄弟。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "猎户，将少华山聚众与官府悬赏消息告知史进。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          },
+          "CHAR_WANG_SI": {
+            "story_state": "史家庄庄客头领，尚未承担少华山联络差事。",
+            "visual_state": "三十余岁、机灵圆脸、短髭、褐色庄客服、布腰带，常带皮质信囊。"
+          },
+          "CHAR_COUNTY_LIEUTENANT": {
+            "story_state": "华阴县县尉，尚未掌握史家庄私通证据。",
+            "visual_state": "四十余岁、瘦硬长脸、黑色幞头、深青官服、皮甲护臂，骑棕马持令旗。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "史进与少华山三杰暗中往来，中秋设宴时因王四醉失回书、李吉告密，被华阴县官兵连夜围庄。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "史家庄与少华山的私交证据落入官府，民间义气与县衙法度从潜在冲突转为武装围捕。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "收受少华山谢礼并持续回礼，中秋邀三杰入庄赏月；官兵围庄后与三杰一同陷入绝境。",
+            "visual_state": "同一银盘面皮、九龙刺青与结实体态；日常穿青锦短袄，中秋宴着深青便服，闻警时急持三尖两刃刀。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "与陈达、杨春持续回礼史进，中秋赴史家庄宴席时被官兵围困。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "获释后与兄弟持续回礼史进，中秋赴宴时被官兵围困。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "获释后与兄弟持续回礼史进，中秋赴宴时被官兵围困。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "在林中发现王四醉失的少华山回书与银两，为三千贯赏钱前往华阴县告密。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          },
+          "CHAR_WANG_SI": {
+            "story_state": "史家庄庄客头领，替史进往来少华山；醉失回书后撒谎掩盖，直接造成官兵围庄。",
+            "visual_state": "三十余岁、机灵圆脸、短髭、褐色庄客服、布腰带，常带皮质信囊。"
+          },
+          "CHAR_COUNTY_LIEUTENANT": {
+            "story_state": "华阴县县尉，收到李吉密报后率都头与三四百官兵连夜围困史家庄。",
+            "visual_state": "四十余岁、瘦硬长脸、黑色幞头、深青官服、皮甲护臂，骑棕马持令旗。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "史进与少华山三杰暗中往来，中秋设宴时因王四醉失回书、李吉告密，被华阴县官兵连夜围庄。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "史家庄与少华山的私交证据落入官府，民间义气与县衙法度从潜在冲突转为武装围捕。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "收受少华山谢礼并持续回礼，中秋邀三杰入庄赏月；官兵围庄后与三杰一同陷入绝境。",
+            "visual_state": "同一银盘面皮、九龙刺青与结实体态；日常穿青锦短袄，中秋宴着深青便服，闻警时急持三尖两刃刀。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "与陈达、杨春持续回礼史进，中秋赴史家庄宴席时被官兵围困。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "获释后与兄弟持续回礼史进，中秋赴宴时被官兵围困。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "获释后与兄弟持续回礼史进，中秋赴宴时被官兵围困。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "在林中发现王四醉失的少华山回书与银两，为三千贯赏钱前往华阴县告密。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          },
+          "CHAR_WANG_SI": {
+            "story_state": "史家庄庄客头领，替史进往来少华山；醉失回书后撒谎掩盖，直接造成官兵围庄。",
+            "visual_state": "三十余岁、机灵圆脸、短髭、褐色庄客服、布腰带，常带皮质信囊。"
+          },
+          "CHAR_COUNTY_LIEUTENANT": {
+            "story_state": "华阴县县尉，收到李吉密报后率都头与三四百官兵连夜围困史家庄。",
+            "visual_state": "四十余岁、瘦硬长脸、黑色幞头、深青官服、皮甲护臂，骑棕马持令旗。"
+          }
+        }
+      }
+    },
+    {
+      "chapter": "第9话",
+      "panel_script_path": "脚本/第9话/panel_script.json",
+      "panel_script_sha256": "bc45a6b0b851a02b85ac7fc533db264ead9988e0fbdbccc8749d7488ff7fba7b",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "史进与少华山三杰暗中往来，中秋设宴时因王四醉失回书、李吉告密，被华阴县官兵连夜围庄。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "史家庄与少华山的私交证据落入官府，民间义气与县衙法度从潜在冲突转为武装围捕。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "收受少华山谢礼并持续回礼，中秋邀三杰入庄赏月；官兵围庄后与三杰一同陷入绝境。",
+            "visual_state": "同一银盘面皮、九龙刺青与结实体态；日常穿青锦短袄，中秋宴着深青便服，闻警时急持三尖两刃刀。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "与陈达、杨春持续回礼史进，中秋赴史家庄宴席时被官兵围困。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "获释后与兄弟持续回礼史进，中秋赴宴时被官兵围困。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "获释后与兄弟持续回礼史进，中秋赴宴时被官兵围困。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "在林中发现王四醉失的少华山回书与银两，为三千贯赏钱前往华阴县告密。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          },
+          "CHAR_WANG_SI": {
+            "story_state": "史家庄庄客头领，替史进往来少华山；醉失回书后撒谎掩盖，直接造成官兵围庄。",
+            "visual_state": "三十余岁、机灵圆脸、短髭、褐色庄客服、布腰带，常带皮质信囊。"
+          },
+          "CHAR_COUNTY_LIEUTENANT": {
+            "story_state": "华阴县县尉，收到李吉密报后率都头与三四百官兵连夜围困史家庄。",
+            "visual_state": "四十余岁、瘦硬长脸、黑色幞头、深青官服、皮甲护臂，骑棕马持令旗。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "史进以焚庄突围结束华阴旧生活，拒绝落草后踏上寻师路，并在渭州遇见鲁达。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "史家庄被焚、官兵围捕失败；史进从地方庄主变成无家可归的江湖行者，官法与草莽冲突进一步扩大。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "为救少华山三杰焚毁史家庄、斩杀告密者李吉并冲出官兵包围；拒绝落草后独自赴关西寻王进，在渭州结识鲁达。",
+            "visual_state": "同一银盘面皮与九龙刺青；突围时披战装持朴刀，离寨寻师时戴白范阳毡帽、穿白战袍、背包裹提朴刀。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "与史进共同突围回到少华山，苦留史进入伙未果，洒泪送他下山。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "与史进、朱武、杨春共同杀出围庄，回到少华山后送别史进。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "与史进、朱武、陈达共同杀出围庄，回到少华山后送别史进。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "随官兵围庄索赏，突围时被史进当场斩杀。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          },
+          "CHAR_WANG_SI": {
+            "story_state": "史家庄庄客头领，替史进往来少华山；醉失回书后撒谎掩盖，直接造成官兵围庄。",
+            "visual_state": "三十余岁、机灵圆脸、短髭、褐色庄客服、布腰带，常带皮质信囊。"
+          },
+          "CHAR_COUNTY_LIEUTENANT": {
+            "story_state": "率兵围庄却被火攻与突围冲散，惊惧逃回华阴县。",
+            "visual_state": "四十余岁、瘦硬长脸、黑色幞头、深青官服、皮甲护臂，骑棕马持令旗。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "史进以焚庄突围结束华阴旧生活，拒绝落草后踏上寻师路，并在渭州遇见鲁达。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "三十六天罡与七十二地煞已分散入世，具体人间身份仍未揭晓。"
+          },
+          "WORLD_ORDER": {
+            "state": "史家庄被焚、官兵围捕失败；史进从地方庄主变成无家可归的江湖行者，官法与草莽冲突进一步扩大。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "知道天罡地煞真相、主动封口并向天子隐瞒放魔责任的复职官员。",
+            "visual_state": "返京朝觐时重新整理为洁净官服，外表恢复稳拿，掌心仍有冷汗。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "已向洪信说明一百零八魔君的来历，留守龙虎山修整殿宇、重立石碑。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          },
+          "CHAR_GAO_QIU": {
+            "story_state": "得知王进弃家在逃，已发文诸州府追捕逃军。",
+            "visual_state": "脸与清瘦体态不变，换穿殿帅府新任太尉的绯色圆领公服、黑色展脚幞头与革带。"
+          },
+          "CHAR_DUAN_WANG": {
+            "story_state": "哲宗无嗣而崩后被百官拥立，已即位为徽宗。",
+            "visual_state": "年轻清俊面孔不变，改穿即位后的赭黄帝王圆领袍与通天冠礼服。"
+          },
+          "CHAR_WANG_JIN": {
+            "story_state": "已完成半年授艺，为避免追捕牵连史家庄，携母继续前往延安府。",
+            "visual_state": "旅尘与病色大减，授艺后更显沉稳；离庄时仍穿素青旅装。"
+          },
+          "CHAR_WANG_MOTHER": {
+            "story_state": "在史家庄休养半年后康复，随王进继续西行。",
+            "visual_state": "银灰发髻与朴素衣着不变，气色恢复，离庄时乘马。"
+          },
+          "CHAR_SHI_JIN": {
+            "story_state": "为救少华山三杰焚毁史家庄、斩杀告密者李吉并冲出官兵包围；拒绝落草后独自赴关西寻王进，在渭州结识鲁达。",
+            "visual_state": "同一银盘面皮与九龙刺青；突围时披战装持朴刀，离寨寻师时戴白范阳毡帽、穿白战袍、背包裹提朴刀。"
+          },
+          "CHAR_SHI_TAIGONG": {
+            "story_state": "促成王进授艺半年，送别后染病去世，安葬于村西祖坟。",
+            "visual_state": "年近六旬、须发皆白；病中卧床，丧仪只呈遗像、棺椁与送葬队列。"
+          },
+          "CHAR_ZHU_WU": {
+            "story_state": "与史进共同突围回到少华山，苦留史进入伙未果，洒泪送他下山。",
+            "visual_state": "清瘦谋士，红润俊眼、白面细髯，棕叶道服、鹿皮云冠，佩双刀。"
+          },
+          "CHAR_CHEN_DA": {
+            "story_state": "与史进、朱武、杨春共同杀出围庄，回到少华山后送别史进。",
+            "visual_state": "粗豪壮汉，干红凹面巾、裹金生铁甲、红衲袄，持丈八点钢矛，骑高头白马。"
+          },
+          "CHAR_YANG_CHUN": {
+            "story_state": "与史进、朱武、陈达共同杀出围庄，回到少华山后送别史进。",
+            "visual_state": "腰长臂瘦，冷静坚忍，朴素山寨战衣，持大杆刀。"
+          },
+          "CHAR_LI_JI": {
+            "story_state": "随官兵围庄索赏，突围时被史进当场斩杀。",
+            "visual_state": "精瘦猎户，晒黑面孔，短褐草鞋，背猎弓与空猎囊。"
+          },
+          "CHAR_WANG_SI": {
+            "story_state": "史家庄庄客头领，替史进往来少华山；醉失回书后撒谎掩盖，直接造成官兵围庄。",
+            "visual_state": "三十余岁、机灵圆脸、短髭、褐色庄客服、布腰带，常带皮质信囊。"
+          },
+          "CHAR_COUNTY_LIEUTENANT": {
+            "story_state": "率兵围庄却被火攻与突围冲散，惊惧逃回华阴县。",
+            "visual_state": "四十余岁、瘦硬长脸、黑色幞头、深青官服、皮甲护臂，骑棕马持令旗。"
           }
         }
       }

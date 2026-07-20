@@ -19,17 +19,17 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-07-18。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-07-20。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4722 | 286913 |
+| n2d | `n2d` + `n2d-*` | 21 | 4722 | 288817 |
 | novel | `novel` + `novel-*` | 29 | 3173 | 71169 |
-| comic | `comic` + `comic-*` | 13 | 1525 | 44165 |
+| comic | `comic` + `comic-*` | 13 | 1525 | 44827 |
 | song | `song` + `song-*` | 11 | 660 | 9899 |
-| mv | `mv` + `mv-*` | 14 | 1138 | 23589 |
-| ad | `ad` + `ad-*` | 14 | 1117 | 37009 |
-| **合计** | `skills/*/SKILL.md` | **102** | 12335 | 472744 |
+| mv | `mv` + `mv-*` | 14 | 1138 | 24251 |
+| ad | `ad` + `ad-*` | 14 | 1117 | 37671 |
+| **合计** | `skills/*/SKILL.md` | **102** | 12335 | 476634 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 

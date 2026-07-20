@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第9话",
+  "panel_id": "P019",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 10,
+  "references": [
+    {
+      "id": "CHAR_ZHU_WU",
+      "path": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+      "sha256": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_CHEN_DA",
+      "path": "出图/共享/图片/CHAR_CHEN_DA__front.png",
+      "sha256": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_YANG_CHUN",
+      "path": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+      "sha256": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHI_MANOR",
+      "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+      "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_ZHU_WU",
+      "path": "出图/共享/图片/CHAR_ZHU_WU__face.png",
+      "sha256": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_CHEN_DA",
+      "path": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+      "sha256": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_YANG_CHUN",
+      "path": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+      "sha256": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_ZHU_WU",
+      "path": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+      "sha256": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21",
+      "role": "three_quarter",
+      "required": false
+    },
+    {
+      "id": "CHAR_CHEN_DA",
+      "path": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
+      "sha256": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-20T16:42:24"
+}

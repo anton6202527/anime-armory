@@ -5,7 +5,7 @@
 - `出视频/jobs_manifest.json`：每个 clip 跑几版、prompt 文件、已登记 take、评分、selected_take 的源头，由 `scripts/video_jobs.py` 生成/维护。
 - `分镜/timeline_manifest.json`：最终合成顺序和 selected video 路径，由 `mv-plan` 创建、`video_jobs.py --select` 同步。
 - `mv-video/references/action_knowledge.md`：动作家族、动作峰值、转场母题的知识库。`clip_plan.json` 中的 `action_family/action_peak/visual_motif/transition_motif` 应从这里选，不临场泛写“炫酷”。
-- `mv/references/运镜/manifest.json`：运镜机器真值源。`clip_plan.json.shot_design.camera_movement` 和视频 prompt 的 `镜头运动` 应从这里选结构化词，并补速度、方向、起幅、落幅。
+- `mv/references/运镜/manifest.json`：运镜机器真值源。`clip_plan.json.shot_design.camera_movement` 和视频 prompt 的 `镜头运动` 应从这里选结构化词，并补速度、方向、起幅、落幅；视觉校准优先看本地五帧 contact sheet，需要完整动态节奏时才用 `skills/mv/scripts/camera_reference.py fetch` 按需下载。
 
 ## clip 任务格式（按 clip_plan + beatgrid 规划）
 ```markdown

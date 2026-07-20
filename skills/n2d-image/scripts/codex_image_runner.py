@@ -537,13 +537,30 @@ def shared_variant_note(rel_path: str) -> str:
             "枪尖、枪杆、尾端和绿色法术能量层级清楚；禁止画成散雾或无实体光束。"
         )
     if any(token in stem for token in ("后45度", "后3／4", "后四分之三", "侧背")):
-        return "本次目标是后3/4参考：同一角色同一服装，中性浅灰背景，人物从背面向侧前方转约45°，全身从头到鞋靴完整可见；不是前3/4，也不是纯背面。"
+        return (
+            "本次目标是后3/4参考：同一角色同一服装，中性浅灰背景，头、颈、双肩线、胸腔、腰背、"
+            "骨盆、膝盖和双脚作为一个整体，从严格正背面向同一侧旋转约45°；近侧肩胯更大、远侧肩胯"
+            "被遮挡，背部平面必须出现明确透视收缩，只露少量侧脸轮廓。全身从头到鞋靴完整可见；禁止"
+            "只有头部回转而躯干仍正背对称，禁止后脑正中、双肩等宽、双鞋跟对称的纯背面，禁止前3/4。"
+            "若角色锚写苍白干裂病容，只表现为病弱苍白肤色和轻微干唇，不得画成脸颊树枝状黑线、龟裂"
+            "纹、妖化纹、疤痕或开放性伤口；可见侧脸必须服从同源脸锚。"
+        )
     if "45度" in stem:
         return "本次目标是 45° / 三分之二侧脸参考：同一角色同一服装，中性浅灰背景，脸部转向约 45°，人物全身从头到鞋靴完整可见；不是正脸改名，也不是纯侧脸。"
     if stem.endswith("_侧"):
-        return "本次目标是标准侧面参考：同一角色同一服装，中性浅灰背景，保持同身高同景别，人物全身从头到鞋靴完整可见，脸部清楚。"
+        return (
+            "本次目标是严格90°标准全侧面参考：同一角色同一服装，中性浅灰背景，脸、肩线、胸腔、"
+            "骨盆和双脚朝同一个侧向一起旋转到90°；脸部只能看到一只眼、一个耳朵和清晰的鼻梁/嘴唇/"
+            "下颌侧影，另一侧眼睛与另一侧耳朵必须完全不可见。保持同身高同景别，人物全身从头到鞋靴"
+            "完整可见；禁止前45°、禁止双眼可见、禁止正面胸口、禁止凭空新增疤痕/裂纹/纹身。"
+        )
     if stem.endswith("_背"):
-        return "本次目标是背面参考：同一角色同一服装，中性浅灰背景，人物全身从头到鞋靴完整可见，重点锁发型背面、衣料结构和背影轮廓。"
+        return (
+            "本次目标是严格180°正背面参考：同一角色同一服装，中性浅灰背景，后脑、后颈、双肩背线、"
+            "腰背、骨盆、双腿和鞋跟都正对镜头；人物全身从头到鞋靴完整可见，重点锁发型背面、布巾尾带、"
+            "衣料背部层次、伤臂吊带背侧连接与背影轮廓。脸、双眼、鼻梁、嘴唇、正面胸口和前襟必须完全"
+            "不可见；禁止后45°冒充正背面，禁止人物回头，禁止凭空新增背部武器、图案、文字或配件。"
+        )
     if "半身" in stem:
         return "本次目标是半身服装参考：人物主体居中，头身中线接近画面中线，左右留白均衡，重点锁服装剪裁、材质和配饰。"
     if "脸部特写" in stem:
@@ -891,6 +908,37 @@ def section_for(sections: Sequence[ClipSection], shot: str) -> ClipSection:
     raise ValueError(f"no prompt section found for {shot}")
 
 
+def declared_target_suffix(section: ClipSection, raw_path: str) -> str:
+    """Return the frame selector encoded by a prompt-declared target path.
+
+    Most projects use ``_a1``/``_mid``/``_end``, but production storyboards
+    also name timed action anchors ``_anchor01`` or
+    ``_anchor_cut_0360``.  The prompt target line is the physical-output
+    truth, so the runner must not silently drop a valid PNG merely because its
+    suffix is more descriptive than the legacy shorthand.
+    """
+    stem = Path(raw_path).stem
+    clip_match = re.search(r"(\d+)$", str(section.clip or ""))
+    if clip_match:
+        number = int(clip_match.group(1))
+        match = re.match(rf"^(?:EP\d+_)?CLIP0*{number}_(.+)$", stem, re.I)
+        if match:
+            return match.group(1)
+    return stem
+
+
+def declared_target_mode(section: ClipSection, raw_path: str, first_path: str = "") -> str:
+    rel = str(raw_path or "")
+    if first_path and rel == first_path:
+        return "firstframe"
+    suffix = declared_target_suffix(section, rel).lower()
+    if suffix == "first":
+        return "firstframe"
+    if suffix == "end":
+        return "tailframe"
+    return "midframe"
+
+
 def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
     shot = normalize_shot_name(shot)
     line = section.target_line
@@ -915,6 +963,19 @@ def target_for_shot(shot: str, section: ClipSection, episode: str) -> Target:
             return Target(shot=shot, clip=section.clip, mode="midframe", rel_path=rel_to_root(path, episode), section=section)
         raise ValueError(f"{shot}: mid/anchor target missing")
 
+    custom_match = re.fullmatch(rf"{re.escape(section.clip)}_(.+)", shot, re.I)
+    if custom_match:
+        requested_suffix = custom_match.group(1)
+        path = next((
+            raw for raw in paths
+            if declared_target_suffix(section, raw).lower() == requested_suffix.lower()
+            or Path(raw).stem.lower() == requested_suffix.lower()
+        ), "")
+        if not path:
+            raise ValueError(f"{shot}: declared frame target missing")
+        mode = declared_target_mode(section, path, paths[0] if paths else "")
+        return Target(shot=shot, clip=section.clip, mode=mode, rel_path=rel_to_root(path, episode), section=section)
+
     first = paths[0] if paths else first_backticked(line)
     if not first:
         raise ValueError(f"{shot}: first-frame target missing")
@@ -929,7 +990,7 @@ def expand_shot_targets(shot: str, section: ClipSection, episode: str) -> List[T
     ``Clip_01_mid`` and ``Clip_01_end`` still resolve to one target.
     """
     normalized = normalize_shot_name(shot)
-    if re.search(r"_(?:first|mid|end|first_mid|a\d+)$", normalized):
+    if normalized.lower() != section.clip.lower():
         return [target_for_shot(normalized, section, episode)]
 
     targets = [target_for_shot(normalized, section, episode)]
@@ -937,10 +998,9 @@ def expand_shot_targets(shot: str, section: ClipSection, episode: str) -> List[T
     stems = {Path(target.rel_path).stem for target in targets}
     for path in paths:
         stem = Path(path).stem
-        suffix_match = re.search(r"_(mid|end|a\d+)$", stem)
-        if not suffix_match or stem in stems:
+        if stem in stems:
             continue
-        suffix = suffix_match.group(1)
+        suffix = declared_target_suffix(section, path)
         frame_shot = f"{section.clip}_{suffix}"
         frame_target = target_for_shot(frame_shot, section, episode)
         stems.add(Path(frame_target.rel_path).stem)
@@ -2523,13 +2583,22 @@ def codex_reference_inputs_for_target(
             add(source_target.rel_path, role="source_frame", owner=target.clip, source="same_clip_firstframe")
         except Exception:
             pass
+        declared_paths = [rel_to_root(raw, episode) for raw in backticked(target.section.target_line)]
+        if target.mode == "midframe" and target.rel_path in declared_paths:
+            target_index = declared_paths.index(target.rel_path)
+            if target_index > 0:
+                add(
+                    declared_paths[target_index - 1],
+                    role="source_frame",
+                    owner=target.clip,
+                    source="same_clip_previous_frame",
+                )
         if target.mode == "tailframe":
-            for raw in backticked(target.section.target_line):
-                rel = rel_to_root(raw, episode)
+            for rel in declared_paths:
                 stem = Path(rel).stem
                 if rel == target.rel_path:
                     continue
-                if "_mid" in stem or re.search(r"_a\d+$", stem):
+                if declared_target_mode(target.section, rel, declared_paths[0] if declared_paths else "") == "midframe":
                     add(rel, role="source_frame", owner=target.clip, source="same_clip_anchor")
 
     for item in bundle.get("items") or []:
@@ -2642,6 +2711,26 @@ def select_codex_reference_inputs(
         context_reserve = min(context_reserve, len(contexts), max(0, limit - len(sources)))
     character_budget = max(0, limit - len(sources) - context_reserve)
 
+    context_groups: Dict[str, List[Dict[str, Any]]] = {}
+    for row in contexts:
+        owner = str(row.get("owner") or row.get("rel_path") or "context")
+        context_groups.setdefault(owner, []).append(row)
+    selected_contexts: List[Dict[str, Any]] = []
+    context_depth = 0
+    context_owners = list(context_groups)
+    while len(selected_contexts) < context_reserve:
+        added = False
+        for owner in context_owners:
+            group = context_groups[owner]
+            if context_depth < len(group):
+                selected_contexts.append(group[context_depth])
+                added = True
+                if len(selected_contexts) >= context_reserve:
+                    break
+        if not added:
+            break
+        context_depth += 1
+
     selected_chars: List[Dict[str, Any]] = []
     depth = 0
     owners = list(characters)
@@ -2658,7 +2747,7 @@ def select_codex_reference_inputs(
             break
         depth += 1
 
-    selected = [*sources, *selected_chars, *contexts[:context_reserve]]
+    selected = [*sources, *selected_chars, *selected_contexts]
     selected_ids = {id(row) for row in selected}
     for row in rows:
         if len(selected) >= limit:
@@ -3129,12 +3218,85 @@ def strict_single_image_review_enabled(root: Path) -> bool:
     return get_setting(str(root), "图片验收模式", "按生成粒度验收") == STRICT_IMAGE_REVIEW_MODE
 
 
+_OPTIONAL_SHARED_IDENTITY_VIEWS = {
+    "named_minimal": {"three_quarter", "side", "rear_three_quarter", "back", "turnaround"},
+    "recurring_standard": {"side", "rear_three_quarter", "back", "turnaround"},
+}
+
+
+def _is_explicitly_abandoned_optional_shared_image(
+    root: Path,
+    asset: str,
+    artifact_sha: str,
+    event: Mapping[str, Any],
+) -> bool:
+    """Return whether a rejected optional shared view was deliberately retired.
+
+    This is intentionally narrower than a general QA waiver: the exact rejected
+    hash must be named, the canonical PNG must already be absent, and the current
+    identity registry must classify the matching view as optional for its library
+    tier with ``status=review_failed``.  A later shot that truly needs the angle is
+    still blocked by the shared-first reference interlock.
+    """
+    meta = event.get("meta") if isinstance(event.get("meta"), Mapping) else {}
+    if (
+        str(meta.get("terminal_disposition") or "") != "abandoned_optional"
+        or str(meta.get("accepted_current_pixels")).strip().lower() not in {"false", "0", "no"}
+        or str(meta.get("artifact_sha256") or "") != artifact_sha
+        or (root / asset).exists()
+    ):
+        return False
+
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except (OSError, TypeError, json.JSONDecodeError):
+        return False
+    characters = registry.get("characters") if isinstance(registry, Mapping) else None
+    if not isinstance(characters, list):
+        return False
+    for character in characters:
+        if not isinstance(character, Mapping):
+            continue
+        character_tier = str(character.get("library_tier") or "")
+        forms = character.get("forms")
+        if not isinstance(forms, list):
+            continue
+        for form in forms:
+            if not isinstance(form, Mapping):
+                continue
+            tier = str(form.get("library_tier") or character_tier)
+            optional_views = _OPTIONAL_SHARED_IDENTITY_VIEWS.get(tier, set())
+            group = form.get("reference_group")
+            if not isinstance(group, Mapping):
+                continue
+            for view in optional_views:
+                slot = group.get(view)
+                visual_review = (
+                    slot.get("visual_review")
+                    if isinstance(slot, Mapping)
+                    and isinstance(slot.get("visual_review"), Mapping)
+                    else {}
+                )
+                if (
+                    isinstance(slot, Mapping)
+                    and str(slot.get("path") or "") == asset
+                    and str(slot.get("status") or "") in {"planned", "review_failed"}
+                    and str(visual_review.get("status") or "") == "rejected"
+                    and str(visual_review.get("png_sha256") or "") == artifact_sha
+                ):
+                    return True
+    return False
+
+
 def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict[str, str]]:
     """Return the latest different image awaiting hash-bound QA acceptance.
 
     Re-drawing the same target remains allowed so a rejected current unit can
     be improved.  Moving to a different image requires a later dashboard QA
-    event with ``status=accepted`` and the exact generated pixel hash.
+    event with ``status=accepted`` and the exact generated pixel hash, except
+    for an exact-hash rejected optional shared identity view that has been
+    explicitly retired and removed from its canonical path.
     """
     path = root / "生产数据" / "production_events.jsonl"
     if not path.is_file():
@@ -3152,7 +3314,7 @@ def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict
         generation = event.get("generation") if isinstance(event.get("generation"), Mapping) else {}
         if (
             event.get("stage") == "image"
-            and event.get("event") == "generation"
+            and event.get("event") in {"generation", "redraw"}
             and generation.get("status") == "pass"
             and generation.get("asset")
         ):
@@ -3169,12 +3331,19 @@ def strict_pending_image_review(root: Path, next_rel_path: str) -> Optional[Dict
         if (
             event.get("stage") == "image"
             and event.get("event") == "qa"
-            and generation.get("status") == "accepted"
             and str(generation.get("asset") or "") == asset
             and artifact_sha
             and str(meta.get("artifact_sha256") or "") == artifact_sha
         ):
-            return None
+            if generation.get("status") == "accepted":
+                return None
+            if (
+                generation.get("status") == "rejected"
+                and _is_explicitly_abandoned_optional_shared_image(
+                    root, asset, artifact_sha, event
+                )
+            ):
+                return None
     return {"asset": asset, "artifact_sha256": artifact_sha}
 
 
@@ -3238,6 +3407,32 @@ def model_facing_policy_guards(
             "镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；"
             "身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍"
         )
+
+    if "刀柄、发抖指节和衣料同轴" in body:
+        guards.insert(0, (
+            "冷开场首帧必须是85mm ECU/CU叙事插入，不是全身群像或两人并排跪地摆拍："
+            "前景清楚看见姜月初发抖的手紧握唯一一把横刀刀柄，暗银单刃刀身横向或斜横穿过画面，"
+            "刀尖悬停并明确指向画面右侧半跪的成年男性裴长青胸颈，尚未接触；"
+            "姜月初带少量暗红血污的痛苦决绝三分之二侧脸在中近景，二人都看戏内对象而非镜头；"
+            "虎山神只在远后景浅景深中形成虎头人身、直立双腿和人形肩背的巨影，绝不是四足普通老虎。"
+            "三层必须一眼读成‘刀对准人、妖在后方逼近’的反差"
+        ))
+
+    if str(getattr(target, "shot", "") or "") == "Clip_02_first" and "尸场空间一次建立" in body:
+        guards[:0] = [
+            (
+                "十分钟前首帧版式：35mm低机位广角尸场建立镜。姜月初画左从尸堆侧躺撑起，空手摸无血残损囚服；"
+                "裴长青在画右相隔至少两个身位独自半跪。禁止贴坐、对跪、搀扶、持刀对人、85mm海报群像和任何角色看镜头"
+            ),
+            (
+                "CHAR_04状态与拓扑：虎山神是远后景水平倒地伪死的虎头人身巨人，具人形胸腹、两条人形手臂手掌和两条人形腿脚；"
+                "禁止站立、复活、逼近、四足兽爪、水平长虎身或普通老虎"
+            ),
+            (
+                "道具唯一性：翻覆囚车、官道尸体和残骸建立死局；只出现一截断刀插地封路。"
+                "本帧完整横刀尚未入画，禁止完整长刀、第二把刀、双刀、碎片变成多把刀或武器陈列"
+            ),
+        ]
 
     if "左臂不自然扭曲" in body or "左臂骨折" in body:
         guards.append(
@@ -3429,10 +3624,7 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
     an exact edit boundary the anchor belongs to the sub-shot that starts
     there, not the one that just ended.
     """
-    match = re.search(r"_a(\d+)$", str(target.shot or ""), re.I)
     if target.mode not in {"firstframe", "midframe"}:
-        return {}
-    if target.mode == "midframe" and not match:
         return {}
     data = load_json_file(root / "脚本" / episode / "storyboard.json")
     target_num = re.search(r"(\d+)$", str(target.clip or ""))
@@ -3452,7 +3644,16 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         frame_role = "first"
     else:
         anchors = (clip.get("continuity") or {}).get("anchors") or []
-        anchor_index = int(match.group(1)) - 1
+        anchor_index = next((
+            index for index, row in enumerate(anchors)
+            if isinstance(row, dict)
+            and rel_to_root(str(row.get("anchor_png") or ""), episode) == target.rel_path
+        ), -1)
+        if anchor_index < 0:
+            match = re.search(r"_a(\d+)$", str(target.shot or ""), re.I)
+            if not match:
+                return {}
+            anchor_index = int(match.group(1)) - 1
         if anchor_index < 0 or anchor_index >= len(anchors) or not isinstance(anchors[anchor_index], dict):
             return {}
         try:
@@ -3468,9 +3669,36 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         if timing:
             parsed.append((float(timing.group(1)), float(timing.group(2)), row))
     if not parsed:
-        return {}
-    exact = next((item for item in parsed if abs(item[0] - at_sec) <= 1e-4), None)
-    selected = exact or next((item for item in parsed if item[0] <= at_sec < item[1]), None)
+        untimed = [row for row in (clip.get("shots") or []) if isinstance(row, dict)]
+        if not untimed:
+            return {}
+        if target.mode == "firstframe":
+            selected_index = 0
+        else:
+            try:
+                duration = float(clip.get("duration") or 0)
+            except (TypeError, ValueError):
+                duration = 0.0
+            if duration <= 0:
+                anchors = (clip.get("continuity") or {}).get("anchors") or []
+                try:
+                    duration = max(float(row.get("source_duration") or 0) for row in anchors if isinstance(row, dict))
+                except (TypeError, ValueError):
+                    duration = 0.0
+            if duration > 0:
+                selected_index = min(int(max(0.0, at_sec) / duration * len(untimed)), len(untimed) - 1)
+            else:
+                selected_index = min(anchor_index + 1, len(untimed) - 1)
+        duration = float(clip.get("duration") or len(untimed) or 1)
+        segment = duration / max(len(untimed), 1)
+        parsed = [
+            (index * segment, (index + 1) * segment, row)
+            for index, row in enumerate(untimed)
+        ]
+        selected = parsed[selected_index]
+    else:
+        exact = next((item for item in parsed if abs(item[0] - at_sec) <= 1e-4), None)
+        selected = exact or next((item for item in parsed if item[0] <= at_sec < item[1]), None)
     if not selected:
         return {}
     start, end, row = selected
@@ -3604,6 +3832,43 @@ def compile_target_image_request(
         request_params=params,
         policy_guards=policy_guards,
     )
+    if target.shot == "Clip_02_first" and "尸场空间一次建立" in body:
+        # The source section describes the whole multi-shot Clip and therefore
+        # also contains the later CU, revival and complete-weapon states.  For
+        # the physical S02A first frame those merged clauses are contradictory;
+        # replace them with the actual ten-minutes-earlier state before provider
+        # compilation instead of hoping a late negative prompt wins.
+        contract["objective"] = "十分钟前：35mm低机位广角一次建立翻覆囚车、官道尸体、断刀封路与虎妖伪死的荒野死局"
+        contract["subject"] = (
+            "姜月初无血、空手、刚从尸堆侧躺撑起；裴长青相隔至少两个身位独自半跪；"
+            "虎山神以虎头人身巨人形态在远后景水平倒地伪死"
+        )
+        contract["subject_slots"] = (
+            "SLOT_1: CHAR_01/常态 -> 画左中景侧躺撑起，空手摸残损囚服；"
+            "SLOT_2: CHAR_02/常态 -> 画右前景远处独自半跪，左臂扭曲重伤；"
+            "SLOT_3: CHAR_04/常态 -> 上方远后景虎头人身巨躯水平倒地伪死"
+        )
+        contract["action"] = "姜月初刚醒并确认囚服；裴长青以一截断刀封住退路；虎山神保持倒地伪死"
+        contract["composition"] = (
+            "35mm低机位广角尸场建立镜，前中后景分层；姜月初与裴长青相隔至少两个身位，"
+            "不贴坐、不对跪、不摆拍，所有角色只看戏内对象"
+        )
+        forbidden_preserve = re.compile(
+            r"WEAPON_01|完整横刀|横刀站姿|面颊血污|被架起|带伤复生|傲慢捕食者姿态"
+        )
+        contract["preserve"] = [
+            item for item in (contract.get("preserve") or [])
+            if not forbidden_preserve.search(str(item))
+        ] + [
+            "状态唯一真值：CHAR_01无血空手刚醒；CHAR_02左臂重伤独自半跪；CHAR_04虎头人身水平倒地伪死",
+            "仅一截断刀插地封路；完整横刀尚未入画",
+        ]
+        contract["exclude"] = list(dict.fromkeys([
+            *(contract.get("exclude") or []),
+            "完整横刀", "第二把刀", "双刀", "武器陈列",
+            "虎山神站立", "虎山神复活", "四足普通老虎",
+            "姜月初面颊血污", "姜月初持刀", "两人贴坐", "两人对跪",
+        ]))
     if anchor_beat:
         still_motion = storyboard_motion_for_still(str(anchor_beat.get("video_prompt") or ""))
         beat_action = "；".join(filter(None, (

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_receipt",
+  "receipt_id": "5f8c3c65af2cf0d932309b7bb017e08d3bdf4bc821866ab94f6ec7d94e98d939",
+  "chapter": "第9话",
+  "stage": "name",
+  "created_at": "2026-07-20T15:54:39",
+  "verdict": "pass",
+  "execution_authorized": true,
+  "inputs_fingerprint_sha256": "b57b837a38247ac1b77b610636c96c9172f7df79233a34cb848a6954a12fec77",
+  "panel_jobs_sha256": "",
+  "artifacts": {
+    "panel_jobs_path": "出图/第9话/prompt/panel_jobs.json",
+    "panel_jobs_sha256": ""
+  },
+  "report_path": "生产数据/comic_gate_name_第9话.json",
+  "report_sha256": "cfcba995acf5f1497092a53e4fc881cc763815c74e99bc44c82e3d60b26a3db2"
+}

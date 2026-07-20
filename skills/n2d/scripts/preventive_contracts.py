@@ -681,6 +681,11 @@ def _slot_entries_from_node(root: Path, node: Any, *, slot_name: str = "") -> Li
                 if status:
                     row["status"] = status
                 entries.append(row)
+                # A mapping with its own artifact path is a leaf slot. Walking
+                # its scalar `path` again created a duplicate entry labelled
+                # with the container name (for example `reference_atlas`),
+                # which defeated tier-aware filtering of optional angle slots.
+                return
             for key, child in value.items():
                 if key in {"derivation", "human_review"}:
                     continue
@@ -711,7 +716,28 @@ def _slot_entries_from_node(root: Path, node: Any, *, slot_name: str = "") -> Li
 def _registry_reference_slots(root: Path, row: Mapping[str, Any]) -> List[Dict[str, Any]]:
     slots: List[Dict[str, Any]] = []
     for key in ("reference_slots", "reference_group", "reference_atlas"):
-        slots.extend(_slot_entries_from_node(root, row.get(key), slot_name=key))
+        entries = _slot_entries_from_node(root, row.get(key), slot_name=key)
+        if key in {"reference_group", "reference_atlas"}:
+            atlas = row.get("reference_atlas") if isinstance(row.get("reference_atlas"), Mapping) else {}
+            tier = str(
+                row.get("library_tier")
+                or row.get("build_tier")
+                or atlas.get("build_tier")
+                or ""
+            ).strip()
+            # Angle slots above a character's baseline tier are deliberately
+            # on-demand.  Shot-level shared-first interlocks validate them when
+            # a concrete composition needs that angle; the global preventive
+            # gate must not promote every registered optional slot into a paid
+            # baseline requirement.
+            optional_angles = {
+                "named_minimal": {"three_quarter", "side", "rear_three_quarter", "back", "turnaround"},
+                "recurring_standard": {"side", "rear_three_quarter", "back", "turnaround"},
+                "restricted_partial": {"front", "three_quarter", "side", "rear_three_quarter", "back", "turnaround"},
+            }.get(tier, set())
+            if optional_angles:
+                entries = [entry for entry in entries if str(entry.get("slot") or "") not in optional_angles]
+        slots.extend(entries)
     return slots
 
 

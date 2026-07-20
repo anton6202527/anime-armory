@@ -156,6 +156,60 @@ def test_reference_scaffold_derives_slots_from_registries(tmp_path: Path) -> Non
     assert confirmed["status"] == "pass"
 
 
+def test_registry_reference_slots_ignore_named_minimal_on_demand_angles(tmp_path: Path) -> None:
+    front = tmp_path / "出图" / "共享" / "CHAR_MIN_front.png"
+    _write_bytes(front, b"front")
+    row = {
+        "reference_atlas": {
+            "build_tier": "named_minimal",
+            "base_views": {
+                "front": {"path": "出图/共享/CHAR_MIN_front.png", "status": "ready"},
+                "three_quarter": {"path": "出图/共享/CHAR_MIN_45.png", "status": "planned"},
+                "side": {"path": "出图/共享/CHAR_MIN_side.png", "status": "planned"},
+                "rear_three_quarter": {"path": "出图/共享/CHAR_MIN_rear45.png", "status": "review_failed"},
+                "back": {"path": "出图/共享/CHAR_MIN_back.png", "status": "planned"},
+            },
+        },
+        "reference_group": {
+            "front": {"path": "出图/共享/CHAR_MIN_front.png", "status": "ready"},
+            "rear_three_quarter": {"path": "出图/共享/CHAR_MIN_rear45.png", "status": "review_failed"},
+        },
+    }
+
+    slots = preventive_contracts._registry_reference_slots(tmp_path, row)
+    paths = {slot["path"] for slot in slots}
+
+    assert "出图/共享/CHAR_MIN_front.png" in paths
+    assert "出图/共享/CHAR_MIN_45.png" not in paths
+    assert "出图/共享/CHAR_MIN_side.png" not in paths
+    assert "出图/共享/CHAR_MIN_rear45.png" not in paths
+    assert "出图/共享/CHAR_MIN_back.png" not in paths
+
+
+def test_registry_reference_slots_keep_recurring_three_quarter_baseline(tmp_path: Path) -> None:
+    front = tmp_path / "出图" / "共享" / "CHAR_STD_front.png"
+    three_quarter = tmp_path / "出图" / "共享" / "CHAR_STD_45.png"
+    _write_bytes(front, b"front")
+    _write_bytes(three_quarter, b"three-quarter")
+    row = {
+        "reference_atlas": {
+            "build_tier": "recurring_standard",
+            "base_views": {
+                "front": {"path": "出图/共享/CHAR_STD_front.png", "status": "ready"},
+                "three_quarter": {"path": "出图/共享/CHAR_STD_45.png", "status": "ready"},
+                "side": {"path": "出图/共享/CHAR_STD_side.png", "status": "planned"},
+            },
+        },
+    }
+
+    slots = preventive_contracts._registry_reference_slots(tmp_path, row)
+    paths = {slot["path"] for slot in slots}
+
+    assert "出图/共享/CHAR_STD_front.png" in paths
+    assert "出图/共享/CHAR_STD_45.png" in paths
+    assert "出图/共享/CHAR_STD_side.png" not in paths
+
+
 def test_reference_gate_uses_registry_when_confirmed_contract_rows_have_empty_slots(tmp_path: Path) -> None:
     _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
         "clips": [{

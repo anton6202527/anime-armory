@@ -42,6 +42,7 @@ Build safe Demo ZIP files and an integrity-checked R2 catalog.
 
 Options:
   --publish              Upload immutable ZIP files and publish the catalog last
+  --publish-existing     Upload the already-built output/catalog without rebuilding
   --workspace <path>     Product workspace (default: ANIME_ARMORY_WORKSPACE or ~/AnimeArmory)
   --config <path>        Demo config (default: infrastructure/r2/demos.json)
   --output <path>        Local artifact directory (default: dist/r2-demos)
@@ -54,10 +55,14 @@ R2_SECRET_ACCESS_KEY in the publisher shell only.`)
 }
 
 function parseArgs(argv) {
-  const result = { publish: false, only: [] }
+  const result = { publish: false, publishExisting: false, only: [] }
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i]
     if (arg === '--publish') result.publish = true
+    else if (arg === '--publish-existing') {
+      result.publish = true
+      result.publishExisting = true
+    }
     else if (arg === '--help' || arg === '-h') result.help = true
     else if (['--workspace', '--config', '--output', '--only'].includes(arg)) {
       const value = argv[++i]
@@ -148,8 +153,8 @@ async function buildDemo({ entry, workspace, output }) {
   const work = parseWorkRel(rel)
   const source = resolveInside(workspace, rel)
   const progressFile = path.join(source, '_进度.md')
-  const progressText = await fsp.readFile(progressFile, 'utf8').catch(() => null)
-  if (progressText === null) throw new Error(`Demo is missing _进度.md: ${source}`)
+  const sourceProgressText = await fsp.readFile(progressFile, 'utf8').catch(() => null)
+  const progressText = sourceProgressText ?? `# ${work.name} — 进度\n\n> 源作品包；尚未建立创作状态机。\n`
 
   const temp = await fsp.mkdtemp(path.join(os.tmpdir(), `anime-armory-demo-${work.lineKey}-`))
   const stagedWork = path.join(temp, rel)
@@ -158,6 +163,9 @@ async function buildDemo({ entry, workspace, output }) {
   try {
     await fsp.mkdir(path.dirname(stagedWork), { recursive: true })
     copyDirSafe(source, stagedWork)
+    if (sourceProgressText === null) {
+      await fsp.writeFile(path.join(stagedWork, '_进度.md'), progressText, 'utf8')
+    }
     await applyProfile(stagedWork, entry.profile)
     await normalizeTimestamps(path.join(temp, '创作区'))
     await fsp.rm(asset, { force: true })
@@ -219,20 +227,37 @@ async function multipartUpload({ file, bucket, key, contentType, cacheControl, c
   try {
     const size = (await fsp.stat(file)).size
     const parts = []
-    for (let start = 0, partNumber = 1; start < size; start += MULTIPART_PART_SIZE, partNumber += 1) {
-      const end = Math.min(start + MULTIPART_PART_SIZE, size) - 1
-      console.log(`[r2-demo] uploading ${path.basename(file)} part ${partNumber}/${Math.ceil(size / MULTIPART_PART_SIZE)}`)
-      const result = await client.send(new UploadPartCommand({
-        Bucket: bucket,
-        Key: key,
-        UploadId: created.UploadId,
-        PartNumber: partNumber,
-        Body: fs.createReadStream(file, { start, end }),
-        ContentLength: end - start + 1,
-      }))
-      if (!result.ETag) throw new Error(`R2 did not return an ETag for part ${partNumber}`)
-      parts.push({ ETag: result.ETag, PartNumber: partNumber })
+    const partCount = Math.ceil(size / MULTIPART_PART_SIZE)
+    let nextPartNumber = 1
+    async function uploadWorker() {
+      while (nextPartNumber <= partCount) {
+        const partNumber = nextPartNumber++
+        const start = (partNumber - 1) * MULTIPART_PART_SIZE
+        const end = Math.min(start + MULTIPART_PART_SIZE, size) - 1
+        console.log(`[r2-demo] uploading ${path.basename(file)} part ${partNumber}/${partCount}`)
+        let result
+        for (let attempt = 1; attempt <= 5; attempt += 1) {
+          try {
+            result = await client.send(new UploadPartCommand({
+              Bucket: bucket,
+              Key: key,
+              UploadId: created.UploadId,
+              PartNumber: partNumber,
+              Body: fs.createReadStream(file, { start, end }),
+              ContentLength: end - start + 1,
+            }))
+            break
+          } catch (error) {
+            if (attempt === 5) throw error
+            console.warn(`[r2-demo] retrying ${path.basename(file)} part ${partNumber} after ${error.name || 'error'} (${attempt}/5)`)
+          }
+        }
+        if (!result.ETag) throw new Error(`R2 did not return an ETag for part ${partNumber}`)
+        parts.push({ ETag: result.ETag, PartNumber: partNumber })
+      }
     }
+    await Promise.all(Array.from({ length: Math.min(2, partCount) }, () => uploadWorker()))
+    parts.sort((a, b) => a.PartNumber - b.PartNumber)
     await client.send(new CompleteMultipartUploadCommand({
       Bucket: bucket,
       Key: key,
@@ -264,7 +289,7 @@ async function wranglerPut({ file, bucket, key, contentType, cacheControl, conte
 
 async function uploadFile(options) {
   const size = (await fsp.stat(options.file)).size
-  if (size > WRANGLER_UPLOAD_LIMIT) await multipartUpload(options)
+  if (s3Credentials() || size > WRANGLER_UPLOAD_LIMIT) await multipartUpload(options)
   else await wranglerPut(options)
 }
 
@@ -280,22 +305,33 @@ async function main() {
   const output = path.resolve(args.output ?? DEFAULT_OUTPUT)
   const works = config.works.filter((entry) => selected(entry, args.only))
   if (works.length === 0) throw new Error('No configured Demo matched --only')
-  await fsp.rm(output, { recursive: true, force: true })
-  await fsp.mkdir(output, { recursive: true })
-
-  const built = []
-  for (const raw of works) {
-    const entry = { ...raw, public_base_url: config.public_base_url }
-    console.log(`[r2-demo] building ${workRel(entry)}`)
-    built.push(await buildDemo({ entry, workspace, output }))
-  }
-  const catalog = {
-    schema_version: 1,
-    published_at: new Date().toISOString(),
-    demos: built.map((item) => item.entry).sort((a, b) => a.rel.localeCompare(b.rel, 'zh-Hans-CN')),
-  }
   const catalogFile = path.join(output, 'catalog.json')
-  await fsp.writeFile(catalogFile, `${JSON.stringify(catalog, null, 2)}\n`)
+  let built
+  if (args.publishExisting) {
+    const catalog = JSON.parse(await fsp.readFile(catalogFile, 'utf8'))
+    built = catalog.demos.map((entry) => ({
+      file: path.join(output, entry.asset_name),
+      objectKey: entry.object_key,
+      entry,
+    }))
+    for (const item of built) await fsp.access(item.file)
+    console.log(`[r2-demo] reusing ${built.length} built Demo(s) from ${output}`)
+  } else {
+    await fsp.rm(output, { recursive: true, force: true })
+    await fsp.mkdir(output, { recursive: true })
+    built = []
+    for (const raw of works) {
+      const entry = { ...raw, public_base_url: config.public_base_url }
+      console.log(`[r2-demo] building ${workRel(entry)}`)
+      built.push(await buildDemo({ entry, workspace, output }))
+    }
+    const catalog = {
+      schema_version: 1,
+      published_at: new Date().toISOString(),
+      demos: built.map((item) => item.entry).sort((a, b) => a.rel.localeCompare(b.rel, 'zh-Hans-CN')),
+    }
+    await fsp.writeFile(catalogFile, `${JSON.stringify(catalog, null, 2)}\n`)
+  }
 
   if (args.publish) {
     for (const item of built) {

@@ -1,0 +1,235 @@
+{
+  "kind": "comic_redundancy_audit",
+  "version": 1,
+  "chapter": "第9话",
+  "generated_at": "2026-07-20T10:07:07+00:00",
+  "thresholds": {
+    "pair_sim_warn": 0.6,
+    "strict_sim": 0.75,
+    "narration_ratio_warn": 0.5,
+    "provenance": "internal-heuristic·confidence=low·2026-07，误报校准后再议升硬闸"
+  },
+  "summary": {
+    "panels": 48,
+    "text_rows": 28,
+    "redundant_pairs": 0,
+    "repeated_fact_phrases": 0,
+    "repeated_composition_groups": 11,
+    "narration_only_panels": 2,
+    "texty_panels": 28,
+    "narration_ratio": 0.071,
+    "block": 0,
+    "warn": 11
+  },
+  "redundant_pairs": [],
+  "repeated_fact_mentions": [],
+  "repeated_compositions": [
+    {
+      "panels": [
+        "P037",
+        "P038",
+        "P039",
+        "P040"
+      ],
+      "scene": "LOC_GUANXI_ROAD",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P027",
+        "P028",
+        "P030",
+        "P035"
+      ],
+      "scene": "LOC_SHAOHUA_FORT",
+      "characters": [
+        "CHAR_CHEN_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_YANG_CHUN",
+        "CHAR_ZHU_WU"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P029",
+        "P033",
+        "P034"
+      ],
+      "scene": "LOC_SHAOHUA_FORT",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P031",
+        "P032"
+      ],
+      "scene": "LOC_SHAOHUA_FORT",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P001",
+        "P002",
+        "P009",
+        "P012",
+        "P020",
+        "P025"
+      ],
+      "scene": "LOC_SHI_MANOR",
+      "characters": [
+        "CHAR_CHEN_DA",
+        "CHAR_SHI_JIN",
+        "CHAR_YANG_CHUN",
+        "CHAR_ZHU_WU"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P014",
+        "P024"
+      ],
+      "scene": "LOC_SHI_MANOR",
+      "characters": [
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P006",
+        "P021",
+        "P022"
+      ],
+      "scene": "LOC_SHI_MANOR",
+      "characters": [
+        "CHAR_LI_JI",
+        "CHAR_SHI_JIN"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P004",
+        "P010",
+        "P011",
+        "P013",
+        "P015",
+        "P016",
+        "P017",
+        "P018",
+        "P026"
+      ],
+      "scene": "LOC_SHI_MANOR",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P007",
+        "P008"
+      ],
+      "scene": "LOC_SHI_MANOR",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_WANG_SI"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P045",
+        "P047",
+        "P048"
+      ],
+      "scene": "LOC_WEIZHOU_TEAHOUSE",
+      "characters": [
+        "CHAR_LU_DA",
+        "CHAR_SHI_JIN"
+      ],
+      "lens": "特写"
+    },
+    {
+      "panels": [
+        "P042",
+        "P043",
+        "P044"
+      ],
+      "scene": "LOC_WEIZHOU_TEAHOUSE",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "lens": "特写"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P037、P038、P039、P040 计划了相同的 (场景=LOC_GUANXI_ROAD, 角色=CHAR_SHI_JIN, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P027、P028、P030、P035 计划了相同的 (场景=LOC_SHAOHUA_FORT, 角色=CHAR_CHEN_DA/CHAR_SHI_JIN/CHAR_YANG_CHUN/CHAR_ZHU_WU, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P029、P033、P034 计划了相同的 (场景=LOC_SHAOHUA_FORT, 角色=CHAR_SHI_JIN, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P031、P032 计划了相同的 (场景=LOC_SHAOHUA_FORT, 角色=CHAR_SHI_JIN/CHAR_ZHU_WU, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P001、P002、P009、P012、P020、P025 计划了相同的 (场景=LOC_SHI_MANOR, 角色=CHAR_CHEN_DA/CHAR_SHI_JIN/CHAR_YANG_CHUN/CHAR_ZHU_WU, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P014、P024 计划了相同的 (场景=LOC_SHI_MANOR, 角色=CHAR_COUNTY_LIEUTENANT, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P006、P021、P022 计划了相同的 (场景=LOC_SHI_MANOR, 角色=CHAR_LI_JI/CHAR_SHI_JIN, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P004、P010、P011、P013、P015、P016、P017、P018、P026 计划了相同的 (场景=LOC_SHI_MANOR, 角色=CHAR_SHI_JIN, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P007、P008 计划了相同的 (场景=LOC_SHI_MANOR, 角色=CHAR_SHI_JIN/CHAR_WANG_SI, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P045、P047、P048 计划了相同的 (场景=LOC_WEIZHOU_TEAHOUSE, 角色=CHAR_LU_DA/CHAR_SHI_JIN, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "P042、P043、P044 计划了相同的 (场景=LOC_WEIZHOU_TEAHOUSE, 角色=CHAR_SHI_JIN, 景别=特写)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。"
+    }
+  ]
+}

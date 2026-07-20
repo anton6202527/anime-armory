@@ -71,9 +71,16 @@ def test_manifest_added_camera_moves_are_recognized():
 
 def test_camera_move_manifest_shape():
     moves = CAMERA_MOVE_MANIFEST.get("moves") or []
+    assert CAMERA_MOVE_MANIFEST.get("schema_version") == 2
     assert len(moves) >= 33
     assert sum(1 for item in moves if item.get("media")) == 23
     assert sum(1 for item in moves if item.get("status") == "added_without_visual_reference") >= 10
+    visual_moves = [item for item in moves if item.get("media")]
+    assert all(item["media"].get("contact_sheet") for item in visual_moves)
+    assert all(item["media"].get("remote", {}).get("url", "").startswith("https://") for item in visual_moves)
+    assert all(len(item["media"].get("remote", {}).get("sha256", "")) == 64 for item in visual_moves)
+    assert all(item["media"].get("remote", {}).get("bytes", 0) > 0 for item in visual_moves)
+    assert all(not item["media"].get("webp") for item in visual_moves)
 
 
 def test_en_trigger_matches():

@@ -1,0 +1,36 @@
+{
+  "kind": "comic_panel_variety",
+  "version": 1,
+  "chapter": "第8话",
+  "generated_at": "2026-07-20T07:02:43+00:00",
+  "available": true,
+  "thresholds": {
+    "dup_warn": 8,
+    "adjacent_ok": 4,
+    "provenance": "2026-07 实搜：imagededup 默认 d≤10 宽松上限、生产系统多用 ≤5；取 8 折中·env 可标定"
+  },
+  "summary": {
+    "panels": 48,
+    "hashed": 48,
+    "unreadable": 0,
+    "duplicate_pairs": 1
+  },
+  "unreadable": [],
+  "duplicate_pairs": [
+    {
+      "panels": [
+        "P026",
+        "P032"
+      ],
+      "dhash": 8,
+      "adjacent": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "near_duplicate_panels",
+      "message": "P026 ↔ P032 构图近重复（dHash=8/64·非相邻格）——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡重出其一，或合并格。"
+    }
+  ]
+}

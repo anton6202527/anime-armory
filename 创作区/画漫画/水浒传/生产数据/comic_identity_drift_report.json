@@ -1,12 +1,12 @@
 {
   "kind": "comic_identity_drift_report",
   "version": 1,
-  "generated_at": "2026-07-19T10:54:22+00:00",
+  "generated_at": "2026-07-20T07:04:23+00:00",
   "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
   "summary": {
-    "chapters_scanned": 6,
-    "characters_tracked": 18,
-    "characters_with_drift": 4,
+    "chapters_scanned": 8,
+    "characters_tracked": 24,
+    "characters_with_drift": 8,
     "characters_block": 0
   },
   "chapters": [
@@ -15,7 +15,9 @@
     "第3话",
     "第4话",
     "第5话",
-    "第6话"
+    "第6话",
+    "第7话",
+    "第8话"
   ],
   "characters": [
     {
@@ -27,6 +29,40 @@
       "chapter_status": {
         "第1话": "ok",
         "第2话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_CHEN_DA",
+      "appeared_chapters": [
+        "第7话",
+        "第8话"
+      ],
+      "chapter_status": {
+        "第7话": "ok",
+        "第8话": "warn"
+      },
+      "first_bad_chapter": "第8话",
+      "warn_or_block_chapters": [
+        "第8话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_CHEN_DA：仅 第8话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+    },
+    {
+      "char_id": "CHAR_COUNTY_LIEUTENANT",
+      "appeared_chapters": [
+        "第8话"
+      ],
+      "chapter_status": {
+        "第8话": "ok"
       },
       "first_bad_chapter": null,
       "warn_or_block_chapters": [],
@@ -129,6 +165,28 @@
       "recommendation": null
     },
     {
+      "char_id": "CHAR_LI_JI",
+      "appeared_chapters": [
+        "第7话",
+        "第8话"
+      ],
+      "chapter_status": {
+        "第7话": "warn",
+        "第8话": "warn"
+      },
+      "first_bad_chapter": "第7话",
+      "warn_or_block_chapters": [
+        "第7话",
+        "第8话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_LI_JI：跨 2 话反复漂移（第7话、第8话）——补专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可本线外训练后把产出登记为 registry 参考。"
+    },
+    {
       "char_id": "CHAR_MASTER_XUJING",
       "appeared_chapters": [
         "第1话"
@@ -146,23 +204,28 @@
       "char_id": "CHAR_SHI_JIN",
       "appeared_chapters": [
         "第5话",
-        "第6话"
+        "第6话",
+        "第7话",
+        "第8话"
       ],
       "chapter_status": {
         "第5话": "warn",
-        "第6话": "warn"
+        "第6话": "warn",
+        "第7话": "ok",
+        "第8话": "warn"
       },
       "first_bad_chapter": "第5话",
       "warn_or_block_chapters": [
         "第5话",
-        "第6话"
+        "第6话",
+        "第8话"
       ],
       "block_chapters": [],
       "codes": [
         "face_fingerprint_low",
         "hair_fingerprint_low"
       ],
-      "recommendation": "CHAR_SHI_JIN：跨 2 话反复漂移（第5话、第6话）——补专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可本线外训练后把产出登记为 registry 参考。"
+      "recommendation": "CHAR_SHI_JIN：跨 3 话反复漂移（第5话、第6话、第8话）——补专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可本线外训练后把产出登记为 registry 参考。"
     },
     {
       "char_id": "CHAR_SHI_TAIGONG",
@@ -265,6 +328,20 @@
       "recommendation": "CHAR_WANG_MOTHER：第5话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
     },
     {
+      "char_id": "CHAR_WANG_SI",
+      "appeared_chapters": [
+        "第8话"
+      ],
+      "chapter_status": {
+        "第8话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
       "char_id": "CHAR_WEN_YANBO",
       "appeared_chapters": [
         "第1话"
@@ -279,6 +356,28 @@
       "recommendation": null
     },
     {
+      "char_id": "CHAR_YANG_CHUN",
+      "appeared_chapters": [
+        "第7话",
+        "第8话"
+      ],
+      "chapter_status": {
+        "第7话": "warn",
+        "第8话": "warn"
+      },
+      "first_bad_chapter": "第7话",
+      "warn_or_block_chapters": [
+        "第7话",
+        "第8话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_YANG_CHUN：跨 2 话反复漂移（第7话、第8话）——补专门定妆多视图（front/¾/side/back/face + 表情库），或换支持持久主体的后端（可灵/Seedream 主体库）按 ID 引用；漫画线不内置 LoRA，坚持一致性可本线外训练后把产出登记为 registry 参考。"
+    },
+    {
       "char_id": "CHAR_ZHAO_ZHE",
       "appeared_chapters": [
         "第1话"
@@ -291,6 +390,27 @@
       "block_chapters": [],
       "codes": [],
       "recommendation": null
+    },
+    {
+      "char_id": "CHAR_ZHU_WU",
+      "appeared_chapters": [
+        "第7话",
+        "第8话"
+      ],
+      "chapter_status": {
+        "第7话": "ok",
+        "第8话": "warn"
+      },
+      "first_bad_chapter": "第8话",
+      "warn_or_block_chapters": [
+        "第8话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_ZHU_WU：仅 第8话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
     },
     {
       "char_id": "MON_SNOW_SERPENT",

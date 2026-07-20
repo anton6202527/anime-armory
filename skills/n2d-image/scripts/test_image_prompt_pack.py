@@ -1396,6 +1396,27 @@ def test_recurring_reference_group_registers_on_demand_rear_three_quarter_slot(t
     assert atlas["base_views"]["rear_three_quarter"] == rg["rear_three_quarter"]
 
 
+def test_named_minimal_reference_group_registers_on_demand_angle_slots(tmp_path: Path) -> None:
+    cfg = {
+        "asset_key": "CHAR_MINIMAL__常态",
+        "name": "短线具名角色",
+        "form": "常态",
+        "library_tier": "named_minimal",
+    }
+
+    rg, atlas = image_prompt_pack.full_reference_group(tmp_path, "CHAR_MINIMAL", cfg)
+
+    for field, suffix in {
+        "three_quarter": "_45度.png",
+        "side": "_侧.png",
+        "rear_three_quarter": "_后45度.png",
+        "back": "_背.png",
+    }.items():
+        assert rg[field]["status"] == "planned"
+        assert rg[field]["path"].endswith(suffix)
+        assert atlas["base_views"][field] == rg[field]
+
+
 def test_core_reference_group_marks_unlabelled_existing_turnaround_as_unknown(tmp_path: Path) -> None:
     path = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_CORE__常态_三视图.png"
     path.parent.mkdir(parents=True)
@@ -1894,6 +1915,30 @@ def test_state_lock_line_resolves_character_and_asset_names() -> None:
 
     assert "`CHAR_HE`: 初见破盆异状时茫然。" in line
     assert "`PROP_BASIN`: 满盆碧绿灵水，盆底微绿亮点。" in line
+
+
+def test_state_lock_uses_clip_form_hint_across_cold_open_time_jump() -> None:
+    story = {
+        "visual_contract": {
+            "角色状态演进": {
+                "CHAR_01": "囚途残损无血→面颊血污→杀裴后人血增加",
+                "CHAR_04": "贯穿伤伪死→带伤复生→扑击",
+            }
+        },
+        "clips": [
+            {"character_ids": ["CHAR_01/囚途残损态", "CHAR_04/复生态焦外"]},
+            {"character_ids": ["CHAR_01/囚途残损态", "CHAR_04/伪死态"]},
+        ],
+    }
+
+    cold_open = image_prompt_pack.state_lock_line(story, ["CHAR_01", "CHAR_04"], 1)
+    ten_minutes_earlier = image_prompt_pack.state_lock_line(story, ["CHAR_01", "CHAR_04"], 2)
+
+    assert "`CHAR_04`: 带伤复生。" in cold_open
+    assert "`CHAR_01`: 囚途残损无血。" in ten_minutes_earlier
+    assert "`CHAR_04`: 贯穿伤伪死。" in ten_minutes_earlier
+    assert "面颊血污" not in ten_minutes_earlier
+    assert "带伤复生" not in ten_minutes_earlier
 
 
 def test_static_identity_strips_episode_dynamic_state() -> None:

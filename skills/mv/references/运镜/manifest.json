@@ -1,9 +1,9 @@
 {
-  "schema_version": 1,
-  "updated_at": "2026-07-10",
+  "schema_version": 2,
+  "updated_at": "2026-07-20",
   "name": "mv camera movement manifest",
   "purpose": "为 mv-plan 的 clip_plan、mv-video 的视频 prompt 和 mv-review 的运镜/卡点判断提供结构化运镜候选。视觉参考图只做理解校准；真正提交给视频后端时仍使用结构化字段：运镜词、速度、方向、起幅、落幅、卡点/段落张力。",
-  "source_summary": "从 n2d 运镜库同步：23 个用户提供 animated WebP 已绑定媒体；另有 10 个高价值影视/AI 视频常用镜头控制项，暂无视觉参考图。",
+  "source_summary": "23 个已授权公开再分发的 animated WebP 使用内容寻址 R2 按需下载；本地保留首帧与五帧 contact sheet。另有 10 个高价值镜头控制项暂无视觉动画。",
   "sources": [
     {
       "name": "StudioBinder camera movement guide",
@@ -74,9 +74,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：固定机位；速度=无；方向=无；起止=保持首帧构图不漂移。",
       "media": {
-        "webp": "固定镜头.webp",
         "preview": "_preview/固定镜头.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/固定镜头.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "固定镜头.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/571ed69a37183099904b7b188fb16ffd26ef298736903b7ca316b1902d97966c.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/571ed69a37183099904b7b188fb16ffd26ef298736903b7ca316b1902d97966c.webp",
+          "sha256": "571ed69a37183099904b7b188fb16ffd26ef298736903b7ca316b1902d97966c",
+          "bytes": 6597352,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "d5e316edbc13fefb590467c70b703f770fb931ec354d5c7ed5fcee088f4a8273",
+        "contact_sheet_bytes": 26723
       }
     },
     {
@@ -116,9 +126,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：推镜头；速度={缓慢/匀速/快速}；方向=沿镜头轴线前推；起止={MS 到 MCU / MCU 到 CU}。",
       "media": {
-        "webp": "镜头前推.webp",
         "preview": "_preview/镜头前推.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头前推.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头前推.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/e6fbceb013c0b7e00ad2b49d82a59f2df3f4cf4e3baad0c6546cea4a73d2663c.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/e6fbceb013c0b7e00ad2b49d82a59f2df3f4cf4e3baad0c6546cea4a73d2663c.webp",
+          "sha256": "e6fbceb013c0b7e00ad2b49d82a59f2df3f4cf4e3baad0c6546cea4a73d2663c",
+          "bytes": 5575084,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "0f8704dfc2e27db734e89af0057dd1dc79a2a3280ff8700050cdcc05645a3cd5",
+        "contact_sheet_bytes": 30097
       }
     },
     {
@@ -158,9 +178,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：拉镜头；速度={缓慢/匀速}；方向=沿镜头轴线后移；起止={CU 到 MS / MS 到 LS}。",
       "media": {
-        "webp": "镜头后移.webp",
         "preview": "_preview/镜头后移.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头后移.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头后移.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/63be22634ca243271bf0776c64510ffb28072b929bf82a1cce0d91b631dd8ee4.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/63be22634ca243271bf0776c64510ffb28072b929bf82a1cce0d91b631dd8ee4.webp",
+          "sha256": "63be22634ca243271bf0776c64510ffb28072b929bf82a1cce0d91b631dd8ee4",
+          "bytes": 3997974,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "68496723971bfed696fe2c9b03fcf093a02cfb1c62a2f52592f2e2548832d813",
+        "contact_sheet_bytes": 28197
       }
     },
     {
@@ -195,9 +225,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：变焦推进；速度={缓慢/快速}；方向=焦距收窄；起止={画面中心目标从 MS 放大到 MCU/CU}。",
       "media": {
-        "webp": "变焦推进.webp",
         "preview": "_preview/变焦推进.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/变焦推进.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "变焦推进.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/df2422df117f241ce02b93e949dcc4f977c2edd6140073c7966b3050eb7b7f78.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/df2422df117f241ce02b93e949dcc4f977c2edd6140073c7966b3050eb7b7f78.webp",
+          "sha256": "df2422df117f241ce02b93e949dcc4f977c2edd6140073c7966b3050eb7b7f78",
+          "bytes": 4909984,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "cf4811fda95485be9d77943a04f46052802fd421fa794e95d6eb7809e91976a5",
+        "contact_sheet_bytes": 29555
       }
     },
     {
@@ -233,9 +273,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：变焦拉远；速度={缓慢/匀速}；方向=焦距放宽；起止={CU/MCU 到 MS/LS}。",
       "media": {
-        "webp": "变焦拉远.webp",
         "preview": "_preview/变焦拉远.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/变焦拉远.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "变焦拉远.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/202c9d62d2ed550cc99796f9917ec6041e7cfc3f0e984be7be4b79c05bc5e8fa.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/202c9d62d2ed550cc99796f9917ec6041e7cfc3f0e984be7be4b79c05bc5e8fa.webp",
+          "sha256": "202c9d62d2ed550cc99796f9917ec6041e7cfc3f0e984be7be4b79c05bc5e8fa",
+          "bytes": 3358290,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "ae5553c43ffe04b742bb37eac83425b0b37ea005ccc98c605780bfe10906d4e5",
+        "contact_sheet_bytes": 28696
       }
     },
     {
@@ -275,9 +325,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：柯克变焦；速度={缓慢/快速}；方向=机位与焦距反向变化；背景尺度={拉伸/压缩}；主体大小尽量保持。",
       "media": {
-        "webp": "柯克变焦.webp",
         "preview": "_preview/柯克变焦.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/柯克变焦.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "柯克变焦.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/a4e22700c3f21792ef922f20db0f05119606b882c6e756e6c8898f216db75dc0.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/a4e22700c3f21792ef922f20db0f05119606b882c6e756e6c8898f216db75dc0.webp",
+          "sha256": "a4e22700c3f21792ef922f20db0f05119606b882c6e756e6c8898f216db75dc0",
+          "bytes": 4604858,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "1737f5b9b3f981403208a596faeca5bfe43cc74fb580ce13a1fb22272a9caf9c",
+        "contact_sheet_bytes": 29644
       }
     },
     {
@@ -311,9 +371,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向左横摇；起止={右侧主体到左侧目标}。",
       "media": {
-        "webp": "镜头左摇.webp",
         "preview": "_preview/镜头左摇.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头左摇.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头左摇.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/aec1a82f4047cc0b931c7fd51997ca2722b059e3842f27359983acf0c00d3a8e.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/aec1a82f4047cc0b931c7fd51997ca2722b059e3842f27359983acf0c00d3a8e.webp",
+          "sha256": "aec1a82f4047cc0b931c7fd51997ca2722b059e3842f27359983acf0c00d3a8e",
+          "bytes": 3471384,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "cffbfc0409457f1ae900924f8466837a65ea5df09bf0893a5414c1827dfedd5b",
+        "contact_sheet_bytes": 35268
       }
     },
     {
@@ -347,9 +417,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向右横摇；起止={左侧主体到右侧目标}。",
       "media": {
-        "webp": "镜头右摇.webp",
         "preview": "_preview/镜头右摇.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头右摇.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头右摇.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/f186ab05aca2c9bf1340cc5cef6822422f835a812164fe4a94a14fb7b5fee25e.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/f186ab05aca2c9bf1340cc5cef6822422f835a812164fe4a94a14fb7b5fee25e.webp",
+          "sha256": "f186ab05aca2c9bf1340cc5cef6822422f835a812164fe4a94a14fb7b5fee25e",
+          "bytes": 4881580,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "df5a387b06df6f15bc0b33576ac8b0a4576e6da23a6e5834a8f4dbb31a900922",
+        "contact_sheet_bytes": 32845
       }
     },
     {
@@ -384,9 +464,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向上摇；起止={人物/道具到高处目标}。",
       "media": {
-        "webp": "镜头上摇.webp",
         "preview": "_preview/镜头上摇.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头上摇.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头上摇.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/4e70d9e02ac684add35d56dae404f27a37fbc6ba0bfc75c56b28a5b0b990aa24.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/4e70d9e02ac684add35d56dae404f27a37fbc6ba0bfc75c56b28a5b0b990aa24.webp",
+          "sha256": "4e70d9e02ac684add35d56dae404f27a37fbc6ba0bfc75c56b28a5b0b990aa24",
+          "bytes": 4299758,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "022167c9222ed1147b5957a523f3db5119226510b6f28e710036d3ed828474ee",
+        "contact_sheet_bytes": 30739
       }
     },
     {
@@ -420,9 +510,19 @@
       "risk_level": "low",
       "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向下摇；起止={高处目标到人物/地面证据}。",
       "media": {
-        "webp": "镜头下摇.webp",
         "preview": "_preview/镜头下摇.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头下摇.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头下摇.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/d43d7984254dc39d3fcca38c7d3c0b9ae7b6a75173cac176568686b7f667b940.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/d43d7984254dc39d3fcca38c7d3c0b9ae7b6a75173cac176568686b7f667b940.webp",
+          "sha256": "d43d7984254dc39d3fcca38c7d3c0b9ae7b6a75173cac176568686b7f667b940",
+          "bytes": 4301520,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "c40af87add5eb5b97f96a5c550c43a161a6bedd4ce2100a62056f8af65fd854e",
+        "contact_sheet_bytes": 26801
       }
     },
     {
@@ -459,9 +559,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：移镜头；速度={匀速/缓慢}；方向=向左平移；起止={保持主体相对构图稳定}。",
       "media": {
-        "webp": "镜头左移.webp",
         "preview": "_preview/镜头左移.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头左移.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头左移.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/ac50097b688ff0a003d5be6f6ff91d75f22c356f1303f37bb4ed556743d8659b.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/ac50097b688ff0a003d5be6f6ff91d75f22c356f1303f37bb4ed556743d8659b.webp",
+          "sha256": "ac50097b688ff0a003d5be6f6ff91d75f22c356f1303f37bb4ed556743d8659b",
+          "bytes": 3344324,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "d2bbc21b2e6ed70b2a7d3ae3ac7ca1a4acc12cb817475059506ea0bf7bfd16a1",
+        "contact_sheet_bytes": 28144
       }
     },
     {
@@ -498,9 +608,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：移镜头；速度={匀速/缓慢}；方向=向右平移；起止={保持主体相对构图稳定}。",
       "media": {
-        "webp": "镜头右移.webp",
         "preview": "_preview/镜头右移.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头右移.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头右移.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/6dece5270421ca6f0fcc3db0924f10747c3f57a76382ed6af1b07e9727380dab.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/6dece5270421ca6f0fcc3db0924f10747c3f57a76382ed6af1b07e9727380dab.webp",
+          "sha256": "6dece5270421ca6f0fcc3db0924f10747c3f57a76382ed6af1b07e9727380dab",
+          "bytes": 4616902,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "78e728a31721bb639a83fc762fc3e6949dc094f873821324523a90c769ee663b",
+        "contact_sheet_bytes": 29640
       }
     },
     {
@@ -538,9 +658,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：升降；速度={缓慢/匀速}；方向=上升；终点高度={中机位到高机位/俯视}。",
       "media": {
-        "webp": "镜头上升.webp",
         "preview": "_preview/镜头上升.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头上升.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头上升.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/10681f0ab96e8501bdbe1d306d2b89d2914e3789ba6798a2babd4a163daa5143.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/10681f0ab96e8501bdbe1d306d2b89d2914e3789ba6798a2babd4a163daa5143.webp",
+          "sha256": "10681f0ab96e8501bdbe1d306d2b89d2914e3789ba6798a2babd4a163daa5143",
+          "bytes": 5013500,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "e673087f2ed805841d250aeae49018da5c02780874e27a9447215cc4d4575d28",
+        "contact_sheet_bytes": 32321
       }
     },
     {
@@ -579,9 +709,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：升降；速度={缓慢/匀速}；方向=下降；终点高度={高机位到平视/低机位}。",
       "media": {
-        "webp": "镜头下降.webp",
         "preview": "_preview/镜头下降.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/镜头下降.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "镜头下降.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/7d6691f06594c7857f4b6afa0ca3d3442df305db585681d03e47e1cb411e258d.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/7d6691f06594c7857f4b6afa0ca3d3442df305db585681d03e47e1cb411e258d.webp",
+          "sha256": "7d6691f06594c7857f4b6afa0ca3d3442df305db585681d03e47e1cb411e258d",
+          "bytes": 4451732,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "22dafccc8f6a0a3dcced4910cd6cb7f386f2649be7e078184119b2eacfe79fa4",
+        "contact_sheet_bytes": 32789
       }
     },
     {
@@ -624,9 +764,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：环绕；速度={缓慢/匀速}；方向={顺时针/逆时针}；弧度={90/180/360度}；主体保持居中。",
       "media": {
-        "webp": "环绕拍摄.webp",
         "preview": "_preview/环绕拍摄.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/环绕拍摄.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "环绕拍摄.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519.webp",
+          "sha256": "1e45106e40f995c59d588b76f0c8b6356507f57068661b4090118e8612042519",
+          "bytes": 6451590,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "327191ae4f501f41f7de402847db7df12a6a9123bf49ca481729a1a8b3688379",
+        "contact_sheet_bytes": 32516
       }
     },
     {
@@ -665,9 +815,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：盘旋抬升；速度={缓慢/匀速}；方向={顺/逆时针}；弧度={半圈/一圈}；终点高度=高机位。",
       "media": {
-        "webp": "盘旋抬升.webp",
         "preview": "_preview/盘旋抬升.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/盘旋抬升.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "盘旋抬升.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/d08fd0447896f483d5d5ac5aa92cf412e9c2d718d42d5bfa8d519931ec0c814c.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/d08fd0447896f483d5d5ac5aa92cf412e9c2d718d42d5bfa8d519931ec0c814c.webp",
+          "sha256": "d08fd0447896f483d5d5ac5aa92cf412e9c2d718d42d5bfa8d519931ec0c814c",
+          "bytes": 3858248,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "ed77e2ac5fd537cbb439ecd2daabc6f1b13be8ca1a8f30d90e75809cbbc9e034",
+        "contact_sheet_bytes": 30265
       }
     },
     {
@@ -705,9 +865,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：盘旋下降；速度={缓慢/匀速}；方向={顺/逆时针}；弧度={半圈/一圈}；终点高度=平视/低机位。",
       "media": {
-        "webp": "盘旋下降.webp",
         "preview": "_preview/盘旋下降.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/盘旋下降.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "盘旋下降.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/6d53f8add90302a21d33a160eb7fa15749ffd95dc0c537c1ace4c4d18130b5c6.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/6d53f8add90302a21d33a160eb7fa15749ffd95dc0c537c1ace4c4d18130b5c6.webp",
+          "sha256": "6d53f8add90302a21d33a160eb7fa15749ffd95dc0c537c1ace4c4d18130b5c6",
+          "bytes": 3588504,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "f2a85309ed176255dee1500b4ebeeb61a8b6ddf067086943cf76923ed52a486a",
+        "contact_sheet_bytes": 26148
       }
     },
     {
@@ -746,9 +916,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：无人机航拍；速度={缓慢/匀速}；方向={前进/上升/横移}；终点高度={高空/俯视}。",
       "media": {
-        "webp": "高空航拍.webp",
         "preview": "_preview/高空航拍.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/高空航拍.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "高空航拍.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/9ab028523ecc28e08c01a15fbae6b9e136e9a15ecfbbfb1d09ebe006e19661a8.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/9ab028523ecc28e08c01a15fbae6b9e136e9a15ecfbbfb1d09ebe006e19661a8.webp",
+          "sha256": "9ab028523ecc28e08c01a15fbae6b9e136e9a15ecfbbfb1d09ebe006e19661a8",
+          "bytes": 10676472,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "2e24253fa7bc3466bafe3f8b994c9f2c4f5c4837bd6bf1c2acb864a07d03ae75",
+        "contact_sheet_bytes": 31503
       }
     },
     {
@@ -786,9 +966,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：无人机航拍；速度={匀速/快速}；方向={前进/穿行/侧向跟飞}；终点高度={保持/上升/下降}。",
       "media": {
-        "webp": "无人机.webp",
         "preview": "_preview/无人机.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/无人机.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "无人机.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/56edea75b6b9131a4896d4346e22660e9a03e882c1240f8c24c424ad14e29c90.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/56edea75b6b9131a4896d4346e22660e9a03e882c1240f8c24c424ad14e29c90.webp",
+          "sha256": "56edea75b6b9131a4896d4346e22660e9a03e882c1240f8c24c424ad14e29c90",
+          "bytes": 4082458,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "684125cd93aad1c379a49591c18438a493b6dfbc248f2e0297de5efeed18ae04",
+        "contact_sheet_bytes": 28217
       }
     },
     {
@@ -826,9 +1016,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：跟拍；速度={匀速/快速}；方向={跟随主体前进/侧向跟随/背后跟随}；主体相对构图保持稳定。",
       "media": {
-        "webp": "跟随拍摄.webp",
         "preview": "_preview/跟随拍摄.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/跟随拍摄.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "跟随拍摄.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/0b066abc2019f5a98a119e1b9ea560ff51e64c8c048dceacfcd5431efd1bf85e.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/0b066abc2019f5a98a119e1b9ea560ff51e64c8c048dceacfcd5431efd1bf85e.webp",
+          "sha256": "0b066abc2019f5a98a119e1b9ea560ff51e64c8c048dceacfcd5431efd1bf85e",
+          "bytes": 5216698,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "c6b496e52108a632fb3d2b1e4fa6fe6f81d2193a708872e3e861c25764d7ac9c",
+        "contact_sheet_bytes": 29573
       }
     },
     {
@@ -867,9 +1067,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：第一视角；速度={缓慢/快速}；方向={向前/转头/躲避}；画面表现主观视线，不显示本角色正脸。",
       "media": {
-        "webp": "第一视角.webp",
         "preview": "_preview/第一视角.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/第一视角.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "第一视角.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/1fbf306838bd9f75f04e9d8379dc3395b422393c919cacfa0c6833f7b1a9e195.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/1fbf306838bd9f75f04e9d8379dc3395b422393c919cacfa0c6833f7b1a9e195.webp",
+          "sha256": "1fbf306838bd9f75f04e9d8379dc3395b422393c919cacfa0c6833f7b1a9e195",
+          "bytes": 6961426,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "2f79c864d9808167353cb02ac321ae12895b2656b6c2f937841053774e29efdd",
+        "contact_sheet_bytes": 29487
       }
     },
     {
@@ -907,9 +1117,19 @@
       "risk_level": "medium",
       "prompt_template": "镜头运动：手持晃动；强度={轻微/中等}；节奏=随角色动作产生微晃，不改变主体身份。",
       "media": {
-        "webp": "手持拍摄.webp",
         "preview": "_preview/手持拍摄.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/手持拍摄.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "手持拍摄.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/656fdc47904aa89a61d0b8238015a9caec54999d8b46ae9e96ee381d1e311d46.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/656fdc47904aa89a61d0b8238015a9caec54999d8b46ae9e96ee381d1e311d46.webp",
+          "sha256": "656fdc47904aa89a61d0b8238015a9caec54999d8b46ae9e96ee381d1e311d46",
+          "bytes": 3927216,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "f1ba87eb4dca2c5bd13c8eef37d11c5fc529d6ef8ff2d2b13c7ce44baaba8a65",
+        "contact_sheet_bytes": 31638
       }
     },
     {
@@ -947,9 +1167,19 @@
       "risk_level": "high",
       "prompt_template": "镜头运动：滚筒旋转；速度={缓慢/快速}；方向={顺/逆时针}；滚转角={15/45/90度}；主体不要变形。",
       "media": {
-        "webp": "滚筒旋转.webp",
         "preview": "_preview/滚筒旋转.jpg",
-        "source": "user_provided"
+        "contact_sheet": "_contact/滚筒旋转.jpg",
+        "source": "user_provided",
+        "remote": {
+          "filename": "滚筒旋转.webp",
+          "url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/objects/29e9f8ee6d70a2eeaa008f531bc9438ee7682a14f0f304eee929a85b1b07908d.webp",
+          "object_key": "reference-assets/camera-moves/v1/objects/29e9f8ee6d70a2eeaa008f531bc9438ee7682a14f0f304eee929a85b1b07908d.webp",
+          "sha256": "29e9f8ee6d70a2eeaa008f531bc9438ee7682a14f0f304eee929a85b1b07908d",
+          "bytes": 4357410,
+          "content_type": "image/webp"
+        },
+        "contact_sheet_sha256": "84214be96a4cd393bb11c88f59d8921c4ffb708d47ee714004db1a54089cb20c",
+        "contact_sheet_bytes": 28908
       }
     },
     {
@@ -1336,5 +1566,18 @@
     }
   ],
   "synced_from": "camera manifest snapshot 2026-07-10; copied into this line, no runtime dependency",
-  "synced_at": "2026-07-10"
+  "synced_at": "2026-07-10",
+  "media_policy": {
+    "mode": "local_contact_sheet_remote_animation",
+    "download": "on_demand",
+    "cache_scope": "user_cache_outside_repo",
+    "offline_fallback": "structured_manifest_and_local_contact_sheet",
+    "integrity": "bytes_and_sha256_required",
+    "catalog_url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev/reference-assets/camera-moves/v1/catalog.json",
+    "rights": {
+      "status": "authorized_public_redistribution",
+      "basis": "user_confirmation",
+      "confirmed_at": "2026-07-20"
+    }
+  }
 }

@@ -103,6 +103,51 @@ def test_dreamina_main_scopes_shared_first_interlock_to_selected_targets(tmp_pat
     assert captured["targets"] == [target]
 
 
+def test_dreamina_dry_run_resolves_shared_targets_without_episode_preflight(tmp_path: Path, monkeypatch) -> None:
+    target = _project(tmp_path)
+    captured = {"processed": []}
+    monkeypatch.setattr(base, "build_shared_targets", lambda *_args, **_kwargs: [target])
+    monkeypatch.setattr(
+        dreamina,
+        "process_target",
+        lambda _root, _episode, resolved, **_kwargs: captured["processed"].append(resolved) or True,
+    )
+    monkeypatch.setattr(base, "run_shared_asset_preflight", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("dry-run must not preflight")))
+    monkeypatch.setattr(base, "run_image_gate", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("shared target must not run episode gate")))
+
+    assert dreamina.main([str(tmp_path), "第1集", "--shared-targets", "VFX_01", "--dry-run"]) == 0
+    assert captured["processed"] == [target]
+
+
+def test_dreamina_shared_target_uses_shared_preflight_not_episode_preflight(tmp_path: Path, monkeypatch) -> None:
+    target = _project(tmp_path)
+    calls = []
+    monkeypatch.setattr(dreamina, "require_dreamina_image_signoff", lambda _root: None)
+    monkeypatch.setattr(base, "build_shared_targets", lambda *_args, **_kwargs: [target])
+    monkeypatch.setattr(base, "strict_single_image_review_enabled", lambda _root: False)
+    monkeypatch.setattr(base, "run_shared_asset_preflight", lambda *_args, **_kwargs: calls.append("shared") or True)
+    monkeypatch.setattr(base, "run_image_gate", lambda *_args, **_kwargs: calls.append("episode") or True)
+    monkeypatch.setattr(dreamina, "process_target", lambda *_args, **_kwargs: True)
+    monkeypatch.setattr(base, "run_target_image_qc", lambda *_args, **_kwargs: True)
+    monkeypatch.setattr(base, "sync_image_progress", lambda *_args, **_kwargs: None)
+
+    assert dreamina.main([str(tmp_path), "第1集", "--shared-targets", "VFX_01"]) == 0
+    assert calls == ["shared"]
+
+
+def test_dreamina_strict_review_rejects_multi_target_paid_call(tmp_path: Path, monkeypatch) -> None:
+    target = _project(tmp_path)
+    second = base.Target(
+        shot="VFX_02", clip="VFX_02", mode="shared",
+        rel_path="出图/共享/图片/第二张.png", section=target.section,
+    )
+    monkeypatch.setattr(dreamina, "require_dreamina_image_signoff", lambda _root: None)
+    monkeypatch.setattr(base, "build_shared_targets", lambda *_args, **_kwargs: [target, second])
+    monkeypatch.setattr(base, "strict_single_image_review_enabled", lambda _root: True)
+
+    assert dreamina.main([str(tmp_path), "第1集", "--shared-targets", "all"]) == 1
+
+
 def test_dreamina_record_event_writes_release_grade_recipe_evidence(tmp_path: Path, monkeypatch) -> None:
     target = _project(tmp_path)
     final = tmp_path / target.rel_path
@@ -156,6 +201,51 @@ def test_dreamina_record_event_writes_release_grade_recipe_evidence(tmp_path: Pa
         assert meta[key]
     assert meta["reference_bundle_sha256"] == "refs-sha"
     assert meta["seed_effective"] == "false"
+
+
+def test_dreamina_midframe_pass_records_generation_self_check(tmp_path: Path, monkeypatch) -> None:
+    section = base.ClipSection(
+        clip="Clip_02", title="## 镜头 2", body="",
+        target_line="`出图/第1集/图片/EP01_CLIP02_a1.png`",
+    )
+    target = base.Target(
+        shot="Clip_02_a1", clip="Clip_02", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP02_a1.png", section=section,
+    )
+    final = tmp_path / target.rel_path
+    final.parent.mkdir(parents=True, exist_ok=True)
+    final.write_bytes(b"midframe-png")
+    first = base.Target(
+        shot="Clip_02_first", clip="Clip_02", mode="firstframe",
+        rel_path="出图/第1集/图片/Clip02_first.png", section=section,
+    )
+    captured = {}
+
+    def capture_run(cmd, **_kwargs):
+        captured["cmd"] = cmd
+        return type("Result", (), {"returncode": 0})()
+
+    monkeypatch.setattr(base, "target_for_shot", lambda *_args: first)
+    monkeypatch.setattr(dreamina.subprocess, "run", capture_run)
+
+    dreamina.record_event(
+        tmp_path, "第1集", target,
+        status="pass", duration_sec=1.0, task_id="dreamina-test", seed="1234",
+        temp_path=tmp_path / "temp.png", submit_id="submit-mid",
+        refs=[], archive_path=None,
+        compiled_request={"kind": "n2d_compiled_image_prompt", "version": 1},
+        submitted_prompt="mid prompt",
+    )
+
+    cmd = captured["cmd"]
+    meta = {
+        cmd[index + 1].split("=", 1)[0]: cmd[index + 1].split("=", 1)[1]
+        for index, token in enumerate(cmd[:-1])
+        if token == "--meta" and "=" in cmd[index + 1]
+    }
+    assert meta["self_check"] == "pass"
+    assert meta["midframe_role"] == "between_first_and_end"
+    assert meta["source_image"] == "出图/第1集/图片/Clip02_first.png"
 
 
 def _combat_target(body: str) -> "base.Target":
@@ -309,6 +399,87 @@ def test_dreamina_relay_keeps_source_first_and_drops_nonfocus_character(tmp_path
     assert inputs[0]["role"] == "source_frame"
 
 
+def test_dreamina_balances_three_character_references_and_plot_context(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    items = []
+    for character_id in ("CHAR_01", "CHAR_02", "CHAR_04"):
+        paths = []
+        for suffix in ("front", "face_anchor", "half", "side", "back"):
+            rel = f"出图/共享/图片/{character_id}_{suffix}.png"
+            (tmp_path / rel).write_bytes((character_id + suffix).encode())
+            paths.append(rel)
+        items.append({"kind": "character", "id": character_id, "paths": paths})
+    for asset_id, filename in (
+        ("LOC_01", "location.png"),
+        ("WEAPON_01", "weapon.png"),
+    ):
+        rel = f"出图/共享/图片/{filename}"
+        (tmp_path / rel).write_bytes(asset_id.encode())
+        items.append({"kind": "asset", "id": asset_id, "paths": [rel]})
+    section = base.ClipSection(
+        clip="Clip_01",
+        title="## 镜头 1",
+        body="**参考图**：多人近景，LOC_01，WEAPON_01",
+        target_line="`出图/第1集/图片/Clip01_first.png`",
+    )
+    target = base.Target(
+        shot="Clip_01_first",
+        clip="Clip_01",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip01_first.png",
+        section=section,
+    )
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": items})
+    monkeypatch.setattr(base, "storyboard_anchor_beat", lambda *_args: {})
+
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+    names = [path.name for path in refs]
+
+    assert len(refs) == dreamina.MAX_REFERENCES
+    for character_id in ("CHAR_01", "CHAR_02", "CHAR_04"):
+        assert f"{character_id}_face_anchor.png" in names
+        assert f"{character_id}_front.png" in names
+    assert "location.png" in names
+    assert "weapon.png" in names
+
+
+def test_clip02_first_excludes_later_complete_hengdao_reference(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    face = image_dir / "CHAR_01_face.png"
+    location = image_dir / "location.png"
+    weapon = image_dir / "hengdao.png"
+    for path in (face, location, weapon):
+        path.write_bytes(path.name.encode())
+    items = [
+        {"kind": "character", "id": "CHAR_01", "paths": [str(face.relative_to(tmp_path))]},
+        {"kind": "asset", "id": "LOC_01", "paths": [str(location.relative_to(tmp_path))]},
+        {"kind": "asset", "id": "PROP_横刀", "paths": [str(weapon.relative_to(tmp_path))]},
+    ]
+    section = base.ClipSection(
+        clip="Clip_02", title="## 镜头 2",
+        body="尸场空间一次建立。姜月初摸到囚服。断刀封路。",
+        target_line="`出图/第1集/图片/Clip02_first.png`",
+    )
+    target = base.Target(
+        shot="Clip_02_first", clip="Clip_02", mode="firstframe",
+        rel_path="出图/第1集/图片/Clip02_first.png", section=section,
+    )
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": items})
+    monkeypatch.setattr(base, "storyboard_anchor_beat", lambda *_args: {})
+
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+
+    assert face in refs
+    assert location in refs
+    assert weapon not in refs
+
+
 def test_firstframe_exact_state_relay_uses_previous_accepted_last_anchor_as_source(
     tmp_path: Path, monkeypatch,
 ) -> None:
@@ -361,6 +532,65 @@ def test_firstframe_exact_state_relay_uses_previous_accepted_last_anchor_as_sour
     assert refs[0] == previous
     assert inputs[0]["role"] == "source_frame"
     assert inputs[0]["owner"] == "Clip_05"
+
+
+def test_firstframe_does_not_relay_across_intentional_time_discontinuity(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    previous = tmp_path / "出图" / "第1集" / "图片" / "EP01_CLIP01_a1.png"
+    previous.parent.mkdir(parents=True)
+    previous.write_bytes(b"future-cold-open")
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [
+        {
+            "id": "EP01_CLIP01",
+            "continuity": {
+                "end_state": "刀尖停在裴长青胸前",
+                "transition": "时间回切",
+                "seam_mode": "intentional_discontinuity",
+                "seam_evidence": {"reason": "冷开未来片段切回十分钟前"},
+                "anchors": [{"anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png"}],
+            },
+        },
+        {
+            "id": "EP01_CLIP02",
+            "continuity": {
+                "start_state": "刀尖停在裴长青胸前",
+                "previous_start_state_note": "姜月初刚在尸场醒来，未持刀",
+            },
+        },
+    ]}, ensure_ascii=False), encoding="utf-8")
+    events = tmp_path / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True)
+    events.write_text(json.dumps({
+        "stage": "image",
+        "event": "qa",
+        "generation": {
+            "asset": "出图/第1集/图片/EP01_CLIP01_a1.png",
+            "status": "accepted",
+        },
+        "meta": {"artifact_sha256": base.file_sha256(previous)},
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+    section = base.ClipSection(
+        clip="Clip_02",
+        title="## 镜头 2",
+        body="",
+        target_line="`出图/第1集/图片/Clip02_first.png`",
+    )
+    target = base.Target(
+        shot="Clip_02_first",
+        clip="Clip_02",
+        mode="firstframe",
+        rel_path="出图/第1集/图片/Clip02_first.png",
+        section=section,
+    )
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": []})
+    monkeypatch.setattr(base, "storyboard_anchor_beat", lambda *_args: {})
+
+    refs = dreamina.prompt_reference_paths(tmp_path, target, "第1集")
+
+    assert previous not in refs
 
 
 def test_same_target_exact_hash_rejection_uses_current_pixels_as_correction_source(
@@ -424,6 +654,39 @@ def test_same_target_exact_hash_rejection_uses_current_pixels_as_correction_sour
     assert current not in reset_refs
     assert first not in reset_refs
     assert reset_inputs[0]["role"] == "character"
+
+
+def test_canonical_reset_excludes_rejected_target_reintroduced_by_registry(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    current = tmp_path / "出图/共享/图片/定妆_CHAR_02__常态_后45度.png"
+    face = tmp_path / "出图/共享/图片/定妆_CHAR_02__常态_脸部特写.png"
+    current.parent.mkdir(parents=True)
+    current.write_bytes(b"rejected-current")
+    face.write_bytes(b"independent-face")
+    section = base.ClipSection(
+        clip="CHAR_02", title="## CHAR_02", body="",
+        target_line="`出图/共享/图片/定妆_CHAR_02__常态_后45度.png`",
+    )
+    target = base.Target(
+        shot="CHAR_02::后45度", clip="CHAR_02", mode="shared",
+        rel_path="出图/共享/图片/定妆_CHAR_02__常态_后45度.png", section=section,
+    )
+    monkeypatch.setattr(base, "reference_bundle_for_target", lambda *_args: {"items": [{
+        "kind": "character", "id": "CHAR_02",
+        "paths": [
+            "出图/共享/图片/定妆_CHAR_02__常态_后45度.png",
+            "出图/共享/图片/定妆_CHAR_02__常态_脸部特写.png",
+        ],
+    }]})
+    monkeypatch.setattr(base, "storyboard_anchor_beat", lambda *_args: {})
+
+    reset_refs = dreamina.prompt_reference_paths(
+        tmp_path, target, "第1集", canonical_reset=True,
+    )
+
+    assert current not in reset_refs
+    assert face in reset_refs
 
 
 def test_dreamina_requeries_same_async_submit_until_image_exists(tmp_path: Path, monkeypatch) -> None:

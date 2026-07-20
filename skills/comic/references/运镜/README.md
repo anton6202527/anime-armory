@@ -1,6 +1,8 @@
 # 漫画镜头语言参考库
 
-本目录是 comic 系列的镜头语言参考库，以运镜库快照为初始来源，已复制为本系列自包含资源。漫画不直接播放运镜，但这些条目可以转译为静态格子的机位、景别、速度线、前景遮挡、格子轻重和阅读节奏。机器可读真值源是 [`manifest.json`](manifest.json)。
+本目录是 comic 系列的镜头语言参考库。漫画不直接播放运镜，但这些条目可以转译为静态格子的机位、景别、速度线、前景遮挡、格子轻重和阅读节奏。机器可读真值源是 [`manifest.json`](manifest.json)；本地 `_contact/` 五帧拼图让 agent 离线理解运动轨迹，已授权公开再分发的完整动画则以 URL/bytes/SHA-256 登记在 manifest。
+
+默认只读 manifest + contact sheet。只有静态转译仍无法判断运动方向/节奏时，才运行 `python3 skills/comic/scripts/camera_reference.py fetch <运镜ID或名称>` 下载到仓库外用户缓存；下载强制校验 bytes + SHA-256，断网不阻断漫画脚本。
 
 ## 静态转译
 

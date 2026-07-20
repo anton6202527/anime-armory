@@ -1,10 +1,9 @@
 # 跨集角色漂移报表
 
 - root: 创作区/制漫剧/从变身少女开始斩妖除魔
-- generated_at: 2026-07-15T02:26:00+00:00
-- available: False
+- generated_at: 2026-07-20T04:09:07+00:00
+- available: True
 
-- note: face consistency run skipped by --skip-face
 
 | 角色 | first_bad_episode | total_warn | total_block | episodes |
 |---|---|---|---|---|

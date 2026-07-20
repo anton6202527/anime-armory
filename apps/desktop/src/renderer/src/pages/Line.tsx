@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
   createWork,
   deleteWork,
@@ -64,6 +64,8 @@ export function Line(props: {
   const [deleting, setDeleting] = useState(false);
   const [availableDemos, setAvailableDemos] = useState<DemoDownloadInfo[]>([]);
   const [installingDemoRel, setInstallingDemoRel] = useState<string | null>(null);
+  const [toast, setToast] = useState<string>("");
+  const toastTimer = useRef<number | null>(null);
   // Local media server powers work-cover thumbnails; re-render once its port is up.
   const mediaPort = useSyncExternalStore(subscribeMediaPort, getMediaPort);
 
@@ -88,6 +90,18 @@ export function Line(props: {
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceRoot, line.line]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    };
+  }, []);
+
+  function showToast(message: string) {
+    if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    setToast(message);
+    toastTimer.current = window.setTimeout(() => setToast(""), 2200);
+  }
 
   useEffect(() => {
     if (!pendingDelete) return;
@@ -135,10 +149,9 @@ export function Line(props: {
     setErr("");
     setInstallingDemoRel(demo.rel);
     try {
-      const result = await installDemo(workspaceRoot, demo.rel);
-      const fresh = await refresh();
-      const root = fresh?.roots.find((r) => r.path === result.root.path) ?? result.root;
-      onOpen(root);
+      await installDemo(workspaceRoot, demo.rel);
+      await refresh();
+      showToast(t("line.downloadDemoSuccess", { name: demo.name }));
     } catch (e) {
       setErr(t("line.downloadDemoFailed", { error: String(e) }));
     } finally {
@@ -280,6 +293,11 @@ export function Line(props: {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {toast && (
+        <div className="line-toast" role="status" aria-live="polite">
+          {toast}
         </div>
       )}
     </div>

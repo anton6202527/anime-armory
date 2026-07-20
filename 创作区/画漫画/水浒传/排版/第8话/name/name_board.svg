@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="1402" viewBox="0 0 1012 1402">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">月黑初更，两名少华山喽啰在史家庄门外递上沉甸甸的金包，史进披衣…</text>
+<rect x="57" y="146" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="161">P002</text>
+<text class="note" x="62" y="176">史进打开包裹，三十两蒜条金在灯下发亮，他先抬手推回。</text>
+<rect x="57" y="204" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="219">P003</text>
+<text class="note" x="62" y="234">史进沉吟片刻收下金子，命庄客摆酒招待送礼喽啰。</text>
+<rect x="57" y="262" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="277">P004</text>
+<text class="note" x="62" y="292">送礼喽啰酒足离庄，史进反赏碎银，暗夜中双方抱拳。</text>
+<rect x="57" y="320" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="335">P005</text>
+<text class="note" x="62" y="350">半月后，一串硕大珍珠又被夜送入庄，珠光映在史进掌中。</text>
+<rect x="57" y="378" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="393">P006</text>
+<text class="note" x="62" y="408">史进独坐案前望着金珠，决定不能只受不还。</text>
+<text class="note" x="38" y="448">hook: P006 reflection</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="396" y="62" width="220" height="33" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="77">P007</text>
+<text class="note" x="401" y="88">裁缝在庄中裁三匹红锦，旁边三领锦袄逐渐成形。</text>
+<rect x="396" y="101" width="220" height="33" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="116">P008</text>
+<text class="note" x="401" y="127">厨房蒸汽腾起，三只肥羊装入大食盒，酒坛扎紧。</text>
+<rect x="385" y="141" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="156">P009</text>
+<text class="note" x="390" y="171">庄客头领王四拍着皮质信囊，圆脸机灵，向史进躬身领命。</text>
+<rect x="385" y="215" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="230">P010</text>
+<text class="note" x="390" y="245">王四与另一庄客挑盒担沿少华山道上行，红锦包裹醒目。</text>
+<rect x="385" y="288" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="303">P011</text>
+<text class="note" x="390" y="318">少华山寨内朱武三人接下锦袄肥羊，陈达豪爽拍王四肩膀。</text>
+<rect x="385" y="362" width="242" height="67" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="377">P012</text>
+<text class="note" x="390" y="392">王四连饮十余碗，双颊通红仍举碗逞能。</text>
+<text class="note" x="366" y="448">hook: P012 comic_relief</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="713" y="62" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="77">P013</text>
+<text class="note" x="718" y="92">数次礼担在山道往返，金银、酒羊与锦帛交替出现。</text>
+<rect x="713" y="124" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="139">P014</text>
+<text class="note" x="718" y="154">八月十五将近，史进立在挂满桂枝的后园，抬头望渐圆的月。</text>
+<rect x="713" y="186" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="201">P015</text>
+<text class="note" x="718" y="216">史进把封好的请书交给王四，指尖压实信囊扣带。</text>
+<rect x="713" y="248" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="263">P016</text>
+<text class="note" x="718" y="278">王四在聚义厅递上请书，朱武展开阅读，陈达杨春相视而笑。</text>
+<rect x="713" y="310" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="325">P017</text>
+<text class="note" x="718" y="340">朱武写好回书封入信囊，并赏王四五两银子。</text>
+<rect x="713" y="373" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="388">P018</text>
+<text class="note" x="718" y="403">王四下山撞见相熟喽啰，被一把抱住拖向路边村酒店。</text>
+<text class="note" x="694" y="448">hook: P018 temptation</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="68" y="520" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="535">P019</text>
+<text class="note" x="73" y="543">低矮酒店内酒碗排满桌，王四与喽啰大笑碰碗。</text>
+<rect x="57" y="556" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="571">P020</text>
+<text class="note" x="62" y="586">王四醉步出店，被山风一吹，身形沿山路左右摇摆。</text>
+<rect x="57" y="623" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="638">P021</text>
+<text class="note" x="62" y="653">王四跌进松林，扑倒在绿茸莎草上，信囊与银袋压在臂下。</text>
+<rect x="57" y="691" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="706">P022</text>
+<text class="note" x="62" y="721">正在坡下设套捕兔的李吉闻声赶入林中，认出醉倒的王四。</text>
+<rect x="57" y="758" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="773">P023</text>
+<text class="note" x="62" y="788">李吉扶不动王四，却看见袖口滚出银角，目光停住。</text>
+<rect x="57" y="826" width="242" height="62" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="841">P024</text>
+<text class="note" x="62" y="856">李吉解下信囊向草地一抖，银两与封缄回书一同落出。</text>
+<text class="note" x="38" y="906">hook: P024 theft</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="374" y="520" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="535">P025</text>
+<text class="note" x="379" y="550">李吉拆开回书，虽读不懂文句，却认出朱武、陈达、杨春三个名字。</text>
+<rect x="385" y="598" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="613">P026</text>
+<text class="note" x="390" y="628">李吉攥紧回书和银子，想起县衙三千贯悬赏告示的画面。</text>
+<rect x="374" y="652" width="264" height="72" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="667">P027</text>
+<text class="note" x="379" y="682">李吉回望醉倒的王四，转身沿月下山路疾奔华阴县。</text>
+<rect x="385" y="730" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="745">P028</text>
+<text class="note" x="390" y="760">华阴县衙内，李吉双手呈上回书，县尉从案后俯身接过。</text>
+<rect x="385" y="784" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="799">P029</text>
+<text class="note" x="390" y="814">县尉看见三名首领姓名，重重拍案，差役开始披甲集合。</text>
+<rect x="385" y="839" width="242" height="48" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="854">P030</text>
+<text class="note" x="390" y="869">二更月光照进松林，王四惊醒摸向腰间，只剩空信囊。</text>
+<text class="note" x="366" y="906">hook: P030 awakening</text>
+<rect x="684" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="504">SCROLL_006 scroll</text>
+<rect x="713" y="520" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="535">P031</text>
+<text class="note" x="718" y="550">王四跪在草间四处翻找，额头冷汗直流。</text>
+<rect x="713" y="587" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="602">P032</text>
+<text class="note" x="718" y="617">王四忽然停手，眼珠一转，决定谎称没有回书。</text>
+<rect x="724" y="654" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="729" y="669">P033</text>
+<text class="note" x="729" y="677">五更天色微白，王四跑回史家庄，衣襟凌乱、脚步虚浮。</text>
+<rect x="713" y="691" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="706">P034</text>
+<text class="note" x="718" y="721">史进追问回书，王四强作镇定，称自己怕醉后遗失所以没让三杰写。</text>
+<rect x="713" y="758" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="773">P035</text>
+<text class="note" x="718" y="788">史进大喜拍王四肩膀，王四低头掩住心虚。</text>
+<rect x="713" y="826" width="242" height="62" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="841">P036</text>
+<text class="note" x="718" y="856">中秋晴日，庄客宰羊杀鸡鹅，长案摆满酒食果品。</text>
+<text class="note" x="694" y="906">hook: P036 feast_prep</text>
+<rect x="28" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="962">SCROLL_007 scroll</text>
+<rect x="46" y="978" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="993">P037</text>
+<text class="note" x="51" y="1008">黄昏转夜，一轮银月越过史家庄屋脊，桂影铺满后园。</text>
+<rect x="57" y="1062" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1077">P038</text>
+<text class="note" x="62" y="1092">朱武、陈达、杨春只带三五随从，佩朴刀步行来到庄门。</text>
+<rect x="57" y="1120" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1135">P039</text>
+<text class="note" x="62" y="1150">史进迎三杰入庄，双方抱拳叙礼，庄门随后从内闩紧。</text>
+<rect x="57" y="1178" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1193">P040</text>
+<text class="note" x="62" y="1208">后园月下，四人分席而坐，庄客轮流把盏割羊劝酒。</text>
+<rect x="57" y="1236" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1251">P041</text>
+<text class="note" x="62" y="1266">满月升至桂树枝头，酒杯与席面泛起银光，远山如水。</text>
+<rect x="57" y="1294" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="1309">P042</text>
+<text class="note" x="62" y="1324">史进与陈达碰碗，朱武杨春笑谈旧事，席间戒心尽去。</text>
+<text class="note" x="38" y="1364">hook: P042 bond</text>
+<rect x="356" y="944" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="962">SCROLL_008 scroll</text>
+<rect x="385" y="978" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="993">P043</text>
+<text class="note" x="390" y="1008">庄墙外黑暗里，一支火把忽然点燃，随后更多火光接连亮起。</text>
+<rect x="385" y="1028" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1043">P044</text>
+<text class="note" x="390" y="1058">墙外骤起喊声，后园四人同时停杯，史进翻身站起。</text>
+<rect x="385" y="1079" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="1094">P045</text>
+<text class="note" x="390" y="1109">史进抓起三尖两刃刀冲向前院，厉声命庄客不得开门。</text>
+<rect x="374" y="1130" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1145">P046</text>
+<text class="note" x="379" y="1160">史进登梯伏在庄墙上俯看：县尉骑马居中，三四百官兵与火把围成铁环。</text>
+<rect x="374" y="1204" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1219">P047</text>
+<text class="note" x="379" y="1234">庄外火把乱明，钢叉朴刀密如麻林；两名都头指向庄门高喊。</text>
+<rect x="374" y="1277" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="1292">P048</text>
+<text class="note" x="379" y="1307">高位远景：银月之下史家庄被火把完全包围，墙内史进与三杰的剪影各…</text>
+<text class="note" x="366" y="1364">hook: P048 ending_promise</text>
+</svg>

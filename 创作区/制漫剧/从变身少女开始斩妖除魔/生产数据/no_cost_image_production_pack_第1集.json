@@ -109,49 +109,49 @@
       {
         "kind": "reference_anchor",
         "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-        "slot": "front"
+        "path": "出图/共享/图片/定妆_CHAR_01_常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
+        "owner": "CHAR_02/常态",
+        "path": "出图/共享/图片/定妆_CHAR_02_常态_three_quarter.png",
         "slot": "three_quarter"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
+        "owner": "CHAR_02/常态",
+        "path": "出图/共享/图片/定妆_CHAR_02_常态_side.png",
         "slot": "side"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
+        "owner": "CHAR_02/常态",
+        "path": "出图/共享/图片/定妆_CHAR_02_常态_rear_three_quarter.png",
         "slot": "rear_three_quarter"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
+        "owner": "CHAR_02/常态",
+        "path": "出图/共享/图片/定妆_CHAR_02_常态_back.png",
         "slot": "back"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-        "slot": "turnaround"
+        "owner": "CHAR_02/常态",
+        "path": "出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png",
+        "slot": "expression_bank"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
-        "slot": "face_anchor_refs"
+        "owner": "CHAR_02/常态",
+        "path": "出图/共享/图片/定妆_CHAR_02_常态_action_pose_pack.png",
+        "slot": "action_pose_pack"
       },
       {
         "kind": "reference_anchor",
-        "owner": "CHAR_01/常态",
-        "path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+        "owner": "CHAR_04/常态",
+        "path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
         "slot": "expression_bank"
       }
     ],
@@ -433,294 +433,6 @@
   ],
   "reference_generation_queue": [
     {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "78902b59b4a567a9",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_001"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_45度.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "9be82287e72bd601",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_002"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_侧.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0e66b97ec2754ef9",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_003"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7e78dd127ef79031",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_004"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_背.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "a92c912fa353b095",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_005"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-            "scope": "character",
-            "slot": "turnaround"
-          }
-        ],
-        "slot": "turnaround",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "770b75d8e4ae0a94",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "核心档五角 turnaround 人审总览：正面/前3/4/侧面/后3/4/背面同身高同景别对齐。",
-          "scope": "character",
-          "slot": "turnaround"
-        }
-      ],
-      "scope": "character",
-      "slot": "turnaround",
-      "task_id": "REF_006"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          }
-        ],
-        "slot": "face_anchor_refs",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "5603cd3f306a122b",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        }
-      ],
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_008"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-            "scope": "character",
-            "slot": "expression_bank"
-          }
-        ],
-        "slot": "expression_bank",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "794c12d527963b97",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "同源情绪表情库至少 5 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-          "scope": "character",
-          "slot": "expression_bank"
-        }
-      ],
-      "scope": "character",
-      "slot": "expression_bank",
-      "task_id": "REF_009"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_CHAR_01_常态_action_pose_pack.png",
       "owner": "CHAR_01/常态",
       "priority": "P0",
@@ -755,54 +467,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_010"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_02__常态.png",
-      "owner": "CHAR_02/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_02/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_02/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          },
-          {
-            "owner": "CHAR_02/常态",
-            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-            "scope": "character",
-            "slot": "expression_bank"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "90cb3808e7581e74",
-      "satisfies": [
-        {
-          "owner": "CHAR_02/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        },
-        {
-          "owner": "CHAR_02/常态",
-          "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
-          "scope": "character",
-          "slot": "expression_bank"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_011"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_02_常态_three_quarter.png",
@@ -954,16 +618,16 @@
       "priority": "P0",
       "prompt_recipe": {
         "owner": "CHAR_02/常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
+        "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
         "satisfies": [
           {
             "owner": "CHAR_02/常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
+            "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
             "scope": "character",
-            "slot": "face_anchor_refs"
+            "slot": "expression_bank"
           }
         ],
-        "slot": "face_anchor_refs",
+        "slot": "expression_bank",
         "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
       },
       "qc_required": [
@@ -971,18 +635,18 @@
         "no_logo_text",
         "identity_or_asset_match"
       ],
-      "recipe_hash": "fa5cbb1164a09a21",
+      "recipe_hash": "a74cd10523730ab7",
       "satisfies": [
         {
           "owner": "CHAR_02/常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
+          "reason": "同源情绪表情库至少 3 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。",
           "scope": "character",
-          "slot": "face_anchor_refs"
+          "slot": "expression_bank"
         }
       ],
       "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_017"
+      "slot": "expression_bank",
+      "task_id": "REF_018"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_02_常态_action_pose_pack.png",
@@ -1019,222 +683,6 @@
       "scope": "character",
       "slot": "action_pose_pack",
       "task_id": "REF_019"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "front"
-          }
-        ],
-        "slot": "front",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0e96a09ecf4363b8",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "front"
-        }
-      ],
-      "scope": "character",
-      "slot": "front",
-      "task_id": "REF_020"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "three_quarter"
-          }
-        ],
-        "slot": "three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "09632e637c157b57",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "three_quarter",
-      "task_id": "REF_021"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04_常态_side.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "side"
-          }
-        ],
-        "slot": "side",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0165eebc6a45b812",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "side"
-        }
-      ],
-      "scope": "character",
-      "slot": "side",
-      "task_id": "REF_022"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04_常态_rear_three_quarter.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "rear_three_quarter"
-          }
-        ],
-        "slot": "rear_three_quarter",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "2629b210ef6ec73b",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "rear_three_quarter"
-        }
-      ],
-      "scope": "character",
-      "slot": "rear_three_quarter",
-      "task_id": "REF_023"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04_常态_back.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-            "scope": "character",
-            "slot": "back"
-          }
-        ],
-        "slot": "back",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "3f66fec5ebb0c79a",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。",
-          "scope": "character",
-          "slot": "back"
-        }
-      ],
-      "scope": "character",
-      "slot": "back",
-      "task_id": "REF_024"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P0",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "脸部特写锚，近景/反打/表情镜必用。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "脸部特写锚，近景/反打/表情镜必用。",
-            "scope": "character",
-            "slot": "face_anchor_refs"
-          }
-        ],
-        "slot": "face_anchor_refs",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "0be698641530f2a4",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "脸部特写锚，近景/反打/表情镜必用。",
-          "scope": "character",
-          "slot": "face_anchor_refs"
-        }
-      ],
-      "scope": "character",
-      "slot": "face_anchor_refs",
-      "task_id": "REF_026"
     },
     {
       "output_path": "出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
@@ -2173,78 +1621,6 @@
       "task_id": "REF_083"
     },
     {
-      "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-      "owner": "LOC_01",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_01",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "wide_plate"
-          }
-        ],
-        "slot": "wide_plate",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "aa06932501225b9f",
-      "satisfies": [
-        {
-          "owner": "LOC_01",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "wide_plate"
-        }
-      ],
-      "scope": "asset",
-      "slot": "wide_plate",
-      "task_id": "REF_029"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-      "owner": "LOC_01",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "LOC_01",
-        "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-        "satisfies": [
-          {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "scope": "asset",
-            "slot": "reverse_angle"
-          }
-        ],
-        "slot": "reverse_angle",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e07212c4b0feeaa4",
-      "satisfies": [
-        {
-          "owner": "LOC_01",
-          "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-          "scope": "asset",
-          "slot": "reverse_angle"
-        }
-      ],
-      "scope": "asset",
-      "slot": "reverse_angle",
-      "task_id": "REF_030"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
       "owner": "LOC_01",
       "priority": "P1",
@@ -2315,42 +1691,6 @@
       "scope": "asset",
       "slot": "lighting_plate",
       "task_id": "REF_032"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-      "owner": "PROP_横刀",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_横刀",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "832a2f7e7790c8cb",
-      "satisfies": [
-        {
-          "owner": "PROP_横刀",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_033"
     },
     {
       "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -2425,42 +1765,6 @@
       "task_id": "REF_035"
     },
     {
-      "output_path": "出图/共享/图片/定妆_道具_断刀.png",
-      "owner": "PROP_断刀",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_断刀",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_断刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "1769f439d9bc5d32",
-      "satisfies": [
-        {
-          "owner": "PROP_断刀",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_036"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_道具_断刀_比例.png",
       "owner": "PROP_断刀",
       "priority": "P1",
@@ -2531,42 +1835,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_038"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-      "owner": "PROP_翻覆囚车",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_翻覆囚车",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_翻覆囚车",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "e07f8b3e49287413",
-      "satisfies": [
-        {
-          "owner": "PROP_翻覆囚车",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_039"
     },
     {
       "output_path": "出图/共享/图片/定妆_道具_翻覆囚车_比例.png",
@@ -2641,42 +1909,6 @@
       "task_id": "REF_041"
     },
     {
-      "output_path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-      "owner": "VFX_系统面板",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "VFX_系统面板",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "VFX_系统面板",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "b28e97882143728e",
-      "satisfies": [
-        {
-          "owner": "VFX_系统面板",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_042"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_VFX_系统面板_scale_reference.png",
       "owner": "VFX_系统面板",
       "priority": "P1",
@@ -2747,42 +1979,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_044"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_特效_百妖谱.png",
-      "owner": "VFX_百妖谱",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "VFX_百妖谱",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "VFX_百妖谱",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "4a0331752bfa3dac",
-      "satisfies": [
-        {
-          "owner": "VFX_百妖谱",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_045"
     },
     {
       "output_path": "出图/共享/图片/定妆_VFX_百妖谱_scale_reference.png",
@@ -2857,42 +2053,6 @@
       "task_id": "REF_047"
     },
     {
-      "output_path": "出图/共享/图片/定妆_特效_道行灌注.png",
-      "owner": "VFX_道行灌注",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "VFX_道行灌注",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "VFX_道行灌注",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "c3a40f3fa2333357",
-      "satisfies": [
-        {
-          "owner": "VFX_道行灌注",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_048"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_VFX_道行灌注_scale_reference.png",
       "owner": "VFX_道行灌注",
       "priority": "P1",
@@ -2963,42 +2123,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_050"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_道具_虎首.png",
-      "owner": "PROP_虎首",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "PROP_虎首",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "PROP_虎首",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "24c2000f0e75f769",
-      "satisfies": [
-        {
-          "owner": "PROP_虎首",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_051"
     },
     {
       "output_path": "出图/共享/图片/定妆_道具_虎首_比例.png",
@@ -3073,42 +2197,6 @@
       "task_id": "REF_053"
     },
     {
-      "output_path": "出图/共享/图片/定妆_特效_黑妖血.png",
-      "owner": "VFX_黑妖血",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "VFX_黑妖血",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "VFX_黑妖血",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "32338fb8ebbd8f66",
-      "satisfies": [
-        {
-          "owner": "VFX_黑妖血",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_054"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_VFX_黑妖血_scale_reference.png",
       "owner": "VFX_黑妖血",
       "priority": "P1",
@@ -3181,42 +2269,6 @@
       "task_id": "REF_056"
     },
     {
-      "output_path": "出图/共享/图片/定妆_特效_道行反噬.png",
-      "owner": "VFX_道行反噬",
-      "priority": "P1",
-      "prompt_recipe": {
-        "owner": "VFX_道行反噬",
-        "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-        "satisfies": [
-          {
-            "owner": "VFX_道行反噬",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "scope": "asset",
-            "slot": "primary"
-          }
-        ],
-        "slot": "primary",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7561309dfef8d281",
-      "satisfies": [
-        {
-          "owner": "VFX_道行反噬",
-          "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-          "scope": "asset",
-          "slot": "primary"
-        }
-      ],
-      "scope": "asset",
-      "slot": "primary",
-      "task_id": "REF_057"
-    },
-    {
       "output_path": "出图/共享/图片/定妆_VFX_道行反噬_scale_reference.png",
       "owner": "VFX_道行反噬",
       "priority": "P1",
@@ -3287,114 +2339,6 @@
       "scope": "asset",
       "slot": "detail_closeup",
       "task_id": "REF_059"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_01__常态_半身.png",
-      "owner": "CHAR_01/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_01/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_01/常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "7c56dada32784b26",
-      "satisfies": [
-        {
-          "owner": "CHAR_01/常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_007"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_02__常态_半身.png",
-      "owner": "CHAR_02/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_02/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_02/常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "ccd19cb93f7b6c2c",
-      "satisfies": [
-        {
-          "owner": "CHAR_02/常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_016"
-    },
-    {
-      "output_path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-      "owner": "CHAR_04/常态",
-      "priority": "P2",
-      "prompt_recipe": {
-        "owner": "CHAR_04/常态",
-        "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-        "satisfies": [
-          {
-            "owner": "CHAR_04/常态",
-            "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-            "scope": "character",
-            "slot": "half_body_or_full_body"
-          }
-        ],
-        "slot": "half_body_or_full_body",
-        "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-      },
-      "qc_required": [
-        "reference_ready",
-        "no_logo_text",
-        "identity_or_asset_match"
-      ],
-      "recipe_hash": "d6871c1eaa44ca9c",
-      "satisfies": [
-        {
-          "owner": "CHAR_04/常态",
-          "reason": "服装/体态参考，防止镜头内换身材或换衣。",
-          "scope": "character",
-          "slot": "half_body_or_full_body"
-        }
-      ],
-      "scope": "character",
-      "slot": "half_body_or_full_body",
-      "task_id": "REF_025"
     }
   ],
   "regional_construct_manifests": [
@@ -3797,78 +2741,6 @@
       "recipe_hash": "07d343f4c79a7735",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -3905,21 +2777,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -3927,18 +2799,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -4087,78 +2959,6 @@
       "recipe_hash": "3b725ac15e06d936",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -4195,21 +2995,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -4217,18 +3017,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -4303,42 +3103,6 @@
           "task_id": "REF_035"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_断刀.png",
-          "owner": "PROP_断刀",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_断刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_断刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "1769f439d9bc5d32",
-          "satisfies": [
-            {
-              "owner": "PROP_断刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_036"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_道具_断刀_比例.png",
           "owner": "PROP_断刀",
           "priority": "P1",
@@ -4409,42 +3173,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_038"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-          "owner": "PROP_翻覆囚车",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_翻覆囚车",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_翻覆囚车",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07f8b3e49287413",
-          "satisfies": [
-            {
-              "owner": "PROP_翻覆囚车",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_039"
         },
         {
           "output_path": "出图/共享/图片/定妆_道具_翻覆囚车_比例.png",
@@ -4591,78 +3319,6 @@
       "recipe_hash": "c5d91419eec23a8c",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -4699,21 +3355,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -4721,18 +3377,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -4805,42 +3461,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_035"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_断刀.png",
-          "owner": "PROP_断刀",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_断刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_断刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "1769f439d9bc5d32",
-          "satisfies": [
-            {
-              "owner": "PROP_断刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_036"
         },
         {
           "output_path": "出图/共享/图片/定妆_道具_断刀_比例.png",
@@ -4982,78 +3602,6 @@
       "recipe_hash": "7b124e46844fd0c7",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -5090,21 +3638,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -5112,18 +3660,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -5272,78 +3820,6 @@
       "recipe_hash": "502ba1284d6029c0",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -5380,21 +3856,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -5402,18 +3878,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -5562,78 +4038,6 @@
       "recipe_hash": "ea240e8dd0a95140",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -5670,21 +4074,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -5692,18 +4096,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -5854,78 +4258,6 @@
       "recipe_hash": "5b2cd85bf6f83760",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -5962,21 +4294,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -5984,18 +4316,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -6070,42 +4402,6 @@
           "task_id": "REF_035"
         },
         {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "owner": "VFX_系统面板",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_系统面板",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_系统面板",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "b28e97882143728e",
-          "satisfies": [
-            {
-              "owner": "VFX_系统面板",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_042"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_VFX_系统面板_scale_reference.png",
           "owner": "VFX_系统面板",
           "priority": "P1",
@@ -6176,42 +4472,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_044"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱.png",
-          "owner": "VFX_百妖谱",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_百妖谱",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_百妖谱",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "4a0331752bfa3dac",
-          "satisfies": [
-            {
-              "owner": "VFX_百妖谱",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_045"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_百妖谱_scale_reference.png",
@@ -6362,78 +4622,6 @@
       "recipe_hash": "558db9b95b325f53",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -6470,21 +4658,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -6492,18 +4680,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -6576,42 +4764,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_035"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "owner": "VFX_系统面板",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_系统面板",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_系统面板",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "b28e97882143728e",
-          "satisfies": [
-            {
-              "owner": "VFX_系统面板",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_042"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_系统面板_scale_reference.png",
@@ -6760,78 +4912,6 @@
       "recipe_hash": "ec35c6a61805b343",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -6868,21 +4948,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -6890,18 +4970,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -6974,42 +5054,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_035"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_道行灌注.png",
-          "owner": "VFX_道行灌注",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_道行灌注",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_道行灌注",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "c3a40f3fa2333357",
-          "satisfies": [
-            {
-              "owner": "VFX_道行灌注",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_048"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_道行灌注_scale_reference.png",
@@ -7156,78 +5200,6 @@
       "recipe_hash": "b84e000e1d1081f9",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -7264,21 +5236,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -7286,18 +5258,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -7372,42 +5344,6 @@
           "task_id": "REF_035"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_虎首.png",
-          "owner": "PROP_虎首",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_虎首",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_虎首",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "24c2000f0e75f769",
-          "satisfies": [
-            {
-              "owner": "PROP_虎首",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_051"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_道具_虎首_比例.png",
           "owner": "PROP_虎首",
           "priority": "P1",
@@ -7480,42 +5416,6 @@
           "task_id": "REF_053"
         },
         {
-          "output_path": "出图/共享/图片/定妆_特效_黑妖血.png",
-          "owner": "VFX_黑妖血",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_黑妖血",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_黑妖血",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "32338fb8ebbd8f66",
-          "satisfies": [
-            {
-              "owner": "VFX_黑妖血",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_054"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_VFX_黑妖血_scale_reference.png",
           "owner": "VFX_黑妖血",
           "priority": "P1",
@@ -7586,42 +5486,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_056"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_道行反噬.png",
-          "owner": "VFX_道行反噬",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_道行反噬",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_道行反噬",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "7561309dfef8d281",
-          "satisfies": [
-            {
-              "owner": "VFX_道行反噬",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_057"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_道行反噬_scale_reference.png",
@@ -7767,78 +5631,6 @@
       "recipe_hash": "5eaa309c69523786",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -7875,21 +5667,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -7897,18 +5689,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -7983,42 +5775,6 @@
           "task_id": "REF_035"
         },
         {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "owner": "VFX_系统面板",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_系统面板",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_系统面板",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "b28e97882143728e",
-          "satisfies": [
-            {
-              "owner": "VFX_系统面板",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_042"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_VFX_系统面板_scale_reference.png",
           "owner": "VFX_系统面板",
           "priority": "P1",
@@ -8089,42 +5845,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_044"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱.png",
-          "owner": "VFX_百妖谱",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_百妖谱",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_百妖谱",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "4a0331752bfa3dac",
-          "satisfies": [
-            {
-              "owner": "VFX_百妖谱",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_045"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_百妖谱_scale_reference.png",
@@ -8199,42 +5919,6 @@
           "task_id": "REF_047"
         },
         {
-          "output_path": "出图/共享/图片/定妆_道具_虎首.png",
-          "owner": "PROP_虎首",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_虎首",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_虎首",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "24c2000f0e75f769",
-          "satisfies": [
-            {
-              "owner": "PROP_虎首",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_051"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_道具_虎首_比例.png",
           "owner": "PROP_虎首",
           "priority": "P1",
@@ -8305,42 +5989,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_053"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_黑妖血.png",
-          "owner": "VFX_黑妖血",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_黑妖血",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_黑妖血",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "32338fb8ebbd8f66",
-          "satisfies": [
-            {
-              "owner": "VFX_黑妖血",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_054"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_黑妖血_scale_reference.png",
@@ -8480,78 +6128,6 @@
       "recipe_hash": "bcc2a47389a331c5",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -8588,21 +6164,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -8610,18 +6186,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -8696,42 +6272,6 @@
           "task_id": "REF_035"
         },
         {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-          "owner": "VFX_系统面板",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_系统面板",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_系统面板",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "b28e97882143728e",
-          "satisfies": [
-            {
-              "owner": "VFX_系统面板",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_042"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_VFX_系统面板_scale_reference.png",
           "owner": "VFX_系统面板",
           "priority": "P1",
@@ -8802,42 +6342,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_044"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_特效_百妖谱.png",
-          "owner": "VFX_百妖谱",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "VFX_百妖谱",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "VFX_百妖谱",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "4a0331752bfa3dac",
-          "satisfies": [
-            {
-              "owner": "VFX_百妖谱",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_045"
         },
         {
           "output_path": "出图/共享/图片/定妆_VFX_百妖谱_scale_reference.png",
@@ -8954,78 +6458,6 @@
       "recipe_hash": "1d581b3af75a01ad",
       "reference_tasks": [
         {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "wide_plate"
-              }
-            ],
-            "slot": "wide_plate",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "aa06932501225b9f",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "wide_plate"
-            }
-          ],
-          "scope": "asset",
-          "slot": "wide_plate",
-          "task_id": "REF_029"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png",
-          "owner": "LOC_01",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "LOC_01",
-            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-            "satisfies": [
-              {
-                "owner": "LOC_01",
-                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-                "scope": "asset",
-                "slot": "reverse_angle"
-              }
-            ],
-            "slot": "reverse_angle",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "e07212c4b0feeaa4",
-          "satisfies": [
-            {
-              "owner": "LOC_01",
-              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
-              "scope": "asset",
-              "slot": "reverse_angle"
-            }
-          ],
-          "scope": "asset",
-          "slot": "reverse_angle",
-          "task_id": "REF_030"
-        },
-        {
           "output_path": "出图/共享/图片/定妆_LOC_01_empty_plate.png",
           "owner": "LOC_01",
           "priority": "P1",
@@ -9062,21 +6494,21 @@
           "task_id": "REF_031"
         },
         {
-          "output_path": "出图/共享/图片/定妆_武器_横刀.png",
-          "owner": "PROP_横刀",
+          "output_path": "出图/共享/图片/定妆_LOC_01_lighting_plate.png",
+          "owner": "LOC_01",
           "priority": "P1",
           "prompt_recipe": {
-            "owner": "PROP_横刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+            "owner": "LOC_01",
+            "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
             "satisfies": [
               {
-                "owner": "PROP_横刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+                "owner": "LOC_01",
+                "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
                 "scope": "asset",
-                "slot": "primary"
+                "slot": "lighting_plate"
               }
             ],
-            "slot": "primary",
+            "slot": "lighting_plate",
             "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
           },
           "qc_required": [
@@ -9084,18 +6516,18 @@
             "no_logo_text",
             "identity_or_asset_match"
           ],
-          "recipe_hash": "832a2f7e7790c8cb",
+          "recipe_hash": "6e77f9081be3b71e",
           "satisfies": [
             {
-              "owner": "PROP_横刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
+              "owner": "LOC_01",
+              "reason": "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。",
               "scope": "asset",
-              "slot": "primary"
+              "slot": "lighting_plate"
             }
           ],
           "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_033"
+          "slot": "lighting_plate",
+          "task_id": "REF_032"
         },
         {
           "output_path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -9168,42 +6600,6 @@
           "scope": "asset",
           "slot": "detail_closeup",
           "task_id": "REF_035"
-        },
-        {
-          "output_path": "出图/共享/图片/定妆_道具_断刀.png",
-          "owner": "PROP_断刀",
-          "priority": "P1",
-          "prompt_recipe": {
-            "owner": "PROP_断刀",
-            "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-            "satisfies": [
-              {
-                "owner": "PROP_断刀",
-                "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-                "scope": "asset",
-                "slot": "primary"
-              }
-            ],
-            "slot": "primary",
-            "style": "继承本剧 style_contract / identity_registry / asset_registry；无文字无水印。"
-          },
-          "qc_required": [
-            "reference_ready",
-            "no_logo_text",
-            "identity_or_asset_match"
-          ],
-          "recipe_hash": "1769f439d9bc5d32",
-          "satisfies": [
-            {
-              "owner": "PROP_断刀",
-              "reason": "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。",
-              "scope": "asset",
-              "slot": "primary"
-            }
-          ],
-          "scope": "asset",
-          "slot": "primary",
-          "task_id": "REF_036"
         },
         {
           "output_path": "出图/共享/图片/定妆_道具_断刀_比例.png",
@@ -9315,7 +6711,7 @@
   "summary": {
     "clips": 13,
     "keyshot_candidate_tasks": 13,
-    "reference_generation_tasks": 82,
+    "reference_generation_tasks": 53,
     "regional_construct_manifests": 12,
     "shot_packages": 13
   },

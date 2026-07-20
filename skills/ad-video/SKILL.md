@@ -70,7 +70,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
 - **产品镜稳定优先**：产品 hero 镜路由到主体一致性最强的后端，避免 image2video 把包装/logo 抖花。
 - **资产注册表驱动**：`route.py` 消费 `asset_registry.json`，让 App/UI/end card 的 `PROD_*`、`BRAND_*` 和平台安全区一起进入视频路由产物。
 - **生成后也要验收**：`inherit_contract.py` 只管生成前 prompt 继承；`video_qc.py` 负责生成后的 Clip 文件、产品锁、文字可读、安全区、接缝声明，外加**批内混帧率/混分辨率**（`batch_fps_mix`/`batch_resolution_mix`·warn——合成强制统一参数会静默掩盖来源差异）与**同场景相邻镜色跳**（`seam_color_jump`·平均色距>0.12 warn，已声明转场降 info——dHash 只抓灰度结构，调色/白平衡跳变靠色距抓），不允许坏 Clip 进入剪辑。
-- **运镜服务节奏**：广告节奏紧，一镜一个主运镜，动作峰值对 VO/音乐床节奏点（`ad-script` 时间轴标）。产品 hero/demo/end card 的可用运镜见 `skills/ad/references/运镜/manifest.json`。
+- **运镜服务节奏**：广告节奏紧，一镜一个主运镜，动作峰值对 VO/音乐床节奏点（`ad-script` 时间轴标）。产品 hero/demo/end card 的可用运镜见 `skills/ad/references/运镜/manifest.json`，默认读本地五帧 contact sheet；只有需要检查运动节奏/轨迹时才运行 `python3 skills/ad/scripts/camera_reference.py fetch <运镜ID或名称>` 按 SHA-256 下载远端动画。断网只退回 manifest + contact sheet，不阻断广告 prompt。
 - **多比例**：按主比例出视频，其它比例 `ad-compose` reframe；运镜别让主体/产品冲出 action-safe。
 
 ## 测试

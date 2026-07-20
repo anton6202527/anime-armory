@@ -270,9 +270,9 @@ button:hover { border-color: var(--accent); }
 .root-card { position: relative; }
 .root-card:hover { border-color: var(--accent); }
 .root-demo-badge {
-  position: absolute; top: 6px; right: 6px; height: 16px; padding: 0 6px;
+  position: absolute; top: -1px; right: -1px; height: 22px; padding: 0 8px;
   display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 5px; border: 1px solid rgba(78, 201, 176, .45);
+  border-radius: 0 10px 0 6px; border: 1px solid rgba(78, 201, 176, .45);
   background: rgba(78, 201, 176, .12); color: var(--good);
   font-size: 9px; font-weight: 800; line-height: 1; letter-spacing: 0;
 }
@@ -292,7 +292,7 @@ button:hover { border-color: var(--accent); }
 /* Work card: cover thumbnail + text (name / synopsis). */
 .root-main { display: flex; gap: 10px; align-items: stretch; min-width: 0; }
 .root-cover {
-  flex: 0 0 40px; width: 40px; height: 56px; border-radius: 6px; overflow: hidden;
+  flex: 0 0 48px; width: 48px; height: 56px; border-radius: 6px; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   background: rgba(255, 255, 255, .04); border: 1px solid var(--border);
 }
@@ -331,7 +331,7 @@ button:hover { border-color: var(--accent); }
 .line-info .line-title .line-title-main { display: inline-flex; align-items: baseline; min-width: 0; }
 
 /* ---- Line page (创作区) ---- */
-.line-page { padding: 0; height: 100%; overflow: auto; background: var(--editor-bg); }
+.line-page { position: relative; padding: 0; height: 100%; overflow: auto; background: var(--editor-bg); }
 .work-nav {
   height: var(--work-nav-height); min-height: var(--work-nav-height); box-sizing: border-box;
   display: flex; align-items: center; gap: 4px; padding: 2px var(--work-nav-inline-padding);
@@ -358,7 +358,10 @@ button:hover { border-color: var(--accent); }
   width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center;
   font-size: 14px; line-height: 1;
 }
-.line-page .roots { padding: 20px; }
+.line-page .roots {
+  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
 .root-card.new-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   border-style: dashed; color: var(--muted); min-height: 78px;
@@ -1978,13 +1981,18 @@ body:is(
   opacity: 0;
 }
 
-.op-toast {
+.op-toast,
+.line-toast {
   position: absolute; top: 52px; right: 18px; z-index: 30;
   max-width: min(360px, calc(100% - 36px)); padding: 8px 12px;
   border: 1px solid rgba(0, 122, 204, .42); border-radius: 8px;
   background: rgba(37, 37, 38, .96); color: var(--text);
   box-shadow: 0 10px 28px rgba(0, 0, 0, .35);
   font-size: 12px; line-height: 1.4;
+}
+.line-toast {
+  top: 18px;
+  border-color: rgba(78, 201, 176, .5);
 }
 
 /* ---- Canvas / ClipNode ---- */

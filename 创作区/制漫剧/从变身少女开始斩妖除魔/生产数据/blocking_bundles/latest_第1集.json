@@ -7,7 +7,7 @@
       "step": "preventive_contracts"
     },
     {
-      "message": "生产锁版账未通过（image）：style_identity_lock status 不是 confirmed。先确认相关 lock，或在 creative_decisions.jsonl 记录解锁/最小返工范围后再继续。",
+      "message": "生产锁版账未通过（image）：style_identity_lock 锁定后文件已变化：生产数据/identity_adapter_matrix.json。先确认相关 lock，或在 creative_decisions.jsonl 记录解锁/最小返工范围后再继续。",
       "step": "production_locks"
     }
   ],
@@ -31,7 +31,7 @@
     "return_to_stage": "image_prompt",
     "stage": "image_preflight"
   },
-  "generated_at": "2026-07-15T15:10:59+0800",
+  "generated_at": "2026-07-20T12:24:08+0800",
   "headline": "第1集 出图：确定性前置失败",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-image",

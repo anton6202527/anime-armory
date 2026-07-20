@@ -180,6 +180,95 @@ def _reference_block(body: str) -> str:
     return m.group(0) if m else ""
 
 
+def select_dreamina_reference_paths(
+    target: base.Target,
+    bundle: Mapping[str, Any],
+    paths: Sequence[Path],
+    *,
+    root: Path,
+    source_path: Optional[Path],
+) -> List[Path]:
+    """Balance Dreamina's ten attachments across identities and scene evidence.
+
+    Merely prepending every registry-only angle can let the first character's
+    large view pack consume the whole backend cap.  Convert the concrete paths
+    into the same role/owner rows used by the backend-neutral selector so each
+    depicted identity receives a face/body anchor before extra angles, while a
+    location and interacted plot asset still retain context slots.
+    """
+    metadata: Dict[str, tuple[str, str, int]] = {}
+
+    def character_priority(path: Path, index: int) -> int:
+        stem = path.stem.lower()
+        if any(token in stem for token in ("脸部特写", "face_anchor", "face")):
+            return 10
+        if index == 0:
+            return 20
+        if any(token in stem for token in ("半身", "全身", "outfit")):
+            return 30
+        if any(token in stem for token in ("45度", "_侧", "侧面")):
+            return 40
+        if any(token in stem for token in ("表情", "expression")):
+            return 45
+        return 50
+
+    for item in bundle.get("items") or []:
+        if not isinstance(item, Mapping):
+            continue
+        role = str(item.get("kind") or item.get("role") or "reference")
+        owner = str(
+            item.get("owner") or item.get("character") or item.get("asset_id")
+            or item.get("id") or item.get("ref") or ""
+        )
+        for index, rel in enumerate(item.get("paths") or []):
+            path = root / str(rel)
+            if role == "character":
+                priority = character_priority(path, index)
+            elif role == "style":
+                priority = 60
+            elif owner.startswith("LOC_"):
+                priority = 70
+            elif role == "asset":
+                priority = 80
+            else:
+                priority = 100
+            metadata.setdefault(str(path), (role, owner, priority))
+
+    rows: List[Dict[str, Any]] = []
+    seen: set[Path] = set()
+    for sequence, path in enumerate(paths):
+        if path in seen:
+            continue
+        seen.add(path)
+        role, owner, priority = metadata.get(
+            str(path), ("reference", path.stem, 100)
+        )
+        if source_path is not None and path == source_path:
+            role, owner, priority = "source_frame", target.clip, 0
+        rows.append({
+            "role": role,
+            "owner": owner,
+            "priority": priority,
+            "sequence": sequence,
+            "_path": path,
+        })
+    if target.shot == "Clip_02_first" and "尸场空间一次建立" in str(target.section.body or ""):
+        # S02A happens before the complete hengdao enters the visual beat.  The
+        # merged Clip reference bundle also contains PROP_横刀/WEAPON_01 for
+        # later sub-shots; attaching it here repeatedly made the provider place
+        # a complete foreground sword despite the first-frame contract.
+        rows = [
+            row for row in rows
+            if not (
+                str(row.get("role") or "") == "asset"
+                and str(row.get("owner") or "") in {"PROP_横刀", "WEAPON_01"}
+            )
+        ]
+    rows.sort(key=lambda row: (int(row["priority"]), int(row["sequence"])))
+    selected = base.select_codex_reference_inputs(target, rows, MAX_REFERENCES)
+    return [row["_path"] for row in selected]
+
+
 def _accepted_current_hash(root: Path, rel_path: str) -> bool:
     """Whether the latest executor QA receipt accepts the exact current pixels."""
     current = root / rel_path
@@ -231,16 +320,31 @@ def previous_continuity_source_path(root: Path, target: base.Target, episode: st
     previous = clips[current_index - 1]
     current_cont = current.get("continuity") if isinstance(current.get("continuity"), Mapping) else {}
     previous_cont = previous.get("continuity") if isinstance(previous.get("continuity"), Mapping) else {}
+    discontinuity_text = " ".join((
+        str(previous_cont.get("seam_mode") or ""),
+        str(previous_cont.get("transition") or ""),
+        str((previous_cont.get("seam_evidence") or {}).get("reason") or "")
+        if isinstance(previous_cont.get("seam_evidence"), Mapping) else "",
+        str(current_cont.get("previous_start_state_note") or ""),
+    ))
+    if (
+        "intentional_discontinuity" in discontinuity_text
+        or re.search(r"时间回切|时间跳切|闪回|倒叙|回到.{0,8}前|十分钟前", discontinuity_text)
+    ):
+        return None
     start_state = re.sub(r"\s+", "", str(current_cont.get("start_state") or ""))
     end_state = re.sub(r"\s+", "", str(previous_cont.get("end_state") or ""))
     if not start_state or start_state != end_state:
         return None
     candidates: List[str] = []
+    for key in ("tailframe_png", "endframe_png"):
+        if previous_cont.get(key):
+            candidates.append(str(previous_cont.get(key)))
     anchors = previous_cont.get("anchors") if isinstance(previous_cont.get("anchors"), list) else []
     for anchor in reversed(anchors):
         if isinstance(anchor, Mapping) and anchor.get("anchor_png"):
             candidates.append(str(anchor.get("anchor_png")))
-    for key in ("tailframe_png", "endframe_png", "firstframe_png"):
+    for key in ("firstframe_png",):
         if previous_cont.get(key):
             candidates.append(str(previous_cont.get(key)))
     previous_id = str(previous.get("id") or "")
@@ -360,7 +464,21 @@ def prompt_reference_paths(
         for rel in item.get("paths") or []:
             add(str(rel))
     paths = [path for path in paths if path not in excluded_asset_paths]
-    return paths[:MAX_REFERENCES]
+    if canonical_reset:
+        # A rejected target can re-enter through the registry-resolved bundle
+        # even after the explicit correction source above is disabled.  That
+        # silently defeats canonical reset and causes the backend to reproduce
+        # the same bad pixels/composition.  Never attach the current output to
+        # itself during a reset; keep the independent identity/style evidence.
+        current_target = root / target.rel_path
+        paths = [path for path in paths if path != current_target]
+    return select_dreamina_reference_paths(
+        target,
+        bundle,
+        paths,
+        root=root,
+        source_path=source_path,
+    )
 
 
 def submit_id_from(text: str) -> str:
@@ -762,6 +880,14 @@ def record_event(
             cmd.extend(["--meta", f"reference_sha256={rel}#{base.file_sha256(ref)}"])
     if compiled_receipt:
         cmd.extend(["--meta", f"compiled_request_receipt={compiled_receipt}"])
+    if target.mode == "midframe" and status == "pass":
+        try:
+            source_image = base.target_for_shot(target.clip, target.section, episode).rel_path
+        except Exception:
+            source_image = ""
+        cmd.extend(["--meta", "self_check=pass", "--meta", "midframe_role=between_first_and_end"])
+        if source_image:
+            cmd.extend(["--meta", f"source_image={source_image}"])
     if archive_path:
         cmd.extend(["--redraw-reason", f"{task_id} Dreamina image2image 真实参考图重出 {target.shot}", "--redraw-category", "backend_migration"])
         cmd.extend(["--meta", f"archived_previous={archive_path}"])
@@ -994,6 +1120,13 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("root")
     ap.add_argument("episode")
     ap.add_argument("--shots", default=os.environ.get("N2D_AFFECTED_SHOTS", ""))
+    ap.add_argument(
+        "--shared-targets",
+        default="",
+        help="comma-separated shared assets to generate; use 'all' for all shared prompt targets",
+    )
+    ap.add_argument("--shared-offset", type=int, default=0, help="zero-based offset into resolved shared targets")
+    ap.add_argument("--max-shared-targets", type=int, help="maximum number of resolved shared targets to process")
     ap.add_argument("--max-shots", type=int)
     ap.add_argument("--timeout-sec", type=float, default=float(os.environ.get("N2D_DREAMINA_IMAGE_TIMEOUT", "900")))
     ap.add_argument("--poll-sec", type=int, default=int(os.environ.get("N2D_DREAMINA_IMAGE_POLL", "300")))
@@ -1018,32 +1151,69 @@ def main(argv: Sequence[str]) -> int:
     ns = parser().parse_args(argv)
     root = Path(ns.root).resolve()
     episode = base.normalize_episode(ns.episode)
+    shots = base.split_csv(ns.shots)
+    shared_targets = base.split_csv(ns.shared_targets)
+    if not shots and not shared_targets:
+        raise SystemExit("--shots/--shared-targets or N2D_AFFECTED_SHOTS is required")
+    if ns.max_shots is not None:
+        shots = shots[: ns.max_shots]
     if not ns.dry_run:
         try:
             require_dreamina_image_signoff(root)
         except RuntimeError as exc:
             print(f"[block] {exc}", file=sys.stderr)
             return 1
-    shots = base.split_csv(ns.shots)
-    if not shots:
-        raise SystemExit("--shots or N2D_AFFECTED_SHOTS is required")
-    if ns.max_shots is not None:
-        shots = shots[: ns.max_shots]
-    targets = base.build_targets(root, episode, shots)
+
+    targets: List[base.Target] = []
+    if shared_targets:
+        resolved_shared = base.build_shared_targets(root, shared_targets)
+        start = max(ns.shared_offset, 0)
+        end = start + ns.max_shared_targets if ns.max_shared_targets is not None else None
+        targets.extend(resolved_shared[start:end])
+    if shots:
+        targets.extend(base.build_targets(root, episode, shots))
     if not targets:
         raise SystemExit("no targets resolved")
     if ns.recover_submit_id and len(targets) != 1:
         raise SystemExit("--recover-submit-id requires exactly one resolved target")
     task_id = os.environ.get("N2D_TASK_ID") or f"dreamina-{episode}"
 
+    strict_single_review = base.strict_single_image_review_enabled(root)
+    if strict_single_review and not ns.dry_run and len(targets) != 1:
+        print(
+            "[gate] 图片验收模式=逐张机器QC+实际目视：一次正式调用必须且只能解析 1 张图片；"
+            "请传单一 --shared-targets，或把 --shots 缩到只产生一个实际 PNG 的目标。",
+            file=sys.stderr,
+        )
+        return 1
+    if strict_single_review and not ns.dry_run:
+        pending_review = base.strict_pending_image_review(root, targets[0].rel_path)
+        if pending_review:
+            print(
+                "[gate] 上一张图片尚无与当前像素 SHA 绑定的 qa/accepted 目视验收："
+                f"{pending_review['asset']} ({pending_review['artifact_sha256'] or 'sha-missing'})；"
+                "只能继续重抽该图，或先完成 full 机器QC、实际像素目视并记录 accepted，再生成下一张。",
+                file=sys.stderr,
+            )
+            return 1
+
+    # Shared style/identity/assets are paid generations too.  Their missing
+    # pixels necessarily make the full episode image_preflight fail, so run the
+    # narrower non-waivable compliance/rights preflight used by the Codex
+    # adapter.  Clip targets still require the full image_preflight below.
+    if shared_targets and not ns.dry_run and not base.run_shared_asset_preflight(root, episode):
+        return 1
+
     # Non-waivable ordering lock shared with codex_image_runner: --skip-preflight
     # cannot spend on Clip PNGs before the episode shared library is complete.
-    if not ns.dry_run and not base.enforce_shared_first_interlock(root, episode, targets=targets):
+    if shots and not ns.dry_run and not base.enforce_shared_first_interlock(root, episode, targets=targets):
+        return 1
+    if shots and not ns.dry_run and not base.enforce_current_episode_image_namespace(root, episode):
         return 1
 
     # Pre-spend interlock: 生成前先跑 image_preflight 硬闸门，block 即拒绝生成不花钱；
     # 逃生口 --skip-preflight 留痕成 dashboard waiver（与 codex_image_runner 同源）。
-    if not ns.dry_run:
+    if shots and not ns.dry_run:
         if ns.recover_submit_id:
             print("[gate] recovery mode uses an existing paid submit id; pre-spend image_preflight is not applicable")
         elif ns.skip_preflight:
@@ -1072,15 +1242,19 @@ def main(argv: Sequence[str]) -> int:
         if ok and not ns.dry_run and not ns.skip_image_qc:
             ok = base.run_target_image_qc(root, episode, target)
         ok_all = ok_all and ok
+        if ok and not ns.dry_run:
+            base.sync_image_progress(root, episode)
         if not ok and ns.stop_on_fail:
             break
-    if ns.skip_image_qc and not ns.dry_run:
+    if ns.skip_image_qc and shots and not ns.dry_run:
         base.record_waiver(root, episode, "image", "skip-image-qc",
                            "operator passed --skip-image-qc; per-target landed-frame QC not run")
-    if ok_all and not ns.dry_run:
+    if ok_all and shots and not ns.dry_run:
         if ns.skip_final_gate:
             base.record_waiver(root, episode, "image", "skip-final-gate",
                                "operator passed --skip-final-gate; whole-episode image gate not run")
+        elif not base.covers_all_episode_targets(root, episode, targets):
+            print("[gate] image final gate deferred for partial batch; run the whole-episode image gate after all declared Clip PNGs are present")
         else:
             ok_all = base.run_image_gate(root, episode)
     return 0 if ok_all else 1

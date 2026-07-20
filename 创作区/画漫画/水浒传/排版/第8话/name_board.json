@@ -1,0 +1,2968 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第8话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 reflection",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:顺读推进；P002:顺读推进；P003:顺读推进；P004:顺读推进；P005:顺读推进；P006:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "月黑初更，两名少华山喽啰在史家庄门外递上沉甸甸的金包，史进披衣持灯。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 142,
+                "w": 777,
+                "h": 245
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 450,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进打开包裹，三十两蒜条金在灯下发亮，他先抬手推回。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 496,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 461,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进沉吟片刻收下金子，命庄客摆酒招待送礼喽啰。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 757,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 722,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 972,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "送礼喽啰酒足离庄，史进反赏碎银，暗夜中双方抱拳。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1018,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 983,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1233,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "半月后，一串硕大珍珠又被夜送入庄，珠光映在史进掌中。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1279,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 1244,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1494,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进独坐案前望着金珠，决定不能只受不还。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1540,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1505,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "reflection"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 comic_relief",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:顺读推进；P008:顺读推进；P009:顺读推进；P010:顺读推进；P011:顺读推进；P012:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 152
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "裁缝在庄中裁三匹红锦，旁边三领锦袄逐渐成形。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 102,
+                "w": 648,
+                "h": 106
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 251,
+            "w": 1080,
+            "h": 152
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "厨房蒸汽腾起，三只肥羊装入大食盒，酒坛扎紧。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 281,
+                "w": 648,
+                "h": 106
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 430,
+            "w": 1188,
+            "h": 304
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "庄客头领王四拍着皮质信囊，圆脸机灵，向史进躬身领命。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 490,
+                "w": 712,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 445,
+                "w": 475,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 761,
+            "w": 1188,
+            "h": 304
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四与另一庄客挑盒担沿少华山道上行，红锦包裹醒目。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 821,
+                "w": 712,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1092,
+            "w": 1188,
+            "h": 304
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "少华山寨内朱武三人接下锦袄肥羊，陈达豪爽拍王四肩膀。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P011_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "朱武",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "朱武"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1152,
+                "w": 712,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1107,
+                "w": 475,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1423,
+            "w": 1188,
+            "h": 305
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四连饮十余碗，双颊通红仍举碗逞能。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1484,
+                "w": 712,
+                "h": 213
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1438,
+                "w": 475,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "comic_relief"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 temptation",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P018",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ]
+      },
+      "gutter_intent": "P013:顺读推进；P014:顺读推进；P015:顺读推进；P016:顺读推进；P017:顺读推进；P018:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "数次礼担在山道往返，金银、酒羊与锦帛交替出现。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P013_N1",
+              "type": "narration",
+              "content_ref": "panel:P013.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 122,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.narration",
+              "rect": {
+                "x": 185,
+                "y": 84,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 352,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "八月十五将近，史进立在挂满桂枝的后园，抬头望渐圆的月。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 402,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 364,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进把封好的请书交给王四，指尖压实信囊扣带。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P015.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 682,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 644,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四在聚义厅递上请书，朱武展开阅读，陈达杨春相视而笑。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 962,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 924,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 253
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "朱武写好回书封入信囊，并赏王四五两银子。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P017_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P017.dialogue:1",
+              "speaker": "朱武",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "朱武"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1242,
+                "w": 712,
+                "h": 177
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1204,
+                "w": 475,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1472,
+            "w": 1188,
+            "h": 256
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四下山撞见相熟喽啰，被一把抱住拖向路边村酒店。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P018_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P018.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1523,
+                "w": 712,
+                "h": 179
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1484,
+                "w": 475,
+                "h": 85
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P018",
+          "story_function": "temptation"
+        },
+        "payoff": {
+          "panel_id": "P019",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_004",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P024 theft",
+      "eye_flow_path": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P019",
+        "exit_panel_id": "P024",
+        "path": [
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024"
+        ]
+      },
+      "gutter_intent": "P019:顺读推进；P020:顺读推进；P021:顺读推进；P022:顺读推进；P023:顺读推进；P024:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "低矮酒店内酒碗排满桌，王四与喽啰大笑碰碗。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 99,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 237,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四醉步出店，被山风一吹，身形沿山路左右摇摆。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 292,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 540,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四跌进松林，扑倒在绿茸莎草上，信囊与银袋压在臂下。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 595,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 843,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "正在坡下设套捕兔的李吉闻声赶入林中，认出醉倒的王四。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P022_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P022.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 898,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 856,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1146,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "李吉扶不动王四，却看见袖口滚出银角，目光停住。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P023_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P023.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1201,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1159,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1449,
+            "w": 1188,
+            "h": 279
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "李吉解下信囊向草地一抖，银两与封缄回书一同落出。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1504,
+                "w": 712,
+                "h": 195
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P024",
+          "story_function": "theft"
+        },
+        "payoff": {
+          "panel_id": "P025",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_005",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P030 awakening",
+      "eye_flow_path": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P025",
+        "exit_panel_id": "P030",
+        "path": [
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030"
+        ]
+      },
+      "gutter_intent": "P025:重揭示长停顿；P026:顺读推进；P027:重揭示长停顿；P028:顺读推进；P029:顺读推进；P030:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P025",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "李吉拆开回书，虽读不懂文句，却认出朱武、陈达、杨春三个名字。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P025_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P025.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 137,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 88,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P026",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 424,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "李吉攥紧回书和银子，想起县衙三千贯悬赏告示的画面。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P026_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P026.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 467,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 434,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P027",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 668,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "李吉回望醉倒的王四，转身沿月下山路疾奔华阴县。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P027_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 733,
+                "w": 777,
+                "h": 227
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 684,
+                "w": 518,
+                "h": 108
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P028",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1020,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "华阴县衙内，李吉双手呈上回书，县尉从案后俯身接过。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P028_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P028.dialogue:1",
+              "speaker": "李吉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "李吉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1063,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1030,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P029",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1264,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "县尉看见三名首领姓名，重重拍案，差役开始披甲集合。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P029_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "华阴县尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "华阴县尉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1307,
+                "w": 712,
+                "h": 151
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1274,
+                "w": 475,
+                "h": 72
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P030",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1508,
+            "w": 1188,
+            "h": 220
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "二更月光照进松林，王四惊醒摸向腰间，只剩空信囊。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P030_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P030.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1552,
+                "w": 712,
+                "h": 154
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P030.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1519,
+                "w": 475,
+                "h": 73
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P030",
+          "story_function": "awakening"
+        },
+        "payoff": {
+          "panel_id": "P031",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_006",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P036 feast_prep",
+      "eye_flow_path": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P031",
+        "exit_panel_id": "P036",
+        "path": [
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036"
+        ]
+      },
+      "gutter_intent": "P031:顺读推进；P032:顺读推进；P033:顺读推进；P034:顺读推进；P035:顺读推进；P036:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P031",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四跪在草间四处翻找，额头冷汗直流。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P031_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 127,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 85,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P032",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 375,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "王四忽然停手，眼珠一转，决定谎称没有回书。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P032_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 430,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 388,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P033",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 678,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "五更天色微白，王四跑回史家庄，衣襟凌乱、脚步虚浮。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 705,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P034",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 843,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进追问回书，王四强作镇定，称自己怕醉后遗失所以没让三杰写。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P034_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P034.dialogue:1",
+              "speaker": "王四",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王四"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 898,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P034.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 856,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P035",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1146,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进大喜拍王四肩膀，王四低头掩住心虚。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P035_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P035.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1201,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P035.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1159,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P036",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1449,
+            "w": 1188,
+            "h": 279
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "中秋晴日，庄客宰羊杀鸡鹅，长案摆满酒食果品。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1504,
+                "w": 712,
+                "h": 195
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P036",
+          "story_function": "feast_prep"
+        },
+        "payoff": {
+          "panel_id": "P037",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_007",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P042 bond",
+      "eye_flow_path": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P037",
+        "exit_panel_id": "P042",
+        "path": [
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042"
+        ]
+      },
+      "gutter_intent": "P037:顺读推进；P038:顺读推进；P039:顺读推进；P040:顺读推进；P041:顺读推进；P042:顺读推进",
+      "panels": [
+        {
+          "panel_id": "P037",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "黄昏转夜，一轮银月越过史家庄屋脊，桂影铺满后园。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P037_N1",
+              "type": "narration",
+              "content_ref": "panel:P037.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 142,
+                "w": 777,
+                "h": 245
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.narration",
+              "rect": {
+                "x": 136,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P038",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 450,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "朱武、陈达、杨春只带三五随从，佩朴刀步行来到庄门。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 496,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P039",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进迎三杰入庄，双方抱拳叙礼，庄门随后从内闩紧。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P039_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P039.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 757,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 722,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P040",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 972,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "后园月下，四人分席而坐，庄客轮流把盏割羊劝酒。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1018,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P041",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1233,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "满月升至桂树枝头，酒杯与席面泛起银光，远山如水。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P041_N1",
+              "type": "narration",
+              "content_ref": "panel:P041.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1279,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.narration",
+              "rect": {
+                "x": 185,
+                "y": 1244,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P042",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1494,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进与陈达碰碗，朱武杨春笑谈旧事，席间戒心尽去。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P042_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P042.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1540,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P042.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1505,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P042",
+          "story_function": "bond"
+        },
+        "payoff": {
+          "panel_id": "P043",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_008",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_004",
+      "page_turn_hook": "P048 ending_promise",
+      "eye_flow_path": [
+        "P043",
+        "P044",
+        "P045",
+        "P046",
+        "P047",
+        "P048"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P043",
+        "exit_panel_id": "P048",
+        "path": [
+          "P043",
+          "P044",
+          "P045",
+          "P046",
+          "P047",
+          "P048"
+        ]
+      },
+      "gutter_intent": "P043:顺读推进；P044:顺读推进；P045:顺读推进；P046:重揭示长停顿；P047:重揭示长停顿；P048:重揭示长停顿",
+      "panels": [
+        {
+          "panel_id": "P043",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "庄墙外黑暗里，一支火把忽然点燃，随后更多火光接连亮起。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 112,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P044",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 301,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "墙外骤起喊声，后园四人同时停杯，史进翻身站起。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P044_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P044.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 341,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 311,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P045",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 530,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "camera_hint": "史进抓起三尖两刃刀冲向前院，厉声命庄客不得开门。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P045_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P045.dialogue:1",
+              "speaker": "史进",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "史进"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 570,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P045.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 540,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P046",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 759,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "史进登梯伏在庄墙上俯看：县尉骑马居中，三四百官兵与火把围成铁环。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 819,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P047",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1090,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "庄外火把乱明，钢叉朴刀密如麻林；两名都头指向庄门高喊。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P047_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P047.dialogue:1",
+              "speaker": "华阴县尉",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "华阴县尉"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1150,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P047.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1105,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        },
+        {
+          "panel_id": "P048",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1421,
+            "w": 1296,
+            "h": 307
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "camera_hint": "高位远景：银月之下史家庄被火把完全包围，墙内史进与三杰的剪影各自握紧兵器。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P048_N1",
+              "type": "narration",
+              "content_ref": "panel:P048.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1482,
+                "w": 777,
+                "h": 214
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.narration",
+              "rect": {
+                "x": 136,
+                "y": 1436,
+                "w": 518,
+                "h": 102
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P048",
+          "story_function": "ending_promise"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "显式effects_plan: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第8话/panel_script.json",
+    "panel_script_sha256": "38aa6adcf892e22ef90af1d696f82204c6c19b5ca27715591f941ac38a944000",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-20T04:21:43.162308+00:00",
+    "note": "",
+    "subject_sha256": "086f772d47c946e672cf46f456bffedd15909bf8d14b3bd6c9168e32ccedc02b",
+    "panel_script_sha256": "38aa6adcf892e22ef90af1d696f82204c6c19b5ca27715591f941ac38a944000",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

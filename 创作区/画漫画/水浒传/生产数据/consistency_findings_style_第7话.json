@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "style_consistency",
+  "chapter": "第7话",
+  "created_at": "2026-07-20T12:12:08",
+  "summary": {
+    "panel_count": 48,
+    "finding_count": 11,
+    "block_count": 0,
+    "warn_count": 11,
+    "info_count": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P003",
+      "artifact": "出图/第7话/panels/P003.png",
+      "reason": "风格指纹内聚度 0.7696 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P004",
+      "artifact": "出图/第7话/panels/P004.png",
+      "reason": "风格指纹内聚度 0.7188 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P005",
+      "artifact": "出图/第7话/panels/P005.png",
+      "reason": "风格指纹内聚度 0.7918 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P010",
+      "artifact": "出图/第7话/panels/P010.png",
+      "reason": "风格指纹内聚度 0.7186 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P012",
+      "artifact": "出图/第7话/panels/P012.png",
+      "reason": "风格指纹内聚度 0.7602 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P014",
+      "artifact": "出图/第7话/panels/P014.png",
+      "reason": "风格指纹内聚度 0.7287 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P039",
+      "artifact": "出图/第7话/panels/P039.png",
+      "reason": "风格指纹内聚度 0.7379 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P043",
+      "artifact": "出图/第7话/panels/P043.png",
+      "reason": "风格指纹内聚度 0.7869 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "panel_style_outlier",
+      "panel_id": "P047",
+      "artifact": "出图/第7话/panels/P047.png",
+      "reason": "风格指纹内聚度 0.6293 明显低于本话中位 0.8511，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "location_color_grade_shift",
+      "panel_id": "P047",
+      "artifact": "出图/第7话/panels/P047.png",
+      "reason": "同场景“LOC_SHI_MANOR”内调色代理偏离组中位：warmth_dev=0.242, tint_dev=0.009。",
+      "return_to_stage": "image",
+      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "evidence_family": "color_grade",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "style_anchor_drift",
+      "panel_id": "",
+      "artifact": "出图/共享/style_baseline.json",
+      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8371，风格锚可能已失去约束力。",
+      "return_to_stage": "image",
+      "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
+      "evidence_family": "cross_chapter_baseline",
+      "confidence": "heuristic"
+    }
+  ]
+}

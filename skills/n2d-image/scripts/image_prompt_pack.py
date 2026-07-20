@@ -2746,19 +2746,22 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
         ],
         "expressions": [],
     }
-    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or three_quarter.get("status") == "ready":
+    # Every non-restricted character can be promoted on demand by a concrete
+    # shot.  Keep the angle slots registered even when a named-minimal role
+    # does not need them at baseline; otherwise the shared-first interlock can
+    # correctly demand an angle that the shared target resolver cannot select
+    # or generate.
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER, MINIMAL_LIBRARY_TIER} or three_quarter.get("status") == "ready":
         rg["three_quarter"] = three_quarter
-    # recurring_standard keeps side/rear-three-quarter/back as on-demand
-    # planned slots.  They are
-    # not baseline gate requirements, but the shot-level shared-first
-    # interlock may require one for a profile/back-facing composition.  Without
-    # registering the slots, the runner could demand a view that no shared
-    # target was capable of generating.
-    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or side.get("status") == "ready":
+    # recurring_standard and named_minimal keep side/rear-three-quarter/back as
+    # on-demand planned slots.  They are not baseline gate requirements, but
+    # the shot-level shared-first interlock may require one for a profile or
+    # back-facing composition.
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER, MINIMAL_LIBRARY_TIER} or side.get("status") == "ready":
         rg["side"] = side
-    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or rear_three_quarter.get("status") == "ready":
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER, MINIMAL_LIBRARY_TIER} or rear_three_quarter.get("status") == "ready":
         rg["rear_three_quarter"] = rear_three_quarter
-    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or back.get("status") == "ready":
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER, MINIMAL_LIBRARY_TIER} or back.get("status") == "ready":
         rg["back"] = back
     if library_tier == FULL_LIBRARY_TIER or turnaround.get("status") == "ready":
         rg["turnaround"] = turnaround
@@ -4011,6 +4014,30 @@ def sanitize_state_lock(text: str, cid: str, idx: int) -> str:
     return value.strip("，。 ") + "。"
 
 
+def clip_entity_state_hint(story: Mapping[str, Any], cid: str, idx: int) -> str:
+    """Return the current Clip's explicit form/state suffix for an entity.
+
+    Arrow-only episode progressions cannot be indexed by Clip number when a
+    cold open jumps forward and Clip 2 returns to an earlier state.  The
+    storyboard's per-Clip ``character_ids``/``entity_schedule`` are the closer
+    truth source, so use their ``CHAR_xx/<state>`` suffix to select the matching
+    arrow segment when possible.
+    """
+    clips = story.get("clips") if isinstance(story.get("clips"), list) else []
+    if idx < 1 or idx > len(clips) or not isinstance(clips[idx - 1], Mapping):
+        return ""
+    clip = clips[idx - 1]
+    refs: List[Any] = list(clip.get("character_ids") or [])
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    refs.extend(schedule.get("characters") or [])
+    for ref in refs:
+        text = str(ref or "").strip()
+        base_id, sep, suffix = text.partition("/")
+        if sep and base_id == cid and suffix:
+            return re.sub(r"(?:状态|形态|态|焦外)+$", "", suffix).strip()
+    return ""
+
+
 def state_entries_for_clip(story: Mapping[str, Any], cid: str, idx: int) -> List[str]:
     vc = visual_contract(story)
     data = vc.get("角色状态演进") or vc.get("角色状态演进表") or {}
@@ -4035,7 +4062,9 @@ def state_entries_for_clip(story: Mapping[str, Any], cid: str, idx: int) -> List
         if "→" in desc and not shot_number(desc):
             parts = [part.strip(" ，,。") for part in desc.split("→") if part.strip(" ，,。")]
             if parts:
-                desc = parts[min(max(idx - 1, 0), len(parts) - 1)]
+                hint = clip_entity_state_hint(story, cid, idx)
+                matched = next((part for part in parts if hint and hint in part), "")
+                desc = matched or parts[min(max(idx - 1, 0), len(parts) - 1)]
         if desc and idx >= start and (end is None or idx <= end):
             out.append(sanitize_state_lock(desc, cid, idx))
     return out

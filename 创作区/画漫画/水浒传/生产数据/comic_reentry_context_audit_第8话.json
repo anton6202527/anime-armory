@@ -1,0 +1,22 @@
+{
+  "kind": "comic_reentry_context_audit",
+  "version": 1,
+  "generated_at": "2026-07-20T07:02:42+00:00",
+  "chapter": "第8话",
+  "prior_chapter": "第7话",
+  "skipped_reason": "",
+  "thresholds": {
+    "opening_window": 3
+  },
+  "summary": {
+    "panels": 48,
+    "prior_chapters": 7,
+    "known_entities": 50,
+    "chapter_entities": 7,
+    "must": 0,
+    "warn": 0,
+    "info": 0,
+    "skipped": false
+  },
+  "findings": []
+}

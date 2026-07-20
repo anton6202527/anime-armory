@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "character_consistency",
+  "chapter": "第9话",
+  "created_at": "2026-07-20T18:06:57",
+  "summary": {
+    "character_count": 8,
+    "panel_binding_count": 95,
+    "finding_count": 13,
+    "block_count": 0,
+    "warn_count": 13,
+    "info_count": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_COUNTY_LIEUTENANT",
+      "panel_id": "P024",
+      "artifact": "出图/第9话/panels/P024.png",
+      "reason": "CHAR_COUNTY_LIEUTENANT hair 指纹与参考图相似度偏低：score=0.359。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_LI_JI",
+      "panel_id": "P021",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "CHAR_LI_JI face 指纹与参考图相似度偏低：score=0.423。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_LI_JI",
+      "panel_id": "P021",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "CHAR_LI_JI hair 指纹与参考图相似度偏低：score=0.194。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_LI_JI",
+      "panel_id": "P022",
+      "artifact": "出图/第9话/panels/P022.png",
+      "reason": "CHAR_LI_JI hair 指纹与参考图相似度偏低：score=0.457。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_SHI_JIN",
+      "panel_id": "P008",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_SHI_JIN face 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_SHI_JIN",
+      "panel_id": "P008",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_SHI_JIN hair 指纹与参考图相似度偏低：score=0.207。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_SHI_JIN",
+      "panel_id": "P021",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "CHAR_SHI_JIN hair 指纹与参考图相似度偏低：score=0.424。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_SHI_JIN",
+      "panel_id": "P038",
+      "artifact": "出图/第9话/panels/P038.png",
+      "reason": "CHAR_SHI_JIN face 指纹与参考图相似度偏低：score=0.375。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_SHI_JIN",
+      "panel_id": "P038",
+      "artifact": "出图/第9话/panels/P038.png",
+      "reason": "CHAR_SHI_JIN hair 指纹与参考图相似度偏低：score=0.391。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_WANG_SI",
+      "panel_id": "P008",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_WANG_SI face 指纹与参考图相似度偏低：score=0.411。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_WANG_SI",
+      "panel_id": "P008",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_WANG_SI hair 指纹与参考图相似度偏低：score=0.194。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_YANG_CHUN",
+      "panel_id": "P020",
+      "artifact": "出图/第9话/panels/P020.png",
+      "reason": "CHAR_YANG_CHUN hair 指纹与参考图相似度偏低：score=0.456。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_ZHU_WU",
+      "panel_id": "P012",
+      "artifact": "出图/第9话/panels/P012.png",
+      "reason": "CHAR_ZHU_WU hair 指纹与参考图相似度偏低：score=0.429。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    }
+  ]
+}

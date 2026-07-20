@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第9话",
+  "panel_id": "P021",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 4,
+  "cli_image_input_count": 4,
+  "references": [
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__front.png",
+      "sha256": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "LOC_SHI_MANOR",
+      "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
+      "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+      "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+      "role": "face",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 4,
+  "omitted_attachments": [
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__face.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    },
+    {
+      "id": "CHAR_LI_JI",
+      "path": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
+      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+    }
+  ],
+  "created_at": "2026-07-20T17:55:36"
+}

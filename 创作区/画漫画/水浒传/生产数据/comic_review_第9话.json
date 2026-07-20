@@ -1,0 +1,643 @@
+{
+  "schema_version": 1,
+  "kind": "comic_review",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
+  "chapter": "第9话",
+  "created_at": "2026-07-20T18:06:59",
+  "verdict": "revise",
+  "settings": {
+    "定妆级别": "长线专门定妆+高一致性",
+    "参考一致性策略": "共享参考图",
+    "年龄形态继承": "开启",
+    "角色一致性硬闸": "开启",
+    "风格锚": "STYLE_SHUIHU_SONG_CINEMATIC",
+    "文字语言": "中文",
+    "合规用途": "demo学习"
+  },
+  "summary": {
+    "panel_count": 48,
+    "issue_count": 37,
+    "block_count": 0,
+    "warn_count": 32,
+    "info_count": 5
+  },
+  "artifacts": {
+    "panel_script": "脚本/第9话/panel_script.json",
+    "source_semantics": "脚本/第9话/source_semantics.json",
+    "layout": "排版/第9话/layout.json",
+    "lettering": "排版/第9话/lettering.json",
+    "manifest": "排版/第9话/export_manifest.json",
+    "identity_report": "生产数据/comic_identity_report_第9话.json",
+    "style_report": "生产数据/comic_style_consistency_第9话.json",
+    "character_report": "生产数据/comic_character_consistency_第9话.json",
+    "rendered": [
+      {
+        "path": "排版/第9话/长图/longstrip.png",
+        "panel_ids": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006",
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012",
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018",
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024",
+          "P025",
+          "P026",
+          "P027",
+          "P028",
+          "P029",
+          "P030",
+          "P031",
+          "P032",
+          "P033",
+          "P034",
+          "P035",
+          "P036",
+          "P037",
+          "P038",
+          "P039",
+          "P040",
+          "P041",
+          "P042",
+          "P043",
+          "P044",
+          "P045",
+          "P046",
+          "P047",
+          "P048"
+        ],
+        "size": {
+          "width": 1440,
+          "height": 43507
+        },
+        "format": "png"
+      }
+    ],
+    "lettering_slot_qc": {
+      "path": "生产数据/qa_previews/第9话_lettering_slots.jpg",
+      "items": 38,
+      "missing_slots": []
+    },
+    "qa_preview": "生产数据/qa_previews/第9话_longstrip_preview.webp",
+    "contact_sheet": "生产数据/panel_contact_sheet_第9话.jpg"
+  },
+  "raw_bubble_candidates": [
+    {
+      "panel_id": "P034",
+      "path": "出图/第9话/panels/P034.png",
+      "components": [
+        {
+          "x": 195,
+          "y": 386,
+          "w": 180,
+          "h": 257,
+          "area": 17954
+        },
+        {
+          "x": 730,
+          "y": 420,
+          "w": 76,
+          "h": 217,
+          "area": 6474
+        }
+      ]
+    },
+    {
+      "panel_id": "P043",
+      "path": "出图/第9话/panels/P043.png",
+      "components": [
+        {
+          "x": 331,
+          "y": 158,
+          "w": 188,
+          "h": 153,
+          "area": 17966
+        }
+      ]
+    },
+    {
+      "panel_id": "P046",
+      "path": "出图/第9话/panels/P046.png",
+      "components": [
+        {
+          "x": 1150,
+          "y": 232,
+          "w": 143,
+          "h": 135,
+          "area": 5482
+        },
+        {
+          "x": 880,
+          "y": 337,
+          "w": 329,
+          "h": 234,
+          "area": 19296
+        },
+        {
+          "x": 18,
+          "y": 348,
+          "w": 89,
+          "h": 121,
+          "area": 4578
+        }
+      ]
+    },
+    {
+      "panel_id": "P047",
+      "path": "出图/第9话/panels/P047.png",
+      "components": [
+        {
+          "x": 537,
+          "y": 69,
+          "w": 346,
+          "h": 190,
+          "area": 23522
+        }
+      ]
+    },
+    {
+      "panel_id": "P048",
+      "path": "出图/第9话/panels/P048.png",
+      "components": [
+        {
+          "x": 159,
+          "y": 45,
+          "w": 245,
+          "h": 237,
+          "area": 34408
+        }
+      ]
+    }
+  ],
+  "accepted_raw_bubble_candidates": [
+    {
+      "panel_id": "P034",
+      "path": "出图/第9话/panels/P034.png",
+      "components": [
+        {
+          "x": 195,
+          "y": 386,
+          "w": 180,
+          "h": 257,
+          "area": 17954
+        },
+        {
+          "x": 730,
+          "y": 420,
+          "w": 76,
+          "h": 217,
+          "area": 6474
+        }
+      ]
+    },
+    {
+      "panel_id": "P043",
+      "path": "出图/第9话/panels/P043.png",
+      "components": [
+        {
+          "x": 331,
+          "y": 158,
+          "w": 188,
+          "h": 153,
+          "area": 17966
+        }
+      ]
+    },
+    {
+      "panel_id": "P046",
+      "path": "出图/第9话/panels/P046.png",
+      "components": [
+        {
+          "x": 1150,
+          "y": 232,
+          "w": 143,
+          "h": 135,
+          "area": 5482
+        },
+        {
+          "x": 880,
+          "y": 337,
+          "w": 329,
+          "h": 234,
+          "area": 19296
+        },
+        {
+          "x": 18,
+          "y": 348,
+          "w": 89,
+          "h": 121,
+          "area": 4578
+        }
+      ]
+    },
+    {
+      "panel_id": "P047",
+      "path": "出图/第9话/panels/P047.png",
+      "components": [
+        {
+          "x": 537,
+          "y": 69,
+          "w": 346,
+          "h": 190,
+          "area": 23522
+        }
+      ]
+    },
+    {
+      "panel_id": "P048",
+      "path": "出图/第9话/panels/P048.png",
+      "components": [
+        {
+          "x": 159,
+          "y": 45,
+          "w": 245,
+          "h": 237,
+          "area": 34408
+        }
+      ]
+    }
+  ],
+  "style_consistency": {
+    "verdict": "warn",
+    "summary": {
+      "panel_count": 48,
+      "finding_count": 19,
+      "block_count": 0,
+      "warn_count": 19,
+      "info_count": 0
+    }
+  },
+  "character_consistency": {
+    "verdict": "warn",
+    "summary": {
+      "character_count": 8,
+      "panel_binding_count": 95,
+      "finding_count": 13,
+      "block_count": 0,
+      "warn_count": 13,
+      "info_count": 0
+    },
+    "contact_sheet": "生产数据/qa_previews/第9话_character_consistency_contact_sheet.jpg"
+  },
+  "issues": [
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第9话/panels/P034.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：人工复核确认候选白区为白战袍、白毡帽与山水门洞形成的自然亮区，不是预烘焙气泡或文字容器；画面无文字，人物身份、动作与场景可用。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第9话/panels/P043.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：人工复核确认候选白区为茶坊门帘与门外天光形成的自然亮区，不是预烘焙气泡或文字容器；画面无文字，人物身份、动作与场景可用。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第9话/panels/P046.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：人工复核确认候选白区为茶坊门外天光与浅色帘幕形成的自然亮区，不是预烘焙气泡或文字容器；画面无文字，人物身份、动作与场景可用。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第9话/panels/P047.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：人工复核确认候选白区为茶坊门帘与窗外天空形成的自然亮区，不是预烘焙气泡或文字容器；画面无文字，人物身份、动作与场景可用。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第9话/panels/P048.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：人工复核确认候选白区为茶坊门外天光与浅色帘幕形成的自然亮区，不是预烘焙气泡或文字容器；画面无文字，人物身份、动作与场景可用。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P004.png",
+      "reason": "风格指纹内聚度 0.6626 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P005.png",
+      "reason": "风格指纹内聚度 0.7122 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "风格指纹内聚度 0.7659 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P009.png",
+      "reason": "风格指纹内聚度 0.7596 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P010.png",
+      "reason": "风格指纹内聚度 0.7605 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P011.png",
+      "reason": "风格指纹内聚度 0.7869 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P013.png",
+      "reason": "风格指纹内聚度 0.7535 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P015.png",
+      "reason": "风格指纹内聚度 0.6771 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P016.png",
+      "reason": "风格指纹内聚度 0.6330 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P018.png",
+      "reason": "风格指纹内聚度 0.7860 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "风格指纹内聚度 0.7455 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P022.png",
+      "reason": "风格指纹内聚度 0.7334 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P037.png",
+      "reason": "风格指纹内聚度 0.7705 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P039.png",
+      "reason": "风格指纹内聚度 0.7575 明显低于本话中位 0.8292，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P009.png",
+      "reason": "同场景“LOC_SHI_MANOR”内调色代理偏离组中位：warmth_dev=0.206, tint_dev=0.035。",
+      "return_to": "comic-image",
+      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P015.png",
+      "reason": "同场景“LOC_SHI_MANOR”内调色代理偏离组中位：warmth_dev=0.393, tint_dev=0.005。",
+      "return_to": "comic-image",
+      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P016.png",
+      "reason": "同场景“LOC_SHI_MANOR”内调色代理偏离组中位：warmth_dev=0.210, tint_dev=0.010。",
+      "return_to": "comic-image",
+      "suggested_fix": "人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.3155（中位 0.038），线宽代理 edge_density=0.0962（中位 0.146）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to": "comic-image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "style",
+      "artifact": "出图/共享/style_baseline.json",
+      "reason": "本话整体指纹与风格锚图最高相似度仅 0.8675，风格锚可能已失去约束力。",
+      "return_to": "comic-image",
+      "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P024.png",
+      "reason": "CHAR_COUNTY_LIEUTENANT hair 指纹与参考图相似度偏低：score=0.359。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "CHAR_LI_JI face 指纹与参考图相似度偏低：score=0.423。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "CHAR_LI_JI hair 指纹与参考图相似度偏低：score=0.194。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P022.png",
+      "reason": "CHAR_LI_JI hair 指纹与参考图相似度偏低：score=0.457。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_SHI_JIN face 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_SHI_JIN hair 指纹与参考图相似度偏低：score=0.207。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P021.png",
+      "reason": "CHAR_SHI_JIN hair 指纹与参考图相似度偏低：score=0.424。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P038.png",
+      "reason": "CHAR_SHI_JIN face 指纹与参考图相似度偏低：score=0.375。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P038.png",
+      "reason": "CHAR_SHI_JIN hair 指纹与参考图相似度偏低：score=0.391。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_WANG_SI face 指纹与参考图相似度偏低：score=0.411。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P008.png",
+      "reason": "CHAR_WANG_SI hair 指纹与参考图相似度偏低：score=0.194。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P020.png",
+      "reason": "CHAR_YANG_CHUN hair 指纹与参考图相似度偏低：score=0.456。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "category": "character",
+      "artifact": "出图/第9话/panels/P012.png",
+      "reason": "CHAR_ZHU_WU hair 指纹与参考图相似度偏低：score=0.429。这是色彩分布代理，需并排人审。",
+      "return_to": "comic-image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "confidence": "deterministic"
+    }
+  ],
+  "notes": [
+    "已刷新风格一致性报告：生产数据/comic_style_consistency_第9话.md",
+    "已刷新角色一致性报告：生产数据/comic_character_consistency_第9话.md",
+    "demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。",
+    "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",
+    "已刷新 QA 长图预览：生产数据/qa_previews/第9话_longstrip_preview.webp",
+    "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第9话.jpg"
+  ]
+}

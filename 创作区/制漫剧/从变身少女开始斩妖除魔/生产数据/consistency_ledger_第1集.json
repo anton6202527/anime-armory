@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 6,
+    "block": 4,
     "high": 0,
-    "medium": 16
+    "medium": 18
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 6,
+      "block": 4,
       "high": 0
     },
     "required_domains": [
@@ -28,16 +28,16 @@
     "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/consistency_dependency_graph_第1集.json",
     "summary": {
       "clips": 13,
-      "edges": 68,
+      "edges": 69,
       "images": 0,
-      "nodes": 31,
+      "nodes": 32,
       "videos": 0
     }
   },
   "domain_counts": {
-    "block": 6,
+    "block": 4,
     "high": 0,
-    "medium": 2
+    "medium": 4
   },
   "domains": [
     {
@@ -100,9 +100,9 @@
     },
     {
       "counts": {
-        "block": 43,
+        "block": 15,
         "high": 0,
-        "medium": 63
+        "medium": 57
       },
       "findings": [
         {
@@ -148,16 +148,16 @@
           "source": "detect"
         },
         {
-          "dimension": "多视角身份包(MVIEW)",
+          "dimension": "生成配方(RCP)",
           "loc": "",
-          "message": " 多视角身份包(MVIEW)   identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。 ",
-          "severity": "block",
+          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=040107f474ef7d65，但复跑审计证据不完整。 ",
+          "severity": "warn",
           "source": "detect"
         },
         {
           "dimension": "生成配方(RCP)",
           "loc": "",
-          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=040107f474ef7d65，但复跑审计证据不完整。 ",
+          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, declared_recipe_hash；已可推导 hash=e93144dda4cae006，但复跑审计证据不完整。 ",
           "severity": "warn",
           "source": "detect"
         }
@@ -173,7 +173,7 @@
     },
     {
       "counts": {
-        "block": 25,
+        "block": 9,
         "high": 0,
         "medium": 24
       },
@@ -246,7 +246,7 @@
     },
     {
       "counts": {
-        "block": 13,
+        "block": 0,
         "high": 0,
         "medium": 38
       },
@@ -310,7 +310,7 @@
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -463,7 +463,7 @@
     },
     {
       "counts": {
-        "block": 3,
+        "block": 0,
         "high": 0,
         "medium": 3
       },
@@ -483,27 +483,6 @@
           "source": "gate:image_preflight"
         },
         {
-          "dimension": "生图AI一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
-          "message": "生图AI一致性 全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，并写 合规/image_backend_override.json 后才能付费出图。当前：Dreamina/即梦官方 CLI",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "生图AI一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，并写 合规/image_backend_override.json 后才能付费出图。当前：dreamina_official_cli",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "生图AI一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，并写 合规/image_backend_override.json 后才能付费出图。当前：dreamina_official_cli",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
           "dimension": "合规前置",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
@@ -513,7 +492,7 @@
       ],
       "key": "compliance",
       "label": "合规",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:image_preflight",
@@ -523,7 +502,7 @@
     },
     {
       "counts": {
-        "block": 21,
+        "block": 29,
         "high": 0,
         "medium": 69
       },
@@ -630,7 +609,7 @@
         {
           "dimension": "预防式合同",
           "loc": "PROP_断刀",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_手持.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在",
+          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在",
           "severity": "block",
           "source": "gate:image_preflight"
         }
@@ -651,7 +630,7 @@
         {
           "dimension": "预防式合同",
           "loc": "PROP_横刀",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_手持.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在",
+          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在",
           "severity": "block",
           "source": "gate:image_preflight"
         }
@@ -672,7 +651,7 @@
         {
           "dimension": "预防式合同",
           "loc": "PROP_翻覆囚车",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_手持.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_手持.png 不存在",
+          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_反面.png 不存在",
           "severity": "block",
           "source": "gate:image_preflight"
         }
@@ -693,112 +672,7 @@
         {
           "dimension": "预防式合同",
           "loc": "PROP_虎首",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "VFX_百妖谱",
-      "dimensions": [
-        "预防式合同"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "预防式合同",
-          "loc": "VFX_百妖谱",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_百妖谱 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_百妖谱.png 不存在；出图/共享/图片/定妆_特效_百妖谱.png 不存在；出图/共享/图片/定妆_特效_百妖谱.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "VFX_系统面板",
-      "dimensions": [
-        "预防式合同"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "预防式合同",
-          "loc": "VFX_系统面板",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_系统面板 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在；出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在；出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "VFX_道行反噬",
-      "dimensions": [
-        "预防式合同"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "预防式合同",
-          "loc": "VFX_道行反噬",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_道行反噬 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_道行反噬.png 不存在；出图/共享/图片/定妆_特效_道行反噬.png 不存在；出图/共享/图片/定妆_特效_道行反噬.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "VFX_道行灌注",
-      "dimensions": [
-        "预防式合同"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "预防式合同",
-          "loc": "VFX_道行灌注",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_道行灌注 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_道行灌注.png 不存在；出图/共享/图片/定妆_特效_道行灌注.png 不存在；出图/共享/图片/定妆_特效_道行灌注.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "VFX_黑妖血",
-      "dimensions": [
-        "预防式合同"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "预防式合同",
-          "loc": "VFX_黑妖血",
-          "message": "预防式合同 reference_slot_gate: 道具/场景 VFX_黑妖血 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_黑妖血.png 不存在；出图/共享/图片/定妆_特效_黑妖血.png 不存在；出图/共享/图片/定妆_特效_黑妖血.png 不存在",
+          "message": "预防式合同 reference_slot_gate: 道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在",
           "severity": "block",
           "source": "gate:image_preflight"
         }
@@ -821,13 +695,6 @@
           "dimension": "共享定妆",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md",
           "message": "共享定妆 本集逐镜引用了未过落档自检的共享定妆/资产 `WEAPON_01`（registry `self_check_passed=false`）——脏定妆是锚点，脸/结构漂了下游每镜继承；先过自检并把该项置 true（或人工复核后 `image_qc --mark-finalized`），再付费出图。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_01`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
           "severity": "block",
           "source": "gate:image_preflight"
         },
@@ -913,258 +780,6 @@
       ]
     },
     {
-      "anchor": "特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "特效定妆.md ## 道行反噬（`VFX_道行反噬`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 道行反噬（`VFX_道行反噬`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 道行反噬（`VFX_道行反噬`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "特效定妆.md ## 道行灌注（`VFX_道行灌注`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 道行灌注（`VFX_道行灌注`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 道行灌注（`VFX_道行灌注`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "特效定妆.md ## 黑妖血（`VFX_黑妖血`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 黑妖血（`VFX_黑妖血`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 黑妖血（`VFX_黑妖血`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "道具定妆.md ## 断刀（`PROP_断刀`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 断刀（`PROP_断刀`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 断刀（`PROP_断刀`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "道具定妆.md ## 横刀（`PROP_横刀`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 横刀（`PROP_横刀`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 横刀（`PROP_横刀`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "道具定妆.md ## 翻覆囚车（`PROP_翻覆囚车`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 翻覆囚车（`PROP_翻覆囚车`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 翻覆囚车（`PROP_翻覆囚车`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "道具定妆.md ## 虎首（`PROP_虎首`）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "asset",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 虎首（`PROP_虎首`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 虎首（`PROP_虎首`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:28>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
       "anchor": "01_分镜出图.md",
       "dimensions": [
         "共享定妆"
@@ -1235,80 +850,6 @@
       ]
     },
     {
-      "anchor": "CHAR_01",
-      "dimensions": [
-        "表情连续(EXP1)",
-        "实体记忆(EMB)",
-        "预防式合同",
-        "image prompt compiler"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": null,
-          "message": " 表情连续(EXP1)   Clip_08：角色 CHAR_01 相邻镜情绪硬跳（惧→惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": null,
-          "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_01 相邻镜情绪硬跳（惊→惧）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "实体记忆(EMB)",
-          "loc": null,
-          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/反噬跪地态, CHAR_01/囚途染血态, CHAR_01/囚途残损态, CHAR_01__, CHAR_01__常态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01/反噬跪地态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01/反噬跪地态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01/囚途染血态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01/囚途染血态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01/囚途残损态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01/囚途残损态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "预防式合同",
-          "loc": "CHAR_01/战后染血反噬态",
-          "message": "预防式合同 reference_slot_gate: 核心/出场角色 CHAR_01/战后染血反噬态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在；出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 不存在",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
       "anchor": "CHAR_02",
       "dimensions": [
         "表情连续(EXP1)",
@@ -1340,66 +881,7 @@
         {
           "dimension": "image prompt compiler",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 裴长青（`CHAR_02/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 裴长青（`CHAR_02/常态`）",
           "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:34>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "CHAR_04",
-      "dimensions": [
-        "表情连续(EXP1)",
-        "image_prompt_lint",
-        "image prompt compiler"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": null,
-          "message": " 表情连续(EXP1)   Clip_08：角色 CHAR_04 相邻镜情绪硬跳（惧→惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "表情连续(EXP1)",
-          "loc": null,
-          "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_04 相邻镜情绪硬跳（惊→惧）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image_prompt_lint",
-          "loc": null,
-          "message": "image_prompt_lint  None 多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 虎山神（`CHAR_04/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 虎山神（`CHAR_04/常态`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         }
@@ -1442,117 +924,6 @@
       ]
     },
     {
-      "anchor": "adapters",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_01__姜月初/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_02__裴长青/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_04__虎山神/adapters",
-          "message": "角色资产包 角色资产包分区不存在：adapters",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "character",
-      "dimensions": [
-        "真值源(TRUTH)",
-        "多视角身份包(MVIEW)",
-        "生成配方(RCP)",
-        "强配方Schema(RCP2)",
-        "台词语域(D1)",
-        "成本路由(K1)",
-        "叙事状态(NS1)"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "detect"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "真值源(TRUTH)",
-          "loc": null,
-          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "多视角身份包(MVIEW)",
-          "loc": null,
-          "message": " 多视角身份包(MVIEW)   identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。 ",
-          "severity": "block",
-          "source": "detect"
-        },
-        {
-          "dimension": "生成配方(RCP)",
-          "loc": null,
-          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=040107f474ef7d65，但复跑审计证据不完整。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "生成配方(RCP)",
-          "loc": null,
-          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, declared_recipe_hash；已可推导 hash=e93144dda4cae006，但复跑审计证据不完整。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "生成配方(RCP)",
-          "loc": null,
-          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=a2cddad2d9bba857，但复跑审计证据不完整。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "强配方Schema(RCP2)",
-          "loc": null,
-          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_regi",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "强配方Schema(RCP2)",
-          "loc": null,
-          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_三视图.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_s",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "强配方Schema(RCP2)",
-          "loc": null,
-          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_45度.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_s",
-          "severity": "warn",
-          "source": "detect"
-        }
-      ]
-    },
-    {
       "anchor": "identity_eval_pack.json",
       "dimensions": [
         "核心人物多视图验收"
@@ -1568,62 +939,6 @@
           "dimension": "核心人物多视图验收",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/identity_eval_pack.json",
           "message": "核心人物多视图验收 identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "identity_registry.json character#1 form#1",
-      "dimensions": [
-        "资产身份注册层"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "资产身份注册层",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/identity_registry.json character#1 form#1",
-          "message": "资产身份注册层 reference_group.expressions 必须为 ready 且有路径；planned 表情/脸锚不能放行。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "lora",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_01__姜月初/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_02__裴长青/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_04__虎山神/lora",
-          "message": "角色资产包 角色资产包分区不存在：lora",
           "severity": "block",
           "source": "gate:image_preflight"
         }
@@ -1665,232 +980,14 @@
         {
           "dimension": "生产锁版账",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_locks_check_image_preflight_第1集.json",
-          "message": "生产锁版账 image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：_设置.md, 出图/共享/identity_registry.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.p",
+          "message": "生产锁版账 image_preflight 前置锁版账未通过：style_identity_lock 锁定后文件已变化：_设置.md, 出图/共享/identity_registry.json, 生产数据/identity_adapter_matrix.json。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 sk",
           "severity": "block",
           "source": "gate:image_preflight"
         }
       ]
     },
     {
-      "anchor": "prompts",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_01__姜月初/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_02__裴长青/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_04__虎山神/prompts",
-          "message": "角色资产包 角色资产包分区不存在：prompts",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "qc",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_01__姜月初/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_02__裴长青/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_04__虎山神/qc",
-          "message": "角色资产包 角色资产包分区不存在：qc",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "reference",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_01__姜月初/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_02__裴长青/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_04__虎山神/reference",
-          "message": "角色资产包 角色资产包分区不存在：reference",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "voice",
-      "dimensions": [
-        "角色资产包"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_01__姜月初/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_02__裴长青/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "角色资产包",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/角色库/CHAR_04__虎山神/voice",
-          "message": "角色资产包 角色资产包分区不存在：voice",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "_设置.md",
-      "dimensions": [
-        "生图AI一致性"
-      ],
-      "domain": "compliance",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "生图AI一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
-          "message": "生图AI一致性 全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，并写 合规/image_backend_override.json 后才能付费出图。当前：Dreamina/即梦官方 CLI",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "production_events.jsonl",
-      "dimensions": [
-        "生图AI一致性"
-      ],
-      "domain": "compliance",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "生图AI一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，并写 合规/image_backend_override.json 后才能付费出图。当前：dreamina_official_cli",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "生图AI一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，并写 合规/image_backend_override.json 后才能付费出图。当前：dreamina_official_cli",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "_设置.md",
-      "dimensions": [
-        "生图后端连通性",
-        "生图后端适配"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "生图后端连通性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
-          "message": "生图后端连通性 生图后端「Dreamina/即梦官方 CLI」无法自动探活：确认即梦官方 CLI 已登录·会员态有效（dreamina 控制台或一次 dry-run）。出图前请人工确认它能落 PNG（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "生图后端适配",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
-          "message": "生图后端适配 生图后端「Dreamina/即梦官方 CLI」缺少本次官方 API/CLI 刷新证据：no per-run official API refresh evidence。正式付费出图前必须实时查官方文档/本机 CLI 或 API help，确认生成、编辑、多参考、主体库、掩码、输出 schema、价格/额度等当前能力，再记录刷新证据：`pytho",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "production_events.jsonl:line 215",
+      "anchor": "production_events.jsonl:line 101",
       "dimensions": [
         "生成配方证据"
       ],
@@ -1903,7 +1000,196 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 215",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 101",
+          "message": "生成配方证据 出图/共享/图片/定妆_道具_翻覆囚车.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_i",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 105",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 105",
+          "message": "生成配方证据 出图/共享/图片/定妆_道具_虎首.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_ima",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 107",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 107",
+          "message": "生成配方证据 出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, act",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 109",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 109",
+          "message": "生成配方证据 出图/共享/图片/定妆_特效_百妖谱.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_im",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 112",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 112",
+          "message": "生成配方证据 出图/共享/图片/定妆_特效_道行灌注.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_i",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 115",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 115",
+          "message": "生成配方证据 出图/共享/图片/定妆_特效_黑妖血.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_im",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 117",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 117",
+          "message": "生成配方证据 出图/共享/图片/定妆_特效_道行反噬.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_i",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 119",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 119",
+          "message": "生成配方证据 出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tie",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 123",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 123",
+          "message": "生成配方证据 出图/共享/图片/定妆_CHAR_04__常态_侧.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, ac",
+          "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_events.jsonl:line 43",
+      "dimensions": [
+        "生成配方证据"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生成配方证据",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 43",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_01__常态_三视图.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, ",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -1911,7 +1197,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 218",
+      "anchor": "production_events.jsonl:line 46",
       "dimensions": [
         "生成配方证据"
       ],
@@ -1924,7 +1210,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 218",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 46",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_01__常态_45度.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -1932,7 +1218,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 220",
+      "anchor": "production_events.jsonl:line 48",
       "dimensions": [
         "生成配方证据"
       ],
@@ -1945,7 +1231,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 220",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 48",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_01__常态_侧.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_t",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -1953,7 +1239,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 222",
+      "anchor": "production_events.jsonl:line 50",
       "dimensions": [
         "生成配方证据"
       ],
@@ -1966,7 +1252,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 222",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 50",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_01__常态_后45度.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, qualit",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -1974,7 +1260,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 224",
+      "anchor": "production_events.jsonl:line 52",
       "dimensions": [
         "生成配方证据"
       ],
@@ -1987,7 +1273,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 224",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 52",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_01__常态_背.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_t",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -1995,7 +1281,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 226",
+      "anchor": "production_events.jsonl:line 54",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2008,7 +1294,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 226",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 54",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_02__常态.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tie",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2016,7 +1302,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 237",
+      "anchor": "production_events.jsonl:line 65",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2029,7 +1315,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 237",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 65",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2037,7 +1323,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 239",
+      "anchor": "production_events.jsonl:line 67",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2050,7 +1336,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 239",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 67",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_02__常态_半身.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2058,7 +1344,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 241",
+      "anchor": "production_events.jsonl:line 69",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2071,7 +1357,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 241",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 69",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_04__常态.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tie",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2079,7 +1365,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 243",
+      "anchor": "production_events.jsonl:line 71",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2092,7 +1378,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 243",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 71",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_04__常态_半身.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2100,7 +1386,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 245",
+      "anchor": "production_events.jsonl:line 73",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2113,7 +1399,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 245",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 73",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, q",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2121,7 +1407,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 247",
+      "anchor": "production_events.jsonl:line 75",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2134,7 +1420,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 247",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 75",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png 生成事件缺必填配方证据：model, channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quali",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2142,7 +1428,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 249",
+      "anchor": "production_events.jsonl:line 77",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2155,7 +1441,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 249",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 77",
           "message": "生成配方证据 出图/共享/图片/定妆_CHAR_04__常态_45度.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, ",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2163,7 +1449,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 251",
+      "anchor": "production_events.jsonl:line 79",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2176,7 +1462,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 251",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 79",
           "message": "生成配方证据 出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, act",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2184,7 +1470,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 253",
+      "anchor": "production_events.jsonl:line 81",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2197,7 +1483,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 253",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 81",
           "message": "生成配方证据 出图/共享/图片/定妆_场景_荒野押解_虎妖现场_反打.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, ",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2205,7 +1491,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 255",
+      "anchor": "production_events.jsonl:line 83",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2218,7 +1504,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 255",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 83",
           "message": "生成配方证据 出图/共享/图片/定妆_场景_荒野押解_虎妖现场_平面图.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier,",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2226,7 +1512,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 259",
+      "anchor": "production_events.jsonl:line 87",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2239,7 +1525,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 259",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 87",
           "message": "生成配方证据 出图/共享/图片/定妆_武器_横刀.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_ima",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2247,7 +1533,7 @@
       ]
     },
     {
-      "anchor": "production_events.jsonl:line 267",
+      "anchor": "production_events.jsonl:line 95",
       "dimensions": [
         "生成配方证据"
       ],
@@ -2260,7 +1546,7 @@
       "symptoms": [
         {
           "dimension": "生成配方证据",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 267",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl:line 95",
           "message": "生成配方证据 出图/共享/图片/定妆_道具_断刀.png 生成事件缺必填配方证据：channel, route_hash, capability_evidence_id, recipe_hash, prompt_sha256, reference_bundle_sha256, backend_version, quality_tier, actual_ima",
           "severity": "block",
           "source": "gate:image_preflight"
@@ -2310,507 +1596,6 @@
       ]
     },
     {
-      "anchor": "01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1622>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:69>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1581>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:63>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1549>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1659>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1723>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:68>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1595>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1714>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:68>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1742>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1661>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:70>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1706>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:72>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1780>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:72>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
-      "dimensions": [
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1614>1500",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
-          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "LOC_01",
-      "dimensions": [
-        "场景平面(FP1)",
-        "物料漂移预案",
-        "image prompt compiler"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "detect",
-        "gate:image_preflight",
-        "gate:image_prompt_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景平面(FP1)",
-          "loc": null,
-          "message": " 场景平面(FP1)   场景 LOC_01 本集出现 13 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。 ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "物料漂移预案",
-          "loc": "荒野押解/虎妖现场（LOC_01）",
-          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/场景定妆.md ## 荒野押解/虎妖现场（`LOC_01`）",
-          "message": "image prompt compiler 共享资产编译图片请求结构错误：compiled_backend_mismatch:codex!=dreamina。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
-          "severity": "block",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "image prompt compiler",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/场景定妆.md ## 荒野押解/虎妖现场（`LOC_01`）",
-          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        },
-        {
-          "dimension": "物料漂移预案",
-          "loc": "荒野押解/虎妖现场（LOC_01）",
-          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
-          "severity": "warn",
-          "source": "gate:image_prompt_preflight"
-        }
-      ]
-    },
-    {
       "anchor": "memory_anchor_plan_第1集.json",
       "dimensions": [
         "跨集记忆锚落实"
@@ -2827,6 +1612,195 @@
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/memory_anchor_plan_第1集.json",
           "message": "跨集记忆锚落实 memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
           "severity": "block",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 道行反噬（`VFX_道行反噬`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 道行反噬（`VFX_道行反噬`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 道行灌注（`VFX_道行灌注`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 道行灌注（`VFX_道行灌注`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:31>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 黑妖血（`VFX_黑妖血`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/特效定妆.md ## 黑妖血（`VFX_黑妖血`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 断刀（`PROP_断刀`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 断刀（`PROP_断刀`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 横刀（`PROP_横刀`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 横刀（`PROP_横刀`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:32>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 翻覆囚车（`PROP_翻覆囚车`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 翻覆囚车（`PROP_翻覆囚车`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 虎首（`PROP_虎首`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/道具定妆.md ## 虎首（`PROP_虎首`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:28>16",
+          "severity": "warn",
           "source": "gate:image_preflight"
         }
       ]
@@ -2937,105 +1911,45 @@
       ]
     },
     {
-      "anchor": "01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+      "anchor": "CHAR_01",
       "dimensions": [
-        "角色一致性"
+        "表情连续(EXP1)",
+        "实体记忆(EMB)",
+        "image prompt compiler"
       ],
       "domain": "character",
       "severity": "warn",
       "sources": [
+        "detect",
         "gate:image_preflight"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "角色一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
-          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_08：角色 CHAR_01 相邻镜情绪硬跳（惧→惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
-      "dimensions": [
-        "角色一致性"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+          "source": "detect"
+        },
         {
-          "dimension": "角色一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
-          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_01 相邻镜情绪硬跳（惊→惧）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-      "dimensions": [
-        "角色一致性"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+          "source": "detect"
+        },
         {
-          "dimension": "角色一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/反噬跪地态, CHAR_01/囚途染血态, CHAR_01/囚途残损态, CHAR_01__, CHAR_01__常态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
-      "dimensions": [
-        "角色一致性"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
+          "source": "detect"
+        },
         {
-          "dimension": "角色一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
-          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
-          "severity": "warn",
-          "source": "gate:image_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
-      "dimensions": [
-        "角色一致性"
-      ],
-      "domain": "character",
-      "severity": "warn",
-      "sources": [
-        "gate:image_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色一致性",
-          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
-          "message": "角色一致性 含角色镜头只看到主参考；侧脸/半身/全身锚或角色ID缺失时容易漂",
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 姜月初（`CHAR_01/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
           "severity": "warn",
           "source": "gate:image_preflight"
         }
@@ -3084,6 +1998,51 @@
       ]
     },
     {
+      "anchor": "CHAR_04",
+      "dimensions": [
+        "表情连续(EXP1)",
+        "image_prompt_lint",
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_08：角色 CHAR_04 相邻镜情绪硬跳（惧→惊）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_09：角色 CHAR_04 相邻镜情绪硬跳（惊→惧）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/角色定妆.md ## 虎山神（`CHAR_04/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
       "anchor": "asset_registry.json asset#8",
       "dimensions": [
         "主角装备库"
@@ -3105,23 +2064,77 @@
       ]
     },
     {
-      "anchor": "定妆_CHAR_01__常态_表情_六联表.png",
+      "anchor": "character",
       "dimensions": [
-        "定妆对账"
+        "真值源(TRUTH)",
+        "生成配方(RCP)",
+        "强配方Schema(RCP2)",
+        "台词语域(D1)",
+        "成本路由(K1)",
+        "叙事状态(NS1)"
       ],
       "domain": "character",
       "severity": "warn",
       "sources": [
-        "gate:image_preflight"
+        "detect"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "定妆对账",
-          "loc": "出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
-          "message": "定妆对账 identity_registry 登记的定妆参考 出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png 磁盘缺失；补出该图或修 registry 路径，否则锁脸参考落空",
+          "dimension": "真值源(TRUTH)",
+          "loc": null,
+          "message": " 真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。 ",
           "severity": "warn",
-          "source": "gate:image_preflight"
+          "source": "detect"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": null,
+          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=040107f474ef7d65，但复跑审计证据不完整。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": null,
+          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_02__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, declared_recipe_hash；已可推导 hash=e93144dda4cae006，但复跑审计证据不完整。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": null,
+          "message": " 生成配方(RCP)   出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=a2cddad2d9bba857，但复跑审计证据不完整。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": null,
+          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_regi",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": null,
+          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_三视图.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_s",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": null,
+          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_45度.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_s",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": null,
+          "message": " 强配方Schema(RCP2)   出图/共享/图片/定妆_CHAR_01__常态_侧.png 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, identity_registry_sha",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
@@ -3344,6 +2357,27 @@
       ]
     },
     {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生图后端连通性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生图后端连通性",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/_设置.md",
+          "message": "生图后端连通性 生图后端「Dreamina/即梦官方 CLI」无法自动探活：确认即梦官方 CLI 已登录·会员态有效（dreamina 控制台或一次 dry-run）。出图前请人工确认它能落 PNG（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
       "anchor": "ops",
       "dimensions": [
         "锚点门(N3)",
@@ -3432,56 +2466,56 @@
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第208行 provider「local_derive」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第36行 provider「local_derive」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第218行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第46行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第220行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第48行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第222行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第50行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第224行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第52行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第237行 provider「Real-ESRGAN official」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第65行 provider「Real-ESRGAN official」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第239行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第67行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         },
         {
           "dimension": "生图AI一致性",
           "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-          "message": "生图AI一致性 production_events 第243行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
+          "message": "生图AI一致性 production_events 第71行 provider「derive_makeup_pack」不在官方后端清单内；请确认其为官方 API/CLI，并补充后端适配。",
           "severity": "warn",
           "source": "gate:image_preflight"
         }
@@ -3505,6 +2539,409 @@
           "message": "物理尺寸对账 多人同框镜头（姜月初、虎山神、裴长青）中 姜月初「比裴长青明显矮且更纤细；与魏清同框时更精瘦，站姿更有攻击性。」；虎山神「按 storyboard 中同框体量关系保持。」；裴长青「按 storyboard 中同框体量关系保持。」 在 registry 声明了相对身量(relative_scale)，但本镜 prompt 未写入——把声明的相对身",
           "severity": "warn",
           "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1483>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:64>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1442>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 11（`EP01_CLIP11` · 妖血为墨摹影虎山神 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 12（`EP01_CLIP12` · 能力留下而道行用尽 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:58>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1390>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 13（`EP01_CLIP13` · 我欠你一条命 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1525>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1587>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:63>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1433>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:60>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1578>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先活着再算账 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:63>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1606>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 死妖咳嗽站起 · reveal_reaction_chain）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1528>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 虎口最后威胁 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:65>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1570>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 百妖谱给出残酷选择 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1643>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 8（`EP01_CLIP08` · 道歉之后刀落在人身上 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:67>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1452>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md ## 镜头 9（`EP01_CLIP09` · 二十年全押一斩 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:62>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_01",
+      "dimensions": [
+        "场景平面(FP1)",
+        "物料漂移预案",
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景平面(FP1)",
+          "loc": null,
+          "message": " 场景平面(FP1)   场景 LOC_01 本集出现 13 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "物料漂移预案",
+          "loc": "荒野押解/虎妖现场（LOC_01）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/prompt/场景定妆.md ## 荒野押解/虎妖现场（`LOC_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "物料漂移预案",
+          "loc": "荒野押解/虎妖现场（LOC_01）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分54）：本集高频场景：登记 scene_atlas.base_views（G-I2 场景多机位锁：front + 反打/侧机位 ready），锁 layout/axis/light_anchor，反打不越轴（production 核心 LOC 缺则 gate BLOCK）。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
         }
       ]
     },
@@ -3950,7 +3387,6 @@
     "[warn]  节奏密度(Rhythm)   连续 4 个长镜聚集（EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CL",
     "[warn]  节奏密度(Rhythm)   连续 7 个长镜聚集（EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CL",
     "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
-    "[block]  多视角身份包(MVIEW)   identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过",
     "[warn]  状态转场视频证据(ST1)   检测到 13 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 ",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
     "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",

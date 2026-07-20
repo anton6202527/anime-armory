@@ -201,7 +201,7 @@
       "band": "medium",
       "drivers": [
         {
-          "factor": "禁漂项 6 个",
+          "factor": "禁漂项 10 个",
           "points": 20
         },
         {
@@ -223,7 +223,7 @@
       "score": 37,
       "signals": {
         "appear": 1,
-        "drift_forbidden": 6,
+        "drift_forbidden": 10,
         "has_color": false,
         "has_multiform": false,
         "has_structure": true,

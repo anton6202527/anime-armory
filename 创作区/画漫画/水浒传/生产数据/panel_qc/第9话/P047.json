@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第9话",
+  "panel_id": "P047",
+  "created_at": "2026-07-20T17:40:10",
+  "verdict": "warn",
+  "path": "出图/第9话/panels/P047.png",
+  "size": {
+    "width": 1188,
+    "height": 840
+  },
+  "expected_size": {
+    "width": 1188,
+    "height": 840
+  },
+  "declared_reference_count": 8,
+  "declared_reference_binding_count": 8,
+  "reference_input_count": 8,
+  "omitted_attachment_count": 0,
+  "omitted_attachment_ids": [],
+  "blank_region_candidates": [
+    {
+      "x": 537,
+      "y": 70,
+      "w": 345,
+      "h": 189,
+      "area": 23242
+    }
+  ],
+  "issues": [
+    {
+      "severity": "warn",
+      "category": "baked_text_container",
+      "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+    }
+  ],
+  "manual_review_required": true,
+  "manual_review": {
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-20T17:48:00+08:00",
+    "verdict": "pass",
+    "artifact_sha256": "3c94add09bfdad5eac7223bdfd6433e4151e70b0ea7327eaba4e830af152e068",
+    "reason": "人工复核确认候选白区为茶坊门帘与窗外天空形成的自然亮区，不是预烘焙气泡或文字容器；画面无文字，人物身份、动作与场景可用。"
+  }
+}

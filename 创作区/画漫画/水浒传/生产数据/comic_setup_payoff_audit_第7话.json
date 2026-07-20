@@ -1,0 +1,49 @@
+{
+  "kind": "comic_setup_payoff_audit",
+  "version": 1,
+  "chapter": "第7话",
+  "generated_at": "2026-07-20T04:11:09+00:00",
+  "provenance": "SP1·显式标记进 gate/弱信号只提示·development_pack 种子并入·2026-07",
+  "summary": {
+    "detected_setups": 0,
+    "ledger_pairs": 3,
+    "must": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "findings": [],
+  "ledger": {
+    "kind": "comic_setup_payoff_ledger",
+    "version": 1,
+    "generated_at": "2026-07-20T04:11:09+00:00",
+    "pairs": [
+      {
+        "id": "FSH_001",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "第2话",
+        "desc": "伏魔碑背‘遇洪而开’，洪信误将宿命当作对权势与好奇心的许可。",
+        "panel": "第2话 P003–P010",
+        "status": "done",
+        "from_development_pack": true
+      },
+      {
+        "id": "FSH_002",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "每位核心好汉的首次登场",
+        "desc": "百十道金光散往四面八方，以不同方向与地貌预示群像结构。",
+        "panel": "",
+        "status": "open",
+        "from_development_pack": true
+      },
+      {
+        "id": "FSH_003",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "全书反复兑现，结局完成回扣",
+        "desc": "瘟疫与宫廷无能的开篇，确立‘上层秩序失灵，代价由百姓承担’的长线母题。",
+        "panel": "",
+        "status": "open",
+        "from_development_pack": true
+      }
+    ]
+  }
+}

@@ -1,102 +1,78 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-15T03:30:38+00:00",
+  "generated_at": "2026-07-20T04:05:55+00:00",
   "kind": "n2d_repair_preflight",
   "next_when_blocked": [
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 check --write-missing --write-check --stage image_preflight --json",
-    "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 --stage image_preflight --json --write --write-missing"
+    "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 --stage image_preflight --json --write --write-missing"
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "stage": "image_preflight",
   "status": "block",
   "steps": [
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 --write-plan --json",
-      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [\n    \"skills/n2d-image/scripts/image_qc.py\",\n    \"skills/n2d-review/scripts/face_consistency.py\",\n    \"skills/n2d/SKILL.md\",\n    \"skills/n2d/doctor.py\"\n  ],\n  \"changed_skills\": [\n    \"n2d\",\n    \"n2d-image\",\n    \"n2d-review\"\n  ],\n  \"commands\": [\n    \"python3 skills/n2d-dashboard/scripts/dashboard.py gate \\\"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔\\\" 第1集 --stage image\"\n  ],\n  \"contract_inheritance\": null,\n  \"created_at\": \"2026-07-15T03:30:38+00:00\",\n  \"current_stage\": \"image\",\n  \"current_todo\": {\n    \"column\": \"出图\",\n    \"command\": \"n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集\",\n    \"label\": \"出图返修\",\n    \"note\": \"image_qc=block，hard_blocks=408；先修复报告阻断并重跑 image_qc：/Users/wesley/learn/anime-armory/创作区/制漫剧/从变",
+      "command": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 --write-plan --json",
+      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [],\n  \"changed_skills\": [],\n  \"commands\": [],\n  \"contract_inheritance\": null,\n  \"created_at\": \"2026-07-20T04:05:50+00:00\",\n  \"current_stage\": \"image\",\n  \"current_todo\": {\n    \"column\": \"出图\",\n    \"command\": \"n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集\",\n    \"label\": \"出图\",\n    \"note\": \"\",\n    \"skill\": \"n2d-image\",\n    \"stage_key\": \"image\",\n    \"status\": \"33/78\"\n  },\n  \"episode\": \"第1集\",\n  \"execution_steps\": [],\n  \"gate_refresh_needed\": false,\n  \"gate_refresh_stages\": [],\n  \"image_consistency\": {\n    \"advisory\": 1,\n    \"consistent\": true,\n    \"degraded\": true,\n    \"freshness\": \"stale\",\n    \"hard_blocks\": 0,\n    \"precision_level\": \"full\",\n    \"report_md\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/imag",
       "payload": {
         "baseline_bootstrapped": false,
-        "changed_files": [
-          "skills/n2d-image/scripts/image_qc.py",
-          "skills/n2d-review/scripts/face_consistency.py",
-          "skills/n2d/SKILL.md",
-          "skills/n2d/doctor.py"
-        ],
-        "changed_skills": [
-          "n2d",
-          "n2d-image",
-          "n2d-review"
-        ],
-        "commands": [
-          "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集 --stage image"
-        ],
+        "changed_files": [],
+        "changed_skills": [],
+        "commands": [],
         "contract_inheritance": null,
-        "created_at": "2026-07-15T03:30:38+00:00",
+        "created_at": "2026-07-20T04:05:50+00:00",
         "current_stage": "image",
         "current_todo": {
           "column": "出图",
           "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集",
-          "label": "出图返修",
-          "note": "image_qc=block，hard_blocks=408；先修复报告阻断并重跑 image_qc：/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md",
+          "label": "出图",
+          "note": "",
           "skill": "n2d-image",
           "stage_key": "image",
-          "status": "0/114"
+          "status": "33/78"
         },
         "episode": "第1集",
-        "execution_steps": [
-          {
-            "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集 --stage image",
-            "role": "refresh_gate",
-            "type": "command"
-          }
-        ],
-        "gate_refresh_needed": true,
-        "gate_refresh_stages": [
-          "image"
-        ],
+        "execution_steps": [],
+        "gate_refresh_needed": false,
+        "gate_refresh_stages": [],
         "image_consistency": {
           "advisory": 1,
-          "consistent": false,
+          "consistent": true,
           "degraded": true,
           "freshness": "stale",
-          "hard_blocks": 408,
+          "hard_blocks": 0,
           "precision_level": "full",
           "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md",
           "samples": [
-            "prompt lint:  镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）：打斗/动作/强互动镜写了直视主镜头/看观众；除非明确 opponent POV 或破第四墙，镜头必须是旁观者，角色视线应锁定对手、武器来路或命中点。",
-            "prompt lint:  镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）：身份引用 `CHAR_01/囚途残损态/常态` 在 identity_registry 不存在（形态名对不上 registry）",
-            "prompt lint:  镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）：身份引用 `CHAR_02/濒死态/常态` 在 identity_registry 不存在（形态名对不上 registry）"
+            "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+            "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
           ],
           "status": "ok",
-          "verdict": "block"
+          "verdict": "review"
         },
         "image_qc_environment": {
           "advisory": 1,
           "degraded": true,
           "finding_samples": [
-            "prompt lint:  镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）：打斗/动作/强互动镜写了直视主镜头/看观众；除非明确 opponent POV 或破第四墙，镜头必须是旁观者，角色视线应锁定对手、武器来路或命中点。",
-            "prompt lint:  镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）：身份引用 `CHAR_01/囚途残损态/常态` 在 identity_registry 不存在（形态名对不上 registry）",
-            "prompt lint:  镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）：身份引用 `CHAR_02/濒死态/常态` 在 identity_registry 不存在（形态名对不上 registry）"
+            "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
+            "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
           ],
           "freshness": "stale",
-          "hard_blocks": 408,
-          "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-          "jump_to_stage": "image",
+          "hard_blocks": 0,
+          "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+          "jump_to_stage": "video",
           "precision_level": "full",
           "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
           "recommended_install": "",
           "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json",
           "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md",
           "status": "ok",
-          "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
-          "verdict": "block"
+          "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+          "verdict": "review"
         },
         "kind": "n2d_skill_update_plan",
         "needs_record": false,
         "newly_relevant_skills": [],
         "notes": [
-          "变动集中在 n2d/_lib/review/dashboard/batch/n2d 等横切层，或只涉及该集尚未到达的阶段文件；先重跑 gate/审查/计划，不默认重抽图。",
           "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 24 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png",
-          "图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=408）：见 `/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.md`，崩脸/服装/场景/接缝需重出受影响镜。",
           "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第1集` 再据此判断。"
         ],
         "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.json",
@@ -120,12 +96,7 @@
         "shared_lock_changed_files": [],
         "shared_lock_reuse": false,
         "smart_suggestions": [],
-        "snapshot_changed_files": [
-          "skills/n2d-image/scripts/image_qc.py",
-          "skills/n2d-review/scripts/face_consistency.py",
-          "skills/n2d/SKILL.md",
-          "skills/n2d/doctor.py"
-        ],
+        "snapshot_changed_files": [],
         "source_drift": {
           "status": "clean"
         },
@@ -283,8 +254,8 @@
       "step": "update_plan"
     },
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 check --json --write-missing",
-      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-15T03:30:38+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔\",\n  \"episode\": \"第1集\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 9,\n    \"block\": 0\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第1集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"is",
+      "command": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 check --json --write-missing",
+      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-20T04:05:51+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔\",\n  \"episode\": \"第1集\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 9,\n    \"block\": 0\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第1集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第1集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"is",
       "payload": {
         "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_breakdown_check_第1集.json",
         "episode": "第1集",
@@ -335,7 +306,7 @@
             "status": "pass"
           }
         ],
-        "generated_at": "2026-07-15T03:30:38+00:00",
+        "generated_at": "2026-07-20T04:05:51+00:00",
         "kind": "n2d_production_handoff_pack_check",
         "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
         "overview_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_handoff_pack_第1集.md",
@@ -354,8 +325,8 @@
       "step": "production_breakdown"
     },
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 check --write-missing --write-check --stage image_preflight --json",
-      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第1集\",\n  \"stage\": \"image\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\"\n  ],\n  \"status\": \"block\",\n  \"generated_at\": \"2026-07-15T03:30:38+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第1集.json\",\n  \"summary\": {\n    \"block\": 4,\n    \"locks\": 4,\n    \"required_locks\": 4\n  },\n  \"findings\": [\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_not_confirmed\",\n      \"lock_id\": \"source_lock\",\n      \"message\": \"source_lock status 不是 confirmed\"\n    },\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_not_confirmed\",\n      \"lock_id\": \"script_lock\",\n      \"message\": \"script_lock status 不是 confirmed\"\n    },\n    {\n      \"severity\": \"block\",\n      \"code\": \"lock_not_co",
+      "command": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 check --write-missing --write-check --stage image_preflight --json",
+      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第1集\",\n  \"stage\": \"image\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\"\n  ],\n  \"status\": \"pass\",\n  \"generated_at\": \"2026-07-20T04:05:51+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第1集.json\",\n  \"summary\": {\n    \"block\": 0,\n    \"locks\": 4,\n    \"required_locks\": 4\n  },\n  \"findings\": [],\n  \"check_path\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_locks_check_image_第1集.json\"\n}",
       "payload": {
         "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_locks_check_image_第1集.json",
         "checked_lock_ids": [
@@ -365,279 +336,34 @@
           "style_identity_lock"
         ],
         "episode": "第1集",
-        "findings": [
-          {
-            "code": "lock_not_confirmed",
-            "lock_id": "source_lock",
-            "message": "source_lock status 不是 confirmed",
-            "severity": "block"
-          },
-          {
-            "code": "lock_not_confirmed",
-            "lock_id": "script_lock",
-            "message": "script_lock status 不是 confirmed",
-            "severity": "block"
-          },
-          {
-            "code": "lock_not_confirmed",
-            "lock_id": "storyboard_lock",
-            "message": "storyboard_lock status 不是 confirmed",
-            "severity": "block"
-          },
-          {
-            "code": "lock_not_confirmed",
-            "lock_id": "style_identity_lock",
-            "message": "style_identity_lock status 不是 confirmed",
-            "severity": "block"
-          }
-        ],
-        "generated_at": "2026-07-15T03:30:38+00:00",
+        "findings": [],
+        "generated_at": "2026-07-20T04:05:51+00:00",
         "kind": "n2d_production_locks_check",
         "lock_path": "生产数据/production_locks_第1集.json",
         "stage": "image",
-        "status": "block",
+        "status": "pass",
         "summary": {
-          "block": 4,
+          "block": 0,
           "locks": 4,
           "required_locks": 4
         },
         "version": 1
       },
-      "returncode": 1,
-      "status": "block",
+      "returncode": 0,
+      "status": "pass",
       "step": "production_locks"
     },
     {
-      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 --stage image_preflight --json --write --write-missing",
-      "detail": "{\n  \"contract_path\": \"脚本/第1集/preventive_contracts.json\",\n  \"episode\": \"第1集\",\n  \"findings\": [\n    {\n      \"gate\": \"reference_slot_gate\",\n      \"loc\": \"CHAR_01\",\n      \"message\": \"核心/出场角色 CHAR_01 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在\",\n      \"minimal_rerun_scope\": \"回 production_breakdown/identity/asset registry 补引用槽位与锁定策略\",\n      \"owner\": \"制片主任/场记\",\n      \"return_to_stage\": \"image_prompt\",\n      \"root_cause_layer\": \"production_breakdown\",\n      \"severity\": \"block\"\n    },\n    {\n      \"gate\": \"reference_slot_gate\",\n      \"loc\": \"CHAR_01/反噬跪地态\",\n      \"message\": \"核心/出场角色 CHAR_01/反噬跪地态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在\",\n      \"minimal_rerun_scope\": \"回 p",
+      "command": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔 第1集 --stage image_preflight --json --write --write-missing",
+      "detail": "{\n  \"contract_path\": \"脚本/第1集/preventive_contracts.json\",\n  \"episode\": \"第1集\",\n  \"findings\": [\n    {\n      \"gate\": \"reference_slot_gate\",\n      \"loc\": \"PROP_断刀\",\n      \"message\": \"道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在\",\n      \"minimal_rerun_scope\": \"回 production_breakdown/identity/asset registry 补引用槽位与锁定策略\",\n      \"owner\": \"制片主任/场记\",\n      \"return_to_stage\": \"image_prompt\",\n      \"root_cause_layer\": \"production_breakdown\",\n      \"severity\": \"block\"\n    },\n    {\n      \"gate\": \"reference_slot_gate\",\n      \"loc\": \"PROP_横刀\",\n      \"message\": \"道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在\",\n      \"minimal_rerun_scope\": \"回 production_breakdown/identity/asset",
       "payload": {
         "contract_path": "脚本/第1集/preventive_contracts.json",
         "episode": "第1集",
         "findings": [
           {
             "gate": "reference_slot_gate",
-            "loc": "CHAR_01",
-            "message": "核心/出场角色 CHAR_01 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_01/反噬跪地态",
-            "message": "核心/出场角色 CHAR_01/反噬跪地态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_01/囚途染血态",
-            "message": "核心/出场角色 CHAR_01/囚途染血态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_01/囚途残损态",
-            "message": "核心/出场角色 CHAR_01/囚途残损态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_01/战后染血反噬态",
-            "message": "核心/出场角色 CHAR_01/战后染血反噬态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在；出图/共享/图片/定妆_CHAR_01__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02",
-            "message": "核心/出场角色 CHAR_02 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/倒地重伤态",
-            "message": "核心/出场角色 CHAR_02/倒地重伤态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/半跪重伤态",
-            "message": "核心/出场角色 CHAR_02/半跪重伤态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/死亡态",
-            "message": "核心/出场角色 CHAR_02/死亡态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/濒死态",
-            "message": "核心/出场角色 CHAR_02/濒死态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/濒死至死亡态",
-            "message": "核心/出场角色 CHAR_02/濒死至死亡态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/重伤态",
-            "message": "核心/出场角色 CHAR_02/重伤态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_02/重伤搀扶态",
-            "message": "核心/出场角色 CHAR_02/重伤搀扶态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在；出图/共享/图片/定妆_CHAR_02__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04",
-            "message": "核心/出场角色 CHAR_04 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04/伪死态",
-            "message": "核心/出场角色 CHAR_04/伪死态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04/复生态",
-            "message": "核心/出场角色 CHAR_04/复生态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04/复生态焦外",
-            "message": "核心/出场角色 CHAR_04/复生态焦外 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04/复生至斩首态",
-            "message": "核心/出场角色 CHAR_04/复生至斩首态 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04/残躯及摹影",
-            "message": "核心/出场角色 CHAR_04/残躯及摹影 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "CHAR_04/焦外",
-            "message": "核心/出场角色 CHAR_04/焦外 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在；出图/共享/图片/定妆_CHAR_04__常态.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "LOC_01",
-            "message": "道具/场景 LOC_01 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png 不存在；出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png 不存在；出图/共享/图片/定妆_场景_荒野押解_虎妖现场.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "LOC_01光位",
-            "message": "道具/场景 LOC_01光位 缺 reference_slots/reference_group。",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
             "loc": "PROP_断刀",
-            "message": "道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀.png 不存在；出图/共享/图片/定妆_道具_断刀.png 不存在；出图/共享/图片/定妆_道具_断刀.png 不存在",
+            "message": "道具/场景 PROP_断刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_比例.png 不存在；出图/共享/图片/定妆_道具_断刀_手持.png 不存在",
             "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
             "owner": "制片主任/场记",
             "return_to_stage": "image_prompt",
@@ -647,7 +373,7 @@
           {
             "gate": "reference_slot_gate",
             "loc": "PROP_横刀",
-            "message": "道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_横刀.png 不存在；出图/共享/图片/定妆_道具_横刀.png 不存在；出图/共享/图片/定妆_道具_横刀.png 不存在",
+            "message": "道具/场景 PROP_横刀 引用槽位未绑定真实产物：出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_比例.png 不存在；出图/共享/图片/定妆_武器_横刀_手持.png 不存在",
             "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
             "owner": "制片主任/场记",
             "return_to_stage": "image_prompt",
@@ -657,7 +383,7 @@
           {
             "gate": "reference_slot_gate",
             "loc": "PROP_翻覆囚车",
-            "message": "道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车.png 不存在",
+            "message": "道具/场景 PROP_翻覆囚车 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_比例.png 不存在；出图/共享/图片/定妆_道具_翻覆囚车_反面.png 不存在",
             "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
             "owner": "制片主任/场记",
             "return_to_stage": "image_prompt",
@@ -667,57 +393,7 @@
           {
             "gate": "reference_slot_gate",
             "loc": "PROP_虎首",
-            "message": "道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首.png 不存在；出图/共享/图片/定妆_道具_虎首.png 不存在；出图/共享/图片/定妆_道具_虎首.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "VFX_百妖谱",
-            "message": "道具/场景 VFX_百妖谱 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_百妖谱.png 不存在；出图/共享/图片/定妆_特效_百妖谱.png 不存在；出图/共享/图片/定妆_特效_百妖谱.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "VFX_系统面板",
-            "message": "道具/场景 VFX_系统面板 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在；出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在；出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "VFX_道行反噬",
-            "message": "道具/场景 VFX_道行反噬 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_道行反噬.png 不存在；出图/共享/图片/定妆_特效_道行反噬.png 不存在；出图/共享/图片/定妆_特效_道行反噬.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "VFX_道行灌注",
-            "message": "道具/场景 VFX_道行灌注 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_道行灌注.png 不存在；出图/共享/图片/定妆_特效_道行灌注.png 不存在；出图/共享/图片/定妆_特效_道行灌注.png 不存在",
-            "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
-            "owner": "制片主任/场记",
-            "return_to_stage": "image_prompt",
-            "root_cause_layer": "production_breakdown",
-            "severity": "block"
-          },
-          {
-            "gate": "reference_slot_gate",
-            "loc": "VFX_黑妖血",
-            "message": "道具/场景 VFX_黑妖血 引用槽位未绑定真实产物：出图/共享/图片/定妆_特效_黑妖血.png 不存在；出图/共享/图片/定妆_特效_黑妖血.png 不存在；出图/共享/图片/定妆_特效_黑妖血.png 不存在",
+            "message": "道具/场景 PROP_虎首 引用槽位未绑定真实产物：出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_比例.png 不存在；出图/共享/图片/定妆_道具_虎首_手持.png 不存在",
             "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
             "owner": "制片主任/场记",
             "return_to_stage": "image_prompt",
@@ -728,7 +404,7 @@
         "gates": [
           "reference_slot_gate"
         ],
-        "generated_at": "2026-07-15T03:30:38+00:00",
+        "generated_at": "2026-07-20T04:05:55+00:00",
         "kind": "n2d_preventive_contract_report",
         "outputs": {
           "json": "生产数据/preventive_contracts_image_preflight_第1集.json",
@@ -739,7 +415,7 @@
         "stage": "image_preflight",
         "status": "blocked",
         "summary": {
-          "block": 31,
+          "block": 4,
           "info": 0,
           "warn": 0
         },
@@ -751,8 +427,8 @@
     }
   ],
   "summary": {
-    "block": 2,
-    "pass": 2,
+    "block": 1,
+    "pass": 3,
     "skip": 0,
     "steps": 4,
     "warn": 0

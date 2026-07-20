@@ -1,0 +1,215 @@
+{
+  "actual_submit_prompt": "生成一张正式多人剧情关键帧：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。；先展示不可逆选择，再回到选择前 主体：十八岁冷白清丽脸·冷静狭长眼·乌黑高马尾·玄黑赤纹窄袖劲装·精瘦横刀站姿。；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血·傲慢捕食者姿态 主体布局：SLOT_1: CHAR_01/常态 -> LEFT_SLOT，primary 星标，区分锚点：十八岁冷白清丽脸·冷静狭长眼·乌黑高马尾·玄黑赤纹窄袖劲装·精瘦横刀站姿。；SLOT_2: CHAR_02/常态 -> RIGHT_SLOT，区分锚点：高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；SLOT_3: CHAR_04/常态 -> BACKGROUND_SLOT，区分锚点：吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血·傲慢捕食者姿态 动作瞬间：刀柄、发抖指节和衣料同轴。 染血脸与后景虎妖巨影，痛苦但已决定。；为「轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间 构图：ECU→CU；按导演运镜预留起幅，首帧不是摆拍肖像。；物理镜头参数：85mm, f/1.8；角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、本镜状态锁继承。；视线方向=LOC_01 官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。；画幅= 场景：荒野押解/虎妖现场；横刀；横刀；冷灰、土褐、墨黑；人血暗红、妖血黑墨；百妖谱只在反馈用朱砂与少量金。；光位锚=LOC_01 阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光 光影：{\"LOC_01\": \"阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\"} 情绪焦点：本镜戏剧功能是先展示不可逆选择，再回到选择前。，观众应获得立刻追问她为何不杀后景虎妖而杀人 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为CHAR_01的character参考 图2作为CHAR_01的character参考 图3作为CHAR_01的character参考 图4作为CHAR_04的character参考 图5作为CHAR_04的character参考 图6作为CHAR_01的character参考 图7作为CHAR_01的character参考 图8作为CHAR_01的character参考 图9作为CHAR_01的character参考 图10作为CHAR_01的character参考 保持一致：姜月初 CHAR_01/常态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色…；WEAPON_01 横刀：结构=大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；武器拓扑=weapon_count=1；single_hilt=1；single_blade=1…；CHAR_01: 囚途残损无血。；CHAR_02: 半跪重伤。；CHAR_04: 贯穿伤伪死；{\"LOC_01\": \"阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\"} 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+  "actual_submit_prompt_chars": 2079,
+  "actual_submit_prompt_sha256": "64a0fdcddbf5e101678478f0b9ef1c24434ee11e058b977ae983c7c1784c4353",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "生成一张正式多人剧情关键帧：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。；先展示不可逆选择，再回到选择前 主体：十八岁冷白清丽脸·冷静狭长眼·乌黑高马尾·玄黑赤纹窄袖劲装·精瘦横刀站姿。；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血·傲慢捕食者姿态 主体布局：SLOT_1: CHAR_01/常态 -> LEFT_SLOT，primary 星标，区分锚点：十八岁冷白清丽脸·冷静狭长眼·乌黑高马尾·玄黑赤纹窄袖劲装·精瘦横刀站姿。；SLOT_2: CHAR_02/常态 -> RIGHT_SLOT，区分锚点：高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；SLOT_3: CHAR_04/常态 -> BACKGROUND_SLOT，区分锚点：吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血·傲慢捕食者姿态 动作瞬间：刀柄、发抖指节和衣料同轴。 染血脸与后景虎妖巨影，痛苦但已决定。；为「轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间 构图：ECU→CU；按导演运镜预留起幅，首帧不是摆拍肖像。；物理镜头参数：85mm, f/1.8；角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、本镜状态锁继承。；视线方向=LOC_01 官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。；画幅= 场景：荒野押解/虎妖现场；横刀；横刀；冷灰、土褐、墨黑；人血暗红、妖血黑墨；百妖谱只在反馈用朱砂与少量金。；光位锚=LOC_01 阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光 光影：{\"LOC_01\": \"阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\"} 情绪焦点：本镜戏剧功能是先展示不可逆选择，再回到选择前。，观众应获得立刻追问她为何不杀后景虎妖而杀人 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为CHAR_01的character参考 图2作为CHAR_01的character参考 图3作为CHAR_01的character参考 图4作为CHAR_04的character参考 图5作为CHAR_04的character参考 图6作为CHAR_01的character参考 图7作为CHAR_01的character参考 图8作为CHAR_01的character参考 图9作为CHAR_01的character参考 图10作为CHAR_01的character参考 保持一致：姜月初 CHAR_01/常态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色…；WEAPON_01 横刀：结构=大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；武器拓扑=weapon_count=1；single_hilt=1；single_blade=1…；CHAR_01: 囚途残损无血。；CHAR_02: 半跪重伤。；CHAR_04: 贯穿伤伪死；{\"LOC_01\": \"阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\"} 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+        "role": "character",
+        "sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
+        "role": "character",
+        "sha256": "17fad145e3565e198c531d5ed351094b78dcb717432259f123359b1b2f07159a"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+        "role": "character",
+        "sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_04",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
+        "role": "character",
+        "sha256": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_04",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+        "role": "character",
+        "sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53"
+      },
+      {
+        "index": 6,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态.png",
+        "role": "character",
+        "sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e"
+      },
+      {
+        "index": 7,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849"
+      },
+      {
+        "index": 8,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_45度.png",
+        "role": "character",
+        "sha256": "db5ce4cb5d115fbaef26424c45e38e55f51337fb5ebeb715405c56766d599cce"
+      },
+      {
+        "index": 9,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_侧.png",
+        "role": "character",
+        "sha256": "8b9b3f4a0de65ea1aafb91a6c2a4c4515949b83ca140be65cf307ce64cc95de7"
+      },
+      {
+        "index": 10,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_背.png",
+        "role": "character",
+        "sha256": "2e379d2ebc3332e68845dfbaac1fae7e4df5ad355ad181e577c65b8e79abce09"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "4k"
+    }
+  },
+  "compiler": {
+    "backend": "dreamina",
+    "channel": "official_cli",
+    "compiled_request_sha256": "f955eaac4bd23a84c01d807e7c199de96bf50bd92bb8314994d42cde48463ffa",
+    "compiler_decisions": [
+      "request_params.aspect_ratio_overrode_composition"
+    ],
+    "execution_context_sha256": "6b336927bddc0bd394d74596a66a0526cf614254e08ddbaa0790715b80631372",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_verbose:2079>1200",
+        "submit_prompt_many_clauses:68>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 68,
+      "constraint_compression": {
+        "policy_guard_input": 4,
+        "policy_guard_output": 4,
+        "preserve_input": 4,
+        "preserve_output": 4
+      },
+      "estimated_text_tokens": 520,
+      "negative_chars": 0,
+      "prompt_chars": 2079,
+      "reference_count": 10
+    },
+    "mode": "firstframe",
+    "model": "5.0",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "seedream_concise_natural_language",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成一张正式多人剧情关键帧：大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。；先展示不可逆选择，再回到选择前 主体：十八岁冷白清丽脸·冷静狭长眼·乌黑高马尾·玄黑赤纹窄袖劲装·精瘦横刀站姿。；高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血·傲慢捕食者姿态 主体布局：SLOT_1: CHAR_01/常态 -> LEFT_SLOT，primary 星标，区分锚点：十八岁冷白清丽脸·冷静狭长眼·乌黑高马尾·玄黑赤纹窄袖劲装·精瘦横刀站姿。；SLOT_2: CHAR_02/常态 -> RIGHT_SLOT，区分锚点：高大年轻镇魔队正·苍白干裂病容·玄黑赤纹劲装·左臂扭曲重伤·克制锐眼。；SLOT_3: CHAR_04/常态 -> BACKGROUND_SLOT，区分锚点：吊睛白额虎头人身·小山强肩背·粗壮利爪·胸前贯穿伤与黑妖血·傲慢捕食者姿态 动作瞬间：刀柄、发抖指节和衣料同轴。 染血脸与后景虎妖巨影，痛苦但已决定。；为「轻微推镜头，沿视线轴轻推，最后稳定停住，落到CU/MCU」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间 构图：ECU→CU；按导演运镜预留起幅，首帧不是摆拍肖像。；物理镜头参数：85mm, f/1.8；角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、本镜状态锁继承。；视线方向=LOC_01 官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。；画幅= 场景：荒野押解/虎妖现场；横刀；横刀；冷灰、土褐、墨黑；人血暗红、妖血黑墨；百妖谱只在反馈用朱砂与少量金。；光位锚=LOC_01 阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光 光影：{\"LOC_01\": \"阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\"} 情绪焦点：本镜戏剧功能是先展示不可逆选择，再回到选择前。，观众应获得立刻追问她为何不杀后景虎妖而杀人 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为CHAR_01的character参考 图2作为CHAR_01的character参考 图3作为CHAR_01的character参考 图4作为CHAR_04的character参考 图5作为CHAR_04的character参考 图6作为CHAR_01的character参考 图7作为CHAR_01的character参考 图8作为CHAR_01的character参考 图9作为CHAR_01的character参考 图10作为CHAR_01的character参考 保持一致：姜月初 CHAR_01/常态 必须与人物定妆和脸部特写参考保持同一张脸：脸型、五官比例、发型发髻、服装配色、标志配饰五层一致；多参考后端不得把其他角色参考脸泛化到本角色…；WEAPON_01 横刀：结构=大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；武器拓扑=weapon_count=1；single_hilt=1；single_blade=1…；CHAR_01: 囚途残损无血。；CHAR_02: 半跪重伤。；CHAR_04: 贯穿伤伪死；{\"LOC_01\": \"阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\"} 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，不得被头发/暗影/火花/刀光完全遮住，也不得被其他强烈光效完全遮住；不转成看镜头肖像 手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；保持左右手方向正确、手腕连接连续，每只手只出现一次；禁止额外手掌、镜像右手/镜像左手，人体与手部结构自然完整 若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手 可见手部归属清楚并自然连接正确手臂和接触点；单个人形主体最多两条手臂、两只可见手 可见身体与鞋脚结构完整、裁切自然、接地明确 主检脸与自身参考一致且可辨，但不转成直视镜头的肖像摆拍 每个具名主体守住自己的画面槽位，只使用自己的身份参考 画幅：9:16 限制：换脸；改年龄；改服装；改场景/光位；新增人物/道具；直视镜头/looking at viewer；文字/logo/水印；风格漂移；脱离项目 style_anchor；不得遮住眼鼻嘴；遮住五官；重画脸；额外手；第三只手；多肢；六指",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_表情_六联表.png",
+        "role": "character",
+        "sha256": "2ec7ac8c76c24d739fbea63baf56c05055f8e9bd4e5b96a9362fdccf94c651cb"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_后45度.png",
+        "role": "character",
+        "sha256": "17fad145e3565e198c531d5ed351094b78dcb717432259f123359b1b2f07159a"
+      },
+      {
+        "index": 3,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_三视图.png",
+        "role": "character",
+        "sha256": "ade0cbe323f055e8262380975782c237359f1ee4d8f06d0950133cf82229cbd2"
+      },
+      {
+        "index": 4,
+        "owner": "CHAR_04",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_04__常态_表情_克制.png",
+        "role": "character",
+        "sha256": "16b483088e774547d034d7a1d73f925b29e1a60c51e3ebf86b95acd3d806b7b8"
+      },
+      {
+        "index": 5,
+        "owner": "CHAR_04",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_04__常态_后45度.png",
+        "role": "character",
+        "sha256": "95cd2d211a22c36e7c9c9fa958fb5f12fb555820e64d3ab9c3cc6b8408a58f53"
+      },
+      {
+        "index": 6,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态.png",
+        "role": "character",
+        "sha256": "99e8905b5b6b17d0838018d0f0ec080307384a7c7c6fb2d3e68fb4e89410a00e"
+      },
+      {
+        "index": 7,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_脸部特写_脸锚裁切.png",
+        "role": "character",
+        "sha256": "ccac6358df8d61efece1578e0c9e4e547de8813dcc20ca410187ccb712ae7849"
+      },
+      {
+        "index": 8,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_45度.png",
+        "role": "character",
+        "sha256": "db5ce4cb5d115fbaef26424c45e38e55f51337fb5ebeb715405c56766d599cce"
+      },
+      {
+        "index": 9,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_侧.png",
+        "role": "character",
+        "sha256": "8b9b3f4a0de65ea1aafb91a6c2a4c4515949b83ca140be65cf307ce64cc95de7"
+      },
+      {
+        "index": 10,
+        "owner": "CHAR_01",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_CHAR_01__常态_背.png",
+        "role": "character",
+        "sha256": "2e379d2ebc3332e68845dfbaac1fae7e4df5ad355ad181e577c65b8e79abce09"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "4k"
+    },
+    "source_contract_sha256": "83266d39624524e03e7a3f1da15e8192290b04db329f9207b69a6046c0b9df7e",
+    "source_contract_text_sha256": "793c1c4be5ce23aaf8243896542248b5d1cbf42b9557cb35612ea25598c7a5cf",
+    "task_type": "multi_subject",
+    "version": 1
+  },
+  "created_at": "2026-07-20T07:26:33+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "d45532e9b44cf6fc792340adda0eea2678205216986fda31e986ea5df899ab24",
+  "request_params_sha256": "009551831462626b4ffbfb52f4727539821eeed54de7070119f70e0eabc6e6fb",
+  "shot": "Clip_01_first",
+  "target": "出图/第1集/图片/Clip01_first.png",
+  "version": 1
+}

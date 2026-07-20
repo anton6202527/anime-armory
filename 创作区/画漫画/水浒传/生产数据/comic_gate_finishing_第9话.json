@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第9话",
+  "stage": "finishing",
+  "created_at": "2026-07-20T15:54:40",
+  "verdict": "pass",
+  "summary": {
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "findings": [],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=9 block=0 warn=0",
+    "缩略分镜/name board 审批合同: pass",
+    "排版审批合同: pass",
+    "原稿收尾合同: pass"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+        "size": 1814
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "cacc0486962f040e43a46913d5bd9abee742319f1c35964295f38db386ea246f",
+        "size": 3638
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "9d62e5a8f79471df57a4110b1f3daee394e53c3bb0f187c2a5f4fc15602a9cf7",
+        "size": 2817
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "28fc9c317bec36abb38bddc38344c2b0daf381252046ef1fc570f3d623696eb2",
+        "size": 93508
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "3bfc2059e6c8411eefcc56ae047be8201c52504c287654096b4fbf94e5724903",
+        "size": 1506
+      },
+      {
+        "path": "源本/水浒传.docx",
+        "exists": true,
+        "sha256": "dbee5369b3fc152b340d0629eb0eb16af05c15c01e1ffba02fcd636688fc7d52",
+        "size": 1211659
+      },
+      {
+        "path": "脚本/第9话/panel_script.json",
+        "exists": true,
+        "sha256": "bc45a6b0b851a02b85ac7fc533db264ead9988e0fbdbccc8749d7488ff7fba7b",
+        "size": 257636
+      },
+      {
+        "path": "脚本/第9话/source_semantics.json",
+        "exists": true,
+        "sha256": "bf5dca6063d1d5eca79ae84b5d894e9bd23dcb056096e6b6ec97ba2d9f39e102",
+        "size": 76137
+      },
+      {
+        "path": "排版/第9话/name_board.json",
+        "exists": true,
+        "sha256": "090f241937aad2853b3bce1ab2e2f8c8d0ab1f45248b93b23af671c788a2cdf8",
+        "size": 93072
+      },
+      {
+        "path": "排版/第9话/layout.json",
+        "exists": true,
+        "sha256": "fc99c5fe3f4e6193896a620d0dc803c5b487e506e0b3719a7825ba6c7edc225b",
+        "size": 104682
+      },
+      {
+        "path": "出图/第9话/finishing/finishing_plan.json",
+        "exists": true,
+        "sha256": "b36dbfa48345e6d0f85351bf92bc4fb65df3bd2362eade7e1f39a8a1ddfc0bec",
+        "size": 145750
+      }
+    ],
+    "sha256": "f8b0981c04ed9f69793cef88b398d925eb26a2ec0c58ac63c7d7a82438f33722"
+  },
+  "receipt_id": "dfddedcf98395b26e3229818ccf5b844eeda4e7e06bb9935619381d60083d896"
+}

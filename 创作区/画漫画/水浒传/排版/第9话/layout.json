@@ -1,0 +1,3536 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第9话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第9话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 5504,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 confrontation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "confrontation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 219,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 74,
+                "w": 518,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P002",
+          "x": 126,
+          "y": 1044,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 confrontation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "confrontation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1209,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1083,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 1090,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 1912,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 confrontation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "confrontation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2077,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1951,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B003D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 1958,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 126,
+          "y": 2780,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 confrontation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "confrontation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2945,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2819,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 2826,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P005",
+          "x": 126,
+          "y": 3648,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 confrontation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "confrontation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3836,
+                "w": 712,
+                "h": 668
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3693,
+                "w": 475,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005D1",
+              "type": "dialogue",
+              "content_ref": "panel:P005.dialogue:1",
+              "speaker": "LI_JI",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "LI_JI"
+              },
+              "x": 174,
+              "y": 3696,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 4636,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 confrontation",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "confrontation"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4801,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4675,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 4682,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 5076,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arm_up",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arm_up"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 217,
+                "w": 712,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 75,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B007D1",
+              "type": "dialogue",
+              "content_ref": "panel:P007.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P008",
+          "x": 126,
+          "y": 1016,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arm_up",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arm_up"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1181,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 126,
+          "y": 1884,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arm_up",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arm_up"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2049,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1925,
+                "w": 475,
+                "h": 279
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 1930,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 180,
+          "y": 2752,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arm_up",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arm_up"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 2874,
+                "w": 648,
+                "h": 432
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.dialogue:1",
+              "rect": {
+                "x": 234,
+                "y": 2780,
+                "w": 432,
+                "h": 203
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B010D1",
+              "type": "dialogue",
+              "content_ref": "panel:P010.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 214,
+              "y": 2786,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 180,
+          "y": 3400,
+          "w": 1080,
+          "h": 700,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arm_up",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arm_up"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 3538,
+                "w": 648,
+                "h": 488
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "rect": {
+                "x": 234,
+                "y": 3432,
+                "w": 432,
+                "h": 230
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011S1",
+              "type": "sfx",
+              "content_ref": "panel:P011.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3912,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P012",
+          "x": 126,
+          "y": 4128,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 arm_up",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "arm_up"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4312,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 4173,
+                "w": 475,
+                "h": 304
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012S1",
+              "type": "sfx",
+              "content_ref": "panel:P012.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4850,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 5932,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 236,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B013S2",
+              "type": "sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P014",
+          "x": 126,
+          "y": 1124,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1290,
+                "w": 712,
+                "h": 584
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1162,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "COUNTY_LIEUTENANT",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "COUNTY_LIEUTENANT"
+              },
+              "x": 172,
+              "y": 1170,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 126,
+          "y": 1992,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2174,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 2034,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015S1",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2714,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 2940,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3148,
+                "w": 777,
+                "h": 726
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2991,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 2991,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 120,
+              "y": 2988,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B016S2",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3782,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P017",
+          "x": 126,
+          "y": 4036,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4218,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 4078,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B017S1",
+              "type": "sfx",
+              "content_ref": "panel:P017.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4758,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P018",
+          "x": 126,
+          "y": 4984,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "action"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5168,
+                "w": 712,
+                "h": 644
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 5030,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B018S1",
+              "type": "sfx",
+              "content_ref": "panel:P018.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 5706,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_004",
+      "source_name_page_id": "SCROLL_004",
+      "width": 1440,
+      "height": 5516,
+      "reading_order": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 collapse",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "collapse"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 193,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B019D1",
+              "type": "dialogue",
+              "content_ref": "panel:P019.dialogue:1",
+              "speaker": "ZHU_WU",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "ZHU_WU"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P020",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 collapse",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "collapse"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1061,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P021",
+          "x": 126,
+          "y": 1764,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 collapse",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "collapse"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1929,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P021.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1803,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B021D1",
+              "type": "dialogue",
+              "content_ref": "panel:P021.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 1810,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P022",
+          "x": 72,
+          "y": 2632,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 collapse",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "collapse"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2839,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 2682,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B022S1",
+              "type": "sfx",
+              "content_ref": "panel:P022.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3474,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P023",
+          "x": 126,
+          "y": 3700,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 collapse",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "collapse"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3880,
+                "w": 712,
+                "h": 640
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.sfx:1",
+              "rect": {
+                "x": 185,
+                "y": 3743,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B023S1",
+              "type": "sfx",
+              "content_ref": "panel:P023.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4422,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P024",
+          "x": 126,
+          "y": 4648,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 collapse",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "collapse"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4813,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4687,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B024D1",
+              "type": "dialogue",
+              "content_ref": "panel:P024.dialogue:1",
+              "speaker": "COUNTY_LIEUTENANT",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "COUNTY_LIEUTENANT"
+              },
+              "x": 172,
+              "y": 4694,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_005",
+      "source_name_page_id": "SCROLL_005",
+      "width": 1440,
+      "height": 5384,
+      "reading_order": [
+        "P025",
+        "P026",
+        "P027",
+        "P028",
+        "P029",
+        "P030"
+      ],
+      "panels": [
+        {
+          "panel_id": "P025",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 new_goal",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "new_goal"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 193,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P026",
+          "x": 72,
+          "y": 896,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 new_goal",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "new_goal"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1087,
+                "w": 777,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P027",
+          "x": 126,
+          "y": 1912,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 new_goal",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "new_goal"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2077,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1951,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B027D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 1958,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P028",
+          "x": 126,
+          "y": 2780,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 new_goal",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "new_goal"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2945,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P029",
+          "x": 126,
+          "y": 3648,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 new_goal",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "new_goal"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3813,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P029.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3687,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B029D1",
+              "type": "dialogue",
+              "content_ref": "panel:P029.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 3694,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P030",
+          "x": 126,
+          "y": 4516,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P030 new_goal",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P030",
+              "story_function": "new_goal"
+            },
+            "payoff": {
+              "panel_id": "P031",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4681,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P030.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 4555,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B030D1",
+              "type": "dialogue",
+              "content_ref": "panel:P030.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 4562,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_006",
+      "source_name_page_id": "SCROLL_006",
+      "width": 1440,
+      "height": 5167,
+      "reading_order": [
+        "P031",
+        "P032",
+        "P033",
+        "P034",
+        "P035",
+        "P036"
+      ],
+      "panels": [
+        {
+          "panel_id": "P031",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 194,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P031.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 67,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B031D1",
+              "type": "dialogue",
+              "content_ref": "panel:P031.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P032",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1062,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P032.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 935,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B032D1",
+              "type": "dialogue",
+              "content_ref": "panel:P032.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P033",
+          "x": 180,
+          "y": 1764,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1887,
+                "w": 648,
+                "h": 433
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P034",
+          "x": 126,
+          "y": 2412,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2578,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P035",
+          "x": 72,
+          "y": 3280,
+          "w": 1296,
+          "h": 963,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3472,
+                "w": 777,
+                "h": 674
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P035.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3328,
+                "w": 518,
+                "h": 319
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B035D1",
+              "type": "dialogue",
+              "content_ref": "panel:P035.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 120,
+              "y": 3328,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P036",
+          "x": 126,
+          "y": 4299,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_006",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P036 departure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P036",
+              "story_function": "departure"
+            },
+            "payoff": {
+              "panel_id": "P037",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4466,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_007",
+      "source_name_page_id": "SCROLL_007",
+      "width": 1440,
+      "height": 5080,
+      "reading_order": [
+        "P037",
+        "P038",
+        "P039",
+        "P040",
+        "P041",
+        "P042"
+      ],
+      "panels": [
+        {
+          "panel_id": "P037",
+          "x": 180,
+          "y": 28,
+          "w": 1080,
+          "h": 700,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 reentry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "reentry"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 166,
+                "w": 648,
+                "h": 488
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P037.narration",
+              "rect": {
+                "x": 234,
+                "y": 60,
+                "w": 432,
+                "h": 230
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B037N1",
+              "type": "narration",
+              "content_ref": "panel:P037.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 218,
+              "y": 66,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P038",
+          "x": 180,
+          "y": 756,
+          "w": 1080,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 reentry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "reentry"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 878,
+                "w": 648,
+                "h": 432
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P039",
+          "x": 180,
+          "y": 1404,
+          "w": 1080,
+          "h": 700,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 reentry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "reentry"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1542,
+                "w": 648,
+                "h": 488
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P039.sfx:1",
+              "rect": {
+                "x": 234,
+                "y": 1436,
+                "w": 432,
+                "h": 230
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B039S1",
+              "type": "sfx",
+              "content_ref": "panel:P039.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1916,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P040",
+          "x": 72,
+          "y": 2132,
+          "w": 1296,
+          "h": 1156,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 reentry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "reentry"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2362,
+                "w": 777,
+                "h": 808
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P040.narration",
+              "rect": {
+                "x": 136,
+                "y": 2187,
+                "w": 518,
+                "h": 385
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B040N1",
+              "type": "narration",
+              "content_ref": "panel:P040.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2180,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P041",
+          "x": 126,
+          "y": 3344,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 reentry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "reentry"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3509,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P041.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3385,
+                "w": 475,
+                "h": 279
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B041D1",
+              "type": "dialogue",
+              "content_ref": "panel:P041.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 3390,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P042",
+          "x": 126,
+          "y": 4212,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_007",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P042 reentry",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P042",
+              "story_function": "reentry"
+            },
+            "payoff": {
+              "panel_id": "P043",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4380,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_008",
+      "source_name_page_id": "SCROLL_008",
+      "width": 1440,
+      "height": 5680,
+      "reading_order": [
+        "P043",
+        "P044",
+        "P045",
+        "P046",
+        "P047",
+        "P048"
+      ],
+      "panels": [
+        {
+          "panel_id": "P043",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 194,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P043.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 69,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B043D1",
+              "type": "dialogue",
+              "content_ref": "panel:P043.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 74,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P044",
+          "x": 126,
+          "y": 896,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1062,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P044.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 937,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B044D1",
+              "type": "dialogue",
+              "content_ref": "panel:P044.dialogue:1",
+              "speaker": "SHI_JIN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "SHI_JIN"
+              },
+              "x": 172,
+              "y": 942,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P045",
+          "x": 72,
+          "y": 1764,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1953,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P046",
+          "x": 72,
+          "y": 2780,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "none",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2969,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P047",
+          "x": 126,
+          "y": 3796,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "顺读推进",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3962,
+                "w": 712,
+                "h": 586
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P047.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3837,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B047D1",
+              "type": "dialogue",
+              "content_ref": "panel:P047.dialogue:1",
+              "speaker": "LU_DA",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "LU_DA"
+              },
+              "x": 172,
+              "y": 3842,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P048",
+          "x": 72,
+          "y": 4664,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "重揭示长停顿",
+          "bubble_first": "top",
+          "effects_hint": "仅使用真实火焰、烟尘、山雾、风与兵器速度线；禁魔法粒子。",
+          "name_page_id": "SCROLL_008",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_004",
+          "page_turn_hook": "P048 ending_promise",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P048",
+              "story_function": "ending_promise"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4854,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P048.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 4710,
+                "w": 518,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B048D1",
+              "type": "dialogue",
+              "content_ref": "panel:P048.dialogue:1",
+              "speaker": "LU_DA",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "LU_DA"
+              },
+              "x": 120,
+              "y": 4712,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第9话/panel_script.json",
+    "panel_script_sha256": "bc45a6b0b851a02b85ac7fc533db264ead9988e0fbdbccc8749d7488ff7fba7b",
+    "name_board": "排版/第9话/name_board.json",
+    "name_board_sha256": "090f241937aad2853b3bce1ab2e2f8c8d0ab1f45248b93b23af671c788a2cdf8",
+    "name_approval_subject_sha256": "27d2ec8d48451b6f18c31b83aea7e6c7c9ec104a815fae37e68caa2e2275bad9",
+    "settings": "_设置.md",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-20T07:54:39.463873+00:00",
+    "note": "",
+    "subject_sha256": "ef4ee32f609a6bc5405fef61fe2b14dd10e1f5eadffe4cb5d6fce8c881e095b6",
+    "panel_script_sha256": "bc45a6b0b851a02b85ac7fc533db264ead9988e0fbdbccc8749d7488ff7fba7b",
+    "name_board_sha256": "090f241937aad2853b3bce1ab2e2f8c8d0ab1f45248b93b23af671c788a2cdf8",
+    "settings_sha256": "85a21a2ca97d6d81a4304ae6fa13ee87c217cb6f6a5152d9ffdcc20c70a61ae7"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

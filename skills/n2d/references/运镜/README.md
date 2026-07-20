@@ -1,8 +1,22 @@
 # 运镜视觉参考库
 
-本目录是 n2d 系列的出视频运镜参考库，原始来源为用户提供的 `/Users/wesley/Desktop/运镜`（2026-07-10 拷贝）。这里的 `.webp` 用同一类画面示例罗列常见镜头运动，供 `n2d-script` 的导演运镜 sidecar 和 `n2d-video` 的视频 prompt 优先参考。
+本目录是 n2d 系列的出视频运镜参考库，原始来源为用户提供且已确认可公开再分发的运镜动画。23 个大体积 animated WebP 使用内容寻址 R2 保存，本线只保留结构化真值、轻量首帧和五帧 contact sheet；`n2d-script` 的导演运镜 sidecar 与 `n2d-video` 的视频 prompt 不依赖网络即可运行。
 
-机器可读真值源是 [`manifest.json`](manifest.json)：它把现有 23 个视觉参考图、英文名、别名、slot、风险等级、适用场景、prompt 模板和媒体路径统一登记；`skills/n2d/_lib/n2d_const.py` 会启动时读取它并扩展 `CAMERA_MOVE_LEXICON`。`_preview/` 里的 JPG 是 Tauri skill 预览用的轻量首帧，避免直接解码大体积 animated WebP。
+机器可读真值源是 [`manifest.json`](manifest.json)：它把 23 个视觉参考的英文名、别名、slot、风险等级、适用场景、prompt 模板、本地预览/contact sheet 与远端 URL/bytes/SHA-256 统一登记；`skills/n2d/_lib/n2d_const.py` 会启动时读取它并扩展 `CAMERA_MOVE_LEXICON`。
+
+## 视觉素材分层
+
+- `_preview/`：轻量首帧，供 Desktop 快速预览。
+- `_contact/`：按时间均匀抽取的五帧拼图，供 agent/视觉模型离线理解运动方向和构图变化；这是默认视觉校准入口。
+- R2 animated WebP：只有需要判断完整运动节奏、轨迹或镜头速度时才按需下载；对象以内容 SHA-256 命名，下载时同时校验声明字节数与 SHA-256，缓存位于仓库外用户缓存。
+- 断网或下载失败不是主流程 blocker：继续使用 `manifest.json + _contact/`。
+
+```bash
+python3 skills/n2d/scripts/camera_reference.py list
+python3 skills/n2d/scripts/camera_reference.py show dolly_in --json
+python3 skills/n2d/scripts/camera_reference.py fetch dolly_in --json
+python3 skills/n2d/scripts/camera_reference.py self-check
+```
 
 ## 使用原则
 
@@ -14,7 +28,7 @@
 
 ## 图片索引
 
-| 文件 | 结构化运镜词 | prompt 适用场景 |
+| 远端动画文件 | 结构化运镜词 | prompt 适用场景 |
 |---|---|---|
 | `固定镜头.webp` | 固定机位 | 对白、反打、屏幕/面板、近景表演、身份高风险镜头 |
 | `镜头前推.webp` | 推镜头 | 逼近、压迫、揭示、聚焦人物情绪或物证 |

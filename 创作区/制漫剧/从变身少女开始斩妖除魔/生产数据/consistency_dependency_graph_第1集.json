@@ -328,6 +328,11 @@
     {
       "from": "episode:第1集",
       "relation": "has_evidence",
+      "to": "evidence:consistency_ledger_第1集.json"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "has_evidence",
       "to": "evidence:audio_space_consistency_第1集.json"
     },
     {
@@ -543,6 +548,12 @@
       "path": "生产数据/audio_space_consistency_第1集.json"
     },
     {
+      "id": "evidence:consistency_ledger_第1集.json",
+      "kind": "evidence",
+      "label": "consistency_ledger_第1集.json",
+      "path": "生产数据/consistency_ledger_第1集.json"
+    },
+    {
       "id": "evidence:expression_state_consistency_第1集.json",
       "kind": "evidence",
       "label": "expression_state_consistency_第1集.json",
@@ -558,9 +569,9 @@
   "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
   "summary": {
     "clips": 13,
-    "edges": 68,
+    "edges": 69,
     "images": 0,
-    "nodes": 31,
+    "nodes": 32,
     "videos": 0
   },
   "version": 1

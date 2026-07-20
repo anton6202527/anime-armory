@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "kind": "comic_release_verdict",
+  "created_at": "2026-07-20T07:04:26+00:00",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
+  "chapter": "第8话",
+  "profile": "internal",
+  "target_platform": "通用",
+  "platform_profile": {
+    "platform_id": "generic",
+    "display_name": "通用",
+    "verified": true,
+    "collected_at": "2026-07-14",
+    "source_urls": [],
+    "page_width_px": null,
+    "max_image_height_px": null,
+    "max_file_bytes": null,
+    "allowed_formats": [
+      "webp",
+      "png",
+      "jpg"
+    ],
+    "thumbnail": null,
+    "min_panels": null,
+    "recommended_min_pages": null,
+    "max_pages": null,
+    "notes": [
+      "No platform-specific hard limits are applied."
+    ]
+  },
+  "verdict": "pass",
+  "delivery_states": {
+    "technical_complete": true,
+    "production_complete": true,
+    "publish_ready_internal": true,
+    "publish_ready_digital": false,
+    "publish_ready_print": false,
+    "publish_ready_commercial": false
+  },
+  "artifacts": [
+    {
+      "path": "排版/第8话/pages/page_001.webp",
+      "sha256": "b00960bac0d5aed31e94ee86936e8c87542bc47d0cbdeed5d075e55055a1b398",
+      "size": 1534098,
+      "dimensions": {
+        "width": 1440,
+        "height": 5436
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_002.webp",
+      "sha256": "7ef0459002ccf73585bee851249613f82d232dfbcc8b04f16751326dc94ce5fa",
+      "size": 1427924,
+      "dimensions": {
+        "width": 1440,
+        "height": 4796
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_003.webp",
+      "sha256": "26204db318398d01efa1e8514dff572d083959deb74592dc565ac7f07585ca04",
+      "size": 1616566,
+      "dimensions": {
+        "width": 1440,
+        "height": 5316
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_004.webp",
+      "sha256": "d4c64eba824aafdbbfce98b78e6b64352b6b0dc29791c6f7a95a3f99cb95a303",
+      "size": 1455470,
+      "dimensions": {
+        "width": 1440,
+        "height": 5016
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_005.webp",
+      "sha256": "ce025fc251400cf73611b5657f6dbfde984d57582f40488eadec3283796aeba5",
+      "size": 1678030,
+      "dimensions": {
+        "width": 1440,
+        "height": 5532
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_006.webp",
+      "sha256": "08022a36a9153823c973df8c6eb6790ab651ccbd4f2f592ecbb7942c7722b53d",
+      "size": 1639246,
+      "dimensions": {
+        "width": 1440,
+        "height": 5016
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_007.webp",
+      "sha256": "430f017508a3f34c36d77ea1201b4a51ccd14c271bf81a7b07c9d37bcd1bbcfc",
+      "size": 1789562,
+      "dimensions": {
+        "width": 1440,
+        "height": 5516
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/pages/page_008.webp",
+      "sha256": "3dad5055d7ba204b0b40d3cd7d3e8e68b94d47f4fee251dda45b3aeafff3f69b",
+      "size": 1809056,
+      "dimensions": {
+        "width": 1440,
+        "height": 5760
+      },
+      "format": "webp",
+      "manifest_sections": [
+        "pages"
+      ]
+    },
+    {
+      "path": "排版/第8话/长图/longstrip.png",
+      "sha256": "759f5d14224d9786b5892a7a5cf4e0484c9cf2a4981ad51b3cf252219c671f71",
+      "size": 77471403,
+      "dimensions": {
+        "width": 1440,
+        "height": 42556
+      },
+      "format": "png",
+      "manifest_sections": [
+        "rendered"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "code": "release_acceptance_missing",
+      "reason": "发布候选缺 SHA 绑定的人工签收。",
+      "domain": "release",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    },
+    {
+      "code": "source_status_unverified",
+      "reason": "source_status=user_declared_with_provenance；公开/印刷/商用交付必须显式声明原创、自有、公版、已授权、开源许可或不适用。",
+      "domain": "rights",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    },
+    {
+      "code": "font_status_unverified",
+      "reason": "font_status=pending_before_publish；公开/印刷/商用交付必须显式声明原创、自有、公版、已授权、开源许可或不适用。",
+      "domain": "rights",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    },
+    {
+      "code": "asset_status_unverified",
+      "reason": "asset_status=pending_before_publish；公开/印刷/商用交付必须显式声明原创、自有、公版、已授权、开源许可或不适用。",
+      "domain": "rights",
+      "blocking_profiles": [
+        "digital",
+        "print",
+        "commercial"
+      ]
+    }
+  ]
+}

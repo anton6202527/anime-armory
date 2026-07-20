@@ -2,9 +2,7 @@
   "artifact_namespace": {
     "available": true,
     "declared_targets": 44,
-    "notes": [
-      "本集图片目录不存在。"
-    ],
+    "notes": [],
     "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/prompt/01_分镜出图.md",
     "stale": []
   },
@@ -58,18 +56,24 @@
       "available": true,
       "characters": {
         "CHAR_01__常态": {
+          "ep_mean_score": 0.4569,
+          "ep_n_shots": 7,
           "floor": 0.3977,
           "floor_calibrated": true,
           "has_main": true,
           "intra_pairs": 4
         },
         "CHAR_02__常态": {
-          "floor": 0.8975,
+          "ep_mean_score": 0.4679,
+          "ep_n_shots": 2,
+          "floor": 0.3691,
           "floor_calibrated": true,
           "has_main": true,
-          "intra_pairs": 2
+          "intra_pairs": 4
         },
         "CHAR_04__常态": {
+          "ep_mean_score": 0.1362,
+          "ep_n_shots": 5,
           "floor": 0.8872,
           "floor_calibrated": true,
           "has_main": true,
@@ -83,7 +87,220 @@
       "notes": [
         "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
       ],
-      "shots": []
+      "shots": [
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_04__常态",
+          "face_idx": 0,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 0,
+                "score": 0.7324
+              },
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 1,
+                "score": 0.4929
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__常态"
+            ],
+            "missing_chars": [
+              "CHAR_04__常态"
+            ],
+            "swap_suspected": true
+          },
+          "floor": 0.8872,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-20T08:08:43+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已查看当前4K尾帧并与CHAR_04虎脸锚及本镜首/中段锚比对：虎额白斑、眼眶虎纹、耳鼻口和虎头人身结构一致；非人虎脸导致InsightFace低分。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/Clip01_end.png",
+          "score": 0.1555,
+          "score_vs_main": 0.1196,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_04__常态",
+          "face_idx": 1,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 0,
+                "score": 0.6423
+              },
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 1,
+                "score": 0.4582
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__常态"
+            ],
+            "missing_chars": [
+              "CHAR_04__常态"
+            ],
+            "swap_suspected": true
+          },
+          "floor": 0.8872,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-20T07:45:13+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已查看当前4K原图并与CHAR_04虎脸锚逐项比对：额心白斑、眼眶黑纹、耳位、鼻口与虎纹身份一致；InsightFace用于非人虎脸产生低分属误报。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/Clip01_first.png",
+          "score": 0.1218,
+          "score_vs_main": 0.0891,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_04__常态",
+          "face_idx": 1,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 0,
+                "score": 0.4225
+              },
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 1,
+                "score": 0.6904
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__常态"
+            ],
+            "missing_chars": [
+              "CHAR_04__常态"
+            ],
+            "swap_suspected": true
+          },
+          "floor": 0.8872,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-20T09:09:55+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已查看当前4K原图并与CHAR_04虎脸锚及已验收Clip01比对：吊睛白额、眼眶虎纹、耳鼻口比例与虎头人身结构一致；本镜仅改变为远后景仰卧伪死姿态，InsightFace对非人虎脸低分属误报。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/Clip02_first.png",
+          "score": 0.2392,
+          "score_vs_main": 0.1935,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__常态",
+          "face_idx": 1,
+          "floor": 0.3977,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first.png",
+          "score": 0.6276,
+          "score_vs_main": 0.5342,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_04__常态",
+          "face_idx": 1,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 0,
+                "score": 0.6629
+              },
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 1,
+                "score": 0.5016
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__常态"
+            ],
+            "missing_chars": [
+              "CHAR_04__常态"
+            ],
+            "swap_suspected": true
+          },
+          "floor": 0.8872,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-20T07:59:17+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已查看当前4K中段锚帧并与CHAR_04虎脸锚及已验收首帧比对：额心白斑、眼眶虎纹、耳位、鼻口和人形虎首一致；非人虎脸导致InsightFace低分。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.1464,
+          "score_vs_main": 0.1109,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_04__常态",
+          "face_idx": 1,
+          "face_swap": {
+            "assignments": [
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 0,
+                "score": 0.461
+              },
+              {
+                "char": "CHAR_01__常态",
+                "face_idx": 1,
+                "score": 0.7256
+              }
+            ],
+            "duplicate_chars": [
+              "CHAR_01__常态"
+            ],
+            "missing_chars": [
+              "CHAR_04__常态"
+            ],
+            "swap_suspected": true
+          },
+          "floor": 0.8872,
+          "floor_calibrated": true,
+          "manual_confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
+          "manual_confirmed": true,
+          "manual_confirmed_at": "2026-07-20T09:25:47+00:00",
+          "manual_original_verdict": "block",
+          "manual_reason": "已查看当前4K中段锚并与Clip02首帧及CHAR_04虎脸锚比对：虎山神保持同一吊睛白额、眼眶条纹、耳鼻口和虎头人身比例，仅为轻微推镜下的倒地伪死姿态；非人虎脸导致InsightFace低分属误报。",
+          "manual_reviewer": "Codex视觉执行者",
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.2077,
+          "score_vs_main": 0.1681,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__常态",
+          "face_idx": 1,
+          "floor": 0.3977,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.6693,
+          "score_vs_main": 0.5405,
+          "verdict": "ok"
+        }
+      ]
     },
     "hair": {
       "available": true,
@@ -93,8 +310,8 @@
           "intra_pairs": 6
         },
         "CHAR_02__常态": {
-          "floor": 0.18,
-          "intra_pairs": 3
+          "floor": 0.1059,
+          "intra_pairs": 6
         },
         "CHAR_04__常态": {
           "floor": 0.9135,
@@ -105,13 +322,69 @@
       "min_group": 3,
       "notes": [],
       "rel_margin": 0.15,
-      "shots": []
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9135,
+          "png": "图片/Clip01_end.png",
+          "score": 0.525,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9135,
+          "png": "图片/Clip01_first.png",
+          "score": 0.4713,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9135,
+          "png": "图片/Clip02_first.png",
+          "score": 0.6684,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__常态",
+          "floor": 0.3196,
+          "png": "图片/Clip03_first.png",
+          "score": 0.4462,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9135,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.4509,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9135,
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.5089,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_02__常态",
+          "floor": 0.1059,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.1019,
+          "verdict": "warn"
+        }
+      ]
     },
     "human_anatomy": {
       "available": true,
       "extra_threshold": 6,
+      "locator": "肤色启发",
       "notes": [
-        "本集无分镜 PNG。"
+        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
       ],
       "shots": []
     },
@@ -188,6 +461,8 @@
         "CHAR_02",
         "CHAR_02__常态",
         "CHAR_02__常态_脸部特写_脸锚裁切",
+        "CHAR_02__常态_45度",
+        "CHAR_02__常态_后45度",
         "虎山神",
         "CHAR_04",
         "CHAR_04__常态",
@@ -198,7 +473,36 @@
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第1集",
-      "groups": {},
+      "groups": {
+        "LOC_01": {
+          "median_dist": 0.478,
+          "shots": 3
+        },
+        "PROP_断刀": {
+          "shots": 2,
+          "skipped": "组<3镜"
+        },
+        "PROP_横刀": {
+          "median_dist": 0.478,
+          "shots": 3
+        },
+        "PROP_翻覆囚车": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "VFX_百妖谱": {
+          "median_dist": 0.478,
+          "shots": 3
+        },
+        "VFX_黑妖血": {
+          "shots": 2,
+          "skipped": "组<3镜"
+        },
+        "WEAPON_01": {
+          "median_dist": 0.478,
+          "shots": 3
+        }
+      },
       "kind": "n2d_multimodal_consistency_report",
       "notes": [],
       "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
@@ -214,8 +518,8 @@
           "intra_pairs": 6
         },
         "CHAR_02__常态": {
-          "floor": 0.204,
-          "intra_pairs": 3
+          "floor": 0.0575,
+          "intra_pairs": 6
         },
         "CHAR_04__常态": {
           "floor": 0.9084,
@@ -226,31 +530,134 @@
       "min_group": 3,
       "notes": [],
       "rel_margin": 0.15,
-      "shots": []
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9084,
+          "png": "图片/Clip01_end.png",
+          "score": 0.465,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9084,
+          "png": "图片/Clip01_first.png",
+          "score": 0.4708,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9084,
+          "png": "图片/Clip02_first.png",
+          "score": 0.6427,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__常态",
+          "costume_change_expected": "囚途残损无血→面颊血污→杀裴后人血增加→斩虎后反噬虚脱；始终黑发黑瞳无虎纹。",
+          "floor": 0.1408,
+          "png": "图片/Clip03_first.png",
+          "score": 0.4862,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9084,
+          "png": "图片/EP01_CLIP01_a1.png",
+          "score": 0.407,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_04__常态",
+          "floor": 0.9084,
+          "png": "图片/EP01_CLIP02_a1.png",
+          "score": 0.4713,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__常态",
+          "costume_change_expected": "囚途残损无血→面颊血污→杀裴后人血增加→斩虎后反噬虚脱；始终黑发黑瞳无虎纹。",
+          "floor": 0.1408,
+          "png": "图片/EP01_CLIP03_a1.png",
+          "score": 0.4088,
+          "verdict": "ok"
+        }
+      ]
     },
     "scene": {
       "available": true,
-      "groups": {},
+      "groups": {
+        "荒野押解/虎妖现场": {
+          "constraints": {
+            "axis_rules": "官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。",
+            "face_policy": "faceless",
+            "layout": "官道由正机位下端向上端纵深延伸并呈轻微S弯；世界西侧为低黄土坡与唯一分叉枯树，世界东侧为浅沟与唯一三角深灰巨石；断木、麻绳、暗血尘集中在道路下半至中段。",
+            "light_anchor": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
+            "lighting_signature": {
+              "color_temperature": "mixed_cool_warm",
+              "key_light_direction": "left",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "controlled",
+              "source_text": "阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。；阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 25.8,
+          "registered_id": "LOC_01",
+          "shots": 7
+        }
+      },
       "impact_physics": [],
-      "notes": [],
+      "notes": [
+        "场景[荒野押解/虎妖现场] 已注册layout：官道由正机位下端向上端纵深延伸并呈轻微S弯；世界西侧为低黄土坡与唯一分叉枯树，世界东侧为浅沟与唯一三角深灰巨石；断木、麻绳、暗血尘集中在道路下半至中段。。验收时请重点核对。",
+        "场景[荒野押解/虎妖现场] 已注册light_anchor：阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。。验收时请重点核对。",
+        "场景[荒野押解/虎妖现场] 已注册axis_rules：官道纵深为主轴；虎妖从画面上方后景向下逼近，姜月初画左、裴长青画右；二人看虎妖均向上后景。。验收时请重点核对。",
+        "场景[荒野押解/虎妖现场] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[荒野押解/虎妖现场] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[荒野押解/虎妖现场] 已注册lighting_signature：{'color_temperature': 'mixed_cool_warm', 'saturation_profile': 'controlled', 'key_light_direction': 'left', 'source_text': '阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。；阴冷清晨侧逆光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
+      ],
       "shots": []
     },
     "seam": {
-      "availability_reason": "no_episode_images",
-      "available": false,
-      "notes": [
-        "无 /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片——出图后再跑接缝机检。"
-      ],
-      "seams": []
+      "availability_reason": "ready",
+      "available": true,
+      "contradictions": [],
+      "notes": [],
+      "seams": [
+        {
+          "action_shift": 0.021,
+          "action_verdict": null,
+          "color_dist": 0.0486,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 35,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_first.png",
+          "relative_outlier": false,
+          "seam_mode": "intentional_discontinuity",
+          "struct_verdict": "block",
+          "tail": "Clip01_end.png",
+          "transition": "时间回切。",
+          "verdict": "info"
+        }
+      ]
     }
   },
   "cross_episode_face_drift": {
     "available": true,
     "entries": [],
-    "history_chars": 0,
-    "notes": [
-      "无跨集历史（首集或降级精度未累积均值）"
-    ]
+    "history_chars": 3
   },
   "episode": "第1集",
   "face_anchor_lighting": {
@@ -265,89 +672,60 @@
   },
   "face_human_review": [],
   "face_manual_confirmations": {
-    "applied": 0,
+    "applied": 5,
     "available": true,
-    "configured": 0,
+    "configured": 5,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/face_confirmations.json",
-    "rows": []
+    "rows": [
+      {
+        "char": "CHAR_04__常态",
+        "original_verdict": "block",
+        "png": "图片/Clip01_end.png",
+        "reason": "已查看当前4K尾帧并与CHAR_04虎脸锚及本镜首/中段锚比对：虎额白斑、眼眶虎纹、耳鼻口和虎头人身结构一致；非人虎脸导致InsightFace低分。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.1555
+      },
+      {
+        "char": "CHAR_04__常态",
+        "original_verdict": "block",
+        "png": "图片/Clip01_first.png",
+        "reason": "已查看当前4K原图并与CHAR_04虎脸锚逐项比对：额心白斑、眼眶黑纹、耳位、鼻口与虎纹身份一致；InsightFace用于非人虎脸产生低分属误报。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.1218
+      },
+      {
+        "char": "CHAR_04__常态",
+        "original_verdict": "block",
+        "png": "图片/Clip02_first.png",
+        "reason": "已查看当前4K原图并与CHAR_04虎脸锚及已验收Clip01比对：吊睛白额、眼眶虎纹、耳鼻口比例与虎头人身结构一致；本镜仅改变为远后景仰卧伪死姿态，InsightFace对非人虎脸低分属误报。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.2392
+      },
+      {
+        "char": "CHAR_04__常态",
+        "original_verdict": "block",
+        "png": "图片/EP01_CLIP01_a1.png",
+        "reason": "已查看当前4K中段锚帧并与CHAR_04虎脸锚及已验收首帧比对：额心白斑、眼眶虎纹、耳位、鼻口和人形虎首一致；非人虎脸导致InsightFace低分。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.1464
+      },
+      {
+        "char": "CHAR_04__常态",
+        "original_verdict": "block",
+        "png": "图片/EP01_CLIP02_a1.png",
+        "reason": "已查看当前4K中段锚并与Clip02首帧及CHAR_04虎脸锚比对：虎山神保持同一吊睛白额、眼眶条纹、耳鼻口和虎头人身比例，仅为轻微推镜下的倒地伪死姿态；非人虎脸导致InsightFace低分属误报。",
+        "reviewer": "Codex视觉执行者",
+        "score": 0.2077
+      }
+    ]
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 0,
+    "covered": 7,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_04/常态"
-        ],
-        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-        "png": "出图/第1集/图片/Clip01_first.png",
-        "shot": "Clip_01"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_04/常态"
-        ],
-        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-        "png": "出图/第1集/图片/EP01_CLIP01_a1.png",
-        "shot": "Clip_01"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_04/常态"
-        ],
-        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
-        "png": "出图/第1集/图片/Clip01_end.png",
-        "shot": "Clip_01"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_04/常态"
-        ],
-        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
-        "png": "出图/第1集/图片/Clip02_first.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_04/常态"
-        ],
-        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
-        "png": "出图/第1集/图片/EP01_CLIP02_a1.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_02/常态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
-        "png": "出图/第1集/图片/Clip03_first.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/常态",
-          "CHAR_02/常态"
-        ],
-        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
-        "png": "出图/第1集/图片/EP01_CLIP03_a1.png",
-        "shot": "Clip_03"
-      },
       {
         "face_coverage_required": true,
         "identity_refs": [
@@ -628,7 +1006,7 @@
       }
     ],
     "precision_level": "full",
-    "required": 0,
+    "required": 7,
     "skipped": [
       {
         "label": "镜头 10（`EP01_CLIP10` · 一刀斩虎与反噬 · fight_exchange）",
@@ -696,9 +1074,9 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "dca449d354c602100cfee4516c95105e8ded49503b4503b5db42a17fa16b840e",
-      "出图/共享/identity_registry.json": "b1d02f048ac5328bd5b69502d8723ef1ef4e7bb10fae16a7d1b4f56c4608321d",
-      "出图/共享/style_anchor_registry.json": "3e25a9605e6281e1def35fdda8d1e318e7beb8434f1e349cac2baa5e9f76a8a4",
+      "出图/共享/asset_registry.json": "28c1dce353f2794253261761c6888c2fa5d09bb48707e279116f3557aa553211",
+      "出图/共享/identity_registry.json": "0b0e81dbb73d6f8aeaba909e22509856461d3255e450606dbfa5fc03e0aae9af",
+      "出图/共享/style_anchor_registry.json": "98ec5185a503bb5ea5c87dd3963f5421399019f611e6f4ebd70873408031502b",
       "出图/共享/图片/定妆_武器_横刀.png": "cb194704b70ee11165f1112e90db21074ced9316baa8c0183888b58ad432f159",
       "出图/共享/图片/定妆_特效_百妖谱.png": "0af7a1e9933799ab39aa976e21afc734cfdbe3852bf29394a4ff467083256046",
       "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png": "be948d1aa5595956ed2b46910370eb4a217d453e1fedf657f10f23438d1c4b8f",
@@ -710,12 +1088,19 @@
       "出图/共享/图片/定妆_道具_虎首.png": "c2f4022b5a07b9f6ca2e1a67ea12dcfc8bd5e1a2e4951150cb2c3abcf7e60134",
       "出图/共享/图片/风格锚_黑赤镇魔水墨妖谱.png": "7943cb3f18d25ae3ba700e13a256b07f88bec7e725afabe035432b6c31e1a825",
       "出图/第1集/prompt/00_总览.md": "a9b61d6f7b1c1aeec31a89fa2413c3065bc5e049f15d903666073bd9aa47588c",
-      "出图/第1集/prompt/01_分镜出图.md": "b4c00b8f90f24ae73b485a4e96cc8cceab6b931eed7ccd0c1114cf6e5128800e",
-      "生产数据/image_qc/第1集/face_confirmations.json": null,
+      "出图/第1集/prompt/01_分镜出图.md": "cc53940dc2fbac6e6c85db24a1eb1832aae89cd72611fe4047eaee79f67e792d",
+      "出图/第1集/图片/Clip01_end.png": "8e4c04ba60e6cb5d164e3e782c10e0efd4765986c3c3fd8f73c34b3a92e63960",
+      "出图/第1集/图片/Clip01_first.png": "2b2b2a0b0a9611c43e9a91c35c42df14e3fb2ffa9a4fcb81329e6673d24714fc",
+      "出图/第1集/图片/Clip02_first.png": "35883e0b4643d9ecae5acee7e5c109db0861a723dec620a615b9482951aba99d",
+      "出图/第1集/图片/Clip03_first.png": "012a48c0e3d330915e06451418ba66e6f9151dcc66c6c671d8330f1beec5edf2",
+      "出图/第1集/图片/EP01_CLIP01_a1.png": "044f38fdaf3ec8d2b6eec391203318f021e277b5088e123acdc7fc3b8ba6633c",
+      "出图/第1集/图片/EP01_CLIP02_a1.png": "d2019c424abe22f3e64186d00ae2faf1634b55c422d9dd531ab089de1128972f",
+      "出图/第1集/图片/EP01_CLIP03_a1.png": "3297d993d9f935ca8868e08fbfe626bba0f2f61f12a837944b5eb9bf028bc7de",
+      "生产数据/image_qc/第1集/face_confirmations.json": "950aa1adb287f2fcb4fd33576e092320867a78d288c3df03f96ac1705268c2a9",
       "生产数据/image_qc/第1集/human_image_review.json": null,
-      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "08a62f6fbfc80a91283a2751e593203e51bb7498ec2c92e0dbb7ab6cad274be6"
+      "生产数据/image_qc/第1集/prop_shape_confirmations.json": "6546341c3ce9b1c74b9d72c6f63cf15d803995b16cb1a91a4fda191c9da37c38"
     },
-    "sha": "6b5e9a362db6b4b4610216d6474e98510f404cab5bf5f1aa61befbf94bf24226"
+    "sha": "54e675c880f121fed3ede22a4c8ed3f70ad2cbb93129075001ddec79f4fcaf99"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1173,7 +1558,17 @@
       {
         "code": "turnaround_misaligned",
         "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_02/常态：身体中心线不齐：rear_three_quarter(0.396) vs front(0.493)，差 0.097>0.055；视平线不齐：front(0.12) vs rear_three_quarter(0.46)，跨视图脸中心高度差 34%>6%；比例不一：front 脸高是 side 的 4.22 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
         "msg": "多视图对齐初筛异常 CHAR_04/常态：视平线不齐：three_quarter(0.09) vs rear_three_quarter(0.64)，跨视图脸中心高度差 56%>6%；比例不一：three_quarter 脸高是 side 的 4.94 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
       }
     ],
     "notes": [],
@@ -1190,7 +1585,7 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
-    "confirmed": 9,
+    "confirmed": 20,
     "pending": 0,
     "targets": [
       {
@@ -1243,7 +1638,7 @@
         "asset_type": "prop",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
         "confirmed": true,
-        "contract_fingerprint": "d97c41b74b1e0f16f33a7c4c8dd321f9186b84e081126979779ae6242a3e4875",
+        "contract_fingerprint": "cbcd1c376e5fe741f52fe84b758f1985c22acdb5c101aedf3fa6614f0361f3d7",
         "label": "共享主参考·翻覆囚车",
         "must_not_have": [
           "现代物件",
@@ -1258,7 +1653,8 @@
         "scale": "None",
         "scope": "shared_primary",
         "shape_contract": [
-          "唐代边塞押解用双轮粗木槛车：窄长板舆",
+          "唐代边塞押解用双轮粗木槛车",
+          "窄长板舆",
           "两只大型木辐条轮",
           "前伸双辕",
           "低矮木栏与暗铁箍",
@@ -1267,8 +1663,10 @@
           "一轮受压",
           "右侧轮轴折断",
           "栏杆局部断裂",
-          "麻绳散落",
-          "始终只有一辆车的单一连续残骸"
+          "麻绳散落。始终是一辆车的单一残骸",
+          "不得变西式封闭篷车",
+          "四轮马车",
+          "刑笼高塔或现代囚车"
         ],
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_翻覆囚车_shared_primary_定妆_道具_翻覆囚车_compare.png",
@@ -1529,9 +1927,617 @@
         "shot": "shared_primary",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_shared_primary_定妆_武器_横刀_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_横刀",
+        "asset_name": "横刀",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "0cf2e48d7003b7b36717d3d0ea7e9d9a375ba493fca049bcce5e036dd25c231c",
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "唐制语汇直身单刃",
+          "细黑缠柄",
+          "克制实战刀",
+          "至少做完整侧视",
+          "握持角度",
+          "落地角度",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_横刀_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_横刀",
+        "asset_name": "横刀",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "0cf2e48d7003b7b36717d3d0ea7e9d9a375ba493fca049bcce5e036dd25c231c",
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip01_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "唐制语汇直身单刃",
+          "细黑缠柄",
+          "克制实战刀",
+          "至少做完整侧视",
+          "握持角度",
+          "落地角度",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_横刀_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 1（`EP01_CLIP01` · 刀口为何对准人 · ）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip01_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_断刀",
+        "asset_name": "断刀",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "b28cab5b111f37ac31bf603bd86c73c339f762934428e3bb32acd537b58ba0dc",
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_断刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "broken_blade=1",
+          "cutting_edge_count=1",
+          "残存刀身保持单面刃与厚钝刀背",
+          "断口粗粝且明确终止",
+          "断口之后不得补出刀尖",
+          "完整刀身",
+          "第二把刀刃或实体光刃",
+          "jagged_break=1",
+          "仅一把断裂横刀",
+          "断口之后不得续出完整刀身或第二把刀",
+          "裴长青掷出的半截断刀",
+          "开局插在姜月初脚前",
+          "后续不得变成完整横刀",
+          "断口只允许少量冷光",
+          "血尘边缘高光",
+          "不得生长实体刀刃"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_断刀_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_横刀",
+        "asset_name": "横刀",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "0cf2e48d7003b7b36717d3d0ea7e9d9a375ba493fca049bcce5e036dd25c231c",
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "唐制语汇直身单刃",
+          "细黑缠柄",
+          "克制实战刀",
+          "至少做完整侧视",
+          "握持角度",
+          "落地角度",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_横刀_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_翻覆囚车",
+        "asset_name": "翻覆囚车",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "cbcd1c376e5fe741f52fe84b758f1985c22acdb5c101aedf3fa6614f0361f3d7",
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_翻覆囚车.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "唐代边塞押解用双轮粗木槛车",
+          "窄长板舆",
+          "两只大型木辐条轮",
+          "前伸双辕",
+          "低矮木栏与暗铁箍",
+          "向右侧翻覆",
+          "一轮高悬",
+          "一轮受压",
+          "右侧轮轴折断",
+          "栏杆局部断裂",
+          "麻绳散落。始终是一辆车的单一残骸",
+          "不得变西式封闭篷车",
+          "四轮马车",
+          "刑笼高塔或现代囚车"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_翻覆囚车_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 2（`EP01_CLIP02` · 十分钟前的荒野死局 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_断刀",
+        "asset_name": "断刀",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "b28cab5b111f37ac31bf603bd86c73c339f762934428e3bb32acd537b58ba0dc",
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_断刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "broken_blade=1",
+          "cutting_edge_count=1",
+          "残存刀身保持单面刃与厚钝刀背",
+          "断口粗粝且明确终止",
+          "断口之后不得补出刀尖",
+          "完整刀身",
+          "第二把刀刃或实体光刃",
+          "jagged_break=1",
+          "仅一把断裂横刀",
+          "断口之后不得续出完整刀身或第二把刀",
+          "裴长青掷出的半截断刀",
+          "开局插在姜月初脚前",
+          "后续不得变成完整横刀",
+          "断口只允许少量冷光",
+          "血尘边缘高光",
+          "不得生长实体刀刃"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_断刀_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_横刀",
+        "asset_name": "横刀",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "0cf2e48d7003b7b36717d3d0ea7e9d9a375ba493fca049bcce5e036dd25c231c",
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "唐制语汇直身单刃",
+          "细黑缠柄",
+          "克制实战刀",
+          "至少做完整侧视",
+          "握持角度",
+          "落地角度",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/PROP_横刀_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 3（`EP01_CLIP03` · 以脱籍换搀扶 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/第1集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 9
+    "total": 20
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -1546,8 +2552,44 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "semantic_drift": {
     "available": true,
-    "compared": 0,
-    "findings": [],
+    "compared": 7,
+    "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_04__常态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_04__常态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.23 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_04__常态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.19 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__常态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.52 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_04__常态」↔ 本镜 图片/EP01_CLIP01_a1.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_04__常态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.19 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__常态」↔ 本镜 图片/EP01_CLIP03_a1.png DINO/CLIP cosine=0.53 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      }
+    ],
     "floor": 0.55
   },
   "shot_scale_contract": {
@@ -1578,7 +2620,9 @@
       "血污",
       "觉醒"
     ],
-    "not_injected_markers": []
+    "not_injected_markers": [
+      "血污"
+    ]
   },
   "style_attribution": {
     "anchor_fingerprint": {
@@ -1587,8 +2631,14 @@
       "sat": 53.0
     },
     "anchor_status": "ok",
-    "available": false,
-    "checked": 0,
+    "available": true,
+    "checked": 7,
+    "distance": 0.527,
+    "episode_fingerprint": {
+      "contrast": 144.0,
+      "edge": 29.5,
+      "sat": 24.0
+    },
     "findings": [],
     "intent": {
       "anchors": [
@@ -1607,13 +2657,10 @@
         "烤字",
         "水印Logo"
       ]
-    },
-    "notes": [
-      "本集无可测出图帧（或 Pillow 不可用）——风格归属跳过。"
-    ]
+    }
   },
   "summary": {
-    "advisory": 1,
+    "advisory": 11,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1624,14 +2671,14 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
+        "ok": 7,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
-        "warn": 0
+        "ok": 6,
+        "warn": 1
       },
       "human_anatomy": {
         "block": 0,
@@ -1643,7 +2690,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 3
       },
       "multimodal": {
         "block": 0,
@@ -1654,7 +2701,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 0,
+        "ok": 7,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1674,32 +2721,196 @@
         "noface": 0,
         "ok": 0,
         "warn": 0
+      },
+      "semantic_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 7
       }
     },
-    "degraded": true,
+    "degraded": false,
     "hard_blocks": 0,
-    "unavailable_visual_checks": [
-      "seam"
-    ],
+    "unavailable_visual_checks": [],
     "verdict": "review"
   },
   "tone_light_contract": {
-    "available": false,
-    "checked": 0,
+    "available": true,
+    "checked": 7,
     "findings": [],
     "intent": {
       "brightness": "dark",
       "evidence": "冷灰、土褐、墨黑；人血暗红、妖血黑墨；百妖谱只在反馈用朱砂与少量金。",
       "warmth": "cool"
     },
-    "notes": [
-      "本集无可测出图帧（或 Pillow 不可用）——色调/光位像素兜底跳过。"
-    ]
+    "luma_median": 66.2,
+    "warmth_median": 0.1
   },
   "turnaround_alignment": {
     "available": true,
     "checked_forms": 3,
     "findings": [
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              190,
+              186,
+              190
+            ],
+            "bbox_normalized": [
+              0.0,
+              0.0266,
+              0.8083,
+              0.9703
+            ],
+            "border_delta_p90": 25,
+            "centerline": 0.4042,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9703,
+            "head_top": 0.0266,
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9437,
+            "subject_width": 0.8083
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              188,
+              183,
+              189
+            ],
+            "bbox_normalized": [
+              0.4062,
+              0.0222,
+              0.5797,
+              0.9667
+            ],
+            "border_delta_p90": 19,
+            "centerline": 0.493,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9667,
+            "head_top": 0.0222,
+            "image_size": {
+              "height": 941,
+              "width": 1672
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9444,
+            "subject_width": 0.1734
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              192,
+              190,
+              192
+            ],
+            "bbox_normalized": [
+              0.0,
+              0.0,
+              0.7917,
+              0.975
+            ],
+            "border_delta_p90": 27,
+            "centerline": 0.3958,
+            "confidence": "heuristic",
+            "foot_bottom": 0.975,
+            "head_top": 0.0,
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.975,
+            "subject_width": 0.7917
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              182,
+              180,
+              185
+            ],
+            "bbox_normalized": [
+              0.0,
+              0.0,
+              0.8056,
+              0.975
+            ],
+            "border_delta_p90": 28,
+            "centerline": 0.4028,
+            "confidence": "heuristic",
+            "foot_bottom": 0.975,
+            "head_top": 0.0,
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.975,
+            "subject_width": 0.8056
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              194,
+              190,
+              192
+            ],
+            "bbox_normalized": [
+              0.0,
+              0.0,
+              0.7972,
+              0.9859
+            ],
+            "border_delta_p90": 27,
+            "centerline": 0.3986,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9859,
+            "head_top": 0.0,
+            "image_size": {
+              "height": 5404,
+              "width": 3040
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9859,
+            "subject_width": 0.7972
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "front": [
+            0.1238,
+            0.0818
+          ],
+          "rear_three_quarter": [
+            0.4633,
+            0.022
+          ],
+          "side": [
+            0.1531,
+            0.0194
+          ],
+          "three_quarter": [
+            0.1261,
+            0.0786
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_02/常态：身体中心线不齐：rear_three_quarter(0.396) vs front(0.493)，差 0.097>0.055；视平线不齐：front(0.12) vs rear_three_quarter(0.46)，跨视图脸中心高度差 34%>6%；比例不一：front 脸高是 side 的 4.22 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
       {
         "body_views": {
           "back": {
@@ -2114,11 +3325,46 @@
         },
         "views": {
           "back": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "human_review": {
+              "expected_registry_binding_fingerprint": "ff5966c51ef5880964573c0a3ef81c60184a22eafe1db378612532df1a5665cb",
+              "png_sha256": "63275cc04a8bb60d2c1ab9b81c6b48490eef4ef421f77d4f62cb43ce18ed2704",
+              "reasons": [],
+              "registry_binding_fingerprint": "ff5966c51ef5880964573c0a3ef81c60184a22eafe1db378612532df1a5665cb",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-20T06:19:51+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
             },
-            "path": null,
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                190,
+                186,
+                190
+              ],
+              "bbox_normalized": [
+                0.0,
+                0.0266,
+                0.8083,
+                0.9703
+              ],
+              "border_delta_p90": 25,
+              "centerline": 0.4042,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9703,
+              "head_top": 0.0266,
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9437,
+              "subject_width": 0.8083
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__常态_背.png",
+            "png_sha256": "63275cc04a8bb60d2c1ab9b81c6b48490eef4ef421f77d4f62cb43ce18ed2704",
             "view": "back"
           },
           "front": {
@@ -2170,27 +3416,147 @@
             "view": "front"
           },
           "rear_three_quarter": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "face_geometry": {
+              "center_y": 0.4633,
+              "confidence": "heuristic",
+              "face_height": 0.022
             },
-            "path": null,
+            "human_review": {
+              "expected_registry_binding_fingerprint": "45386b11bff265908078185ed5b048a5802940848034730ff82ec1a3b1454f81",
+              "png_sha256": "5ef04f31637153e54a2bc9eb61136e2f5b1462d226b3851d5bc89138563d0505",
+              "reasons": [],
+              "registry_binding_fingerprint": "45386b11bff265908078185ed5b048a5802940848034730ff82ec1a3b1454f81",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-20T08:15:53+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                192,
+                190,
+                192
+              ],
+              "bbox_normalized": [
+                0.0,
+                0.0,
+                0.7917,
+                0.975
+              ],
+              "border_delta_p90": 27,
+              "centerline": 0.3958,
+              "confidence": "heuristic",
+              "foot_bottom": 0.975,
+              "head_top": 0.0,
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.975,
+              "subject_width": 0.7917
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__常态_后45度.png",
+            "png_sha256": "5ef04f31637153e54a2bc9eb61136e2f5b1462d226b3851d5bc89138563d0505",
             "view": "rear_three_quarter"
           },
           "side": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "face_geometry": {
+              "center_y": 0.1531,
+              "confidence": "heuristic",
+              "face_height": 0.0194
             },
-            "path": null,
+            "human_review": {
+              "expected_registry_binding_fingerprint": "ae2abdb652bea84d03b878708cd9607bbee89a001f840179736d09fcba087522",
+              "png_sha256": "134242a0ae2436545d7c74e55b7ad0f3630e0977da6ca1ed71361eff33bcfc41",
+              "reasons": [],
+              "registry_binding_fingerprint": "ae2abdb652bea84d03b878708cd9607bbee89a001f840179736d09fcba087522",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-20T06:15:24+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                182,
+                180,
+                185
+              ],
+              "bbox_normalized": [
+                0.0,
+                0.0,
+                0.8056,
+                0.975
+              ],
+              "border_delta_p90": 28,
+              "centerline": 0.4028,
+              "confidence": "heuristic",
+              "foot_bottom": 0.975,
+              "head_top": 0.0,
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.975,
+              "subject_width": 0.8056
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__常态_侧.png",
+            "png_sha256": "134242a0ae2436545d7c74e55b7ad0f3630e0977da6ca1ed71361eff33bcfc41",
             "view": "side"
           },
           "three_quarter": {
-            "machine_evidence": {
-              "measurable": false,
-              "reason": "path_missing"
+            "face_geometry": {
+              "center_y": 0.1261,
+              "confidence": "heuristic",
+              "face_height": 0.0786
             },
-            "path": null,
+            "human_review": {
+              "expected_registry_binding_fingerprint": "da8d60392ab3b24f90355c66cdc8a1bcbb1d6378caa7ba4d8124ec386791059a",
+              "png_sha256": "bb6f5836c174310d37f205c8f1703535707b43ebfcb7f4f8b5019959b613bb38",
+              "reasons": [],
+              "registry_binding_fingerprint": "da8d60392ab3b24f90355c66cdc8a1bcbb1d6378caa7ba4d8124ec386791059a",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-20T06:02:15+00:00",
+              "reviewer": "Codex视觉执行者",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                194,
+                190,
+                192
+              ],
+              "bbox_normalized": [
+                0.0,
+                0.0,
+                0.7972,
+                0.9859
+              ],
+              "border_delta_p90": 27,
+              "centerline": 0.3986,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9859,
+              "head_top": 0.0,
+              "image_size": {
+                "height": 5404,
+                "width": 3040
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9859,
+              "subject_width": 0.7972
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__常态_45度.png",
+            "png_sha256": "bb6f5836c174310d37f205c8f1703535707b43ebfcb7f4f8b5019959b613bb38",
             "view": "three_quarter"
           }
         }

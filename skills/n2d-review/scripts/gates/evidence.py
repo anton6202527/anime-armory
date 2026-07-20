@@ -87,6 +87,20 @@ def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
         if rel:
             latest_by_asset[rel] = (idx, event)
     final_rels = _final_media_rels(root, ep, audited_stages)
+    # A pre-spend gate may run before this episode has produced any final media.
+    # In that state the ledger can legitimately contain shared-library build
+    # events tagged with the episode that funded them.  Those are inputs to the
+    # episode, not final episode outputs, and legacy shared events must not be
+    # mistaken for missing recipe receipts on a not-yet-generated episode.
+    # Once even one episode PNG/MP4 exists, `final_rels` is authoritative and
+    # every landed final asset remains subject to the full recipe gate.
+    if stage in {
+        "image_prompt_preflight",
+        "image_preflight",
+        "video_prompt_preflight",
+        "video_preflight",
+    } and not final_rels:
+        return
     targets = final_rels or sorted(latest_by_asset)
     if not targets:
         if _final_media_exists(root, ep, audited_stages):

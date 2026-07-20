@@ -237,20 +237,21 @@
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "4583160e3a41782c0f40253f84c16264e9e5c1b7ea94aa31efe2751a53ccc494"
+      "sha256": "cc53940dc2fbac6e6c85db24a1eb1832aae89cd72611fe4047eaee79f67e792d"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 33
+      "file_count": 45
     },
     {
       "stage": "image",
       "path": "出图/第1集/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 7
     },
     {
       "stage": "video_prompt",
@@ -291,8 +292,9 @@
     {
       "stage": "review",
       "path": "生产数据/consistency_ledger_第1集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "32f20f8607c33b2247b31b8a5dce87233806f98026aed352f0f4ce4a6ec2ae52"
     },
     {
       "stage": "review",
@@ -320,6 +322,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "33/78",
+  "last_progress_value": "52/89",
   "last_progress_state": "partial"
 }

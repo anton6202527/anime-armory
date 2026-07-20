@@ -1,0 +1,3301 @@
+{
+  "schema_version": 2,
+  "kind": "comic_panel_script",
+  "chapter": "第8话",
+  "title": "月夜围庄",
+  "working_title": "月夜围庄",
+  "status": "confirmed",
+  "chapter_contract": {
+    "path": "脚本/split_blueprint.json",
+    "chapter_contract_sha256": "f2660f34de20295668c1789ba9c3ac989dadbf2cf50ba6a570f2fb8ec0553179",
+    "status": "confirmed"
+  },
+  "source_semantics": "脚本/第8话/source_semantics.json",
+  "visual_contract": {
+    "style_baseline": "STYLE_SHUIHU_SONG_CINEMATIC",
+    "scene_anchors": {
+      "LOC_SHI_MANOR": {
+        "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+        "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+        "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。"
+      },
+      "LOC_SHAOHUA_ROAD": {
+        "spatial_layout": "山寨在画上，史家村在画下，盘山路由松石间斜贯。",
+        "lighting_anchor": "昼景薄暖日光，夜景冷月与山风。",
+        "axis_eyeline": "上山由画下至画上，下山反向。"
+      },
+      "LOC_SHAOHUA_FORT": {
+        "spatial_layout": "聚义厅居中，桌案在前，兵器架与寨门分列两侧。",
+        "lighting_anchor": "室内侧顶暖光，外景光从画右入。",
+        "axis_eyeline": "朱武居中，陈达画左，杨春画右。"
+      },
+      "LOC_VILLAGE_TAVERN": {
+        "spatial_layout": "山路边低矮酒肆，酒桌居中，门口通往画右下山路。",
+        "lighting_anchor": "黄昏油灯暖光，门外冷蓝暮色。",
+        "axis_eyeline": "王四由画左入、从画右离开。"
+      },
+      "LOC_PINE_GROVE": {
+        "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+        "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+        "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。"
+      },
+      "LOC_HUAYIN_YAMEN": {
+        "spatial_layout": "县衙公案居中，堂门画下，兵器架和衙役列于两侧。",
+        "lighting_anchor": "夜间堂内烛火暖光，门外冷月。",
+        "axis_eyeline": "县尉居画上案后，告发者画下堂前。"
+      },
+      "LOC_SHI_GARDEN": {
+        "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+        "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+        "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。"
+      }
+    },
+    "character_state_progression": {
+      "CHAR_SHI_JIN": "收礼回礼→托王四送信→中秋设宴→闻警登墙",
+      "CHAR_WANG_SI": "可靠使者→贪杯醉倒→失信撒谎",
+      "CHAR_LI_JI": "偶遇醉汉→偷信辨名→为赏告官",
+      "CHAR_COUNTY_LIEUTENANT": "收取密报→调兵→围庄"
+    },
+    "character_integrity": "同一角色继承registry脸型、发式、体态、服装与标志；回书、信囊、银两和火把不可串换或消失。",
+    "gaze_policy": "眼神落在对话者、回书、银两、酒碗、墙外火光或行动目标，不看镜头。"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "opening_hook",
+      "source_excerpt": "S096：卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "meaning_zh": "卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "text_target": "三位头领特送薄礼，谢大郎不杀之恩。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "月黑初更，两名少华山喽啰在史家庄门外递上沉甸甸的金包，史进披衣持灯。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S096"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "none",
+      "spatial_relationships": "月黑初更，两名少华山喽啰在史家庄门外递上沉甸甸的金包，史进披衣持灯。",
+      "blocking": "月黑初更，两名少华山喽啰在史家庄门外递上沉甸甸的金包，史进披衣持灯。",
+      "staging": "月黑初更，两名少华山喽啰在史家庄门外递上沉甸甸的金包，史进披衣持灯。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "三位头领特送薄礼，谢大郎不杀之恩。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "hesitation",
+      "source_excerpt": "S096：卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "meaning_zh": "卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "text_target": "救人不是为金。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进打开包裹，三十两蒜条金在灯下发亮，他先抬手推回。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S096"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P001",
+      "spatial_relationships": "史进打开包裹，三十两蒜条金在灯下发亮，他先抬手推回。",
+      "blocking": "史进打开包裹，三十两蒜条金在灯下发亮，他先抬手推回。",
+      "staging": "史进打开包裹，三十两蒜条金在灯下发亮，他先抬手推回。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "救人不是为金。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "choice",
+      "source_excerpt": "S096：卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "meaning_zh": "卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "text_target": "既是一片好意，便留下。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进沉吟片刻收下金子，命庄客摆酒招待送礼喽啰。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S096"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P002",
+      "spatial_relationships": "史进沉吟片刻收下金子，命庄客摆酒招待送礼喽啰。",
+      "blocking": "史进沉吟片刻收下金子，命庄客摆酒招待送礼喽啰。",
+      "staging": "史进沉吟片刻收下金子，命庄客摆酒招待送礼喽啰。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "既是一片好意，便留下。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "exchange",
+      "source_excerpt": "S096：卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "meaning_zh": "卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "text_target": "替我多谢三位头领。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "送礼喽啰酒足离庄，史进反赏碎银，暗夜中双方抱拳。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S096"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P003",
+      "spatial_relationships": "送礼喽啰酒足离庄，史进反赏碎银，暗夜中双方抱拳。",
+      "blocking": "送礼喽啰酒足离庄，史进反赏碎银，暗夜中双方抱拳。",
+      "staging": "送礼喽啰酒足离庄，史进反赏碎银，暗夜中双方抱拳。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "替我多谢三位头领。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "montage",
+      "source_excerpt": "S096：卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "meaning_zh": "卻說朱武等三人歸到寨中坐下，朱武道：「我們不是這條苦計，怎得性命在此？雖然救了一人，卻也難得史進為義氣上，放了我們。過幾日備些禮物送去，謝他救命之恩。」話休絮繁。過了十數日，朱武等三人收拾得三十兩蒜條金，使兩個小嘍囉，乘月黑夜送去史家莊上，當夜初更時分，小嘍囉敲門，莊客報知史進，史進火急披衣，來到莊前，問小嘍囉：「有甚話說？」小嘍囉道：「三個頭領再三拜覆：特地使小校進些薄禮，酬謝大郎不殺之恩，不要推卻，望乞笑留。」取出金子，遞與史進。初時推卻，次後尋思道：「既然好意送來，受之為當。」叫莊客置酒，管待小校喫了半夜酒，把些零碎銀兩，賞了小校，回山去了。又過半月有餘，朱武等三人在寨中商議擄掠得一串好大珠子，又使小嘍囉連夜送來史家莊上。史進受了，不在話下。",
+      "text_target": "礼物又来了。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "半月后，一串硕大珍珠又被夜送入庄，珠光映在史进掌中。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S096"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P004",
+      "spatial_relationships": "半月后，一串硕大珍珠又被夜送入庄，珠光映在史进掌中。",
+      "blocking": "半月后，一串硕大珍珠又被夜送入庄，珠光映在史进掌中。",
+      "staging": "半月后，一串硕大珍珠又被夜送入庄，珠光映在史进掌中。",
+      "dialogue": [],
+      "narration": "礼物又来了。",
+      "narration_target": "礼物又来了。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "reflection",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "他们敬我，我也该回奉。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进独坐案前望着金珠，决定不能只受不还。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P005",
+      "spatial_relationships": "史进独坐案前望着金珠，决定不能只受不还。",
+      "blocking": "史进独坐案前望着金珠，决定不能只受不还。",
+      "staging": "史进独坐案前望着金珠，决定不能只受不还。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "他们敬我，我也该回奉。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "preparation",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "裁缝在庄中裁三匹红锦，旁边三领锦袄逐渐成形。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P006",
+      "spatial_relationships": "裁缝在庄中裁三匹红锦，旁边三领锦袄逐渐成形。",
+      "blocking": "裁缝在庄中裁三匹红锦，旁边三领锦袄逐渐成形。",
+      "staging": "裁缝在庄中裁三匹红锦，旁边三领锦袄逐渐成形。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "preparation",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "厨房蒸汽腾起，三只肥羊装入大食盒，酒坛扎紧。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P007",
+      "spatial_relationships": "厨房蒸汽腾起，三只肥羊装入大食盒，酒坛扎紧。",
+      "blocking": "厨房蒸汽腾起，三只肥羊装入大食盒，酒坛扎紧。",
+      "staging": "厨房蒸汽腾起，三只肥羊装入大食盒，酒坛扎紧。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "introduce",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "小人一定送到。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "庄客头领王四拍着皮质信囊，圆脸机灵，向史进躬身领命。",
+      "characters": [
+        "CHAR_WANG_SI",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P008",
+      "spatial_relationships": "庄客头领王四拍着皮质信囊，圆脸机灵，向史进躬身领命。",
+      "blocking": "庄客头领王四拍着皮质信囊，圆脸机灵，向史进躬身领命。",
+      "staging": "庄客头领王四拍着皮质信囊，圆脸机灵，向史进躬身领命。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "小人一定送到。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_WANG_SI",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "delivery",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四与另一庄客挑盒担沿少华山道上行，红锦包裹醒目。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHAOHUA_ROAD",
+      "scene_anchor_id": "LOC_SHAOHUA_ROAD",
+      "spatial_layout": "山寨在画上，史家村在画下，盘山路由松石间斜贯。",
+      "lighting_anchor": "昼景薄暖日光，夜景冷月与山风。",
+      "axis_eyeline": "上山由画下至画上，下山反向。",
+      "continuity_from": "P009",
+      "spatial_relationships": "王四与另一庄客挑盒担沿少华山道上行，红锦包裹醒目。",
+      "blocking": "王四与另一庄客挑盒担沿少华山道上行，红锦包裹醒目。",
+      "staging": "王四与另一庄客挑盒担沿少华山道上行，红锦包裹醒目。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_ROAD",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_ROAD",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "上山由画下至画上，下山反向。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "welcome",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "史大郎的情，我们领了。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "少华山寨内朱武三人接下锦袄肥羊，陈达豪爽拍王四肩膀。",
+      "characters": [
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHAOHUA_FORT",
+      "scene_anchor_id": "LOC_SHAOHUA_FORT",
+      "spatial_layout": "聚义厅居中，桌案在前，兵器架与寨门分列两侧。",
+      "lighting_anchor": "室内侧顶暖光，外景光从画右入。",
+      "axis_eyeline": "朱武居中，陈达画左，杨春画右。",
+      "continuity_from": "P010",
+      "spatial_relationships": "少华山寨内朱武三人接下锦袄肥羊，陈达豪爽拍王四肩膀。",
+      "blocking": "少华山寨内朱武三人接下锦袄肥羊，陈达豪爽拍王四肩膀。",
+      "staging": "少华山寨内朱武三人接下锦袄肥羊，陈达豪爽拍王四肩膀。",
+      "dialogue": [
+        {
+          "speaker": "朱武",
+          "speaker_id": "CHAR_ZHU_WU",
+          "text_target": "史大郎的情，我们领了。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_FORT",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_FORT",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "朱武居中，陈达画左，杨春画右。",
+      "character_integrity": "CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "comic_relief",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "再来一碗！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四连饮十余碗，双颊通红仍举碗逞能。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHAOHUA_FORT",
+      "scene_anchor_id": "LOC_SHAOHUA_FORT",
+      "spatial_layout": "聚义厅居中，桌案在前，兵器架与寨门分列两侧。",
+      "lighting_anchor": "室内侧顶暖光，外景光从画右入。",
+      "axis_eyeline": "朱武居中，陈达画左，杨春画右。",
+      "continuity_from": "P011",
+      "spatial_relationships": "王四连饮十余碗，双颊通红仍举碗逞能。",
+      "blocking": "王四连饮十余碗，双颊通红仍举碗逞能。",
+      "staging": "王四连饮十余碗，双颊通红仍举碗逞能。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "再来一碗！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_FORT",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_FORT",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "朱武居中，陈达画左，杨春画右。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "bond",
+      "source_excerpt": "S097：又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "meaning_zh": "又過了半月，史進尋思道：「也難得這三個敬重我，我也備些禮物回奉他。」次日，叫莊客尋個裁縫，自去縣裏買了三疋紅錦，裁成三領錦襖子；又揀肥羊，煮了三個，將大盒子盛了，委兩個莊客去送。史進莊上，有個為頭的莊客王四，此人頗能答應官府，口舌利便，滿莊人都叫他做「賽伯當。」史進教他同一個得力莊客，挑了盒擔，直送到山下。小嘍囉問了備細，引到山寨裏，見了朱武等三個頭領，大喜，受了錦襖子，並肥羊酒禮，把十兩銀子，賞了莊客。每人喫了十數碗酒，下山回歸莊內，見了史進，說道：「山上頭領，多多上覆。」史進自此常常與朱武等三人往來，不時間，只是王四去山寨裏送物事，不則一日。寨裏頭領也頻頻地使人送金銀來與史進。",
+      "text_target": "自此，史家庄与少华山往来不断。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "数次礼担在山道往返，金银、酒羊与锦帛交替出现。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S097"
+      ],
+      "location": "LOC_SHAOHUA_ROAD",
+      "scene_anchor_id": "LOC_SHAOHUA_ROAD",
+      "spatial_layout": "山寨在画上，史家村在画下，盘山路由松石间斜贯。",
+      "lighting_anchor": "昼景薄暖日光，夜景冷月与山风。",
+      "axis_eyeline": "上山由画下至画上，下山反向。",
+      "continuity_from": "P012",
+      "spatial_relationships": "数次礼担在山道往返，金银、酒羊与锦帛交替出现。",
+      "blocking": "数次礼担在山道往返，金银、酒羊与锦帛交替出现。",
+      "staging": "数次礼担在山道往返，金银、酒羊与锦帛交替出现。",
+      "dialogue": [],
+      "narration": "自此，史家庄与少华山往来不断。",
+      "narration_target": "自此，史家庄与少华山往来不断。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_ROAD",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_ROAD",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "上山由画下至画上，下山反向。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "season_shift",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "今年中秋，请三位兄弟来赏月。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "八月十五将近，史进立在挂满桂枝的后园，抬头望渐圆的月。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P013",
+      "spatial_relationships": "八月十五将近，史进立在挂满桂枝的后园，抬头望渐圆的月。",
+      "blocking": "八月十五将近，史进立在挂满桂枝的后园，抬头望渐圆的月。",
+      "staging": "八月十五将近，史进立在挂满桂枝的后园，抬头望渐圆的月。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "今年中秋，请三位兄弟来赏月。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "mission",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "亲手交给朱武，带回准信。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进把封好的请书交给王四，指尖压实信囊扣带。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P014",
+      "spatial_relationships": "史进把封好的请书交给王四，指尖压实信囊扣带。",
+      "blocking": "史进把封好的请书交给王四，指尖压实信囊扣带。",
+      "staging": "史进把封好的请书交给王四，指尖压实信囊扣带。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "亲手交给朱武，带回准信。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "invitation",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "十五夜，我们准到。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四在聚义厅递上请书，朱武展开阅读，陈达杨春相视而笑。",
+      "characters": [
+        "CHAR_WANG_SI",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_SHAOHUA_FORT",
+      "scene_anchor_id": "LOC_SHAOHUA_FORT",
+      "spatial_layout": "聚义厅居中，桌案在前，兵器架与寨门分列两侧。",
+      "lighting_anchor": "室内侧顶暖光，外景光从画右入。",
+      "axis_eyeline": "朱武居中，陈达画左，杨春画右。",
+      "continuity_from": "P015",
+      "spatial_relationships": "王四在聚义厅递上请书，朱武展开阅读，陈达杨春相视而笑。",
+      "blocking": "王四在聚义厅递上请书，朱武展开阅读，陈达杨春相视而笑。",
+      "staging": "王四在聚义厅递上请书，朱武展开阅读，陈达杨春相视而笑。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "十五夜，我们准到。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_FORT",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_FORT",
+        "CHAR_WANG_SI",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "朱武居中，陈达画左，杨春画右。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P017",
+      "story_function": "reply",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "这封回书，务必交到。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "朱武写好回书封入信囊，并赏王四五两银子。",
+      "characters": [
+        "CHAR_ZHU_WU",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_SHAOHUA_FORT",
+      "scene_anchor_id": "LOC_SHAOHUA_FORT",
+      "spatial_layout": "聚义厅居中，桌案在前，兵器架与寨门分列两侧。",
+      "lighting_anchor": "室内侧顶暖光，外景光从画右入。",
+      "axis_eyeline": "朱武居中，陈达画左，杨春画右。",
+      "continuity_from": "P016",
+      "spatial_relationships": "朱武写好回书封入信囊，并赏王四五两银子。",
+      "blocking": "朱武写好回书封入信囊，并赏王四五两银子。",
+      "staging": "朱武写好回书封入信囊，并赏王四五两银子。",
+      "dialogue": [
+        {
+          "speaker": "朱武",
+          "speaker_id": "CHAR_ZHU_WU",
+          "text_target": "这封回书，务必交到。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_FORT",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_FORT",
+        "CHAR_ZHU_WU",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "朱武居中，陈达画左，杨春画右。",
+      "character_integrity": "CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P018",
+      "story_function": "temptation",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "只饮几碗，不误事！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四下山撞见相熟喽啰，被一把抱住拖向路边村酒店。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_VILLAGE_TAVERN",
+      "scene_anchor_id": "LOC_VILLAGE_TAVERN",
+      "spatial_layout": "山路边低矮酒肆，酒桌居中，门口通往画右下山路。",
+      "lighting_anchor": "黄昏油灯暖光，门外冷蓝暮色。",
+      "axis_eyeline": "王四由画左入、从画右离开。",
+      "continuity_from": "P017",
+      "spatial_relationships": "王四下山撞见相熟喽啰，被一把抱住拖向路边村酒店。",
+      "blocking": "王四下山撞见相熟喽啰，被一把抱住拖向路边村酒店。",
+      "staging": "王四下山撞见相熟喽啰，被一把抱住拖向路边村酒店。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "只饮几碗，不误事！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_VILLAGE_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_VILLAGE_TAVERN",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四由画左入、从画右离开。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P019",
+      "story_function": "drinking",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "低矮酒店内酒碗排满桌，王四与喽啰大笑碰碗。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_VILLAGE_TAVERN",
+      "scene_anchor_id": "LOC_VILLAGE_TAVERN",
+      "spatial_layout": "山路边低矮酒肆，酒桌居中，门口通往画右下山路。",
+      "lighting_anchor": "黄昏油灯暖光，门外冷蓝暮色。",
+      "axis_eyeline": "王四由画左入、从画右离开。",
+      "continuity_from": "P018",
+      "spatial_relationships": "低矮酒店内酒碗排满桌，王四与喽啰大笑碰碗。",
+      "blocking": "低矮酒店内酒碗排满桌，王四与喽啰大笑碰碗。",
+      "staging": "低矮酒店内酒碗排满桌，王四与喽啰大笑碰碗。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_VILLAGE_TAVERN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_VILLAGE_TAVERN",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四由画左入、从画右离开。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P020",
+      "story_function": "loss_of_control",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四醉步出店，被山风一吹，身形沿山路左右摇摆。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_SHAOHUA_ROAD",
+      "scene_anchor_id": "LOC_SHAOHUA_ROAD",
+      "spatial_layout": "山寨在画上，史家村在画下，盘山路由松石间斜贯。",
+      "lighting_anchor": "昼景薄暖日光，夜景冷月与山风。",
+      "axis_eyeline": "上山由画下至画上，下山反向。",
+      "continuity_from": "P019",
+      "spatial_relationships": "王四醉步出店，被山风一吹，身形沿山路左右摇摆。",
+      "blocking": "王四醉步出店，被山风一吹，身形沿山路左右摇摆。",
+      "staging": "王四醉步出店，被山风一吹，身形沿山路左右摇摆。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_ROAD",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_ROAD",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "上山由画下至画上，下山反向。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P021",
+      "story_function": "collapse",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四跌进松林，扑倒在绿茸莎草上，信囊与银袋压在臂下。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P020",
+      "spatial_relationships": "王四跌进松林，扑倒在绿茸莎草上，信囊与银袋压在臂下。",
+      "blocking": "王四跌进松林，扑倒在绿茸莎草上，信囊与银袋压在臂下。",
+      "staging": "王四跌进松林，扑倒在绿茸莎草上，信囊与银袋压在臂下。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P022",
+      "story_function": "discovery",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "王四？醒醒！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "正在坡下设套捕兔的李吉闻声赶入林中，认出醉倒的王四。",
+      "characters": [
+        "CHAR_LI_JI",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P021",
+      "spatial_relationships": "正在坡下设套捕兔的李吉闻声赶入林中，认出醉倒的王四。",
+      "blocking": "正在坡下设套捕兔的李吉闻声赶入林中，认出醉倒的王四。",
+      "staging": "正在坡下设套捕兔的李吉闻声赶入林中，认出醉倒的王四。",
+      "dialogue": [
+        {
+          "speaker": "李吉",
+          "speaker_id": "CHAR_LI_JI",
+          "text_target": "王四？醒醒！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_LI_JI",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P023",
+      "story_function": "suspicion",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "这厮哪里来的许多银子？",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "李吉扶不动王四，却看见袖口滚出银角，目光停住。",
+      "characters": [
+        "CHAR_LI_JI",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P022",
+      "spatial_relationships": "李吉扶不动王四，却看见袖口滚出银角，目光停住。",
+      "blocking": "李吉扶不动王四，却看见袖口滚出银角，目光停住。",
+      "staging": "李吉扶不动王四，却看见袖口滚出银角，目光停住。",
+      "dialogue": [
+        {
+          "speaker": "李吉",
+          "speaker_id": "CHAR_LI_JI",
+          "text_target": "这厮哪里来的许多银子？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_LI_JI",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P024",
+      "story_function": "theft",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "李吉解下信囊向草地一抖，银两与封缄回书一同落出。",
+      "characters": [
+        "CHAR_LI_JI",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P023",
+      "spatial_relationships": "李吉解下信囊向草地一抖，银两与封缄回书一同落出。",
+      "blocking": "李吉解下信囊向草地一抖，银两与封缄回书一同落出。",
+      "staging": "李吉解下信囊向草地一抖，银两与封缄回书一同落出。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_LI_JI",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P025",
+      "story_function": "evidence",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "朱武……陈达……杨春！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "李吉拆开回书，虽读不懂文句，却认出朱武、陈达、杨春三个名字。",
+      "characters": [
+        "CHAR_LI_JI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P024",
+      "spatial_relationships": "李吉拆开回书，虽读不懂文句，却认出朱武、陈达、杨春三个名字。",
+      "blocking": "李吉拆开回书，虽读不懂文句，却认出朱武、陈达、杨春三个名字。",
+      "staging": "李吉拆开回书，虽读不懂文句，却认出朱武、陈达、杨春三个名字。",
+      "dialogue": [
+        {
+          "speaker": "李吉",
+          "speaker_id": "CHAR_LI_JI",
+          "text_target": "朱武……陈达……杨春！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_LI_JI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P026",
+      "story_function": "motive",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "我的大财，原来在这里。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "李吉攥紧回书和银子，想起县衙三千贯悬赏告示的画面。",
+      "characters": [
+        "CHAR_LI_JI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P025",
+      "spatial_relationships": "李吉攥紧回书和银子，想起县衙三千贯悬赏告示的画面。",
+      "blocking": "李吉攥紧回书和银子，想起县衙三千贯悬赏告示的画面。",
+      "staging": "李吉攥紧回书和银子，想起县衙三千贯悬赏告示的画面。",
+      "dialogue": [
+        {
+          "speaker": "李吉",
+          "speaker_id": "CHAR_LI_JI",
+          "text_target": "我的大财，原来在这里。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_LI_JI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P027",
+      "story_function": "betrayal",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "史进，你倒和贼人来往！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "李吉回望醉倒的王四，转身沿月下山路疾奔华阴县。",
+      "characters": [
+        "CHAR_LI_JI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_SHAOHUA_ROAD",
+      "scene_anchor_id": "LOC_SHAOHUA_ROAD",
+      "spatial_layout": "山寨在画上，史家村在画下，盘山路由松石间斜贯。",
+      "lighting_anchor": "昼景薄暖日光，夜景冷月与山风。",
+      "axis_eyeline": "上山由画下至画上，下山反向。",
+      "continuity_from": "P026",
+      "spatial_relationships": "李吉回望醉倒的王四，转身沿月下山路疾奔华阴县。",
+      "blocking": "李吉回望醉倒的王四，转身沿月下山路疾奔华阴县。",
+      "staging": "李吉回望醉倒的王四，转身沿月下山路疾奔华阴县。",
+      "dialogue": [
+        {
+          "speaker": "李吉",
+          "speaker_id": "CHAR_LI_JI",
+          "text_target": "史进，你倒和贼人来往！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHAOHUA_ROAD",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHAOHUA_ROAD",
+        "CHAR_LI_JI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "上山由画下至画上，下山反向。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P028",
+      "story_function": "report",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "小人有少华山贼人的真凭实据。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "华阴县衙内，李吉双手呈上回书，县尉从案后俯身接过。",
+      "characters": [
+        "CHAR_LI_JI",
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_LI_JI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_COUNTY_LIEUTENANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_HUAYIN_YAMEN",
+      "scene_anchor_id": "LOC_HUAYIN_YAMEN",
+      "spatial_layout": "县衙公案居中，堂门画下，兵器架和衙役列于两侧。",
+      "lighting_anchor": "夜间堂内烛火暖光，门外冷月。",
+      "axis_eyeline": "县尉居画上案后，告发者画下堂前。",
+      "continuity_from": "P027",
+      "spatial_relationships": "华阴县衙内，李吉双手呈上回书，县尉从案后俯身接过。",
+      "blocking": "华阴县衙内，李吉双手呈上回书，县尉从案后俯身接过。",
+      "staging": "华阴县衙内，李吉双手呈上回书，县尉从案后俯身接过。",
+      "dialogue": [
+        {
+          "speaker": "李吉",
+          "speaker_id": "CHAR_LI_JI",
+          "text_target": "小人有少华山贼人的真凭实据。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_HUAYIN_YAMEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_HUAYIN_YAMEN",
+        "CHAR_LI_JI",
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "县尉居画上案后，告发者画下堂前。",
+      "character_integrity": "CHAR_LI_JI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_COUNTY_LIEUTENANT继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P029",
+      "story_function": "decision",
+      "source_excerpt": "S098：荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "meaning_zh": "荏苒光陰，時遇八月中秋到來。史進要和三人說話，約至十五夜，來莊上賞月飲酒。先使莊客王四，齎一封請書，直去少華山上，請朱武，陳達，楊春來莊上赴席。王四馳書逕到山寨裏，見了三位頭領，下了來書。朱武看了大喜，三個應允，隨即寫封回書，賞了王四五兩銀子，喫了十來碗酒。王四下得山來，正撞著時常送物事來的小嘍囉，一把抱住，那裏肯放。又拖去山路邊村酒店裏，喫了十數碗酒。王四相別了回莊，一面走著，被山風一吹，酒卻湧上來，踉踉蹌蹌，一步一攧。走不到十里之路，見座林子，奔到裏面，望著那綠茸茸莎草地上撲地倒了。原來「摽兔」李吉，正在那山坡下張兔兒，認得是史家莊上王四，趕入林子裏來扶他，那裏扶得動！只見王四膊裏突出銀子來，李吉尋思道：「這廝醉了，那裏討得許多！何不拿他些？」也是天罡星合當聚會，自然生出機會來。李吉解那膊，望地下只一抖，那封回書和銀子都抖出來。李吉拿起，頗識幾字，將書拆開看時，見上面寫著少華山朱武，陳達，楊春，中間多有兼文帶武的言語，卻不識得，只認得三個名字。李吉道：「我做獵戶，幾時能夠發跡，算命道我今年有大財，卻在這裏。華陰縣裏現出三千貫賞錢，捕捉他三個賊人。叵耐史進那廝，前日我去他莊上尋矮丘乙郎，他道我來相腳頭屣盤，你原來倒和賊人來往！」銀子並書都拿去了，望華陰縣裏來出首。",
+      "text_target": "今夜拿人与赃证！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "县尉看见三名首领姓名，重重拍案，差役开始披甲集合。",
+      "characters": [
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_COUNTY_LIEUTENANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S098"
+      ],
+      "location": "LOC_HUAYIN_YAMEN",
+      "scene_anchor_id": "LOC_HUAYIN_YAMEN",
+      "spatial_layout": "县衙公案居中，堂门画下，兵器架和衙役列于两侧。",
+      "lighting_anchor": "夜间堂内烛火暖光，门外冷月。",
+      "axis_eyeline": "县尉居画上案后，告发者画下堂前。",
+      "continuity_from": "P028",
+      "spatial_relationships": "县尉看见三名首领姓名，重重拍案，差役开始披甲集合。",
+      "blocking": "县尉看见三名首领姓名，重重拍案，差役开始披甲集合。",
+      "staging": "县尉看见三名首领姓名，重重拍案，差役开始披甲集合。",
+      "dialogue": [
+        {
+          "speaker": "华阴县尉",
+          "speaker_id": "CHAR_COUNTY_LIEUTENANT",
+          "text_target": "今夜拿人与赃证！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_HUAYIN_YAMEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_HUAYIN_YAMEN",
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "县尉居画上案后，告发者画下堂前。",
+      "character_integrity": "CHAR_COUNTY_LIEUTENANT继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P030",
+      "story_function": "awakening",
+      "source_excerpt": "S099：卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "meaning_zh": "卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "text_target": "回书呢？银子呢？",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "二更月光照进松林，王四惊醒摸向腰间，只剩空信囊。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S099"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P029",
+      "spatial_relationships": "二更月光照进松林，王四惊醒摸向腰间，只剩空信囊。",
+      "blocking": "二更月光照进松林，王四惊醒摸向腰间，只剩空信囊。",
+      "staging": "二更月光照进松林，王四惊醒摸向腰间，只剩空信囊。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "回书呢？银子呢？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P031",
+      "story_function": "panic",
+      "source_excerpt": "S099：卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "meaning_zh": "卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "text_target": "丢了回书，大郎必赶我出去。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四跪在草间四处翻找，额头冷汗直流。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S099"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P030",
+      "spatial_relationships": "王四跪在草间四处翻找，额头冷汗直流。",
+      "blocking": "王四跪在草间四处翻找，额头冷汗直流。",
+      "staging": "王四跪在草间四处翻找，额头冷汗直流。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "丢了回书，大郎必赶我出去。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P032",
+      "story_function": "bad_choice",
+      "source_excerpt": "S099：卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "meaning_zh": "卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "text_target": "只说他们不曾写。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "王四忽然停手，眼珠一转，决定谎称没有回书。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S099"
+      ],
+      "location": "LOC_PINE_GROVE",
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "spatial_layout": "松林坡地由画上向画下倾斜，莎草空地居中，捕兔套在画左下。",
+      "lighting_anchor": "二更冷月由画右上穿林，斑驳月影。",
+      "axis_eyeline": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "continuity_from": "P031",
+      "spatial_relationships": "王四忽然停手，眼珠一转，决定谎称没有回书。",
+      "blocking": "王四忽然停手，眼珠一转，决定谎称没有回书。",
+      "staging": "王四忽然停手，眼珠一转，决定谎称没有回书。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "只说他们不曾写。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_PINE_GROVE",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_PINE_GROVE",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "王四倒在中央，李吉从画左下进入，离开朝画右下。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P033",
+      "story_function": "return",
+      "source_excerpt": "S099：卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "meaning_zh": "卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "五更天色微白，王四跑回史家庄，衣襟凌乱、脚步虚浮。",
+      "characters": [
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S099"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P032",
+      "spatial_relationships": "五更天色微白，王四跑回史家庄，衣襟凌乱、脚步虚浮。",
+      "blocking": "五更天色微白，王四跑回史家庄，衣襟凌乱、脚步虚浮。",
+      "staging": "五更天色微白，王四跑回史家庄，衣襟凌乱、脚步虚浮。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P034",
+      "story_function": "lie",
+      "source_excerpt": "S099：卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "meaning_zh": "卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "text_target": "既然准来赴席，何必回书？",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进追问回书，王四强作镇定，称自己怕醉后遗失所以没让三杰写。",
+      "characters": [
+        "CHAR_WANG_SI",
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S099"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P033",
+      "spatial_relationships": "史进追问回书，王四强作镇定，称自己怕醉后遗失所以没让三杰写。",
+      "blocking": "史进追问回书，王四强作镇定，称自己怕醉后遗失所以没让三杰写。",
+      "staging": "史进追问回书，王四强作镇定，称自己怕醉后遗失所以没让三杰写。",
+      "dialogue": [
+        {
+          "speaker": "王四",
+          "speaker_id": "CHAR_WANG_SI",
+          "text_target": "既然准来赴席，何必回书？"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_WANG_SI",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P035",
+      "story_function": "false_relief",
+      "source_excerpt": "S099：卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "meaning_zh": "卻說莊客王四，一覺直睡到二更，方醒覺來，看見月光微微照在身上，喫了一驚。跳將起來，卻見四邊都是松樹。便去腰裏摸時，膊和書都不見了。四下裏尋時，只見空膊在莎草地上。王四只管叫苦，尋思道：「銀子不打緊，這封回書，卻怎生好？正不知被甚人拿去了？」眉頭一縱，計上心來，自道：「若向去莊上說脫了回書，大郎必然焦躁，定是趕我出去，不如只說不曾有回書，那裏查照。」計較定了，飛也似取路歸來莊上，卻好五更天氣。史進見王四回來，問道：「你緣何方纔歸來？」王四道：「托主人福蔭，寨中三個頭領，都不肯放，留住王四喫了半夜酒，因此回來遲了。」史進又問：「曾有回書否？」王四道：「三個頭領要寫回書，卻是小人道：『三位頭領既然準來赴席，何必回書？小人又有杯酒，路上恐有些失支脫節，不是耍處。』」史進聽了大喜，說道：「不枉了諸人叫做『賽伯當，』真個了得。」王四應道：「小人怎敢差遲，路上不曾住腳，一直奔回莊上。」史進道：「既然如此，教人去縣裏買些果品，案酒伺候。」",
+      "text_target": "不枉人叫你赛伯当。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进大喜拍王四肩膀，王四低头掩住心虚。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_WANG_SI"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG_SI",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S099"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P034",
+      "spatial_relationships": "史进大喜拍王四肩膀，王四低头掩住心虚。",
+      "blocking": "史进大喜拍王四肩膀，王四低头掩住心虚。",
+      "staging": "史进大喜拍王四肩膀，王四低头掩住心虚。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "不枉人叫你赛伯当。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN",
+        "CHAR_WANG_SI"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_WANG_SI继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P036",
+      "story_function": "feast_prep",
+      "source_excerpt": "S100：不覺中秋節至，是日晴明得好。史進當日吩咐家中莊客，宰了一腔大羊，殺了百十個雞鵝，準備下酒食筵宴。看看天色晚來，怎見得好個中秋，但見：",
+      "meaning_zh": "不覺中秋節至，是日晴明得好。史進當日吩咐家中莊客，宰了一腔大羊，殺了百十個雞鵝，準備下酒食筵宴。看看天色晚來，怎見得好個中秋，但見：",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "中秋晴日，庄客宰羊杀鸡鹅，长案摆满酒食果品。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S100"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P035",
+      "spatial_relationships": "中秋晴日，庄客宰羊杀鸡鹅，长案摆满酒食果品。",
+      "blocking": "中秋晴日，庄客宰羊杀鸡鹅，长案摆满酒食果品。",
+      "staging": "中秋晴日，庄客宰羊杀鸡鹅，长案摆满酒食果品。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P037",
+      "story_function": "moonrise",
+      "source_excerpt": "S101：午夜初長，黃昏已半，一輪月掛如銀。",
+      "meaning_zh": "午夜初長，黃昏已半，一輪月掛如銀。",
+      "text_target": "午夜初长，一轮月挂如银。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "黄昏转夜，一轮银月越过史家庄屋脊，桂影铺满后园。",
+      "characters": [],
+      "character_bindings": [],
+      "source_segment_refs": [
+        "S101",
+        "S102",
+        "S103",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P036",
+      "spatial_relationships": "黄昏转夜，一轮银月越过史家庄屋脊，桂影铺满后园。",
+      "blocking": "黄昏转夜，一轮银月越过史家庄屋脊，桂影铺满后园。",
+      "staging": "黄昏转夜，一轮银月越过史家庄屋脊，桂影铺满后园。",
+      "dialogue": [],
+      "narration": "午夜初长，一轮月挂如银。",
+      "narration_target": "午夜初长，一轮月挂如银。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": ""
+    },
+    {
+      "panel_id": "P038",
+      "story_function": "arrival",
+      "source_excerpt": "S107：且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "meaning_zh": "且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "朱武、陈达、杨春只带三五随从，佩朴刀步行来到庄门。",
+      "characters": [
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S107"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P037",
+      "spatial_relationships": "朱武、陈达、杨春只带三五随从，佩朴刀步行来到庄门。",
+      "blocking": "朱武、陈达、杨春只带三五随从，佩朴刀步行来到庄门。",
+      "staging": "朱武、陈达、杨春只带三五随从，佩朴刀步行来到庄门。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P039",
+      "story_function": "welcome",
+      "source_excerpt": "S107：且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "meaning_zh": "且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "text_target": "请入后园，今夜只论兄弟。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进迎三杰入庄，双方抱拳叙礼，庄门随后从内闩紧。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S107"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P038",
+      "spatial_relationships": "史进迎三杰入庄，双方抱拳叙礼，庄门随后从内闩紧。",
+      "blocking": "史进迎三杰入庄，双方抱拳叙礼，庄门随后从内闩紧。",
+      "staging": "史进迎三杰入庄，双方抱拳叙礼，庄门随后从内闩紧。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "请入后园，今夜只论兄弟。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P040",
+      "story_function": "banquet",
+      "source_excerpt": "S107：且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "meaning_zh": "且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "后园月下，四人分席而坐，庄客轮流把盏割羊劝酒。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S107"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P039",
+      "spatial_relationships": "后园月下，四人分席而坐，庄客轮流把盏割羊劝酒。",
+      "blocking": "后园月下，四人分席而坐，庄客轮流把盏割羊劝酒。",
+      "staging": "后园月下，四人分席而坐，庄客轮流把盏割羊劝酒。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN",
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P041",
+      "story_function": "lyrical_pause",
+      "source_excerpt": "S108：桂花離海嶠，雲葉散天衢。",
+      "meaning_zh": "桂花離海嶠，雲葉散天衢。",
+      "text_target": "彩霞照万里如银，素魄映千山似水。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "满月升至桂树枝头，酒杯与席面泛起银光，远山如水。",
+      "characters": [],
+      "character_bindings": [],
+      "source_segment_refs": [
+        "S108",
+        "S109",
+        "S110",
+        "S111",
+        "S112"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P040",
+      "spatial_relationships": "满月升至桂树枝头，酒杯与席面泛起银光，远山如水。",
+      "blocking": "满月升至桂树枝头，酒杯与席面泛起银光，远山如水。",
+      "staging": "满月升至桂树枝头，酒杯与席面泛起银光，远山如水。",
+      "dialogue": [],
+      "narration": "彩霞照万里如银，素魄映千山似水。",
+      "narration_target": "彩霞照万里如银，素魄映千山似水。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": ""
+    },
+    {
+      "panel_id": "P042",
+      "story_function": "bond",
+      "source_excerpt": "S107：且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "meaning_zh": "且說少華山上朱武，陳達，楊春三個頭領，吩咐小嘍囉看守寨柵，只帶三五個做伴，將了朴刀，各跨口腰刀，不騎鞍馬，步行下山，逕來到史家莊上。史進接著，各敘禮罷，請入後園，莊內已安排下筵宴。史進請三位頭領上坐，史進對席相陪，便叫莊客把前後莊門拴了。一面飲酒，莊內莊客，輪流把盞，一邊割羊勸酒。酒至數杯，卻早東邊推起那輪明月，但見：",
+      "text_target": "前日刀兵，今夜都付一杯。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进与陈达碰碗，朱武杨春笑谈旧事，席间戒心尽去。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S107"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P041",
+      "spatial_relationships": "史进与陈达碰碗，朱武杨春笑谈旧事，席间戒心尽去。",
+      "blocking": "史进与陈达碰碗，朱武杨春笑谈旧事，席间戒心尽去。",
+      "staging": "史进与陈达碰碗，朱武杨春笑谈旧事，席间戒心尽去。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "前日刀兵，今夜都付一杯。"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN",
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P043",
+      "story_function": "foreshadow",
+      "source_excerpt": "S113：史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "meaning_zh": "史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "庄墙外黑暗里，一支火把忽然点燃，随后更多火光接连亮起。",
+      "characters": [],
+      "character_bindings": [],
+      "source_segment_refs": [
+        "S113"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P042",
+      "spatial_relationships": "庄墙外黑暗里，一支火把忽然点燃，随后更多火光接连亮起。",
+      "blocking": "庄墙外黑暗里，一支火把忽然点燃，随后更多火光接连亮起。",
+      "staging": "庄墙外黑暗里，一支火把忽然点燃，随后更多火光接连亮起。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": ""
+    },
+    {
+      "panel_id": "P044",
+      "story_function": "alarm",
+      "source_excerpt": "S113：史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "meaning_zh": "史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "text_target": "三位且坐，待我去看！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "墙外骤起喊声，后园四人同时停杯，史进翻身站起。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S113"
+      ],
+      "location": "LOC_SHI_GARDEN",
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "spatial_layout": "后园桂树画左，月下酒席居中，通往前院的廊门画右。",
+      "lighting_anchor": "冷银月由画右上入，席面与人物由暖灯补光。",
+      "axis_eyeline": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "continuity_from": "P043",
+      "spatial_relationships": "墙外骤起喊声，后园四人同时停杯，史进翻身站起。",
+      "blocking": "墙外骤起喊声，后园四人同时停杯，史进翻身站起。",
+      "staging": "墙外骤起喊声，后园四人同时停杯，史进翻身站起。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "三位且坐，待我去看！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_GARDEN",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_GARDEN",
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "史进画下陪席，三杰画上分坐；警报来自画右廊门。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P045",
+      "story_function": "command",
+      "source_excerpt": "S113：史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "meaning_zh": "史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "text_target": "不要开门！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进抓起三尖两刃刀冲向前院，厉声命庄客不得开门。",
+      "characters": [
+        "CHAR_SHI_JIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S113"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P044",
+      "spatial_relationships": "史进抓起三尖两刃刀冲向前院，厉声命庄客不得开门。",
+      "blocking": "史进抓起三尖两刃刀冲向前院，厉声命庄客不得开门。",
+      "staging": "史进抓起三尖两刃刀冲向前院，厉声命庄客不得开门。",
+      "dialogue": [
+        {
+          "speaker": "史进",
+          "speaker_id": "CHAR_SHI_JIN",
+          "text_target": "不要开门！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "顺读推进",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P046",
+      "story_function": "siege_reveal",
+      "source_excerpt": "S113：史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "meaning_zh": "史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "text_target": "（无字动作格）",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "史进登梯伏在庄墙上俯看：县尉骑马居中，三四百官兵与火把围成铁环。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_COUNTY_LIEUTENANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S113"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P045",
+      "spatial_relationships": "史进登梯伏在庄墙上俯看：县尉骑马居中，三四百官兵与火把围成铁环。",
+      "blocking": "史进登梯伏在庄墙上俯看：县尉骑马居中，三四百官兵与火把围成铁环。",
+      "staging": "史进登梯伏在庄墙上俯看：县尉骑马居中，三四百官兵与火把围成铁环。",
+      "dialogue": [],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN",
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_COUNTY_LIEUTENANT继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P047",
+      "story_function": "cliffhanger",
+      "source_excerpt": "S113：史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "meaning_zh": "史進正和三個頭領在後園飲酒，賞玩中秋，敘說舊話新言，只聽得牆外一聲喊起，火把亂明。史進大驚，跳起身來吩咐：「三位賢友且坐，待我去看。」喝叫莊客：「不要開門！」掇條梯子，上牆打一看時，只見是華陰縣縣尉在馬上，引著兩個都頭，帶著三四百士兵，圍住莊院。史進和三個頭領只管叫苦，外面火把光中，照見鋼叉，朴刀，五股叉，留客住，擺得似麻林一般。兩個都頭口裏叫道：「不要走了強賊。」",
+      "text_target": "不要走了强贼！",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "庄外火把乱明，钢叉朴刀密如麻林；两名都头指向庄门高喊。",
+      "characters": [
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_COUNTY_LIEUTENANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S113"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P046",
+      "spatial_relationships": "庄外火把乱明，钢叉朴刀密如麻林；两名都头指向庄门高喊。",
+      "blocking": "庄外火把乱明，钢叉朴刀密如麻林；两名都头指向庄门高喊。",
+      "staging": "庄外火把乱明，钢叉朴刀密如麻林；两名都头指向庄门高喊。",
+      "dialogue": [
+        {
+          "speaker": "华阴县尉",
+          "speaker_id": "CHAR_COUNTY_LIEUTENANT",
+          "text_target": "不要走了强贼！"
+        }
+      ],
+      "narration": "",
+      "narration_target": "",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_COUNTY_LIEUTENANT"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_COUNTY_LIEUTENANT继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    },
+    {
+      "panel_id": "P048",
+      "story_function": "ending_promise",
+      "source_excerpt": "S114：不是這夥人來捉史進，並三個頭領，有分教，史進先殺了一兩個人，結識了十數個好漢，直使天罡地煞，一齊相會。直教蘆花深處屯兵士，荷葉陰中治戰船。畢竟史進與三個頭領怎地脫身，且聽下回分解。",
+      "meaning_zh": "不是這夥人來捉史進，並三個頭領，有分教，史進先殺了一兩個人，結識了十數個好漢，直使天罡地煞，一齊相會。直教蘆花深處屯兵士，荷葉陰中治戰船。畢竟史進與三個頭領怎地脫身，且聽下回分解。",
+      "text_target": "一封回书，换来三百官兵。",
+      "adaptation_note": "第8话主消费范围；按谢礼往来、王四醉失回书、李吉告官、中秋赴宴与官兵围庄闭环改编。",
+      "description": "高位远景：银月之下史家庄被火把完全包围，墙内史进与三杰的剪影各自握紧兵器。",
+      "characters": [
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_SHI_JIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHU_WU",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN_DA",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_YANG_CHUN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "source_segment_refs": [
+        "S114"
+      ],
+      "location": "LOC_SHI_MANOR",
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "spatial_layout": "庄门画下、前院居中、后园画上，木梯靠内墙画右；墙外官道环绕。",
+      "lighting_anchor": "日景暖光由画左入；夜景冷月从画右上入，火把暖光仅在墙外。",
+      "axis_eyeline": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "continuity_from": "P047",
+      "spatial_relationships": "高位远景：银月之下史家庄被火把完全包围，墙内史进与三杰的剪影各自握紧兵器。",
+      "blocking": "高位远景：银月之下史家庄被火把完全包围，墙内史进与三杰的剪影各自握紧兵器。",
+      "staging": "高位远景：银月之下史家庄被火把完全包围，墙内史进与三杰的剪影各自握紧兵器。",
+      "dialogue": [],
+      "narration": "一封回书，换来三百官兵。",
+      "narration_target": "一封回书，换来三百官兵。",
+      "sfx": [],
+      "lettering_plan": "中文简体字置于负空间；原始图禁止生成文字、气泡、旁白框或乱码。",
+      "art_notes": "宋画工笔淡彩×写实国漫×电影动机光；北宋服饰建筑武器；无文字水印；禁明清样式、现代物件。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "重揭示长停顿",
+      "ink_plan": "人物与道具有压力变化的清晰墨线；脸、双手双脚和信件接触点完整。",
+      "black_fill_plan": "夜景黑场不吞没脸、手、回书、火把和兵器。",
+      "tone_plan": "低饱和石青、灰绿、赭石、绛红、银灰与墨黑薄染。",
+      "value_plan": "三值阅读，每格一个主焦点。",
+      "effects_plan": "仅使用山风、酒气、月光、火把烟与真实环境效果；禁魔法粒子。",
+      "style_bucket": "song_cinematic_low_saturation",
+      "scene_family": "LOC_SHI_MANOR",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHI_MANOR",
+        "CHAR_SHI_JIN",
+        "CHAR_ZHU_WU",
+        "CHAR_CHEN_DA",
+        "CHAR_YANG_CHUN"
+      ],
+      "gaze_target": "人物注视戏内对话者、回书、银两、酒碗、墙外火光或明确行动目标。",
+      "eyeline_direction": "庄内人物位于画上/内侧，来客与官兵从画下/外侧进入。",
+      "character_integrity": "CHAR_SHI_JIN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_ZHU_WU继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_CHEN_DA继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。；CHAR_YANG_CHUN继承registry同一脸型、体态、发式与服装；手脚和关键道具完整。"
+    }
+  ]
+}

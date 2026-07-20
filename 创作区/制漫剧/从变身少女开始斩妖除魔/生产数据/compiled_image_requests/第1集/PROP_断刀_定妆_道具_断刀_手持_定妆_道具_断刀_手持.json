@@ -1,0 +1,86 @@
+{
+  "actual_submit_prompt": "生成独立生产级资产参考图：图片/定妆_道具_断刀_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀；武器拓扑: weapon_count=1；single_hilt=1；broken_blade=1；cutting_edge_count=1；残存刀身保持单面刃与厚钝刀背，断口粗粝且明确终止；断口之后不得补出刀尖、完整刀身、第二把刀刃或实体光刃。；weapon_count=1；single_hilt=1；broken_blade=1… 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为PROP_断刀的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；禁止同一把武器像插了多刀或出现互相矛盾的伤口位置 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 画幅：9:16 限制：白衣仙女；正式制服提前出现；常态红发金瞳虎纹；巨型毛笔武器；金甲符牌；网红脸；虎妖萌宠化；猎奇伤口；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让断刀结构/颜色/尺寸漂移；现代物件；结构漂移",
+  "actual_submit_prompt_chars": 829,
+  "actual_submit_prompt_sha256": "8012556fcf5f619d3c32cca1929e79e7b02b8bfa674c6039daa9973e6a830808",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "生成独立生产级资产参考图：图片/定妆_道具_断刀_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀；武器拓扑: weapon_count=1；single_hilt=1；broken_blade=1；cutting_edge_count=1；残存刀身保持单面刃与厚钝刀背，断口粗粝且明确终止；断口之后不得补出刀尖、完整刀身、第二把刀刃或实体光刃。；weapon_count=1；single_hilt=1；broken_blade=1… 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为PROP_断刀的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；禁止同一把武器像插了多刀或出现互相矛盾的伤口位置 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 画幅：9:16 限制：白衣仙女；正式制服提前出现；常态红发金瞳虎纹；巨型毛笔武器；金甲符牌；网红脸；虎妖萌宠化；猎奇伤口；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让断刀结构/颜色/尺寸漂移；现代物件；结构漂移",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "PROP_断刀",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_道具_断刀.png",
+        "role": "asset",
+        "sha256": "f4b13beb0be97ea09d1753f62ac0568006ddc9c6b20cc330aa6b720c57c22bd6"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "4k"
+    }
+  },
+  "compiler": {
+    "backend": "dreamina",
+    "channel": "official_cli",
+    "compiled_request_sha256": "fe9bc8663412b55c9ae9f52f2fba8142d5197989b9285384833b448db8a57542",
+    "compiler_decisions": [],
+    "execution_context_sha256": "3012f037f38a1aa9e07bbdf1fba1ff4d090f878201f2eda1de2b702631aec4a1",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:38>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 38,
+      "constraint_compression": {
+        "policy_guard_input": 3,
+        "policy_guard_output": 3,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 208,
+      "negative_chars": 0,
+      "prompt_chars": 829,
+      "reference_count": 1
+    },
+    "mode": "shared",
+    "model": "5.0",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "seedream_concise_natural_language",
+    "profile_version": "2026-07-17.1",
+    "prompt": "生成独立生产级资产参考图：图片/定妆_道具_断刀_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；裴长青掷出的半截断刀；开局插在姜月初脚前，后续不得变成完整横刀；武器拓扑: weapon_count=1；single_hilt=1；broken_blade=1；cutting_edge_count=1；残存刀身保持单面刃与厚钝刀背，断口粗粝且明确终止；断口之后不得补出刀尖、完整刀身、第二把刀刃或实体光刃。；weapon_count=1；single_hilt=1；broken_blade=1… 视觉风格：黑赤镇魔·水墨妖谱；粗粝唐代边塞与写实国漫人物；自然皮肤、毛发和磨损布料，百妖谱才进入黑墨朱砂金子风格；有来源的阴冷侧逆光；金色只用于百妖谱点睛和系统反馈 图1作为PROP_断刀的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对象、对话对象、手中物件或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；禁止同一把武器像插了多刀或出现互相矛盾的伤口位置 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 画幅：9:16 限制：白衣仙女；正式制服提前出现；常态红发金瞳虎纹；巨型毛笔武器；金甲符牌；网红脸；虎妖萌宠化；猎奇伤口；烤字；水印Logo；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让断刀结构/颜色/尺寸漂移；现代物件；结构漂移",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "PROP_断刀",
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/出图/共享/图片/定妆_道具_断刀.png",
+        "role": "asset",
+        "sha256": "f4b13beb0be97ea09d1753f62ac0568006ddc9c6b20cc330aa6b720c57c22bd6"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "model_version": "5.0",
+      "output_format": "png",
+      "resolution_type": "4k"
+    },
+    "source_contract_sha256": "1a73066efa8dff9746ec8aae3bd446f290010e90a3d94ff40f615efb3336eb96",
+    "source_contract_text_sha256": "024fe4ff38bcf8dcaab350f4254f696f8ecbc009657b07201b7716c6bb623c19",
+    "task_type": "prop_asset",
+    "version": 1
+  },
+  "created_at": "2026-07-20T04:24:30+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "7511ebfa72d2521b67cd6fe5768f7b01ee794b9ebbd153727ca0d747f1a08de1",
+  "request_params_sha256": "009551831462626b4ffbfb52f4727539821eeed54de7070119f70e0eabc6e6fb",
+  "shot": "PROP_断刀::定妆_道具_断刀_手持",
+  "target": "出图/共享/图片/定妆_道具_断刀_手持.png",
+  "version": 1
+}

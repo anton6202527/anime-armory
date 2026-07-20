@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第8话",
+  "panel_id": "P017",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 7,
+  "references": [
+    {
+      "id": "CHAR_ZHU_WU",
+      "path": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+      "sha256": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_WANG_SI",
+      "path": "出图/共享/图片/CHAR_WANG_SI__front.png",
+      "sha256": "ae6d85d7727a5b5b636fd582d4cf7b9cec26d63958653b3210c84a00ff863ac9",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHAOHUA_FORT",
+      "path": "出图/共享/图片/LOC_SHAOHUA_FORT__anchor.png",
+      "sha256": "cf37548a9e350b104a48d64cf0d2943477f9444312884a9b246cfe9e8887e2c7",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_ZHU_WU",
+      "path": "出图/共享/图片/CHAR_ZHU_WU__face.png",
+      "sha256": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_WANG_SI",
+      "path": "出图/共享/图片/CHAR_WANG_SI__face.png",
+      "sha256": "90608380c211e1d5d6707ee9d4d16e36886c088c054c24f117f54317fc4790c6",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_ZHU_WU",
+      "path": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+      "sha256": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-20T13:51:58"
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "kind": "comic_reference_anchor_generation",
+  "chapter": "第7话",
+  "created_at": "2026-07-20T10:17:37",
+  "refs": [
+    "LOC_SHI_NORTH_ROAD"
+  ],
+  "backend": "Dreamina official CLI",
+  "model": "Dreamina 5.0",
+  "backend_version": "{",
+  "requested_ratio": "4:5",
+  "submitted_ratio": "3:4",
+  "execution_mode": "dreamina_official_cli",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第7话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_anchors_第7话__20260720T101737050447.json",
+  "previous_manifest_sha256": "6a38235fcfb4b76be981b1f9bd57f6010f38cf6bca2d49a759caf261e60313eb",
+  "generated": 1,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-20T10:17:37",
+      "status": "reference_anchor_ready",
+      "ref_id": "LOC_SHI_NORTH_ROAD",
+      "path": "出图/共享/图片/LOC_SHI_NORTH_ROAD__anchor.png",
+      "sha256": "0a0e0ed10bf35052264450fc9c6085c7ff3b5be34d8c1d73bf3664ce0e20a999",
+      "backend": "Dreamina official CLI",
+      "model": "Dreamina 5.0",
+      "backend_version": "{",
+      "attempt": 2,
+      "prompt_path": "生产数据/comic_identity_prompts/第7话/LOC_SHI_NORTH_ROAD__anchor_dreamina__20260720T101627736217.md",
+      "prompt_sha256": "e7daf16ded6462da9a6927b90b8fb7ba099fed0d0139c5e23ad1e9e9be80cb7b",
+      "requested_ratio": "4:5",
+      "submitted_ratio": "3:4",
+      "submit_id": "de27bd89-54f1-4f09-998b-a08b5e5f58a5",
+      "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "style_reference_role": "style_only",
+      "archived_previous_path": "出图/共享/candidates/LOC_SHI_NORTH_ROAD/anchor/20260720T101737019951__d6f1d18a4d97.png",
+      "raw_canvas_path": "出图/共享/candidates/LOC_SHI_NORTH_ROAD/anchor/20260720T101736723372__raw_canvas.png",
+      "raw_canvas_sha256": "7998f0d46801825a3eacacd5ba693f823652ca9534a331142bbb38f2fe255cfd",
+      "canvas_normalization": {
+        "method": "contain_and_pad_no_crop",
+        "ratio": "4:5",
+        "source_width": 1728,
+        "source_height": 2304,
+        "target_width": 1844,
+        "target_height": 2305
+      }
+    }
+  ]
+}

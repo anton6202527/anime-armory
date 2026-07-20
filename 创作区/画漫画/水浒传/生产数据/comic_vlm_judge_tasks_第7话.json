@@ -1,0 +1,2814 @@
+{
+  "schema_version": 2,
+  "kind": "comic_vlm_judge_tasks",
+  "protocol": "CANVAS-ContinuityEval-3axis",
+  "chapter": "第7话",
+  "created_at": "2026-07-20T12:12:51",
+  "axes": [
+    "character_identity",
+    "background_continuity",
+    "prop_identity"
+  ],
+  "instructions": "由多模态 agent 逐条执行：打开 panel 与 references 图片并排看，按 question 打分，写入 verdict 文件（路径见 verdict_file）。只做相对排序与低分预警；score<=2 或 verdict=suspect 会转成 warn finding。verdict 记录必须复制任务里的 panel.sha256——重抽后 sha 不匹配的旧裁决会被自动作废。",
+  "verdict_file": "生产数据/comic_vlm_judge_verdicts_第7话.json",
+  "verdict_schema": {
+    "verdicts": [
+      {
+        "task_id": "<task_id>",
+        "panel_sha256": "<复制任务里的 panel.sha256>",
+        "task_sha256": "<复制任务里的 task_sha256>",
+        "references_sha256": {
+          "<reference path>": "<复制任务里的 sha256>"
+        },
+        "evaluator": {
+          "model": "<具体模型名>",
+          "version": "<版本或日期>",
+          "reviewed_at": "<ISO-8601>"
+        },
+        "scores": {
+          "face": "1-5（按轴要求的子项）"
+        },
+        "verdict": "pass | suspect",
+        "notes": "一句话证据"
+      }
+    ]
+  },
+  "task_count": 132,
+  "tasks": [
+    {
+      "task_id": "P001__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P001",
+        "path": "出图/第7话/panels/P001.png",
+        "sha256": "78ad27455acc81171f13140c530aa385b84d884de81f23484467c90a9ae599b8"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "426a2a05f15e910f07eb0ebf466c6b807112d6b28f41e0403f0124b3a68d7738"
+    },
+    {
+      "task_id": "P002__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P002",
+        "path": "出图/第7话/panels/P002.png",
+        "sha256": "bd3d2bcfb51edb65790bb64672f1e4c36002385c37c01bd372d13838cd8867e0"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "bc6cbb7c99eac3cc58fdc12a4fd4c351d58c2867ec05a6d222acd4f6fbf96d7e"
+    },
+    {
+      "task_id": "P002__CHAR_LI_JI__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P002",
+        "path": "出图/第7话/panels/P002.png",
+        "sha256": "bd3d2bcfb51edb65790bb64672f1e4c36002385c37c01bd372d13838cd8867e0"
+      },
+      "subject": "CHAR_LI_JI",
+      "references": [
+        "出图/共享/图片/CHAR_LI_JI__face.png",
+        "出图/共享/图片/CHAR_LI_JI__front.png",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_LI_JI 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_LI_JI__face.png": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f",
+        "出图/共享/图片/CHAR_LI_JI__front.png": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png": "f781b1fb77da39cbde0efe4c5a699b68e97198fda39ff41b33a1493010a7e47e"
+      },
+      "task_sha256": "13cfc0bbd76afa6e5335fd30b9f4562c8160d12806cd69150f6e30b0a29b865d"
+    },
+    {
+      "task_id": "P003__CHAR_LI_JI__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P003",
+        "path": "出图/第7话/panels/P003.png",
+        "sha256": "4ba692878f432c8cfb13c46dfff91117ac992b4d38cc0c11c5872c5276189bce"
+      },
+      "subject": "CHAR_LI_JI",
+      "references": [
+        "出图/共享/图片/CHAR_LI_JI__face.png",
+        "出图/共享/图片/CHAR_LI_JI__front.png",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_LI_JI 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_LI_JI__face.png": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f",
+        "出图/共享/图片/CHAR_LI_JI__front.png": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png": "f781b1fb77da39cbde0efe4c5a699b68e97198fda39ff41b33a1493010a7e47e"
+      },
+      "task_sha256": "7f53c2bdeb8e740be1aa9fa9a8201feddb40f8237ef1baf1931890202204596c"
+    },
+    {
+      "task_id": "P003__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P003",
+        "path": "出图/第7话/panels/P003.png",
+        "sha256": "4ba692878f432c8cfb13c46dfff91117ac992b4d38cc0c11c5872c5276189bce"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "387ddf589db4bf96bcc603540042cfe5bb86047ff1124db068c1f93c3d432cb0"
+    },
+    {
+      "task_id": "P004__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P004",
+        "path": "出图/第7话/panels/P004.png",
+        "sha256": "b78d2cf606124639e94a015d8fa7e225974a957ddf3fac48499e8f52ca3b3d9f"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "79ad747ce4ebd2c592d1a724d3b7602ce3766a4d0f07ec79526eb16a27f1b3b5"
+    },
+    {
+      "task_id": "P004__CHAR_LI_JI__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P004",
+        "path": "出图/第7话/panels/P004.png",
+        "sha256": "b78d2cf606124639e94a015d8fa7e225974a957ddf3fac48499e8f52ca3b3d9f"
+      },
+      "subject": "CHAR_LI_JI",
+      "references": [
+        "出图/共享/图片/CHAR_LI_JI__face.png",
+        "出图/共享/图片/CHAR_LI_JI__front.png",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_LI_JI 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_LI_JI__face.png": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f",
+        "出图/共享/图片/CHAR_LI_JI__front.png": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png": "f781b1fb77da39cbde0efe4c5a699b68e97198fda39ff41b33a1493010a7e47e"
+      },
+      "task_sha256": "7c6423d025d26c30adab8770632d2b35dd96cab82831bee10034dec3e509afdd"
+    },
+    {
+      "task_id": "P005__CHAR_LI_JI__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P005",
+        "path": "出图/第7话/panels/P005.png",
+        "sha256": "2163df4b1f66d05c82980bd89e0fbd8e7d4570ec212823f42530157d5dbc1060"
+      },
+      "subject": "CHAR_LI_JI",
+      "references": [
+        "出图/共享/图片/CHAR_LI_JI__face.png",
+        "出图/共享/图片/CHAR_LI_JI__front.png",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_LI_JI 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_LI_JI__face.png": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f",
+        "出图/共享/图片/CHAR_LI_JI__front.png": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+        "出图/共享/图片/CHAR_LI_JI__three_quarter.png": "f781b1fb77da39cbde0efe4c5a699b68e97198fda39ff41b33a1493010a7e47e"
+      },
+      "task_sha256": "2539dbfa51bf33b746f0a49eee0ce6308e9fa150350417ed0ea719448f7c9a17"
+    },
+    {
+      "task_id": "P007__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P007",
+        "path": "出图/第7话/panels/P007.png",
+        "sha256": "d6bd03d02266310e99600445d012a44f53b51319fabe58a4002ff3c21e34a0c2"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "46b3f12cfb8b49775e1ad064fe58897c0900f542ffa3633d8cb0e61cb33c6d03"
+    },
+    {
+      "task_id": "P008__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P008",
+        "path": "出图/第7话/panels/P008.png",
+        "sha256": "6199c896347d5147999e54c46468ef2550f84c47d144d6374e41c8febd8a87db"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "99a340c6607fa274ab60cacd793b1bd1137454ef7c61899157cdbcedde98069d"
+    },
+    {
+      "task_id": "P009__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P009",
+        "path": "出图/第7话/panels/P009.png",
+        "sha256": "34e6e25b35a41f0a73ad9316b04e63c875e412868240193973203f9e12ca8bf0"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "131295ad295379c63bc39cc33d9d0ff483a9792c6b724c228725371be9fa003b"
+    },
+    {
+      "task_id": "P010__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P010",
+        "path": "出图/第7话/panels/P010.png",
+        "sha256": "d5b8b2b624e4126ab984bc5fe8953d7b6b7421f79ec30d47d536d03a562ce551"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "668282f3ba7411522be1873af436613778b0e14ff69dba2ec26b306226fa67c7"
+    },
+    {
+      "task_id": "P011__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P011",
+        "path": "出图/第7话/panels/P011.png",
+        "sha256": "1d686bb75eb010e9c67afc964116df042e804ecaff82422eb0f13cb9de9bf9f8"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "e7f44ab4adf44fedb32705a4fd216e867ea3d8ab35e9017d692afc612426aeb7"
+    },
+    {
+      "task_id": "P012__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P012",
+        "path": "出图/第7话/panels/P012.png",
+        "sha256": "3b2e2def95a8260fc515a658542a1d95eefd5ec9da1c1c936d07cf0cb78373de"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "bcde3160beb47937cb980e682b85cbfc73c0e9803a56a2bbe91ce28623cbf35a"
+    },
+    {
+      "task_id": "P013__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P013",
+        "path": "出图/第7话/panels/P013.png",
+        "sha256": "0aba9b22ba11529484f000e32bbfe65720c589ad7ea6be20cd96131fc913dd94"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "44cc3b3836ec547d8dbfd686d79fd0b26a86e6b2e4eb1bcc4c5fe5b7f58afde9"
+    },
+    {
+      "task_id": "P013__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P013",
+        "path": "出图/第7话/panels/P013.png",
+        "sha256": "0aba9b22ba11529484f000e32bbfe65720c589ad7ea6be20cd96131fc913dd94"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "02b5b0491c4e7e0990dda01ba52a39cb5ee2df42f4742e20914ad4df1c326134"
+    },
+    {
+      "task_id": "P013__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P013",
+        "path": "出图/第7话/panels/P013.png",
+        "sha256": "0aba9b22ba11529484f000e32bbfe65720c589ad7ea6be20cd96131fc913dd94"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "1265a4d4cda6325cae5840419a95f8654e38736627c87feed6897888b6ab0a09"
+    },
+    {
+      "task_id": "P014__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P014",
+        "path": "出图/第7话/panels/P014.png",
+        "sha256": "a4f2e3eddcfe98e512b0d182769310b0b3d024fe63be2842ddcc95620d9bc5cb"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "aaa744e61c4ff4dc45595ee0e0169ae9e6e65307bb47eb5bead11dbe5e45c9a8"
+    },
+    {
+      "task_id": "P015__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P015",
+        "path": "出图/第7话/panels/P015.png",
+        "sha256": "6f4ba2ebb317bafb4678d1c235d34fa12d0eec77a19c0336b530ab46b11f4ca4"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "bf227aeefef8942618490df488662a6a7ff28379cf82b4af1a42de0345d65d88"
+    },
+    {
+      "task_id": "P016__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P016",
+        "path": "出图/第7话/panels/P016.png",
+        "sha256": "2b0a7d32acc7ed55cee80318dd4d56a67defeb3f8e07eb0bd35724ada1e1bcb7"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "ef7144e2a33003c105b801434c21c3127b508bed3c675e9eff22b31a86fdb1d3"
+    },
+    {
+      "task_id": "P017__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P017",
+        "path": "出图/第7话/panels/P017.png",
+        "sha256": "3de84b891735a8c4e79352da9f55a5cb2238024c6dee15c62b8147af4d859494"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "e43f53de54806321f58725290d0beb204ae0e2d570c916361416595131d525b3"
+    },
+    {
+      "task_id": "P017__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P017",
+        "path": "出图/第7话/panels/P017.png",
+        "sha256": "3de84b891735a8c4e79352da9f55a5cb2238024c6dee15c62b8147af4d859494"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "0e2580fc052a6094cce41e31b879996e378ff40b4d00112b5f97b9cbabde01e0"
+    },
+    {
+      "task_id": "P018__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P018",
+        "path": "出图/第7话/panels/P018.png",
+        "sha256": "49e1c89201f1d179103fa4c5d810ddcef5e09359ed07130a8f8e6da67960cfde"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "a773952e28cffd923db55e254fd69bb2f5ec95f60429a14462b754e805f82010"
+    },
+    {
+      "task_id": "P018__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P018",
+        "path": "出图/第7话/panels/P018.png",
+        "sha256": "49e1c89201f1d179103fa4c5d810ddcef5e09359ed07130a8f8e6da67960cfde"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "005070743e712a9c993fd3b6c6187c8ae2e2dcc19a78f062a0744192cf3705de"
+    },
+    {
+      "task_id": "P018__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P018",
+        "path": "出图/第7话/panels/P018.png",
+        "sha256": "49e1c89201f1d179103fa4c5d810ddcef5e09359ed07130a8f8e6da67960cfde"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "b69993efecfd497dbeb509ca295c0e34473e6511f3232aea6b51625c2022222f"
+    },
+    {
+      "task_id": "P019__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P019",
+        "path": "出图/第7话/panels/P019.png",
+        "sha256": "07084285a181bc37735b98813e1eda890530d1b29c163c6680d5722a15a8aa24"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "71f700a1a90353d91455d2a9d6d65459baba0c5b6f3a0b93108dba321194b637"
+    },
+    {
+      "task_id": "P020__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P020",
+        "path": "出图/第7话/panels/P020.png",
+        "sha256": "8f5a56549513867c36dd39410957eaedfd5ed8b491b159da7a370c40fa03947c"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "95ac5423467bf1ff5632adabd3d4e919fb91d67e9424d2b84788adbb2e7b548f"
+    },
+    {
+      "task_id": "P021__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P021",
+        "path": "出图/第7话/panels/P021.png",
+        "sha256": "5b4ffb7badd7148f4d5ea400efe4d4537c0a4fadf465db8aba74f81490d8d69a"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "6f99c8a75b67584fb62205597337c55dd5c417fe7c1349521f5cff0bfada207e"
+    },
+    {
+      "task_id": "P022__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P022",
+        "path": "出图/第7话/panels/P022.png",
+        "sha256": "5cc5542e360da17aeaa7dd17e9bcba1c9b88b8ab0ae2519dfefd2f8b3a7a0a05"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "01f8257f0168dc9b2d9451d66f6a08c7b34fa522e84bdfd0d732c0bc8755dd35"
+    },
+    {
+      "task_id": "P023__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P023",
+        "path": "出图/第7话/panels/P023.png",
+        "sha256": "75be7e92cc7d361b688f6dd9a9e3ef9b874ce613b76518f6f2b3ae71c5a77394"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "ac74e04637a7c034395d9dd10804a929b02d3b33286f803b0db3683720a0722f"
+    },
+    {
+      "task_id": "P024__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P024",
+        "path": "出图/第7话/panels/P024.png",
+        "sha256": "b18333306a4b5ae9f59a2e702bef3a9f23b3a5bf749ce1d42df69e7baab21721"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "f278d876b9dac173c15fcef5cc5fa72a8fafda97858b15dec2b08837228299d1"
+    },
+    {
+      "task_id": "P025__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P025",
+        "path": "出图/第7话/panels/P025.png",
+        "sha256": "98c3a6cbd402ede975e4d62e53e33913b0c9f048b2dc48ea368c25cfb245c405"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "5a7ab42bb78776ab37ac635caa35472e8e4c90b34345e78f13a8cfc8882cd10c"
+    },
+    {
+      "task_id": "P026__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P026",
+        "path": "出图/第7话/panels/P026.png",
+        "sha256": "9ba2b96947dbf9a4fc911912d0fff57d4018a6f7d0f88cfdc56f6c9e0c1d204d"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "7b44db13b23a1785137d0fb155fe4594110c523883f8608667c01bee33cf1098"
+    },
+    {
+      "task_id": "P026__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P026",
+        "path": "出图/第7话/panels/P026.png",
+        "sha256": "9ba2b96947dbf9a4fc911912d0fff57d4018a6f7d0f88cfdc56f6c9e0c1d204d"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "405b14a2398be3c1fc4bca42ba3c4acb2c3670547f6d61493d799ef25c59a58d"
+    },
+    {
+      "task_id": "P027__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P027",
+        "path": "出图/第7话/panels/P027.png",
+        "sha256": "1f92f2457a502f706fdfa4fa8314c8c038443ccbe8fa2a5cc1212aaf976a3b9b"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "77e4a2a76e29d8e85c31e4b5fc68075031ae2a47119f7b2d3fa8b31c78d36127"
+    },
+    {
+      "task_id": "P027__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P027",
+        "path": "出图/第7话/panels/P027.png",
+        "sha256": "1f92f2457a502f706fdfa4fa8314c8c038443ccbe8fa2a5cc1212aaf976a3b9b"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "94efa34dd290082fb0dfd9db5c8b63b3ed52e52992bd2be6e4793aa0a4b070cc"
+    },
+    {
+      "task_id": "P028__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P028",
+        "path": "出图/第7话/panels/P028.png",
+        "sha256": "794ba60d2163d4b1270a8f635653091aa701fcd12ecf49ad2418f45530834220"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "7392afb352bea37d2d0ff108ffb88f605aa8d65b57be3e5a076f3913ac913c74"
+    },
+    {
+      "task_id": "P028__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P028",
+        "path": "出图/第7话/panels/P028.png",
+        "sha256": "794ba60d2163d4b1270a8f635653091aa701fcd12ecf49ad2418f45530834220"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "604d38b1caa5ed11578ceaa60cf2343faeb3d344d90f28957c69527000de118a"
+    },
+    {
+      "task_id": "P029__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P029",
+        "path": "出图/第7话/panels/P029.png",
+        "sha256": "260a2d7122ec1c875b2308f476b41051835155156f3c532698f1d6828fe33329"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "6bd0ec9216269aff3d7ab5d8419459380d6cd2ce76660234a273badff913d15f"
+    },
+    {
+      "task_id": "P029__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P029",
+        "path": "出图/第7话/panels/P029.png",
+        "sha256": "260a2d7122ec1c875b2308f476b41051835155156f3c532698f1d6828fe33329"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "9ac390a7d71fecd116f6a7efc0422747f5e5581b4fc4f68bdd0f9626e3bac3c7"
+    },
+    {
+      "task_id": "P030__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P030",
+        "path": "出图/第7话/panels/P030.png",
+        "sha256": "12c7e1abab9a8dd181ae9e31517be91ce9757c0bc5ac4d93e25a250618c87da4"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "28a0f857cf3c3afab17e8bf20075f0256d4184db4a092fd8492a8262d1be50e8"
+    },
+    {
+      "task_id": "P030__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P030",
+        "path": "出图/第7话/panels/P030.png",
+        "sha256": "12c7e1abab9a8dd181ae9e31517be91ce9757c0bc5ac4d93e25a250618c87da4"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "b19b958c3641b90a4b58a29323e25b2ed3ac5258080afa9996e0435d719028e0"
+    },
+    {
+      "task_id": "P031__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P031",
+        "path": "出图/第7话/panels/P031.png",
+        "sha256": "24de3acc7fea88bc88690119f9c7f0493c9fc74afa715a8a89008f2bad3fa7d4"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "f5d22319667ab05ceb803754d2a1efed21c47d38fd49149a52e5886ebe15fb40"
+    },
+    {
+      "task_id": "P031__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P031",
+        "path": "出图/第7话/panels/P031.png",
+        "sha256": "24de3acc7fea88bc88690119f9c7f0493c9fc74afa715a8a89008f2bad3fa7d4"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "8de63d9588f3f96cfc651966cc52c39e7833cf4c74a1f0c3349051c91e439993"
+    },
+    {
+      "task_id": "P032__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P032",
+        "path": "出图/第7话/panels/P032.png",
+        "sha256": "a788ac5069bbee41e6b1eb8369f54a19989f59e57fec0166fd41034e14557ed2"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "cac9c3b881fd1d38695478f9bc676de4b842ac766f0242d0d005002704ce8cdb"
+    },
+    {
+      "task_id": "P032__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P032",
+        "path": "出图/第7话/panels/P032.png",
+        "sha256": "a788ac5069bbee41e6b1eb8369f54a19989f59e57fec0166fd41034e14557ed2"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "cee6eeae21c29e202bb73a80ccf342f5b1b829321bd9db90de53259179589212"
+    },
+    {
+      "task_id": "P033__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P033",
+        "path": "出图/第7话/panels/P033.png",
+        "sha256": "5b05030f508f254d6b84b440db2414963ef0a5f263a05949c1737c6d48b0c88b"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "7a6de86cbb78e33b51c91810549f037109d63f9675561989e888743822338219"
+    },
+    {
+      "task_id": "P033__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P033",
+        "path": "出图/第7话/panels/P033.png",
+        "sha256": "5b05030f508f254d6b84b440db2414963ef0a5f263a05949c1737c6d48b0c88b"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "c72aebef8dc5181c92a30b94841e0aaa941159b1ac743fd9c9a75fab19173697"
+    },
+    {
+      "task_id": "P034__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P034",
+        "path": "出图/第7话/panels/P034.png",
+        "sha256": "64707ffd4ab452dd9da2d54509dcf9612f433ad00c286e45fecbafee0a2c227c"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "63cb969d1a1e1b27f7e039765fe08b46066f3f9a47aa7f274422d1882fe23a5c"
+    },
+    {
+      "task_id": "P034__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P034",
+        "path": "出图/第7话/panels/P034.png",
+        "sha256": "64707ffd4ab452dd9da2d54509dcf9612f433ad00c286e45fecbafee0a2c227c"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "defc8622d53399ce02af6630be92da5e17387608593fff0507ebd887d4820c19"
+    },
+    {
+      "task_id": "P035__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P035",
+        "path": "出图/第7话/panels/P035.png",
+        "sha256": "784f6a94f1200461bbd381e329f7ecf3f500d28ebb376954117418175aeffdeb"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "f21a9127b9d640d7a66d625804ec2d6de921171d72412a419c658b28740112f4"
+    },
+    {
+      "task_id": "P035__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P035",
+        "path": "出图/第7话/panels/P035.png",
+        "sha256": "784f6a94f1200461bbd381e329f7ecf3f500d28ebb376954117418175aeffdeb"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "164a82313eb51d9d15e79189071ec3aff047613e1427b679ae38e9a58cee3c15"
+    },
+    {
+      "task_id": "P036__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P036",
+        "path": "出图/第7话/panels/P036.png",
+        "sha256": "b592cb3d97a2bc0089381f6bf43f495db0127e047acd43b9c92bd0800cd760f4"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "0183900305e72baf105c731bf01c7f7153256abb4b774cd0e00589f751e25948"
+    },
+    {
+      "task_id": "P036__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P036",
+        "path": "出图/第7话/panels/P036.png",
+        "sha256": "b592cb3d97a2bc0089381f6bf43f495db0127e047acd43b9c92bd0800cd760f4"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "ab7337b0c97c9a17557940d36747e926f9964d8817613740eaa2cd7d34eebc6a"
+    },
+    {
+      "task_id": "P037__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P037",
+        "path": "出图/第7话/panels/P037.png",
+        "sha256": "1d566b6dde951afa4f782d389afcc291df612906769db001b3ba19de1c503f8f"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "c384365e0e670ab89cd0edb2abc9d283e2a047d0c667f53ff9364b7b001d87be"
+    },
+    {
+      "task_id": "P037__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P037",
+        "path": "出图/第7话/panels/P037.png",
+        "sha256": "1d566b6dde951afa4f782d389afcc291df612906769db001b3ba19de1c503f8f"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "44f7a1194f55a587358c0c013ccfb25d56997004af6fca659b2833624add0984"
+    },
+    {
+      "task_id": "P038__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P038",
+        "path": "出图/第7话/panels/P038.png",
+        "sha256": "8b5dff6278ecb1f547c2742ba6d6efcf3d27f263e5868ca0d6132b22a97aac69"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "457339c1ded8c6544e6610a4decc8e18f352551980af1f40a9f0f1dbf1c6f6cb"
+    },
+    {
+      "task_id": "P038__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P038",
+        "path": "出图/第7话/panels/P038.png",
+        "sha256": "8b5dff6278ecb1f547c2742ba6d6efcf3d27f263e5868ca0d6132b22a97aac69"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "309b6bfa81ddc20f32eba9ad7574c4f776825d00c705c29d1f566b69b39bf72c"
+    },
+    {
+      "task_id": "P039__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P039",
+        "path": "出图/第7话/panels/P039.png",
+        "sha256": "d2d31081db206f22a33f82833763aebd0bebc76800256453cc73ba8f537eb717"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "251f21dc7690acff0216c0c55b9834170c5be67f5e2fa4e7d692ef7372a5adb8"
+    },
+    {
+      "task_id": "P039__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P039",
+        "path": "出图/第7话/panels/P039.png",
+        "sha256": "d2d31081db206f22a33f82833763aebd0bebc76800256453cc73ba8f537eb717"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "d99a7730d2c4cf12f25061ff75ca3e26cb1a0a3857bf7a7afc6d76d774c8ab1d"
+    },
+    {
+      "task_id": "P040__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P040",
+        "path": "出图/第7话/panels/P040.png",
+        "sha256": "0cfb87076becda4f05de2af98552c56bfddc7dc0160b4236bf5157a8c35e7800"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "9f1c21025296a639f386bf10a20e08e221a73bc38c4477057f3f52d4d3a28e3b"
+    },
+    {
+      "task_id": "P040__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P040",
+        "path": "出图/第7话/panels/P040.png",
+        "sha256": "0cfb87076becda4f05de2af98552c56bfddc7dc0160b4236bf5157a8c35e7800"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "d4cc7fafc36ca097db6c019be00b006d947e1b3e1765a144a275c05f69bce63a"
+    },
+    {
+      "task_id": "P041__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P041",
+        "path": "出图/第7话/panels/P041.png",
+        "sha256": "4003f8993ddd6aecc4c10df3334e7e63d63be51364a3925a0b49f054806da293"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "d8e3ebedb1017d50d180b0094160fd179a8156c826124c414f0dd0ca890eefc7"
+    },
+    {
+      "task_id": "P041__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P041",
+        "path": "出图/第7话/panels/P041.png",
+        "sha256": "4003f8993ddd6aecc4c10df3334e7e63d63be51364a3925a0b49f054806da293"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "d3d54e0946a568407e6395672e1fe8dae51975ba6b725b5aeefff8d39fc3d4d5"
+    },
+    {
+      "task_id": "P041__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P041",
+        "path": "出图/第7话/panels/P041.png",
+        "sha256": "4003f8993ddd6aecc4c10df3334e7e63d63be51364a3925a0b49f054806da293"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "8e1efc53ed56bfc8ecd0760ce0060c193fe3894e694bea29b14440e9049c60ee"
+    },
+    {
+      "task_id": "P042__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P042",
+        "path": "出图/第7话/panels/P042.png",
+        "sha256": "10cd0e0d59a52e27e5e1abdd945aee221593eee6a9a377ad7190f1572267c428"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "e7f76bda7214d24dd245c231e5128cd0a69baefa686b37682bd0a3f7b43be1de"
+    },
+    {
+      "task_id": "P042__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P042",
+        "path": "出图/第7话/panels/P042.png",
+        "sha256": "10cd0e0d59a52e27e5e1abdd945aee221593eee6a9a377ad7190f1572267c428"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "2427f61f223a5ef11964bf78fbcf246fda3fe5b7cb2e58b4da1154d5d1adaead"
+    },
+    {
+      "task_id": "P042__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P042",
+        "path": "出图/第7话/panels/P042.png",
+        "sha256": "10cd0e0d59a52e27e5e1abdd945aee221593eee6a9a377ad7190f1572267c428"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "4bc04ec863f356b3226425f6d0a3a2619374d256c017f989087615ad4ef3fabb"
+    },
+    {
+      "task_id": "P043__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P043",
+        "path": "出图/第7话/panels/P043.png",
+        "sha256": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "d175652b7ac38fd4571860e99090127c2d8a53b2babb275452541e1911e254da"
+    },
+    {
+      "task_id": "P043__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P043",
+        "path": "出图/第7话/panels/P043.png",
+        "sha256": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "b476681b5e8fc25a1f6c68c15cf7fab5296364165bfc76275c116efccbb28ead"
+    },
+    {
+      "task_id": "P043__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P043",
+        "path": "出图/第7话/panels/P043.png",
+        "sha256": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "c4f30b755587a70f7e81bba43884ff7166c05aaf045c34ac6bf208122fead3d7"
+    },
+    {
+      "task_id": "P043__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P043",
+        "path": "出图/第7话/panels/P043.png",
+        "sha256": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "13a93350c8a585cb50c61fd518b2f1d20a5f5f5740e8387fa7cd26d68dae085d"
+    },
+    {
+      "task_id": "P044__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P044",
+        "path": "出图/第7话/panels/P044.png",
+        "sha256": "fb595384a1b7440b7ef3521228905c5d44d9989e536effe69e1c63b6662bcc22"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "afc1444a614d1436df4978dfe6218c1eb79d952f30b273d92ca9b741ea977bd9"
+    },
+    {
+      "task_id": "P044__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P044",
+        "path": "出图/第7话/panels/P044.png",
+        "sha256": "fb595384a1b7440b7ef3521228905c5d44d9989e536effe69e1c63b6662bcc22"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "8bb6012b90309a7b6b2de350a603ce4f5fa233062373681c168b31e62775135b"
+    },
+    {
+      "task_id": "P044__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P044",
+        "path": "出图/第7话/panels/P044.png",
+        "sha256": "fb595384a1b7440b7ef3521228905c5d44d9989e536effe69e1c63b6662bcc22"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "5e8e6f2912db0f546ecb51c944798c9aea0d2f5a1b1db172cf91f0382dc3d5be"
+    },
+    {
+      "task_id": "P045__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P045",
+        "path": "出图/第7话/panels/P045.png",
+        "sha256": "6a0de4822812210a559f23053d04f4227b0ffa6b36762a3a735aefc24f56cd48"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "d4c0a8ce18d118805a50529c099ac34c5cb9d29e875813d6eb3d9c63efe3e948"
+    },
+    {
+      "task_id": "P045__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P045",
+        "path": "出图/第7话/panels/P045.png",
+        "sha256": "6a0de4822812210a559f23053d04f4227b0ffa6b36762a3a735aefc24f56cd48"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "6b7c0b50dd3c250ad18e44eeb3029568159828d3b8bc3e335d8a73a2afc86ded"
+    },
+    {
+      "task_id": "P046__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P046",
+        "path": "出图/第7话/panels/P046.png",
+        "sha256": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "4949ed9aa0bcca4e25bfbd2b6ab5c420e7a1d12330d616a7f0dab3b2bbee675c"
+    },
+    {
+      "task_id": "P046__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P046",
+        "path": "出图/第7话/panels/P046.png",
+        "sha256": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "53a94d1bbd959512e292030de62222de569f7a0313e8f526f71702dc4d3ae7b8"
+    },
+    {
+      "task_id": "P046__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P046",
+        "path": "出图/第7话/panels/P046.png",
+        "sha256": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "d0326bd9ff55f73991533fbac5b1a4b5b3cc47da1b453d2a1cd7bc07f27e9921"
+    },
+    {
+      "task_id": "P046__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P046",
+        "path": "出图/第7话/panels/P046.png",
+        "sha256": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "c3296a000a9e25dbf72eb05035025305f829b0e51009e46d2dd2b6d4c1d6722e"
+    },
+    {
+      "task_id": "P047__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P047",
+        "path": "出图/第7话/panels/P047.png",
+        "sha256": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "6f5d90882e741cb2e088cc62beac5745e5e5ca0ab0f225ff2ece650801e24299"
+    },
+    {
+      "task_id": "P047__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P047",
+        "path": "出图/第7话/panels/P047.png",
+        "sha256": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "0c9bc0803f29c9c0761f9143d07ed78ceb00e9cd3c478ffdec86631b4a662428"
+    },
+    {
+      "task_id": "P047__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P047",
+        "path": "出图/第7话/panels/P047.png",
+        "sha256": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "4c7dc0d549fbe1608441372f39954972713031ff9c4d505e78fca182d5f68a0f"
+    },
+    {
+      "task_id": "P047__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P047",
+        "path": "出图/第7话/panels/P047.png",
+        "sha256": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "cb4e181bf3e6d515a9dba77eb1967badf7f76468caf8e85c9dad5ff0c8b2bd91"
+    },
+    {
+      "task_id": "P048__CHAR_SHI_JIN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P048",
+        "path": "出图/第7话/panels/P048.png",
+        "sha256": "0707e731e86a3594fb0e5bcb0e4a49a166f0cb88509e1083a3cfeb8f572aaff6"
+      },
+      "subject": "CHAR_SHI_JIN",
+      "references": [
+        "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_SHI_JIN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_SHI_JIN__face.png": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+        "出图/共享/图片/CHAR_SHI_JIN__front.png": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+      },
+      "task_sha256": "255333675c5934f552e3942e52ff21892b520c815aa99bd068dd7fcf84acab13"
+    },
+    {
+      "task_id": "P048__CHAR_ZHU_WU__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P048",
+        "path": "出图/第7话/panels/P048.png",
+        "sha256": "0707e731e86a3594fb0e5bcb0e4a49a166f0cb88509e1083a3cfeb8f572aaff6"
+      },
+      "subject": "CHAR_ZHU_WU",
+      "references": [
+        "出图/共享/图片/CHAR_ZHU_WU__face.png",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_ZHU_WU 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_ZHU_WU__face.png": "21f7eb803894f4bb63bf1861a51daadf73b1f26e173d28ba20e2c41602c982e4",
+        "出图/共享/图片/CHAR_ZHU_WU__front.png": "3cd938110f8b5960df9d337ed265687597bd1dedf2f95605d600e64e4a33300a",
+        "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png": "01a746a9175b6daba2cb58131cd99085b82575467dc8e5103939b4a87b360d21"
+      },
+      "task_sha256": "7eb69c5c9627e6f8895cf6be7adaf104f958019f8018c42bc6cdf939faedd904"
+    },
+    {
+      "task_id": "P048__CHAR_CHEN_DA__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P048",
+        "path": "出图/第7话/panels/P048.png",
+        "sha256": "0707e731e86a3594fb0e5bcb0e4a49a166f0cb88509e1083a3cfeb8f572aaff6"
+      },
+      "subject": "CHAR_CHEN_DA",
+      "references": [
+        "出图/共享/图片/CHAR_CHEN_DA__face.png",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_CHEN_DA 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_CHEN_DA__face.png": "75016a43966cea72e00c160b91cdc08f426565ea2a073c000debb9b31d2c0ea8",
+        "出图/共享/图片/CHAR_CHEN_DA__front.png": "feda36a9a88ad79692f2b4deb9ecc983f07dabf1396140539df5b6b361894adf",
+        "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png": "2157d68b719bc99942e59080378b9a25c243da1809f86d8954d33904edf702e3"
+      },
+      "task_sha256": "d75cd18e357c4aad796b7de8ffad276415bfbcfcde468c82c66eba4d96c064b6"
+    },
+    {
+      "task_id": "P048__CHAR_YANG_CHUN__character",
+      "axis": "character_identity",
+      "panel": {
+        "panel_id": "P048",
+        "path": "出图/第7话/panels/P048.png",
+        "sha256": "0707e731e86a3594fb0e5bcb0e4a49a166f0cb88509e1083a3cfeb8f572aaff6"
+      },
+      "subject": "CHAR_YANG_CHUN",
+      "references": [
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png"
+      ],
+      "question": "并排对比 panel 图与 CHAR_YANG_CHUN 的定妆参考：这是同一个角色吗？分三个子项打分：face（脸型/眼型/发际线/发型轮廓）、outfit（领型/纽扣/花纹/配饰）、build（体型比例）。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/共享/图片/CHAR_YANG_CHUN__face.png": "6e19ac65eda8ead2fc3e9ab053f77e1183698203cc3463c80c1f746a29122cb2",
+        "出图/共享/图片/CHAR_YANG_CHUN__front.png": "573203d0df7bbd33ee5c958b8f2da752c2f147839dd679f6e1a3d6b8c3aaf094",
+        "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png": "cdd8c3e81632d9e98e4db1615dfb21a27c330a31829a23fc5627f594b71a85e9"
+      },
+      "task_sha256": "acdf8c51b76d48b8cafbcb48fceb8134acfc7016e728a0e73c1ca0f29014c464"
+    },
+    {
+      "task_id": "P001__P002__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P002",
+        "path": "出图/第7话/panels/P002.png",
+        "sha256": "bd3d2bcfb51edb65790bb64672f1e4c36002385c37c01bd372d13838cd8867e0"
+      },
+      "subject": "LOC_SHI_THRESHING_GROUND",
+      "references": [
+        "出图/第7话/panels/P001.png"
+      ],
+      "reference_sha256": "78ad27455acc81171f13140c530aa385b84d884de81f23484467c90a9ae599b8",
+      "question": "这两格同属场景锚 LOC_SHI_THRESHING_GROUND（前格 P001 → 本格 P002）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P001.png": "78ad27455acc81171f13140c530aa385b84d884de81f23484467c90a9ae599b8"
+      },
+      "task_sha256": "068cf53c4008643d2b04e62f2c5ffb54fb6c899d26ee01903b96dcf96e4d8ccb"
+    },
+    {
+      "task_id": "P002__P003__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P003",
+        "path": "出图/第7话/panels/P003.png",
+        "sha256": "4ba692878f432c8cfb13c46dfff91117ac992b4d38cc0c11c5872c5276189bce"
+      },
+      "subject": "LOC_SHI_THRESHING_GROUND",
+      "references": [
+        "出图/第7话/panels/P002.png"
+      ],
+      "reference_sha256": "bd3d2bcfb51edb65790bb64672f1e4c36002385c37c01bd372d13838cd8867e0",
+      "question": "这两格同属场景锚 LOC_SHI_THRESHING_GROUND（前格 P002 → 本格 P003）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P002.png": "bd3d2bcfb51edb65790bb64672f1e4c36002385c37c01bd372d13838cd8867e0"
+      },
+      "task_sha256": "1204eb2a12d4a2c3d5122c546161feb4248897704a288b58b91aacc7e79ba3be"
+    },
+    {
+      "task_id": "P003__P004__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P004",
+        "path": "出图/第7话/panels/P004.png",
+        "sha256": "b78d2cf606124639e94a015d8fa7e225974a957ddf3fac48499e8f52ca3b3d9f"
+      },
+      "subject": "LOC_SHI_THRESHING_GROUND",
+      "references": [
+        "出图/第7话/panels/P003.png"
+      ],
+      "reference_sha256": "4ba692878f432c8cfb13c46dfff91117ac992b4d38cc0c11c5872c5276189bce",
+      "question": "这两格同属场景锚 LOC_SHI_THRESHING_GROUND（前格 P003 → 本格 P004）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P003.png": "4ba692878f432c8cfb13c46dfff91117ac992b4d38cc0c11c5872c5276189bce"
+      },
+      "task_sha256": "f74a289920505265d184bd2d7211a9ce0d222f4b8b1e3cf4dd040c9c8ed4b29d"
+    },
+    {
+      "task_id": "P004__P005__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P005",
+        "path": "出图/第7话/panels/P005.png",
+        "sha256": "2163df4b1f66d05c82980bd89e0fbd8e7d4570ec212823f42530157d5dbc1060"
+      },
+      "subject": "LOC_SHI_THRESHING_GROUND",
+      "references": [
+        "出图/第7话/panels/P004.png"
+      ],
+      "reference_sha256": "b78d2cf606124639e94a015d8fa7e225974a957ddf3fac48499e8f52ca3b3d9f",
+      "question": "这两格同属场景锚 LOC_SHI_THRESHING_GROUND（前格 P004 → 本格 P005）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P004.png": "b78d2cf606124639e94a015d8fa7e225974a957ddf3fac48499e8f52ca3b3d9f"
+      },
+      "task_sha256": "3a4cda9e21e773dd65e24f83ae39959acb131a16113bc0c81bb4d4ce19c87883"
+    },
+    {
+      "task_id": "P005__P007__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P007",
+        "path": "出图/第7话/panels/P007.png",
+        "sha256": "d6bd03d02266310e99600445d012a44f53b51319fabe58a4002ff3c21e34a0c2"
+      },
+      "subject": "LOC_SHI_THRESHING_GROUND",
+      "references": [
+        "出图/第7话/panels/P005.png"
+      ],
+      "reference_sha256": "2163df4b1f66d05c82980bd89e0fbd8e7d4570ec212823f42530157d5dbc1060",
+      "question": "这两格同属场景锚 LOC_SHI_THRESHING_GROUND（前格 P005 → 本格 P007）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P005.png": "2163df4b1f66d05c82980bd89e0fbd8e7d4570ec212823f42530157d5dbc1060"
+      },
+      "task_sha256": "0e06a70b445133ba34d193b0d251f92ac0c79d7f8907d9ae784ab06e6a2584d0"
+    },
+    {
+      "task_id": "P008__P009__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P009",
+        "path": "出图/第7话/panels/P009.png",
+        "sha256": "34e6e25b35a41f0a73ad9316b04e63c875e412868240193973203f9e12ca8bf0"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P008.png"
+      ],
+      "reference_sha256": "6199c896347d5147999e54c46468ef2550f84c47d144d6374e41c8febd8a87db",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P008 → 本格 P009）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P008.png": "6199c896347d5147999e54c46468ef2550f84c47d144d6374e41c8febd8a87db"
+      },
+      "task_sha256": "ecc10e007232012ec7a2afe12db4a8b11db603c8eb5fd6aa07c154d4ec4bfff0"
+    },
+    {
+      "task_id": "P009__P010__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P010",
+        "path": "出图/第7话/panels/P010.png",
+        "sha256": "d5b8b2b624e4126ab984bc5fe8953d7b6b7421f79ec30d47d536d03a562ce551"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P009.png"
+      ],
+      "reference_sha256": "34e6e25b35a41f0a73ad9316b04e63c875e412868240193973203f9e12ca8bf0",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P009 → 本格 P010）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P009.png": "34e6e25b35a41f0a73ad9316b04e63c875e412868240193973203f9e12ca8bf0"
+      },
+      "task_sha256": "a7d0120cf99a9a099d5d8b973514a9b146158050f0d4a038ee787da0dec548af"
+    },
+    {
+      "task_id": "P010__P011__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P011",
+        "path": "出图/第7话/panels/P011.png",
+        "sha256": "1d686bb75eb010e9c67afc964116df042e804ecaff82422eb0f13cb9de9bf9f8"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P010.png"
+      ],
+      "reference_sha256": "d5b8b2b624e4126ab984bc5fe8953d7b6b7421f79ec30d47d536d03a562ce551",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P010 → 本格 P011）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P010.png": "d5b8b2b624e4126ab984bc5fe8953d7b6b7421f79ec30d47d536d03a562ce551"
+      },
+      "task_sha256": "7f3db76da737a29b828f8712173969403b20c4d8f0d3a78be8f2eafa6dea9422"
+    },
+    {
+      "task_id": "P011__P012__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P012",
+        "path": "出图/第7话/panels/P012.png",
+        "sha256": "3b2e2def95a8260fc515a658542a1d95eefd5ec9da1c1c936d07cf0cb78373de"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P011.png"
+      ],
+      "reference_sha256": "1d686bb75eb010e9c67afc964116df042e804ecaff82422eb0f13cb9de9bf9f8",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P011 → 本格 P012）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P011.png": "1d686bb75eb010e9c67afc964116df042e804ecaff82422eb0f13cb9de9bf9f8"
+      },
+      "task_sha256": "db10b8c1d232450af270c546de10a6598acf221bf93ba44b8e7b79e6ccbf9dda"
+    },
+    {
+      "task_id": "P006__P013__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P013",
+        "path": "出图/第7话/panels/P013.png",
+        "sha256": "0aba9b22ba11529484f000e32bbfe65720c589ad7ea6be20cd96131fc913dd94"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P006.png"
+      ],
+      "reference_sha256": "bc2bbbe68e0e0fe9f4a93784de30611da930fd9152fcffd5c76b7c5671c13dd4",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P006 → 本格 P013）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P006.png": "bc2bbbe68e0e0fe9f4a93784de30611da930fd9152fcffd5c76b7c5671c13dd4"
+      },
+      "task_sha256": "1b28cb4624bb57f0f216a76f93b7041f90790293a691d9351f8d4fa764058a7f"
+    },
+    {
+      "task_id": "P013__P014__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P014",
+        "path": "出图/第7话/panels/P014.png",
+        "sha256": "a4f2e3eddcfe98e512b0d182769310b0b3d024fe63be2842ddcc95620d9bc5cb"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P013.png"
+      ],
+      "reference_sha256": "0aba9b22ba11529484f000e32bbfe65720c589ad7ea6be20cd96131fc913dd94",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P013 → 本格 P014）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P013.png": "0aba9b22ba11529484f000e32bbfe65720c589ad7ea6be20cd96131fc913dd94"
+      },
+      "task_sha256": "c9b35839ed8b58581119d86205a61dabdcabee4efdbcbb60e97e0837afee9344"
+    },
+    {
+      "task_id": "P014__P015__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P015",
+        "path": "出图/第7话/panels/P015.png",
+        "sha256": "6f4ba2ebb317bafb4678d1c235d34fa12d0eec77a19c0336b530ab46b11f4ca4"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P014.png"
+      ],
+      "reference_sha256": "a4f2e3eddcfe98e512b0d182769310b0b3d024fe63be2842ddcc95620d9bc5cb",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P014 → 本格 P015）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P014.png": "a4f2e3eddcfe98e512b0d182769310b0b3d024fe63be2842ddcc95620d9bc5cb"
+      },
+      "task_sha256": "07a59b0af5ed5dae839fca32d121ef9222d6eacb2da454b0e64f68920222b463"
+    },
+    {
+      "task_id": "P015__P016__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P016",
+        "path": "出图/第7话/panels/P016.png",
+        "sha256": "2b0a7d32acc7ed55cee80318dd4d56a67defeb3f8e07eb0bd35724ada1e1bcb7"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P015.png"
+      ],
+      "reference_sha256": "6f4ba2ebb317bafb4678d1c235d34fa12d0eec77a19c0336b530ab46b11f4ca4",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P015 → 本格 P016）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P015.png": "6f4ba2ebb317bafb4678d1c235d34fa12d0eec77a19c0336b530ab46b11f4ca4"
+      },
+      "task_sha256": "3947e04a9a0babafaa30f25510d2fec577773bbbc26213e2fbb7e67b09d6b74c"
+    },
+    {
+      "task_id": "P016__P017__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P017",
+        "path": "出图/第7话/panels/P017.png",
+        "sha256": "3de84b891735a8c4e79352da9f55a5cb2238024c6dee15c62b8147af4d859494"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P016.png"
+      ],
+      "reference_sha256": "2b0a7d32acc7ed55cee80318dd4d56a67defeb3f8e07eb0bd35724ada1e1bcb7",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P016 → 本格 P017）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P016.png": "2b0a7d32acc7ed55cee80318dd4d56a67defeb3f8e07eb0bd35724ada1e1bcb7"
+      },
+      "task_sha256": "a579f4de5b9d34a3e670a23dbbd24c28e1fd13c3ea07ca1ae1c63ea3d8ef14a3"
+    },
+    {
+      "task_id": "P017__P018__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P018",
+        "path": "出图/第7话/panels/P018.png",
+        "sha256": "49e1c89201f1d179103fa4c5d810ddcef5e09359ed07130a8f8e6da67960cfde"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P017.png"
+      ],
+      "reference_sha256": "3de84b891735a8c4e79352da9f55a5cb2238024c6dee15c62b8147af4d859494",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P017 → 本格 P018）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P017.png": "3de84b891735a8c4e79352da9f55a5cb2238024c6dee15c62b8147af4d859494"
+      },
+      "task_sha256": "28277ef10117291fe532f04a171843300ad1fa75dddded25f246d19a36ab1f70"
+    },
+    {
+      "task_id": "P012__P020__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P020",
+        "path": "出图/第7话/panels/P020.png",
+        "sha256": "8f5a56549513867c36dd39410957eaedfd5ed8b491b159da7a370c40fa03947c"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P012.png"
+      ],
+      "reference_sha256": "3b2e2def95a8260fc515a658542a1d95eefd5ec9da1c1c936d07cf0cb78373de",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P012 → 本格 P020）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P012.png": "3b2e2def95a8260fc515a658542a1d95eefd5ec9da1c1c936d07cf0cb78373de"
+      },
+      "task_sha256": "e40270bba3bf7ec112e9c6b755cb07c2fdc2faa320b4943a85deb4ca6c68b50a"
+    },
+    {
+      "task_id": "P020__P021__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P021",
+        "path": "出图/第7话/panels/P021.png",
+        "sha256": "5b4ffb7badd7148f4d5ea400efe4d4537c0a4fadf465db8aba74f81490d8d69a"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P020.png"
+      ],
+      "reference_sha256": "8f5a56549513867c36dd39410957eaedfd5ed8b491b159da7a370c40fa03947c",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P020 → 本格 P021）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P020.png": "8f5a56549513867c36dd39410957eaedfd5ed8b491b159da7a370c40fa03947c"
+      },
+      "task_sha256": "98574367be37cd52281883136dd9509a1af8d6ce2f0ed1b3005997cfbe92910d"
+    },
+    {
+      "task_id": "P021__P022__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P022",
+        "path": "出图/第7话/panels/P022.png",
+        "sha256": "5cc5542e360da17aeaa7dd17e9bcba1c9b88b8ab0ae2519dfefd2f8b3a7a0a05"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P021.png"
+      ],
+      "reference_sha256": "5b4ffb7badd7148f4d5ea400efe4d4537c0a4fadf465db8aba74f81490d8d69a",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P021 → 本格 P022）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P021.png": "5b4ffb7badd7148f4d5ea400efe4d4537c0a4fadf465db8aba74f81490d8d69a"
+      },
+      "task_sha256": "1ef2245bed9ef0e7bea109c7c7268f2dcc713db894cb2d791b997fd9f628cf12"
+    },
+    {
+      "task_id": "P022__P023__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P023",
+        "path": "出图/第7话/panels/P023.png",
+        "sha256": "75be7e92cc7d361b688f6dd9a9e3ef9b874ce613b76518f6f2b3ae71c5a77394"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P022.png"
+      ],
+      "reference_sha256": "5cc5542e360da17aeaa7dd17e9bcba1c9b88b8ab0ae2519dfefd2f8b3a7a0a05",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P022 → 本格 P023）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P022.png": "5cc5542e360da17aeaa7dd17e9bcba1c9b88b8ab0ae2519dfefd2f8b3a7a0a05"
+      },
+      "task_sha256": "34c49a7cfc6d117684269df48cbdeee39ab5100f9d1adc64db8f62ebdefd02bc"
+    },
+    {
+      "task_id": "P024__P025__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P025",
+        "path": "出图/第7话/panels/P025.png",
+        "sha256": "98c3a6cbd402ede975e4d62e53e33913b0c9f048b2dc48ea368c25cfb245c405"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P024.png"
+      ],
+      "reference_sha256": "b18333306a4b5ae9f59a2e702bef3a9f23b3a5bf749ce1d42df69e7baab21721",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P024 → 本格 P025）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P024.png": "b18333306a4b5ae9f59a2e702bef3a9f23b3a5bf749ce1d42df69e7baab21721"
+      },
+      "task_sha256": "d949cf141e47e63cf7650c08cb22c6fc12ab98ba2b2539a739c9eb996fd4f67a"
+    },
+    {
+      "task_id": "P025__P026__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P026",
+        "path": "出图/第7话/panels/P026.png",
+        "sha256": "9ba2b96947dbf9a4fc911912d0fff57d4018a6f7d0f88cfdc56f6c9e0c1d204d"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P025.png"
+      ],
+      "reference_sha256": "98c3a6cbd402ede975e4d62e53e33913b0c9f048b2dc48ea368c25cfb245c405",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P025 → 本格 P026）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P025.png": "98c3a6cbd402ede975e4d62e53e33913b0c9f048b2dc48ea368c25cfb245c405"
+      },
+      "task_sha256": "cb42720766f45ab397dd31a80e7e9c3863c56f072d652c86657c39e27b4c0a49"
+    },
+    {
+      "task_id": "P026__P027__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P027",
+        "path": "出图/第7话/panels/P027.png",
+        "sha256": "1f92f2457a502f706fdfa4fa8314c8c038443ccbe8fa2a5cc1212aaf976a3b9b"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P026.png"
+      ],
+      "reference_sha256": "9ba2b96947dbf9a4fc911912d0fff57d4018a6f7d0f88cfdc56f6c9e0c1d204d",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P026 → 本格 P027）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P026.png": "9ba2b96947dbf9a4fc911912d0fff57d4018a6f7d0f88cfdc56f6c9e0c1d204d"
+      },
+      "task_sha256": "eb1044fa96f57fa76032c6765d584fe7e2ab434f085b058a81e340302cf0917d"
+    },
+    {
+      "task_id": "P027__P028__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P028",
+        "path": "出图/第7话/panels/P028.png",
+        "sha256": "794ba60d2163d4b1270a8f635653091aa701fcd12ecf49ad2418f45530834220"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P027.png"
+      ],
+      "reference_sha256": "1f92f2457a502f706fdfa4fa8314c8c038443ccbe8fa2a5cc1212aaf976a3b9b",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P027 → 本格 P028）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P027.png": "1f92f2457a502f706fdfa4fa8314c8c038443ccbe8fa2a5cc1212aaf976a3b9b"
+      },
+      "task_sha256": "67ce3e4690faa8d972bee8814078439e0dfc65a65f1e2160177cfba1bbce006a"
+    },
+    {
+      "task_id": "P028__P029__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P029",
+        "path": "出图/第7话/panels/P029.png",
+        "sha256": "260a2d7122ec1c875b2308f476b41051835155156f3c532698f1d6828fe33329"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P028.png"
+      ],
+      "reference_sha256": "794ba60d2163d4b1270a8f635653091aa701fcd12ecf49ad2418f45530834220",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P028 → 本格 P029）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P028.png": "794ba60d2163d4b1270a8f635653091aa701fcd12ecf49ad2418f45530834220"
+      },
+      "task_sha256": "015c8faf9995dc26fe8f08b28ebccd58e62a9e51d0a9c9d83c2355f14ad207ce"
+    },
+    {
+      "task_id": "P029__P030__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P030",
+        "path": "出图/第7话/panels/P030.png",
+        "sha256": "12c7e1abab9a8dd181ae9e31517be91ce9757c0bc5ac4d93e25a250618c87da4"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P029.png"
+      ],
+      "reference_sha256": "260a2d7122ec1c875b2308f476b41051835155156f3c532698f1d6828fe33329",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P029 → 本格 P030）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P029.png": "260a2d7122ec1c875b2308f476b41051835155156f3c532698f1d6828fe33329"
+      },
+      "task_sha256": "2f72c8bee0079aaf13d9ddee3c456a39c47f90f791b2a0285f690b6b95d6bf3b"
+    },
+    {
+      "task_id": "P030__P031__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P031",
+        "path": "出图/第7话/panels/P031.png",
+        "sha256": "24de3acc7fea88bc88690119f9c7f0493c9fc74afa715a8a89008f2bad3fa7d4"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P030.png"
+      ],
+      "reference_sha256": "12c7e1abab9a8dd181ae9e31517be91ce9757c0bc5ac4d93e25a250618c87da4",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P030 → 本格 P031）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P030.png": "12c7e1abab9a8dd181ae9e31517be91ce9757c0bc5ac4d93e25a250618c87da4"
+      },
+      "task_sha256": "2f7a3de1687419e6b5769897fad230cbdb8b2c78007ca70abc53b58460f936b9"
+    },
+    {
+      "task_id": "P031__P032__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P032",
+        "path": "出图/第7话/panels/P032.png",
+        "sha256": "a788ac5069bbee41e6b1eb8369f54a19989f59e57fec0166fd41034e14557ed2"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P031.png"
+      ],
+      "reference_sha256": "24de3acc7fea88bc88690119f9c7f0493c9fc74afa715a8a89008f2bad3fa7d4",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P031 → 本格 P032）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P031.png": "24de3acc7fea88bc88690119f9c7f0493c9fc74afa715a8a89008f2bad3fa7d4"
+      },
+      "task_sha256": "cd5b2c4f948a949736a3d9f42085099d8e294106e6a2a2ff3cf63e6067019beb"
+    },
+    {
+      "task_id": "P032__P033__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P033",
+        "path": "出图/第7话/panels/P033.png",
+        "sha256": "5b05030f508f254d6b84b440db2414963ef0a5f263a05949c1737c6d48b0c88b"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P032.png"
+      ],
+      "reference_sha256": "a788ac5069bbee41e6b1eb8369f54a19989f59e57fec0166fd41034e14557ed2",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P032 → 本格 P033）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P032.png": "a788ac5069bbee41e6b1eb8369f54a19989f59e57fec0166fd41034e14557ed2"
+      },
+      "task_sha256": "126c4473c03abeb5bfd2d8e4d7e75aa761861899ad99f1c278c14632ea71eea6"
+    },
+    {
+      "task_id": "P033__P034__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P034",
+        "path": "出图/第7话/panels/P034.png",
+        "sha256": "64707ffd4ab452dd9da2d54509dcf9612f433ad00c286e45fecbafee0a2c227c"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P033.png"
+      ],
+      "reference_sha256": "5b05030f508f254d6b84b440db2414963ef0a5f263a05949c1737c6d48b0c88b",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P033 → 本格 P034）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P033.png": "5b05030f508f254d6b84b440db2414963ef0a5f263a05949c1737c6d48b0c88b"
+      },
+      "task_sha256": "e93a3f4caa0c13817abde6071422afa1d0fc4ddf4b5d89da65ae9af1cf6eb52a"
+    },
+    {
+      "task_id": "P034__P035__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P035",
+        "path": "出图/第7话/panels/P035.png",
+        "sha256": "784f6a94f1200461bbd381e329f7ecf3f500d28ebb376954117418175aeffdeb"
+      },
+      "subject": "LOC_SHI_NORTH_ROAD",
+      "references": [
+        "出图/第7话/panels/P034.png"
+      ],
+      "reference_sha256": "64707ffd4ab452dd9da2d54509dcf9612f433ad00c286e45fecbafee0a2c227c",
+      "question": "这两格同属场景锚 LOC_SHI_NORTH_ROAD（前格 P034 → 本格 P035）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P034.png": "64707ffd4ab452dd9da2d54509dcf9612f433ad00c286e45fecbafee0a2c227c"
+      },
+      "task_sha256": "33a312c055d5fb07bd4e49a59b0ce14d74a4a428bd6966dd6beb58b82ff6c21a"
+    },
+    {
+      "task_id": "P023__P036__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P036",
+        "path": "出图/第7话/panels/P036.png",
+        "sha256": "b592cb3d97a2bc0089381f6bf43f495db0127e047acd43b9c92bd0800cd760f4"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P023.png"
+      ],
+      "reference_sha256": "75be7e92cc7d361b688f6dd9a9e3ef9b874ce613b76518f6f2b3ae71c5a77394",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P023 → 本格 P036）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P023.png": "75be7e92cc7d361b688f6dd9a9e3ef9b874ce613b76518f6f2b3ae71c5a77394"
+      },
+      "task_sha256": "fcd6e671e515bdef946a175f174ae084da767b377984749bcd2616a3caf57cab"
+    },
+    {
+      "task_id": "P018__P037__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P037",
+        "path": "出图/第7话/panels/P037.png",
+        "sha256": "1d566b6dde951afa4f782d389afcc291df612906769db001b3ba19de1c503f8f"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P018.png"
+      ],
+      "reference_sha256": "49e1c89201f1d179103fa4c5d810ddcef5e09359ed07130a8f8e6da67960cfde",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P018 → 本格 P037）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P018.png": "49e1c89201f1d179103fa4c5d810ddcef5e09359ed07130a8f8e6da67960cfde"
+      },
+      "task_sha256": "2ef0645f8783408741aaf83fec876327836981b21261baf2563a02f5729c7e01"
+    },
+    {
+      "task_id": "P037__P038__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P038",
+        "path": "出图/第7话/panels/P038.png",
+        "sha256": "8b5dff6278ecb1f547c2742ba6d6efcf3d27f263e5868ca0d6132b22a97aac69"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P037.png"
+      ],
+      "reference_sha256": "1d566b6dde951afa4f782d389afcc291df612906769db001b3ba19de1c503f8f",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P037 → 本格 P038）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P037.png": "1d566b6dde951afa4f782d389afcc291df612906769db001b3ba19de1c503f8f"
+      },
+      "task_sha256": "e724bf39fc4d6ef51632924e4279a28fee313a6883bc4ee6641c6ad9ee4e1904"
+    },
+    {
+      "task_id": "P038__P039__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P039",
+        "path": "出图/第7话/panels/P039.png",
+        "sha256": "d2d31081db206f22a33f82833763aebd0bebc76800256453cc73ba8f537eb717"
+      },
+      "subject": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/第7话/panels/P038.png"
+      ],
+      "reference_sha256": "8b5dff6278ecb1f547c2742ba6d6efcf3d27f263e5868ca0d6132b22a97aac69",
+      "question": "这两格同属场景锚 LOC_SHAOHUA_FORT（前格 P038 → 本格 P039）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P038.png": "8b5dff6278ecb1f547c2742ba6d6efcf3d27f263e5868ca0d6132b22a97aac69"
+      },
+      "task_sha256": "21511e218b2dd25fb3dc65faac03c6471a7866dab04b9dd823eab90d0230cf16"
+    },
+    {
+      "task_id": "P036__P040__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P040",
+        "path": "出图/第7话/panels/P040.png",
+        "sha256": "0cfb87076becda4f05de2af98552c56bfddc7dc0160b4236bf5157a8c35e7800"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P036.png"
+      ],
+      "reference_sha256": "b592cb3d97a2bc0089381f6bf43f495db0127e047acd43b9c92bd0800cd760f4",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P036 → 本格 P040）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P036.png": "b592cb3d97a2bc0089381f6bf43f495db0127e047acd43b9c92bd0800cd760f4"
+      },
+      "task_sha256": "9855f7b6bf41503b1e099ac91904d82b40c565fd764f8af79b615802869ef679"
+    },
+    {
+      "task_id": "P040__P041__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P041",
+        "path": "出图/第7话/panels/P041.png",
+        "sha256": "4003f8993ddd6aecc4c10df3334e7e63d63be51364a3925a0b49f054806da293"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P040.png"
+      ],
+      "reference_sha256": "0cfb87076becda4f05de2af98552c56bfddc7dc0160b4236bf5157a8c35e7800",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P040 → 本格 P041）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P040.png": "0cfb87076becda4f05de2af98552c56bfddc7dc0160b4236bf5157a8c35e7800"
+      },
+      "task_sha256": "697aefba852c1b0be3178fa1408329b9842ea9c15f215f4c54c8d20142fbeec5"
+    },
+    {
+      "task_id": "P041__P042__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P042",
+        "path": "出图/第7话/panels/P042.png",
+        "sha256": "10cd0e0d59a52e27e5e1abdd945aee221593eee6a9a377ad7190f1572267c428"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P041.png"
+      ],
+      "reference_sha256": "4003f8993ddd6aecc4c10df3334e7e63d63be51364a3925a0b49f054806da293",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P041 → 本格 P042）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P041.png": "4003f8993ddd6aecc4c10df3334e7e63d63be51364a3925a0b49f054806da293"
+      },
+      "task_sha256": "1112549c96aa0573dfcc1abeb35064ae880b7eba0507c0117b45d0038bf1d185"
+    },
+    {
+      "task_id": "P042__P043__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P043",
+        "path": "出图/第7话/panels/P043.png",
+        "sha256": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P042.png"
+      ],
+      "reference_sha256": "10cd0e0d59a52e27e5e1abdd945aee221593eee6a9a377ad7190f1572267c428",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P042 → 本格 P043）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P042.png": "10cd0e0d59a52e27e5e1abdd945aee221593eee6a9a377ad7190f1572267c428"
+      },
+      "task_sha256": "3df9ce2ebd5dae86fb15a94e69c17694f905cf92440af61ce60460589ce66aef"
+    },
+    {
+      "task_id": "P043__P044__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P044",
+        "path": "出图/第7话/panels/P044.png",
+        "sha256": "fb595384a1b7440b7ef3521228905c5d44d9989e536effe69e1c63b6662bcc22"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P043.png"
+      ],
+      "reference_sha256": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P043 → 本格 P044）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P043.png": "7991552d24c37c285c3ec2aa08e697f532415fc8d33a7ea7a0ad3f77edde43ee"
+      },
+      "task_sha256": "2077cfeb02ec153840e6677d6970b72cf7fe463f48a3bad9f8527ac8d6b49aa3"
+    },
+    {
+      "task_id": "P044__P045__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P045",
+        "path": "出图/第7话/panels/P045.png",
+        "sha256": "6a0de4822812210a559f23053d04f4227b0ffa6b36762a3a735aefc24f56cd48"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P044.png"
+      ],
+      "reference_sha256": "fb595384a1b7440b7ef3521228905c5d44d9989e536effe69e1c63b6662bcc22",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P044 → 本格 P045）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P044.png": "fb595384a1b7440b7ef3521228905c5d44d9989e536effe69e1c63b6662bcc22"
+      },
+      "task_sha256": "89f2d89eec34f4c365c1a5ca9dacba2b310de1c6bfa6d5ab59925e4f8d44f228"
+    },
+    {
+      "task_id": "P045__P046__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P046",
+        "path": "出图/第7话/panels/P046.png",
+        "sha256": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P045.png"
+      ],
+      "reference_sha256": "6a0de4822812210a559f23053d04f4227b0ffa6b36762a3a735aefc24f56cd48",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P045 → 本格 P046）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P045.png": "6a0de4822812210a559f23053d04f4227b0ffa6b36762a3a735aefc24f56cd48"
+      },
+      "task_sha256": "f56c8e881852665dc7e29ceac17ac6b1c99a4a504825956f87cbe2408d6a3aaf"
+    },
+    {
+      "task_id": "P046__P047__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P047",
+        "path": "出图/第7话/panels/P047.png",
+        "sha256": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P046.png"
+      ],
+      "reference_sha256": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P046 → 本格 P047）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P046.png": "40957bae11f724fd66031522089a6f39a3ab20d66a325787e6bf42c889c16fd0"
+      },
+      "task_sha256": "d855fba25395952d4303704450a5dd48b35a13614abe0ddff8657bd0f7ce7ea6"
+    },
+    {
+      "task_id": "P047__P048__background",
+      "axis": "background_continuity",
+      "panel": {
+        "panel_id": "P048",
+        "path": "出图/第7话/panels/P048.png",
+        "sha256": "0707e731e86a3594fb0e5bcb0e4a49a166f0cb88509e1083a3cfeb8f572aaff6"
+      },
+      "subject": "LOC_SHI_MANOR",
+      "references": [
+        "出图/第7话/panels/P047.png"
+      ],
+      "reference_sha256": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558",
+      "question": "这两格同属场景锚 LOC_SHI_MANOR（前格 P047 → 本格 P048）。对比空间布局（门窗/家具方位）、主光方向与冷暖、轴线方向是否继承；机位可以变，场景结构和光位不能翻转。score 取 1-5：5=与参考/前格完全一致；4=细节小偏差不影响认脸/认景/认物；3=可见偏差需人工确认；2=明显漂移（换脸/换景布局/道具变形）；1=完全不是同一个。只做同批次内相对排序，不追求绝对准确。",
+      "references_sha256": {
+        "出图/第7话/panels/P047.png": "c6ddff0ea998232867277be7ad7bef6e34e37c74bd52a1b398d60b2429fb3558"
+      },
+      "task_sha256": "678f82568f52533ac03722b0b5d0091f892393a1225c7d46eea03b74806c81a7"
+    }
+  ]
+}

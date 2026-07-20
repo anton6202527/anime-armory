@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第7话",
+  "panel_id": "P024",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+      "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHI_NORTH_ROAD",
+      "path": "出图/共享/图片/LOC_SHI_NORTH_ROAD__anchor.png",
+      "sha256": "0a0e0ed10bf35052264450fc9c6085c7ff3b5be34d8c1d73bf3664ce0e20a999",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+      "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+      "role": "face",
+      "required": false
+    },
+    {
+      "id": "CHAR_SHI_JIN",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+      "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9",
+      "role": "three_quarter",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-20T11:00:31"
+}

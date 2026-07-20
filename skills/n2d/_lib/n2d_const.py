@@ -533,7 +533,8 @@ FACS_AU_REGIONS = {
 # + triggers（自由文本里的同义触发子串，让分镜散文「推近/拉远/横摇」也能归一到本词典）。
 # 动作镜 prompt 应从这里取词并填槽（Veo/即梦运镜段是传达情绪与速度感最强的工具），而非自由散文。
 # 消费方：n2d_logic.normalize_camera_move() → gate.check_video_clip_prompt_section ⑤运镜结构化（WARN）。
-# 视觉参考图/结构化 manifest：skills/n2d/references/运镜/manifest.json（用户提供 WebP + 机器可读补充项）。
+# 视觉参考图/结构化 manifest：skills/n2d/references/运镜/manifest.json。
+# 大体积 animated WebP 走内容寻址 R2 + 用户缓存；本地 contact sheet 保证离线可理解。
 CAMERA_MOVE_LEXICON = {
     "推镜头": {"en": "dolly in", "slots": ("speed", "end_size"), "triggers": ("推镜", "推近", "前推", "镜头前推", "推进", "dolly in", "push in")},
     "拉镜头": {"en": "dolly out", "slots": ("speed", "end_size"), "triggers": ("拉镜", "拉远", "后拉", "后移", "镜头后移", "dolly out", "pull back")},
@@ -593,10 +594,17 @@ def _manifest_media_ref(entry):
         return None
     ref = {
         "id": str(entry.get("id") or "").strip(),
-        "webp": str(media.get("webp") or "").strip(),
         "preview": str(media.get("preview") or "").strip(),
+        "contact_sheet": str(media.get("contact_sheet") or "").strip(),
         "source": str(media.get("source") or "").strip(),
     }
+    remote = media.get("remote")
+    if isinstance(remote, dict):
+        ref["remote"] = {
+            key: remote[key]
+            for key in ("filename", "url", "object_key", "sha256", "bytes", "content_type")
+            if remote.get(key) not in (None, "")
+        }
     return {k: v for k, v in ref.items() if v}
 
 

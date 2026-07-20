@@ -1,0 +1,476 @@
+{
+  "schema_version": 1,
+  "kind": "comic_scene_prop_consistency",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
+  "chapter": "第8话",
+  "created_at": "2026-07-20T15:03:34",
+  "available": true,
+  "verdict": "pass",
+  "summary": {
+    "scene_anchor_count": 7,
+    "prop_count": 1,
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "scenes": [
+    {
+      "scene_anchor_id": "LOC_HUAYIN_YAMEN",
+      "references": [
+        "出图/共享/图片/LOC_HUAYIN_YAMEN__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P028",
+          "path": "出图/第8话/panels/P028.png"
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第8话/panels/P029.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_HUAYIN_YAMEN_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_PINE_GROVE",
+      "references": [
+        "出图/共享/图片/LOC_PINE_GROVE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P021",
+          "path": "出图/第8话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第8话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第8话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第8话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第8话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第8话/panels/P026.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第8话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第8话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第8话/panels/P032.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.981,
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_PINE_GROVE_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_SHAOHUA_FORT",
+      "references": [
+        "出图/共享/图片/LOC_SHAOHUA_FORT__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P011",
+          "path": "出图/第8话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第8话/panels/P012.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第8话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第8话/panels/P017.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9712,
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_SHAOHUA_FORT_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_SHAOHUA_ROAD",
+      "references": [
+        "出图/共享/图片/LOC_SHAOHUA_ROAD__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P010",
+          "path": "出图/第8话/panels/P010.png"
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第8话/panels/P013.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第8话/panels/P020.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第8话/panels/P027.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9649,
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_SHAOHUA_ROAD_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_SHI_GARDEN",
+      "references": [
+        "出图/共享/图片/LOC_SHI_GARDEN__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P014",
+          "path": "出图/第8话/panels/P014.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第8话/panels/P036.png"
+        },
+        {
+          "panel_id": "P037",
+          "path": "出图/第8话/panels/P037.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第8话/panels/P040.png"
+        },
+        {
+          "panel_id": "P041",
+          "path": "出图/第8话/panels/P041.png"
+        },
+        {
+          "panel_id": "P042",
+          "path": "出图/第8话/panels/P042.png"
+        },
+        {
+          "panel_id": "P044",
+          "path": "出图/第8话/panels/P044.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9752,
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_SHI_GARDEN_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_SHI_MANOR",
+      "references": [
+        "出图/共享/图片/LOC_SHI_MANOR__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第8话/panels/P001.png"
+        },
+        {
+          "panel_id": "P002",
+          "path": "出图/第8话/panels/P002.png"
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第8话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第8话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第8话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第8话/panels/P006.png"
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第8话/panels/P007.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第8话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第8话/panels/P009.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第8话/panels/P015.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第8话/panels/P033.png"
+        },
+        {
+          "panel_id": "P034",
+          "path": "出图/第8话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第8话/panels/P035.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第8话/panels/P038.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第8话/panels/P039.png"
+        },
+        {
+          "panel_id": "P043",
+          "path": "出图/第8话/panels/P043.png"
+        },
+        {
+          "panel_id": "P045",
+          "path": "出图/第8话/panels/P045.png"
+        },
+        {
+          "panel_id": "P046",
+          "path": "出图/第8话/panels/P046.png"
+        },
+        {
+          "panel_id": "P047",
+          "path": "出图/第8话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第8话/panels/P048.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9452,
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_SHI_MANOR_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_VILLAGE_TAVERN",
+      "references": [
+        "出图/共享/图片/LOC_VILLAGE_TAVERN__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P018",
+          "path": "出图/第8话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第8话/panels/P019.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第8话_scene_LOC_VILLAGE_TAVERN_sheet.jpg"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "OUTFIT_BASE",
+      "references": [
+        "出图/共享/图片/CHAR_ABBOT_SHANGQING__front.png",
+        "出图/共享/图片/CHAR_EMPEROR_RENZONG__front.png",
+        "出图/共享/图片/CHAR_FAN_ZHONGYAN__front.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第8话/panels/P001.png"
+        },
+        {
+          "panel_id": "P002",
+          "path": "出图/第8话/panels/P002.png"
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第8话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第8话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第8话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第8话/panels/P006.png"
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第8话/panels/P007.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第8话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第8话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第8话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第8话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第8话/panels/P012.png"
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第8话/panels/P013.png"
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第8话/panels/P014.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第8话/panels/P015.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第8话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第8话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第8话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第8话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第8话/panels/P020.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第8话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第8话/panels/P022.png"
+        },
+        {
+          "panel_id": "P023",
+          "path": "出图/第8话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第8话/panels/P024.png"
+        },
+        {
+          "panel_id": "P025",
+          "path": "出图/第8话/panels/P025.png"
+        },
+        {
+          "panel_id": "P026",
+          "path": "出图/第8话/panels/P026.png"
+        },
+        {
+          "panel_id": "P027",
+          "path": "出图/第8话/panels/P027.png"
+        },
+        {
+          "panel_id": "P028",
+          "path": "出图/第8话/panels/P028.png"
+        },
+        {
+          "panel_id": "P029",
+          "path": "出图/第8话/panels/P029.png"
+        },
+        {
+          "panel_id": "P030",
+          "path": "出图/第8话/panels/P030.png"
+        },
+        {
+          "panel_id": "P031",
+          "path": "出图/第8话/panels/P031.png"
+        },
+        {
+          "panel_id": "P032",
+          "path": "出图/第8话/panels/P032.png"
+        },
+        {
+          "panel_id": "P033",
+          "path": "出图/第8话/panels/P033.png"
+        },
+        {
+          "panel_id": "P034",
+          "path": "出图/第8话/panels/P034.png"
+        },
+        {
+          "panel_id": "P035",
+          "path": "出图/第8话/panels/P035.png"
+        },
+        {
+          "panel_id": "P036",
+          "path": "出图/第8话/panels/P036.png"
+        },
+        {
+          "panel_id": "P038",
+          "path": "出图/第8话/panels/P038.png"
+        },
+        {
+          "panel_id": "P039",
+          "path": "出图/第8话/panels/P039.png"
+        },
+        {
+          "panel_id": "P040",
+          "path": "出图/第8话/panels/P040.png"
+        },
+        {
+          "panel_id": "P042",
+          "path": "出图/第8话/panels/P042.png"
+        },
+        {
+          "panel_id": "P044",
+          "path": "出图/第8话/panels/P044.png"
+        },
+        {
+          "panel_id": "P045",
+          "path": "出图/第8话/panels/P045.png"
+        },
+        {
+          "panel_id": "P046",
+          "path": "出图/第8话/panels/P046.png"
+        },
+        {
+          "panel_id": "P047",
+          "path": "出图/第8话/panels/P047.png"
+        },
+        {
+          "panel_id": "P048",
+          "path": "出图/第8话/panels/P048.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第8话_prop_OUTFIT_BASE_sheet.jpg"
+    }
+  ],
+  "findings": [],
+  "notes": [
+    "VLM 三轴裁决进度：0/119（生产数据/comic_vlm_judge_verdicts_第8话.json）。"
+  ]
+}

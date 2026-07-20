@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "comic_dreamina_reference_bundle",
+  "chapter": "第8话",
+  "panel_id": "P037",
+  "reference_input_mode": "dreamina_image2image_images",
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 2,
+  "references": [
+    {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_SHI_GARDEN",
+      "path": "出图/共享/图片/LOC_SHI_GARDEN__anchor.png",
+      "sha256": "c50e95996d7cd6e792dd343b64451d8c0ce9719eff27b4d224574184ab657099",
+      "role": "location",
+      "required": true
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-20T14:28:07"
+}
