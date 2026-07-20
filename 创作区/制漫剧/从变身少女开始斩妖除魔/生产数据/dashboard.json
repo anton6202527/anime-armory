@@ -24,7 +24,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.0269,
+      "blockers_per_attempt": 0.0267,
       "completion_rate": null,
       "consistency_blockers": 5,
       "consistency_ledger": {
@@ -138,28 +138,28 @@
         "image": 20.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "3h28m35s",
-      "duration_sec": 12515.4,
-      "elapsed_per_finished_min_sec": 5783.189,
+      "duration_hms": "3h29m53s",
+      "duration_sec": 12592.509,
+      "elapsed_per_finished_min_sec": 5818.82,
       "episode": "第1集",
-      "event_count": 276,
+      "event_count": 277,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 186,
+      "generation_attempts": 187,
       "generation_fails": 58,
-      "generation_pass_rate": 0.6882,
-      "generation_passes": 128,
+      "generation_pass_rate": 0.6898,
+      "generation_passes": 129,
       "image_qc_passive": {
         "advisory": 11,
         "freshness": "fresh",
         "hard_blocks": 0,
-        "path": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json"
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/image_qc/第1集/image_qc_第1集.json"
       },
       "missing_deliverables": [],
-      "one_pass_count": 52,
-      "one_pass_rate": 0.2796,
+      "one_pass_count": 53,
+      "one_pass_rate": 0.2834,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 5,
@@ -180,7 +180,7 @@
         "reference_crop": 1
       },
       "redraw_count": 28,
-      "redraw_rate": 0.1505,
+      "redraw_rate": 0.1497,
       "redraw_reasons": {
         "black demon blood became glossy tar/oil with excessive red neon": 1,
         "dreamina-第1集 Dreamina image2image 真实参考图重出 CHAR_02::定妆_CHAR_02__常态_45度": 1,
@@ -211,14 +211,14 @@
       "retention_3s": null,
       "runtime_hms": "2m10s",
       "runtime_sec": 129.846,
-      "runtime_source": "创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
+      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
           "consistency_warnings": 11,
-          "duration_sec": 12385.554,
-          "generation_attempts": 185,
+          "duration_sec": 12462.663,
+          "generation_attempts": 186,
           "generation_fails": 58,
-          "generation_passes": 127,
+          "generation_passes": 128,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 50,
@@ -272,7 +272,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.3387
+      "warnings_per_attempt": 0.3369
     },
     {
       "blockers_per_attempt": null,
@@ -770,8 +770,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-20T10:06:47+00:00",
+  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-20T10:09:22+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1247,9 +1247,9 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
   "totals": {
-    "blockers_per_attempt": 0.0269,
+    "blockers_per_attempt": 0.0267,
     "consistency_blockers": 5,
     "consistency_ledger_counts": {
       "block": 4,
@@ -1264,11 +1264,11 @@
       "image": 20.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "3h28m35s",
-    "duration_sec": 12515.4,
-    "elapsed_per_finished_min_sec": 5783.189,
+    "duration_hms": "3h29m53s",
+    "duration_sec": 12592.509,
+    "elapsed_per_finished_min_sec": 5818.82,
     "episode_count": 10,
-    "event_count": 276,
+    "event_count": 277,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
@@ -1281,12 +1281,12 @@
       "time_to_first_episode_hours": null,
       "time_to_first_episode_sec": null
     },
-    "generation_attempts": 186,
+    "generation_attempts": 187,
     "generation_fails": 58,
-    "generation_pass_rate": 0.6882,
-    "generation_passes": 128,
-    "one_pass_count": 52,
-    "one_pass_rate": 0.2796,
+    "generation_pass_rate": 0.6898,
+    "generation_passes": 129,
+    "one_pass_count": 53,
+    "one_pass_rate": 0.2834,
     "qa_blockers": 5,
     "qa_blockers_historical": 35,
     "qa_infos": 85,
@@ -1302,7 +1302,7 @@
       "reference_crop": 1
     },
     "redraw_count": 28,
-    "redraw_rate": 0.1505,
+    "redraw_rate": 0.1497,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -1310,7 +1310,7 @@
     "release_spend_totals": {},
     "runtime_hms": "2m10s",
     "runtime_sec": 129.846,
-    "warnings_per_attempt": 0.3387
+    "warnings_per_attempt": 0.3369
   },
   "version": 1
 }

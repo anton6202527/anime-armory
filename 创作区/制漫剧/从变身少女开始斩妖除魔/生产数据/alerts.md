@@ -1,7 +1,7 @@
 # n2d 生产告警
 
-- root: 创作区/制漫剧/从变身少女开始斩妖除魔
-- generated_at: 2026-07-20T10:06:47+00:00
+- root: /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔
+- generated_at: 2026-07-20T10:09:22+00:00
 - 告警数: 2（critical 1 / warn 1）
 
 | 级别 | 类型 | 范围 | 说明 |
