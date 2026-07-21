@@ -11,6 +11,7 @@ from gate_core import (
     _artifact_exists,
     _event_asset_rel,
     _event_status_pass,
+    _event_value_any,
     _final_media_exists,
     _final_media_rels,
     _load_production_events,
@@ -129,6 +130,7 @@ def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
         idx, event = latest_by_asset[rel]
         missing = _recipe_event_missing_fields(event)
         if not missing:
+            _warn_missing_recipe_reference_inputs(root, path, idx, rel, event)
             continue
         add(
             sev,
@@ -138,6 +140,35 @@ def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
             "每个最终媒体必须记录 provider/model/channel/route_hash/capability_evidence_id/"
             "recipe_hash/prompt_sha256/reference_bundle_sha256/backend_version/quality_tier/"
             "actual_image_inputs，并在 seed 不生效时显式 seed_effective=false + seed_support。",
+            return_to_stage=_recipe_return_stage_for_asset(rel),
+        )
+
+
+def _warn_missing_recipe_reference_inputs(root: str, path: str, idx: int, rel: str, event) -> None:
+    """收据字段齐 ≠ 参考图仍在：actual_image_inputs 指向的文件被移动/删除时复现链断裂。
+
+    gate 对「参考图是否真传」原本只有 prompt 文本代理校验；这条把收据里登记的实际输入
+    与当前磁盘对账。WARN 不 BLOCK：归档清理是允许的，但漂移必须可见、不可静默。
+    """
+    inputs = _event_value_any(event, "actual_image_inputs")
+    if not isinstance(inputs, (list, tuple)):
+        return
+    gone = []
+    for item in inputs:
+        raw = str(item.get("path") if isinstance(item, Mapping) else item or "").strip()
+        if not raw or raw.startswith(("http://", "https://")):
+            continue
+        candidate = raw if os.path.isabs(raw) else os.path.join(root, raw)
+        if not os.path.exists(candidate):
+            gone.append(raw)
+    if gone:
+        add(
+            WARN,
+            "生成配方证据",
+            f"{path}:line {idx}",
+            f"{rel} 收据登记的实际参考输入已不在盘上：{', '.join(gone[:4])}"
+            f"{' 等' if len(gone) > 4 else ''}；复现/审计链断裂——确认是显式归档清理，"
+            "或恢复参考文件后重跑 gate。",
             return_to_stage=_recipe_return_stage_for_asset(rel),
         )
 

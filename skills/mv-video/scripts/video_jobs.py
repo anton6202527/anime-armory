@@ -555,7 +555,7 @@ def register_sequence(root, unit_id, take_id, src):
     return registrations
 
 
-def register_take(root, clip_id, take_id, src):
+def register_take(root, clip_id, take_id, src, generation=None):
     if not os.path.exists(src):
         raise SystemExit(f"[err] 找不到视频文件：{src}")
     manifest_path, manifest = load_manifest(root)
@@ -567,6 +567,17 @@ def register_take(root, clip_id, take_id, src):
     take["status"] = "registered"
     take["registered_at"] = date.today().isoformat()
     take["video_sha256"] = mv_utils.content_hash(dst)
+    # 出图→出视频像素级绑定：登记时记录该 clip 当时的首/尾帧内容 SHA。
+    # inherit_contract 会核对当前 PNG 与登记值——图在出视频后被替换时确定性现形，
+    # 堵住「视频不是由已过 QC 的那张首帧生成」的断链（此前仅有 <0.45 感知相似度 warn）。
+    inherited = job.get("inherited_contract") or {}
+    first_rel = inherited.get("image_path")
+    take["first_frame_sha256"] = mv_utils.content_hash(os.path.join(root, first_rel)) if first_rel else ""
+    end_rel = inherited.get("end_frame_path")
+    take["end_frame_sha256"] = mv_utils.content_hash(os.path.join(root, end_rel)) if end_rel else ""
+    # 生成参数留痕（可复现性）：seed/参数/后端 job id 属于登记时已知的事实，能记必记。
+    if generation:
+        take["generation"] = {k: v for k, v in generation.items() if v not in (None, "", [], {})}
     take["score"] = {}
     take.pop("scored_by", None)
     take.pop("scored_at", None)
@@ -736,6 +747,10 @@ def main():
     ap.add_argument("--notes")
     ap.add_argument("--select", help="选择某个 clip 的 take 定稿，1/Clip_001 均可")
     ap.add_argument("--waiver-reason", help="评分未达门槛时的显式人工放行原因；会写入 manifest")
+    ap.add_argument("--seed", help="配合 --register：后端返回/提交的随机种子（有则必记，复现与微调用）")
+    ap.add_argument("--generation-param", action="append", default=[], metavar="K=V",
+                    help="配合 --register：其它生成参数留痕（cfg=7.5 / motion=high…，可重复）")
+    ap.add_argument("--provider-job-id", default="", help="配合 --register：后端任务 ID（有则必记，审计/重下载用）")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -751,7 +766,15 @@ def main():
     if args.register:
         clip_id = normalize_clip_id(args.clip)
         take_id = normalize_take_id(args.take)
-        dst = register_take(root, clip_id, take_id, args.register)
+        params = {}
+        for pair in args.generation_param:
+            if "=" not in pair:
+                raise SystemExit(f"[err] --generation-param 格式应为 K=V，收到：{pair}")
+            key, value = pair.split("=", 1)
+            params[key.strip()] = value.strip()
+        generation = {"seed": (args.seed or "").strip(), "params": params,
+                      "provider_job_id": args.provider_job_id.strip()}
+        dst = register_take(root, clip_id, take_id, args.register, generation=generation)
         print(f"[ok] {clip_id} {take_id} 登记 → {dst}")
 
     if args.register_sequence:

@@ -314,6 +314,42 @@ def check_review_receipt(root: Path, chapter: str) -> list[dict[str, Any]]:
     return []
 
 
+def review_gate_summary(root: Path, chapter: str) -> dict[str, Any]:
+    """机检真相摘要：verdict + 计数 + 有效豁免清单，嵌进发布裁决供叙事对账。
+
+    背景：历史上 review gate 实为 warn（如 0 block/133 warn）而 `_进度.md`
+    叙事写「pass」，完成度表述比机检结论乐观。发布裁决是叙事的上游证据，
+    必须原样携带机检结论；任何「内部验收通过」的表述都应引用本区块。
+    """
+    receipt = load_json(root / "生产数据" / "gate_receipts" / f"review_{chapter}.json", {})
+    report = load_json(root / "生产数据" / f"comic_gate_review_{chapter}.json", {})
+    counts = {}
+    report_summary = report.get("summary") if isinstance(report, Mapping) and isinstance(report.get("summary"), Mapping) else {}
+    for key in ("block_count", "warn_count", "info_count"):
+        value = report_summary.get(key)
+        if isinstance(value, int):
+            counts[key] = value
+    waivers = []
+    waiver_dir = root / "生产数据" / "gate_waivers"
+    if waiver_dir.is_dir():
+        for path in sorted(waiver_dir.glob(f"*{chapter}_latest.json")):
+            payload = load_json(path, {})
+            if isinstance(payload, Mapping):
+                waivers.append(
+                    {
+                        "path": str(path.relative_to(root)),
+                        "stage": str(payload.get("stage") or ""),
+                        "reason": str(payload.get("reason") or ""),
+                        "created_at": str(payload.get("created_at") or ""),
+                    }
+                )
+    return {
+        "receipt_verdict": str(receipt.get("verdict") or "missing") if isinstance(receipt, Mapping) else "missing",
+        "counts": counts,
+        "waivers": waivers,
+    }
+
+
 def review_receipt_binding(root: Path, chapter: str) -> dict[str, str]:
     path = root / "生产数据" / "gate_receipts" / f"review_{chapter}.json"
     receipt = load_json(path, {})
@@ -478,6 +514,7 @@ def build(root: Path, chapter: str, profile: str) -> dict[str, Any]:
         "target_platform": target_platform,
         "platform_profile": platform_profile,
         "verdict": "pass" if not profile_blocks else "blocked",
+        "review_gate_summary": review_gate_summary(root, chapter),
         "delivery_states": delivery_states,
         "artifacts": artifacts,
         "issues": issues,
@@ -489,11 +526,28 @@ def write_outputs(root: Path, chapter: str, report: Mapping[str, Any]) -> tuple[
     md_path = root / "生产数据" / f"release_verdict_{chapter}.md"
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    gate_summary = report.get("review_gate_summary") or {}
+    counts = gate_summary.get("counts") or {}
     lines = [
         f"# 漫画发布裁决 — {chapter}",
         "",
         f"- profile: {report.get('profile')}",
         f"- verdict: {report.get('verdict')}",
+        "",
+        "## 机检结论（review gate 真相区块——任何「验收通过」叙事必须引用本区块，不得只写 pass）",
+        "",
+        f"- review receipt verdict: **{gate_summary.get('receipt_verdict', 'missing')}**"
+        + (
+            f"（block {counts.get('block_count', '?')} / warn {counts.get('warn_count', '?')} / info {counts.get('info_count', '?')}）"
+            if counts
+            else ""
+        ),
+    ]
+    for waiver in gate_summary.get("waivers") or []:
+        lines.append(
+            f"- 豁免留痕: `{waiver.get('path')}`（{waiver.get('stage')}；{waiver.get('reason')}）"
+        )
+    lines += [
         "",
         "## Delivery states",
         "",

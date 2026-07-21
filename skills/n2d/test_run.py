@@ -1592,3 +1592,34 @@ def test_report_only_cache_ignores_output_paths_outside_project_root(tmp_path):
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-v"]))
+
+
+# ── G9 轻量闭环：花钱停点必须透出当前 critical 告警（观测面→决策点，不新增阻断）──────
+
+
+def test_decide_payment_confirm_surfaces_active_critical_alerts():
+    root = make_work(ALL_DONE_TO["image"])
+    os.makedirs(os.path.join(root, "生产数据"), exist_ok=True)
+    with open(os.path.join(root, "生产数据", "alerts.json"), "w", encoding="utf-8") as fh:
+        json.dump({
+            "kind": "n2d_alerts",
+            "alerts": [
+                {"kind": "qa_blockers", "level": "critical", "scope": "totals",
+                 "message": "QA 阻断 9 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成"},
+                {"kind": "qa_blockers", "level": "warn", "scope": "第1集", "message": "第1集 QA 阻断 9 项"},
+            ],
+        }, fh, ensure_ascii=False)
+
+    na = run.decide(root, _route("image"), "image", run.Probes())
+
+    assert na["stop_reason"] == "needs_payment_confirm"
+    alerts = na["action_card"]["active_alerts"]
+    assert len(alerts) == 1 and alerts[0]["level"] == "critical"  # warn 不透出，只透 critical
+    assert "QA 阻断 9 项" in na["action_card"]["to_user"]
+
+
+def test_decide_payment_confirm_quiet_without_alerts_file():
+    root = make_work(ALL_DONE_TO["image"])
+    na = run.decide(root, _route("image"), "image", run.Probes())
+    assert na["stop_reason"] == "needs_payment_confirm"
+    assert "active_alerts" not in na["action_card"]

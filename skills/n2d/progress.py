@@ -33,7 +33,7 @@ _PROGRESS_ALLOW_ENV = "N2D_PROGRESS_ALLOW_UNVERIFIED"
 _UNVERIFIED_WAIVER_LEDGER = "progress_unverified_waivers.jsonl"
 
 
-def _append_unverified_waiver_fallback(root, ep, col, val, reason):
+def _append_unverified_waiver_fallback(root, ep, col, val, reason, code="gate_receipt_unavailable"):
     """gate_receipt 不可加载时的最小留痕：往同一 waiver 账本 append 一行（schema 兼容 gate_receipt
     的 unresolved_waivers：带 episode + gate_stage，使日后模块恢复跑闸能自动销账）。"""
     import json as _json
@@ -47,9 +47,9 @@ def _append_unverified_waiver_fallback(root, ep, col, val, reason):
         "episode": ep,
         "column": col,
         "gate_stage": _GATED_COLUMN_STAGE_FALLBACK.get(col, ""),
-        "code": "gate_receipt_unavailable",
+        "code": code,
         "reason": reason,
-        "message": f"gate_receipt 模块不可加载，{_PROGRESS_ALLOW_ENV}=1 强行回写「{col}」={val}（欠债）。",
+        "message": f"{_PROGRESS_ALLOW_ENV}=1 强行回写「{col}」={val}（欠债·{code}）。",
     }
     with open(path, "a", encoding="utf-8") as fh:
         fh.write(_json.dumps(rec, ensure_ascii=False) + "\n")
@@ -161,8 +161,51 @@ def _verify_gate_receipt(root, ep, col, val):
     sys.exit(2)
 
 
+def _verify_dag_prereqs(root, ep, col, val):
+    """DAG 前驱校验：向任何列写「完成态 ✅」前，STAGE_GRAPH 前驱列必须已满足。
+
+    audit-dag 只能事后抓乱序，这里把同一判据前移到回写时 fail-closed——上游未完成时
+    拒绝置下游 ✅。非完成态（⬜/⏳rough/12/19/—/na）不拦；逃生口与凭据耦合同一口径：
+    N2D_PROGRESS_ALLOW_UNVERIFIED=1 强行回写并留痕 waiver（欠债，验收 reconcile 复核）。
+    """
+    if cell_state(val) != "done":
+        return
+    prereqs = _dag_prereqs_for(col)
+    if not prereqs:
+        return
+    try:
+        header, rows = parse_progress(root)
+    except Exception:
+        return  # 表读不出/不存在时交给 do_set 自身按原路径报错
+    ep_norm = str(ep).strip()
+    row = next((r for r in rows
+                if str(r.get("_ep") or r.get("集") or "").strip() == ep_norm), None)
+    if row is None:
+        return  # ep 不在表里由 do_set 报错
+    colset = set(header)
+    gaps = []
+    for prereq in prereqs:
+        if prereq not in colset:
+            continue  # 旧项目缺列不误伤（ensure-col 迁移前按不存在处理）
+        if not _dag_prereq_satisfied(root, row, col, prereq):
+            gaps.append((prereq, row.get(prereq, ""), _dag_expected_for(root, col, prereq)))
+    if not gaps:
+        return
+    detail = "；".join(f"「{p}」当前={v or '⬜'}（要求：{exp}）" for p, v, exp in gaps)
+    if os.environ.get(_PROGRESS_ALLOW_ENV) == "1":
+        wpath = _append_unverified_waiver_fallback(
+            root, ep, col, val, f"DAG 前驱未满足强行回写：{detail}", code="dag_prereq_unsatisfied")
+        print(f"⚠️ DAG 前驱未满足，但 {_PROGRESS_ALLOW_ENV}=1 强行回写 {ep}「{col}」={val}；"
+              f"已留痕欠债 → {os.path.relpath(wpath, root)}（验收 reconcile 会复核）。")
+        return
+    print(f"⛔ 拒绝回写 {ep}「{col}」= {val}：上游前驱未满足——{detail}")
+    print(f"   先完成前驱列，或确属特殊路线时设 {_PROGRESS_ALLOW_ENV}=1 强行回写并留痕（欠债）。")
+    sys.exit(2)
+
+
 def do_set(root, ep, col, val):
     _verify_gate_receipt(root, ep, col, val)
+    _verify_dag_prereqs(root, ep, col, val)
     p = prog_path(root)
     with progress_lock(root):
         lines = open(p, encoding='utf-8').read().split('\n')

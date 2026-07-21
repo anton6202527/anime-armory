@@ -14,6 +14,7 @@ import hashlib
 import json
 import re
 import sys
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
@@ -21,12 +22,41 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 _AD_LIB = Path(__file__).resolve().parents[2] / "ad" / "_lib"
 if str(_AD_LIB) not in sys.path:
     sys.path.insert(0, str(_AD_LIB))
+import image_backend_adapter as adapter  # noqa: E402
 import settings as ad_settings  # noqa: E402
 
 
 KIND = "ad_image_prompt_plan"
 PROD_RE = re.compile(r"\bPROD_[A-Za-z0-9_]*\b")
 BRAND_RE = re.compile(r"\bBRAND_[A-Za-z0-9_]*\b")
+
+# ── 稳定 seed 规划（确定性·非 random/时间） ─────────────────────────────────────
+# seed 不是身份锁，只是可复现随机起点：重抽单镜/跨镜复用同一产品时锁同一起点。
+# 派生规则：zlib.crc32(项目名|主资产ID) → 同一资产跨镜同 seed、跨项目不同。
+# seed 与「后端是否支持」解耦：job 一律记 planned_seed + seed_capability（适配层三态）；
+# 不支持的后端如实标 unavailable，渲染端不得假装 seed 生效（provenance 有据可查）。
+SEED_SPACE = 2 ** 31  # planned_seed ∈ [0, 2^31)：落在常见后端 seed 参数的安全区间
+
+
+def planned_seed_for(project_name: str, seed_key: str) -> int:
+    """确定性 seed：crc32(项目名|seed_key)。纯函数·可测；禁 random/时间做 seed 源。"""
+    data = f"{project_name}|{seed_key}".encode("utf-8")
+    return zlib.crc32(data) % SEED_SPACE
+
+
+def job_seed_info(job: Mapping[str, Any]) -> Dict[str, Any]:
+    """从 manifest job 读 seed 字段（向后兼容：旧 manifest 无此字段不炸）。
+
+    旧 job → planned_seed=None、seed_capability="unknown"（未知≠不支持，如实降级）。
+    """
+    raw_seed = job.get("planned_seed") if isinstance(job, Mapping) else None
+    seed = raw_seed if isinstance(raw_seed, int) else None
+    capability = job.get("seed_capability") if isinstance(job, Mapping) else None
+    return {
+        "planned_seed": seed,
+        "seed_capability": str(capability) if capability else adapter.CAP_UNKNOWN,
+        "seed_basis": dict(job.get("seed_basis") or {}) if isinstance(job, Mapping) else {},
+    }
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -322,6 +352,13 @@ def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]
         label = shot_label(shot, index)
         required = asset_ids(shot, PROD_RE) + asset_ids(shot, BRAND_RE)
         refs = list(dict.fromkeys(path for aid in required for path in reference_paths(entries.get(aid, {}))))
+        # 稳定 seed：主资产 = 产品优先的首个资产 ID（同一资产跨镜同 seed）；
+        # 无资产的空镜退化为按镜头标签派生（该镜自身可复现即可）。
+        primary_asset = required[0] if required else ""
+        seed_key = primary_asset or label
+        seed = planned_seed_for(root.name, seed_key)
+        seed_basis = {"project": root.name, "seed_key": seed_key,
+                      "derivation": "zlib.crc32(project|seed_key) % 2^31"}
         jobs.append({
             "job_id": f"{label}_first",
             "shot": label,
@@ -331,6 +368,8 @@ def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]
             "requires_assets": required,
             "reference_inputs": refs,
             "requires_image_input": bool(asset_ids(shot, PROD_RE)),
+            "planned_seed": seed,
+            "seed_basis": seed_basis,
             "status": "planned",
         })
         if needs_end_frame(shot):
@@ -343,6 +382,8 @@ def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]
                 "requires_assets": required,
                 "reference_inputs": refs,
                 "requires_image_input": bool(asset_ids(shot, PROD_RE)),
+                "planned_seed": seed,
+                "seed_basis": dict(seed_basis),
                 "status": "planned",
             })
     return jobs
@@ -387,9 +428,12 @@ def run(root: Path) -> Dict[str, Any]:
     jobs = build_jobs(root, storyboard)
     image_model = ad_settings.get_setting(str(root), "生图模型", "GPT Image 2")
     image_channel = ad_settings.get_setting(str(root), "生图渠道", "Codex CLI")
+    # seed 能力来自适配层三态：unavailable 也照记 planned_seed（provenance），不假装生效。
+    seed_capability = adapter.seed_capability(adapter.profile_for(image_model, image_channel))
     for job in jobs:
         job["planned_model"] = image_model
         job["planned_channel"] = image_channel
+        job["seed_capability"] = seed_capability
         prompt_path = root / str(job["prompt"])
         job["prompt_sha256"] = hashlib.sha256(prompt_path.read_bytes()).hexdigest()
     manifest = {
@@ -402,6 +446,12 @@ def run(root: Path) -> Dict[str, Any]:
         ],
         "overview": "出图/分镜/prompt/00_总览.md",
         "image_route": {"model": image_model, "channel": image_channel},
+        "seed_policy": {
+            "derivation": "zlib.crc32(project|seed_key) % 2^31（确定性；同一资产跨镜同 seed、跨项目不同）",
+            "seed_capability": seed_capability,
+            "note": "planned_seed 只是可复现随机起点的计划值；seed_capability 来自适配层三态，"
+                    "unavailable/unknown 时渲染端不得宣称 seed 生效。旧 manifest 无 seed 字段属正常。",
+        },
         "jobs": jobs,
         "summary": {
             "first_frames": sum(1 for j in jobs if j["kind"] == "first_frame"),

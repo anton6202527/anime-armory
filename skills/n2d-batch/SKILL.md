@@ -90,6 +90,7 @@ python3 skills/n2d-batch/scripts/queue.py plan <作品根> --episodes 2 --rerun-
 # 6) findings / ledger / 低分回流 + 闭环复检（修复→resolved / 复发→reopen）
 python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-consistency-findings <findings.json>
 python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-consistency-ledger <作品根>/生产数据/consistency_ledger_第1集.json
+python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-events   # production_events.jsonl 里未被后续 pass 承接的 generation/redraw fail → 重试任务（手动/外部生成失败也进闭环）
 python3 skills/n2d-score/scripts/score.py <作品根> 第1集 --run-checks --threshold 85 --enqueue-low
 python3 skills/n2d-batch/scripts/runner.py <作品根> --until-empty --recheck   # pass 后自动刷门禁再判现状
 
@@ -125,7 +126,7 @@ python3 skills/n2d/scripts/stop_loss.py <作品根> --write --json
 | 错误 | 纠正 |
 |---|---|
 | 让 runner 直接重写阶段逻辑 | 不做。runner 只调配置好的阶段命令；阶段规则仍归对应 n2d skill |
-| batch 跑过单集编排器的硬阻断 | runner 默认会在执行前消费 `run.py next` 的 stop_reason；只有确认阶段 wrapper 已自带等价 gate 时，才可在 `batch_runner.json` 写 `"next_preflight": false` 或用 `--no-next-preflight` 显式关闭。`blocked_by_entry_check`、`capability_evidence_required`、`blocked_by_review_acceptance` 同样会阻断 |
+| batch 跑过单集编排器的硬阻断 | runner 默认会在执行前消费 `run.py next` 的 stop_reason；只有确认阶段 wrapper 已自带等价 gate 时，才可在 `batch_runner.json` 写 `"next_preflight": false` 或用 `--no-next-preflight` 显式关闭。**关闭只对非花钱 stage 生效**：`image / video / compose` 这类花钱/不可逆 stage 会无视关闭配置强制跑 next-preflight（fail-closed，被拦时错误信息注明「paid stage 强制」），防止一个配置绕过 gate/image_qc/compliance/entry_check。`blocked_by_entry_check`、`capability_evidence_required`、`blocked_by_review_acceptance` 同样会阻断 |
 | 直接跑队列里的 `n2d-image` slash command | slash command 不是 shell 命令；在 `batch_runner.json` 配真实 shell 命令 |
 | 多个 agent 口头分任务 | 统一 `claim`（已上 flock 原子认领），否则并发槽和状态会乱 |
 | 多 worker 不给 `--worker` id | 给稳定 id；否则 `--resume` 无法回收"自己"上次残留的 running |

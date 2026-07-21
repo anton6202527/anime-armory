@@ -46,6 +46,25 @@ def write_json(path: str, payload: Any) -> None:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
 
+def write_json_stable(path: str, payload: Any, *, volatile_keys: tuple = ("generated_at",)) -> bool:
+    """Idempotent `write_json`: skip the write when the payload only differs in volatile keys.
+
+    MV receipts embed `generated_at`; many consumers hash the *file content*
+    (`source_clip_plan_sha256`, picture-lock `inputs_sha256`, …). A no-op re-run on a
+    later date would change only that stamp, rotate the file hash, and needlessly
+    invalidate every downstream receipt. Comparing with the volatile keys stripped
+    keeps unchanged truth byte-stable (and mtime-stable). Returns True when written.
+    """
+    existing = load_json(path, None, resilient=True)
+    if isinstance(existing, dict) and isinstance(payload, dict):
+        def _stable(doc: dict) -> dict:
+            return {k: v for k, v in doc.items() if k not in volatile_keys}
+        if _stable(existing) == _stable(payload):
+            return False
+    write_json(path, payload)
+    return True
+
+
 def read_text(path: str, default: str = "") -> str:
     """Read a UTF-8 text file; return `default` when it does not exist."""
     if not os.path.exists(path):

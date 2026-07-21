@@ -100,6 +100,46 @@ def atomic_write_text(path: Path, text: str) -> None:
     os.replace(tmp, path)
 
 
+_GENERATED_AT_MD_RE = re.compile(r"generated_at[:：].*")
+
+
+def _semantic_text(suffix: str, text: str) -> str:
+    """比较用归一：剔除 generated_at 时间戳噪声，其余内容逐字比较。"""
+    if suffix == ".json":
+        try:
+            data = json.loads(text)
+        except Exception:
+            return text
+
+        def scrub(obj: Any) -> Any:
+            if isinstance(obj, dict):
+                return {k: scrub(v) for k, v in obj.items() if k != "generated_at"}
+            if isinstance(obj, list):
+                return [scrub(v) for v in obj]
+            return obj
+
+        return json.dumps(scrub(data), ensure_ascii=False, sort_keys=True)
+    return _GENERATED_AT_MD_RE.sub("generated_at: <scrubbed>", text)
+
+
+def write_report_if_changed(path: Path, text: str) -> bool:
+    """write-if-semantically-changed：除 generated_at 外内容一致就不重写（保留旧文件与旧时间戳）。
+
+    run.py 每轮 next 都自动刷新 identity 报表；无脑重写会把 prework 输入指纹每轮打脏，
+    缓存命中率归零（G12）。语义没变就不动盘——「输出被删必须重跑」语义不受影响，
+    PreworkCache 的 sidecar 存在性检查仍然生效。返回是否真的写盘。
+    """
+    if path.is_file():
+        try:
+            old = path.read_text(encoding="utf-8")
+        except OSError:
+            old = None
+        if old is not None and _semantic_text(path.suffix, old) == _semantic_text(path.suffix, text):
+            return False
+    atomic_write_text(path, text)
+    return True
+
+
 def registry_path(root: Path) -> Path:
     return Path(identity_registry_path(str(root)))
 
@@ -1032,11 +1072,11 @@ def write_outputs(
         "drift_json": out_dir / "identity_drift_report.json",
         "drift_md": out_dir / "identity_drift_report.md",
     }
-    atomic_write_text(paths["matrix_json"], json.dumps(matrix, ensure_ascii=False, indent=2) + "\n")
-    atomic_write_text(paths["matrix_md"], render_matrix_md(matrix) + "\n")
+    write_report_if_changed(paths["matrix_json"], json.dumps(matrix, ensure_ascii=False, indent=2) + "\n")
+    write_report_if_changed(paths["matrix_md"], render_matrix_md(matrix) + "\n")
     if write_drift:
-        atomic_write_text(paths["drift_json"], json.dumps(drift, ensure_ascii=False, indent=2) + "\n")
-        atomic_write_text(paths["drift_md"], render_drift_md(drift) + "\n")
+        write_report_if_changed(paths["drift_json"], json.dumps(drift, ensure_ascii=False, indent=2) + "\n")
+        write_report_if_changed(paths["drift_md"], render_drift_md(drift) + "\n")
     return paths
 
 

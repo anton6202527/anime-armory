@@ -61,7 +61,7 @@ python3 skills/comic-progress/scripts/scan.py "创作区/画漫画/作品名" --
 | 最晚已完成阶段的 gate receipt 缺失/过期、report SHA 不匹配或未 `execution_authorized` | `comic-review` |
 | gate 存在 block | 按 finding 的 `return_to_stage` 返回对应 `comic-*` skill |
 
-`传统原稿流程=关闭` 只跳过 `原稿收尾/finishing`；缩略分镜/name 是必需的编辑阅读与页流合同，不会被该设置绕过。怪物资产仅在 registry 明确 `model_pack_required=true` 时纳入多视图 report/signoff；`type=character` 仍全部纳入。
+`传统原稿流程=关闭` 只跳过 `原稿收尾/finishing`；缩略分镜/name 是必需的编辑阅读与页流合同，不会被该设置绕过。怪物资产按档位默认纳入多视图 report/signoff（`core_full`/`recurring_standard` 生物默认纳管，registry `model_pack_required` 可显式 true/false 覆盖；2026-07-17 起与 comic-identity model_pack 同口径）；`type=character` 仍全部纳入。
 
 下游 gate 会重跑全部上游确定性检查，因此扫描器把“最晚已完成阶段的当前 receipt”作为传递证明，同时仍直接核验全部当前 artifacts/contracts。早期 receipt 因 runner 刷新 jobs/report 而 stale 不会单独触发回退。
 

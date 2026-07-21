@@ -240,6 +240,34 @@ def production_control_hints(root: str) -> list[str]:
     return hints
 
 
+def acceptance_audit(root: str, states, stage_by_label) -> list[str]:
+    """✅ 阶段行 ↔ 验收凭证对账（只读发现，不改状态）。
+
+    手改 _进度.md 可绕过 progress_set 的护栏；扫描器把每个标 ✅ 的阶段行对到
+    `生产数据/stage_acceptance/<stage>.json`：凭证缺失/不可读 → 「✅ 无验收凭证」，
+    凭证仍有 block → 「✅ 但验收凭证 block>0」。硬拦在 ad-review M0，这里只报。
+    """
+    issues: list[str] = []
+    for row, state in states:
+        if state != DONE:
+            continue
+        key = str((stage_by_label.get(row["label"]) or {}).get("key") or "")
+        if not key:
+            continue
+        rel = os.path.join("生产数据", "stage_acceptance", f"{key}.json")
+        payload = load_json(os.path.join(root, rel))
+        if not isinstance(payload, dict):
+            issues.append(f"⚠️ {row['label']}: ✅ 无验收凭证（缺 {rel}，疑似手改 _进度.md）")
+            continue
+        try:
+            block = int((payload.get("summary") or {}).get("block") or 0)
+        except (TypeError, ValueError):
+            block = -1
+        if block:
+            issues.append(f"⚠️ {row['label']}: ✅ 但验收凭证 {rel} 仍有 block（假完成）")
+    return issues
+
+
 def has_media(folder: str, suffixes: tuple[str, ...]) -> bool:
     if not os.path.isdir(folder):
         return False
@@ -265,6 +293,7 @@ def report(contract, progress_md, root: str, rel: str, limit: int) -> str:
     done = sum(1 for _, state in states if state == DONE)
     out.append(f"阶段数: {len(rows)} | 完成: {done}/{len(rows)}")
     out.append("各阶段: " + " | ".join(f"{row['label']} {marker(state)}" for row, state in states))
+    out.extend(acceptance_audit(root, states, stage_by_label))
 
     deliverables = parse_deliverables(progress_md, text)
     if deliverables:

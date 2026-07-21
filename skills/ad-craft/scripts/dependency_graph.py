@@ -183,6 +183,9 @@ def discover(root: Path) -> list[dict[str, Any]]:
     ], ["脚本/广告脚本.md", "脚本/voiceover.txt", "脚本/时间轴.json", "脚本/广告法机检报告.json"]))
     nodes.append(_node(root, "voice", "voice", [
         _file_token(root, "脚本/voiceover.txt"), _value_token("voice_backend", _settings_value(root, "配音后端")),
+        # 音色注册表也是 voice 的真实输入：voice_key 由 render_voice 读它计算。
+        # 无条件登记（缺失时 sha256=null 作 sentinel），改音色绑定/补建 voicemap 都会触发 stale。
+        _file_token(root, "设定库/voicemap.json"),
     ], ["配音/时长清单.json", "配音/vo.wav", "配音/voice_qc.json"]))
     nodes.append(_node(root, "storyboard", "storyboard", [
         _file_token(root, "脚本/广告脚本.md"), _file_token(root, "脚本/时间轴.json"),
@@ -228,11 +231,14 @@ def discover(root: Path) -> list[dict[str, Any]]:
             row = locale_rows.get(locale_id) if isinstance(locale_rows.get(locale_id), Mapping) else {}
             localized_paths.extend(str(row.get(key) or "") for key in ("voiceover_path", "subtitle_path"))
         if not mapped:
-            localized_paths.extend(("脚本/字幕_zh.srt", "脚本/字幕_en.srt"))
+            # 无 locale matrix 分支：整轨 VO 直接混进成片，重配音必须让 compose 变 stale。
+            localized_paths.extend(("配音/vo.wav", "脚本/字幕_zh.srt", "脚本/字幕_en.srt"))
         localized_paths.append("合成/_work/endcard.png")
+        # 无条件登记：文件缺失时 _file_token 的 sha256=null 就是 sentinel，参与 input hash。
+        # 从缺到有 / 从有到缺都会改变哈希 → 触发 stale。旧收据（当年只登记存在的文件）
+        # 会因 token 集合变化被判 stale_input，属预期：要求该交付件重新验收一次。
         for rel in dict.fromkeys(path for path in localized_paths if path):
-            if (root / rel).exists():
-                compose_inputs.append(_file_token(root, rel))
+            compose_inputs.append(_file_token(root, rel))
         nodes.append(_node(root, f"compose:{did}", "compose", compose_inputs, [str(item.get("expected_path") or "")]))
     handoff_inputs = [_file_token(root, "需求/brief.json"), _file_token(root, "合规/ai_usage.json"),
                       _file_token(root, "合规/locale_matrix.json"), _file_token(root, "合规/provenance_qc.json")]

@@ -2636,6 +2636,18 @@ def adapter_defaults() -> Dict[str, Any]:
     return {"image": image, "video": video, "lora": {"status": "not_needed", "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"}}
 
 
+def identity_seed_base(identity_id: str, form_key: str = "") -> int:
+    """身份哈希 seed 基址：同 (身份ID, 形态) 恒定，与角色在列表中的位置无关。
+
+    旧实现是位置计数（1100 + i*100 + fidx*10）——角色重排序/增删即 seed 漂移，与
+    `seed_strategy=fixed_pool` 的承诺不符。seed 在多数后端本为 no-op（seed_effective=false），
+    存量项目 seed 数值变化不构成回归；支持 seed 的后端自此获得「同身份恒定 seed」。
+    区间 [10_000, 2^31)：避开小值保留段，留出 seed_pool 的 +5 偏移空间不越界。
+    """
+    digest = hashlib.sha256(f"{identity_id}|{form_key}".encode("utf-8")).hexdigest()
+    return 10_000 + int(digest[:8], 16) % (2**31 - 10_100)
+
+
 def generation_control(seed_base: int) -> Dict[str, Any]:
     return {
         "seed_strategy": "fixed_pool",
@@ -2946,7 +2958,7 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                     reference_slot(root, primary_path, "primary_reference") if primary_path else {"slot": "primary_reference", "path": "", "status": "planned"},
                 ],
                 "identity_adapters": adapter_defaults(),
-                "generation_control": generation_control(1100 + i * 100 + fidx * 10),
+                "generation_control": generation_control(identity_seed_base(cid, str(merged_cfg.get("form") or ""))),
                 "angle_policy": {
                     "allowed": [
                         "front", "three_quarter", "side", "rear_three_quarter", "back",

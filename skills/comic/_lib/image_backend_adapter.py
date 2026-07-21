@@ -25,6 +25,15 @@ class ImageBackendCapabilities:
     non_character_reference_limit: int
     style_reference_limit: int
     notes: str
+    # 实机可执行附件上限：runner 一次请求真正能提交的参考图数。
+    # reference_image_limit 是能力上限（供规划/文档），executable_attachment_limit
+    # 是执行真值（供 runner/planner 分配槽位）。二者不一致时以本字段为准，
+    # 禁止在 runner 里再写死第二份数字。
+    executable_attachment_limit: int = 0
+
+    def __post_init__(self) -> None:
+        if int(self.executable_attachment_limit or 0) <= 0:
+            object.__setattr__(self, "executable_attachment_limit", int(self.reference_image_limit or 0))
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -57,7 +66,12 @@ def resolve_capabilities(model: str, channel: str = "") -> ImageBackendCapabilit
             multi_character_reference_limit=3,
             non_character_reference_limit=2,
             style_reference_limit=2,
-            notes="OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed.",
+            notes=(
+                "OpenAI/Codex route: use project-memory references via real image inputs; no public "
+                "persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec "
+                "invocation (observed runner limit), below the 16-image capability ceiling."
+            ),
+            executable_attachment_limit=5,
         )
 
     if any(token in combined for token in ("gemini", "nano banana")):

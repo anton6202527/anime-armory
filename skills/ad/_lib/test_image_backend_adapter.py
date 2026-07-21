@@ -23,6 +23,7 @@ from image_backend_adapter import (
     CAP_MASK_INPAINT,
     CAP_MULTI_REFERENCE,
     CAP_REFERENCE,
+    CAP_SEED_CONTROL,
     CAP_SUBJECT_LIBRARY,
     CAP_UNAVAILABLE,
     CAP_UNKNOWN,
@@ -34,6 +35,7 @@ from image_backend_adapter import (
     TIER_SUBJECT_LIBRARY,
     UNKNOWN_BACKEND_REFERENCE_LIMIT,
     asset_kind_for_id,
+    backends_reaching_tier,
     capability_state,
     describe,
     has_capability,
@@ -41,6 +43,7 @@ from image_backend_adapter import (
     normalize_backend,
     profile_for,
     reference_limit_for,
+    seed_capability,
     tier_for_setting,
     tier_rank,
     tier_setting_value,
@@ -73,8 +76,9 @@ def test_has_capability_only_accepts_available_never_unknown():
 def test_unknown_capability_state_is_reported_not_silently_unsupported():
     # unknown 必须在报告里显性列出——「未知」与「不支持」对人的下一步动作完全不同。
     assert unknown_capabilities(profile_for("Nano Banana Pro")) == sorted(
-        [CAP_SUBJECT_LIBRARY, CAP_CONTROLNET, CAP_MASK_INPAINT])
-    assert unknown_capabilities(profile_for("Seedream 4.5")) == sorted([CAP_CONTROLNET, CAP_MASK_INPAINT])
+        [CAP_SUBJECT_LIBRARY, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL])
+    assert unknown_capabilities(profile_for("Seedream 4.5")) == sorted(
+        [CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL])
 
 
 def test_capability_state_of_unlisted_capability_is_unknown_not_crash():
@@ -117,7 +121,7 @@ def test_unknown_backend_falls_back_to_conservative_profile():
     # 只假定最基本的单张图生图，其余全 unknown——不假装支持，也不谎称不支持。
     assert capability_state(profile, CAP_REFERENCE) == CAP_AVAILABLE
     for cap in (CAP_MULTI_REFERENCE, CAP_SUBJECT_LIBRARY, CAP_FACE_EMBEDDING,
-                CAP_LORA, CAP_CONTROLNET, CAP_MASK_INPAINT):
+                CAP_LORA, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL):
         assert capability_state(profile, cap) == CAP_UNKNOWN
         assert has_capability(profile, cap) is False
     assert profile["requested_model"] == "MyCustomDiffusion v9"
@@ -264,6 +268,58 @@ def test_lock_tier_for_defaults_to_unknown_asset_kind():
 ])
 def test_asset_kind_for_id(asset_id, kind):
     assert asset_kind_for_id(asset_id) == kind
+
+
+# ── seed 控制能力三态（逐后端如实标注·查不到证据一律 unknown） ────────────────────
+
+def test_seed_capability_is_tri_state_per_backend():
+    # openai：兄弟线 Codex 渠道 runner 落档 no-seed-api 降级口径 → 明确 unavailable。
+    assert seed_capability(profile_for("GPT Image 2", "Codex CLI")) == CAP_UNAVAILABLE
+    # 其余登记后端：仓内无传 seed 的调用证据 → unknown，绝不猜 available。
+    for model in ("Nano Banana Pro", "Seedream 4.5", "Kling Image 3.0", "即梦 Dreamina"):
+        assert seed_capability(profile_for(model)) == CAP_UNKNOWN
+    # 未知后端 → unknown（保守，不谎称不支持）。
+    assert seed_capability(profile_for("MyCustomDiffusion v9")) == CAP_UNKNOWN
+
+
+def test_seed_capability_accepts_model_string_and_never_counts_as_available():
+    assert seed_capability("GPT Image 2") == CAP_UNAVAILABLE
+    # unknown/unavailable 都不得被 has_capability 当成支持。
+    for model in ("GPT Image 2", "Seedream 4.5", "没听过的后端"):
+        assert has_capability(profile_for(model), CAP_SEED_CONTROL) is False
+
+
+def test_seed_control_is_a_capability_not_a_tier():
+    # seed 只是可复现随机起点，不是一致性梯子的档位——不得因 seed 升档。
+    assert CAP_SEED_CONTROL in ALL_CAPABILITIES
+    assert tier_rank(CAP_SEED_CONTROL) == -1
+
+
+# ── 升档可达路由：够得着建议档的后端清单（advisory·来自能力表） ───────────────────
+
+def test_backends_reaching_subject_library_for_product_are_seedream_and_kling():
+    reached = backends_reaching_tier(TIER_SUBJECT_LIBRARY, ASSET_KIND_PRODUCT)
+    assert {r["backend"] for r in reached} == {"seedream", "kling"}
+    # label 必须带「模型+渠道」信息，供人直接对照 _设置.md 切换。
+    for row in reached:
+        assert row["label"]
+
+
+def test_backends_reaching_directed_reference_includes_all_multi_reference_backends():
+    reached = {r["backend"] for r in backends_reaching_tier(TIER_DIRECTED_REFERENCE, ASSET_KIND_PRODUCT)}
+    assert reached == {"openai", "gemini", "seedream", "kling", "dreamina"}
+
+
+def test_backends_reaching_lora_is_empty_and_unknown_tier_is_empty():
+    # 现表无任何后端有 LoRA 挂载点 → 如实空清单（调用方应建议人工降低期望/补定妆参考）。
+    assert backends_reaching_tier(TIER_LORA, ASSET_KIND_CHARACTER) == []
+    assert backends_reaching_tier("no_such_tier", ASSET_KIND_PRODUCT) == []
+
+
+def test_backends_reaching_tier_ignores_unknown_subject_library():
+    # gemini/dreamina 的 subject_library=unknown → 不得被列为「够得着第②档」。
+    reached = {r["backend"] for r in backends_reaching_tier(TIER_SUBJECT_LIBRARY, ASSET_KIND_BRAND)}
+    assert "gemini" not in reached and "dreamina" not in reached
 
 
 # ── profile 隔离 / 预算 / 摘要 ──────────────────────────────────────────────────

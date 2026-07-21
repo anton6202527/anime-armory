@@ -3,19 +3,19 @@
   "kind": "comic_character_consistency",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/水浒传",
   "chapter": "第9话",
-  "created_at": "2026-07-20T18:15:42",
+  "created_at": "2026-07-20T18:56:20",
   "available": true,
   "capabilities": {
     "pillow": true,
-    "ccip": false
+    "ccip": true
   },
   "verdict": "warn",
   "summary": {
     "character_count": 8,
     "panel_binding_count": 95,
-    "finding_count": 13,
+    "finding_count": 23,
     "block_count": 0,
-    "warn_count": 13,
+    "warn_count": 23,
     "info_count": 0
   },
   "contact_sheet": "生产数据/qa_previews/第9话_character_consistency_contact_sheet.jpg",
@@ -112,6 +112,17 @@
       "metrics": [
         {
           "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.1601,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9333,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -136,6 +147,17 @@
         },
         {
           "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.1909,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8975,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -160,6 +182,17 @@
         },
         {
           "panel_id": "P009",
+          "ccip": {
+            "available": true,
+            "difference": 0.2346,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8865,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__front.png",
@@ -184,6 +217,17 @@
         },
         {
           "panel_id": "P012",
+          "ccip": {
+            "available": true,
+            "difference": 0.1871,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8205,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -208,6 +252,17 @@
         },
         {
           "panel_id": "P019",
+          "ccip": {
+            "available": true,
+            "difference": 0.195,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9255,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -232,6 +287,17 @@
         },
         {
           "panel_id": "P020",
+          "ccip": {
+            "available": true,
+            "difference": 0.1763,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9261,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -256,6 +322,17 @@
         },
         {
           "panel_id": "P023",
+          "ccip": {
+            "available": true,
+            "difference": 0.1825,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8738,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -280,6 +357,17 @@
         },
         {
           "panel_id": "P025",
+          "ccip": {
+            "available": true,
+            "difference": 0.1799,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9189,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -304,6 +392,17 @@
         },
         {
           "panel_id": "P027",
+          "ccip": {
+            "available": true,
+            "difference": 0.1566,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9078,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -328,6 +427,17 @@
         },
         {
           "panel_id": "P028",
+          "ccip": {
+            "available": true,
+            "difference": 0.1803,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9203,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -352,6 +462,17 @@
         },
         {
           "panel_id": "P030",
+          "ccip": {
+            "available": true,
+            "difference": 0.1828,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9422,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -376,6 +497,17 @@
         },
         {
           "panel_id": "P035",
+          "ccip": {
+            "available": true,
+            "difference": 0.1975,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9384,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -400,6 +532,17 @@
         },
         {
           "panel_id": "P036",
+          "ccip": {
+            "available": true,
+            "difference": 0.2099,
+            "reference": "出图/共享/图片/CHAR_CHEN_DA__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9563,
             "reference": "出图/共享/图片/CHAR_CHEN_DA__three_quarter.png",
@@ -455,6 +598,17 @@
       "metrics": [
         {
           "panel_id": "P014",
+          "ccip": {
+            "available": true,
+            "difference": 0.0134,
+            "reference": "出图/共享/图片/CHAR_COUNTY_LIEUTENANT__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.6508,
             "reference": "出图/共享/图片/CHAR_COUNTY_LIEUTENANT__face.png",
@@ -479,6 +633,17 @@
         },
         {
           "panel_id": "P024",
+          "ccip": {
+            "available": true,
+            "difference": 0.0897,
+            "reference": "出图/共享/图片/CHAR_COUNTY_LIEUTENANT__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.5778,
             "reference": "出图/共享/图片/CHAR_COUNTY_LIEUTENANT__front.png",
@@ -550,6 +715,17 @@
       "metrics": [
         {
           "panel_id": "P005",
+          "ccip": {
+            "available": true,
+            "difference": 0.0247,
+            "reference": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7673,
             "reference": "出图/共享/图片/CHAR_LI_JI__front.png",
@@ -574,6 +750,17 @@
         },
         {
           "panel_id": "P006",
+          "ccip": {
+            "available": true,
+            "difference": 0.0386,
+            "reference": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.6071,
             "reference": "出图/共享/图片/CHAR_LI_JI__face.png",
@@ -598,6 +785,17 @@
         },
         {
           "panel_id": "P021",
+          "ccip": {
+            "available": true,
+            "difference": 0.046,
+            "reference": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.4235,
             "reference": "出图/共享/图片/CHAR_LI_JI__front.png",
@@ -622,6 +820,17 @@
         },
         {
           "panel_id": "P022",
+          "ccip": {
+            "available": true,
+            "difference": 0.0825,
+            "reference": "出图/共享/图片/CHAR_LI_JI__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.6173,
             "reference": "出图/共享/图片/CHAR_LI_JI__front.png",
@@ -693,6 +902,17 @@
       "metrics": [
         {
           "panel_id": "P045",
+          "ccip": {
+            "available": true,
+            "difference": 0.1394,
+            "reference": "出图/共享/图片/CHAR_LU_DA__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8618,
             "reference": "出图/共享/图片/CHAR_LU_DA__face.png",
@@ -717,6 +937,17 @@
         },
         {
           "panel_id": "P046",
+          "ccip": {
+            "available": true,
+            "difference": 0.0845,
+            "reference": "出图/共享/图片/CHAR_LU_DA__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7942,
             "reference": "出图/共享/图片/CHAR_LU_DA__three_quarter.png",
@@ -741,6 +972,17 @@
         },
         {
           "panel_id": "P047",
+          "ccip": {
+            "available": true,
+            "difference": 0.1412,
+            "reference": "出图/共享/图片/CHAR_LU_DA__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9092,
             "reference": "出图/共享/图片/CHAR_LU_DA__face.png",
@@ -765,6 +1007,17 @@
         },
         {
           "panel_id": "P048",
+          "ccip": {
+            "available": true,
+            "difference": 0.0732,
+            "reference": "出图/共享/图片/CHAR_LU_DA__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8737,
             "reference": "出图/共享/图片/CHAR_LU_DA__front.png",
@@ -1026,6 +1279,17 @@
       "metrics": [
         {
           "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.0653,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8732,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1050,6 +1314,17 @@
         },
         {
           "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.0394,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8646,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
@@ -1074,6 +1349,17 @@
         },
         {
           "panel_id": "P003",
+          "ccip": {
+            "available": true,
+            "difference": 0.0415,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8915,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1098,6 +1384,17 @@
         },
         {
           "panel_id": "P004",
+          "ccip": {
+            "available": true,
+            "difference": 0.0509,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7543,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1122,6 +1419,17 @@
         },
         {
           "panel_id": "P006",
+          "ccip": {
+            "available": true,
+            "difference": 0.0458,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7432,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1146,6 +1454,17 @@
         },
         {
           "panel_id": "P007",
+          "ccip": {
+            "available": true,
+            "difference": 0.034,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8192,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1170,6 +1489,17 @@
         },
         {
           "panel_id": "P008",
+          "ccip": {
+            "available": true,
+            "difference": 0.0315,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.4495,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1194,6 +1524,17 @@
         },
         {
           "panel_id": "P009",
+          "ccip": {
+            "available": true,
+            "difference": 0.0557,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7693,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
@@ -1218,6 +1559,17 @@
         },
         {
           "panel_id": "P010",
+          "ccip": {
+            "available": true,
+            "difference": 0.034,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8171,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1242,6 +1594,17 @@
         },
         {
           "panel_id": "P011",
+          "ccip": {
+            "available": true,
+            "difference": 0.061,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8062,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1266,6 +1629,17 @@
         },
         {
           "panel_id": "P012",
+          "ccip": {
+            "available": true,
+            "difference": 0.0453,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9067,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1290,6 +1664,17 @@
         },
         {
           "panel_id": "P013",
+          "ccip": {
+            "available": true,
+            "difference": 0.0278,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.84,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
@@ -1314,6 +1699,17 @@
         },
         {
           "panel_id": "P015",
+          "ccip": {
+            "available": true,
+            "difference": 0.094,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8035,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1338,6 +1734,17 @@
         },
         {
           "panel_id": "P016",
+          "ccip": {
+            "available": true,
+            "difference": 0.0334,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8188,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1362,6 +1769,17 @@
         },
         {
           "panel_id": "P017",
+          "ccip": {
+            "available": true,
+            "difference": 0.088,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7958,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
@@ -1386,6 +1804,17 @@
         },
         {
           "panel_id": "P018",
+          "ccip": {
+            "available": true,
+            "difference": 0.0493,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9352,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
@@ -1410,6 +1839,17 @@
         },
         {
           "panel_id": "P020",
+          "ccip": {
+            "available": true,
+            "difference": 0.0475,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8573,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1434,6 +1874,17 @@
         },
         {
           "panel_id": "P021",
+          "ccip": {
+            "available": true,
+            "difference": 0.0438,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.6037,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1458,6 +1909,17 @@
         },
         {
           "panel_id": "P022",
+          "ccip": {
+            "available": true,
+            "difference": 0.0762,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8928,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1482,6 +1944,17 @@
         },
         {
           "panel_id": "P025",
+          "ccip": {
+            "available": true,
+            "difference": 0.0671,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.866,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1506,6 +1979,17 @@
         },
         {
           "panel_id": "P026",
+          "ccip": {
+            "available": true,
+            "difference": 0.0705,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8237,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1530,6 +2014,17 @@
         },
         {
           "panel_id": "P027",
+          "ccip": {
+            "available": true,
+            "difference": 0.1007,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.912,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1554,6 +2049,17 @@
         },
         {
           "panel_id": "P028",
+          "ccip": {
+            "available": true,
+            "difference": 0.052,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.88,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1578,6 +2084,17 @@
         },
         {
           "panel_id": "P029",
+          "ccip": {
+            "available": true,
+            "difference": 0.0287,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9368,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1602,6 +2119,17 @@
         },
         {
           "panel_id": "P030",
+          "ccip": {
+            "available": true,
+            "difference": 0.0349,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8892,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
@@ -1626,6 +2154,17 @@
         },
         {
           "panel_id": "P031",
+          "ccip": {
+            "available": true,
+            "difference": 0.0511,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8814,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1650,6 +2189,17 @@
         },
         {
           "panel_id": "P032",
+          "ccip": {
+            "available": true,
+            "difference": 0.0276,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8672,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1674,6 +2224,17 @@
         },
         {
           "panel_id": "P033",
+          "ccip": {
+            "available": true,
+            "difference": 0.0431,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9058,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1698,6 +2259,17 @@
         },
         {
           "panel_id": "P034",
+          "ccip": {
+            "available": true,
+            "difference": 0.0392,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8204,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
@@ -1722,6 +2294,17 @@
         },
         {
           "panel_id": "P035",
+          "ccip": {
+            "available": true,
+            "difference": 0.0807,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.881,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1746,6 +2329,17 @@
         },
         {
           "panel_id": "P036",
+          "ccip": {
+            "available": true,
+            "difference": 0.0796,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8918,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
@@ -1770,6 +2364,17 @@
         },
         {
           "panel_id": "P037",
+          "ccip": {
+            "available": true,
+            "difference": 0.0376,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8094,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1794,6 +2399,17 @@
         },
         {
           "panel_id": "P038",
+          "ccip": {
+            "available": true,
+            "difference": 0.0547,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.375,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1818,6 +2434,17 @@
         },
         {
           "panel_id": "P039",
+          "ccip": {
+            "available": true,
+            "difference": 0.039,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8619,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
@@ -1842,6 +2469,17 @@
         },
         {
           "panel_id": "P040",
+          "ccip": {
+            "available": true,
+            "difference": 0.021,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8351,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1866,6 +2504,17 @@
         },
         {
           "panel_id": "P041",
+          "ccip": {
+            "available": true,
+            "difference": 0.0446,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8064,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1890,6 +2539,17 @@
         },
         {
           "panel_id": "P042",
+          "ccip": {
+            "available": true,
+            "difference": 0.0655,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9091,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1914,6 +2574,17 @@
         },
         {
           "panel_id": "P043",
+          "ccip": {
+            "available": true,
+            "difference": 0.0577,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8676,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1938,6 +2609,17 @@
         },
         {
           "panel_id": "P044",
+          "ccip": {
+            "available": true,
+            "difference": 0.0197,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8767,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
@@ -1962,6 +2644,17 @@
         },
         {
           "panel_id": "P045",
+          "ccip": {
+            "available": true,
+            "difference": 0.0488,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9003,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -1986,6 +2679,17 @@
         },
         {
           "panel_id": "P047",
+          "ccip": {
+            "available": true,
+            "difference": 0.062,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8774,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -2010,6 +2714,17 @@
         },
         {
           "panel_id": "P048",
+          "ccip": {
+            "available": true,
+            "difference": 0.071,
+            "reference": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8448,
             "reference": "出图/共享/图片/CHAR_SHI_JIN__face.png",
@@ -2065,6 +2780,17 @@
       "metrics": [
         {
           "panel_id": "P007",
+          "ccip": {
+            "available": true,
+            "difference": 0.0855,
+            "reference": "出图/共享/图片/CHAR_WANG_SI__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8972,
             "reference": "出图/共享/图片/CHAR_WANG_SI__face.png",
@@ -2089,6 +2815,17 @@
         },
         {
           "panel_id": "P008",
+          "ccip": {
+            "available": true,
+            "difference": 0.0692,
+            "reference": "出图/共享/图片/CHAR_WANG_SI__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.4106,
             "reference": "出图/共享/图片/CHAR_WANG_SI__face.png",
@@ -2205,6 +2942,17 @@
       "metrics": [
         {
           "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.0733,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7727,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2229,6 +2977,17 @@
         },
         {
           "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.0535,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7749,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2253,6 +3012,17 @@
         },
         {
           "panel_id": "P009",
+          "ccip": {
+            "available": true,
+            "difference": 0.031,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7277,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2277,6 +3047,17 @@
         },
         {
           "panel_id": "P012",
+          "ccip": {
+            "available": true,
+            "difference": 0.0567,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8137,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2301,6 +3082,17 @@
         },
         {
           "panel_id": "P019",
+          "ccip": {
+            "available": true,
+            "difference": 0.0502,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7891,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2325,6 +3117,17 @@
         },
         {
           "panel_id": "P020",
+          "ccip": {
+            "available": true,
+            "difference": 0.0648,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.6584,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2349,6 +3152,17 @@
         },
         {
           "panel_id": "P023",
+          "ccip": {
+            "available": true,
+            "difference": 0.0931,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7429,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2373,6 +3187,17 @@
         },
         {
           "panel_id": "P025",
+          "ccip": {
+            "available": true,
+            "difference": 0.0767,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7406,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2397,6 +3222,17 @@
         },
         {
           "panel_id": "P027",
+          "ccip": {
+            "available": true,
+            "difference": 0.1087,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8018,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2421,6 +3257,17 @@
         },
         {
           "panel_id": "P028",
+          "ccip": {
+            "available": true,
+            "difference": 0.0563,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.706,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2445,6 +3292,17 @@
         },
         {
           "panel_id": "P030",
+          "ccip": {
+            "available": true,
+            "difference": 0.0433,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8173,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2469,6 +3327,17 @@
         },
         {
           "panel_id": "P035",
+          "ccip": {
+            "available": true,
+            "difference": 0.0753,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7979,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2493,6 +3362,17 @@
         },
         {
           "panel_id": "P036",
+          "ccip": {
+            "available": true,
+            "difference": 0.0631,
+            "reference": "出图/共享/图片/CHAR_YANG_CHUN__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8341,
             "reference": "出图/共享/图片/CHAR_YANG_CHUN__face.png",
@@ -2619,6 +3499,17 @@
       "metrics": [
         {
           "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.0725,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8834,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2643,6 +3534,17 @@
         },
         {
           "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.0854,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.9094,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2667,6 +3569,17 @@
         },
         {
           "panel_id": "P003",
+          "ccip": {
+            "available": true,
+            "difference": 0.0362,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8737,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2691,6 +3604,17 @@
         },
         {
           "panel_id": "P009",
+          "ccip": {
+            "available": true,
+            "difference": 0.0548,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8417,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
@@ -2715,6 +3639,17 @@
         },
         {
           "panel_id": "P012",
+          "ccip": {
+            "available": true,
+            "difference": 0.0459,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.6663,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2739,6 +3674,17 @@
         },
         {
           "panel_id": "P019",
+          "ccip": {
+            "available": true,
+            "difference": 0.0451,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8364,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2763,6 +3709,17 @@
         },
         {
           "panel_id": "P020",
+          "ccip": {
+            "available": true,
+            "difference": 0.0847,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8777,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2787,6 +3744,17 @@
         },
         {
           "panel_id": "P025",
+          "ccip": {
+            "available": true,
+            "difference": 0.0992,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8649,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2811,6 +3779,17 @@
         },
         {
           "panel_id": "P027",
+          "ccip": {
+            "available": true,
+            "difference": 0.0969,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.795,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2835,6 +3814,17 @@
         },
         {
           "panel_id": "P028",
+          "ccip": {
+            "available": true,
+            "difference": 0.0698,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8072,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2859,6 +3849,17 @@
         },
         {
           "panel_id": "P030",
+          "ccip": {
+            "available": true,
+            "difference": 0.0647,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.902,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2883,6 +3884,17 @@
         },
         {
           "panel_id": "P031",
+          "ccip": {
+            "available": true,
+            "difference": 0.0322,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.7493,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2907,6 +3919,17 @@
         },
         {
           "panel_id": "P032",
+          "ccip": {
+            "available": true,
+            "difference": 0.0418,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8417,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2931,6 +3954,17 @@
         },
         {
           "panel_id": "P035",
+          "ccip": {
+            "available": true,
+            "difference": 0.1048,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8475,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2955,6 +3989,17 @@
         },
         {
           "panel_id": "P036",
+          "ccip": {
+            "available": true,
+            "difference": 0.098,
+            "reference": "出图/共享/图片/CHAR_ZHU_WU__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
           "face": {
             "score": 0.8954,
             "reference": "出图/共享/图片/CHAR_ZHU_WU__face.png",
@@ -2981,6 +4026,116 @@
     }
   ],
   "findings": [
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P002",
+      "artifact": "出图/第9话/panels/P002.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1909 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P009",
+      "artifact": "出图/第9话/panels/P009.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.2346 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P012",
+      "artifact": "出图/第9话/panels/P012.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1871 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P019",
+      "artifact": "出图/第9话/panels/P019.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.195 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P023",
+      "artifact": "出图/第9话/panels/P023.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1825 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P025",
+      "artifact": "出图/第9话/panels/P025.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1799 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P028",
+      "artifact": "出图/第9话/panels/P028.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1803 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P030",
+      "artifact": "出图/第9话/panels/P030.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1828 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P035",
+      "artifact": "出图/第9话/panels/P035.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.1975 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_CHEN_DA",
+      "panel_id": "P036",
+      "artifact": "出图/第9话/panels/P036.png",
+      "reason": "CHAR_CHEN_DA CCIP 身份距离 0.2099 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
     {
       "severity": "warn",
       "dimension": "character_consistency",
@@ -3126,7 +4281,6 @@
     }
   ],
   "notes": [
-    "CCIP 动漫身份 embedding 不可用（色彩指纹只是代理，换脸同色调会漏报）。建议在独立 venv 安装 dghs-imgutils（pip install dghs-imgutils）后重跑，获得阈值化的同角色判定（threshold=0.178）。",
     "VLM 并排判定任务包已刷新：生产数据/comic_vlm_judge_tasks_第9话.json（裁决 0/137）；由多模态 agent 看图执行并写回 verdict 文件。",
     "已生成角色一致性并排复核图：生产数据/qa_previews/第9话_character_consistency_contact_sheet.jpg"
   ]

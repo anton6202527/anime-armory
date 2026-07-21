@@ -44,6 +44,9 @@ def main():
     parser.add_argument("--subject-id", action="append", default=[], help="真实提交的后端主体/角色 ID，可多次")
     parser.add_argument("--method", default="generation")
     parser.add_argument("--provider-job-id", default="")
+    parser.add_argument("--seed", default="", help="后端返回/提交的随机种子；有则必记（复现与微调用）")
+    parser.add_argument("--param", action="append", default=[], metavar="K=V",
+                        help="其它生成参数留痕（cfg=7.5 / size=2048x1152…，可重复）")
     parser.add_argument("--notes", default="")
     args = parser.parse_args()
 
@@ -67,6 +70,14 @@ def main():
         print(f"[err] {exc}", file=sys.stderr)
         return 2
 
+    params = {}
+    for pair in args.param:
+        if "=" not in pair:
+            print(f"[err] --param 格式应为 K=V，收到：{pair}", file=sys.stderr)
+            return 2
+        key, value = pair.split("=", 1)
+        params[key.strip()] = value.strip()
+
     event = {
         "schema_version": 1,
         "stage": "image",
@@ -83,6 +94,9 @@ def main():
             "reference_inputs": ref_rows,
             "subject_inputs": [value.strip() for value in args.subject_id if value.strip()],
             "provider_job_id": args.provider_job_id.strip(),
+            # 可复现性留痕：seed/参数是登记时已知的事实，能记必记（缺省不阻断——很多网页入口拿不到）。
+            "seed": args.seed.strip(),
+            "generation_params": params,
         },
         "notes": args.notes,
     }

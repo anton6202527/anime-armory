@@ -1099,3 +1099,62 @@ def test_sqlite_status_warns_on_network_fs_and_documents_scope(tmp_path, monkeyp
 
 def test_network_fs_type_local_path_returns_empty(tmp_path):
     assert queue._network_fs_type(str(tmp_path)) == ""
+
+
+# ── plan --from-events：未被后续 pass 承接的 generation fail 自动进重试队列（G10）──────
+
+
+def _write_events(root: Path, records) -> None:
+    d = root / "生产数据"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "production_events.jsonl").write_text(
+        "\n".join(json.dumps(r, ensure_ascii=False) for r in records) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _gen_event(ep: str, asset: str, status: str, ts: str, stage: str = "image"):
+    return {
+        "kind": "n2d_production_event",
+        "event": "generation",
+        "episode": ep,
+        "stage": stage,
+        "ts": ts,
+        "generation": {"asset": asset, "status": status, "provider": "dreamina_official_cli"},
+    }
+
+
+def test_tasks_from_events_picks_unrecovered_fail(tmp_path: Path) -> None:
+    _write_events(tmp_path, [
+        _gen_event("第1集", "出图/第1集/图片/Clip04_first.png", "fail", "2026-07-20T10:00:00Z"),
+        _gen_event("第1集", "出图/第1集/图片/Clip05_first.png", "fail", "2026-07-20T10:01:00Z"),
+        _gen_event("第1集", "出图/第1集/图片/Clip05_first.png", "pass", "2026-07-20T10:02:00Z"),
+    ])
+    tasks = queue.tasks_from_production_events(
+        str(tmp_path), cost_estimates={}, max_retries=1)
+
+    assert len(tasks) == 1, "后续 pass 已承接的资产不该再入队"
+    task = tasks[0]
+    assert task["stage_key"] == "image"
+    assert task["reason"] == "generation_fail_retry"
+    assert task["affected_artifacts"] == ["出图/第1集/图片/Clip04_first.png"]
+
+
+def test_tasks_from_events_idempotent_across_replans(tmp_path: Path) -> None:
+    _write_events(tmp_path, [
+        _gen_event("第1集", "出图/第1集/图片/Clip04_first.png", "fail", "2026-07-20T10:00:00Z"),
+    ])
+    first = queue.tasks_from_production_events(str(tmp_path), cost_estimates={}, max_retries=1)
+    second = queue.tasks_from_production_events(str(tmp_path), cost_estimates={}, max_retries=1)
+    assert first[0]["idempotency_key"] == second[0]["idempotency_key"]
+
+    # 新一次失败（新 ts）→ 新幂等键，允许再次排队
+    _write_events(tmp_path, [
+        _gen_event("第1集", "出图/第1集/图片/Clip04_first.png", "fail", "2026-07-21T09:00:00Z"),
+    ])
+    third = queue.tasks_from_production_events(str(tmp_path), cost_estimates={}, max_retries=1)
+    assert third[0]["idempotency_key"] != first[0]["idempotency_key"]
+
+
+def test_tasks_from_events_missing_file_returns_empty(tmp_path: Path) -> None:
+    assert queue.tasks_from_production_events(str(tmp_path), cost_estimates={}, max_retries=1) == []

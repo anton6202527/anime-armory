@@ -63,6 +63,18 @@ DHASH_MIN_GROUP = 3          # 组内 < 3 张时离群判定不可靠，降级�
 # logo 模板匹配：归一化互相关峰值（NCC ∈ [-1,1]）。
 LOGO_NCC_WARN = 0.45         # 峰值 < 0.45：logo 疑形变/缺失 → warn。
 LOGO_NCC_BLOCK = 0.25        # 峰值 < 0.25：基本看不到模板 logo → block。
+# logo 多尺度：出图帧里 logo 实际尺寸未知，单尺度滑窗会被"大小不符"压低峰值。
+# 档位覆盖约 ±50% 尺度（相邻档比 ≈1.25，NCC 对 ≤±12% 的尺寸误差不敏感），取各档峰值最大者。
+LOGO_NCC_SCALES = (0.6, 0.8, 1.0, 1.25, 1.5)
+
+# 产品 ROI 粗定位（多尺度灰度模板匹配，定妆参考 → 出图帧）：为品牌色 ΔE / dHash / logo
+# 提供产品 bbox，使有区域信息时的 block 分支真正可达。全部阈值为启发式（confidence=heuristic）。
+PRODUCT_ROI_SCALES = (0.5, 0.65, 0.8, 1.0, 1.25, 1.5)  # 模板缩放档：产品在帧中占比变化大于 logo，档位放宽。
+PRODUCT_ROI_NCC_MIN = 0.60   # 峰值 ≥ 0.60 才认 ROI：低于此宁可维持整图降级口径，也不给假 bbox 去硬挡。
+PRODUCT_ROI_FRAME_EDGE = 512     # 帧降采样上限（与 logo 检同口径，控滑窗开销）。
+PRODUCT_ROI_TEMPLATE_EDGE = 128  # 模板基准边（scale=1.0 档）；再小判别细节不足，再大滑窗开销陡增。
+PRODUCT_ROI_MARGIN = 0.15    # bbox 按模板边长外扩比例：粗步长滑窗定位偏差 ≤ 步长，外扩后再作采样窗。
+PRODUCT_ROI_MAX_TEMPLATES = 3    # 每镜最多试前 N 张产品定妆参考（控开销；registry 首图通常最正）。
 
 # 产品区域采样：若 prompt 未给区域，取整图但只采"较饱和"像素近似产品主色（避开纯背景）。
 SATURATION_MIN = 0.18        # HSV 饱和度下限，低于此视为背景/灰场，剔除后再取主色。
@@ -273,6 +285,60 @@ def load_asset_registry_ids(root: Path) -> set:
     return ids
 
 
+def product_reference_map(root: Path) -> Dict[str, List[Path]]:
+    """asset_id → 已登记且在盘的定妆参考图绝对路径（registry.reference_images，快照优先母本兜底）。
+    只作 ROI 模板源；与裁决任务包的参考解析同契约但独立实现，保持本脚本自包含。"""
+    out: Dict[str, List[Path]] = {}
+    for reg_path in (root / "出图" / "共享" / "asset_registry.json", root / "设定库" / "asset_registry.json"):
+        data = load_json(reg_path)
+        if not isinstance(data, dict):
+            continue
+        entries: List[Dict[str, Any]] = []
+        brand = data.get("brand")
+        if isinstance(brand, dict):
+            entries.append(brand)
+        for key in ("products", "characters", "locations", "assets"):
+            entries.extend(x for x in (data.get(key) or []) if isinstance(x, dict))
+        for entry in entries:
+            aid = str(entry.get("id") or "").strip()
+            if not aid or aid in out:
+                continue
+            raw = entry.get("reference_images") or entry.get("references") or entry.get("reference_paths") or []
+            if isinstance(raw, str):
+                raw = [raw]
+            refs: List[Path] = []
+            for item in raw if isinstance(raw, (list, tuple)) else []:
+                rel = str(item.get("path") if isinstance(item, dict) else item or "").strip()
+                if rel and (root / rel).exists() and (root / rel) not in refs:
+                    refs.append(root / rel)
+            if refs:
+                out[aid] = refs
+    return out
+
+
+def product_roi_templates(root: Path, shot: Dict[str, Any], ref_map: Dict[str, List[Path]],
+                          logo_template: Path) -> List[Path]:
+    """单产品镜的 ROI 模板候选：registry 登记的该镜 PROD_*/BRAND_ 参考 → 定妆视图分参考 →
+    定妆库/产品 目录兜底（排除 logo 模板：logo 特写不代表整只产品的板式）。"""
+    templates: List[Path] = []
+    for aid in product_asset_ids(shot) + brand_asset_ids(shot):
+        for p in ref_map.get(aid, []):
+            if p not in templates:
+                templates.append(p)
+        view_dir = root / "出图" / "共享" / "定妆视图" / aid
+        if view_dir.is_dir():
+            for p in sorted(view_dir.glob("*.png")):
+                if p not in templates:
+                    templates.append(p)
+    if not templates:
+        prod_dir = root / "出图" / "共享" / "定妆库" / "产品"
+        if prod_dir.is_dir():
+            for p in sorted(prod_dir.glob("*.png")):
+                if p != logo_template and "logo" not in p.name.lower() and p not in templates:
+                    templates.append(p)
+    return templates
+
+
 def check_asset_bindings(label: str, shot: Dict[str, Any], registry_ids: set) -> List[Dict[str, Any]]:
     findings: List[Dict[str, Any]] = []
     prod_ids = product_asset_ids(shot)
@@ -467,14 +533,14 @@ def dominant_color(img_path: Path, Image: Any, np: Any,
     arr = np.asarray(im, dtype=np.float64).reshape(-1, 3)
     if arr.size == 0:
         return None
-    if bbox is None:
-        # 无区域信息：剔除低饱和背景像素，对剩余取均值，近似产品主色。
-        mx = arr.max(axis=1)
-        mn = arr.min(axis=1)
-        sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1e-6), 0.0)
-        keep = arr[sat >= SATURATION_MIN]
-        if keep.shape[0] >= max(16, arr.shape[0] // 100):
-            arr = keep
+    # 剔除低饱和背景像素后取均值近似产品主色。bbox 模式同样过滤：粗定位 ROI 已外扩，
+    # 含背景边角，不滤会稀释品牌色导致误判（block 分支现已可达，须防假 block）。
+    mx = arr.max(axis=1)
+    mn = arr.min(axis=1)
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1e-6), 0.0)
+    keep = arr[sat >= SATURATION_MIN]
+    if keep.shape[0] >= max(16, arr.shape[0] // 100):
+        arr = keep
     mean = arr.mean(axis=0)
     return float(mean[0]), float(mean[1]), float(mean[2])
 
@@ -583,10 +649,14 @@ def check_brand_color(shot_label: str, img_path: Optional[Path], brand_hex: Opti
 
 # ── 3) product dHash 离群（需 Pillow） ───────────────────────────────────────────
 
-def dhash(img_path: Path, Image: Any, size: int = 8) -> Optional[int]:
-    """8x8 dHash（行向相邻差），返回 64-bit 整数。失败 → None。"""
+def dhash(img_path: Path, Image: Any, size: int = 8,
+          bbox: Optional[Tuple[int, int, int, int]] = None) -> Optional[int]:
+    """8x8 dHash（行向相邻差），返回 64-bit 整数。bbox 给定时只 hash 产品区域。失败 → None。"""
     try:
-        im = Image.open(str(img_path)).convert("L").resize((size + 1, size), Image.BILINEAR)
+        im = Image.open(str(img_path)).convert("L")
+        if bbox:
+            im = im.crop(bbox)
+        im = im.resize((size + 1, size), Image.BILINEAR)
     except Exception:
         return None
     try:
@@ -607,15 +677,24 @@ def hamming(a: int, b: int) -> int:
 
 
 def check_dhash_group(labels_paths: List[Tuple[str, Optional[Path]]], Image: Any, *,
-                      product_region_known: bool = False) -> List[Dict[str, Any]]:
+                      product_region_known: bool = False,
+                      bbox_map: Optional[Dict[str, Tuple[int, int, int, int]]] = None) -> List[Dict[str, Any]]:
     """产品镜组内 dHash 离群：每图取与组内其它图的最小 Hamming 距离，超阈值即漂移。
-    组 < DHASH_MIN_GROUP 张 → info（样本不足，不下 warn/block）。纯逻辑可测（Image 可注入）。"""
+    组 < DHASH_MIN_GROUP 张 → info（样本不足，不下 warn/block）。纯逻辑可测（Image 可注入）。
+    bbox_map（label→产品 ROI）给定时按 ROI 裁剪后再 hash；只有全组都有 ROI 才按
+    product_region 口径判（混合口径的组间距离不可比，宁可整体降级）。"""
     if Image is None:
         return [_finding("info", "-", "product_dhash",
                          "缺 Pillow，产品 dHash 离群检降级跳过", {"degraded": "no_pillow"})]
+    bbox_map = bbox_map or {}
+    present = [(label, p) for label, p in labels_paths if p and Path(p).exists()]
+    if bbox_map and present and all(label in bbox_map for label, _ in present):
+        product_region_known = True
+    else:
+        bbox_map = {}
     hashes: List[Tuple[str, Optional[Path], Optional[int]]] = []
     for label, p in labels_paths:
-        h = dhash(Path(p), Image) if (p and Path(p).exists()) else None
+        h = dhash(Path(p), Image, bbox=bbox_map.get(label)) if (p and Path(p).exists()) else None
         hashes.append((label, p, h))
     valid = [(lb, h) for lb, p, h in hashes if h is not None]
     if len(valid) < DHASH_MIN_GROUP:
@@ -648,16 +727,16 @@ def check_dhash_group(labels_paths: List[Tuple[str, Optional[Path]]], Image: Any
 
 # ── 4) logo 模板匹配（需 Pillow+numpy，且 logo 模板已注册） ───────────────────────
 
-def _ncc_peak(template: Any, image: Any, np: Any) -> float:
-    """模板在图中的最大归一化互相关（粗匹配，定步长滑窗）。返回峰值 ∈ [-1,1]。"""
+def _ncc_peak(template: Any, image: Any, np: Any) -> Tuple[float, int, int]:
+    """模板在图中的最大归一化互相关（粗匹配，定步长滑窗）。返回 (峰值∈[-1,1], 峰值左上 x, y)。"""
     th, tw = template.shape
     ih, iw = image.shape
     if th > ih or tw > iw:
-        return -1.0
+        return -1.0, 0, 0
     t = template - template.mean()
     t_norm = math.sqrt(float((t * t).sum())) or 1e-6
-    best = -1.0
-    step = max(1, min(ih, iw) // 64)  # 粗步长，足够判 logo 在不在 + 大致完整
+    best, bx, by = -1.0, 0, 0
+    step = max(1, min(ih, iw) // 64)  # 粗步长，足够判模板在不在 + 大致位置
     for y in range(0, ih - th + 1, step):
         for x in range(0, iw - tw + 1, step):
             win = image[y:y + th, x:x + tw]
@@ -665,13 +744,83 @@ def _ncc_peak(template: Any, image: Any, np: Any) -> float:
             w_norm = math.sqrt(float((w * w).sum())) or 1e-6
             ncc = float((t * w).sum()) / (t_norm * w_norm)
             if ncc > best:
-                best = ncc
+                best, bx, by = ncc, x, y
+    return best, bx, by
+
+
+def _ncc_peak_multiscale(tmpl_img: Any, image: Any, np: Any, Image: Any,
+                         scales: Sequence[float]) -> Dict[str, Any]:
+    """模板按缩放档逐档滑窗，取峰值最大档。tmpl_img 为灰度 PIL 图，image 为灰度 ndarray。
+    返回 {"ncc","scale","xy","size"}；所有档都放不进搜索图时 ncc=-1（caller 需兜底）。"""
+    best: Dict[str, Any] = {"ncc": -1.0, "scale": 0.0, "xy": (0, 0), "size": (0, 0)}
+    for s in scales:
+        tw = max(1, int(round(tmpl_img.size[0] * s)))
+        th = max(1, int(round(tmpl_img.size[1] * s)))
+        if th > image.shape[0] or tw > image.shape[1]:
+            continue
+        arr = np.asarray(tmpl_img.resize((tw, th), Image.BILINEAR), dtype=np.float64)
+        peak, x, y = _ncc_peak(arr, image, np)
+        if peak > best["ncc"]:
+            best = {"ncc": peak, "scale": s, "xy": (x, y), "size": (tw, th)}
     return best
 
 
+def locate_product_roi(img_path: Path, template_paths: Sequence[Path],
+                       Image: Any, np: Any) -> Optional[Dict[str, Any]]:
+    """出图帧中的产品 ROI 粗定位：定妆参考灰度模板 × 多尺度滑窗 NCC。
+    峰值 < PRODUCT_ROI_NCC_MIN → None（宁降级不给假框）。bbox 为原图坐标、已按
+    PRODUCT_ROI_MARGIN 外扩。灰度粗匹配只锁"位置+大致尺度"，颜色归 ΔE、结构归 dHash/logo/裁决。"""
+    if Image is None or np is None:
+        return None
+    try:
+        frame = Image.open(str(img_path)).convert("L")
+    except Exception:
+        return None
+    fw, fh = frame.size
+    ds = min(1.0, PRODUCT_ROI_FRAME_EDGE / float(max(frame.size)))
+    small = frame if ds >= 1.0 else frame.resize(
+        (max(1, int(fw * ds)), max(1, int(fh * ds))), Image.BILINEAR)
+    farr = np.asarray(small, dtype=np.float64)
+    best: Optional[Dict[str, Any]] = None
+    best_tpl: Optional[Path] = None
+    for tpath in list(template_paths)[:PRODUCT_ROI_MAX_TEMPLATES]:
+        try:
+            tmpl = Image.open(str(tpath)).convert("L")
+        except Exception:
+            continue
+        tscale = min(1.0, PRODUCT_ROI_TEMPLATE_EDGE / float(max(tmpl.size)))
+        if tscale < 1.0:
+            tmpl = tmpl.resize((max(1, int(tmpl.size[0] * tscale)), max(1, int(tmpl.size[1] * tscale))),
+                               Image.BILINEAR)
+        cand = _ncc_peak_multiscale(tmpl, farr, np, Image, PRODUCT_ROI_SCALES)
+        if best is None or cand["ncc"] > best["ncc"]:
+            best, best_tpl = cand, tpath
+    if best is None or best_tpl is None or best["ncc"] < PRODUCT_ROI_NCC_MIN:
+        return None
+    x, y = best["xy"]
+    tw, th = best["size"]
+    mx, my = tw * PRODUCT_ROI_MARGIN, th * PRODUCT_ROI_MARGIN
+    left = max(0, int((x - mx) / ds))
+    top = max(0, int((y - my) / ds))
+    right = min(fw, int(math.ceil((x + tw + mx) / ds)))
+    bottom = min(fh, int(math.ceil((y + th + my) / ds)))
+    if right <= left or bottom <= top:
+        return None
+    return {
+        "bbox": (left, top, right, bottom),
+        "ncc": round(float(best["ncc"]), 3),
+        "scale": best["scale"],
+        "template": str(best_tpl),
+        "threshold_ncc": PRODUCT_ROI_NCC_MIN,
+        "confidence": "heuristic",
+    }
+
+
 def check_logo(shot_label: str, img_path: Optional[Path], logo_template: Path,
-               Image: Any, np: Any) -> List[Dict[str, Any]]:
-    """单产品镜的 logo 存在/形变粗检。仅当 logo 模板存在时调用（无模板由 caller 跳过）。"""
+               Image: Any, np: Any,
+               roi_bbox: Optional[Tuple[int, int, int, int]] = None) -> List[Dict[str, Any]]:
+    """单产品镜的 logo 存在/形变粗检（多尺度 NCC）。仅当 logo 模板存在时调用（无模板由 caller 跳过）。
+    roi_bbox（产品 ROI）给定时只在 ROI 内搜索：搜索窗小 → 假峰少、可按 ROI 口径给更强判定。"""
     if img_path is None or not Path(img_path).exists():
         return [_finding("info", shot_label, "logo",
                          "产品镜图未落档，logo 检 pending", {"degraded": "no_image"})]
@@ -685,24 +834,32 @@ def check_logo(shot_label: str, img_path: Optional[Path], logo_template: Path,
         if scale < 1.0:
             tmpl = tmpl.resize((max(1, int(tmpl.size[0] * scale)), max(1, int(tmpl.size[1] * scale))), Image.BILINEAR)
         img = Image.open(str(img_path)).convert("L")
+        if roi_bbox:
+            img = img.crop(roi_bbox)
         iscale = min(1.0, 512.0 / max(img.size))
         if iscale < 1.0:
             img = img.resize((max(1, int(img.size[0] * iscale)), max(1, int(img.size[1] * iscale))), Image.BILINEAR)
-        t_arr = np.asarray(tmpl, dtype=np.float64)
         i_arr = np.asarray(img, dtype=np.float64)
     except Exception:
         return [_finding("info", shot_label, "logo",
                          "读 logo 模板/图失败，logo 检跳过", {"degraded": "read_fail"})]
-    peak = _ncc_peak(t_arr, i_arr, np)
-    detail = {"ncc_peak": round(peak, 3), "threshold_warn": LOGO_NCC_WARN, "threshold_block": LOGO_NCC_BLOCK,
-              "template": str(logo_template)}
+    cand = _ncc_peak_multiscale(tmpl, i_arr, np, Image, LOGO_NCC_SCALES)
+    peak = cand["ncc"]
+    detail = {"ncc_peak": round(peak, 3), "ncc_scale": cand.get("scale"),
+              "threshold_warn": LOGO_NCC_WARN, "threshold_block": LOGO_NCC_BLOCK,
+              "template": str(logo_template),
+              "region": "product_bbox" if roi_bbox else "whole_image"}
     if peak < LOGO_NCC_BLOCK:
         detail["confidence"] = "heuristic"
+        if roi_bbox:
+            return [_finding("warn", shot_label, "logo",
+                             f"产品 ROI 内多尺度检不到注册 logo（NCC={peak:.2f}<{LOGO_NCC_BLOCK}），"
+                             "疑 logo 缺失/严重形变，优先人工复核该镜", detail)]
         return [_finding("warn", shot_label, "logo",
-                         f"产品镜粗模板基本检不到注册 logo（NCC={peak:.2f}<{LOGO_NCC_BLOCK}）；未做尺度/透视校准，仅提示人工复核", detail)]
+                         f"产品镜粗模板基本检不到注册 logo（NCC={peak:.2f}<{LOGO_NCC_BLOCK}）；未做透视校准，仅提示人工复核", detail)]
     if peak < LOGO_NCC_WARN:
         return [_finding("warn", shot_label, "logo",
-                         f"产品镜 logo 匹配偏弱（NCC={peak:.2f}<{LOGO_NCC_WARN}），疑形变/被遮挡，人工复核", detail)]
+                         f"产品镜 logo 匹配偏弱（NCC={peak:.2f}<{LOGO_NCC_WARN}，尺度 {cand.get('scale')}），疑形变/被遮挡，人工复核", detail)]
     return []
 
 
@@ -864,7 +1021,8 @@ def _resolve_shot_png(stage_dir: Path, shot_label: str) -> Optional[Path]:
 
 # ── 主流程 ──────────────────────────────────────────────────────────────────────
 
-def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool = False) -> Dict[str, Any]:
+def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool = False,
+           refresh_vlm_tasks: bool = True) -> Dict[str, Any]:
     paths = resolve_paths(stage_dir, storyboard_arg)
     Image, np = _load_imaging()
     sb = load_json(paths["storyboard"], {}) or {}
@@ -912,20 +1070,59 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
         labels_paths: List[Tuple[str, Optional[Path]]] = [
             (label, _resolve_shot_png(paths["stage_dir"], label)) for label in prod
         ]
-        # 2) brand-color ΔE
+        # 1.5) 产品 ROI 粗定位：定妆参考模板 × 多尺度 NCC。定位成功 → 像素三项按产品区域
+        # 口径跑（block 分支可达）；失败 → 维持整图降级口径并落 finding 说明（不给假框）。
+        ref_map = product_reference_map(paths["root"])
+        bbox_map: Dict[str, Tuple[int, int, int, int]] = {}
+        if Image is not None and np is not None:
+            for label, p in labels_paths:
+                if p is None or not p.exists():
+                    continue
+                templates = product_roi_templates(paths["root"], shot_map.get(label, {}),
+                                                  ref_map, paths["logo_template"])
+                if not templates:
+                    findings.append(_finding("info", label, "product_roi",
+                                             "无产品定妆参考模板可用，ROI 定位跳过，本镜像素检按整图降级口径",
+                                             {"degraded": "no_roi_template"}))
+                    continue
+                roi = locate_product_roi(p, templates, Image, np)
+                if roi is None:
+                    findings.append(_finding("warn", label, "product_roi",
+                                             f"产品 ROI 定位失败（多尺度 NCC < {PRODUCT_ROI_NCC_MIN}）：疑产品缺席/严重变形，"
+                                             "本镜像素检按整图降级口径，人工优先看这镜",
+                                             {"degraded": "roi_not_found", "confidence": "heuristic"}))
+                else:
+                    bbox_map[label] = tuple(roi["bbox"])
+                    findings.append(_finding("info", label, "product_roi",
+                                             f"产品 ROI 已定位（NCC={roi['ncc']}，尺度 {roi['scale']}），像素检按产品区域口径",
+                                             {k: roi[k] for k in ("bbox", "ncc", "scale", "template", "confidence")}))
+        # 2) brand-color ΔE（有 ROI 时 block 分支可达）
         for label, p in labels_paths:
-            findings.extend(check_brand_color(label, p, brand_hex, Image, np, bbox=None))
-        # 3) product dHash 离群
-        findings.extend(check_dhash_group(labels_paths, Image))
-        # 4) logo 模板匹配（仅注册了模板时）
+            findings.extend(check_brand_color(label, p, brand_hex, Image, np, bbox=bbox_map.get(label)))
+        # 3) product dHash 离群（全组有 ROI 时按产品区域口径）
+        findings.extend(check_dhash_group(labels_paths, Image, bbox_map=bbox_map))
+        # 4) logo 模板匹配（仅注册了模板时；有 ROI 时窗内多尺度搜索）
         if paths["logo_template"].exists():
             for label, p in labels_paths:
-                findings.extend(check_logo(label, p, paths["logo_template"], Image, np))
+                findings.extend(check_logo(label, p, paths["logo_template"], Image, np,
+                                           roi_bbox=bbox_map.get(label)))
         else:
             findings.append(_finding("info", "-", "logo",
                                      f"未注册 logo 模板（{paths['logo_template']}），logo 模板匹配跳过",
                                      {"degraded": "no_template"}))
         findings.extend(check_prohibited_local_patch(paths["root"], labels_paths))
+
+    # 5) VLM 并排裁决消费：刷新任务包（产品镜 × PROD_/BRAND_ 资产），把已有有效裁决折进
+    # findings；0/部分裁决落 warn 让 gate/review 能看见"还没看图"。裁决链失败不阻断像素 QC。
+    if prod and refresh_vlm_tasks:
+        try:
+            import product_vlm_judge as _vlm
+            _vlm.write_tasks(stage_dir, storyboard_arg)
+            findings.extend(_vlm.qc_findings(paths["root"]))
+        except Exception as exc:  # 裁决层是增强不是地基：坏了要可见，但不拖垮像素 QC
+            findings.append(_finding("warn", "-", "vlm_judge",
+                                     f"VLM 裁决任务包生成/消费失败（{exc}），产品身份内容级检缺位，需人工看图",
+                                     {"degraded": "vlm_error"}))
 
     # strict：把 warn/info（降级）也提级为 warn 进候选重出（不动 block）。
     if strict:
@@ -969,8 +1166,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("stage_dir", help="出图阶段目录，如 <作品根>/出图/分镜（或 出图/第N集）")
     ap.add_argument("--storyboard", default=None, help="storyboard.json 路径（默认 <作品根>/脚本/storyboard.json）")
     ap.add_argument("--strict", action="store_true", help="严审刷新：降级 info 提级 warn 进候选重出")
+    ap.add_argument("--no-vlm", action="store_true", help="跳过 VLM 裁决任务包刷新/消费（默认开启）")
     ns = ap.parse_args(argv)
-    payload = run_qc(Path(ns.stage_dir), ns.storyboard, strict=ns.strict)
+    payload = run_qc(Path(ns.stage_dir), ns.storyboard, strict=ns.strict,
+                     refresh_vlm_tasks=not ns.no_vlm)
     s = payload["summary"]
     print(f"# 产品落档机检 product_qc  block={s['block']}  warn={s['warn']}  info={s['info']}")
     print(f"  落档：{payload['_json_path']}  产品镜={len(payload['_product_shots'])}  品牌色={payload['_brand_hex'] or '未声明'}")

@@ -100,18 +100,29 @@ def build(root: Path):
                 findings.append({"severity": "block", "code": "asset_shot_image_missing", "asset_id": aid,
                                  "shot": label, "msg": f"{label} 缺真实图片，无法复核 {aid}"})
     for aid, images in by_asset.items():
-        if aid.startswith(("CHAR_", "LOC_", "PROP_")) and len(images) > 1:
+        # 产品/品牌是最严资产：跨镜阈值比常规资产更紧（26 vs 30 bit），命中标 priority=high
+        # 并在 summary 置顶；仍是全帧启发式（产品 ROI 级比对归 product_qc），advisory 不 block。
+        is_brand_asset = aid.startswith(("PROD_", "BRAND_"))
+        if (is_brand_asset or aid.startswith(("CHAR_", "LOC_", "PROP_"))) and len(images) > 1:
             sheet = _contact_sheet(root, aid, images, Image, ImageDraw) if Image is not None else None
             hashes = [_dhash(root / rel, Image) for rel in images] if Image is not None else []
             valid = [value for value in hashes if value is not None]
             max_distance = max(((a ^ b).bit_count() for i, a in enumerate(valid) for b in valid[i + 1:]), default=0)
-            if max_distance > 30:
-                findings.append({"severity": "warn", "code": "cross_shot_visual_drift", "asset_id": aid,
-                                 "msg": f"{aid} 跨镜全帧 dHash 最大差 {max_distance}bit；启发式仅提示并排复核",
-                                 "contact_sheet": sheet, "confidence": "heuristic"})
+            drift_threshold = 26 if is_brand_asset else 30
+            if max_distance > drift_threshold:
+                finding = {"severity": "warn", "code": "cross_shot_visual_drift", "asset_id": aid,
+                           "msg": f"{aid} 跨镜全帧 dHash 最大差 {max_distance}bit（阈 {drift_threshold}）；启发式仅提示并排复核",
+                           "contact_sheet": sheet, "confidence": "heuristic"}
+                if is_brand_asset:
+                    finding["priority"] = "high"
+                    finding["msg"] = ("[产品/品牌] " + finding["msg"] +
+                                      "——产品跨镜漂移整片报废，优先看这条")
+                findings.append(finding)
             findings.append({"severity": "info", "code": "manual_contact_review_required", "asset_id": aid,
                              "msg": f"{aid} 跨 {len(images)} 镜复用；需用列出的真实图片做人脸/服装/空间/道具并排签收",
                              "images": images, "contact_sheet": sheet})
+    findings.sort(key=lambda f: (f.get("priority") != "high",
+                                 {"block": 0, "warn": 1, "info": 2}.get(f.get("severity"), 3)))
     return {
         "schema_version": 1, "kind": "ad_asset_consistency", "assets": by_asset,
         "summary": {"block": sum(1 for f in findings if f["severity"] == "block"),

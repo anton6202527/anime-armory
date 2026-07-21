@@ -73,6 +73,90 @@ def test_manifest_is_not_fake_generation(tmp_path):
     assert payload["jobs"][0]["expected_output"].endswith("镜头01.png")
 
 
+def _two_shot_project(tmp_path: Path, name: str = "广告项目") -> Path:
+    """同一产品出现在两镜的最小项目（seed 跨镜一致性夹具）。"""
+    root = tmp_path / name
+    (root / "脚本").mkdir(parents=True)
+    (root / "设定库").mkdir()
+    (root / "脚本" / "storyboard.json").write_text(json.dumps({
+        "aspect": "9:16",
+        "shots": [
+            {"shot_id": "S1", "scene": "产品 hero", "assets": {"PROD_APP": True},
+             "continuity": {"need_end_frame": True}},
+            {"shot_id": "S2", "scene": "山谷晨雾空镜"},
+            {"shot_id": "S3", "scene": "产品再登场", "assets": {"PROD_APP": True}},
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+    (root / "设定库" / "asset_registry.json").write_text(json.dumps({
+        "brand": {"id": "BRAND_APP", "name": "品牌", "primary_hex": "#224466"},
+        "products": [{"id": "PROD_APP", "name": "产品", "brand_id": "BRAND_APP"}],
+    }, ensure_ascii=False), encoding="utf-8")
+    return root
+
+
+# ── 稳定 seed 规划：确定性派生 · 同资产跨镜同 seed · 跨项目不同 ───────────────────
+
+def test_planned_seed_is_deterministic_and_project_scoped():
+    a = pp.planned_seed_for("项目甲", "PROD_APP")
+    assert a == pp.planned_seed_for("项目甲", "PROD_APP")  # 纯确定性：无 random/时间
+    assert 0 <= a < pp.SEED_SPACE
+    assert a != pp.planned_seed_for("项目乙", "PROD_APP")   # 跨项目不同
+    assert a != pp.planned_seed_for("项目甲", "PROD_OTHER")  # 不同资产不同
+
+
+def test_same_asset_across_shots_shares_one_seed(tmp_path):
+    root = _two_shot_project(tmp_path)
+    payload = pp.run(root)
+    by_id = {j["job_id"]: j for j in payload["jobs"]}
+
+    expected = pp.planned_seed_for(root.name, "PROD_APP")
+    # 同一产品的首帧/尾帧/复现镜共享同一 seed（重抽跨镜复用同一随机起点）。
+    assert by_id["镜头01_first"]["planned_seed"] == expected
+    assert by_id["镜头01_end"]["planned_seed"] == expected
+    assert by_id["镜头03_first"]["planned_seed"] == expected
+    # 空镜无主资产 → 按镜头标签派生（自身可复现即可），不与产品镜混用。
+    assert by_id["镜头02_first"]["planned_seed"] == pp.planned_seed_for(root.name, "镜头02")
+    assert by_id["镜头02_first"]["planned_seed"] != expected
+    # seed_basis 落 provenance：项目名 + 派生键 + 派生式。
+    assert by_id["镜头01_first"]["seed_basis"] == {
+        "project": root.name, "seed_key": "PROD_APP",
+        "derivation": "zlib.crc32(project|seed_key) % 2^31"}
+
+
+def test_same_asset_in_different_projects_gets_different_seed(tmp_path):
+    seed_a = {j["job_id"]: j["planned_seed"] for j in pp.run(_two_shot_project(tmp_path, "项目甲"))["jobs"]}
+    seed_b = {j["job_id"]: j["planned_seed"] for j in pp.run(_two_shot_project(tmp_path, "项目乙"))["jobs"]}
+    assert seed_a["镜头01_first"] != seed_b["镜头01_first"]
+
+
+def test_rerun_produces_identical_seeds(tmp_path):
+    root = _two_shot_project(tmp_path)
+    first = {j["job_id"]: j["planned_seed"] for j in pp.run(root)["jobs"]}
+    second = {j["job_id"]: j["planned_seed"] for j in pp.run(root)["jobs"]}
+    assert first == second
+
+
+def test_seed_capability_recorded_from_adapter_tri_state(tmp_path):
+    # 默认路线 GPT Image 2 via Codex：seed 控制明确 unavailable → 如实标注，不假装生效。
+    payload = pp.run(_project(tmp_path))
+    for job in payload["jobs"]:
+        assert job["seed_capability"] == "unavailable"
+        assert isinstance(job["planned_seed"], int)  # 不支持也照记 planned_seed（provenance）
+    assert payload["seed_policy"]["seed_capability"] == "unavailable"
+    assert "不得宣称 seed 生效" in payload["seed_policy"]["note"]
+
+
+def test_job_seed_info_tolerates_legacy_manifest_jobs():
+    # 向后兼容：旧 manifest 的 job 没有 seed 字段——不许炸，如实降级为「未知」。
+    legacy = {"job_id": "镜头01_first", "status": "done"}
+    info = pp.job_seed_info(legacy)
+    assert info == {"planned_seed": None, "seed_capability": "unknown", "seed_basis": {}}
+    # 新 manifest 正常读出。
+    fresh = {"planned_seed": 42, "seed_capability": "unavailable", "seed_basis": {"seed_key": "PROD_X"}}
+    assert pp.job_seed_info(fresh) == {"planned_seed": 42, "seed_capability": "unavailable",
+                                       "seed_basis": {"seed_key": "PROD_X"}}
+
+
 def test_asset_regex_does_not_match_plain_product_or_brand_words():
     shot = {"prompt": "product shot with brand color but no structured ids"}
 

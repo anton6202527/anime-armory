@@ -442,13 +442,21 @@ def _identity_gaps(root: Path, chapter: str) -> list[dict[str, Any]]:
                 invalid.append(f"default_binding.{id_key}")
         if invalid:
             return [_gap(root, chapter, "identity", "identity_registry_character_contract_invalid", registry_path, f"{cid} 缺失/引用不明的 v2 身份子合同：{','.join(invalid)}。")]
-    # Align exactly with model_pack.py: every declared character participates;
-    # monsters participate only when the project explicitly opts that asset in.
+    # Align exactly with model_pack.py（2026-07-17 起）：角色全部纳管；monster 按
+    # 档位默认纳管（core_full/recurring_standard），model_pack_required 显式
+    # true/false 可覆盖。此前 opt-in 口径导致虎妖漏管（P015 四足虎无人拦）。
+    def _monster_managed(asset: Mapping) -> bool:
+        flag = asset.get("model_pack_required")
+        if flag is True or flag is False:
+            return flag
+        tier = str(asset.get("library_tier") or asset.get("tier") or "").strip()
+        return tier in ("core_full", "recurring_standard")
+
     model_pack_assets = {
         cid: asset
         for cid, asset in identity_assets.items()
         if asset.get("type") == "character"
-        or (asset.get("type") == "monster" and asset.get("model_pack_required") is True)
+        or (asset.get("type") == "monster" and _monster_managed(asset))
     }
     if not model_pack_assets:
         return []
@@ -990,7 +998,48 @@ def summarize_project(root: Path) -> dict:
                 "blockers": [],
             }
         )
-    return {"project": root.name, "root": str(root), "fronts": fronts}
+    return {
+        "project": root.name,
+        "root": str(root),
+        "fronts": fronts,
+        "review_verdict_disclosures": review_verdict_disclosures(root, parsed["rows"]),
+    }
+
+
+def review_verdict_disclosures(root: Path, rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    """叙事对账：`_进度.md` 勾了 ✅审查 的话，其 review receipt 的机检真相是什么。
+
+    历史教训：review gate 实为 warn（0 block/133 warn）而进度叙事写「pass/
+    内部验收通过」，完成度表述比机检结论乐观。本函数只披露、不改判定——
+    ✅ 属于人审签收权限，但披露必须与叙事同屏。
+    """
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        chapter = row.get("话", "")
+        if not chapter or row_stage_state(row, "审查") != "done":
+            continue
+        receipt = load_json(root / "生产数据" / "gate_receipts" / f"review_{chapter}.json") or {}
+        report = load_json(root / "生产数据" / f"comic_gate_review_{chapter}.json") or {}
+        report_summary = report.get("summary") if isinstance(report.get("summary"), Mapping) else {}
+        verdict = str(receipt.get("verdict") or "missing")
+        if verdict in {"pass", ""}:
+            continue
+        block_count = report_summary.get("block_count")
+        warn_count = report_summary.get("warn_count")
+        out.append(
+            {
+                "chapter": chapter,
+                "receipt_verdict": verdict,
+                "block_count": block_count,
+                "warn_count": warn_count,
+                "hint": (
+                    f"{chapter} 审查已勾 ✅ 但机检结论为 {verdict}"
+                    + (f"（block {block_count} / warn {warn_count}）" if isinstance(warn_count, int) else "")
+                    + "；进度叙事必须引用机检计数与签收依据，不得只写 pass。"
+                ),
+            }
+        )
+    return out
 
 
 def find_projects(root: Path, args: argparse.Namespace) -> list[Path]:
@@ -1036,6 +1085,8 @@ def main() -> int:
             else:
                 suffix = f"（{front['reason']}）" if front.get("reason") else ""
                 print(f"  {front['chapter']}: 下一步 {front['next_stage']} → {front['next_skill']}{suffix}")
+        for item in summary.get("review_verdict_disclosures") or []:
+            print(f"  [叙事对账] {item['hint']}")
     return 0
 
 

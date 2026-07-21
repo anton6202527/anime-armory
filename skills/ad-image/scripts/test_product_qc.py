@@ -300,3 +300,157 @@ def test_logo_reports_no_image_before_no_pillow(tmp_path):
 
     assert findings[0]["check"] == "logo"
     assert findings[0]["detail"]["degraded"] == "no_image"
+
+
+# ── 产品 ROI 定位 + ROI 口径像素检 + VLM 裁决接线 ────────────────────────────────
+
+def _imaging():
+    Image = pytest.importorskip("PIL.Image")
+    np = pytest.importorskip("numpy")
+    return Image, np
+
+
+def _paste_patch(Image, size, patch_color, patch_box, bg=(240, 240, 240)):
+    im = Image.new("RGB", size, bg)
+    from PIL import ImageDraw
+    ImageDraw.Draw(im).rectangle(patch_box, fill=patch_color)
+    return im
+
+
+def test_locate_product_roi_finds_known_patch(tmp_path):
+    Image, np = _imaging()
+    # 模板 = 带内部结构的"包装"；帧 = 同一结构贴在右下角
+    tmpl = _paste_patch(Image, (80, 120), (230, 0, 18), (10, 10, 70, 110))
+    from PIL import ImageDraw
+    ImageDraw.Draw(tmpl).rectangle((20, 30, 60, 60), fill=(255, 255, 255))
+    tmpl_path = tmp_path / "定妆_产品.png"
+    tmpl.save(tmpl_path)
+    frame = Image.new("RGB", (640, 360), (200, 210, 220))
+    frame.paste(tmpl, (500, 200))
+    frame_path = tmp_path / "镜头1.png"
+    frame.save(frame_path)
+    roi = pq.locate_product_roi(frame_path, [tmpl_path], Image, np)
+    assert roi is not None
+    left, top, right, bottom = roi["bbox"]
+    # bbox 应盖住贴入位置（允许粗步长+外扩偏差）
+    assert left <= 520 and right >= 540 and top <= 230 and bottom >= 250
+    assert roi["confidence"] == "heuristic"
+
+
+def test_locate_product_roi_refuses_low_confidence(tmp_path):
+    Image, np = _imaging()
+    tmpl = _paste_patch(Image, (80, 120), (230, 0, 18), (10, 10, 70, 110))
+    tmpl_path = tmp_path / "定妆_产品.png"
+    tmpl.save(tmpl_path)
+    # 帧里根本没有产品——纯噪声梯度
+    frame = Image.new("RGB", (320, 180))
+    px = frame.load()
+    for y in range(180):
+        for x in range(320):
+            px[x, y] = (x % 256, y % 256, (x * y) % 256)
+    frame_path = tmp_path / "镜头1.png"
+    frame.save(frame_path)
+    assert pq.locate_product_roi(frame_path, [tmpl_path], Image, np) is None
+
+
+def test_brand_color_block_reachable_with_bbox(tmp_path):
+    Image, np = _imaging()
+    # bbox 区域是纯蓝，品牌色是红 → ΔE 远超 block 阈，必须硬挡
+    im = _paste_patch(Image, (200, 200), (0, 0, 255), (50, 50, 150, 150))
+    p = tmp_path / "镜头1.png"
+    im.save(p)
+    findings = pq.check_brand_color("镜头1", p, "#E60012", Image, np, bbox=(50, 50, 150, 150))
+    assert any(f["severity"] == "block" for f in findings)
+    assert findings[0]["detail"]["region"] == "bbox"
+
+
+def test_dhash_group_uses_bbox_map_only_when_complete(tmp_path):
+    Image, np = _imaging()
+    paths = []
+    for i in range(3):
+        im = _paste_patch(Image, (160, 160), (230, 0, 18), (40, 40, 120, 120))
+        p = tmp_path / f"镜头{i+1}.png"
+        im.save(p)
+        paths.append((f"镜头{i+1}", p))
+    full = {lb: (40, 40, 120, 120) for lb, _ in paths}
+    res_full = pq.check_dhash_group(paths, Image, bbox_map=full)
+    for f in res_full:
+        assert f["detail"].get("region") in (None, "product_bbox")
+    partial = {"镜头1": (40, 40, 120, 120)}
+    res_partial = pq.check_dhash_group(paths, Image, bbox_map=partial)
+    for f in res_partial:
+        assert f["detail"].get("region") in (None, "whole_image")
+
+
+def test_check_logo_multiscale_finds_scaled_logo(tmp_path):
+    Image, np = _imaging()
+    logo = _paste_patch(Image, (64, 64), (0, 0, 0), (8, 8, 56, 56), bg=(255, 255, 255))
+    from PIL import ImageDraw
+    ImageDraw.Draw(logo).rectangle((24, 24, 40, 40), fill=(255, 255, 255))
+    logo_path = tmp_path / "logo.png"
+    logo.save(logo_path)
+    frame = Image.new("RGB", (400, 300), (255, 255, 255))
+    frame.paste(logo.resize((96, 96)), (150, 100))  # 1.5 倍尺度
+    frame_path = tmp_path / "镜头1.png"
+    frame.save(frame_path)
+    findings = pq.check_logo("镜头1", frame_path, logo_path, Image, np)
+    assert findings == []  # 多尺度峰值应达标；单尺度旧实现会漏
+    # 无 logo 的帧应给 warn
+    blank = Image.new("RGB", (400, 300), (128, 128, 128))
+    blank_path = tmp_path / "镜头2.png"
+    blank.save(blank_path)
+    findings2 = pq.check_logo("镜头2", blank_path, logo_path, Image, np)
+    assert findings2 and findings2[0]["severity"] == "warn"
+
+
+def _project_with_registry_and_frame(tmp_path, Image):
+    root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT, "镜头2.md": GOOD_PROMPT})
+    ref_dir = root / "出图" / "共享" / "定妆库" / "产品"
+    ref_dir.mkdir(parents=True)
+    ref = _paste_patch(Image, (80, 120), (230, 0, 18), (10, 10, 70, 110))
+    ref_path = ref_dir / "定妆_产品.png"
+    ref.save(ref_path)
+    reg = {"products": [{"id": "PROD_main",
+                         "reference_images": ["出图/共享/定妆库/产品/定妆_产品.png"]}]}
+    (root / "出图" / "共享" / "asset_registry.json").write_text(
+        json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    for label in ("镜头1", "镜头2"):
+        frame = Image.new("RGB", (320, 240), (240, 240, 240))
+        frame.paste(ref, (100, 60))
+        frame.save(stage / f"{label}.png")
+    return root, stage
+
+
+def test_run_qc_vlm_wiring_reports_unadjudicated_then_consumes_verdict(tmp_path):
+    Image, np = _imaging()
+    root, stage = _project_with_registry_and_frame(tmp_path, Image)
+    payload = pq.run_qc(stage)
+    checks = [f["check"] for f in payload["findings"]]
+    assert "vlm_product_unadjudicated" in checks  # 任务包已生成但 0 裁决 → 机检空转要可见
+    tasks = json.loads((root / "生产数据" / "ad_vlm_judge_tasks.json").read_text(encoding="utf-8"))
+    assert tasks["task_count"] >= 2
+    # 回填一条 suspect 裁决（合同要求原样复制 sha）→ 消费为 vlm_product_identity warn
+    task = tasks["tasks"][0]
+    verdict = {"verdicts": [{
+        "task_id": task["task_id"],
+        "image_sha256": task["image"]["sha256"],
+        "task_sha256": task["task_sha256"],
+        "references_sha256": task["references_sha256"],
+        "evaluator": {"model": "test-vlm", "version": "2026-07", "reviewed_at": "2026-07-20T00:00:00"},
+        "scores": {"presence": 5, "structure": 2, "relation": 4},
+        "verdict": "suspect",
+        "notes": "包装文字漂了",
+    }]}
+    (root / "生产数据" / "ad_vlm_judge_verdicts.json").write_text(
+        json.dumps(verdict, ensure_ascii=False), encoding="utf-8")
+    payload2 = pq.run_qc(stage)
+    checks2 = [f["check"] for f in payload2["findings"]]
+    assert "vlm_product_identity" in checks2
+    assert "vlm_product_partial_coverage" in checks2  # 2 任务只裁了 1 条
+
+
+def test_run_qc_no_vlm_flag_skips_task_refresh(tmp_path):
+    Image, np = _imaging()
+    root, stage = _project_with_registry_and_frame(tmp_path, Image)
+    pq.run_qc(stage, refresh_vlm_tasks=False)
+    assert not (root / "生产数据" / "ad_vlm_judge_tasks.json").exists()

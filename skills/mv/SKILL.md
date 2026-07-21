@@ -2,7 +2,7 @@
 name: mv
 description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续补入定稿歌，再重跑卡点与正式 timeline）。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1138 | 目录文本总行数 24251
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1147 | 目录文本总行数 25369
 
 # mv — 制MV 生产线 · 总调度
 
@@ -69,7 +69,8 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 要卡拉OK字幕 | `mv-lyric-sync` |
 | 素材齐了要合成成片 | `mv-compose` |
 | 审 MV / 卡点对账 / 字幕检查 / 成片体检 / 流程自审 | `mv-review`（成品后审，出定位报告） |
-| 给了 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | `mv-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步） |
+| 给了 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | `mv-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步）；要机器可消费的下一步卡（前沿+gate+停因+收据健康度）跑 `python3 skills/mv/run.py next <作品根> --json` |
+| 改了某个 clip 的图/prompt/剪辑决定，问下游要重做什么 | `python3 skills/mv/run.py impact <作品根> --clip Clip_00N --change image\|prompt\|edit`（确定性返工级联清单，只读） |
 | 问 skill 更新是否影响本 MV / 要返工计划 / 重审重评前先看范围 | `mv-update`（只写更新影响计划和基线，不改素材/视频/进度） |
 
 > **先传音乐推荐顺序**：成品歌（及按需歌词）入库 → 立项 → 卡点并具名确认 timing → 按需歌词强制对齐 → 视觉蓝图 → timeline + 全量语义分镜 → 节奏预检 → 出图/QC/生成收据 → 真实 animatic/OTIO/picture lock → 视频评分挑版/逐缝语义签收 → 母版/派生交付 → provenance/总审。纯器乐且设置为“无字幕+关闭口型”时跳过歌词时间轴。
@@ -77,6 +78,8 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 > **后配歌曲推荐顺序**：mv-craft 立项/选择 → mv-script rough 视觉蓝图/设定 → 用户补入成品歌+歌词 → mv-beat + mv-lyric-sync → mv-script 按真实 beatgrid 复核 → mv-plan 全量语义时间线 → mv-score → 出图/QC → animatic/OTIO/picture lock → 视频任务/挑版 → 合成 → AI使用披露/质检。**未补最终音频前不得跑 mv-plan / mv-image / mv-video / mv-compose 的正式产物**。
 
 > 每阶段“凭什么通过、谁签、失败回哪一级”的单一说明见 `mv-craft/references/production-standards.md`。导演视角负责创意与镜头，但剪辑、音乐时间、连续性和交付 QC 是独立责任维度，不能合并成一句“专业导演已看过”。
+
+> **编排入口**：agent 跑流程时优先消费 `python3 skills/mv/run.py next <作品根> --json` 的结构化 NextAction（frontier + 登记制 stop_reason + gate 结果 + 已 done 付费阶段的收据健康度巡检），而不是仅凭 `_进度.md` 文本自觉选下一步；`_进度.md` 标 done 但 hash 链已失效的“假 done”会被 `stale_receipts` 主动揪出。run.py 只读不写、不代跑付费阶段。
 
 > **mv-image/mv-video 是 mv 自己的视觉 skill**。两层定妆、尾帧接力、出图前一致性包和视频动作模板化都在 mv 家族内自持。
 

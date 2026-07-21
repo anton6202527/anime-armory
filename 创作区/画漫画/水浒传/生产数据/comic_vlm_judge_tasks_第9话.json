@@ -3,7 +3,7 @@
   "kind": "comic_vlm_judge_tasks",
   "protocol": "CANVAS-ContinuityEval-3axis",
   "chapter": "第9话",
-  "created_at": "2026-07-20T18:15:40",
+  "created_at": "2026-07-20T18:56:18",
   "axes": [
     "character_identity",
     "background_continuity",

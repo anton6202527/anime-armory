@@ -33,6 +33,10 @@ def load_json(path, default=None):
 def write_json(path, payload):
     io_utils.write_json(path, payload)
 
+def write_json_stable(path, payload, volatile_keys=("generated_at",)):
+    """幂等写收据：仅 volatile 字段（如 generated_at）不同则不重写，保住下游 hash 链。"""
+    return io_utils.write_json_stable(path, payload, volatile_keys=volatile_keys)
+
 def parse_settings(root):
     # 委托给本线 _lib/settings.load_settings：正确处理 **加粗** key、跳过 `## 记录` 区，
     # 与本线 _lib/settings.py 写回格式同源（vendored，本线自包含）。

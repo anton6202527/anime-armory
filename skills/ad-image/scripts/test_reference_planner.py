@@ -147,6 +147,154 @@ def test_shot_asset_ids_ignores_falsy_assets_and_plain_words():
     assert rp.shot_asset_ids({"assets": {"PROD_BOTTLE": False}, "prompt": "product and brand words"}) == []
 
 
+# ── 复现间隔（gap）因子：纯函数 ─────────────────────────────────────────────────
+
+def test_reappearance_gaps_counts_shots_since_last_seen():
+    gaps = rp.reappearance_gaps([
+        ("镜头1", ["PROD_A", "CHAR_B"]),
+        ("镜头2", []),
+        ("镜头3", ["CHAR_B"]),
+        ("镜头4", []),
+        ("镜头5", ["PROD_A", "CHAR_B"]),
+    ])
+    # 首次出现 → None（不存在「复现」）；之后 = 距上次出现的镜数。
+    assert gaps["镜头1"] == {"PROD_A": None, "CHAR_B": None}
+    assert gaps["镜头3"] == {"CHAR_B": 2}
+    assert gaps["镜头5"] == {"PROD_A": 4, "CHAR_B": 2}
+
+
+def test_is_long_gap_product_threshold_is_stricter_and_first_seen_exempt():
+    # 产品/品牌阈 3、一般资产阈 4；首次出现（None）永远豁免。
+    assert rp.is_long_gap(3, rp.adapter.ASSET_KIND_PRODUCT) is True
+    assert rp.is_long_gap(3, rp.adapter.ASSET_KIND_BRAND) is True
+    assert rp.is_long_gap(3, rp.adapter.ASSET_KIND_CHARACTER) is False
+    assert rp.is_long_gap(4, rp.adapter.ASSET_KIND_CHARACTER) is True
+    assert rp.is_long_gap(2, rp.adapter.ASSET_KIND_PRODUCT) is False
+    assert rp.is_long_gap(None, rp.adapter.ASSET_KIND_PRODUCT) is False
+
+
+def test_tier_one_up_climbs_ladder_but_never_into_lora():
+    assert rp.tier_one_up(rp.adapter.TIER_SHARED_KIT) == rp.adapter.TIER_DIRECTED_REFERENCE
+    assert rp.tier_one_up(rp.adapter.TIER_DIRECTED_REFERENCE) == rp.adapter.TIER_SUBJECT_LIBRARY
+    # +LoRA 是长线代言人训练决策，不因镜序间隔自动建议。
+    assert rp.tier_one_up(rp.adapter.TIER_SUBJECT_LIBRARY) == rp.adapter.TIER_SUBJECT_LIBRARY
+    assert rp.tier_one_up(rp.adapter.TIER_LORA) == rp.adapter.TIER_LORA
+    assert rp.tier_one_up("no_such_tier") == "no_such_tier"
+
+
+# ── 复现间隔（gap）因子：集成 ───────────────────────────────────────────────────
+
+def _gap_project(tmp_path, *, gap_shots=2, refs_count=3):
+    """产品在 镜头1 出现、隔 gap_shots 个空镜后再登场的项目。"""
+    shots = [{"shot_id": "镜头1", "scene": "中景 产品摆在桌面", "assets": {"PROD_BOTTLE": True}}]
+    for i in range(gap_shots):
+        shots.append({"shot_id": f"镜头{i + 2}", "scene": "山谷晨雾空镜"})
+    shots.append({"shot_id": f"镜头{gap_shots + 2}", "scene": "中景 产品再登场",
+                  "assets": {"PROD_BOTTLE": True}})
+    refs = [f"设定库/r{i}.png" for i in range(refs_count)]
+    root = _project(tmp_path, settings=OPENAI, shots=shots,
+                    registry={"products": [{"id": "PROD_BOTTLE", "reference_images": refs}]})
+    _touch(root, *refs)
+    return root, shots[-1]["shot_id"]
+
+
+def test_long_gap_reappearance_lifts_floor_and_pins_earliest_anchor(tmp_path):
+    root, last = _gap_project(tmp_path, gap_shots=2)  # gap=3 ≥ 产品阈 3
+    report = rp.build_plan(root)
+
+    hits = _find(report, "long_gap_reappearance", shot=last)
+    assert len(hits) == 1 and hits[0]["severity"] == "warn"  # 产品/品牌 → warn（advisory）
+    assert hits[0]["gap"] == 3
+    assert "最早定妆锚" in hits[0]["msg"] and "设定库/r0.png" in hits[0]["msg"]
+
+    plan = _asset_plan(report, last, "PROD_BOTTLE")
+    # 参考下限 +1（产品地板 2 → 3）；建议档位提一档（指定参考图 → 后端主体库）。
+    assert plan["min_references"] == 3
+    assert plan["recommended_tier"] == rp.adapter.TIER_SUBJECT_LIBRARY
+    assert plan["reappearance"] == {"gap": 3, "threshold": 3, "long_gap": True,
+                                    "anchor_reference": "设定库/r0.png"}
+    # 首次出现的 镜头1 豁免：无 gap finding，reappearance 如实记 None。
+    assert _find(report, "long_gap_reappearance", shot="镜头1") == []
+    first_plan = _asset_plan(report, "镜头1", "PROD_BOTTLE")
+    assert first_plan["reappearance"]["gap"] is None
+    assert first_plan["reappearance"]["long_gap"] is False
+    # 全 advisory：gap 因子绝不产 block。
+    assert all(f["severity"] != "block" for f in _find(report, "long_gap_reappearance"))
+
+
+def test_short_gap_reappearance_is_exempt(tmp_path):
+    root, last = _gap_project(tmp_path, gap_shots=1)  # gap=2 < 产品阈 3 → 豁免
+    report = rp.build_plan(root)
+    assert "long_gap_reappearance" not in _codes(report)
+    plan = _asset_plan(report, last, "PROD_BOTTLE")
+    assert plan["min_references"] == 2 and plan["reappearance"]["long_gap"] is False
+
+
+def test_long_gap_on_character_is_info_and_uses_looser_threshold(tmp_path):
+    shots = [{"shot_id": "镜头1", "scene": "代言人入场", "assets": {"CHAR_host": True}}]
+    shots += [{"shot_id": f"镜头{i + 2}", "scene": "空镜"} for i in range(3)]
+    shots.append({"shot_id": "镜头5", "scene": "代言人回归", "assets": {"CHAR_host": True}})
+    root = _project(tmp_path, settings=OPENAI, shots=shots,
+                    registry={"characters": [{"id": "CHAR_host",
+                                              "reference_images": ["设定库/h1.png", "设定库/h2.png"]}]})
+    _touch(root, "设定库/h1.png", "设定库/h2.png")
+    report = rp.build_plan(root)
+    hits = _find(report, "long_gap_reappearance", shot="镜头5")
+    assert len(hits) == 1 and hits[0]["severity"] == "info"  # 非产品 → info
+    assert hits[0]["gap"] == 4  # 一般资产阈 4，恰好触发
+
+
+# ── 升档可达路由建议：清单来自适配层能力表 ──────────────────────────────────────
+
+def test_route_suggestions_lists_backends_reaching_tier():
+    reached, hint = rp.route_suggestions(rp.adapter.TIER_SUBJECT_LIBRARY, rp.adapter.ASSET_KIND_PRODUCT)
+    assert {r["backend"] for r in reached} == {"seedream", "kling"}
+    assert "Seedream 4.5" in hint and "Kling Image 3.0" in hint
+    assert "签核" in hint and "不自动改设置" in hint  # advisory：建议切换，不代改
+
+
+def test_route_suggestions_with_no_reachable_backend_says_so_honestly():
+    # 现表无后端有 LoRA 挂载点 → 空清单 + 建议人工降低期望或补定妆参考。
+    reached, hint = rp.route_suggestions(rp.adapter.TIER_LORA, rp.adapter.ASSET_KIND_CHARACTER)
+    assert reached == []
+    assert "无任何后端够得着" in hint and "降低期望" in hint
+
+
+def test_tier_below_recommended_finding_carries_reachable_backends(tmp_path):
+    root = _project(
+        tmp_path, settings=OPENAI,
+        shots=[{"shot_id": "镜头1", "scene": "产品包装特写，俯视，logo 露出",
+                "assets": {"PROD_BOTTLE": True}}],
+        registry={"products": [{"id": "PROD_BOTTLE", "reference_images": [
+            "设定库/a.png", "设定库/b.png", "设定库/c.png"]}]},
+    )
+    _touch(root, "设定库/a.png", "设定库/b.png", "设定库/c.png")
+    report = rp.build_plan(root)
+
+    hits = _find(report, "tier_below_recommended", shot="镜头1")
+    assert len(hits) == 1
+    # warn 里列出「哪些后端够得着建议档」（模型+渠道），并注明切换属建议。
+    assert hits[0]["reachable_backends"] == ["seedream", "kling"]
+    assert "Seedream 4.5" in hits[0]["msg"] and "Kling Image 3.0" in hits[0]["msg"]
+    # plan JSON 同步落清单（供机器消费）。
+    plan = _asset_plan(report, "镜头1", "PROD_BOTTLE")
+    assert [r["backend"] for r in plan["tier_route_suggestions"]] == ["seedream", "kling"]
+    assert all(r["label"] for r in plan["tier_route_suggestions"])
+
+
+def test_no_tier_gap_means_no_route_suggestions(tmp_path):
+    root = _project(
+        tmp_path, settings={"生图模型": "Seedream 4.5", "生图渠道": "BytePlus ModelArk"},
+        shots=[{"shot_id": "镜头1", "scene": "产品包装特写，俯视", "assets": {"PROD_BOTTLE": True}}],
+        registry={"products": [{"id": "PROD_BOTTLE", "reference_images": [
+            "设定库/a.png", "设定库/b.png", "设定库/c.png"]}]},
+    )
+    _touch(root, "设定库/a.png", "设定库/b.png", "设定库/c.png")
+    report = rp.build_plan(root)
+    plan = _asset_plan(report, "镜头1", "PROD_BOTTLE")
+    assert plan["tier_gap"] is False and plan["tier_route_suggestions"] == []
+
+
 # ── 参考预算分配 ────────────────────────────────────────────────────────────────
 
 def test_allocate_references_gives_each_asset_one_first_then_round_robins():

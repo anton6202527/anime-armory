@@ -11,6 +11,7 @@ import importlib.util
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import contract
@@ -668,6 +669,87 @@ def run_gate(root, stage, allow_placeholder=False):
             "summary": summary, "findings": findings}
 
 
+# gate 每一阶段核验的关键输入（相对路径）。gate 落档新鲜度以它们为准：
+# 任一关键输入晚于落档 = gate 结论已过期。stage_acceptance 的 advisory 互链也复用本表，
+# 避免两份清单各自漂移。
+GATE_INPUT_RELS = {
+    "image": [
+        os.path.join("需求", "brief.json"),
+        os.path.join("脚本", "广告法机检报告.json"),
+        os.path.join("脚本", "storyboard.json"),
+        os.path.join("脚本", "镜头时长.json"),
+        os.path.join("配音", "时长清单.json"),
+        os.path.join("设定库", "asset_registry.json"),
+        os.path.join("出图", "共享", "asset_registry.json"),
+    ],
+    "video": [
+        os.path.join("需求", "brief.json"),
+        os.path.join("脚本", "广告法机检报告.json"),
+        os.path.join("脚本", "storyboard.json"),
+        os.path.join("脚本", "镜头时长.json"),
+        os.path.join("配音", "时长清单.json"),
+        os.path.join("设定库", "asset_registry.json"),
+        os.path.join("出图", "共享", "asset_registry.json"),
+        os.path.join("出图", "分镜", "图片"),
+        os.path.join("出图", "分镜", "image_jobs_manifest.json"),
+        os.path.join("出图", "分镜", "product_qc.json"),
+        os.path.join("出视频", "分镜", "contract_inheritance.json"),
+    ],
+    "compose": [
+        os.path.join("需求", "brief.json"),
+        os.path.join("脚本", "广告法机检报告.json"),
+        os.path.join("脚本", "storyboard.json"),
+        os.path.join("脚本", "镜头时长.json"),
+        os.path.join("配音", "时长清单.json"),
+        os.path.join("设定库", "asset_registry.json"),
+        os.path.join("出图", "共享", "asset_registry.json"),
+        os.path.join("出图", "分镜", "图片"),
+        os.path.join("出图", "分镜", "image_jobs_manifest.json"),
+        os.path.join("出图", "分镜", "product_qc.json"),
+        os.path.join("出视频", "分镜", "contract_inheritance.json"),
+        os.path.join("出视频", "分镜", "视频"),
+        os.path.join("出视频", "分镜", "video_qc.json"),
+    ],
+}
+
+
+def gate_report_path(root, stage):
+    return os.path.join(root, "生产数据", "gate_reports", f"{stage}.json")
+
+
+def record_gate_report(root, payload):
+    """把本次 gate 结果落档到 生产数据/gate_reports/<stage>.json（原子写）。
+
+    两链哲学：验收（stage_acceptance）管「完成」、gate 管「花钱」，各自独立；但两边要互相
+    可见——落档让验收侧能 advisory 提示「花钱 gate 未跑/已过期」，而不必重放 gate 逻辑。
+    落档含 findings 摘要、时间戳与被检输入清单（相对路径 + 当时 mtime），供人和机器复盘。
+    """
+    root = os.path.abspath(root)
+    stage = payload["stage"]
+    checked_inputs = []
+    for rel in GATE_INPUT_RELS.get(stage, []):
+        path = os.path.join(root, rel)
+        row = {"path": rel, "exists": os.path.exists(path)}
+        if row["exists"]:
+            row["mtime"] = _newest_mtime([path])
+        checked_inputs.append(row)
+    doc = {
+        "schema_version": 1, "kind": "ad_gate_report", "stage": stage,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "summary": payload["summary"],
+        "findings": payload["findings"],
+        "checked_inputs": checked_inputs,
+    }
+    out_path = gate_report_path(root, stage)
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    tmp_path = out_path + ".tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    os.replace(tmp_path, out_path)
+    return out_path
+
+
 def _write_progress_state(root, stage, payload):
     """gate→_进度.md 反馈：阻塞落 🔴block（带首条原因），通过则清除残留 🔴block。
 
@@ -703,8 +785,12 @@ def main():
                     help="允许占位 VO 继续 demo；compose 默认不建议使用")
     ap.add_argument("--write-progress", action="store_true",
                     help="把 gate 结果回写 _进度.md：block 时该阶段置 🔴block 并记首条原因；通过则清除残留 🔴block")
+    ap.add_argument("--no-record", action="store_true",
+                    help="不落档 生产数据/gate_reports/<stage>.json（默认每次运行都落档，供验收侧互链）")
     args = ap.parse_args()
     payload = run_gate(args.project_root, args.stage, args.allow_placeholder)
+    if not args.no_record:
+        record_gate_report(args.project_root, payload)
     if args.write_progress:
         _write_progress_state(args.project_root, args.stage, payload)
     if args.json:

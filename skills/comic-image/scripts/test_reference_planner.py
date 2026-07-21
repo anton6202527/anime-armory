@@ -185,7 +185,7 @@ def test_attachment_allocation_is_fair_and_keeps_location_and_prop(tmp_path):
         "PROP_KEY": {"anchor_path": paths["prop"]},
     }}
     panel = {"references": ["LOC_ROOM", "PROP_KEY"]}
-    caps = {"adapter_id": "openai_gpt_image_project_memory", "reference_image_limit": 16}
+    caps = {"adapter_id": "openai_gpt_image_project_memory", "reference_image_limit": 16, "executable_attachment_limit": 5}
     result = rp.allocate_panel_attachments(tmp_path, panel, char_plans, registry, caps)
     selected_ids = [item["id"] for item in result["selected"]]
     assert result["limit"] == 5
@@ -205,7 +205,7 @@ def test_critical_reference_budget_overflow_requests_split(tmp_path):
     prop.write_bytes(b"p")
     registry = {"assets": {"LOC_A": {"anchor_path": loc.name}, "PROP_A": {"anchor_path": prop.name}}}
     result = rp.allocate_panel_attachments(tmp_path, {"references": ["LOC_A", "PROP_A"]}, char_plans, registry,
-                                           {"adapter_id": "openai_gpt_image_project_memory", "reference_image_limit": 16})
+                                           {"adapter_id": "openai_gpt_image_project_memory", "reference_image_limit": 16, "executable_attachment_limit": 5})
     assert result["over_capacity"] is True
     assert "拆成单人反打" in result["split_suggestion"]
 

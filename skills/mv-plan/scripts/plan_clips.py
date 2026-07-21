@@ -681,7 +681,9 @@ def main():
     }
     plan_dir = os.path.join(root, "分镜")
     plan_path = os.path.join(plan_dir, "clip_plan.json")
-    mv_utils.write_json(plan_path, plan)
+    # 幂等写盘：同输入重跑（隔天亦然）不得只因 generated_at 变化就换 hash——
+    # clip_plan hash 被 timeline/semantic/picture_lock/jobs_manifest 全链绑定。
+    mv_utils.write_json_stable(plan_path, plan)
     try:
         output_rate = contract.video_spec_profile(settings.get("出视频规格") or "预算一般")["fps"]
     except KeyError:
@@ -712,16 +714,16 @@ def main():
             for c in clips
         ],
     }
-    mv_utils.write_json(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
+    mv_utils.write_json_stable(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
     mv_utils.write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))
     # Rebuild registries after clip_plan exists so asset/reference usage reflects this exact plan.
     identities = registry.build_identity_registry(root)
     assets = registry.build_asset_registry(root)
     refs = registry.build_reference_plan(root, identities, assets)
     requirements = registry.build_reference_requirements(root, identities, assets, refs)
-    mv_utils.write_json(os.path.join(root, "设定", "identity_registry.json"), identities)
-    mv_utils.write_json(os.path.join(root, "设定", "asset_registry.json"), assets)
-    mv_utils.write_json(os.path.join(root, "分镜", "reference_plan.json"), refs)
+    mv_utils.write_json_stable(os.path.join(root, "设定", "identity_registry.json"), identities)
+    mv_utils.write_json_stable(os.path.join(root, "设定", "asset_registry.json"), assets)
+    mv_utils.write_json_stable(os.path.join(root, "分镜", "reference_plan.json"), refs)
     registry.write_reference_requirements(root, requirements)
     mv_utils.update_progress_stage(root, "plan")
     print(f"[ok] clip plan → {os.path.join(plan_dir, 'clip_plan.json')}（{len(clips)} clips）")

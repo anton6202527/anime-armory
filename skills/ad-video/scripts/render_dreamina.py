@@ -36,8 +36,11 @@ if str(AD_LIB) not in sys.path:
     sys.path.insert(0, str(AD_LIB))
 from ad_video_prompt_compiler import parse_markdown  # noqa: E402
 from ad_video_prompt_compiler import normalize_backend  # noqa: E402
+import io_utils  # noqa: E402  本线 _lib 原子写（账本落盘不可半写）
 SUCCESS_STATUSES = {"success", "succeeded", "completed", "done"}
 PENDING_STATUSES = {"querying", "queueing", "queued", "processing", "running", "pending", "submitted", "created"}
+RETRY_ATTEMPTS = 3
+RETRY_BASE_DELAY = 1.0
 
 
 def now_iso() -> str:
@@ -52,8 +55,19 @@ def load_json(path: Path, default: Any = None) -> Any:
 
 
 def write_json(path: Path, data: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    io_utils.write_json_atomic(str(path), data)
+
+
+def retry_call(fn, *, describe: str, attempts: int = RETRY_ATTEMPTS, base_delay: float = RETRY_BASE_DELAY):
+    """幂等操作（下载/查询）的有限重试：指数退避，逐次记录。付费提交绝不走这里。"""
+    for attempt in range(1, attempts + 1):
+        try:
+            return fn()
+        except Exception as exc:
+            print(f"[retry] {describe} 第{attempt}/{attempts}次失败: {exc}", file=sys.stderr, flush=True)
+            if attempt == attempts:
+                raise
+            time.sleep(base_delay * (2 ** (attempt - 1)))
 
 
 def append_jsonl(path: Path, data: Mapping[str, Any]) -> None:
@@ -241,6 +255,17 @@ def job_matches(job: Mapping[str, Any], only: set[str]) -> bool:
     return bool(keys & only)
 
 
+def spent_credits(jobs: Sequence[Any]) -> float:
+    """累计本 manifest 已付费消耗：有 submit_id 即已扣费；credit_count 缺失按 1 计。"""
+    total = 0.0
+    for job in jobs:
+        if not isinstance(job, dict) or not job.get("submit_id"):
+            continue
+        credit = job.get("credit_count")
+        total += float(credit) if isinstance(credit, (int, float)) and not isinstance(credit, bool) else 1.0
+    return total
+
+
 def enforce_gate(root: Path) -> None:
     gate_cmd = [sys.executable, str(Path(__file__).resolve().parents[2] / "ad-craft" / "scripts" / "gate.py"),
                 str(root), "--stage", "video"]
@@ -265,6 +290,7 @@ def render_jobs(
     poll: int,
     submit_only: bool = False,
     collect_only: bool = False,
+    max_credits: Optional[float] = None,
 ) -> Dict[str, Any]:
     root = root.resolve()
     if not collect_only:
@@ -277,6 +303,7 @@ def render_jobs(
     if not isinstance(jobs, list):
         raise RuntimeError("video_jobs_manifest.json 缺 jobs[]")
     rendered = skipped = failed = submitted = pending = 0
+    budget_halt: Optional[Dict[str, Any]] = None
     events_path = root / "生产数据" / "production_events.jsonl"
     for job in jobs:
         if not isinstance(job, dict) or not job_matches(job, only):
@@ -293,14 +320,16 @@ def render_jobs(
         existing_submit_id = str(job.get("submit_id") or "")
         if existing_submit_id and not force:
             try:
-                payload = query_dreamina_result(existing_submit_id)
+                payload = retry_call(lambda: query_dreamina_result(existing_submit_id),
+                                     describe=f"query_result submit_id={existing_submit_id}")
                 if payload.get("_pending_status"):
                     job["status"] = "submitted"
                     job["pending_status"] = payload.get("_pending_status")
                     pending += 1
                     print(f"[pending] {job.get('job_id')} submit_id={existing_submit_id} status={payload.get('_pending_status')}", flush=True)
                     continue
-                download_result(payload, target)
+                retry_call(lambda: download_result(payload, target),
+                           describe=f"download submit_id={existing_submit_id}")
                 job.update({
                     "status": "done",
                     "backend": "Dreamina/即梦官方 CLI",
@@ -320,7 +349,8 @@ def render_jobs(
                     print(f"[pending] {job.get('job_id')} query_error={exc}", flush=True)
                     continue
                 failed += 1
-                job["status"] = "failed"
+                # submit_id 仍在：保持可续跑状态，重跑继续免费取回，不重新付费提交
+                job["status"] = "collect_pending"
                 job["error"] = str(exc)
                 print(f"[block] {job.get('job_id')} {exc}", file=sys.stderr, flush=True)
                 if not force:
@@ -331,6 +361,13 @@ def render_jobs(
             job.setdefault("status", "planned")
             print(f"[pending] {job.get('job_id')} no submit_id yet", flush=True)
             continue
+        if max_credits is not None:
+            spent = spent_credits(jobs)
+            if spent >= max_credits:
+                budget_halt = {"stopped_before": str(job.get("job_id") or ""), "spent_credits": spent}
+                print(f"[budget] 已消耗 credit={spent} >= --max-credits {max_credits}，"
+                      f"停止在 {job.get('job_id')} 之前，不再提交付费任务", file=sys.stderr, flush=True)
+                break
         try:
             prompt_path = root / str(job.get("prompt") or "")
             if not prompt_path.is_file():
@@ -387,17 +424,24 @@ def render_jobs(
                 submitted += 1
                 print(f"[submitted] {job.get('job_id')} submit_id={payload.get('submit_id')} status={payload.get('_pending_status')}", flush=True)
                 continue
-            download_result(payload, target)
+            # 提交已扣费：先原子落盘 submit_id 再下载；下载失败重跑走 existing_submit_id 免费取回
             job.update({
-                "status": "done",
+                "status": "collect_pending",
                 "backend": "Dreamina/即梦官方 CLI",
                 "model_version": model_version,
                 "video_resolution": video_resolution,
                 "actual_model_backend": actual_backend,
                 "submit_id": payload.get("submit_id"),
-                        "credit_count": payload.get("credit_count"),
-                        "submit_prompt_sha256": actual_prompt_sha,
+                "credit_count": payload.get("credit_count"),
+                "submit_prompt_sha256": actual_prompt_sha,
                 "submitted_duration": payload.get("_submitted_duration"),
+                "submitted_at": now_iso(),
+            })
+            write_json(manifest_path, manifest)
+            retry_call(lambda: download_result(payload, target),
+                       describe=f"download submit_id={payload.get('submit_id')}")
+            job.update({
+                "status": "done",
                 "output": str(job.get("expected_output")),
                 "generated_at": now_iso(),
             })
@@ -424,7 +468,8 @@ def render_jobs(
             print(f"[ok] {job.get('job_id')} -> {job.get('expected_output')} submit_id={payload.get('submit_id')}", flush=True)
         except Exception as exc:
             failed += 1
-            job["status"] = "failed"
+            # 已有 submit_id ⇒ 已付费，落可续跑状态；重跑走 existing_submit_id 免费取回
+            job["status"] = "collect_pending" if job.get("submit_id") else "failed"
             job["error"] = str(exc)
             print(f"[block] {job.get('job_id')} {exc}", file=sys.stderr, flush=True)
             if not force:
@@ -443,6 +488,19 @@ def render_jobs(
         "failed": failed,
         "updated_at": now_iso(),
     }
+    if max_credits is not None:
+        unrun = [str(j.get("job_id") or "") for j in jobs
+                 if isinstance(j, dict) and job_matches(j, only)
+                 and not j.get("submit_id") and not (root / str(j.get("expected_output") or "")).exists()]
+        manifest["render_summary"]["budget"] = {
+            "max_credits": max_credits,
+            "spent_credits": spent_credits(jobs),
+            "halted": budget_halt is not None,
+            "unrun_jobs": unrun,
+            **(budget_halt or {}),
+        }
+        if budget_halt is not None:
+            print(f"[budget] 剩余未跑 job：{'、'.join(unrun) or '无'}", file=sys.stderr, flush=True)
     write_json(manifest_path, manifest)
     return manifest["render_summary"]
 
@@ -458,6 +516,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--poll", type=int, default=900)
     ap.add_argument("--submit-only", action="store_true", help="只提交并登记 submit_id，不等待下载")
     ap.add_argument("--collect-only", action="store_true", help="只查询已登记 submit_id 并下载完成结果，不提交新任务")
+    ap.add_argument("--max-credits", type=float, default=None,
+                    help="本 manifest 累计 credit 封顶；付费提交前检查，超限停止（默认不设限）")
     ns = ap.parse_args(argv)
     try:
         summary = render_jobs(
@@ -470,6 +530,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             poll=ns.poll,
             submit_only=ns.submit_only,
             collect_only=ns.collect_only,
+            max_credits=ns.max_credits,
         )
     except Exception as exc:
         print(f"[block] {exc}", file=sys.stderr, flush=True)

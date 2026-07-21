@@ -80,8 +80,20 @@ def project_checks(root: Path | None) -> list[dict[str, Any]]:
 
 def diagnose(root: Path | None = None) -> dict[str, Any]:
     pillow = module_available("PIL")
-    imgutils = module_available("imgutils")
     repo_root = Path(__file__).resolve().parents[2]
+    # CCIP 可用性认外部解释器桥（comic-review ccip_bridge / comicqc env），
+    # 不再要求当前解释器自身装得动 dghs-imgutils。
+    ccip_mode = "unavailable"
+    try:
+        bridge_dir = repo_root / "skills" / "comic-review" / "scripts"
+        if str(bridge_dir) not in sys.path:
+            sys.path.insert(0, str(bridge_dir))
+        import ccip_bridge
+
+        ccip_mode = ccip_bridge.describe().get("mode", "unavailable")
+    except Exception:
+        ccip_mode = "inprocess" if module_available("imgutils") else "unavailable"
+    imgutils = ccip_mode != "unavailable"
     validators = [
         repo_root / "skills" / "comic-script" / "scripts" / "development_pack.py",
         repo_root / "skills" / "comic-name" / "scripts" / "build_name_board.py",
@@ -110,8 +122,15 @@ def diagnose(root: Path | None = None) -> dict[str, Any]:
         capability(
             "anime_identity_embedding",
             "full" if imgutils else "degraded",
-            "dghs-imgutils/CCIP is available." if imgutils else "CCIP identity embedding is unavailable; SHA-bound human review remains required.",
-            install_hint="Install dghs-imgutils in an isolated environment for CCIP triage." if not imgutils else "",
+            f"dghs-imgutils/CCIP is available via {ccip_mode}."
+            if imgutils
+            else "CCIP identity embedding is unavailable; SHA-bound human review remains required.",
+            install_hint=(
+                "Create the conventional env: `conda create -n comicqc python=3.11` then "
+                "`pip install dghs-imgutils onnxruntime`; or point COMIC_CCIP_PYTHON at an interpreter that has imgutils."
+                if not imgutils
+                else ""
+            ),
             affects=["character_consistency"],
         ),
         capability(

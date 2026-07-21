@@ -20,9 +20,14 @@ from pathlib import Path
 from typing import Any
 
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
 COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
+
+import reference_composite  # noqa: E402
 from comic_image_prompt_compiler import (  # noqa: E402
     KIND as COMPILER_KIND,
     VERSION as COMPILER_VERSION,
@@ -31,13 +36,17 @@ from comic_image_prompt_compiler import (  # noqa: E402
     safety_shape_visual_text as safety_shape_visual_prompt,
 )
 from contracts import stage_inputs_fingerprint  # noqa: E402
+from image_backend_adapter import resolve_capabilities  # noqa: E402
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
 SKILLS_ROOT = Path(__file__).resolve().parents[2]
-CODEX_IMAGE_GENERATION_REFERENCE_LIMIT = 5
+# 实机附件上限的唯一真值在 comic/_lib/image_backend_adapter；此处只解引用，不再双写数字。
+CODEX_IMAGE_GENERATION_REFERENCE_LIMIT = resolve_capabilities(
+    CODEX_MODEL, CODEX_CHANNEL
+).executable_attachment_limit
 
 
 def run_preflight_gate(root: Path, chapter: str) -> int:
@@ -260,16 +269,30 @@ def select_reference_attachments(
     records: list[dict[str, str]],
     limit: int = CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
 ) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    """Fairly allocate executable slots; never spend all slots on one face."""
+    """Fairly allocate executable slots; never spend all slots on one face.
+
+    Style anchors get one guaranteed slot: a dropped style anchor silently
+    breaks whole-chapter style cohesion (observed as style_anchor_drift), so
+    the first STYLE_ record is mandatory alongside one anchor per subject.
+    """
     mandatory_indices: list[int] = []
     seen_characters: set[str] = set()
+    style_reserved = False
     for index, record in enumerate(records):
         rid = str(record.get("id") or "")
+        role = str(record.get("role") or "").lower()
         if record.get("required"):
             mandatory_indices.append(index)
+            if rid.startswith(("CHAR_", "MON_")):
+                seen_characters.add(rid)
+            if rid.startswith("STYLE_") or role == "style":
+                style_reserved = True
         elif rid.startswith(("CHAR_", "MON_")) and rid not in seen_characters:
             mandatory_indices.append(index)
             seen_characters.add(rid)
+        elif not style_reserved and (rid.startswith("STYLE_") or role == "style"):
+            mandatory_indices.append(index)
+            style_reserved = True
     # Legacy jobs did not mark required; preserve one scene and each named prop
     # before allocating second/third portraits for a character.
     if not any(record.get("required") for record in records):
@@ -573,8 +596,9 @@ def post_qc_panel(
         if isinstance(ref, dict) and ref.get("id")
     ]
     declared_attachment_count = declared_reference_attachment_count(root, job)
+    attached_equivalent_count = reference_composite.attachment_equivalent_count(reference_records)
     unresolved_reference_count = max(
-        0, declared_attachment_count - len(reference_records) - len(omitted_reference_records)
+        0, declared_attachment_count - attached_equivalent_count - len(omitted_reference_records)
     )
     if unresolved_reference_count:
         issues.append(
@@ -617,6 +641,8 @@ def post_qc_panel(
         "declared_reference_count": declared_attachment_count,
         "declared_reference_binding_count": len(declared_bindings),
         "reference_input_count": len(reference_records),
+        "attached_equivalent_count": attached_equivalent_count,
+        "composite_attachment_count": sum(1 for record in reference_records if record.get("composite")),
         "omitted_attachment_count": len(omitted_reference_records),
         "omitted_attachment_ids": [record.get("id", "") for record in omitted_reference_records],
         "blank_region_candidates": blank_regions,
@@ -952,6 +978,16 @@ def main() -> int:
         started = time.monotonic()
         last_error = ""
         all_reference_records = collect_reference_images(root, job)
+        all_reference_records, composite_disclosure = reference_composite.compact_records_with_composites(
+            root, all_reference_records, reference_limit
+        )
+        for note in composite_disclosure.get("notes") or []:
+            print(f"[warn] {pid} composite: {note}", flush=True)
+        if composite_disclosure.get("applied"):
+            sheets = ", ".join(
+                f"{item['id']}({item['part_count']}视图)" for item in composite_disclosure["composites"]
+            )
+            print(f"[info] {pid} 多视图折叠为拼板参考：{sheets}", flush=True)
         reference_records, omitted_reference_records = select_reference_attachments(all_reference_records, reference_limit)
         omitted_required = [record for record in omitted_reference_records if record.get("required")]
         selected_subjects = {str(record.get("id") or "") for record in reference_records if str(record.get("id") or "").startswith(("CHAR_", "MON_"))}

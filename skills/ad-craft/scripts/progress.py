@@ -24,6 +24,26 @@ import progress_md  # noqa: E402
 DONE = "✅"
 
 
+def acceptance_note(root, key):
+    """✅ 阶段行 ↔ 生产数据/stage_acceptance/<stage>.json 对账（只读提示，不改状态）。
+
+    手改 _进度.md 可以绕过 progress_set 的护栏；这里把「✅ 无验收凭证 / 凭证仍有 block」
+    在只读视图里说出来，真正的硬拦在 ad-review M0。
+    """
+    if not key:
+        return ""
+    path = os.path.join(root, "生产数据", "stage_acceptance", f"{key}.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            payload = json.load(f)
+        block = int((payload.get("summary") or {}).get("block") or 0)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError, AttributeError):
+        return "  ⚠️ ✅ 无验收凭证（缺 stage_acceptance 落档）"
+    if block:
+        return f"  ⚠️ ✅ 但验收凭证仍有 block={block}"
+    return ""
+
+
 def parse_stage_rows(text):
     """从 _进度.md 抽「阶段进度」段的 (label, status) 列表（2 列表）。"""
     rows = progress_md.parse_stage_rows(
@@ -70,7 +90,8 @@ def main():
     for label, status in rows:
         meta = stage_by_label.get(label)
         owner = meta["owner"] if meta else "?"
-        print(f"- {status} {label}  ·  {owner}")
+        note = acceptance_note(root, meta["key"]) if meta and DONE in status else ""
+        print(f"- {status} {label}  ·  {owner}{note}")
         if frontier is None and DONE not in status:
             frontier = (label, meta)
 

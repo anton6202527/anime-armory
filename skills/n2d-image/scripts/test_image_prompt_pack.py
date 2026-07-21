@@ -2035,3 +2035,24 @@ def test_clip_chars_normalizes_episode_state_to_registry_base_id() -> None:
     }
 
     assert image_prompt_pack.clip_chars(clip) == ["CHAR_01", "CHAR_02"]
+
+
+# ── 身份哈希 seed：同 (身份ID, 形态) 恒定，与角色排序/位置无关（fixed_pool 承诺兑现）──
+
+
+def test_identity_seed_base_stable_and_order_independent() -> None:
+    a1 = image_prompt_pack.identity_seed_base("CHAR_01", "常态")
+    a2 = image_prompt_pack.identity_seed_base("CHAR_01", "常态")
+    assert a1 == a2, "同身份+形态必须恒定"
+    assert image_prompt_pack.identity_seed_base("CHAR_02", "常态") != a1
+    assert image_prompt_pack.identity_seed_base("CHAR_01", "战损") != a1
+
+
+def test_identity_seed_base_range_leaves_pool_headroom() -> None:
+    for cid in ("CHAR_01", "CHAR_99", "PROP_横刀", "SCENE_虎山"):
+        base = image_prompt_pack.identity_seed_base(cid, "常态")
+        assert 10_000 <= base < 2**31 - 100
+        ctrl = image_prompt_pack.generation_control(base)
+        assert ctrl["seed_pool"] == [base + i for i in range(6)]
+        assert all(0 < s < 2**31 for s in ctrl["seed_pool"])
+        assert ctrl["usage"]["turnaround"] == base

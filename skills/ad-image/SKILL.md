@@ -23,7 +23,7 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 建角色/场�
 出完一批图、还没继续出视频时跑 `scripts/product_qc.py`——把产品/logo/品牌色漂移（广告线的"脸漂"）在最便宜的点机检拦下，避免漂着出视频再返工烧钱：
 
 ```bash
-python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--storyboard PATH] [--strict]
+python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--storyboard PATH] [--strict] [--no-vlm]
 ```
 
 **逐图即时 QC（ad 线自维护）**：每生成并落档 1 张定妆、首帧或尾帧 PNG，先跑广告线自己的最小 QC，再继续下一张。产品/KV/品牌露出/代言人关键镜必须立即跑 `product_qc.py`（当前脚本以阶段目录全量扫描为主，就全量跑一次并重点处理新图 finding）；普通痛点/空镜也要做 ad-image 本线落档自检（PNG 有效、主比例/安全框、是否有不该出现的 logo/文字/产品变形、是否符合 storyboard 资产声明），并在生产事件或返修记录中留痕。`summary.block>0` 或关键镜未能确认时先重抽/改 prompt/补产品参考，不把坏图传给 `ad-video`。不得抽成公共实现，也不得复用其它系列的 QC 脚本。
@@ -34,10 +34,12 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 3. **asset_registry 对账**：优先读 `出图/共享/asset_registry.json` / `设定库/asset_registry.json`。产品镜建议同时绑定 `PROD_*` 与 `BRAND_*`；缺 registry 或缺品牌资产先 warn，避免出图前没有 logo mask/品牌色/包装禁漂项。
 4. **文字可读性**：品牌/UI/CTA/法律文字镜必须在 prompt 写清“文字清晰可读/不乱码/保留原文”；缺锁定句 → warn，缺 prompt → block。
 5. **跨比例构图余量**：`safe_area.core_in_center_4x4` 只是内部中心裁切风险提示；缺失或 false → warn。它不能证明抖音/TikTok/Reels 等实际 placement 安全，发布前仍须当前模板 + 具名人审。
-6. **brand-color ΔE**：无校准产品 ROI 时只作 WARN 启发式，不能因整图环境色不同就宣判品牌不一致。
-7. **product dHash 离群**：全帧 Hamming 只作 WARN 候选，不把换构图误判成产品漂移硬挡。
-8. **logo NCC**：只作 WARN 快筛；Logo/包装文字硬签收来自真实参考输入、可控后期层和人工并排复核。
-9. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
+6. **产品 ROI 粗定位**：先用定妆参考模板 × 多尺度 NCC 在出图帧里定位产品区域（`locate_product_roi`，峰值 < 0.60 宁可不给框）；定位成功后 6-8 三项按产品区域口径跑，失败则维持整图降级口径并落 `product_roi` finding（定位失败本身就是"产品疑缺席/严重变形"的 warn 信号）。
+7. **brand-color ΔE**：有产品 ROI 时严重偏色（ΔE>block 阈）**可 block**；无 ROI 时只作 WARN 启发式，不能因整图环境色不同就宣判品牌不一致。
+8. **product dHash 离群**：全组产品镜都有 ROI 时按产品区域口径判（仍 warn·启发式）；否则全帧 Hamming 只作 WARN 候选，不把换构图误判成产品漂移硬挡。
+9. **logo 多尺度 NCC**：0.6-1.5 五档尺度取峰值，有 ROI 时窗内搜索（假峰更少、口径更强）；只作 WARN 快筛，Logo/包装文字硬签收来自真实参考输入、可控后期层和人工并排复核。
+10. **VLM 并排裁决接线（默认开启，`--no-vlm` 关）**：run_qc 自动刷新 `生产数据/ad_vlm_judge_tasks.json`（每产品镜 × PROD_/BRAND_ 资产一条「出图帧 vs 定妆参考」任务，sha256 绑定），并把 `ad_vlm_judge_verdicts.json` 里的有效裁决折进 findings——suspect/低分 → warn；任务包有任务但 0 裁决 → `vlm_product_unadjudicated` warn（机检空转要可见）；部分裁决 → `vlm_product_partial_coverage` warn。裁决由多模态 agent 逐条看图打分回填（合同细节见 `scripts/product_vlm_judge.py` 文件头），这是唯一"看图判产品长对没有"的内容级检，ΔE/dHash/NCC 抓不住的形态错误靠它。
+11. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
 
 报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_plan_prompts.py test_product_qc.py test_plan_cover.py`。
 
@@ -45,13 +47,15 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 
 默认路线是 **生图模型=GPT Image 2，生图渠道=Codex CLI**（也可用官方 OpenAI Images API）。Seedream 4.5、Nano Banana Pro、Kling Image 3.0、Sora 2 或其它**自定义模型**（含具名 Dreamina Image 官方版本）只能作为用户明确签核的单项目例外，逆向 Dreamina/即梦路径仍禁用；签核写 `<作品根>/合规/image_backend_override.json`。永久硬闸：① manifest 每个 job 必须分别落 `model/channel`，不能只写厂商壳/backend；② 项目内不混用路线；③ 禁第三方逆向/未授权出图。视频渠道不改变图片路线。
 
+**付费渲染资金安全**（签核例外走 `scripts/render_dreamina.py` 时）：① 提交成功即**先落盘** `submit_id`/结果地址再下载——下载失败重跑走免费取回，绝不因网络抖动二次付费；② job 账本原子写（同目录 tmp+rename），中断不烂账；③ 下载/查询类幂等操作有限重试+退避，付费提交**永不自动重试**；④ `--max-credits N` 预算封顶，累计消耗到顶即停并列出未跑 job；⑤ `--limit` 按条数截断小步验证。
+
 ## 工作流
 
 0. **生成出图 prompt 包**（付费生图前的可复跑计划）：
    ```bash
    python3 skills/ad-image/scripts/plan_prompts.py "<作品根>"
    ```
-   产物：`出图/共享/asset_registry.json`、共享/逐镜 prompt 和 `image_jobs_manifest.json`。产品 job 写 `reference_inputs` / `requires_image_input` / prompt hash；正式 runner 必须把真实参考图传给 image-to-image API，并记录 `actual_reference_inputs`，否则 gate 阻断。
+   产物：`出图/共享/asset_registry.json`、共享/逐镜 prompt 和 `image_jobs_manifest.json`。产品 job 写 `reference_inputs` / `requires_image_input` / prompt hash；正式 runner 必须把真实参考图传给 image-to-image API，并记录 `actual_reference_inputs`，否则 gate 阻断。每个 job 还落 **`planned_seed`**（同一主资产跨镜同 seed、项目名+资产 ID 确定性派生，重抽单镜不引入新随机源）与 **`seed_capability`**（适配层三态：后端支持才真传 seed，unknown/unavailable 如实标注不假装生效）——无主体库路线下固定 seed 是少数能稳住跨镜产品/代言人的廉价锚。
 1. **建三层定妆库**（`出图/共享/`）：
    - 角色：每个出正/侧/背三视图 → `定妆_<角色>_三视图.png`。
    - 场景：关键场景四视图。
@@ -110,7 +114,10 @@ python3 skills/ad-image/scripts/reference_planner.py "<作品根>" --write
 逐镜累积成漂移。此前 `plan_prompts.reference_paths()` 只是把 registry 里**静态登记**的 `reference_images`
 原样列出，**不看镜头变化量、不看后端能力**。规划器逐镜逐资产算变化量 delta × 后端能力，开出"这镜喂哪些参考 +
 要不要控制网 + 要不要升档"，产 `生产数据/ad_reference_plan.{json,md}`。**产品/品牌资产按最严格的"角色"加权**
-（`PROD_*`/`BRAND_*` 漂了整片报废），产品镜单参考会告警。
+（`PROD_*`/`BRAND_*` 漂了整片报废），产品镜单参考会告警。两个补充因子：① **复现间隔 gap**——按镜序算每资产
+距上次出现隔了几镜（产品/品牌 ≥3 镜、一般资产 ≥4 镜即长间隔复现），触发时参考下限 +1 并把**最早定妆锚**
+置顶重注入，治"隔了半条片子再登场就漂"的复现衰减；② **升档可达路由建议**——建议档超出当前后端能力时
+不止说"够不着"，还列出能力表里够得着该档的具体后端（模型+渠道）供切镜参考（advisory，换后端须按治理规矩签核）。
 
 与 `product_qc` 的关系是**互补**，不是替代：`reference_planner` 是**事前处方**（还没花钱），`product_qc` 是
 **事后诊断**（图已生成）。gate 在 `--stage image` 以 **advisory** 并入（缺报告只 info、报告里的 block 降为

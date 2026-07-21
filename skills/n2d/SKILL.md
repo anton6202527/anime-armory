@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4722 | 目录文本总行数 288817
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4723 | 目录文本总行数 290432
 
 # n2d — 主状态机调度器
 
@@ -264,7 +264,7 @@ python3 skills/n2d-update/scripts/update_plan.py check <作品根> 第N集 --wri
 > ```
 > 把脚本输出**直接讲给用户**。下面的"逐列判断"是脚本内部逻辑（容错/手查时参考）。
 >
-> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / ⏳rough / 12/19）。各阶段 skill 收尾都调它；`set` 会自动刷新 `脚本/第N集/manifest.json` 产物快照，并记录 `last_progress_state`。旧项目表头缺新列时先跑：`python3 <skill>/progress.py ensure-col <作品根> <列名> ⬜`。需要手动重建快照时可跑：`python3 skills/n2d/manifest.py <作品根> 第N集 --stage <stage_key>`。
+> **回写进度统一用脚本**（别手工编辑表格）：`python3 <skill>/progress.py set <作品根> 第N集 <列名> <值>`（值 = ✅ / ⬜ / ⏳rough / 12/19）。`set` 写「完成态 ✅」前会做 DAG 前驱校验（上游列未满足即拒绝，audit-dag 判据前移到回写时；非完成态不拦），逃生口 `N2D_PROGRESS_ALLOW_UNVERIFIED=1` 强行回写并留痕 waiver。各阶段 skill 收尾都调它；`set` 会自动刷新 `脚本/第N集/manifest.json` 产物快照，并记录 `last_progress_state`。旧项目表头缺新列时先跑：`python3 <skill>/progress.py ensure-col <作品根> <列名> ⬜`。需要手动重建快照时可跑：`python3 skills/n2d/manifest.py <作品根> 第N集 --stage <stage_key>`。
 
 > **先读 `制作模式`、`合成阶段` 与 `基础视觉风格`**。默认 `制作模式=混合自动路由`：阶段1后先运行 `voice_preflight.py prepare`，建立 `voice_casting.json` 与 `timing_estimate.json`，不生成 WAV；再由 `production_mode_router` 逐镜决定表演音轨先行、neutral-mouth base plate 后置口型、旁白/口外音后配、画面先行或 native AV。`配音=⏳rough` 表示时间基准就绪，不代表已有粗配音。最终音色定妆后才批量生成 final voice；成片前逐镜检查 final voice 与 lipsync 产物。`配音先行`、`原生音画`、`先出视频后配音` 只作用户显式项目级兼容模式。默认 `合成阶段=跳过`，所以基础 `视频` 列满仍只表示 `clip_delivery_complete`。
 >

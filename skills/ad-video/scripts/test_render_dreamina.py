@@ -7,8 +7,16 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+_HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(_HERE))
+# 同名模块防串：另一 render_dreamina（同线其它 skill）先被导入时，按本目录重新加载
+_cached = sys.modules.get("render_dreamina")
+if _cached is not None and Path(getattr(_cached, "__file__", "")).resolve().parent != _HERE:
+    del sys.modules["render_dreamina"]
+    import importlib
+    importlib.invalidate_caches()
 import render_dreamina as rd  # noqa: E402
+assert Path(rd.__file__).resolve().parent == _HERE
 from ad_video_prompt_compiler import compile_prompt, render_markdown  # noqa: E402
 
 
@@ -207,6 +215,7 @@ def test_collect_only_query_error_keeps_job_submitted(tmp_path, monkeypatch):
         raise RuntimeError("timeout")
 
     monkeypatch.setattr(rd, "query_dreamina_result", fake_query)
+    monkeypatch.setattr(rd.time, "sleep", lambda s: None)
     summary = rd.render_jobs(
         root,
         only=set(),
@@ -222,3 +231,96 @@ def test_collect_only_query_error_keeps_job_submitted(tmp_path, monkeypatch):
     assert summary["failed"] == 0
     assert out["jobs"][0]["status"] == "submitted"
     assert out["jobs"][0]["last_query_error"] == "timeout"
+
+
+# ── 资金安全：submit_id 先落盘 / 下载失败可续跑 / 预算封顶 ────────────────────
+
+def _video_project(tmp_path, jobs):
+    root = tmp_path / "项目"
+    (root / "出视频" / "分镜" / "prompt").mkdir(parents=True)
+    (root / "出图" / "分镜" / "图片").mkdir(parents=True)
+    for job in jobs:
+        prompt_rel = job.get("prompt")
+        if prompt_rel:
+            (root / prompt_rel).write_text("## 运镜与动作\nslow", encoding="utf-8")
+        frame_rel = job.get("first_frame")
+        if frame_rel:
+            (root / frame_rel).write_bytes(b"png")
+    (root / "出视频" / "分镜" / "video_jobs_manifest.json").write_text(
+        json.dumps({"jobs": jobs}, ensure_ascii=False), encoding="utf-8")
+    return root
+
+
+def _quiet_video_env(monkeypatch):
+    monkeypatch.setattr(rd, "enforce_gate", lambda root: None)
+    monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
+    monkeypatch.setattr(rd.time, "sleep", lambda s: None)
+
+
+def _render(root, **kwargs):
+    args = dict(only=set(), limit=None, force=False, model_version="seedance2.0fast",
+                video_resolution="720p", poll=1)
+    args.update(kwargs)
+    return rd.render_jobs(root, **args)
+
+
+def test_sync_download_failure_keeps_submit_id_in_manifest(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [{
+        "job_id": "镜头01",
+        "mode": "image2video",
+        "prompt": "出视频/分镜/prompt/镜头01.md",
+        "first_frame": "出图/分镜/图片/镜头01.png",
+        "duration": 4.0,
+        "expected_output": "出视频/分镜/视频/镜头01.mp4",
+    }])
+    _quiet_video_env(monkeypatch)
+    monkeypatch.setattr(rd, "run_dreamina_video", lambda job, root_arg, **kw: {
+        "gen_status": "success", "submit_id": "sub_1", "credit_count": 3,
+        "_submitted_duration": 4, "_mode": "image2video",
+    })
+
+    def broken_download(payload, target):
+        raise RuntimeError("net down")
+
+    monkeypatch.setattr(rd, "download_result", broken_download)
+    summary = _render(root)
+    job = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(encoding="utf-8"))["jobs"][0]
+
+    assert summary["failed"] == 1
+    assert job["submit_id"] == "sub_1"
+    assert job["credit_count"] == 3
+    assert job["status"] == "collect_pending"  # 重跑走 existing_submit_id 免费取回
+
+
+def test_max_credits_halts_before_next_paid_submission(tmp_path, monkeypatch):
+    root = _video_project(tmp_path, [
+        {"job_id": "镜头01", "mode": "image2video", "prompt": "出视频/分镜/prompt/镜头01.md",
+         "first_frame": "出图/分镜/图片/镜头01.png", "duration": 4.0,
+         "expected_output": "出视频/分镜/视频/镜头01.mp4"},
+        {"job_id": "镜头02", "mode": "image2video", "prompt": "出视频/分镜/prompt/镜头02.md",
+         "first_frame": "出图/分镜/图片/镜头02.png", "duration": 4.0,
+         "expected_output": "出视频/分镜/视频/镜头02.mp4"},
+    ])
+    _quiet_video_env(monkeypatch)
+    calls = []
+
+    def fake_run(job, root_arg, **kwargs):
+        calls.append(job.get("job_id"))
+        return {"gen_status": "success", "submit_id": f"sub_{len(calls)}", "credit_count": 5,
+                "_submitted_duration": 4, "_mode": "image2video"}
+
+    def fake_download(payload, target):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"0" * 100001)
+
+    monkeypatch.setattr(rd, "run_dreamina_video", fake_run)
+    monkeypatch.setattr(rd, "download_result", fake_download)
+    summary = _render(root, max_credits=5.0)
+    manifest = json.loads((root / "出视频" / "分镜" / "video_jobs_manifest.json").read_text(encoding="utf-8"))
+
+    assert calls == ["镜头01"]  # 第 2 个 job 提交前被预算封顶拦下
+    assert summary["rendered"] == 1
+    assert summary["budget"]["halted"] is True
+    assert summary["budget"]["spent_credits"] == 5.0
+    assert summary["budget"]["unrun_jobs"] == ["镜头02"]
+    assert manifest["jobs"][1].get("submit_id") is None

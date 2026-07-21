@@ -275,7 +275,7 @@ def build_reference_requirements(root, identity_registry, asset_registry, refere
 
 
 def write_reference_requirements(root, payload):
-    mv_utils.write_json(os.path.join(root, "设定", "reference_requirements.json"), payload)
+    mv_utils.write_json_stable(os.path.join(root, "设定", "reference_requirements.json"), payload)
     lines = ["# reference requirements", "", "| Target | Type | Status | Image refs | Missing Views | Why |", "|---|---|---|---:|---|---|"]
     for row in payload.get("requirements", []):
         coverage = row.get("coverage") or {}
@@ -296,9 +296,10 @@ def main():
     assets = build_asset_registry(root)
     refs = build_reference_plan(root, identity, assets)
     requirements = build_reference_requirements(root, identity, assets, refs)
-    mv_utils.write_json(os.path.join(root, "设定", "identity_registry.json"), identity)
-    mv_utils.write_json(os.path.join(root, "设定", "asset_registry.json"), assets)
-    mv_utils.write_json(os.path.join(root, "分镜", "reference_plan.json"), refs)
+    # 幂等写盘：注册表被 inherit_contract 的 inputs_sha256 绑定，纯 generated_at 变化不得换 hash。
+    mv_utils.write_json_stable(os.path.join(root, "设定", "identity_registry.json"), identity)
+    mv_utils.write_json_stable(os.path.join(root, "设定", "asset_registry.json"), assets)
+    mv_utils.write_json_stable(os.path.join(root, "分镜", "reference_plan.json"), refs)
     write_reference_requirements(root, requirements)
     print(f"[ok] identity/assets/reference registry → {root}")
     return 0

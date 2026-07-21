@@ -212,8 +212,18 @@ def build_report(root):
         blockers.append(f"视频挑版未覆盖全部 clip：{len(selected_jobs)}/{len(clips)} selected。")
     if image_qc.get("summary", {}).get("verdict") == "block":
         blockers.append("image_qc 仍有 hard block。")
-    if image_qc.get("summary", {}).get("degraded") and not image_qc.get("manual_review_accepted"):
-        blockers.append("image_qc 降级且未人工留痕放行。")
+    # 与 gate 同口径：降级放行必须具名 + 绑定当前报告 hash；旧式 manual_review_accepted 裸布尔不再放行。
+    manual = image_qc.get("manual_review") or {}
+    stripped_report = {k: v for k, v in image_qc.items()
+                       if k not in ("manual_review", "json_path", "markdown_path")}
+    manual_ok = bool(
+        manual.get("accepted")
+        and str(manual.get("reviewer") or "").strip()
+        and manual.get("bound_report_sha256") == mv_utils.json_hash(stripped_report)
+    )
+    if image_qc.get("summary", {}).get("degraded") and not manual_ok:
+        blockers.append("image_qc 降级且无具名+绑定当前报告 hash 的人工放行"
+                        "（`image_qc.py --accept-degraded --reviewer <name> --notes <说明>`；旧式布尔留痕不算）。")
     if inherit.get("summary", {}).get("hard_blocks"):
         blockers.append("video inherit contract 仍有 hard block。")
     if video_qc.get("summary", {}).get("hard_blocks"):

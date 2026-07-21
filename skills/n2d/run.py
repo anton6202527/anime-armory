@@ -467,6 +467,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
         })
 
     # 6. 花钱/重活生成 —— 停下，附该阶段"放行前必问"菜单
+    #    （G9 轻量闭环：alerts 是观测面不是闸门，但 critical 告警必须在花钱决策点被看到）
     if stage_key in GENERATION_STAGES:
         cp, _every = STAGE_MENU.get(stage_key, (None, False))
         strict_image_review = (
@@ -493,6 +494,15 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
                 "persistent_source": "图片验收模式=逐张机器QC+实际目视",
             }
             card["to_user"] += " 已启用全局逐图验收闸门，本次不重复询问生成粒度；仍需单独确认本次付费生成。"
+        criticals = _active_critical_alerts(root)
+        if criticals:
+            card["active_alerts"] = criticals
+            card["to_user"] += (
+                " ⚠️ 当前存在 critical 告警："
+                + "；".join(str(a.get("message") or a.get("kind") or "") for a in criticals[:3])
+                + ("（更多见 生产数据/alerts.json）" if len(criticals) > 3 else "")
+                + " —— 建议先处理再放行付费生成。"
+            )
         return na("needs_payment_confirm", card)
 
     if stage_key == "review":
@@ -505,6 +515,34 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
 
     # 7. 纯确定性（当前无此类路由阶段，留给将来）
     return na("auto_ran", {"headline": f"{ep} {frontier['label']}：确定性步骤已自动完成"})
+
+
+def _active_critical_alerts(root: str) -> List[Dict[str, Any]]:
+    """读 生产数据/alerts.json 里 level=critical 的告警（观测面透出，不新增阻断）。
+
+    G9 轻量闭环：告警不是 gate，但「QA 阻断 N 项，先修复再继续付费生成」这类 critical
+    必须出现在花钱决策点的 action card 上，而不是躺在 dashboard 里等人想起来看。
+    读不到/结构不对一律静默返回空——告警透出永不反过来卡死编排器。
+    """
+    path = os.path.join(root, "生产数据", "alerts.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception:
+        return []
+    alerts = data.get("alerts") if isinstance(data, dict) else None
+    if not isinstance(alerts, list):
+        return []
+    out: List[Dict[str, Any]] = []
+    for item in alerts:
+        if isinstance(item, dict) and str(item.get("level") or "").lower() == "critical":
+            out.append({
+                "level": "critical",
+                "kind": str(item.get("kind") or ""),
+                "scope": str(item.get("scope") or ""),
+                "message": str(item.get("message") or ""),
+            })
+    return out
 
 
 def _menu(root: str, choice_point: str) -> Dict[str, Any]:
@@ -2684,8 +2722,10 @@ def render_human(na: Dict[str, Any]) -> str:
 
 
 def main(argv: List[str]) -> int:
+    # --auto：deprecated·当前为 no-op（decide() 的 auto_continue 恒 False）。编排器绝不自动
+    # 跨阶段推进/花钱/创作；flag 仅为兼容外部脚本保留，传入与否行为一致。
     if not argv or argv[0] not in {"next", "enter", "pilot"}:
-        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto] [--preview]")
+        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--preview] [--auto(deprecated·no-op)]")
         return 1
     command = argv[0]
     rest = argv[1:]
@@ -2694,7 +2734,7 @@ def main(argv: List[str]) -> int:
     preview = "--preview" in rest
     pos = [a for a in rest if not a.startswith("--")]
     if not pos:
-        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--auto] [--preview]")
+        print("用法: run.py next|enter|pilot <作品根> [第N集] [--json] [--preview] [--auto(deprecated·no-op)]")
         return 1
     root = pos[0].rstrip("/")
     ep = pos[1] if len(pos) > 1 else None

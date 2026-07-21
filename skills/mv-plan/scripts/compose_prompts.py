@@ -314,8 +314,17 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
         },
         "clips": semantic_data.get("clips", []),
     }
-    write_json(os.path.join(root, "分镜", "semantic_prompts.json"), payload)
-    
+    # 幂等写收据：semantic_prompts.json 被 picture_lock inputs_sha256 绑定；
+    # 同输入重跑仅 generated_at 不同时保持文件字节不变，避免无谓打断 hash 链。
+    receipt_path = os.path.join(root, "分镜", "semantic_prompts.json")
+    existing_receipt = load_json(receipt_path, None)
+
+    def _stable(doc):
+        return {k: v for k, v in (doc or {}).items() if k != "generated_at"}
+
+    if not (isinstance(existing_receipt, dict) and _stable(existing_receipt) == _stable(payload)):
+        write_json(receipt_path, payload)
+
     return updated_count
 
 

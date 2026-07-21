@@ -219,11 +219,51 @@ def test_summarize_palette_block_is_only_review() -> None:
 
 
 def test_summarize_anchor_lint_is_advisory() -> None:
+    # demo/非正式：身份锚点缺失仍是 advisory（提示补，不硬拦）
     payload = {"checks": {}, "lint": {"available": True, "findings": [
         {"level": "warn", "code": "missing_anchor_identity", "msg": "Clip_002：缺身份锚点"}]}}
     s = image_qc.summarize(payload)
     assert s["hard_blocks"] == 0 and s["advisory"] == 1
     assert s["verdict"] == "review"
+
+
+def test_summarize_formal_identity_anchor_missing_is_hard() -> None:
+    # 正式项目：身份锚点/禁止漂移块缺失=身份合同未被 prompt 消费（B12）→ hard
+    payload = {"formal_project": True, "checks": {}, "lint": {"available": True, "findings": [
+        {"level": "warn", "code": "missing_anchor_identity", "msg": "Clip_002：缺身份锚点"},
+        {"level": "warn", "code": "missing_anchor_visual", "msg": "Clip_002：缺视觉锚点"}]}}
+    s = image_qc.summarize(payload)
+    assert s["hard_blocks"] == 1        # identity → hard
+    assert s["advisory"] == 1           # visual 仍 advisory
+    assert s["verdict"] == "block"
+
+
+def test_summarize_formal_prompt_missing_is_hard() -> None:
+    payload = {"formal_project": True, "checks": {}, "lint": {"available": True, "findings": [
+        {"level": "warn", "code": "prompt_missing", "msg": "Clip_004：prompt 文件不存在"}]}}
+    assert image_qc.summarize(payload)["hard_blocks"] == 1
+
+
+def test_to_findings_formal_anchor_contract_is_block() -> None:
+    payload = {"formal_project": True, "checks": {}, "lint": {"available": True, "findings": [
+        {"level": "warn", "code": "missing_anchor_forbidden", "msg": "Clip_005：缺禁止漂移块"},
+        {"level": "warn", "code": "missing_anchor_reference", "msg": "Clip_005：缺参考输入块"}]}}
+    sev = {f["msg"]: f["sev"] for f in image_qc.to_findings(payload)}
+    assert sev["Clip_005：缺禁止漂移块"] == "block"
+    assert sev["Clip_005：缺参考输入块"] == "warn"
+
+
+def test_run_qc_records_assets_sha256(tmp_path: Path) -> None:
+    # QC 报告必须携带被检图片的内容收据（gate 用它做 hash 级新鲜度核对）
+    root = tmp_path
+    (root / "分镜").mkdir()
+    (root / "出图").mkdir()
+    (root / "出图" / "Clip_001.png").write_bytes(b"png bytes")
+    (root / "分镜" / "clip_plan.json").write_text(json.dumps({
+        "clips": [{"clip_id": "Clip_001", "image_path": "出图/Clip_001.png"}]}), encoding="utf-8")
+    payload = image_qc.run_qc(root, with_pixel=False)
+    recorded = payload["assets_sha256"]
+    assert recorded["出图/Clip_001.png"] == image_qc._sha256_path(root / "出图" / "Clip_001.png")
 
 
 def test_summarize_local_patch_is_hard() -> None:

@@ -4240,3 +4240,35 @@ def test_lens_classes_reads_storyboard_shot_size_before_physical_lens() -> None:
     }
 
     assert image_qc._lens_classes(clip) == {"ECU", "CU", "MS"}
+
+
+# ── 选择点回归：run_pixel_checks 必须把作品根传给 face_consistency.analyze ────────────
+# `脸一致性机检后端`（arcface/styleid）由 analyze 内部按「显式参数 > _设置.md > env > 默认」
+# 解析；image_qc 只要把 root 传对，落档机检就与审片机检共用同一 embedder 口径。
+# 这条守住「将来改成不传 root / 换成别的入口」导致选择点在 image_qc 侧静默失效。
+
+
+def test_run_pixel_checks_passes_root_to_face_analyze(tmp_path: Path, monkeypatch) -> None:
+    seen: dict = {}
+
+    class FakeFC:
+        @staticmethod
+        def analyze(root, ep):
+            seen["analyze_args"] = (root, ep)
+            return {"available": False, "notes": ["fake"]}
+
+        @staticmethod
+        def audit_anchors(root):
+            seen["anchors_root"] = root
+            return {"available": False}
+
+    monkeypatch.setattr(
+        image_qc,
+        "_load_review_module",
+        lambda name: FakeFC if name == "face_consistency" else None,
+    )
+    checks = image_qc.run_pixel_checks(tmp_path, "第1集")
+
+    assert seen["analyze_args"] == (str(tmp_path), "第1集")
+    assert seen["anchors_root"] == str(tmp_path)
+    assert checks["face"]["available"] is False

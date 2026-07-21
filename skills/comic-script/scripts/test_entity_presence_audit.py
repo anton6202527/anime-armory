@@ -89,3 +89,44 @@ def test_derived_schedule_seeds_unscheduled_panels(tmp_path: Path) -> None:
     ])
     report = epa.audit(tmp_path, "第2话")
     assert report["derived_schedule"]["P001"] == ["MON_TIGER"]
+
+
+def test_unbound_mention_ack_downgrades_to_info(tmp_path):
+    root = write_project(tmp_path) if "write_project" in globals() else None
+    # 独立 fixture：registry + 单格脚本
+    import json
+    root = tmp_path
+    reg = {"assets": {"CHAR_WANG": {"display_name": "王进"}}}
+    (root / "出图" / "共享").mkdir(parents=True, exist_ok=True)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps(reg, ensure_ascii=False), encoding="utf-8")
+    (root / "脚本" / "第1话").mkdir(parents=True, exist_ok=True)
+    panels = [
+        {"panel_id": "P001", "description": "王进的背影消失在道口", "characters": [],
+         "unbound_mention_ack": {"CHAR_WANG": "仅剪影远景，特意不入定妆"}},
+        {"panel_id": "P002", "description": "王进握枪而立", "characters": []},
+    ]
+    (root / "脚本" / "第1话" / "panel_script.json").write_text(
+        json.dumps({"panels": panels}, ensure_ascii=False), encoding="utf-8")
+    report = epa.audit(root, "第1话")
+    by_pid = {(f["panel_id"], f["severity"]) for f in report["findings"] if f["code"] == "mentioned_not_bound"}
+    assert ("P001", "info") in by_pid, "已签收理由的提及应降档 info"
+    assert ("P002", "warn") in by_pid, "未签收的画面提及保持 warn"
+
+
+def test_adopt_derived_writes_explicit_schedule(tmp_path, capsys):
+    import json
+    root = tmp_path
+    (root / "脚本" / "第1话").mkdir(parents=True, exist_ok=True)
+    panels = [
+        {"panel_id": "P001", "characters": ["CHAR_A"], "references": ["LOC_X"]},
+        {"panel_id": "P002", "entity_schedule": {"required_presence": ["CHAR_B"]}},
+    ]
+    (root / "脚本" / "第1话" / "panel_script.json").write_text(
+        json.dumps({"panels": panels}, ensure_ascii=False), encoding="utf-8")
+    assert epa.adopt_derived_schedule(root, "第1话") == 0
+    script = json.loads((root / "脚本" / "第1话" / "panel_script.json").read_text(encoding="utf-8"))
+    p1 = script["panels"][0]
+    assert p1["entity_schedule"]["required_presence"] == ["CHAR_A", "LOC_X"]
+    assert p1["entity_schedule"]["adopted_from"] == "derived_schedule"
+    assert script["panels"][1]["entity_schedule"] == {"required_presence": ["CHAR_B"]}, "已有显式排程的格不动"

@@ -356,6 +356,28 @@ def seam_rows(clips, clip_rows, exceptions=None):
 
 
 FACE_DRIFT_FALLBACK = 0.45
+# 重度脸漂带：低于（自标定阈值 - 该余量）视为「不是同一个人」级别的漂移。
+# 阈值本身已含 0.05 视频运动余量；再让出 0.15 只拦板上钉钉的重漂——embedding 证据支撑的
+# 确定性硬闸（B10 合规），轻/中度漂移仍走 warn+人审。唯一出口是具名+绑定视频 hash 的 waiver。
+SEVERE_FACE_DRIFT_MARGIN = 0.15
+
+
+def load_face_drift_waivers(root):
+    """具名重度脸漂 waiver 账本：制片/face_drift_waivers.json。
+
+    每条必须具名（reviewer）+ 写明 reason + 绑定当时 selected 视频 sha256；
+    视频一重出/重选，绑定即失效，必须重新签。风格化 MV 中 embedding 系统性偏低而
+    人眼确认同人时，这是显式留痕的逃生口——不是默认放行。"""
+    payload = mv_utils.load_json(os.path.join(root, "制片", "face_drift_waivers.json"), {}) or {}
+    out = {}
+    for row in payload.get("entries") or []:
+        if not isinstance(row, dict):
+            continue
+        cid = str(row.get("clip_id") or "")
+        signed = str(row.get("reviewer") or "").strip() and str(row.get("reason") or "").strip()
+        if cid and signed and str(row.get("bound_video_sha256") or ""):
+            out[cid] = row
+    return out
 
 
 def face_drift_threshold(root):
@@ -377,6 +399,8 @@ def apply_face_identity_qc(root, clips, clip_rows):
     if app is None:
         return "unavailable"
     threshold, threshold_source = face_drift_threshold(root)
+    severe_floor = max(0.20, round(threshold - SEVERE_FACE_DRIFT_MARGIN, 4))
+    waivers = load_face_drift_waivers(root)
     for clip, row in zip(clips, clip_rows):
         source = clip.get("image_path")
         if not source or not os.path.exists(os.path.join(root, source)):
@@ -392,15 +416,48 @@ def apply_face_identity_qc(root, clips, clip_rows):
             if embedding is not None:
                 scores.append({"label": frame.get("label"), "score": round(image_qc.cosine(source_embedding, embedding), 4)})
         row["face_identity_adherence"] = {"mode": "insightface", "source": source, "samples": scores,
-                                          "threshold": threshold, "threshold_source": threshold_source}
-        low = [sample for sample in scores if sample["score"] < threshold]
-        if low:
-            row["findings"].append({"level": "warn", "code": "video_face_identity_drift",
-                                    "samples": low, "threshold": threshold,
-                                    "threshold_source": threshold_source,
-                                    "message": "需与定妆/首帧并排人工复核"})
+                                          "threshold": threshold, "threshold_source": threshold_source,
+                                          "severe_floor": severe_floor}
+        video_rel = row.get("video_path")
+        current_sha = mv_utils.content_hash(os.path.join(root, video_rel)) if video_rel else ""
+        findings, verdict = face_drift_verdict(
+            scores, threshold, severe_floor, threshold_source,
+            waivers.get(str(row.get("clip_id"))), current_sha,
+        )
+        row["findings"].extend(findings)
+        if verdict == "block":
+            row["verdict"] = "block"
+        elif verdict == "review" and row["verdict"] != "block":
             row["verdict"] = "review"
     return "insightface"
+
+
+def face_drift_verdict(scores, threshold, severe_floor, threshold_source, waiver, current_video_sha):
+    """脸漂裁决（纯函数·可测）：轻/中度=warn+人审；重度=block，唯一出口是绑定当前视频 sha 的具名 waiver。
+
+    重度脸漂＝embedding 证据级「换人」——出图侧 G1 是硬闸，视频侧同人底线不能反而只 warn。
+    waiver 绑定 selected 视频 sha；视频重出/换版后旧 waiver 自动失效。"""
+    low = [sample for sample in scores if sample["score"] < threshold]
+    severe = [sample for sample in scores if sample["score"] < severe_floor]
+    if severe:
+        if waiver and current_video_sha and waiver.get("bound_video_sha256") == current_video_sha:
+            return [{"level": "warn", "code": "video_face_identity_drift_severe_waived",
+                     "samples": severe, "severe_floor": severe_floor,
+                     "waiver": {"reviewer": waiver.get("reviewer"), "date": waiver.get("date")},
+                     "message": "重度脸漂已具名 waiver（绑定当前视频）；换版后需重签"}], "review"
+        return [{"level": "block", "code": "video_face_identity_drift_severe",
+                 "samples": severe, "threshold": threshold,
+                 "severe_floor": severe_floor,
+                 "threshold_source": threshold_source,
+                 "message": "视频帧与首帧脸 embedding 相距重度带以下（疑似换人）；"
+                            "重出/换 take，或人眼确认同人后 "
+                            "video_qc.py --accept-face-drift <Clip_ID> --reviewer <name> --notes <理由> 具名放行"}], "block"
+    if low:
+        return [{"level": "warn", "code": "video_face_identity_drift",
+                 "samples": low, "threshold": threshold,
+                 "threshold_source": threshold_source,
+                 "message": "需与定妆/首帧并排人工复核"}], "review"
+    return [], None
 
 
 def build_report(root):
@@ -492,7 +549,10 @@ def main():
     ap.add_argument("--accept-discontinuity", action="append", default=[], metavar="FROM:TO",
                     help="具名签署「有意不连续」接缝（如 Clip_03:Clip_04，可重复）；需 --reviewer 与 --notes 写明意图，"
                          "签署后该接缝的同场景硬切色跳不再报 advisory")
-    ap.add_argument("--reviewer", help="配合 --accept-semantic / --accept-discontinuity，记录复核人")
+    ap.add_argument("--accept-face-drift", action="append", default=[], metavar="CLIP",
+                    help="具名放行重度脸漂 clip（如 Clip_004，可重复）；需 --reviewer 与 --notes 说明人眼如何确认同人。"
+                         "waiver 绑定该 clip 当前 selected 视频 sha256，视频重出/换版即失效")
+    ap.add_argument("--reviewer", help="配合 --accept-semantic / --accept-discontinuity / --accept-face-drift，记录复核人")
     ap.add_argument("--notes", default="")
     args = ap.parse_args()
 
@@ -517,6 +577,28 @@ def main():
                             "reason": args.notes, "date": date.today().isoformat()})
         mv_utils.write_json(ledger_path, {"kind": "mv_intentional_discontinuity", "entries": entries})
         print(f"[ok] 有意不连续例外 → {ledger_path}（{len(args.accept_discontinuity)} 条）")
+    if args.accept_face_drift:
+        if not args.reviewer or not args.notes.strip():
+            print("[err] --accept-face-drift 必须同时提供 --reviewer 和 --notes（写明人眼如何确认同人）", file=sys.stderr)
+            return 2
+        timeline = mv_utils.load_json(os.path.join(root, "分镜", "timeline_manifest.json"), {}) or {}
+        video_by_clip = {str(c.get("clip_id")): c.get("video_path") for c in timeline.get("clips") or []
+                         if isinstance(c, dict)}
+        ledger_path = os.path.join(root, "制片", "face_drift_waivers.json")
+        ledger = mv_utils.load_json(ledger_path, {}) or {}
+        entries = [row for row in ledger.get("entries") or [] if isinstance(row, dict)]
+        for cid in args.accept_face_drift:
+            cid = cid.strip()
+            video_rel = video_by_clip.get(cid)
+            video_sha = mv_utils.content_hash(os.path.join(root, video_rel)) if video_rel else ""
+            if not video_sha:
+                print(f"[err] {cid} 无已选中的视频，waiver 无对象可绑定；先 --select 再签", file=sys.stderr)
+                return 2
+            entries = [row for row in entries if row.get("clip_id") != cid]
+            entries.append({"clip_id": cid, "reviewer": args.reviewer, "reason": args.notes,
+                            "date": date.today().isoformat(), "bound_video_sha256": video_sha})
+        mv_utils.write_json(ledger_path, {"kind": "mv_face_drift_waivers", "entries": entries})
+        print(f"[ok] 重度脸漂具名 waiver → {ledger_path}（{len(args.accept_face_drift)} 条，绑定当前视频 hash）")
     report = build_report(root)
     if args.accept_semantic:
         if not args.reviewer:

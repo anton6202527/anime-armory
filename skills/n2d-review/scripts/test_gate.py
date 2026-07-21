@@ -6731,6 +6731,9 @@ def test_generation_recipe_evidence_passes_complete_event(tmp_path):
     prod = root / "生产数据"
     prod.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    ref = root / "出图" / "共享" / "图片" / "定妆_沈念.png"
+    ref.parent.mkdir(parents=True)
+    ref.write_bytes(b"\x89PNG\r\n\x1a\n")  # 收据登记的参考输入必须在盘（存在性对账 WARN 不该误触发）
     (prod / "production_events.jsonl").write_text(json.dumps({
         "episode": "第1集",
         "stage": "image",
@@ -6764,13 +6767,40 @@ def test_generation_recipe_evidence_recovers_moved_project_asset_paths(tmp_path)
     mp4 = root / "出视频" / "第1集" / "视频" / "Clip_02_part1.mp4"
     mp4.parent.mkdir(parents=True)
     mp4.write_bytes(b"mp4")
+    first_frame = root / "出图" / "第1集" / "图片" / "Clip02_first.png"
+    first_frame.parent.mkdir(parents=True)
+    first_frame.write_bytes(b"\x89PNG\r\n\x1a\n")  # 收据登记的首帧输入必须在盘（存在性对账 WARN 不该误触发）
+    shared_ref = root / "出图" / "共享" / "图片" / "定妆_测试.png"
+    shared_ref.parent.mkdir(parents=True)
+    shared_ref.write_bytes(b"\x89PNG\r\n\x1a\n")
     prod = root / "生产数据"
     prod.mkdir(parents=True)
     old_absolute = "/Users/old/learn/anime-armory/创作区/制漫剧/测试剧/出视频/第1集/视频/Clip_02_part1.mp4"
     prefixed_relative = "创作区/制漫剧/测试剧/出视频/第1集/视频/Clip_02_part1.mp4"
     assert gate._event_asset_rel(str(root), {"generation": {"asset": old_absolute}}) == "出视频/第1集/视频/Clip_02_part1.mp4"
     assert gate._asset_matches(str(root), prefixed_relative, "出视频/第1集/视频/Clip_02_part1.mp4")
-    (prod / "production_events.jsonl").write_text(json.dumps({
+    image_event = {
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": "出图/第1集/图片/Clip02_first.png", "status": "pass"},
+        "meta": {
+            "provider": "dreamina",
+            "model": "seedream_5",
+            "channel": "dreamina",
+            "route_hash": "route-sha-img",
+            "capability_evidence_id": "image_backend_capabilities/dreamina",
+            "recipe_hash": "recipe-image",
+            "prompt_sha256": "prompt-image",
+            "reference_bundle_sha256": "ref-image",
+            "backend_version": "5.0",
+            "quality_tier": "final",
+            "actual_image_inputs": ["出图/共享/图片/定妆_测试.png"],
+            "seed_effective": False,
+            "seed_support": "unsupported_or_unknown",
+        },
+    }
+    video_event = {
         "episode": "第1集",
         "stage": "video",
         "event": "generation",
@@ -6792,7 +6822,12 @@ def test_generation_recipe_evidence_recovers_moved_project_asset_paths(tmp_path)
             "seed_effective": False,
             "seed_support": "unsupported_or_unknown",
         },
-    }, ensure_ascii=False) + "\n", encoding="utf-8")
+    }
+    (prod / "production_events.jsonl").write_text(
+        json.dumps(image_event, ensure_ascii=False) + "\n"
+        + json.dumps(video_event, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
     gate.check_generation_recipe_evidence(str(root), "第1集", "review")
 
@@ -12251,3 +12286,64 @@ def test_combat_apex_block_downgraded_by_signoff(tmp_path):
     }]}, ensure_ascii=False), encoding="utf-8")
     blocked, reason = gate._strict_advisory_should_block(root, "第1集", "review", row, {})
     assert blocked is False and "签收" in reason
+
+
+# ── 收据参考图存在性对账：actual_image_inputs 指向的文件被移动/删除 → WARN（复现链断裂可见化）──
+
+
+def _complete_recipe_event(asset: str, inputs) -> dict:
+    return {
+        "episode": "第1集",
+        "stage": "image",
+        "event": "generation",
+        "generation": {"asset": asset, "status": "pass"},
+        "meta": {
+            "provider": "dreamina_official_cli", "model": "seedream_5", "channel": "official_cli",
+            "route_hash": "r1", "capability_evidence_id": "cap1", "recipe_hash": "abc",
+            "prompt_sha256": "def", "reference_bundle_sha256": "ghi", "backend_version": "v1",
+            "quality_tier": "std", "actual_image_inputs": inputs,
+            "seed_effective": False, "seed_support": "unsupported",
+        },
+    }
+
+
+def test_generation_recipe_warns_when_reference_input_file_gone(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    png = root / "出图" / "第1集" / "图片" / "Clip_01.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"\x89PNG\r\n\x1a\n")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (prod / "production_events.jsonl").write_text(json.dumps(_complete_recipe_event(
+        "出图/第1集/图片/Clip_01.png",
+        ["出图/共享/图片/定妆_已被删除.png"],
+    ), ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "image")
+
+    hits = [f for f in gate.findings if f["dim"] == "生成配方证据" and "已不在盘上" in f["msg"]]
+    assert hits and hits[0]["sev"] == gate.WARN
+
+
+def test_generation_recipe_quiet_when_reference_inputs_present(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    png = root / "出图" / "第1集" / "图片" / "Clip_01.png"
+    ref = root / "出图" / "共享" / "图片" / "定妆_主角.png"
+    png.parent.mkdir(parents=True)
+    ref.parent.mkdir(parents=True)
+    png.write_bytes(b"\x89PNG\r\n\x1a\n")
+    ref.write_bytes(b"\x89PNG\r\n\x1a\n")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    (prod / "production_events.jsonl").write_text(json.dumps(_complete_recipe_event(
+        "出图/第1集/图片/Clip_01.png",
+        [{"path": "出图/共享/图片/定妆_主角.png", "role": "face_anchor"}],
+    ), ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "image")
+
+    assert not any("已不在盘上" in f["msg"] for f in gate.findings if f["dim"] == "生成配方证据")

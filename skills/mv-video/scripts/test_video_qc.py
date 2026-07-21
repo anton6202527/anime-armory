@@ -146,5 +146,53 @@ class VideoQcPureTest(unittest.TestCase):
             self.assertEqual(threshold, 0.20)   # 下限保护：不许阈值烂到形同虚设
 
 
+class FaceDriftVerdictTest(unittest.TestCase):
+    """重度脸漂硬拦（embedding 证据级 block）+ 具名 hash 绑定 waiver。"""
+
+    def _verdict(self, scores, waiver=None, sha="abc"):
+        return video_qc.face_drift_verdict(
+            scores, threshold=0.40, severe_floor=0.25,
+            threshold_source="test", waiver=waiver, current_video_sha=sha)
+
+    def test_mild_drift_stays_warn(self):
+        findings, verdict = self._verdict([{"label": "mid", "score": 0.30}])
+        self.assertEqual(verdict, "review")
+        self.assertEqual(findings[0]["code"], "video_face_identity_drift")
+        self.assertEqual(findings[0]["level"], "warn")
+
+    def test_severe_drift_blocks(self):
+        findings, verdict = self._verdict([{"label": "mid", "score": 0.10}])
+        self.assertEqual(verdict, "block")
+        self.assertEqual(findings[0]["code"], "video_face_identity_drift_severe")
+        self.assertEqual(findings[0]["level"], "block")
+
+    def test_severe_drift_waived_when_bound_to_current_video(self):
+        waiver = {"reviewer": "director", "bound_video_sha256": "abc", "date": "2026-07-20"}
+        findings, verdict = self._verdict([{"label": "mid", "score": 0.10}], waiver=waiver)
+        self.assertEqual(verdict, "review")
+        self.assertEqual(findings[0]["code"], "video_face_identity_drift_severe_waived")
+
+    def test_waiver_invalidated_when_video_replaced(self):
+        waiver = {"reviewer": "director", "bound_video_sha256": "old", "date": "2026-07-20"}
+        _findings, verdict = self._verdict([{"label": "mid", "score": 0.10}], waiver=waiver)
+        self.assertEqual(verdict, "block")
+
+    def test_no_drift_no_findings(self):
+        findings, verdict = self._verdict([{"label": "mid", "score": 0.60}])
+        self.assertEqual((findings, verdict), ([], None))
+
+    def test_load_face_drift_waivers_requires_signature_and_binding(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "制片"))
+            with open(os.path.join(tmp, "制片", "face_drift_waivers.json"), "w", encoding="utf-8") as f:
+                json.dump({"entries": [
+                    {"clip_id": "Clip_001", "reviewer": "d", "reason": "同人确认", "bound_video_sha256": "x"},
+                    {"clip_id": "Clip_002", "reviewer": "", "reason": "匿名", "bound_video_sha256": "x"},
+                    {"clip_id": "Clip_003", "reviewer": "d", "reason": "无绑定"},
+                ]}, f, ensure_ascii=False)
+            waivers = video_qc.load_face_drift_waivers(tmp)
+            self.assertEqual(sorted(waivers), ["Clip_001"])
+
+
 if __name__ == "__main__":
     unittest.main()

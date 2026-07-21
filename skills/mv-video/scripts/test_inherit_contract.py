@@ -42,3 +42,46 @@ def test_backend_or_manifest_drift_blocks():
     codes = {f["code"] for f in ic.check_compiled_prompt(text, take, "Runway Gen-4")}
     assert "prompt_backend_mismatch" in codes
     assert "manifest_submit_prompt_mismatch" in codes
+
+
+def test_frame_changed_after_registration_blocks(tmp_path):
+    """已登记 take 的首帧 SHA 与当前 PNG 不一致 → block（出图→出视频像素级绑定）。"""
+    root = tmp_path
+    (root / "出图").mkdir()
+    image_rel = "出图/Clip_001.png"
+    (root / image_rel).write_bytes(b"new pixels")
+    clip = {"clip_id": "Clip_001", "image_path": image_rel}
+    job = {"clip_id": "Clip_001",
+           "takes": [{"take_id": "take_01", "video_sha256": "f" * 64,
+                      "first_frame_sha256": "0" * 64, "prompt_path": ""}]}
+    findings = ic.check_clip(str(root), clip, job, None, {})
+    assert any(f["code"] == "frame_changed_after_registration" for f in findings)
+
+
+def test_frame_binding_fresh_no_block(tmp_path):
+    import hashlib
+    root = tmp_path
+    (root / "出图").mkdir()
+    image_rel = "出图/Clip_001.png"
+    (root / image_rel).write_bytes(b"same pixels")
+    sha = hashlib.sha256(b"same pixels").hexdigest()
+    clip = {"clip_id": "Clip_001", "image_path": image_rel}
+    job = {"clip_id": "Clip_001",
+           "takes": [{"take_id": "take_01", "video_sha256": "f" * 64,
+                      "first_frame_sha256": sha, "prompt_path": ""}]}
+    codes = {f["code"] for f in ic.check_clip(str(root), clip, job, None, {})}
+    assert "frame_changed_after_registration" not in codes
+    assert "missing_frame_registration_hash" not in codes
+
+
+def test_legacy_take_without_binding_warns_not_blocks(tmp_path):
+    root = tmp_path
+    (root / "出图").mkdir()
+    image_rel = "出图/Clip_001.png"
+    (root / image_rel).write_bytes(b"pixels")
+    clip = {"clip_id": "Clip_001", "image_path": image_rel}
+    job = {"clip_id": "Clip_001",
+           "takes": [{"take_id": "take_01", "video_sha256": "f" * 64, "prompt_path": ""}]}
+    findings = ic.check_clip(str(root), clip, job, None, {})
+    rows = [f for f in findings if f["code"] == "missing_frame_registration_hash"]
+    assert rows and all(f["level"] == "warn" for f in rows)

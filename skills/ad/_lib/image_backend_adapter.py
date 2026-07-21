@@ -31,6 +31,8 @@
     from image_backend_adapter import profile_for, has_capability, lock_tier_for, CAP_SUBJECT_LIBRARY
     profile = profile_for("GPT Image 2", "Codex CLI")   # → dict（可直接塞进 JSON 报告）
     lock_tier_for(profile, "product")                   # → "directed_reference"（= 一致性增强·指定参考图）
+    seed_capability(profile)                            # → seed 控制三态（available/unknown/unavailable）
+    backends_reaching_tier("subject_library", "product")  # → 够得着该档的后端清单（升档建议路由）
 
 测试（从本目录跑）：
     cd skills/ad/_lib && python3 -m pytest test_image_backend_adapter.py
@@ -48,10 +50,14 @@ CAP_FACE_EMBEDDING = "face_embedding"        # 人脸嵌入/faceid（只对代�
 CAP_LORA = "lora"                            # 可挂 LoRA / 微调权重（梯子第③档）
 CAP_CONTROLNET = "controlnet"                # 结构/边缘/深度控制网（锁包装轮廓、锁构图）
 CAP_MASK_INPAINT = "mask_inpaint"            # 带 mask 的局部重绘（logo 保护区）
+# seed 控制：调用方能否把**固定随机种子**传给后端并真实生效（重抽单镜/跨镜复用同一产品
+# 时锁随机起点）。seed 不是身份锁，只是可复现起点；判定证据只认**仓内该渠道的真实调用
+# 方式/落档口径**——查不到证据一律 unknown，绝不猜 available。
+CAP_SEED_CONTROL = "seed_control"
 
 ALL_CAPABILITIES: Tuple[str, ...] = (
     CAP_REFERENCE, CAP_MULTI_REFERENCE, CAP_SUBJECT_LIBRARY, CAP_FACE_EMBEDDING,
-    CAP_LORA, CAP_CONTROLNET, CAP_MASK_INPAINT,
+    CAP_LORA, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL,
 )
 
 # 能力三态。unknown 是**诚实位**：厂商没给公开证据 → 既不敢用，也不谎称不支持。
@@ -153,37 +159,44 @@ IMAGE_BACKEND_PROFILES: Dict[str, Dict[str, Any]] = {
         available=(CAP_REFERENCE, CAP_MULTI_REFERENCE, CAP_MASK_INPAINT),
         unknown=(CAP_CONTROLNET,),
         reference_limit=5,  # 观测到的 Codex image_generation 附件天花板；非文档承诺。
-        notes="官方图生图/多参考可用；无可注册的持久主体 ID，产品/代言人只能走多参考兜底；无 LoRA 挂载点。",
+        notes="官方图生图/多参考可用；无可注册的持久主体 ID，产品/代言人只能走多参考兜底；无 LoRA 挂载点。"
+              "seed 控制 unavailable：兄弟线 Codex 渠道 runner 已落档 no-seed-api 降级口径，"
+              "官方 Images API 公开参数亦无 seed——planned_seed 在此路线只作 provenance 记录，不假装生效。",
     ),
     "gemini": _profile(
         "gemini", "Nano Banana Pro / Gemini 3 Pro Image（Google Gemini API）",
         available=(CAP_REFERENCE, CAP_MULTI_REFERENCE),
-        unknown=(CAP_SUBJECT_LIBRARY, CAP_CONTROLNET, CAP_MASK_INPAINT),
+        unknown=(CAP_SUBJECT_LIBRARY, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL),
         reference_limit=5,
-        notes="多模态多参考可用；是否有可注册持久主体未取得公开证据 → 标 unknown，不据此升档。",
+        notes="多模态多参考可用；是否有可注册持久主体未取得公开证据 → 标 unknown，不据此升档。"
+              "seed 控制：仓内无该渠道传 seed 的调用证据 → unknown。",
     ),
     "seedream": _profile(
         "seedream", "Seedream 4.5（BytePlus ModelArk API）",
         available=(CAP_REFERENCE, CAP_MULTI_REFERENCE, CAP_SUBJECT_LIBRARY),
-        unknown=(CAP_CONTROLNET, CAP_MASK_INPAINT),
+        unknown=(CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL),
         reference_limit=4,
-        notes="universal reference / 主体引用可按 ID 复用（梯子第②档）；LoRA 无官方挂载点。",
+        notes="universal reference / 主体引用可按 ID 复用（梯子第②档）；LoRA 无官方挂载点。"
+              "seed 控制：仓内无该渠道传 seed 的调用证据 → unknown。",
     ),
     "kling": _profile(
         "kling", "Kling Image 3.0（Kling API）",
         available=(CAP_REFERENCE, CAP_MULTI_REFERENCE, CAP_SUBJECT_LIBRARY),
-        unknown=(CAP_FACE_EMBEDDING, CAP_CONTROLNET, CAP_MASK_INPAINT),
+        unknown=(CAP_FACE_EMBEDDING, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL),
         reference_limit=4,
-        notes="原生主体/角色库可注册后按 ID 引用（梯子第②档）；脸嵌入是否独立可用未确证 → unknown。",
+        notes="原生主体/角色库可注册后按 ID 引用（梯子第②档）；脸嵌入是否独立可用未确证 → unknown。"
+              "seed 控制：仓内无该渠道传 seed 的调用证据 → unknown。",
     ),
     # 即梦：ad 线**禁逆向路径**（见 ad-image/SKILL.md 生图后端治理）；此档只描述其官方图生图
     # 能力，登记在表里是为了让路由诚实回答「它够不着第②档」，不构成放行任何路径。
     "dreamina": _profile(
         "dreamina", "即梦 Dreamina Image（官方版本，需单项目签核）",
         available=(CAP_REFERENCE, CAP_MULTI_REFERENCE),
-        unknown=(CAP_SUBJECT_LIBRARY, CAP_CONTROLNET, CAP_MASK_INPAINT),
+        unknown=(CAP_SUBJECT_LIBRARY, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL),
         reference_limit=4,
-        notes="官方图生图/多参考可用；持久主体未确证 → unknown。逆向/未授权即梦路径在 ad 线永久禁用。",
+        notes="官方图生图/多参考可用；持久主体未确证 → unknown。逆向/未授权即梦路径在 ad 线永久禁用。"
+              "seed 控制：ad 线官方 CLI 调用未暴露 seed 旗标，兄弟线 runner 落档口径为"
+              "「unsupported_or_unknown」→ 如实标 unknown。",
     ),
 }
 
@@ -231,7 +244,7 @@ def unknown_profile(model: str = "", channel: str = "") -> Dict[str, Any]:
         "unknown", f"未登记后端（{raw or '未声明'}）",
         available=(CAP_REFERENCE,),
         unknown=(CAP_MULTI_REFERENCE, CAP_SUBJECT_LIBRARY, CAP_FACE_EMBEDDING,
-                 CAP_LORA, CAP_CONTROLNET, CAP_MASK_INPAINT),
+                 CAP_LORA, CAP_CONTROLNET, CAP_MASK_INPAINT, CAP_SEED_CONTROL),
         reference_limit=UNKNOWN_BACKEND_REFERENCE_LIMIT,
         notes="后端未登记在 IMAGE_BACKEND_PROFILES：只假定最基本的单张图生图，参考预算按最保守 1 张算；"
               "要按真实能力规划请先把该后端登记进能力档表。",
@@ -340,6 +353,31 @@ def lock_tier_for(backend: ProfileLike, asset_kind: str = ASSET_KIND_UNKNOWN) ->
         if has_capability(profile, capability):
             best = tier
     return best
+
+
+def seed_capability(profile: ProfileLike) -> str:
+    """seed 控制能力三态查询：available / unknown / unavailable。纯函数·可测。
+
+    规划端（plan_prompts）无论后端是否支持都会生成确定性 planned_seed，并把本三态
+    一并写进 manifest——「记录了 seed」≠「seed 生效了」，渲染端与 provenance 据此判断。
+    """
+    return capability_state(profile, CAP_SEED_CONTROL)
+
+
+def backends_reaching_tier(tier: str, asset_kind: str = ASSET_KIND_UNKNOWN) -> list:
+    """能力表里对该类资产**够得着指定档位**的后端清单（[{backend, label}, ...]）。
+
+    供升档建议路由用：建议档超出当前后端能力时，如实列出「哪些登记后端够得着」——
+    仅 advisory 建议切换素材，不自动改设置；只认 available（unknown 不算够得着）。
+    档位不认识 → 空清单（不猜）。纯函数·可测。
+    """
+    if tier_rank(tier) < 0:
+        return []
+    out = []
+    for key, profile in IMAGE_BACKEND_PROFILES.items():
+        if tier_rank(lock_tier_for(profile, asset_kind)) >= tier_rank(tier):
+            out.append({"backend": key, "label": str(profile.get("label"))})
+    return out
 
 
 def unknown_capabilities(profile: ProfileLike) -> list:

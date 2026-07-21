@@ -717,6 +717,80 @@ def tasks_from_asset_impact(
     return dedupe_task_ids(tasks)
 
 
+def tasks_from_production_events(
+    root: str,
+    *,
+    cost_estimates: Dict[str, Dict[str, Any]],
+    max_retries: int,
+    episodes: Optional[Set[str]] = None,
+    events_path: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """production_events.jsonl 中「未被后续 pass 承接」的 generation/redraw fail → 重试任务。
+
+    治 G10：手动/外部生成失败（如 Dreamina 超时）只留痕不承接、重试靠人。本入口按
+    (episode, stage, asset) 取**最后一条**生成事件——仍是 fail 才入队；后来有 pass 记录
+    视为已恢复不再重排。幂等键含失败事件 ts：同一次失败重复 plan 不重复入队，
+    新一次失败会生成新任务。
+    """
+    path = events_path or os.path.join(root, "生产数据", "production_events.jsonl")
+    if not os.path.isfile(path):
+        return []
+    latest: Dict[Tuple[str, str, str], Dict[str, Any]] = {}
+    try:
+        with open(path, encoding="utf-8") as fh:
+            lines = fh.readlines()
+    except OSError:
+        return []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(event, dict):
+            continue
+        if str(event.get("event") or "").strip() not in {"generation", "redraw"}:
+            continue
+        stage = str(event.get("stage") or "").strip()
+        if stage not in {"image", "video"}:
+            continue
+        ep_raw = str(event.get("episode") or "").strip()
+        if not ep_raw:
+            continue
+        generation = event.get("generation") if isinstance(event.get("generation"), dict) else {}
+        asset = str(generation.get("asset") or event.get("asset") or "").strip()
+        if not asset:
+            continue
+        latest[(normalize_episode(ep_raw), stage, asset)] = event
+    tasks: List[Dict[str, Any]] = []
+    for (ep, stage, asset), event in sorted(latest.items()):
+        generation = event.get("generation") if isinstance(event.get("generation"), dict) else {}
+        status = str(generation.get("status") or event.get("status") or "").strip().lower()
+        if status not in {"fail", "failed", "error", "timeout"}:
+            continue
+        if episodes and ep not in episodes and str(event.get("episode") or "").strip() not in episodes:
+            continue
+        spec = find_stage(stage)
+        ts = str(event.get("ts") or "")
+        tasks.append(
+            task_from_spec(
+                root,
+                ep,
+                spec,
+                reason="generation_fail_retry",
+                priority=len(tasks) + 1,
+                cost_estimates=cost_estimates,
+                max_retries=max_retries,
+                rerun_scope=f"生成失败未承接自动重试：{asset}（{status} @ {ts or 'unknown'}）",
+                affected_artifacts=[asset],
+                fingerprints=[f"{ep}|{stage}|{asset}|{ts}"],
+            )
+        )
+    return dedupe_task_ids(tasks)
+
+
 def tasks_from_shooting_schedule(
     root: str,
     schedule: Dict[str, Any],
@@ -2276,6 +2350,13 @@ def cmd_plan(ns: argparse.Namespace) -> int:
             max_retries=ns.max_retries,
             episodes=selected,
         )
+    elif ns.from_events:
+        tasks = tasks_from_production_events(
+            root,
+            cost_estimates=estimates,
+            max_retries=ns.max_retries,
+            episodes=selected,
+        )
     elif ns.rerun_from:
         if not selected:
             raise SystemExit("--rerun-from requires --episodes")
@@ -2591,6 +2672,8 @@ def parser() -> argparse.ArgumentParser:
                       help="读 n2d-review consistency_findings_*.json（kind=n2d_consistency_findings），直接建审查返工任务")
     plan.add_argument("--from-consistency-ledger",
                       help="读 n2d-review consistency_ledger_*.json（kind=n2d_consistency_ledger），按 root_causes 直接建审查返工任务")
+    plan.add_argument("--from-events", action="store_true",
+                      help="从 生产数据/production_events.jsonl 收集未被后续 pass 承接的 generation/redraw fail，生成重试任务")
     plan.add_argument("--from-shooting-schedule",
                       help="读 n2d-script P-3 ai_shooting_schedule 或生产数据/ai_shooting_schedule_batch_seed_*.json，建按 Clip 排序的 image/video 队列任务")
     plan.add_argument("--scope", help="human-readable rerun scope")

@@ -11,6 +11,9 @@ from pathlib import Path
 import contract
 import dependency_graph
 import compliance_manifest
+# gate 与本文件同属 ad-craft：母本↔快照对账与「花钱 gate 关键输入表」直接复用 gate 的实现，
+# 避免同口径检查抄两份后各自漂移。
+import gate as spend_gate
 
 
 def load(path: Path, default=None):
@@ -103,7 +106,11 @@ def accept_brief(root, out, mode):
     if check["missing_required"]:
         out.append(finding("block", "brief_required", "缺必填：" + "、".join(check["missing_required"]), path, "brief_required"))
     if check["missing_deferred"]:
-        out.append(finding("warn", "brief_production_pending", "花钱前待闭合：" + "、".join(check["missing_deferred"]), path, "measurement_design"))
+        # 与花钱 gate 的口径差是 by design：验收宽松（允许先做创意/脚本）、花钱前从严。
+        out.append(finding("warn", "brief_production_pending",
+                           "花钱前待闭合：" + "、".join(check["missing_deferred"])
+                           + "（此处仅 warn；进入出图/出视频/合成时，花钱 gate 将按 block 处理）",
+                           path, "measurement_design"))
 
 
 def accept_concept(root, out, mode):
@@ -129,6 +136,59 @@ def accept_concept(root, out, mode):
             out.append(finding("block", "concept_stale", f"{path.name} 早于 brief，需重审", path, "strategy_sections"))
 
 
+def _timeline_findings(out, path, data):
+    """时间轴.json 结构校验：段落字段齐全、start<end、按序不重叠、累计与总时长一致。
+
+    schema 以 golden 项目为准：list[{"start","end",...}]，或 dict 里挂
+    segments/sections/timeline/items 列表（dict 顶层可带 master_seconds/total_seconds 总时长）。
+    自相矛盾的时间轴会顺着 VO/分镜一路错到成片，必须在 script 验收就拦下。
+    """
+    total = None
+    if isinstance(data, dict):
+        segments = next((data.get(key) for key in ("segments", "sections", "timeline", "items")
+                         if isinstance(data.get(key), list)), None)
+        if segments is None:
+            out.append(finding("block", "timeline_segments_missing",
+                               "时间轴 JSON 找不到段落列表（segments/sections/timeline/items）", path, "script_package"))
+            return
+        total = next((data.get(key) for key in ("master_seconds", "total_seconds", "总时长")
+                      if data.get(key) is not None), None)
+    else:
+        segments = data
+    prev_end = None
+    last_end = 0.0
+    for pos, row in enumerate(segments, 1):
+        if not isinstance(row, dict):
+            out.append(finding("block", "timeline_segment_malformed",
+                               f"时间轴第 {pos} 段不是对象", path, "script_package"))
+            return
+        try:
+            start, end = float(row["start"]), float(row["end"])
+        except (KeyError, TypeError, ValueError):
+            out.append(finding("block", "timeline_segment_fields_missing",
+                               f"时间轴第 {pos} 段缺数值 start/end 字段", path, "script_package"))
+            return
+        if start >= end:
+            out.append(finding("block", "timeline_segment_invalid",
+                               f"时间轴第 {pos} 段 start={start} >= end={end}", path, "script_package"))
+        if prev_end is not None and start + 1e-6 < prev_end:
+            out.append(finding("block", "timeline_overlap",
+                               f"时间轴第 {pos} 段 start={start} 早于上一段 end={prev_end}（乱序/重叠）",
+                               path, "script_package"))
+        prev_end = end
+        last_end = max(last_end, end)
+    if total is not None:
+        try:
+            total = float(total)
+        except (TypeError, ValueError):
+            out.append(finding("block", "timeline_total_malformed",
+                               "时间轴总时长字段不是数值", path, "script_package"))
+            return
+        if abs(last_end - total) > 0.5:
+            out.append(finding("block", "timeline_total_mismatch",
+                               f"时间轴累计 {last_end}s 与声明总时长 {total}s 不一致", path, "script_package"))
+
+
 def accept_script(root, out, mode):
     script = require_file(out, root, "脚本/广告脚本.md", "script_missing", "script_package")
     vo = require_file(out, root, "脚本/voiceover.txt", "voiceover_missing", "script_package")
@@ -137,6 +197,8 @@ def accept_script(root, out, mode):
         data = load(timeline)
         if not isinstance(data, (list, dict)) or not data:
             out.append(finding("block", "timeline_empty", "时间轴 JSON 无有效段落", timeline, "script_package"))
+        else:
+            _timeline_findings(out, timeline, data)
     law = report_clean(out, root, "脚本/广告法机检报告.json", "ad_law")
     if isinstance(law, dict) and law.get("disabled"):
         out.append(finding("warn", "ad_law_disabled", "广告法机检关闭，须确认非大陆发行", "脚本/广告法机检报告.json", "ad_law"))
@@ -163,6 +225,13 @@ def accept_voice(root, out, mode):
         out.append(finding(sev, "voice_placeholder", "占位 VO 不能作为正式阶段完成", path, "voice_manifest"))
     if path and stale(path, [root / "脚本" / "voiceover.txt"]):
         out.append(finding("block", "voice_manifest_stale", "时长清单早于 voiceover.txt", path, "voice_manifest"))
+    # voice_key 由 render_voice 读 设定库/voicemap.json 计算：音色绑定改了而清单没重算，
+    # 下游会拿旧音色继续排产。voicemap 缺失不新增要求（占位/内置归类项目本就没有它）。
+    voicemap = root / "设定库" / "voicemap.json"
+    if path and voicemap.is_file() and stale(path, [voicemap]):
+        out.append(finding("block", "voice_manifest_voicemap_stale",
+                           "时长清单早于 设定库/voicemap.json：音色绑定已变，须重跑 ad-voice 重算清单",
+                           path, "voice_manifest"))
     qc = report_clean(out, root, "配音/voice_qc.json", "voice_technical_qc", precision=True)
     sources = [p for p in (root / "配音").glob("line_*.wav")]
     sources.extend([p for p in (path, root / "配音" / "vo.wav") if p])
@@ -249,11 +318,38 @@ def _jobs_accept(root, out, rel, criterion, output_keys):
     return data
 
 
+def gate_advisory(out, root, stage):
+    """gate↔验收互链（advisory，不 block）：验收管完成、gate 管花钱，两链独立但要互相可见。
+
+    无对应 gate 落档，或落档早于 gate 自己的关键输入（清单复用 gate.GATE_INPUT_RELS，
+    避免两份漂移）→ warn「花钱 gate 未跑/已过期」。阶段 ✅ 不蕴含 gate 通过，但至少要说出来。
+    """
+    rel = f"生产数据/gate_reports/{stage}.json"
+    path = root / rel
+    if not path.is_file():
+        out.append(finding("warn", "gate_report_missing",
+                           f"花钱 gate 未跑：缺 {rel}；阶段验收不代表 gate 通过，"
+                           f"正式花钱前先跑 ad-craft/scripts/gate.py --stage {stage}",
+                           rel, "gate_crosslink"))
+        return
+    sources = [root / src for src in spend_gate.GATE_INPUT_RELS.get(stage, [])]
+    if stale(path, sources):
+        out.append(finding("warn", "gate_report_stale",
+                           f"花钱 gate 落档早于关键输入，结论已过期；重跑 gate.py --stage {stage} 刷新落档",
+                           rel, "gate_crosslink"))
+
+
 def accept_image(root, out, mode):
     _jobs_accept(root, out, "出图/分镜/image_jobs_manifest.json", "image_provenance", ("output", "expected_output"))
     qc = report_clean(out, root, "出图/分镜/product_qc.json", "product_qc", precision=True)
     if qc and stale(root / "出图" / "分镜" / "product_qc.json", [root / "出图" / "分镜" / "图片", root / "出图" / "分镜" / "prompt"]):
         out.append(finding("block", "product_qc_stale", "product_qc 早于图片/prompt", "出图/分镜/product_qc.json", "product_qc"))
+    # 定妆母本↔出图快照对账与 gate 同口径（直接复用 gate 的实现）：母本晚于快照 = 图照过期
+    # registry 出的，验收侧同样 block，不再只靠花钱 gate 单边兜底。
+    for item in spend_gate.registry_snapshot_findings(str(root)):
+        out.append(finding(item["severity"], item["code"], item["msg"],
+                           item.get("path", ""), "image_provenance"))
+    gate_advisory(out, root, "image")
 
 
 def accept_video(root, out, mode):
@@ -262,6 +358,7 @@ def accept_video(root, out, mode):
     qc = report_clean(out, root, "出视频/分镜/video_qc.json", "video_qc", precision=True)
     if qc and stale(root / "出视频" / "分镜" / "video_qc.json", [root / "出视频" / "分镜" / "视频", root / "出视频" / "分镜" / "prompt"]):
         out.append(finding("block", "video_qc_stale", "video_qc 早于 clips/prompt", "出视频/分镜/video_qc.json", "video_qc"))
+    gate_advisory(out, root, "video")
 
 
 def accept_compose(root, out, mode):
@@ -273,8 +370,14 @@ def accept_compose(root, out, mode):
         if item.get("status") == "cancelled":
             continue
         did = item.get("deliverable_id")
-        if not item.get("exists") or did not in passed:
-            out.append(finding("block", "deliverable_not_accepted", f"交付件 {did} 不存在或未通过 delivery_qc", plan_path, "delivery_matrix"))
+        # 不信任 delivery_plan 里写的 exists 布尔（可能是陈旧/手改的自报）：逐件按
+        # expected_path 复查磁盘真身，文件不在就是不在。
+        expected = str(item.get("expected_path") or "")
+        on_disk = bool(expected) and os.path.isfile(root / expected)
+        if not on_disk or did not in passed:
+            out.append(finding("block", "deliverable_not_accepted",
+                               f"交付件 {did} 磁盘缺失或未通过 delivery_qc（exists 自报不作数，已按 expected_path 复查）",
+                               plan_path, "delivery_matrix"))
     if qc and stale(root / "合成" / "delivery_qc.json", [root / "合成" / "成片_主片.mp4", root / "合成" / "cutdown", root / "合成" / "多比例"]):
         out.append(finding("block", "delivery_qc_stale", "delivery_qc 早于交付媒体", "合成/delivery_qc.json", "delivery_matrix"))
     color = report_clean(out, root, "合成/color_preflight.json", "color_delivery")
@@ -303,6 +406,7 @@ def accept_compose(root, out, mode):
     ]):
         out.append(finding("block", "asr_consistency_stale", "ASR 对账早于当前 VO/字幕/母版",
                            "合成/asr_consistency.json", "asr_delivery"))
+    gate_advisory(out, root, "compose")
 
 
 def accept_handoff(root, out, mode):

@@ -92,3 +92,23 @@ def test_full_vlm_coverage_downgrades_missing_ccip_to_info(tmp_path: Path) -> No
     assert len(findings) == 1
     assert findings[0]["code"] == "identity_similarity_engine_degraded"
     assert findings[0]["severity"] == "info"
+
+
+def test_hard_gate_with_no_ccip_and_zero_verdicts_blocks(tmp_path: Path) -> None:
+    """硬闸开启 + CCIP 不可用 + 0 裁决 = 身份轴完全无机检，必须 block。"""
+    write_tasks_file(tmp_path, "第1话", 3)
+    (tmp_path / "_设置.md").write_text("- 角色一致性硬闸: 开启\n", encoding="utf-8")
+    findings: list = []
+    gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"ccip": False}}, findings, [])
+    unadjudicated = [item for item in findings if item["code"] == "vlm_judge_unadjudicated"]
+    assert unadjudicated and unadjudicated[0]["severity"] == "block"
+
+
+def test_hard_gate_with_live_ccip_keeps_warn(tmp_path: Path) -> None:
+    """CCIP 活着时身份轴有机检，0 裁决只 warn 不 block。"""
+    write_tasks_file(tmp_path, "第1话", 3)
+    (tmp_path / "_设置.md").write_text("- 角色一致性硬闸: 开启\n", encoding="utf-8")
+    findings: list = []
+    gate.check_machine_audit_liveness(tmp_path, "第1话", {"capabilities": {"ccip": True}}, findings, [])
+    unadjudicated = [item for item in findings if item["code"] == "vlm_judge_unadjudicated"]
+    assert unadjudicated and unadjudicated[0]["severity"] == "warn"

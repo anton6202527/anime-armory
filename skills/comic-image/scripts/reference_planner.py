@@ -742,9 +742,10 @@ def panel_asset_ids(panel: Mapping[str, Any]) -> List[str]:
 
 
 def effective_attachment_limit(caps: Mapping[str, Any]) -> int:
-    limit = int(caps.get("reference_image_limit") or 0)
-    if str(caps.get("adapter_id") or "") == "openai_gpt_image_project_memory":
-        limit = min(limit or 5, 5)  # current executable Codex image_generation attachment ceiling
+    """执行真值 = 适配层 executable_attachment_limit；不得在本模块另写数字。"""
+    limit = int(caps.get("executable_attachment_limit") or 0)
+    if limit <= 0:
+        limit = int(caps.get("reference_image_limit") or 0)
     return max(0, limit)
 
 

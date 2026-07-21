@@ -12,6 +12,7 @@
     python3 render_voice.py <作品根> --backend estimate    # 跨平台静音占位（按字数估时）
 """
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -19,6 +20,11 @@ import subprocess
 import sys
 
 import voice_manifest as vm
+
+_AD_LIB = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, "ad", "_lib"))
+if _AD_LIB not in sys.path:
+    sys.path.insert(0, _AD_LIB)
+import io_utils  # noqa: E402  本线 _lib 原子写（清单落盘不可半写）
 
 CN_CHARS_PER_SEC = 4.5   # 中文播报约每秒 4–5 字，用于 estimate 占位估时
 
@@ -129,6 +135,52 @@ def is_placeholder_backend(backend):
     return norm_backend(backend) in PLACEHOLDER_BACKENDS
 
 
+def text_sha256(text):
+    return hashlib.sha256(text.strip().encode("utf-8")).hexdigest()
+
+
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def load_prev_lines(manifest_path):
+    """上次 时长清单.json → (idx→entry 映射, 上次 backend)。读不出来按空处理（全量重合成）。"""
+    try:
+        with open(manifest_path, encoding="utf-8") as f:
+            prev = json.load(f)
+    except (OSError, ValueError):
+        return {}, ""
+    lines = prev.get("lines") if isinstance(prev, dict) else None
+    if not isinstance(lines, list):
+        return {}, ""
+    return ({e.get("idx"): e for e in lines if isinstance(e, dict)},
+            str(prev.get("backend") or ""))
+
+
+def line_reusable(prev_entry, line_wav, t_sha, expected_voice_key):
+    """占位 wav 复用判定：文件在、文本 hash 未变、音色键未变、时长可读才跳过重合成。"""
+    return bool(prev_entry
+                and os.path.isfile(line_wav)
+                and prev_entry.get("text_sha256") == t_sha
+                and prev_entry.get("voice_key") == expected_voice_key
+                and (probe_duration(line_wav) or 0) > 0.05)
+
+
+def import_external_wav(src, dst):
+    """外部真 VO 导入保护：目标已存在且内容不同时，先把旧文件落 dst.bak 再覆盖，绝不静默覆盖。"""
+    if os.path.abspath(src) == os.path.abspath(dst):
+        return
+    if os.path.isfile(dst):
+        if file_sha256(dst) == file_sha256(src):
+            return
+        shutil.copyfile(dst, dst + ".bak")
+    shutil.copyfile(src, dst)
+
+
 def external_line_wavs(from_dir, count):
     """Collect line_01.wav..line_NN.wav from an external real-VO render directory.
 
@@ -183,6 +235,7 @@ def main():
     ap.add_argument("--ref-prefix", help="参考音 env 前缀（默认=归一后端名大写，如 COSYVOICE_REF_*）")
     ap.add_argument("--voice-id", help="指定代言人/名人 voice_id（仿真人音色）——触发授权闸门")
     ap.add_argument("--from-dir", help="登记外部真后端已生成的 line_01.wav..line_NN.wav；真后端必填")
+    ap.add_argument("--force", action="store_true", help="忽略逐句复用缓存，占位全量重合成")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -230,27 +283,41 @@ def main():
             print(f"[block] {exc}", file=sys.stderr)
             sys.exit(5)
 
-    entries, wavs, cursor = [], [], 0.0
+    manifest_path = os.path.join(out_dir, "时长清单.json")
+    prev_lines, prev_backend = load_prev_lines(manifest_path)
+    entries, wavs, cursor, reused = [], [], 0.0, 0
     for idx, (role, text) in enumerate(lines, 1):
         line_wav = os.path.join(out_dir, f"line_{idx:02d}.wav")
+        t_sha = text_sha256(text)
         placeholder = not real_backend
         ok = False
         dur = None
         if real_backend:
             src, dur = external_wavs[idx - 1]
-            if os.path.abspath(src) != os.path.abspath(line_wav):
-                shutil.copyfile(src, line_wav)
+            import_external_wav(src, line_wav)
             ok = True
-        elif backend_norm == "say":
-            ok = synth_say(text, line_wav, args.placeholder_voice)
+        else:
+            # 占位复用：同后端、文本/音色键未变且 wav 可读 → 跳过重合成（--force 全量重跑）
+            expected_key = vm.voice_key_for(role, voicemap, False, args.placeholder_voice)
+            prev = prev_lines.get(idx)
+            if (not args.force and prev_backend == backend.lower()
+                    and line_reusable(prev, line_wav, t_sha, expected_key)):
+                placeholder = bool(prev.get("占位", True))
+                dur = probe_duration(line_wav)
+                ok = True
+                reused += 1
+            elif backend_norm == "say":
+                ok = synth_say(text, line_wav, args.placeholder_voice)
         if not ok and not real_backend:  # estimate 后端 / say 降级
             placeholder = True
             ok = synth_silence(line_wav, est_seconds(text))
         dur = dur if dur is not None else (probe_duration(line_wav) or est_seconds(text))
         start, end = cursor, cursor + dur
-        entries.append(vm.manifest_entry(
+        entry = vm.manifest_entry(
             idx, role, text, dur, start, end, args.gap, os.path.basename(line_wav),
-            voicemap, real_backend, placeholder, args.placeholder_voice))
+            voicemap, real_backend, placeholder, args.placeholder_voice)
+        entry["text_sha256"] = t_sha
+        entries.append(entry)
         wavs.append(line_wav)
         cursor = end + args.gap
 
@@ -266,8 +333,7 @@ def main():
                 "has_placeholder": any(e.get("占位") for e in entries), "lines": entries}
     if args.from_dir:
         manifest["source"] = {"type": "external_line_wavs", "from_dir": os.path.abspath(args.from_dir)}
-    with open(os.path.join(out_dir, "时长清单.json"), "w", encoding="utf-8") as f:
-        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    io_utils.write_json_atomic(manifest_path, manifest)
 
     qc_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "voice_qc.py")
     qc = subprocess.run([sys.executable, qc_script, root])
@@ -276,8 +342,9 @@ def main():
         sys.exit(7)
 
     print(f"[ok] 配音 {len(entries)} 句  总时长≈{cursor:.2f}s  后端={backend}"
+          + (f"  复用 {reused} 句" if reused else "")
           + ("  ⏳占位（正式定稿前需真配音复跑）" if manifest["has_placeholder"] else ""))
-    print(f"     时长清单：{os.path.join(out_dir, '时长清单.json')}")
+    print(f"     时长清单：{manifest_path}")
 
 
 if __name__ == "__main__":

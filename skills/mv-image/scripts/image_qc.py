@@ -1019,6 +1019,10 @@ def run_pixel_checks(root: Path, margin: float = DEFAULT_MARGIN,
 # HARD：主角脸崩（insightface 模式 block=真崩脸 / Pillow 模式 block=图损坏/不存在）。
 # ADVISORY：主色 palette 初筛、锚点 lint、降级——汇报但不强制重抽（MV 筛选宽容）。
 HARD_CHECKS = ("face",)
+# 正式项目的合同消费硬闸（B12 口径）：身份锚点/禁止漂移块是身份合同进入 prompt 的唯一通道，
+# prompt 缺这两块（或 prompt 文件不存在）＝下游未消费身份合同——确定性交接缺口，正式项目 hard。
+# 参考/视觉块仍 advisory（有合法替代路径：后端主体库/参考图直传）。demo 保持提示不拦。
+FORMAL_HARD_LINT_CODES = ("missing_anchor_identity", "missing_anchor_forbidden", "prompt_missing")
 VISUAL_CHECK_LABELS = {"face": "主角脸漂移 G1", "palette": "主色漂移 palette"}
 VISUAL_CHECK_DIMS = {"face": "character_consistency", "palette": "palette_consistency"}
 
@@ -1053,10 +1057,17 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
         else:
             advisory += cnt["block"] + cnt["warn"]   # palette 初筛即便 block 也只人判
     lint = payload.get("lint") or {}
-    l_warn = sum(1 for f in lint.get("findings", []) if f.get("level") == "warn")
-    l_block = sum(1 for f in lint.get("findings", []) if f.get("level") == "block")
-    rows_by_check["lint"] = {"block": l_block, "warn": l_warn, "noface": 0, "ok": 0}
-    advisory += l_block + l_warn   # 锚点 lint 全 advisory（缺锚点块不硬拦，提示补）
+    lint_findings = [f for f in lint.get("findings", []) if isinstance(f, dict)]
+    contract_critical = [f for f in lint_findings if f.get("code") in FORMAL_HARD_LINT_CODES]
+    if payload.get("formal_project") and contract_critical:
+        # 正式项目：身份锚点/禁止漂移块缺失=身份合同未被 prompt 消费（B12 确定性交接缺口）→ hard。
+        hard += len(contract_critical)
+        advisory += len(lint_findings) - len(contract_critical)
+        rows_by_check["lint"] = {"block": len(contract_critical),
+                                 "warn": len(lint_findings) - len(contract_critical), "noface": 0, "ok": 0}
+    else:
+        rows_by_check["lint"] = {"block": 0, "warn": len(lint_findings), "noface": 0, "ok": 0}
+        advisory += len(lint_findings)   # demo/参考类锚点 lint 保持 advisory
     variety = payload.get("shot_variety") or {}
     v_warn = sum(1 for f in variety.get("findings", []) if f.get("level") == "warn")
     if v_warn:
@@ -1165,7 +1176,9 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                                    f"主色漂移 palette 初筛：{s.get('png')} 最近 anchor 距离 {s.get('nearest_dist')}"
                                    "（非阻断，MV 段落允许加亮/变暗）"))
     for f in (payload.get("lint", {}) or {}).get("findings", []):
-        out.append(_qc_finding("warn", "anchor_prompt_lint", None, f.get("msg")))
+        sev = ("block" if payload.get("formal_project") and f.get("code") in FORMAL_HARD_LINT_CODES
+               else "warn")
+        out.append(_qc_finding(sev, "anchor_prompt_lint", None, f.get("msg")))
     for f in (payload.get("shot_variety", {}) or {}).get("findings", []):
         out.append(_qc_finding("warn", "shot_variety", None, f.get("msg")))
     for row in (payload.get("prohibited_local_patch_outputs") or {}).get("outputs", []):
@@ -1349,6 +1362,12 @@ def run_qc(root: Path, with_pixel: bool = True, margin: float = DEFAULT_MARGIN,
     payload["lint"] = lint_prompts(root)
     payload["prohibited_local_patch_outputs"] = prohibited_local_patch_outputs(root)
     payload["generation_provenance"] = generation_provenance(root)
+    # 被检图片的内容收据：gate 用它做确定性新鲜度核对（图片重生成 → hash 变 → 报告过期），
+    # 取代按 mtime 判过期（mtime 会被恢复旧图/跨机复制骗过，与全线 inputs_sha256 口径不一致）。
+    payload["assets_sha256"] = {
+        Path(absolute).resolve().relative_to(root.resolve()).as_posix(): _sha256_path(Path(absolute))
+        for _cid, absolute in discover_clip_frames(root)
+    }
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload = json_safe(payload)
@@ -1469,9 +1488,10 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             f"refs={row.get('reference_count', 0)} · subjects={row.get('subject_count', 0)} · {detail}"
         )
     lines.append("")
-    lines.append("落档判定：**verdict=block** → 主角脸崩（崩脸/图损坏），必须重抽后重跑；"
-                 "**verdict=review** → 只有主色/锚点等非阻断初筛或视觉降级时不挡 mv-video（按阶段跳转补依赖/复核）；"
-                 "**verdict=ok** → 放行。主色与锚点是像素初筛/确定性 lint，非硬失败（MV 筛选宽容铁律）。")
+    lines.append("落档判定：**verdict=block** → 主角脸崩（崩脸/图损坏）或正式项目身份锚点/禁止漂移块缺失"
+                 "（身份合同未进 prompt，B12 合同消费闸），必须修复后重跑；"
+                 "**verdict=review** → 只有主色/参考类锚点等非阻断初筛或视觉降级时不挡 mv-video（按阶段跳转补依赖/复核）；"
+                 "**verdict=ok** → 放行。主色与参考/视觉锚点是像素初筛/确定性 lint，非硬失败（MV 筛选宽容铁律）。")
     return "\n".join(lines) + "\n"
 
 

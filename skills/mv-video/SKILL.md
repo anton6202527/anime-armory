@@ -28,7 +28,7 @@ description: 制MV 出视频 — 把 mv-image PNG 图生视频成卡点 MV clip�
 - **生成单元可大于 clip，签收单元仍是 clip**：支持多镜头的后端可把同一 section + setup、总时长在能力上限内的相邻镜头编成 `sequence_units`，优先解决连续动作/正反关系；成片仍按 picture lock 切点拆回逐 clip 登记、评分和 QC，不能用一次生成绕过逐镜责任。
 - **首尾帧能力要诚实**：只有 capability profile 明确支持时才提交 end frame；不支持时在 job 中写明回退为多镜头生成或剪辑匹配复核，不能把“计划有尾帧”伪装成“后端收到了尾帧”。
 - **继承合约必跑**：`scripts/inherit_contract.py` 检查 `clip_plan` 的身份锚点、参考输入、首帧/尾帧、shot_design 和 continuity 是否进入 `jobs_manifest` 与逐 take prompt；缺失先修 prompt/job，不要带病出视频。
-- **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。逐帧脸相似阈值**自标定**：优先借 `image_qc` 主角定妆组的 `lead_floor`（同人下限，留 0.05 视频运动余量，夹在 0.20–0.60），未自标定回退经验值 0.45——与 mv-image「用本曲定妆组做地板，不写死阈值」同理念，风格化 MV 不再被经验值系统性误报。接缝除连续接缝色差外，还查**同场景硬切色跳**（`same_scene_hard_cut_color_jump`，同 location 相邻镜主色/色温跳变 → advisory 风险，人工并排复核）。**有意不连续例外账本**：MV 常有刻意的段落 look 跳变（副歌切黑白/闪回/换色调），导演确认是刻意的接缝用 `video_qc.py <作品根> --accept-discontinuity Clip_03:Clip_04 --reviewer <name> --notes <为什么是刻意的>` 具名签署进 `制片/intentional_discontinuity.json`——签署后该接缝的同场景硬切色跳不再报 advisory（seam 行记 `intentional_discontinuity` 留痕）；无签名/无理由的条目不生效；接缝声明了 `continuity_required` 却又签不连续=矛盾信号，保留 risk 并另报 `intentional_exception_conflicts_continuous_seam`。
+- **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。逐帧脸相似阈值**自标定**：优先借 `image_qc` 主角定妆组的 `lead_floor`（同人下限，留 0.05 视频运动余量，夹在 0.20–0.60），未自标定回退经验值 0.45——与 mv-image「用本曲定妆组做地板，不写死阈值」同理念，风格化 MV 不再被经验值系统性误报。**脸漂分两档**：低于阈值＝轻/中度漂移 → warn+并排人审；跌破**重度带**（阈值−0.15，下限 0.20）＝embedding 证据级「疑似换人」→ **block**（`video_face_identity_drift_severe`，出图侧 G1 是硬闸，视频侧同人底线不得反而只 warn）。人眼确认同人（风格化导致 embedding 系统性偏低）时用 `video_qc.py <作品根> --accept-face-drift Clip_00N --reviewer <name> --notes <人眼如何确认>` 具名签进 `制片/face_drift_waivers.json`——waiver 绑定当时 selected 视频 sha256，视频重出/换版即失效需重签。接缝除连续接缝色差外，还查**同场景硬切色跳**（`same_scene_hard_cut_color_jump`，同 location 相邻镜主色/色温跳变 → advisory 风险，人工并排复核）。**有意不连续例外账本**：MV 常有刻意的段落 look 跳变（副歌切黑白/闪回/换色调），导演确认是刻意的接缝用 `video_qc.py <作品根> --accept-discontinuity Clip_03:Clip_04 --reviewer <name> --notes <为什么是刻意的>` 具名签署进 `制片/intentional_discontinuity.json`——签署后该接缝的同场景硬切色跳不再报 advisory（seam 行记 `intentional_discontinuity` 留痕）；无签名/无理由的条目不生效；接缝声明了 `continuity_required` 却又签不连续=矛盾信号，保留 risk 并另报 `intentional_exception_conflicts_continuous_seam`。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
 - **视频任务 manifest**：先用 `scripts/video_jobs.py` 从 `分镜/clip_plan.json` 生成 `出视频/jobs_manifest.json` 和逐 take prompt；AI/网页/人工生成的视频先登记到 `takes/`，评分后挑版复制到 `出视频/视频/Clip_XXX.mp4` 并同步 `分镜/timeline_manifest.json`。不要只把 mp4 扔进目录让下游猜来源。
 - **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则生成 job 包并指导 web/manual 登记。若 `_设置.md` 未显式固定模型/渠道，先按可用 CLI/API 与 `生视频渠道` 偏好决定入口；探测不到可执行入口时再问用户选渠道或 `manual`。**不装第三方逆向 CLI**。
@@ -87,7 +87,11 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
    脚本入口会先过 `mv-craft/scripts/gate.py video_jobs`：除最终歌/歌词/beatgrid/plan/首帧外，还要求新鲜 pacing receipt、完整出图生成收据、OTIO receipt 与具名 picture lock。通过后产 schema v3 `出视频/jobs_manifest.json`、逐 take prompt 和可用的 `sequence_units`；每个 take 记录 compiler/profile、合同 hash 和提交 prompt hash。
 3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 只提交逐 take Markdown 的 `后端编译提交 prompt`（负向字段若存在则走后端独立字段），不要提交完整合同。外部生成后登记：
    ```bash
-   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --register /path/to/take.mp4 --clip Clip_001 --take 1
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --register /path/to/take.mp4 --clip Clip_001 --take 1 \
+     [--seed <种子>] [--generation-param cfg=7.5]... [--provider-job-id <后端任务ID>]
+   # 登记时自动落两类绑定：video_sha256（登记文件）+ first/end_frame_sha256（登记时首/尾帧 PNG 内容 SHA）。
+   # 图在出视频后被替换 → inherit_contract 报 frame_changed_after_registration block（视频不再证明来自当前首帧）。
+   # seed/参数/后端任务 ID 登记时已知则必记（复现与审计）；拿不到可缺省，不阻断。
    ```
    登记会记录 take 文件 SHA-256。重新登记同一 take 会自动清空旧评分与 selected；已选 take 被重新评分也会取消 selected，必须重新挑版/QC，避免“换片或改分沿用旧签收”。
    多镜头 `sequence_units` 生成的是一条母片，使用专门入口按锁定切点拆回逐镜（默认登记各镜 `take_01`）：

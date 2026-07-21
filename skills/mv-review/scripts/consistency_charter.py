@@ -82,11 +82,13 @@ CHARTER: dict[str, dict[str, Any]] = {
         "decided": "2026-07-17",
     },
     "_image_qc_errors_warnings": {
-        "dim": "出图落档QC消费", "guard_tokens": ["hard_blocks", 'precision != "full"', "bound_report_sha256"],
+        "dim": "出图落档QC消费", "guard_tokens": ["hard_blocks", 'precision != "full"', "bound_report_sha256",
+                                             "assets_sha256"],
         "max_is_demo_refs": 1,
         "rationale": "image_qc hard block=0、精度 full 或具名+hash 绑定放行才准进 mv-video；"
-                     "旧式裸布尔 manual_review_accepted 不再放行（2026-07-16 第二轮裁决）。",
-        "decided": "2026-07-17",
+                     "旧式裸布尔 manual_review_accepted 不再放行（2026-07-16 第二轮裁决）；"
+                     "新鲜度判定必须走 assets_sha256 内容收据，不得退回 mtime（2026-07-20 裁决）。",
+        "decided": "2026-07-20",
     },
     "_identity_readiness": {
         "dim": "主角定妆包readiness", "guard_tokens": ["len(existing) >= 3"], "max_is_demo_refs": 1,
@@ -150,6 +152,20 @@ HARD_QC_INVARIANTS: list[dict[str, Any]] = [
      "tokens": ['"level": "block", "code": "hdr_input_requires_explicit_tonemap"',
                 '"level": "block", "code": "selected_video_missing"'],
      "rationale": "HDR 未显式 tonemap、选中视频缺失必须 block。"},
+    {"file": "mv-video/scripts/video_qc.py", "dim": "视频重度脸漂block",
+     "tokens": ['"level": "block", "code": "video_face_identity_drift_severe"',
+                "SEVERE_FACE_DRIFT_MARGIN", "bound_video_sha256"],
+     "rationale": "视频帧脸 embedding 跌破重度带（自标定阈值-0.15）＝疑似换人，必须 block；"
+                  "唯一出口是具名+绑定当前视频 sha 的 face_drift_waiver（2026-07-20 新增：出图侧 G1 是硬闸，"
+                  "视频侧同人底线不得反而只 warn）。轻/中度漂移仍是 warn+人审，不受本条约束。"},
+    {"file": "mv-image/scripts/image_qc.py", "dim": "正式身份锚点合同消费hard",
+     "tokens": ["FORMAL_HARD_LINT_CODES", '"missing_anchor_identity"'],
+     "rationale": "正式项目 prompt 缺身份锚点/禁止漂移块＝身份合同未被下游消费（B12 确定性交接缺口）→ hard；"
+                  "demo 与参考/视觉块保持 advisory（2026-07-20 新增）。"},
+    {"file": "mv-video/scripts/inherit_contract.py", "dim": "首尾帧登记绑定block",
+     "tokens": ['"code": "frame_changed_after_registration"', "first_frame_sha256"],
+     "rationale": "已登记 take 的首/尾帧内容 SHA 与当前 PNG 不一致＝视频不再证明来自当前首帧，必须 block"
+                  "（2026-07-20 新增：补出图→出视频像素级绑定断链）。"},
     {"file": "mv-compose/delivery_qc.py", "dim": "交付响度block",
      "tokens": ['blocks.append("true_peak_above_0dbtp")', 'blocks.append("loudness_scan_unavailable")'],
      "rationale": "true peak>0dBTP、响度扫描不可用必须 block——扫不了≠过（fail-closed）。"},

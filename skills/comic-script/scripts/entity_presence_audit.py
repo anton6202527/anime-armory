@@ -138,18 +138,31 @@ def check_panel(panel: Mapping[str, Any], names: Mapping[str, List[str]]) -> Lis
 
     visual = panel_text(panel, VISUAL_FIELDS)
     story = panel_text(panel, STORY_FIELDS)
+    # ack-or-fix：panel 可写 unbound_mention_ack: {ENTITY_ID: "一句话理由"}，
+    # 显式签收"提到但不入画"的决定 → 该实体降档 info（human_acceptance 同款模式）。
+    # 空理由不算签收。
+    acks = panel.get("unbound_mention_ack") if isinstance(panel.get("unbound_mention_ack"), Mapping) else {}
     for aid, name_list in names.items():
         if aid in bound:
             continue
         hit = next((n for n in name_list if n in visual), "")
         if hit:
-            findings.append(finding(
-                "mentioned_not_bound", pid,
-                f"{pid} 画面描述提到「{hit}」（registry 实体 {aid}），但该格 characters/references/"
-                f"scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。"
-                f"确认入画则补进该格 references（或 characters），不入画则改写描述。",
-                entity=aid,
-            ))
+            ack_reason = str(acks.get(aid) or "").strip()
+            if ack_reason:
+                findings.append(finding(
+                    "mentioned_not_bound", pid,
+                    f"{pid} 画面描述提到「{hit}」（registry 实体 {aid}）未绑定，已显式签收不入画：{ack_reason}",
+                    severity="info", entity=aid,
+                ))
+            else:
+                findings.append(finding(
+                    "mentioned_not_bound", pid,
+                    f"{pid} 画面描述提到「{hit}」（registry 实体 {aid}），但该格 characters/references/"
+                    f"scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。"
+                    f"确认入画则补进该格 references（或 characters）；不入画则改写描述，"
+                    f"或在该格写 unbound_mention_ack.{aid} 签收理由。",
+                    entity=aid,
+                ))
             continue
         hit = next((n for n in name_list if n in story), "")
         if hit:
@@ -254,6 +267,38 @@ def write_report(root: Path, report: Mapping[str, Any]) -> None:
     (base / f"{KIND}_{chapter}.md").write_text(render_md(report), encoding="utf-8")
 
 
+def adopt_derived_schedule(root: Path, chapter: str) -> int:
+    """把派生"必在"清单物化为显式 entity_schedule（仅补没写的格）。
+
+    这是显式的上游编辑：panel_script.json 变更会使下游 receipt 失效并触发重闸，
+    这正是想要的效果——从"启发式提醒"升级到"确定性契约"。
+    """
+    chapter = normalize_chapter(chapter)
+    path = root / "脚本" / chapter / "panel_script.json"
+    script = load_json(path, {}) or {}
+    panels = script.get("panels") or []
+    adopted = 0
+    for panel in panels:
+        if not isinstance(panel, dict) or isinstance(panel.get("entity_schedule"), Mapping):
+            continue
+        required = sorted(i for i in bound_ids(panel) if not i.startswith(SKIP_PREFIXES))
+        if not required:
+            continue
+        panel["entity_schedule"] = {
+            "required_presence": required,
+            "offscreen_presence": [],
+            "forbidden_presence": [],
+            "adopted_from": "derived_schedule",
+        }
+        adopted += 1
+    if adopted:
+        path.write_text(json.dumps(script, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"[ok] {chapter} 物化显式 entity_schedule：{adopted} 格（已有显式排程的格不动）")
+    if adopted:
+        print("[info] panel_script.json 已变更：下游 receipt 将失效，需按流程重闸。")
+    return 0
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("root")
@@ -262,8 +307,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--strict", action="store_true",
                     help="人手排查用：有 warn 即 exit 1；正式 gate 从不用它硬拦（advisory·审不是门）")
+    ap.add_argument("--adopt-derived", action="store_true",
+                    help="把派生必在清单物化为显式 entity_schedule（升级到确定性契约的采用杠杆）")
     ns = ap.parse_args(argv)
     root = Path(ns.root)
+    if ns.adopt_derived:
+        return adopt_derived_schedule(root, ns.chapter)
     report = audit(root, ns.chapter)
     if ns.write:
         write_report(root, report)

@@ -246,6 +246,39 @@ class VideoJobsTest(unittest.TestCase):
             self.assertEqual(manifest["jobs"][0]["selected_take"], "take_01")
             self.assertEqual(manifest["jobs"][0]["takes"][0]["score"]["motion"], 5)
 
+    def test_register_records_frame_binding_and_generation_params(self):
+        """登记时落首帧内容 SHA（出图→出视频像素级绑定）+ seed/参数留痕。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            src = os.path.join(tmp, "clip.mp4")
+            with open(src, "wb") as f:
+                f.write(b"fake mp4 bytes")
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1",
+                            "--seed", "42", "--generation-param", "cfg=7.5",
+                            "--provider-job-id", "job_abc"], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
+                take = json.load(f)["jobs"][0]["takes"][0]
+            import hashlib
+            expected = hashlib.sha256(b"fake png").hexdigest()
+            self.assertEqual(take["first_frame_sha256"], expected)
+            self.assertEqual(take["generation"]["seed"], "42")
+            self.assertEqual(take["generation"]["params"], {"cfg": "7.5"})
+            self.assertEqual(take["generation"]["provider_job_id"], "job_abc")
+
+    def test_register_rejects_malformed_generation_param(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            src = os.path.join(tmp, "clip.mp4")
+            with open(src, "wb") as f:
+                f.write(b"fake mp4 bytes")
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            proc = subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1",
+                                   "--take", "1", "--generation-param", "cfg"],
+                                  capture_output=True, text=True)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("K=V", proc.stderr)
+
     def test_rescore_average_does_not_include_previous_average(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)

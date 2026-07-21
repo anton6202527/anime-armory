@@ -102,12 +102,28 @@ def name_to_ref_id(name: str, registry: dict[str, Any]) -> str:
 
 
 def ccip_available() -> bool:
+    """CCIP 可用性：进程内 import 或 ccip_bridge 外部解释器（comicqc env）任一即可。"""
     try:
-        from imgutils.metrics import ccip_difference  # noqa: F401  (dghs-imgutils)
+        import ccip_bridge
 
-        return True
+        return ccip_bridge.available()
     except Exception:
-        return False
+        try:
+            from imgutils.metrics import ccip_difference  # noqa: F401  (dghs-imgutils)
+
+            return True
+        except Exception:
+            return False
+
+
+def _ccip_pairs(pairs: list[tuple[str, str]]) -> list[float | None]:
+    """统一走桥的批量 CCIP 距离；桥不可用返回全 None。"""
+    try:
+        import ccip_bridge
+
+        return ccip_bridge.batch_differences(pairs)
+    except Exception:
+        return [None] * len(pairs)
 
 
 # CCIP（deepghs dghs-imgutils）：动漫角色身份 embedding 的事实标准，
@@ -172,32 +188,24 @@ def intra_reference_fingerprint(root: Path, refs: list[dict[str, str]], region: 
 
 def intra_reference_ccip(root: Path, refs: list[dict[str, str]], limit: int = 4) -> list[float]:
     """定妆组内两两 CCIP 距离（取前 limit 张控制成本）。缺依赖/失败返回空=回退固定阈值。"""
-    try:
-        from imgutils.metrics import ccip_difference
-    except Exception:
-        return []
     paths = [resolve_path(root, item["path"]) for item in refs[:limit]]
-    out: list[float] = []
-    for i in range(len(paths)):
-        for j in range(i + 1, len(paths)):
-            try:
-                out.append(float(ccip_difference(str(paths[i]), str(paths[j]))))
-            except Exception:
-                continue
-    return out
+    pairs = [
+        (str(paths[i]), str(paths[j]))
+        for i in range(len(paths))
+        for j in range(i + 1, len(paths))
+    ]
+    return [diff for diff in _ccip_pairs(pairs) if diff is not None]
 
 
 def ccip_best_match(root: Path, panel_path: Path, refs: list[dict[str, str]]) -> dict[str, Any]:
-    try:
-        from imgutils.metrics import ccip_difference
-    except Exception:
+    if not ccip_available():
         return {"available": False}
+    usable = refs[:6]
+    pairs = [(str(panel_path), str(resolve_path(root, item["path"]))) for item in usable]
+    diffs = _ccip_pairs(pairs)
     best: dict[str, Any] = {"available": True, "difference": None, "reference": ""}
-    for item in refs[:6]:
-        ref_path = resolve_path(root, item["path"])
-        try:
-            diff = float(ccip_difference(str(panel_path), str(ref_path)))
-        except Exception:
+    for item, diff in zip(usable, diffs):
+        if diff is None:
             continue
         if best["difference"] is None or diff < best["difference"]:
             best = {"available": True, "difference": round(diff, 4), "reference": item["path"]}

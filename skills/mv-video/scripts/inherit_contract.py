@@ -139,6 +139,28 @@ def check_clip(root, clip, job, ref_row, identity_registry):
         findings.append({"level": "block", "code": "missing_video_job"})
         return findings
 
+    # 出图→出视频像素级绑定核对：已登记 take 记录了登记时首/尾帧内容 SHA；
+    # 当前 PNG 与登记值不一致 = 图在出视频后被替换，该 take 不再证明来自当前首帧 → block。
+    # 旧 manifest 无该字段：无法证真也无法证伪，warn 提示重登记升级合同（不追溯硬拦旧项目）。
+    for take in job.get("takes", []):
+        if not take.get("video_sha256"):
+            continue  # 未登记实际视频的 take 无绑定义务
+        for field, rel in (("first_frame_sha256", image_path),
+                           ("end_frame_sha256", clip.get("end_frame_path") if clip.get("need_end_frame") else None)):
+            if not rel:
+                continue
+            recorded = take.get(field)
+            if recorded is None:
+                findings.append({"level": "warn", "code": "missing_frame_registration_hash",
+                                 "take_id": take.get("take_id"), "field": field,
+                                 "msg": "旧版登记缺首/尾帧内容收据；重新 --register 升级为像素级绑定"})
+                continue
+            current = mv_utils.content_hash(os.path.join(root, rel))
+            if recorded and current and recorded != current:
+                findings.append({"level": "block", "code": "frame_changed_after_registration",
+                                 "take_id": take.get("take_id"), "field": field, "path": rel,
+                                 "msg": "首/尾帧在该 take 登记后被替换；重出该 clip 视频或重跑 image_qc+重登记"})
+
     take_prompts = []
     for take in job.get("takes", []):
         rel = take.get("prompt_path")

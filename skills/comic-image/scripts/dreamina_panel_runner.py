@@ -32,7 +32,10 @@ import codex_panel_runner as shared  # noqa: E402
 # before submission.
 DREAMINA_MODEL = "Dreamina 5.0"
 DREAMINA_CHANNEL = "Dreamina/即梦官方 CLI"
-DREAMINA_REFERENCE_LIMIT = 10
+# 实机附件上限的唯一真值在 comic/_lib/image_backend_adapter；此处只解引用，不再双写数字。
+DREAMINA_REFERENCE_LIMIT = shared.resolve_capabilities(
+    DREAMINA_MODEL, DREAMINA_CHANNEL
+).executable_attachment_limit
 DREAMINA_RATIOS = {
     "21:9": 21 / 9,
     "16:9": 16 / 9,
@@ -66,6 +69,12 @@ def nearest_supported_ratio(size: dict[str, int]) -> str:
 def reference_role_label(record: dict[str, str]) -> str:
     role = str(record.get("role") or "").lower()
     ref_id = str(record.get("id") or "")
+    if role == "composite_views" or record.get("composite"):
+        part_count = len(record.get("parts") or []) or "多"
+        return (
+            f"同一主体（{ref_id}）的 {part_count} 视图拼板参考：网格内全部分格都是这同一个主体的"
+            "不同视角/表情，绝不当成多个人物；据此保持该主体的脸、发型与服装完全一致"
+        )
     if role == "style" or ref_id.startswith("STYLE_"):
         return "仅继承线条、色彩、光影与材质语言的画风参考"
     if role in {"front", "face", "three_quarter", "side", "back", "outfit"} or ref_id.startswith("CHAR_"):
@@ -491,6 +500,16 @@ def main() -> int:
             )
         )
         all_records = shared.collect_reference_images(root, job)
+        all_records, composite_disclosure = shared.reference_composite.compact_records_with_composites(
+            root, all_records, reference_limit
+        )
+        for note in composite_disclosure.get("notes") or []:
+            print(f"[warn] {panel_id} composite: {note}", flush=True)
+        if composite_disclosure.get("applied"):
+            sheets = ", ".join(
+                f"{item['id']}({item['part_count']}视图)" for item in composite_disclosure["composites"]
+            )
+            print(f"[info] {panel_id} 多视图折叠为拼板参考：{sheets}", flush=True)
         records, omitted = shared.select_reference_attachments(all_records, reference_limit)
         missing_required_ids = unrepresented_required_ids(records, omitted)
         selected_subjects = {

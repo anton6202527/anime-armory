@@ -262,16 +262,50 @@ def _task_stage_spec(task: Dict[str, Any]) -> Dict[str, Any]:
         return {}
 
 
-def _output_exists(root: str, pattern: str) -> bool:
+def _matched_output_paths(root: str, pattern: str) -> List[str]:
     path = pattern if os.path.isabs(pattern) else os.path.join(root, pattern)
-    return bool(glob.glob(path)) if any(ch in path for ch in "*?[") else os.path.exists(path)
+    if any(ch in path for ch in "*?["):
+        return sorted(glob.glob(path))
+    return [path] if os.path.exists(path) else []
+
+
+def _output_content_issue(path: str) -> Optional[str]:
+    """产物可用性：零字节 / 坏 JSON 不算就位。存在性只证「有文件」，这里补「文件可用」。"""
+    if os.path.isdir(path):
+        return None
+    try:
+        if os.path.getsize(path) == 0:
+            return "empty file"
+    except OSError as exc:
+        return f"unreadable ({exc})"
+    if path.endswith(".json"):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                json.load(fh)
+        except Exception as exc:
+            return f"invalid json ({exc})"
+    return None
+
+
+def _output_exists(root: str, pattern: str) -> bool:
+    return any(
+        _output_content_issue(path) is None
+        for path in _matched_output_paths(root, pattern)
+    )
 
 
 def _missing_outputs(root: str, patterns: Sequence[str], fmt: Dict[str, str]) -> List[str]:
     missing: List[str] = []
     for rel in patterns:
         pattern = str(rel).format(**fmt)
-        if not _output_exists(root, pattern):
+        matched = _matched_output_paths(root, pattern)
+        issues = [_output_content_issue(path) for path in matched]
+        if any(issue is None for issue in issues):
+            continue
+        if matched:
+            first = next((i for i in issues if i), "unusable")
+            missing.append(f"{pattern} ({first})")
+        else:
             missing.append(pattern)
     return missing
 
@@ -370,6 +404,10 @@ def run_process(command: str, *, shell: bool, timeout_sec: Optional[float], env:
     return proc.returncode, proc.stdout or "", proc.stderr or ""
 
 
+# 花钱/不可逆 stage：next-preflight 不可关闭（--no-next-preflight / batch_runner.json 均无效）。
+# 关闭自由只留给非花钱 stage；否则 gate/image_qc/compliance/entry_check 全部可被一个配置绕过。
+PAID_STAGE_KEYS = frozenset({"image", "video", "compose"})
+
 NEXT_PREFLIGHT_BLOCK_REASONS = {
     "env_missing",
     "blocked_by_entry_check",
@@ -430,11 +468,17 @@ def execute_task(
     stdout = ""
     stderr = ""
     try:
-        if next_preflight:
+        stage_key = str(task.get("stage_key") or "")
+        forced_preflight = not next_preflight and stage_key in PAID_STAGE_KEYS
+        if next_preflight or forced_preflight:
             issue = next_preflight_issue(root, task)
             if issue:
+                prefix = (
+                    f"paid stage {stage_key} 强制 next-preflight（关闭配置对花钱 stage 无效）· "
+                    if forced_preflight else ""
+                )
                 raise UnrunnableTask(
-                    "next_preflight blocked: "
+                    f"{prefix}next_preflight blocked: "
                     f"{issue.get('stop_reason')} · {issue.get('headline') or issue.get('to_user')}"
                 )
         command = resolve_command(root, task, config, command_override)

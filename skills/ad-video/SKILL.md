@@ -56,7 +56,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    python3 skills/ad-video/scripts/animatic.py "<作品根>"
    ```
    用首帧 PNG × 实测镜头时长 + VO 拼 `合成/animatic.mp4`（+ `生产数据/ad_animatic_manifest.json`，逐帧 SHA + VO 时长对账）。节奏塌/镜序错/VO 不贴，在预演里改是免费的，生完视频再改是重烧。缺首帧/缺实测时长直接 block（预演不能拿空画面凑）；gate video 以 advisory 侧车提示，首帧或时长变更后预演过期。
-5. **图生视频**：调生视频 CLI，标 `need_end_frame` 的用首+尾双帧引导焊接点。
+5. **图生视频**：调生视频 CLI，标 `need_end_frame` 的用首+尾双帧引导焊接点。**付费渲染资金安全**（签核例外走 `scripts/render_dreamina.py` 时）：提交成功即**先落盘** `submit_id` 再下载，下载失败重跑凭已登记 `submit_id` 免费收集（`--submit-only`/`--collect-only` 两段式或默认同步路径均如此），绝不二次付费；job 账本原子写；下载/查询有限重试+退避、付费提交永不自动重试；`--max-credits N` 预算封顶到顶即停。
 6. **出视频落档 QC（post-video gate）**：
    ```bash
    python3 skills/ad-video/scripts/video_qc.py "<作品根>"

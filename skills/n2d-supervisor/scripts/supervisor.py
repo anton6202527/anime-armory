@@ -327,7 +327,8 @@ def main(argv: List[str]) -> int:
     nxt = sub.add_parser("next", help="build supervisor plan from run.py next")
     nxt.add_argument("root")
     nxt.add_argument("episode", nargs="?")
-    nxt.add_argument("--auto", action="store_true")
+    nxt.add_argument("--auto", action="store_true",
+                     help="deprecated·no-op：透传 run.py 的 --auto，其 auto_continue 恒 False，编排器不自动跨阶段推进")
     nxt.add_argument("--write", action="store_true")
     nxt.add_argument("--json", action="store_true")
     nxt.add_argument("--round", type=int, default=0, help="调用方自报已派发轮数（与持久计数取大，不被信任为唯一来源）")

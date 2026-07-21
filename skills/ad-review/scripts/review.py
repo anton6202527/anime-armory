@@ -12,6 +12,33 @@ if _COMPOSE not in sys.path:
     sys.path.insert(0, _COMPOSE)
 import deliver  # noqa: E402
 
+# 阶段表与 _进度.md 表格解析复用本线单一真值（ad-craft contract + ad/_lib progress_md），
+# 用于「✅ 阶段行 ↔ stage_acceptance 凭证」对账。
+_CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-craft", "scripts"))
+_AD_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad", "_lib"))
+for _p in (_CRAFT, _AD_LIB):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+import contract as craft_contract  # noqa: E402
+import progress_md  # noqa: E402
+
+# 逐阶段验收凭证的新鲜度参照物（相对路径）：凭证早于这些核心产物 = 验收后又动过料，
+# 只作 warn（凭证在、结论旧），与缺凭证/有 block 的硬拦分档。
+STAGE_ACCEPTANCE_SOURCES = {
+    "brief": ["需求/brief.json"],
+    "concept": ["创意/concept.md", "创意/创意脚本.md"],
+    "script": ["脚本/广告脚本.md", "脚本/voiceover.txt", "脚本/时间轴.json", "脚本/广告法机检报告.json"],
+    "voice": ["配音/时长清单.json", "配音/vo.wav", "配音/voice_qc.json", "设定库/voicemap.json"],
+    "storyboard": ["脚本/storyboard.json", "脚本/镜头时长.json"],
+    "image": ["出图/分镜", "出图/共享/asset_registry.json", "设定库/asset_registry.json"],
+    "video": ["出视频/分镜"],
+    "compose": ["合成"],
+    "handoff": ["合规/ai_usage.json", "合规/compliance_manifest.json",
+                "合规/release_variant_manifest.json", "合规/locale_matrix_validation.json"],
+    "review": ["合规/ad_review_m0.json", "合规/human_signoff.json"],
+    "feedback": ["投放反馈"],
+}
+
 
 def load_json(path, default=None):
     if not os.path.isfile(path):
@@ -84,6 +111,50 @@ def stale_finding(report_path, sources, code, label):
     if newest and os.path.getmtime(report_path) + 1e-6 < newest:
         return finding("block", code, f"{label} 早于其输入产物，旧报告不能证明当前交付通过", report_path)
     return None
+
+
+def stage_acceptance_findings(root, progress_text, progress_path):
+    """M0 的假 ✅ 对账：每个标 ✅ 的阶段行必须有当前有效的 stage_acceptance 凭证。
+
+    与 ad-progress/scan.py 同口径（那边只读报告，这边硬拦）：
+      · 凭证缺失/不可读 → block「✅ 无验收凭证」；
+      · 凭证 summary.block>0 → block（验收没过却标了 ✅）；
+      · 凭证存在且干净、但早于该阶段核心产物 → warn（凭证 stale，结论可能过期）。
+    """
+    out = []
+    rows = progress_md.parse_stage_rows(
+        progress_text, section_keywords=("阶段进度",), min_cols=2, label_col=0, status_col=1)
+    stage_by_label = {str(s.get("label", "")): s for s in craft_contract.stage_table()}
+    for row in rows:
+        if "✅" not in row.get("status", ""):
+            continue
+        key = str((stage_by_label.get(row["label"]) or {}).get("key") or "")
+        if not key:
+            continue
+        rel = os.path.join("生产数据", "stage_acceptance", f"{key}.json")
+        path = os.path.join(root, rel)
+        payload = load_json(path)
+        if not isinstance(payload, dict):
+            out.append(finding("block", "stage_acceptance_evidence_missing",
+                               f"阶段「{row['label']}」标 ✅ 但无验收凭证（缺 {rel}）；"
+                               "疑似手改 _进度.md，请重跑 stage_acceptance", progress_path))
+            continue
+        blocks, _ = _summary_block(payload)
+        if blocks is None:
+            out.append(finding("block", "stage_acceptance_evidence_missing",
+                               f"阶段「{row['label']}」的验收凭证 {rel} 缺 summary.block（格式异常）", path))
+            continue
+        if blocks:
+            out.append(finding("block", "stage_acceptance_evidence_block",
+                               f"阶段「{row['label']}」标 ✅ 但验收凭证仍有 block={blocks}（假完成）", path))
+            continue
+        sources = [os.path.join(root, src) for src in STAGE_ACCEPTANCE_SOURCES.get(key, [])]
+        newest = _newest_mtime(sources)
+        if newest and os.path.getmtime(path) + 1e-6 < newest:
+            out.append(finding("warn", "stage_acceptance_evidence_stale",
+                               f"阶段「{row['label']}」的验收凭证早于该阶段核心产物，结论可能过期；"
+                               "建议重跑 stage_acceptance 刷新", path))
+    return out
 
 
 def review(root):
@@ -282,7 +353,11 @@ def review(root):
         findings.append(finding("block", "progress_missing", "缺 _进度.md", progress))
     else:
         with open(progress, encoding="utf-8") as f:
-            rows = deliver.parse_deliverables(f.read())
+            progress_text = f.read()
+        # ✅ 阶段行 ↔ 验收凭证对账：手改 _进度.md 绕过 progress_set 的假 ✅ 在此硬拦。
+        # 凭证缺失/不可读或仍有 block → block；凭证在但早于该阶段核心产物 → warn（结论过期）。
+        findings.extend(stage_acceptance_findings(root, progress_text, progress))
+        rows = deliver.parse_deliverables(progress_text)
         master_rows = [r for r in rows if r["kind"] == "master"]
         if not master_rows:
             findings.append(finding("warn", "master_matrix_missing", "交付矩阵缺主片行", progress))

@@ -384,28 +384,46 @@ def _image_qc_errors_warnings(root, stage):
         errors.append("正式出图缺逐资产 model+channel+prompt+asset hash 生成收据，或项目内混用生图模型/渠道；先补 production_events 再重跑 image_qc")
 
     plan = _load_plan(root)
-    try:
-        qc_mtime = os.path.getmtime(path)
-    except OSError:
-        qc_mtime = 0
+    recorded_assets = report.get("assets_sha256")
     stale = []
-    for clip in plan.get("clips", []):
-        if not isinstance(clip, dict):
-            continue
-        rels = [clip.get("image_path")]
-        if clip.get("need_end_frame"):
-            rels.append(clip.get("end_frame_path"))
-        for rel in rels:
-            if not rel:
+    if isinstance(recorded_assets, dict):
+        # 确定性新鲜度：QC 报告记录被检图片的内容 SHA-256；当前文件 hash 与之不符即过期。
+        # （替代旧 mtime 口径——恢复旧图/版本回滚/跨机复制不会改 mtime 序，但骗不过内容 hash。）
+        for clip in plan.get("clips", []):
+            if not isinstance(clip, dict):
                 continue
-            full = os.path.join(root, rel)
-            try:
-                if os.path.getmtime(full) > qc_mtime:
+            rels = [clip.get("image_path")]
+            if clip.get("need_end_frame"):
+                rels.append(clip.get("end_frame_path"))
+            for rel in rels:
+                if not rel:
+                    continue
+                current = mv_utils.content_hash(os.path.join(root, rel))
+                if current and current != str(recorded_assets.get(str(rel)) or ""):
                     stale.append(str(rel))
-            except OSError:
+    else:
+        # 旧版报告缺 assets_sha256 收据：退回 mtime 粗判并提示重跑升级合同。
+        warnings.append("image_qc 报告缺 assets_sha256 图片内容收据（旧版合同）；重跑 image_qc 升级为 hash 级新鲜度核对")
+        try:
+            qc_mtime = os.path.getmtime(path)
+        except OSError:
+            qc_mtime = 0
+        for clip in plan.get("clips", []):
+            if not isinstance(clip, dict):
                 continue
+            rels = [clip.get("image_path")]
+            if clip.get("need_end_frame"):
+                rels.append(clip.get("end_frame_path"))
+            for rel in rels:
+                if not rel:
+                    continue
+                try:
+                    if os.path.getmtime(os.path.join(root, rel)) > qc_mtime:
+                        stale.append(str(rel))
+                except OSError:
+                    continue
     if stale:
-        errors.append(f"mv-image image_qc 已过期：{len(stale)} 张图片晚于 QC 报告，例：{stale[0]}；重跑 image_qc")
+        errors.append(f"mv-image image_qc 已过期：{len(stale)} 张图片与 QC 报告收据不一致，例：{stale[0]}；重跑 image_qc")
     return errors, warnings
 
 

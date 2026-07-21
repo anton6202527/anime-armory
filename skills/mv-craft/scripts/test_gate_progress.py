@@ -150,6 +150,47 @@ class GateProgressTest(unittest.TestCase):
             errors, _warnings = gate.check(tmp, "video_jobs")
             self.assertEqual(errors, [])
 
+    def test_image_qc_stale_by_assets_sha256_blocks(self):
+        """收据 hash 与当前图片不符 → 过期 error（mtime 不变也拦得住，替代旧 mtime 口径）。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            write_clip_plan_with_image(tmp)
+            path = os.path.join(tmp, "生产数据", "image_qc", "image_qc.json")
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"kind": "mv_image_qc",
+                           "summary": {"hard_blocks": 0, "advisory": 0, "verdict": "ok"},
+                           "qc_environment": {"precision_level": "full"},
+                           "assets_sha256": {"出图/段落/图片/Clip_001.png": "0" * 64}}, f)
+            errors, _warnings = gate.check(tmp, "video_jobs")
+            self.assertTrue(any("已过期" in e for e in errors))
+
+    def test_image_qc_fresh_assets_sha256_passes_without_legacy_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            write_clip_plan_with_image(tmp)
+            image_rel = "出图/段落/图片/Clip_001.png"
+            path = os.path.join(tmp, "生产数据", "image_qc", "image_qc.json")
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"kind": "mv_image_qc",
+                           "summary": {"hard_blocks": 0, "advisory": 0, "verdict": "ok"},
+                           "qc_environment": {"precision_level": "full"},
+                           "assets_sha256": {image_rel: mv_utils.content_hash(os.path.join(tmp, image_rel))}}, f)
+            errors, warnings = gate.check(tmp, "video_jobs")
+            self.assertEqual(errors, [])
+            self.assertFalse(any("assets_sha256" in w for w in warnings))
+
+    def test_image_qc_legacy_report_warns_contract_upgrade(self):
+        """旧版报告缺 assets_sha256：不误伤（mtime 兜底），但提示重跑升级合同。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            write_clip_plan_with_image(tmp)
+            write_image_qc(tmp)
+            errors, warnings = gate.check(tmp, "video_jobs")
+            self.assertEqual(errors, [])
+            self.assertTrue(any("assets_sha256" in w for w in warnings))
+
     def test_formal_video_jobs_requires_picture_lock(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)

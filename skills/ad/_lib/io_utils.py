@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 from typing import Any
 
 
@@ -37,13 +38,40 @@ def load_json(path: str, default: Any = None, *, resilient: bool = False) -> Any
         return json.load(f)
 
 
-def write_json(path: str, payload: Any) -> None:
-    """Write `payload` as UTF-8 JSON (`ensure_ascii=False, indent=2`), creating parents."""
+def write_text_atomic(path: str, text: str) -> None:
+    """原子写文本：同目录 temp + os.replace，写一半被打断也不会留下半个文件。
+
+    temp 必须与目标同目录（同一文件系统）os.replace 才是原子重命名。
+    """
+    path = os.fspath(path)
     parent = os.path.dirname(path)
     if parent:
         os.makedirs(parent, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+    fd, tmp = tempfile.mkstemp(dir=parent or ".", prefix=os.path.basename(path) + ".", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(text)
+        os.replace(tmp, path)
+    except BaseException:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def write_json_atomic(path: str, payload: Any) -> None:
+    """原子写 JSON（`ensure_ascii=False, indent=2` + 末尾换行），creating parents."""
+    write_text_atomic(path, json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+
+
+def write_json(path: str, payload: Any) -> None:
+    """Write `payload` as UTF-8 JSON (`ensure_ascii=False, indent=2`), creating parents.
+
+    自 P0 资金安全改造起为原子实现（等价 `write_json_atomic`）：job 账本这类
+    「先花钱后落账」的文件绝不能被进程中断写坏。
+    """
+    write_json_atomic(path, payload)
 
 
 def read_text(path: str, default: str = "") -> str:

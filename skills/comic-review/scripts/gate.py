@@ -1221,6 +1221,83 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
                 )
 
 
+def load_reference_bundle(root: Path, chapter: str, panel_id: str) -> dict[str, Any]:
+    for dirname in ("dreamina_reference_bundles", "codex_reference_bundles"):
+        bundle = load_json(root / "生产数据" / dirname / chapter / f"{panel_id}.json", None)
+        if isinstance(bundle, dict):
+            return bundle
+    return {}
+
+
+def executed_reference_ids(bundle: dict[str, Any]) -> set[str]:
+    ids: set[str] = set()
+    for record in bundle.get("references") or []:
+        if not isinstance(record, dict):
+            continue
+        rid = str(record.get("id") or "")
+        if rid:
+            ids.add(rid)
+        for part in record.get("parts") or []:
+            if isinstance(part, dict) and part.get("id"):
+                ids.add(str(part["id"]))
+    return ids
+
+
+def check_reference_execution(root: Path, chapter: str, jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    """执行保真：声明的风格锚/绑定主体必须真实进入参考通道。
+
+    证据是 runner 落盘的 reference bundle（确定性 JSON），不是像素判断。
+    历史教训：--reference-limit 调低时风格锚按优先级被静默省略（只在
+    bundle omitted 里披露），整话风格随之漂移；角色一致性硬闸开启时该
+    省略必须显式处理，不能只留一行披露。
+    """
+    hard_gate_on = read_setting(root, "角色一致性硬闸", "关闭").strip() in {"开启", "on", "true"}
+    for job in jobs.get("jobs") or []:
+        if not isinstance(job, dict) or str(job.get("status") or "") != "ready":
+            continue
+        pid = str(job.get("panel_id") or "")
+        declared_style_ids = {
+            str(ref.get("id") or "")
+            for ref in job.get("references") or []
+            if isinstance(ref, dict) and str(ref.get("id") or "").startswith("STYLE_")
+        }
+        bound_subjects = {
+            str(binding.get("character_id") or "")
+            for binding in job.get("character_bindings") or []
+            if isinstance(binding, dict) and str(binding.get("character_id") or "")
+        }
+        if not declared_style_ids and not bound_subjects:
+            continue
+        bundle = load_reference_bundle(root, chapter, pid)
+        if not bundle:
+            continue  # 旧后端或手工采纳格：无 bundle 不虚构结论
+        executed = executed_reference_ids(bundle)
+        missing_style = sorted(declared_style_ids - executed)
+        if missing_style:
+            add(
+                findings,
+                "block" if hard_gate_on else "warn",
+                "style_anchor_not_executed",
+                f"生产数据/*reference_bundles/{chapter}/{pid}.json",
+                f"{pid} 声明了风格锚 {','.join(missing_style)}，但执行参考通道未附带（被附件上限省略，仅存文字契约）。",
+                "image",
+                "用多视图拼板释放槽位或提高 --reference-limit 后 force 重抽该格；风格锚必须占一个物理参考槽。",
+                evidence_family="reference_presence",
+            )
+        missing_subjects = sorted(bound_subjects - executed)
+        if missing_subjects:
+            add(
+                findings,
+                "block" if hard_gate_on else "warn",
+                "subject_anchor_not_executed",
+                f"生产数据/*reference_bundles/{chapter}/{pid}.json",
+                f"{pid} 绑定的主体 {','.join(missing_subjects)} 没有任何真实身份锚进入执行参考通道。",
+                "image",
+                "补定妆参考并 force 重抽；不要在无身份锚的情况下让模型自由发挥主体形象。",
+                evidence_family="reference_presence",
+            )
+
+
 def merge_consistency_report(report: dict[str, Any], findings: list[dict[str, Any]], *, category: str) -> None:
     for item in report.get("findings") or []:
         severity = str(item.get("severity") or "warn")
@@ -1480,9 +1557,26 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
             continue
         for item in payload.get("findings") or []:
             sev = str(item.get("severity") or "warn")
+            code = str(item.get("code") or name)
+            # 显式 entity_schedule 违约不属 advisory：契约是作者明写的必在/禁入清单，
+            # 违约=可复算的绑定集事实（deterministic_state_contract），与 continuity
+            # 状态链同级，允许 block。子串命中类（mentioned_not_bound 等）仍按启发式降档。
+            explicit_contract = code in {
+                "required_entity_unbound",
+                "forbidden_entity_bound",
+                "presence_contract_conflict",
+            }
+            if explicit_contract and sev in ("must", "block", "warn"):
+                add(findings, "block", code,
+                    f"生产数据/{payload.get('kind') or name}_{chapter}.json",
+                    str(item.get("message") or ""),
+                    "comic-script",
+                    "按显式 entity_schedule 契约补绑定或改排程后重跑 gate。",
+                    evidence_family="deterministic_state_contract")
+                continue
             add(findings,
                 "warn" if sev in ("must", "block", "warn") else "info",
-                str(item.get("code") or name),
+                code,
                 f"生产数据/comic_{name}_{chapter}.json" if name == "redundancy_audit" else f"生产数据/{payload.get('kind') or name}_{chapter}.json",
                 str(item.get("message") or ""),
                 "comic-script",
@@ -1645,14 +1739,21 @@ def check_machine_audit_liveness(root: Path, chapter: str, char_report: dict[str
             evidence_family="vlm_judge_fallback" if fallback_complete else "capability_degraded",
         )
     if task_count and verdict_count == 0:
+        # 确定性升闸（三个条件都是可复算事实，非启发式）：一致性硬闸开启、
+        # CCIP 不可用、裁决覆盖率为 0 —— 此时三轴身份机检完全空转，靠"人审
+        # 兜底"的叙事放行过（第1话四足虎实证）。必须显式裁决或显式豁免。
+        hard_gate_on = read_setting(root, "角色一致性硬闸", "关闭").strip() in {"开启", "on", "true"}
+        fully_blind = hard_gate_on and not caps.get("ccip")
         add(
             findings,
-            "warn",
+            "block" if fully_blind else "warn",
             "vlm_judge_unadjudicated",
             str(status.get("tasks_file") or ""),
-            f"VLM 并排判定任务包已生成 {task_count} 条但 0 条裁决——角色/生物身份、背景、道具三轴机检空转，画错生物形态这类漂移不会被拦。",
+            f"VLM 并排判定任务包已生成 {task_count} 条但 0 条裁决——角色/生物身份、背景、道具三轴机检空转，画错生物形态这类漂移不会被拦。"
+            + ("（角色一致性硬闸=开启 且 CCIP 不可用：身份轴完全无机检，升级为 block。）" if fully_blind else ""),
             "review",
-            f"由多模态 agent 逐条看图打分并写回 {status.get('verdict_file')} 后重跑 gate。",
+            f"用 vlm_adjudicate.py queue 出队、由多模态 agent 看图打分后 submit 回写 {status.get('verdict_file')}；"
+            "或恢复 CCIP（comicqc env）后重跑 gate。",
         )
     elif task_count and verdict_count < task_count:
         add(
@@ -1673,6 +1774,7 @@ def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: l
     jobs = load_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", {})
     if isinstance(jobs, dict):
         check_panel_jobs_ready(root, chapter, jobs, findings)
+        check_reference_execution(root, chapter, jobs, findings)
     run_panel_variety_advisory(root, chapter, findings, notes)
     if style_consistency is None or character_consistency is None:
         add(findings, "block", "consistency_module_unavailable", "skills/comic-review/scripts", f"一致性模块不可用：{IMPORT_ERROR}", "review", "修复 comic-review 模块导入。")
@@ -1703,6 +1805,43 @@ def run_compose(root: Path, chapter: str, findings: list[dict[str, Any]], notes:
         if not manifest.get("rendered"):
             add(findings, "block", "manifest_not_rendered", rel(root, paths["manifest"]), "尚未登记实际渲染导出物。", "compose", "运行 export_longstrip.py --render。")
         check_manifest_profile(root, chapter, manifest, findings)
+    run_lettering_geometry_qc(root, chapter, findings, notes)
+
+
+def run_lettering_geometry_qc(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """嵌字几何 QC：槽位坐标层面的确定性检查（comic-compose lettering_qc.py）。
+
+    越界=渲染必然裁字 → block（坐标事实，可复算）；贴边/遮挡/密度/字号 → warn。
+    脚本缺失/异常留 note 不拦（advisory-runner 同款容错，不制造假 block）。
+    """
+    import subprocess
+    script = SKILLS_ROOT / "comic-compose" / "scripts" / "lettering_qc.py"
+    if not script.is_file():
+        notes.append("lettering_qc 脚本缺失，嵌字几何 QC 跳过")
+        return
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(script), str(root), chapter, "--json", "--write"],
+            capture_output=True, text=True, timeout=120,
+        )
+        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+    except Exception as exc:
+        notes.append(f"lettering_qc 运行失败（{exc}），嵌字几何 QC 跳过")
+        return
+    for note in payload.get("notes") or []:
+        notes.append(f"lettering_qc: {note}")
+    for item in payload.get("findings") or []:
+        severity = str(item.get("severity") or "warn")
+        add(
+            findings,
+            "block" if severity == "block" and str(item.get("code")) == "lettering_out_of_canvas" else "warn",
+            str(item.get("code") or "lettering_geometry"),
+            f"排版/{chapter}/lettering.json",
+            str(item.get("reason") or ""),
+            "compose",
+            str(item.get("suggested_fix") or "修正槽位几何后重跑 build_lettering.py 与导出。"),
+            evidence_family="deterministic",
+        )
 
 
 def run_review(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:

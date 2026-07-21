@@ -660,3 +660,38 @@ def test_write_outputs(tmp_path):
     assert paths["drift_md"].is_file()
     assert "角色身份 Adapter Matrix" in paths["matrix_md"].read_text(encoding="utf-8")
     assert list((root / "生产数据").glob("*.tmp.*")) == []
+
+
+# ── G12：报表 write-if-semantically-changed——只有 generated_at 变化不重写（保 prework 缓存）──
+
+
+def test_write_report_if_changed_skips_timestamp_only_diff(tmp_path: Path) -> None:
+    p = tmp_path / "identity_drift_report.json"
+    v1 = json.dumps({"kind": "drift", "generated_at": "2026-07-20T10:00:00Z", "chars": {"CHAR_01": 0.8}},
+                    ensure_ascii=False, indent=2) + "\n"
+    v2 = json.dumps({"kind": "drift", "generated_at": "2026-07-20T11:00:00Z", "chars": {"CHAR_01": 0.8}},
+                    ensure_ascii=False, indent=2) + "\n"
+    assert identity.write_report_if_changed(p, v1) is True
+    mtime1 = p.stat().st_mtime_ns
+    assert identity.write_report_if_changed(p, v2) is False, "只有 generated_at 变化不该重写"
+    assert p.stat().st_mtime_ns == mtime1
+    assert "10:00:00" in p.read_text(encoding="utf-8")
+
+
+def test_write_report_if_changed_rewrites_on_real_change(tmp_path: Path) -> None:
+    p = tmp_path / "identity_drift_report.json"
+    v1 = json.dumps({"generated_at": "t1", "chars": {"CHAR_01": 0.8}}, ensure_ascii=False) + "\n"
+    v2 = json.dumps({"generated_at": "t2", "chars": {"CHAR_01": 0.5}}, ensure_ascii=False) + "\n"
+    identity.write_report_if_changed(p, v1)
+    assert identity.write_report_if_changed(p, v2) is True
+    assert "0.5" in p.read_text(encoding="utf-8")
+
+
+def test_write_report_if_changed_markdown_scrubs_generated_at_line(tmp_path: Path) -> None:
+    p = tmp_path / "identity_drift_report.md"
+    v1 = "# 漂移\n- generated_at: 2026-07-20T10:00:00Z\n- CHAR_01: ok\n"
+    v2 = "# 漂移\n- generated_at: 2026-07-20T11:00:00Z\n- CHAR_01: ok\n"
+    v3 = "# 漂移\n- generated_at: 2026-07-20T12:00:00Z\n- CHAR_01: drift\n"
+    assert identity.write_report_if_changed(p, v1) is True
+    assert identity.write_report_if_changed(p, v2) is False
+    assert identity.write_report_if_changed(p, v3) is True

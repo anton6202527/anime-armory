@@ -313,3 +313,90 @@ def test_runner_gate_failure_does_not_break_mark(tmp_path: Path, monkeypatch) ->
     loaded = queue.load_queue(str(tmp_path))
     assert loaded["tasks"][0]["status"] == "done"  # 门禁重跑失败不回滚已 mark 的任务
     assert "gate.py exploded" in result["results"][0]["gate_refreshed"]["error"]
+
+
+# ── 产物内容校验：存在但零字节/坏 JSON 不算就位（output_contract 不收「空壳产物」）──────
+
+
+def test_verify_outputs_rejects_empty_file(tmp_path: Path) -> None:
+    task = {"stage_key": "compose", "episode": "第1集"}
+    out_dir = tmp_path / "合成" / "第1集"
+    out_dir.mkdir(parents=True)
+    (out_dir / "成片_第1集_zh.mp4").write_bytes(b"")
+    spec = queue.find_stage("compose")
+
+    issues = runner.verify_output_contract(str(tmp_path), task, spec)
+    assert issues, "零字节成片不该通过 output_contract"
+    assert "empty file" in issues[0]
+
+
+def test_verify_outputs_rejects_invalid_json(tmp_path: Path) -> None:
+    write_progress(tmp_path)
+    voice_dir = tmp_path / "合成" / "第1集" / "配音"
+    voice_dir.mkdir(parents=True)
+    (voice_dir / "voice_zh.wav").write_bytes(b"RIFF")
+    (voice_dir / "时长清单.json").write_text("{broken", encoding="utf-8")
+    task = {"stage_key": "voice", "episode": "第1集"}
+    spec = queue.find_stage("voice")
+
+    issues = runner.verify_output_contract(str(tmp_path), task, spec)
+    assert issues, "坏 JSON 时长清单不该通过 output_contract"
+    assert "invalid json" in " | ".join(issues)
+
+
+# ── 花钱 stage 禁关 next-preflight：image/video/compose 无视关闭配置强制预检 ──────
+
+
+def test_paid_stage_forces_next_preflight_even_when_disabled(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        runner,
+        "next_preflight_issue",
+        lambda root, task: {"stop_reason": "blocked_by_gate", "headline": "gate 未放行"},
+    )
+    task = {"stage_key": "image", "episode": "第1集", "command": "python3 -c \"pass\""}
+
+    result = runner.execute_task(
+        str(tmp_path),
+        task,
+        {},
+        command_override="python3 -c \"pass\"",
+        shell=False,
+        timeout_sec=None,
+        dry_run=True,
+        no_dashboard=True,
+        verify_outputs=False,
+        next_preflight=False,
+        build_dashboard=False,
+    )
+
+    assert result["status"] == "fail"
+    assert "paid stage image 强制 next-preflight" in result["note"]
+    assert "next_preflight blocked" in result["note"]
+
+
+def test_non_paid_stage_respects_next_preflight_off(tmp_path: Path, monkeypatch) -> None:
+    called = {"n": 0}
+
+    def _boom(root, task):
+        called["n"] += 1
+        return {"stop_reason": "blocked_by_gate", "headline": "gate 未放行"}
+
+    monkeypatch.setattr(runner, "next_preflight_issue", _boom)
+    task = {"stage_key": "script_stage2", "episode": "第1集", "command": "python3 -c \"pass\""}
+
+    result = runner.execute_task(
+        str(tmp_path),
+        task,
+        {},
+        command_override="python3 -c \"pass\"",
+        shell=False,
+        timeout_sec=None,
+        dry_run=True,
+        no_dashboard=True,
+        verify_outputs=False,
+        next_preflight=False,
+        build_dashboard=False,
+    )
+
+    assert called["n"] == 0, "非花钱 stage 关闭 next-preflight 后不该再调用预检"
+    assert result["status"] == "pass"

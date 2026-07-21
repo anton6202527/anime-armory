@@ -14,11 +14,18 @@
     只是把 registry 里**静态登记**的 reference_images 原样列出：不看这一镜变化量，也不看后端能力。
     本脚本就是补上那层处方（与 `product_qc.py` 的事后机检互补·升档口径同源 `ad/_lib/image_backend_adapter`）。
 
-广告特有加权（**别按通用漫剧版理解**）：
+广告特有加权（**别按通用兄弟线版理解**）：
     `PROD_*` / `BRAND_*` 的变化量权重被放大（PRODUCT_DELTA_MULTIPLIER），参考预算下限更高、
     升档阈值更低——产品镜比 CHAR_/LOC_ 更激进是**故意的**。产品镜识别复用同目录 sibling
     `product_qc.product_shots()`（含「产品语义镜逃逸拦截」：storyboard 忘写 assets 也按语义纳管），
     不另抄一套语义表以免两处漂移。
+
+处方的三个输入维度：
+    ① 变化量（本镜相对定妆照变了多少·关键词启发式）；
+    ② 复现间隔 gap（该资产距上次出现隔了几镜·镜序确定性计算）——长间隔再登场时把
+      **最早定妆图**钉为高优先锚重注入，并提参考下限/建议档位（产品/品牌阈值更严）；
+    ③ 后端能力（adapter 三态）——建议档超出当前后端时，列出**够得着建议档**的登记后端
+      清单（模型+渠道）作切换建议（advisory，不自动改设置）。
 
 诚实边界（缺料一律明示降级，绝不臆造通过）：
     - **advisory，不是门**：这是"审"不是"闸"。变化量是脆弱的关键词启发式，默认 **exit 0**；
@@ -98,6 +105,16 @@ MIN_REFERENCES: Dict[str, int] = {
     "product": 2,
     "product_big_delta": 3,
 }
+
+# ── 复现间隔（gap）因子（**内部启发式**，非行业标准） ─────────────────────────────
+# provenance: internal-heuristic·confidence=low
+# 治什么根因：变化量只看「本镜相对定妆照变了多少」，不看「该资产距上次出现隔了几镜」。
+# 长间隔再登场时模型对该资产的近镜上下文已冷，重画概率升高——此时应把**最早定妆图**
+# 钉为高优先锚重注入（registry.reference_images 的第一张即最早定妆约定），并提升
+# 参考下限与建议档位。产品/品牌资产阈值更严。全 advisory，与 exit 0 哲学一致。
+REAPPEARANCE_GAP_SHOTS = 4          # 一般资产：距上次出现 ≥4 镜 = 长间隔复现
+PRODUCT_REAPPEARANCE_GAP_SHOTS = 3  # 产品/品牌更严：≥3 镜即触发
+GAP_EXTRA_REFERENCES = 1            # 长间隔时参考下限 +1
 
 _PRODUCTISH = (adapter.ASSET_KIND_PRODUCT, adapter.ASSET_KIND_BRAND)
 
@@ -193,6 +210,61 @@ def recommended_tier_for(asset_kind: str, big_delta: bool) -> str:
     if asset_kind == adapter.ASSET_KIND_CHARACTER:
         return adapter.TIER_DIRECTED_REFERENCE if big_delta else adapter.TIER_SHARED_KIT
     return adapter.TIER_SHARED_KIT
+
+
+def reappearance_gaps(labeled_assets: Sequence[Tuple[str, Sequence[str]]]) -> Dict[str, Dict[str, Optional[int]]]:
+    """按 storyboard 镜序算每资产「距上次出现的镜数」：{label: {asset_id: gap}}。
+
+    gap = 本镜序号 - 上次出现镜序号（相邻镜 = 1）；首次出现 → None（不存在「复现」）。
+    纯函数·可测。
+    """
+    last_seen: Dict[str, int] = {}
+    out: Dict[str, Dict[str, Optional[int]]] = {}
+    for index, (label, ids) in enumerate(labeled_assets, start=1):
+        row: Dict[str, Optional[int]] = {}
+        for aid in ids:
+            row[str(aid)] = index - last_seen[str(aid)] if str(aid) in last_seen else None
+            last_seen[str(aid)] = index
+        out[str(label)] = row
+    return out
+
+
+def reappearance_threshold(asset_kind: str) -> int:
+    """长间隔判定阈：产品/品牌更严（更早触发重注入）。纯函数·可测。"""
+    return PRODUCT_REAPPEARANCE_GAP_SHOTS if asset_kind in _PRODUCTISH else REAPPEARANCE_GAP_SHOTS
+
+
+def is_long_gap(gap: Optional[int], asset_kind: str) -> bool:
+    """首次出现（gap=None）豁免；达到阈值才算长间隔复现。纯函数·可测。"""
+    return gap is not None and gap >= reappearance_threshold(asset_kind)
+
+
+def tier_one_up(tier: str) -> str:
+    """梯子上提一档（长间隔复现用）。**不自动升进 +LoRA**——LoRA 是长线代言人训练
+    决策，不因镜序间隔触发；已在顶档/不认识的档原样返回。纯函数·可测。"""
+    rank = adapter.tier_rank(tier)
+    if rank < 0 or rank >= len(adapter.TIER_LADDER) - 1:
+        return tier
+    candidate = adapter.TIER_LADDER[rank + 1]
+    return tier if candidate in adapter.CHARACTER_ONLY_TIERS else candidate
+
+
+def route_suggestions(recommended_tier: str, asset_kind: str) -> Tuple[List[Dict[str, str]], str]:
+    """升档可达路由建议：够得着建议档的后端清单（模型+渠道）+ 建议文案。纯函数·可测。
+
+    清单来自适配层能力表（只认 available，unknown 不算够得着）。措辞是**建议切换**
+    （advisory，且换后端须按生图后端治理签核），不自动改任何设置；若无任何后端够得着，
+    如实说明并建议人工降低期望档位或补定妆参考。
+    """
+    reached = adapter.backends_reaching_tier(recommended_tier, asset_kind)
+    if reached:
+        listing = "、".join(str(r["label"]) for r in reached)
+        hint = (f"可达该档的登记后端：{listing}——建议把本镜切过去（advisory·换后端须按"
+                "生图后端治理签核并全项目锁定，不自动改设置）。")
+    else:
+        hint = ("当前能力表无任何后端够得着该档：请人工降低期望档位，或补足定妆参考"
+                "（多视图/细节特写）靠多参考硬堆。")
+    return reached, hint
 
 
 def plan_controls(profile: Mapping[str, Any], deltas: Sequence[str], asset_kind: str) -> List[Dict[str, Any]]:
@@ -393,9 +465,14 @@ def build_plan(root: Path) -> Dict[str, Any]:
     product_labels = set(product_qc.product_shots(storyboard)) if storyboard else set()
     limit = adapter.reference_limit_for(profile)
 
+    # 复现间隔：按 storyboard 镜序一次算清（首次出现豁免；间隔只看镜序，不看时长）。
+    labeled_assets = [(label, shot_asset_ids(shot)) for label, shot in shot_map.items()]
+    gaps = reappearance_gaps(labeled_assets)
+    asset_ids_by_label = dict(labeled_assets)
+
     shots: List[Dict[str, Any]] = []
     for label, shot in shot_map.items():
-        asset_ids = shot_asset_ids(shot)
+        asset_ids = asset_ids_by_label[label]
         is_product_shot = label in product_labels
         semantic_only = is_product_shot and not product_qc.product_asset_ids(shot)
         multi_asset = len(asset_ids) >= 2
@@ -443,6 +520,22 @@ def build_plan(root: Path) -> Dict[str, Any]:
             recommended = recommended_tier_for(kind, big)
             controls = plan_controls(profile, deltas, kind)
 
+            # —— 复现间隔（gap）因子：长间隔再登场 → 提参考下限 + 提建议档位，
+            #    并把最早定妆图（registry 登记的第一张参考）钉为高优先锚重注入。 —— #
+            gap = gaps.get(label, {}).get(aid)
+            long_gap = is_long_gap(gap, kind)
+            anchor = (record["candidate_references"] or [None])[0]
+            if long_gap:
+                required += GAP_EXTRA_REFERENCES
+                recommended = tier_one_up(recommended)
+                findings.append(finding(
+                    "warn" if kind in _PRODUCTISH else "info", "long_gap_reappearance",
+                    f"{label}·{aid} 距上次出现已隔 {gap} 镜（阈 ≥{reappearance_threshold(kind)}）："
+                    f"长间隔复现，重注入最早定妆锚"
+                    f"{f'（首选参考：{anchor}）' if anchor else '——但该资产未登记任何参考图，先补定妆'}；"
+                    f"参考下限提至 ≥{required} 张、建议档位提至 {recommended}。",
+                    shot=label, asset_id=aid, gap=gap))
+
             references = [{"path": p, "exists": _reference_exists(root, p)} for p in refs]
             missing_files = [r["path"] for r in references if not r["exists"]]
 
@@ -486,13 +579,18 @@ def build_plan(root: Path) -> Dict[str, Any]:
                     "登记不等于有图，正式跑前必须落真实文件。",
                     shot=label, asset_id=aid))
 
-            if adapter.tier_rank(achievable) < adapter.tier_rank(recommended):
+            tier_gap = adapter.tier_rank(achievable) < adapter.tier_rank(recommended)
+            reachable: List[Dict[str, str]] = []
+            if tier_gap:
+                # 升档可达路由建议：不止说「够不着」，还列出哪些登记后端够得着（advisory）。
+                reachable, route_hint = route_suggestions(recommended, kind)
                 findings.append(finding(
                     "warn" if kind in _PRODUCTISH else "info", "tier_below_recommended",
                     f"{label}·{aid} 建议档位 {recommended}，但 {profile.get('label')} 对 {kind} 只够得着 "
                     f"{achievable}：{'产品/品牌大变化镜' if kind in _PRODUCTISH else '本镜'}靠多参考硬堆有漂移风险——"
-                    "考虑换支持原生主体库的后端登记 ID，或拆镜降变化量；LoRA 只留给核心长线代言人。",
-                    shot=label, asset_id=aid))
+                    f"{route_hint}或拆镜降变化量；LoRA 只留给核心长线代言人。",
+                    shot=label, asset_id=aid,
+                    reachable_backends=[r["backend"] for r in reachable]))
 
             for control in controls:
                 if control["state"] == adapter.CAP_UNKNOWN:
@@ -514,7 +612,11 @@ def build_plan(root: Path) -> Dict[str, Any]:
                 "min_references": required,
                 "recommended_tier": recommended,
                 "achievable_tier": achievable,
-                "tier_gap": adapter.tier_rank(achievable) < adapter.tier_rank(recommended),
+                "tier_gap": tier_gap,
+                "tier_route_suggestions": reachable,
+                "reappearance": {"gap": gap, "threshold": reappearance_threshold(kind),
+                                 "long_gap": long_gap,
+                                 "anchor_reference": anchor if long_gap else None},
                 "controls": controls,
             })
 
@@ -555,6 +657,9 @@ def build_plan(root: Path) -> Dict[str, Any]:
             "big_delta_score": BIG_DELTA_SCORE,
             "product_big_delta_score": PRODUCT_BIG_DELTA_SCORE,
             "min_references": MIN_REFERENCES,
+            "reappearance_gap_shots": REAPPEARANCE_GAP_SHOTS,
+            "product_reappearance_gap_shots": PRODUCT_REAPPEARANCE_GAP_SHOTS,
+            "gap_extra_references": GAP_EXTRA_REFERENCES,
             "provenance": PROVENANCE,
         },
         "advisory": "事前处方·advisory：变化量为关键词启发式，默认不阻断（exit 0）；只有 --strict 且 block>0 才非零退出。",
@@ -599,6 +704,18 @@ def render_markdown(report: Mapping[str, Any]) -> str:
                 f"（{'、'.join(plan['variation_delta']) or '无'}）· 参考 {plan['reference_count']}/"
                 f"{plan['min_references']} → {refs}"
                 f" · 可达 {plan['achievable_tier']}{'（低于建议）' if plan['tier_gap'] else ''}")
+            reappearance = plan.get("reappearance") or {}
+            if reappearance.get("long_gap"):
+                anchor = reappearance.get("anchor_reference") or "（未登记参考，先补定妆）"
+                lines.append(f"  - 长间隔复现：距上次出现 {reappearance.get('gap')} 镜"
+                             f"（阈 ≥{reappearance.get('threshold')}）——重注入最早定妆锚：{anchor}")
+            if plan["tier_gap"]:
+                reached = plan.get("tier_route_suggestions") or []
+                if reached:
+                    lines.append("  - 可达建议档的后端（advisory·切换须签核）："
+                                 + "、".join(str(r.get("label")) for r in reached))
+                else:
+                    lines.append("  - 无任何登记后端够得着建议档：人工降低期望档位或补定妆参考")
             for control in plan["controls"]:
                 lines.append(f"  - 控制：{control['type']}（后端状态 {control['state']}）—— {control['reason']}")
         if not shot["assets"]:

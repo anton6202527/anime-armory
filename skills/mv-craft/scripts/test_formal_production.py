@@ -66,5 +66,45 @@ class FormalProductionTest(unittest.TestCase):
             self.assertEqual(animatic["clips"][0]["clip_id"], "Clip_001")
 
 
+
+
+class DegradedImageQcManualReviewTest(unittest.TestCase):
+    def _write_image_qc(self, root, extra):
+        out = os.path.join(root, "生产数据", "image_qc")
+        os.makedirs(out, exist_ok=True)
+        report = {"kind": "mv_image_qc",
+                  "summary": {"hard_blocks": 0, "advisory": 0, "degraded": True, "verdict": "review"},
+                  "qc_environment": {"precision_level": "degraded"}}
+        report.update(extra)
+        with open(os.path.join(out, "image_qc.json"), "w", encoding="utf-8") as f:
+            json.dump(report, f, ensure_ascii=False)
+        return report
+
+    def test_legacy_boolean_no_longer_clears_degraded_blocker(self):
+        """旧式 manual_review_accepted 裸布尔不再放行（与 gate 同口径）。"""
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            self._write_image_qc(tmp, {"manual_review_accepted": True})
+            report = formal_readiness.build_report(tmp)
+            self.assertTrue(any("绑定当前报告 hash" in b for b in report["blockers"]))
+
+    def test_bound_manual_review_clears_degraded_blocker(self):
+        import importlib.util as _ilu
+        spec = _ilu.spec_from_file_location(
+            "mv_utils_fr_test", os.path.join(os.path.dirname(os.path.abspath(__file__)), "mv_utils.py"))
+        mv_utils = _ilu.module_from_spec(spec)
+        spec.loader.exec_module(mv_utils)
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            report = self._write_image_qc(tmp, {})
+            manual = {"accepted": True, "reviewer": "editor",
+                      "bound_report_sha256": mv_utils.json_hash(report)}
+            report["manual_review"] = manual
+            with open(os.path.join(tmp, "生产数据", "image_qc", "image_qc.json"), "w", encoding="utf-8") as f:
+                json.dump(report, f, ensure_ascii=False)
+            result = formal_readiness.build_report(tmp)
+            self.assertFalse(any("绑定当前报告 hash" in b for b in result["blockers"]))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -87,7 +87,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
   --skip-gate --waiver-reason "人工复核确认本次为已知误报"
 ```
 
-Codex 内置 `image_generation` 当前单次最多接收 5 张图片附件。即使渠道候选表声明更高参考能力，runner 仍以真实工具上限为硬边界，按“角色身份 → 场景/妖物 → 关键道具 → 风格 → 特效”选择 5 张；被省略附件必须写入 reference bundle 的 `omitted_attachments`，其完整约束继续保留在文字生产合同中，禁止静默丢约束或让工具超限后反复空耗。
+实机可执行附件上限的唯一真值在 comic `_lib/image_backend_adapter` 的 `executable_attachment_limit`（Codex `image_generation` 当前为 5，Dreamina image2image 为 10），runner 只解引用、不得另写数字。声明参考数超上限时，runner 先用 `reference_composite` 把**同一 ID 的多视图折叠为一张网格拼板**（不同主体绝不同图拼接，防串脸；拼板带 layout 版本与逐部件 SHA 血统，缓存于 `出图/共享/composites/`），再按“每具名主体一锚 → 场景/道具 → **风格锚保底一槽** → 次要视图”分配物理槽位。风格锚被省略是历史整话风格漂移的根因，选择器已保底；若仍被挤出（如手动 `--reference-limit` 过低），gate 的 `style_anchor_not_executed` 会在一致性硬闸开启时阻断。被省略附件必须写入 reference bundle 的 `omitted_attachments`，其完整约束继续保留在文字生产合同中，禁止静默丢约束或让工具超限后反复空耗。
 
 若只是参考预算或 QC 规则升级导致一张已生成且人工检查良好的图被旧规则标成 `qc_block`，用 `--recheck-existing --targets Pxxx` 对原 PNG 重跑 post-QC；该模式不得调用模型、归档或重抽。检测器升级不能成为删除好图和重复付费的理由。
 
