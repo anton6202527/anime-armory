@@ -5,7 +5,7 @@
   "title": "刀下不是妖",
   "status": "stage2_draft",
   "timing_basis": "text_estimate_no_audio",
-  "total_duration": 75.297,
+  "total_duration": 74.583,
   "core_attraction": {
     "category": "穿越死局 + 妖魔复生 + 杀人求生反转",
     "why_watch": "刚穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。",
@@ -15,7 +15,7 @@
     "visual_hook": "横刀悬在裴长青胸前，姜月初双手发抖；后景虎妖巨影压近，但刀口对准的是人。",
     "hook_type": "反差/危机",
     "content_proposition": "她为什么不杀妖，反而要杀刚救她的人？",
-    "onscreen_text": "我刀下的，不是妖",
+    "onscreen_text": "想活下去，先杀一个人——我刀下的不是妖",
     "onscreen_duration_sec": 2.2,
     "muted_safe_proof": "刀口、人类目标、后景虎妖与女主痛苦表情构成无需文字的三角冲突。",
     "muted_safe": true,
@@ -142,7 +142,7 @@
       "id": "EP01_CLIP01",
       "beat_id": "Beat_01",
       "label": "刀口为何对准人",
-      "duration": 4.598,
+      "duration": 3.884,
       "voiceover_indices": [
         1
       ],
@@ -269,7 +269,7 @@
         ]
       },
       "start_sec": 0.0,
-      "end_sec": 4.598
+      "end_sec": 3.884
     },
     {
       "id": "EP01_CLIP02",
@@ -454,8 +454,8 @@
           }
         ]
       },
-      "start_sec": 4.598,
-      "end_sec": 16.118
+      "start_sec": 3.884,
+      "end_sec": 15.404
     },
     {
       "id": "EP01_CLIP03",
@@ -629,8 +629,8 @@
           }
         ]
       },
-      "start_sec": 16.118,
-      "end_sec": 28.107
+      "start_sec": 15.404,
+      "end_sec": 27.393
     },
     {
       "id": "EP01_CLIP04",
@@ -799,8 +799,8 @@
         ],
         "previous_start_state_note": "尚未身体接触。"
       },
-      "start_sec": 28.107,
-      "end_sec": 35.526
+      "start_sec": 27.393,
+      "end_sec": 34.812
     },
     {
       "id": "EP01_CLIP05",
@@ -990,8 +990,8 @@
           }
         ]
       },
-      "start_sec": 35.526,
-      "end_sec": 47.134
+      "start_sec": 34.812,
+      "end_sec": 46.42
     },
     {
       "id": "EP01_CLIP06",
@@ -1024,6 +1024,7 @@
         "max": 7
       },
       "dramatic_function": "让系统在马上被吃的压力下出现。",
+      "spectacle_story_function": "用裴长青搏命仍被一脚击溃的单次交锋，直观标定虎妖战力并把横刀送到姜月初脚边，直接触发后续杀人选择。",
       "editing_intent": "以虎爪逼近作为外压起点，硬切主观规则层；现实站位不重置，系统出现不稀释迫近节奏。",
       "audience_effect": "选择窗口压到几秒。",
       "description": "裴长青单臂拾起横刀搏命冲锋，虎妖正面一脚将他连人带刀踢回姜月初脚边；虎妖继续逼近，姜月初绝望反应。",
@@ -1061,16 +1062,31 @@
         "attack_path": "裴长青自画面右下持刀向左上冲锋；虎妖由左上向右下正蹬，双方力线正面对冲。",
         "impact_frame": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。",
         "action_scope": "一次冲锋、一次正蹬、一次落地；不追加连击。",
-        "contact_points": ["虎妖足底与裴长青躯干衣料", "裴长青落地时肩背与泥地", "脱手横刀与泥地"],
+        "contact_points": [
+          "虎妖足底与裴长青躯干衣料",
+          "裴长青落地时肩背与泥地",
+          "脱手横刀与泥地"
+        ],
         "speed_curve": "拾刀短停→裴快速冲锋→虎妖极短爆发正蹬→裴失重飞退→落地后半拍静止。",
         "spatial_path": "裴从右下到左上，再沿同轴回落至姜月初脚边；虎妖保持左上高位。",
         "camera_path": "50mm短跟冲锋→85mm接触特写→50mm落地关系镜→低机位虎妖威胁与姜月初反应硬切。",
-        "readability_beats": ["拾刀搏命", "虎足命中", "人刀同落", "姜月初喊名", "虎妖威胁", "我想活"],
+        "readability_beats": [
+          "拾刀搏命",
+          "虎足命中",
+          "人刀同落",
+          "姜月初喊名",
+          "虎妖威胁",
+          "我想活"
+        ],
         "force_direction": "虎妖踢击由左上指向右下，裴长青飞退与衣摆惯性同向。",
         "screen_direction": "裴右下向左上进攻、右下回落；人物左右不互换。",
         "recovery_beat": "裴长青在姜月初脚边濒死喘息，横刀脱手落在两人之间。",
         "keyframe_plan": "1.2秒锁拾刀起势，3.0秒锁踢击接触，4.8秒锁人刀落地，末尾锁虎妖威胁与姜月初绝望。",
-        "post_cue_points": ["踢击接触加低频闷响", "落地后抽空半拍环境声", "虎妖台词保持近压迫混响"],
+        "post_cue_points": [
+          "踢击接触加低频闷响",
+          "落地后抽空半拍环境声",
+          "虎妖台词保持近压迫混响"
+        ],
         "physics_guard": "裴的飞退方向、身体折线、衣摆与横刀惯性必须统一；虎妖支撑腿落地稳定，不悬浮。",
         "execution_strategy": "regional_construct_required + split_composite_required：空场底板、裴冲锋、虎妖踢击、姜月初反应分take，统一轴线光位后合成。",
         "camera_rule": "沿冲锋力线短跟与硬切，不环绕、不越轴；接触帧优先动作可读性。",
@@ -1111,7 +1127,7 @@
       "entity_schedule": {
         "characters": [
           "CHAR_01/囚途残损态",
-        "CHAR_02/搏命冲锋至倒地濒死态",
+          "CHAR_02/搏命冲锋至倒地濒死态",
           "BEAST_01/复生态"
         ],
         "objects": [
@@ -1125,7 +1141,7 @@
             "无常规逃生可能"
           ],
           "CHAR_02": [
-          "决定拾刀搏命拖延"
+            "决定拾刀搏命拖延"
           ],
           "BEAST_01": [
             "确信猎物无力"
@@ -1197,8 +1213,8 @@
         ],
         "previous_start_state_note": "虎妖逼近，裴长青拾横刀准备搏命。"
       },
-      "start_sec": 47.134,
-      "end_sec": 55.385
+      "start_sec": 46.42,
+      "end_sec": 54.671
     },
     {
       "id": "EP01_CLIP07",
@@ -1401,8 +1417,8 @@
           }
         ]
       },
-      "start_sec": 55.385,
-      "end_sec": 65.981
+      "start_sec": 54.671,
+      "end_sec": 65.267
     },
     {
       "id": "EP01_CLIP08",
@@ -1476,22 +1492,22 @@
       "entity_schedule": {
         "characters": [
           "CHAR_01/囚途残损态",
-        "CHAR_02/濒死受刀态",
+          "CHAR_02/濒死受刀态",
           "BEAST_01/焦外"
         ],
         "objects": [
           "PROP_横刀",
-        "VFX_百妖谱"
+          "VFX_百妖谱"
         ],
         "locations": [
           "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
-          "决定刺向裴长青以争取生路，但尚不知道结果"
+            "决定刺向裴长青以争取生路，但尚不知道结果"
           ],
           "CHAR_02": [
-          "递刀是让她持刀逃生，不知道百妖谱规则"
+            "递刀是让她持刀逃生，不知道百妖谱规则"
           ],
           "BEAST_01": [
             "认为人族凉薄"
@@ -1629,8 +1645,8 @@
         "end_anchor_required": true,
         "previous_start_state_note": "裴右下濒死，横刀手边。"
       },
-      "start_sec": 65.981,
-      "end_sec": 75.297
+      "start_sec": 65.267,
+      "end_sec": 74.583
     }
   ]
 }

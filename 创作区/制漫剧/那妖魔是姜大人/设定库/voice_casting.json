@@ -2,7 +2,7 @@
   "episodes_scanned": [
     "第1集"
   ],
-  "generated_at": "2026-07-21T12:24:05+00:00",
+  "generated_at": "2026-07-21T12:29:25+00:00",
   "kind": "n2d_voice_casting",
   "policy": "casting_first_final_render_later",
   "roles": [
@@ -11,7 +11,7 @@
       "approved_by": "",
       "audition_lines": [
         {
-          "cue": "颤抖决绝·慢",
+          "cue": "短促决绝·快",
           "episode": "第1集",
           "line_index": 1,
           "text": "活下去，得先杀一个人。可我刀下的——不是妖。"

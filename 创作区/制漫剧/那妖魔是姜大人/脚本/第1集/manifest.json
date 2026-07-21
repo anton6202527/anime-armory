@@ -52,7 +52,7 @@
       "path": "脚本/第1集/voiceover.txt",
       "exists": true,
       "kind": "file",
-      "sha256": "acba41064cccc4f6d49a48053f35fb26ab20a500d0e3b17be8eb6884e920bb5f"
+      "sha256": "a159f9bdad5079f082618ebb7cba1f9b9487c6af34ccc4a49e7e81885ccbdcec"
     },
     {
       "stage": "script_stage1",
@@ -94,14 +94,14 @@
       "path": "设定库/voice_casting.json",
       "exists": true,
       "kind": "file",
-      "sha256": "326b16b2ab53f06fbb4508e5e9559fbdc4efe69038f9cd2e2259032532b19089"
+      "sha256": "47cbefdbf50b0e5c3f438ba0aa53f86b8f81ca7309289bfb94db6a1da30f3de3"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/timing_estimate.json",
       "exists": true,
       "kind": "file",
-      "sha256": "7107416f987c9b85bf4c8dbcfadd3493d61b8697adf2ed6dd410487b836fb768"
+      "sha256": "900fa6b5c4b4205218efbd7bc3a9b69205378852dc6bf20707317b7a8d88a7ac"
     },
     {
       "stage": "voice",
@@ -189,7 +189,7 @@
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "5ad741c1ca6507d47e9a2124cb621ce97469c748674e1e625704ec6237e37993"
+      "sha256": "82cd6234fed3bad6ee2b48ccc858292ea0ad378c5914928218a0fbe51ce91d27"
     },
     {
       "stage": "script_stage2",
@@ -203,7 +203,7 @@
       "path": "脚本/第1集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "c6cd58fbc23f8625b953cc212219811ba5ebf52c6ef77520144a800ff685de6b"
+      "sha256": "175a8aa07235a6d4fbf5be145fe97ae2145f7fd37f3c01b89e14293da2c03daa"
     },
     {
       "stage": "script_stage2",
@@ -216,7 +216,7 @@
       "path": "脚本/第1集/镜头时长.json",
       "exists": true,
       "kind": "file",
-      "sha256": "8f8093ff402ee51361106cf2c59331118caf0763efccbd32c7def8649abcaa24"
+      "sha256": "b7c848f54473b73ebda59a8a370539fdd8145ccecbecf4a3193457c127c74b17"
     },
     {
       "stage": "image_prompt",

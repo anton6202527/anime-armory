@@ -62,6 +62,16 @@
       "risk_if_removed": "姜月初不逃反而扶人会显得降智"
     },
     {
+      "source_span": "镇魔司缇骑一旦登门，便是阎王爷亲至，小儿闻名不敢夜啼",
+      "beat_function": "世界观+身份威慑",
+      "decision": "omit",
+      "change_type": "compress",
+      "reason": "裴长青掷断刀与自报队正已用可视行动完成同一威慑功能，重复口播会拖慢尸场冲突。",
+      "delivery": "不单独口播；由断刀入土、裴长青的控制力和姜月初被迫回身承接。",
+      "adaptation_delta": {"changed_from": "便是阎王爷亲至的镇魔司声名旁白", "changed_to": "断刀封路的即时威慑", "preserved_function": "镇魔司令人畏惧且裴仍有控场能力", "short_drama_reason": "用动作代替百科式旁白", "payoff_guard": "镇魔司身份与队正职级必须保留"},
+      "risk_if_removed": "若断刀动作与身份台词同时缺失，裴的威慑将不足"
+    },
+    {
       "source_span": "搀扶过程中的重量、体温、气味、步履细节",
       "beat_function": "状态+过渡",
       "decision": "merge",

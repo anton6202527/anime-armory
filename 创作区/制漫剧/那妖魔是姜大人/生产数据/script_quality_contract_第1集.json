@@ -1,17 +1,9 @@
 {
-  "content_hash": "b337ef444c91319a",
-  "contract_hash": "b337ef444c91319a",
+  "content_hash": "f56759b30f033a21",
+  "contract_hash": "f56759b30f033a21",
   "episode": "第1集",
-  "findings": [
-    {
-      "clip": "EP01_CLIP06",
-      "code": "spectacle_story_function_missing",
-      "message": "高动态/奇观 Clip 缺 spectacle_story_function；奇观必须服务剧情，不能只写酷炫动作。",
-      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
-      "severity": "block"
-    }
-  ],
-  "generated_at": "2026-07-21T12:28:07+00:00",
+  "findings": [],
+  "generated_at": "2026-07-21T12:29:25+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -35,7 +27,7 @@
         "narrate",
         "omit"
       ],
-      "items": 13,
+      "items": 14,
       "path": "脚本/第1集/adaptation_triage.json"
     },
     "audience_question_ledger": {
@@ -120,7 +112,7 @@
         "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "先展示不可逆选择，再回到选择前。",
-        "duration": 4.598,
+        "duration": 3.884,
         "key_clip": true,
         "pacing_role": "冷开场主钩与核心反差",
         "primary_runtime": true,
@@ -196,7 +188,7 @@
         "primary_runtime": true,
         "runtime_priority": "highlight",
         "spectacle_clip": true,
-        "spectacle_story_function": null
+        "spectacle_story_function": "用裴长青搏命仍被一脚击溃的单次交锋，直观标定虎妖战力并把横刀送到姜月初脚边，直接触发后续杀人选择。"
       },
       {
         "audience_effect": "先兴奋再意识到伦理代价。",
@@ -232,7 +224,7 @@
         "clip_id": "EP01_CLIP01",
         "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 4.598,
+        "duration": 3.884,
         "pacing_role": "冷开场主钩与核心反差",
         "primary_runtime": true,
         "runtime_priority": "primary"
@@ -318,7 +310,7 @@
       "muted_safe": true,
       "muted_safe_proof": "刀口、人类目标、后景虎妖与女主痛苦表情构成无需文字的三角冲突。",
       "onscreen_duration_sec": 2.2,
-      "onscreen_text": "我刀下的，不是妖",
+      "onscreen_text": "活下去，先杀人——我刀下的不是妖",
       "visual_hook": "横刀悬在裴长青胸前，姜月初双手发抖；后景虎妖巨影压近，但刀口对准的是人。"
     },
     "pacing_allocation": {
@@ -353,9 +345,9 @@
           "EP01_CLIP07",
           "EP01_CLIP08"
         ],
-        "primary_duration": 75.297,
+        "primary_duration": 74.583,
         "primary_runtime_share": 1.0,
-        "total_duration": 75.297,
+        "total_duration": 74.583,
         "unclassified_duration": 0.0
       },
       "source": "storyboard.pacing_allocation"
@@ -401,18 +393,18 @@
     "storyboard": "脚本/第1集/storyboard.json"
   },
   "source_sha256": {
-    "adaptation_triage": "d3496472caaaae453931c3e5fc91a449ef4a87891d430873dd8183eb3b843780",
+    "adaptation_triage": "54801ba36ac1623860b41036975541047fc4b334e3a14f3eaff7dff11489caff",
     "story_quality_pack": "22ef9cfac0b4dc4c9a7a9077281beb353ab4f1c0d51d5f71597e9173fcd4b7a4",
-    "storyboard": "9f7620d9c65262420e96efad045e7c33a29c1b1769148770eedda21c9604b10c"
+    "storyboard": "6b19ef43f97a2c410d448d86f1d0d9b36eea66b90fe0e796dda67fdbb657b989"
   },
-  "status": "block",
+  "status": "pass",
   "summary": {
-    "blocks": 1,
+    "blocks": 0,
     "clips": 8,
     "compressed_runtime_share": 0.0,
     "open_questions": 0,
     "primary_runtime_share": 1.0,
-    "status": "block",
+    "status": "pass",
     "warnings": 0
   },
   "version": 1
