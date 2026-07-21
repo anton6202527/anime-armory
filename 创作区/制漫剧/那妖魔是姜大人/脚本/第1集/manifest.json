@@ -189,7 +189,7 @@
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "dffbcc2bf737078e51ab098e41939c408739e982d435e54c3b3d5baf9be5cc25"
+      "sha256": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7"
     },
     {
       "stage": "script_stage2",
@@ -203,7 +203,7 @@
       "path": "脚本/第1集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "8928b5d48eaa187cbda1c01ee6f6ba0a43be7dbf613529d929aa07b13fad1629"
+      "sha256": "63297ee8cfa5143aebb3ff97367222636b68de1880f3714f0d54897c999ae3d9"
     },
     {
       "stage": "script_stage2",
@@ -216,7 +216,7 @@
       "path": "脚本/第1集/镜头时长.json",
       "exists": true,
       "kind": "file",
-      "sha256": "452e715095dc373e36a39c1b369abeb5acb5f1c5cc904db04813bcaab48f8f55"
+      "sha256": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb"
     },
     {
       "stage": "image_prompt",
@@ -315,7 +315,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "配音",
-  "last_progress_value": "⏳rough",
-  "last_progress_state": "rough"
+  "last_progress_column": "素材清单",
+  "last_progress_value": "✅",
+  "last_progress_state": "done"
 }

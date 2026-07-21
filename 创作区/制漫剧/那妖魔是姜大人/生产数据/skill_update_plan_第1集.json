@@ -4,10 +4,10 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-21T12:31:17+00:00",
+  "created_at": "2026-07-21T12:32:40+00:00",
   "current_stage": "script_stage2",
   "current_todo": {
-    "column": "分镜设计",
+    "column": "字幕中",
     "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集  (配音后定稿)",
     "label": "阶段2·分镜设计",
     "note": "",

@@ -13,8 +13,8 @@
 
 ## Check
 
-- 状态：block
-- 通过：6/7
+- 状态：pass
+- 通过：7/7
 
 | 文件 | 状态 | 问题 |
 |---|---|---|
@@ -24,4 +24,4 @@
 | `脚本/第1集/transition_map.json` | pass | - |
 | `脚本/第1集/vertical_composition_plan.json` | pass | - |
 | `脚本/第1集/edit_rhythm_map.json` | pass | - |
-| `脚本/第1集/director_blocking_signoff.json` | block | input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[user:wesley:director] 未绑定当前 input_fingerprint；approval[user:wesley:producer] 未绑定当前 input_fingerprint；缺 creative 审批；允许角色：director；缺 production 审批；允许角色：editor, producer |
+| `脚本/第1集/director_blocking_signoff.json` | pass | - |

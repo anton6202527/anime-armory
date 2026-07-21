@@ -8,7 +8,7 @@
     "signoff_manifest": "脚本/第1集/table_read_signoff.json"
   },
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:17:36+00:00",
+  "generated_at": "2026-07-21T12:32:21+00:00",
   "inputs": {
     "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
     "timing_estimate": "合成/第1集/配音/timing_estimate.json",
@@ -17,11 +17,11 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "合成/第1集/配音/timing_estimate.json": "2e87008d783bf4f7ac03b81b63c56f5654a4ed1588a6c381458b5b556d3aadd2",
+      "合成/第1集/配音/timing_estimate.json": "77bbcca360014dc6549e46c8e72f7b90983e0cee14d57cf7ee0c86a006b1576b",
       "合成/第1集/配音/时长清单.json": null,
-      "脚本/第1集/voiceover.txt": "d4912c0c3186b9c41252af8b79d023a0db28ea20b0afbc9d29667599a0d5ca41"
+      "脚本/第1集/voiceover.txt": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812"
     },
-    "sha": "779e444132a6c3f03ac731b2816253af1d0d66e4ba7144ab0c5729ef08b38100"
+    "sha": "94fc75426321cf84637a80a09b0dd5a73070471b3f66fda1c0b89fd64d8cb601"
   },
   "kind": "n2d_table_read_packet",
   "machine_reference": {
@@ -29,7 +29,7 @@
     "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
     "story_economy": "not_applicable_before_storyboard",
     "timing_estimate": {
-      "duration_sec": 74.997,
+      "duration_sec": 74.798,
       "line_count": 22,
       "split_suggested_lines": 0
     }
@@ -39,7 +39,7 @@
     "line_count": 22,
     "placeholder_or_rough_timing_mentions": 0,
     "sample_lines": [
-      "[镜头1·姜月初·颤抖决绝·慢] 活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子",
+      "[镜头1·姜月初·短促决绝·快] 活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子",
       "[镜头2·姜月初·茫然警惕·快] 一炷香前。大唐荒野，囚犯和镇魔卫死了一地。|| 我偏偏在死人堆里醒了。",
       "[镜头3·姜月初·苦涩克制·快] 穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。  ⚡钩子",
       "[镜头4·裴长青·虚弱威严·慢] 过来。",

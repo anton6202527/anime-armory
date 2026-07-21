@@ -3,11 +3,9 @@
   "files": [
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/table_read_packet.json",
-      "issues": [
-        "inputs_fingerprint 已过期，上游输入变更后需重新签收"
-      ],
+      "issues": [],
       "packet": "table_read",
-      "status": "block"
+      "status": "pass"
     },
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/table_read_packet.md",
@@ -17,23 +15,19 @@
     },
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/table_read_signoff.json",
-      "issues": [
-        "input_fingerprint 缺失或过期；上游输入变化后必须重新签收",
-        "approval[user:wesley:director] 未绑定当前 input_fingerprint",
-        "缺 editorial 审批；允许角色：director, head_writer"
-      ],
+      "issues": [],
       "packet": "table_read",
-      "status": "block"
+      "status": "pass"
     }
   ],
-  "generated_at": "2026-07-21T12:31:17+00:00",
+  "generated_at": "2026-07-21T12:32:41+00:00",
   "kind": "n2d_story_acceptance_packets_check",
   "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
   "packet_kind": "table_read",
-  "status": "block",
+  "status": "pass",
   "summary": {
-    "block": 2,
-    "pass": 1,
+    "block": 0,
+    "pass": 3,
     "required": 3
   },
   "version": 1

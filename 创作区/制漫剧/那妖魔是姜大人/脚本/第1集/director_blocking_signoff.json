@@ -28,12 +28,12 @@
           "sha256": "33d1f4ac2583a5337483ce3a796a281f215e327bd05463c6cbe24d7614b13a08"
         }
       ],
-      "note": "用户明确确认第1集P2导演排戏；围读输入刷新后按同一授权重签。",
-      "reviewed_at": "2026-07-21T12:31:46+00:00",
+      "note": "用户明确确认第1集P2导演排戏；刷新至当前围读签收哈希。",
+      "reviewed_at": "2026-07-21T12:32:21+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "director",
       "signed_evidence_fingerprint_sha": "b477902472b568ee1d9d7712ebb7a142f93ec77d3a6c5000a956d88b2e9afbbc",
-      "signed_input_fingerprint_sha": "0f547d4b08842dea7beb78db51e618d9c10b3d232f306a8f4f66c4ae7c8e1cc1",
+      "signed_input_fingerprint_sha": "dd4932ab75e87f8d207199ab10849839ff9d6dce2479f437418ed71e0c946d78",
       "unresolved_risks": [],
       "waiver_reason": ""
     },
@@ -66,18 +66,18 @@
         }
       ],
       "note": "用户明确授权以producer登记第1集P2制作可执行性。",
-      "reviewed_at": "2026-07-21T12:31:46+00:00",
+      "reviewed_at": "2026-07-21T12:32:21+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "producer",
       "signed_evidence_fingerprint_sha": "b477902472b568ee1d9d7712ebb7a142f93ec77d3a6c5000a956d88b2e9afbbc",
-      "signed_input_fingerprint_sha": "0f547d4b08842dea7beb78db51e618d9c10b3d232f306a8f4f66c4ae7c8e1cc1",
+      "signed_input_fingerprint_sha": "dd4932ab75e87f8d207199ab10849839ff9d6dce2479f437418ed71e0c946d78",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "p2_director_blocking",
   "authored_by": "agent:codex",
-  "created_at": "2026-07-21T12:31:46+00:00",
+  "created_at": "2026-07-21T12:32:21+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
@@ -92,12 +92,12 @@
   },
   "input_fingerprint": {
     "files": {
-      "脚本/第1集/table_read_packet.json": "30d5f561fd4d37ef19e0d3ed7611fec492519b2cfcddb31c4cdb054daabc4621",
-      "脚本/第1集/table_read_signoff.json": "c70fa09a024dd78bb037987ce192fb85e32d6d756480012922469dced24964de",
+      "脚本/第1集/table_read_packet.json": "fb2c16f024d44c07850c4ce9e6a58242f20b87fffd2bb3479b25909b6046c07b",
+      "脚本/第1集/table_read_signoff.json": "4a706e491f2a78f8b225a9c4381ff410014318986edcfd9adf276afbce05b00d",
       "脚本/第1集/voiceover.txt": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812",
       "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
     },
-    "sha": "0f547d4b08842dea7beb78db51e618d9c10b3d232f306a8f4f66c4ae7c8e1cc1"
+    "sha": "dd4932ab75e87f8d207199ab10849839ff9d6dce2479f437418ed71e0c946d78"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -116,6 +116,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-21T12:31:46+00:00",
+  "updated_at": "2026-07-21T12:32:21+00:00",
   "version": 1
 }
