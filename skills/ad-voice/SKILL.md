@@ -32,7 +32,7 @@ python3 skills/ad-voice/render_voice.py "<作品根>" --backend EdgeTTS --from-d
 
 产物：`配音/line_NN.wav` + `配音/vo.wav` + `配音/时长清单.json` + `配音/voice_qc.json`。成片后另由本 skill 的 `asr_consistency.py` 生成 `合成/asr_consistency.json` + `asr_receipts.json`，把批准 VO、实际 VO、字幕和最终音轨绑定到各自 SHA；外部预转写也必须记录媒体 SHA、transcript SHA、引擎/模型和时间，不能拿手填 txt 冒充实际 ASR。
 
-真后端不能静默降级：选择 `CosyVoice/GPT-SoVITS/MiniMax/火山/自定义` 但没有 `--from-dir` 时必须阻断，不能自动写静音占位并假装跑过正式配音。`--from-dir` 目录必须包含和 `voiceover.txt` 行数一致的 `line_01.wav..line_NN.wav`。登记后自动跑 `voice_qc.py`：ffprobe 对账逐句/整轨实测时长，ffmpeg 检查非静音与峰值；正式模式要求 full precision，失败不回写完成。compose 统一重采样到 48 kHz，输入非 48 kHz 会 WARN 而不是伪称源文件合格。
+真后端不能静默降级：选择 `CosyVoice/GPT-SoVITS/MiniMax/火山/自定义` 但没有 `--from-dir` 时必须阻断，不能自动写静音占位并假装跑过正式配音。`--from-dir` 目录必须包含和 `voiceover.txt` 行数一致的 `line_01.wav..line_NN.wav`。**重跑保护**：占位合成对「文件在 + 文本 hash 未变 + 音色键未变」的行直接复用不重合成（`--force` 全量重跑）；`--from-dir` 导入遇到目标已存在且内容不同时，先把旧文件落 `.bak` 再覆盖，绝不静默覆盖真 VO；`时长清单.json` 原子写。登记后自动跑 `voice_qc.py`：ffprobe 对账逐句/整轨实测时长，ffmpeg 检查非静音与峰值；正式模式要求 full precision，失败不回写完成。compose 统一重采样到 48 kHz，输入非 48 kHz 会 WARN 而不是伪称源文件合格。
 
 ```bash
 python3 skills/ad-voice/voice_qc.py "<作品根>"
