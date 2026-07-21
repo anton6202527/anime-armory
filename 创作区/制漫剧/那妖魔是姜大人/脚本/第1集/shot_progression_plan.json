@@ -1,0 +1,11 @@
+{
+  "kind":"n2d_shot_progression_plan","version":1,"episode":"第1集","status":"confirmed",
+  "rules":{"establishing":"倒叙钩后立刻用ELS交代尸场、巨岩、南向车辙；竖屏中姜月初仍保留可读轮廓","scale_ladder":"ELS→MS/MCU交易→LS虎妖复生→动作碎切CU/MS→系统ECU/CU→集尾ECU","movement_motivation":"只在威胁逼近、规则聚焦、选择形成时推近；表演和压迫段固定","peak_closeup":"虎妖复生给眼/血洞CU，系统给眼睛ECU，集尾给握刀和姜月初决绝CU"},
+  "progressions":[
+    {"beat_id":"Beat_01","start_shot_size":"ECU/CU倒叙","peak_shot_size":"CU姜月初眼神与刀尖","release_shot_size":"ELS尸骸荒野","camera_move":"首镜固定微推；硬切后缓慢下降建立空间","camera_motivation":"首镜逼观众进入道德选择；随后拉开回答她身处何地","must_have_insert_or_reaction":"刀尖、灰囚服袖口、姜月初睁眼反应"},
+    {"beat_id":"Beat_02","start_shot_size":"MS双人关系","peak_shot_size":"CU断刀入土/姜月初僵住","release_shot_size":"MS搀扶起身","camera_move":"以固定正反打为主，交易落定时轻微拉远","camera_motivation":"威胁动作瞬间切近，谈判让表演优先","must_have_insert_or_reaction":"断刀入土、姜月初脚停住、听见自由后的眼神"},
+    {"beat_id":"Beat_03","start_shot_size":"LS扶行与巨岩","peak_shot_size":"CU虎妖睁眼与胸口血洞","release_shot_size":"MS裴持刀起手","camera_move":"咳声后从二人肩后缓推虎妖；裴起手短跟","camera_motivation":"让声音牵引观众主动寻找复生威胁","must_have_insert_or_reaction":"裴血色褪去、虎爪撑地、横刀被拾起"},
+    {"beat_id":"Beat_04","start_shot_size":"MS裴冲出","peak_shot_size":"CU脚掌命中/裴受击","release_shot_size":"MS裴与横刀落在姜月初脚边","camera_move":"起手短跟、命中固定顿帧、受击顺力方向短摇","camera_motivation":"运动只沿力线，命中点必须清楚而非炫技","must_have_insert_or_reaction":"命中接触点、姜月初惊恐、横刀落地"},
+    {"beat_id":"Beat_05","start_shot_size":"CU百妖谱空面板与眼睛","peak_shot_size":"ECU姜月初目光转向裴/手握刀","release_shot_size":"CU刀下落后黑场","camera_move":"规则呈现固定；选择形成时极慢推近；刺下瞬间硬切黑","camera_motivation":"系统信息需要稳定可读，选择需要压迫式逼近","must_have_insert_or_reaction":"零道行overlay、姜月初视线转移、裴错愕、刀柄攥紧"}
+  ]
+}

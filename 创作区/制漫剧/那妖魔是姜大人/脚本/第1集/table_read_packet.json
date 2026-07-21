@@ -1,0 +1,59 @@
+{
+  "acceptance": {
+    "dialogue_voice_distinct": "accepted",
+    "duration_risk_understood": "accepted",
+    "exposition_not_overloaded": "accepted",
+    "reviewer": "",
+    "rewrite_notes": [],
+    "signoff_manifest": "脚本/第1集/table_read_signoff.json"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-07-21T12:17:36+00:00",
+  "inputs": {
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "timing_estimate": "合成/第1集/配音/timing_estimate.json",
+    "timing_manifest": "合成/第1集/配音/时长清单.json",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第1集/配音/timing_estimate.json": "2e87008d783bf4f7ac03b81b63c56f5654a4ed1588a6c381458b5b556d3aadd2",
+      "合成/第1集/配音/时长清单.json": null,
+      "脚本/第1集/voiceover.txt": "d4912c0c3186b9c41252af8b79d023a0db28ea20b0afbc9d29667599a0d5ca41"
+    },
+    "sha": "779e444132a6c3f03ac731b2816253af1d0d66e4ba7144ab0c5729ef08b38100"
+  },
+  "kind": "n2d_table_read_packet",
+  "machine_reference": {
+    "advisory": true,
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": "not_applicable_before_storyboard",
+    "timing_estimate": {
+      "duration_sec": 74.997,
+      "line_count": 22,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "writer_director_producer",
+  "read_through": {
+    "line_count": 22,
+    "placeholder_or_rough_timing_mentions": 0,
+    "sample_lines": [
+      "[镜头1·姜月初·颤抖决绝·慢] 活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子",
+      "[镜头2·姜月初·茫然警惕·快] 一炷香前。大唐荒野，囚犯和镇魔卫死了一地。|| 我偏偏在死人堆里醒了。",
+      "[镜头3·姜月初·苦涩克制·快] 穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。  ⚡钩子",
+      "[镜头4·裴长青·虚弱威严·慢] 过来。",
+      "[镜头5·姜月初·警惕讥诮·快] 你都快断气了，还想使唤我？",
+      "[镜头6·裴长青·冷厉克制·快] 你可以试试。下一刀，落的就不是地上。",
+      "[镜头7·裴长青·疲惫笃定·慢] 裴长青，陇右镇魔都司队正。扶我往南，我保你脱籍，还你自由。",
+      "[镜头8·姜月初·怀疑盘算·慢] 一个将死之人的承诺……|| 总好过我现在就死。  ⚡钩子",
+      "[镜头9·姜月初·认命警醒·快] 好。先说清楚，那头虎妖真死了？",
+      "[镜头10·虎妖·沙哑戏谑·慢] 别跑啊。|| 这荒郊野岭的，你们能去哪儿？  ⚡钩子",
+      "[镜头11·裴长青·惊骇低哑·快] 不可能……我明明刺穿了你的心！",
+      "[镜头12·虎妖·傲慢从容·慢] 几个不入流的镇魔卫，也配杀我？"
+    ],
+    "timing_status": "estimate_only"
+  },
+  "status": "confirmed",
+  "version": 1
+}

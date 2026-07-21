@@ -1,0 +1,41 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [],
+    "mode": "混合自动路由",
+    "native_av_policy": {
+      "lipsync_policy": "可见口型镜先锁表演轨，缺失则生成neutral-mouth底片并后置口型pass。",
+      "subtitle_policy": "compose_overlay_only；视频和图片后端禁止烤字。",
+      "voice_identity_policy": "所有角色使用纯合成音色，后续由voice_casting和voicemap锁定。"
+    },
+    "policy": "time_basis_first_per_shot_sound_routing",
+    "post_dub": {
+      "fit_strategy": "先按纯文本估时和动作留白锁镜长；音色定妆后以final voice刷新OTIO和口型镜。",
+      "overflow_policy": "超出估时范围时回分镜调整，不重度压速、不以静音占位冒充。"
+    },
+    "production_route_status": "aligned"
+  },
+  "episode": "第1集",
+  "episode_promise": {
+    "cliffhanger": "她没有冲向虎妖，而是向刚承诺给她自由的裴长青刺下横刀；结果和道行结算留到第2集。",
+    "obstacle": "虎妖穿心不死，裴长青彻底失去战力，姜月初是手无缚鸡之力的贱籍逃犯。",
+    "opening_hook": "姜月初持刀对准一个重伤人类，明确说刀下不是妖；静音画面也能读出她将越过道德线。",
+    "payoff_or_progress": "百妖谱给出杀生换道行的规则，姜月初从被动等死转为主动选择代价。",
+    "promise": "揭示一个刚穿越、毫无力量的女子会用什么代价从妖魔死局中争得生路。",
+    "source_trace_ids": [
+      "第1章_百妖谱_荒野醒来",
+      "第1章_虎妖复生",
+      "第1章_百妖谱开启",
+      "第1章_横刀入胸"
+    ]
+  },
+  "interaction_physics": [],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [],
+    "characters": [],
+    "scenes": []
+  },
+  "shots": [],
+  "status": "confirmed",
+  "version": 1
+}

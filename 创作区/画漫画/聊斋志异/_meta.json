@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "comic_project",
+  "project_id": "comic_33e472a2a94a47b8",
+  "line": "comic",
+  "title": "聊斋志异",
+  "created": "2026-07-21",
+  "mode": "源本改漫画",
+  "format": "条漫",
+  "source": {
+    "path": "源本/聊斋志异.docx",
+    "original_name": "聊斋志异.docx"
+  },
+  "synopsis": "",
+  "cover": null,
+  "rights": {
+    "source_status": "original_or_user_provided",
+    "font_status": "pending_before_publish",
+    "asset_status": "pending_before_publish"
+  }
+}

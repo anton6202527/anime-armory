@@ -1,11 +1,20 @@
 # 漫画一致性报告 — 第9话
 
-- 生成时间：2026-07-20T18:14:00
+- 生成时间：2026-07-21T05:06:21
 - reference 总数：15
 - 缺失 reference：0
 - 需要重抽格：0
 - registry v2 结构问题：0
-- model pack 待修/待签收：0
+- model pack 待修/待签收：4
+
+## 人物多视图缺口
+
+| character | missing views |
+|---|---|
+| CHAR_JIN_CUILIAN | front, three_quarter, face |
+| CHAR_JIN_LAO | front, face |
+| CHAR_LI_ZHONG | front, three_quarter, face |
+| CHAR_ZHENG_TU | front, face |
 
 ## 每格状态
 
@@ -31,7 +40,7 @@
 | P018 | ready | 5 | - | 5 |
 | P019 | ready | 10 | - | 10 |
 | P020 | ready | 10 | - | 10 |
-| P021 | ready | 8 | - | 4 |
+| P021 | ready | 10 | - | 4 |
 | P022 | ready | 8 | - | 4 |
 | P023 | ready | 8 | - | 8 |
 | P024 | ready | 4 | - | 4 |

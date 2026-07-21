@@ -1,0 +1,28 @@
+{
+  "kind": "comic_season_arc",
+  "version": 2,
+  "status": "draft",
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "core_conflict": "待补",
+      "ending_mode": "待补",
+      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
+      "promise_refs": []
+    },
+    {
+      "chapter": "第2话",
+      "core_conflict": "待补",
+      "ending_mode": "待补",
+      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
+      "promise_refs": []
+    },
+    {
+      "chapter": "第3话",
+      "core_conflict": "待补",
+      "ending_mode": "待补",
+      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
+      "promise_refs": []
+    }
+  ]
+}

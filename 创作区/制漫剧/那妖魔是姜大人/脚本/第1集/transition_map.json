@@ -1,0 +1,9 @@
+{
+  "kind":"n2d_transition_map","version":1,"episode":"第1集","status":"confirmed",
+  "seams":[
+    {"seam_id":"Seam_01","from_beat":"Beat_01","to_beat":"Beat_02","transition_type":"hard_cut","seam_mode":"hard_cut","seam_mode_source":"explicit","need_endframe":false,"out_point":"裴长青在尸场中抬眼说过来","in_point":"姜月初停住后露出不服的侧脸","sound_bridge":"荒风L-cut延续，不提前进入正面口型台词","continuity_guard":"姜月初画左、裴画右；裴左臂骨折和断刀位置保持","seam_evidence":{"editorial_intent":"从空间建立硬切到权力试探，缩短无效走近过程"}},
+    {"seam_id":"Seam_02","from_beat":"Beat_02","to_beat":"Beat_03","transition_type":"j_cut","seam_mode":"j_cut","seam_mode_source":"explicit","need_endframe":false,"out_point":"姜月初扶起裴，两人沿南向车辙走出两步","in_point":"二人同时停步回头，虎妖仍在巨岩后景","sound_bridge":"虎妖第一声咳嗽提前0.3秒进入扶行尾部","continuity_guard":"二人向画右移动后原地回头，左右关系不互换；虎妖胸口血洞仍在","seam_evidence":{"audio_source":"虎妖画外咳嗽与第一句别跑啊","audio_lead_sec":0.3}},
+    {"seam_id":"Seam_03","from_beat":"Beat_03","to_beat":"Beat_04","transition_type":"match_on_action","seam_mode":"match_on_action","seam_mode_source":"explicit","need_endframe":false,"out_point":"裴长青从右前景俯身抓起横刀并向左后景蹬地","in_point":"侧面中景承接同一次向左发力，刀已进入挥砍前段","sound_bridge":"裴的快走后立刻接衣料破风和脚步蹬地声","continuity_guard":"攻击方向始终右前→左后，右手持刀，左臂骨折不参与发力","seam_evidence":{"action_phase_out":"右手握刀、右脚蹬地的起动相位","action_phase_in":"同一步蹬地后的前冲挥刀相位","screen_direction":"画右前景向画左后景"}},
+    {"seam_id":"Seam_04","from_beat":"Beat_04","to_beat":"Beat_05","transition_type":"reaction_cut","seam_mode":"reaction_cut","seam_mode_source":"explicit","need_endframe":false,"out_point":"裴与横刀重落姜月初脚边，虎妖缓步逼近","in_point":"姜月初俯视横刀后抬眼怒问凭什么又让我死","sound_bridge":"落地闷响尾音延续至姜月初吸气，随后古卷声进入","continuity_guard":"横刀停在她右脚前，裴头朝画右、左臂扭曲；虎妖保持左后景","seam_evidence":{"stimulus":"裴被一脚踢飞并与横刀落在脚边","reaction_subject":"姜月初","reaction_beat":"惊恐失声转为愤怒求生，随后看见百妖谱"}}
+  ]
+}

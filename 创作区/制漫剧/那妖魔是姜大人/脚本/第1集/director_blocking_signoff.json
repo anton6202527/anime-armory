@@ -1,0 +1,121 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第1集/axis_blocking_map.json",
+          "sha256": "0e882aaf12269bd4e7d5d1a8fefa3e43dd5b7c22068ff3081a075aa4742b76f4"
+        },
+        {
+          "path": "脚本/第1集/director_beat_sheet.json",
+          "sha256": "2a822a37f0378e3790df3ca542e0af2b54b44655196cb9be483c895445a50de0"
+        },
+        {
+          "path": "脚本/第1集/edit_rhythm_map.json",
+          "sha256": "021ce2f7bb2cb7cc09bac8e049a1869792fa4554f7226655f22e4a7a88283e7f"
+        },
+        {
+          "path": "脚本/第1集/shot_progression_plan.json",
+          "sha256": "5b568655a01e7d5e5184af3b240b9512afebe8d9b6fae5faf56c30902a649651"
+        },
+        {
+          "path": "脚本/第1集/transition_map.json",
+          "sha256": "d869115181ad4145015218a8d46f240db2230a18c242effcad58812db5edf04b"
+        },
+        {
+          "path": "脚本/第1集/vertical_composition_plan.json",
+          "sha256": "33d1f4ac2583a5337483ce3a796a281f215e327bd05463c6cbe24d7614b13a08"
+        }
+      ],
+      "note": "用户明确确认第1集P2导演排戏。",
+      "reviewed_at": "2026-07-21T12:21:57+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "b477902472b568ee1d9d7712ebb7a142f93ec77d3a6c5000a956d88b2e9afbbc",
+      "signed_input_fingerprint_sha": "fbbf39af810969cd12e11319fb03d6f7d5de158551b08c712f224a8f1599fade",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第1集/axis_blocking_map.json",
+          "sha256": "0e882aaf12269bd4e7d5d1a8fefa3e43dd5b7c22068ff3081a075aa4742b76f4"
+        },
+        {
+          "path": "脚本/第1集/director_beat_sheet.json",
+          "sha256": "2a822a37f0378e3790df3ca542e0af2b54b44655196cb9be483c895445a50de0"
+        },
+        {
+          "path": "脚本/第1集/edit_rhythm_map.json",
+          "sha256": "021ce2f7bb2cb7cc09bac8e049a1869792fa4554f7226655f22e4a7a88283e7f"
+        },
+        {
+          "path": "脚本/第1集/shot_progression_plan.json",
+          "sha256": "5b568655a01e7d5e5184af3b240b9512afebe8d9b6fae5faf56c30902a649651"
+        },
+        {
+          "path": "脚本/第1集/transition_map.json",
+          "sha256": "d869115181ad4145015218a8d46f240db2230a18c242effcad58812db5edf04b"
+        },
+        {
+          "path": "脚本/第1集/vertical_composition_plan.json",
+          "sha256": "33d1f4ac2583a5337483ce3a796a281f215e327bd05463c6cbe24d7614b13a08"
+        }
+      ],
+      "note": "用户明确确认第1集P2制作可执行性。",
+      "reviewed_at": "2026-07-21T12:21:57+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "b477902472b568ee1d9d7712ebb7a142f93ec77d3a6c5000a956d88b2e9afbbc",
+      "signed_input_fingerprint_sha": "fbbf39af810969cd12e11319fb03d6f7d5de158551b08c712f224a8f1599fade",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p2_director_blocking",
+  "authored_by": "agent:codex",
+  "created_at": "2026-07-21T12:21:57+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第1集/axis_blocking_map.json": "0e882aaf12269bd4e7d5d1a8fefa3e43dd5b7c22068ff3081a075aa4742b76f4",
+      "脚本/第1集/director_beat_sheet.json": "2a822a37f0378e3790df3ca542e0af2b54b44655196cb9be483c895445a50de0",
+      "脚本/第1集/edit_rhythm_map.json": "021ce2f7bb2cb7cc09bac8e049a1869792fa4554f7226655f22e4a7a88283e7f",
+      "脚本/第1集/shot_progression_plan.json": "5b568655a01e7d5e5184af3b240b9512afebe8d9b6fae5faf56c30902a649651",
+      "脚本/第1集/transition_map.json": "d869115181ad4145015218a8d46f240db2230a18c242effcad58812db5edf04b",
+      "脚本/第1集/vertical_composition_plan.json": "33d1f4ac2583a5337483ce3a796a281f215e327bd05463c6cbe24d7614b13a08"
+    },
+    "sha": "b477902472b568ee1d9d7712ebb7a142f93ec77d3a6c5000a956d88b2e9afbbc"
+  },
+  "input_fingerprint": {
+    "files": {
+      "脚本/第1集/table_read_packet.json": "30d5f561fd4d37ef19e0d3ed7611fec492519b2cfcddb31c4cdb054daabc4621",
+      "脚本/第1集/table_read_signoff.json": "ddef32375ac67743fdaceb56dc2dec6b51a5ac652fdfa7e96b5b3026521193b3",
+      "脚本/第1集/voiceover.txt": "d4912c0c3186b9c41252af8b79d023a0db28ea20b0afbc9d29667599a0d5ca41",
+      "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
+    },
+    "sha": "fbbf39af810969cd12e11319fb03d6f7d5de158551b08c712f224a8f1599fade"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-21T12:21:57+00:00",
+  "version": 1
+}

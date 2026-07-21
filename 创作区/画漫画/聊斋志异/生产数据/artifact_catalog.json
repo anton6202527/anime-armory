@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "artifact_catalog",
+  "status": "bootstrap",
+  "generated_at": "2026-07-21",
+  "project": {
+    "project_id": "comic_33e472a2a94a47b8",
+    "line": "comic",
+    "title": "聊斋志异",
+    "root_rel": "."
+  },
+  "summary": {
+    "artifact_count": 0,
+    "total_bytes": 0,
+    "disposable_bytes": 0,
+    "invalid_count": 0
+  },
+  "event_sources": [],
+  "view_sources": [],
+  "artifacts": [],
+  "duplicates": []
+}

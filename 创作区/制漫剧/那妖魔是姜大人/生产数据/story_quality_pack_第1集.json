@@ -1,0 +1,95 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。 audience_payoff",
+      "月初架起裴长青，面向画面下方。 rhythm 反转·压迫升级 label 死妖咳嗽站起 subtitle_lines",
+      "立。 dramatic_function 推翻逃生路径，升级为绝对死局。 continuity_story start_state",
+      "行结算和裴的生死。 dramatic_function 兑现开场反差：姜月初主动选择杀死濒死的裴长青换取生路。 continuity_story"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "正。扶我往南，我保你脱籍，还你自由。 [镜头8·姜月初·怀疑盘算·慢] 一个将死之人的承诺……|| 总好过我现在就死",
+        "question_id": "Q01",
+        "signal": "怀疑",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "魔卫。 audience_payoff 观众在首集看清她为何必须跨过道德线，并在横刀入胸处获得强烈反转与追更悬念。",
+        "question_id": "Q02",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "反差/危机 content_proposition 她为什么不杀妖，反而要杀刚救她的人？ onscreen_text",
+        "question_id": "Q03",
+        "signal": "为什么",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "opened_at EP01_CLIP01 promise 姜月初为何把刀对准人而不是妖 payoff_due EP01_CLIP08",
+        "question_id": "Q04",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "opened_at EP01_CLIP05 promise 穿心虎妖为何复生，二人能否逃走 payoff_due 第2集 payoff_status",
+        "question_id": "Q05",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "open rhythm 冷开场·CU硬切 label 刀口为何对准人 subtitle_lines 活下去，得先杀一个",
+        "question_id": "Q06",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "LOC_01/未来片段 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 dramatic_function",
+        "question_id": "Q07",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "择窗口压到几秒。 dramatic_function 让系统在马上被吃的压力下出现。 continuity_story",
+        "question_id": "Q08",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "一击，可借岁月之力杀敌。 scene LOC_01/主观系统层 spectacle_story_function 建",
+        "question_id": "Q09",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": false,
+    "reason": "第1集无上集边界",
+    "status": "n/a"
+  },
+  "episode": "第1集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "f2f8d73f789a5252",
+  "performance_prompt_cues": [],
+  "summary": {
+    "boundary_status": "n/a",
+    "open_questions": 0,
+    "performance_cue_clips": 0
+  },
+  "version": 1
+}

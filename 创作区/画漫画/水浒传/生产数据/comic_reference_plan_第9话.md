@@ -1,7 +1,7 @@
 # 逐格参考规划（事前处方）· 第9话
 
 - 后端 dreamina_image2image（持久主体 False·单角色参考上限 5）
-- 含角色格 48 · 需处理 27 · warn 53 · info 0
+- 含角色格 48 · 需处理 27 · warn 50 · info 0
 
 - ⚠️ `same_frame_color_collision` P001 多人同框主色撞色（易串脸）：CHAR_ZHU_WU↔CHAR_CHEN_DA（同主色「红」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P001 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
@@ -23,8 +23,6 @@
 - ⚠️ `multi_character_closeup` P019 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `same_frame_color_collision` P020 多人同框主色撞色（易串脸）：CHAR_ZHU_WU↔CHAR_CHEN_DA（同主色「红」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P020 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
-- ⚠️ `missing_reference` P021·史进：缺 背身参考（背影/过肩格）
-- ⚠️ `missing_reference` P021·李吉：缺 背身参考（背影/过肩格）
 - ⚠️ `same_frame_color_collision` P021 多人同框主色撞色（易串脸）：CHAR_SHI_JIN↔CHAR_LI_JI（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P021 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `same_frame_color_collision` P022 多人同框主色撞色（易串脸）：CHAR_SHI_JIN↔CHAR_LI_JI（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
@@ -43,7 +41,6 @@
 - ⚠️ `multi_character_closeup` P032 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
 - ⚠️ `same_frame_color_collision` P035 多人同框主色撞色（易串脸）：CHAR_ZHU_WU↔CHAR_CHEN_DA（同主色「红」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
 - ⚠️ `multi_character_closeup` P035 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
-- ⚠️ `missing_reference` P036·史进：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）
 - ⚠️ `missing_reference` P036·朱武：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）
 - ⚠️ `missing_reference` P036·陈达：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）
 - ⚠️ `missing_reference` P036·杨春：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）

@@ -1,0 +1,12 @@
+{
+  "kind":"n2d_axis_blocking_map","version":1,"episode":"第1集","status":"confirmed",
+  "scene_axis_rules":[{"scene_id":"Scene_01","location":"LOC_01","main_axis":"巨岩虎妖—南向车辙形成纵深轴；摄影机默认位于西侧半空间","screen_direction":"姜月初与裴向画右/南移动；虎妖由画左后景逼近；方向全场不反转","default_eyelines":"姜月初/裴看画左后方虎妖；虎妖看画右前方二人；姜月初与裴反打时她画左、他画右","blocking_floorplan":"西北前景为姜月初苏醒点；中央为裴；东侧后景巨岩为虎妖；南向车辙从画面右深处离开"}],
+  "beat_blocking":[
+    {"beat_id":"Beat_01","characters":"CHAR_01前景；CHAR_02中景；BEAST_01巨岩后景","entry_exit":"倒叙CU不交代空间；回到顺叙以ELS重新定场","power_relation":"姜月初视觉被尸场和两名威胁夹住","z_depth":"刀尖前景、姜月初中景、裴虚焦下方；顺叙三层纵深","axis_exception":"倒叙首镜有意省略目标全貌，但不交换左右"},
+    {"beat_id":"Beat_02","characters":"CHAR_01画左、CHAR_02画右","entry_exit":"姜月初后退向画右，被断刀截停后回到画左前景","power_relation":"裴虽低位半跪仍用断刀夺回权力，交易后权力略平衡","z_depth":"断刀前景、姜月初中景、裴后景","axis_exception":"无"},
+    {"beat_id":"Beat_03","characters":"CHAR_01与CHAR_02向右深处；BEAST_01从左后景站起","entry_exit":"两人走两步；咳声使二人沿原轴回头，不调换站位","power_relation":"虎妖从尸体背景跃升为绝对主导","z_depth":"二人前景肩背、虎妖巨岩后景；揭示后反向压缩纵深","axis_exception":"无"},
+    {"beat_id":"Beat_04","characters":"CHAR_02由右前景冲向左后景；BEAST_01原位；CHAR_01右前景","entry_exit":"裴沿既定轴进攻，被踢回右前景姜月初脚边","power_relation":"裴的主动权在命中瞬间归零，虎妖稳定不退","z_depth":"横刀落前景、裴中景、虎妖高位后景","axis_exception":"命中点用中线侧面镜缓冲，仍不越轴"},
+    {"beat_id":"Beat_05","characters":"CHAR_01站起居中；CHAR_02下方右侧；BEAST_01左后景虚焦","entry_exit":"系统出现不改变实体站位；姜月初俯身拾刀后转向脚边裴","power_relation":"选择权首次落到姜月初手里，但虎妖仍构成背景倒计时","z_depth":"手和横刀前景、姜月初脸中景、虎妖虚焦后景；内心镜隔离其他实体","axis_exception":"无"}
+  ],
+  "shot_reverse_patterns":[{"pattern_id":"SR_PEI_JIANG","mode":"active","applies_to":["Beat_02","Beat_05"],"axis_line":"CHAR_01与CHAR_02之间西北—东南轴","screen_sides":"CHAR_01画左，CHAR_02画右","eyeline_match":"姜月初看画右下；裴看画左上；不看镜头","shot_pairing":"双人空间锚→姜月初clean MCU→裴低机位MCU→断刀/握刀insert→反应CU","coverage_order":"先空间后说话者，再切听者反应和道具","camera_coverage":"clean singles + restrained OTS + hand insert + reaction CU","lens_height_distance_match":"交易段相近焦段，裴镜位略低强化余威；集尾姜月初镜位渐低以转移权力","crossing_axis_policy":"禁止越轴；若需重定向先用横刀俯视insert或双人建立","buffer_or_reestablishing":"断刀入土与横刀落地两处insert承担缓冲","continuity_must":["左右关系不交换","视线互补","冷光方向不跳","裴左臂始终骨折"]}]
+}

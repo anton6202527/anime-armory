@@ -3,8 +3,8 @@
   "kind": "comic_model_pack_signoff",
   "decision": "approved",
   "character_id": "CHAR_SHI_JIN",
-  "tier": "recurring_standard",
-  "model_pack_fingerprint": "881ff9ed33e4d571ac49513e9d951ec280b0a4e3b1510c68d6a58807ecc8b8d7",
+  "tier": "core_full",
+  "model_pack_fingerprint": "63c8ebc59ef9356cd3a7aa4b33ca9b4fc12021f65435dcd9431815638fbf9e0b",
   "view_evidence": [
     {
       "view": "front",
@@ -35,6 +35,34 @@
       }
     },
     {
+      "view": "side",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__side.png",
+      "sha256": "b313b7e4ae84984f566f569ee57c12d88f227d0c5885f9250223abd139b703c9",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "side",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "back",
+      "path": "出图/共享/图片/CHAR_SHI_JIN__back.png",
+      "sha256": "3c694c74c61dae19ad5ce14422bf89319a06797272a5a5a4b399b07ebdf0e8b9",
+      "width": 1728,
+      "height": 2304,
+      "source_view": "back",
+      "derivation": {
+        "method": "generated_from_shared_anchor",
+        "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+        "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+        "crop_box": []
+      }
+    },
+    {
       "view": "face",
       "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
       "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
@@ -57,8 +85,8 @@
     "outfit_and_markers_consistent": true,
     "neutral_pose_usable": true
   },
-  "reviewer": "Codex制作代理",
-  "reason": "用户授权连续制作；并排复核front/three_quarter/face为同一青年面孔、同一发式体态与九龙刺青基线",
-  "approved_at": "2026-07-19T07:17:24+00:00",
+  "reviewer": "Claude制作代理(用户授权)",
+  "reason": "drift修复:升级core_full,即梦生成side/back定妆多视图,已逐张核验六项一致",
+  "approved_at": "2026-07-21T12:03:39+00:00",
   "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
 }

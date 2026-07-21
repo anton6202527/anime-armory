@@ -1,0 +1,112 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "开发包/adaptation_strategy.json",
+          "sha256": "3c6d212e4b4dd74e979dd8b3c4340fd1c8fabc565ee2fdf50c2cc55ffb29c602"
+        },
+        {
+          "path": "开发包/pilot_greenlight.md",
+          "sha256": "4fe14deb7dee9f544bddd78aed5b6daac0595566e380a5e45f81e29b1e2f8b0b"
+        },
+        {
+          "path": "开发包/production_feasibility.json",
+          "sha256": "d3f1f7719ec8e197a1f799eb87b7725911d878fff8de202d8909ca3fd6d75eae"
+        },
+        {
+          "path": "开发包/season_arc.json",
+          "sha256": "93f3909aaf01df3714357668aa30f907e6059a74e83de53b976e2075f42943ed"
+        },
+        {
+          "path": "开发包/series_bible.md",
+          "sha256": "606ac4747030367cf31917e15a871b62154a81a01e7d2ff81126ed6ed25f8e40"
+        }
+      ],
+      "note": "批准P1待签摘要所列推荐绿灯方案、试播集策略、视觉路线与合规边界。",
+      "reviewed_at": "2026-07-21T12:07:21+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "showrunner",
+      "signed_evidence_fingerprint_sha": "42fbbae8f9399a621f26ddfa391ab76be7a5d8c0a8574a8187130f98325a3ff2",
+      "signed_input_fingerprint_sha": "fb734fa93bdb6ecf627b3d6b2bb9c2ae2a8de40d47e00eb0088f53c71a47ab00",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "开发包/adaptation_strategy.json",
+          "sha256": "3c6d212e4b4dd74e979dd8b3c4340fd1c8fabc565ee2fdf50c2cc55ffb29c602"
+        },
+        {
+          "path": "开发包/pilot_greenlight.md",
+          "sha256": "4fe14deb7dee9f544bddd78aed5b6daac0595566e380a5e45f81e29b1e2f8b0b"
+        },
+        {
+          "path": "开发包/production_feasibility.json",
+          "sha256": "d3f1f7719ec8e197a1f799eb87b7725911d878fff8de202d8909ca3fd6d75eae"
+        },
+        {
+          "path": "开发包/season_arc.json",
+          "sha256": "93f3909aaf01df3714357668aa30f907e6059a74e83de53b976e2075f42943ed"
+        },
+        {
+          "path": "开发包/series_bible.md",
+          "sha256": "606ac4747030367cf31917e15a871b62154a81a01e7d2ff81126ed6ed25f8e40"
+        }
+      ],
+      "note": "批准P1待签摘要所列制作可行性、预算策略与小批量放量条件。",
+      "reviewed_at": "2026-07-21T12:07:21+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "42fbbae8f9399a621f26ddfa391ab76be7a5d8c0a8574a8187130f98325a3ff2",
+      "signed_input_fingerprint_sha": "fb734fa93bdb6ecf627b3d6b2bb9c2ae2a8de40d47e00eb0088f53c71a47ab00",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p1_development_greenlight",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-21T12:02:50+00:00",
+  "episode": "",
+  "evidence_fingerprint": {
+    "files": {
+      "开发包/adaptation_strategy.json": "3c6d212e4b4dd74e979dd8b3c4340fd1c8fabc565ee2fdf50c2cc55ffb29c602",
+      "开发包/pilot_greenlight.md": "4fe14deb7dee9f544bddd78aed5b6daac0595566e380a5e45f81e29b1e2f8b0b",
+      "开发包/production_feasibility.json": "d3f1f7719ec8e197a1f799eb87b7725911d878fff8de202d8909ca3fd6d75eae",
+      "开发包/season_arc.json": "93f3909aaf01df3714357668aa30f907e6059a74e83de53b976e2075f42943ed",
+      "开发包/series_bible.md": "606ac4747030367cf31917e15a871b62154a81a01e7d2ff81126ed6ed25f8e40"
+    },
+    "sha": "42fbbae8f9399a621f26ddfa391ab76be7a5d8c0a8574a8187130f98325a3ff2"
+  },
+  "input_fingerprint": {
+    "files": {
+      "_设置.md": "9545440599d16cbe9e14992669dbd539d2a57c88c92f9e1772a8310b41f3e58d",
+      "小说/那妖魔是姜大人.txt": "4b7e02353bd41d79e5f1a7c08cce88d2f54fbf9ec8f75259147b9e0eb9fe4ee1",
+      "那妖魔是姜大人.txt": "4b7e02353bd41d79e5f1a7c08cce88d2f54fbf9ec8f75259147b9e0eb9fe4ee1"
+    },
+    "sha": "fb734fa93bdb6ecf627b3d6b2bb9c2ae2a8de40d47e00eb0088f53c71a47ab00"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director",
+        "head_writer",
+        "showrunner"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-21T12:07:21+00:00",
+  "version": 1
+}

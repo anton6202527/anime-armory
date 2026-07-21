@@ -1,11 +1,11 @@
 {
   "kind": "comic_entity_presence_audit",
   "version": 1,
-  "generated_at": "2026-07-20T10:14:00+00:00",
+  "generated_at": "2026-07-21T12:06:21+00:00",
   "chapter": "第9话",
   "summary": {
     "panels": 48,
-    "registry_entities": 61,
+    "registry_entities": 68,
     "panels_with_schedule": 0,
     "must": 0,
     "warn": 2,
@@ -17,14 +17,14 @@
       "code": "mentioned_not_bound",
       "panel_id": "P030",
       "entity": "CHAR_WANG_JIN",
-      "message": "P030 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
+      "message": "P030 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters）；不入画则改写描述，或在该格写 unbound_mention_ack.CHAR_WANG_JIN 签收理由。"
     },
     {
       "severity": "warn",
       "code": "mentioned_not_bound",
       "panel_id": "P048",
       "entity": "CHAR_WANG_JIN",
-      "message": "P048 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters），不入画则改写描述。"
+      "message": "P048 画面描述提到「王进」（registry 实体 CHAR_WANG_JIN），但该格 characters/references/scene_anchor 都没绑它——出图不会附其定妆参考，形态全靠模型自由发挥。确认入画则补进该格 references（或 characters）；不入画则改写描述，或在该格写 unbound_mention_ack.CHAR_WANG_JIN 签收理由。"
     }
   ],
   "derived_schedule": {

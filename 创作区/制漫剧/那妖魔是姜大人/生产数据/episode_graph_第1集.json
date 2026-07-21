@@ -1,0 +1,29 @@
+{
+  "authority": "derived index only; _进度.md and existing gates remain authoritative",
+  "edges": [],
+  "episode": "第1集",
+  "generated_at": "2026-07-21T20:22:04+0800",
+  "graph_hash": "6a6705bdc00e9c912fc05f958cf09319708c17ae55cc48a729858e5e0f3e7782",
+  "kind": "n2d_episode_graph",
+  "lineage_gaps": [],
+  "nodes": [
+    {
+      "episode": "第1集",
+      "id": "episode:第1集",
+      "type": "episode"
+    }
+  ],
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "source_files": [],
+  "status": "pass",
+  "summary": {
+    "edges": 0,
+    "lineage_gaps": 0,
+    "masters": 0,
+    "nodes": 1,
+    "routes": 0,
+    "story_clips": 0,
+    "video_media": 0
+  },
+  "version": 1
+}

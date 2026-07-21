@@ -1,0 +1,11 @@
+{
+  "kind":"n2d_edit_rhythm_map","version":1,"episode":"第1集","status":"confirmed",
+  "timeline":{"first_3s_hook":"刀尖指向重伤人类，姜月初说刀下不是妖；静音仍可读为即将杀错对象","first_6s_proposition":"她为活命将杀人，随后一炷香前回溯解释选择如何形成","hook_cadence":"约15秒身份死局、35秒虎妖复生、55秒裴落败、75秒系统规则、95秒目标反转","cliffhanger":"对不住了后刀落，克制入肉声即全黑；不播放道行到账，不解释裴生死"},
+  "beats":[
+    {"beat_id":"Beat_01","estimated_seconds":"18秒","tempo":"2.5秒倒叙硬钩→短黑场→6秒ELS建制→中速观察碎切","reaction_cut":"姜月初睁眼与听见过来时的警惕反应","sound_or_bgm_cue":"心跳+刀锋近声后抽真空；荒风接入回溯"},
+    {"beat_id":"Beat_02","estimated_seconds":"20秒","tempo":"断刀动作短促→谈判正反打中速→扶起留1秒身体重量","reaction_cut":"姜月初对断刀和自由承诺的两次微反应","sound_or_bgm_cue":"断刀入土低频重音；交易段只留低弦和风声"},
+    {"beat_id":"Beat_03","estimated_seconds":"21秒","tempo":"扶行两步慢→咳声停顿→虎妖站起缓慢压迫→裴起手骤快","reaction_cut":"裴确认虎妖穿心不死后的恐惧CU","sound_or_bgm_cue":"虎妖咳声J-cut 0.3秒；骨响逐级增大；起手前战鼓一下"},
+    {"beat_id":"Beat_04","estimated_seconds":"18秒","tempo":"起手1.2秒→冲出0.8秒→命中顿0.2秒→受击1秒→虎妖台词刻意放慢","reaction_cut":"姜月初看裴落脚边后从惊恐转愤怒","sound_or_bgm_cue":"破风、命中闷响、落地后短静；虎妖台词低频压迫"},
+    {"beat_id":"Beat_05","estimated_seconds":"23秒","tempo":"系统面板稳定可读6秒→规则与盘算交替加速→视线/手/眼逐镜压近→刀落硬断","reaction_cut":"姜月初确认规则、视线转向裴；裴末尾错愕半拍","sound_or_bgm_cue":"古卷展开与金属泛音；心跳渐快；刀落后全静1秒"}
+  ]
+}

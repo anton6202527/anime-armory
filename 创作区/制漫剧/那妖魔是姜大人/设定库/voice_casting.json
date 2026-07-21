@@ -1,0 +1,191 @@
+{
+  "episodes_scanned": [
+    "第1集"
+  ],
+  "generated_at": "2026-07-21T12:24:05+00:00",
+  "kind": "n2d_voice_casting",
+  "policy": "casting_first_final_render_later",
+  "roles": [
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "颤抖决绝·慢",
+          "episode": "第1集",
+          "line_index": 1,
+          "text": "活下去，得先杀一个人。可我刀下的——不是妖。"
+        },
+        {
+          "cue": "茫然警惕·快",
+          "episode": "第1集",
+          "line_index": 2,
+          "text": "一炷香前。大唐荒野，囚犯和镇魔卫死了一地。我偏偏在死人堆里醒了。"
+        },
+        {
+          "cue": "苦涩克制·快",
+          "episode": "第1集",
+          "line_index": 3,
+          "text": "穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 11,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "姜月初",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "中性冷硬·慢",
+          "episode": "第1集",
+          "line_index": 17,
+          "text": "百妖谱开启。斩杀生物，可获道行。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 2,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "百妖谱",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "沙哑戏谑·慢",
+          "episode": "第1集",
+          "line_index": 10,
+          "text": "别跑啊。这荒郊野岭的，你们能去哪儿？"
+        },
+        {
+          "cue": "傲慢从容·慢",
+          "episode": "第1集",
+          "line_index": 12,
+          "text": "几个不入流的镇魔卫，也配杀我？"
+        },
+        {
+          "cue": "伪善轻慢·慢",
+          "episode": "第1集",
+          "line_index": 15,
+          "text": "莫再挣扎。等吃干净了，我替你们立碑。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 3,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "虎妖",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "虚弱威严·慢",
+          "episode": "第1集",
+          "line_index": 4,
+          "text": "过来。"
+        },
+        {
+          "cue": "冷厉克制·快",
+          "episode": "第1集",
+          "line_index": 6,
+          "text": "你可以试试。下一刀，落的就不是地上。"
+        },
+        {
+          "cue": "疲惫笃定·慢",
+          "episode": "第1集",
+          "line_index": 7,
+          "text": "裴长青，陇右镇魔都司队正。扶我往南，我保你脱籍，还你自由。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 6,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "裴长青",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    }
+  ],
+  "rules": [
+    "No final episode render before every required role is locked.",
+    "A text timing estimate is not a voice asset and creates no WAV files.",
+    "Guide audio must be explicitly guide_approved or locked; never treat an arbitrary filler voice as performance truth."
+  ],
+  "status": "casting",
+  "summary": {
+    "locked_count": 0,
+    "pending_count": 4,
+    "required_count": 4,
+    "role_count": 4
+  },
+  "version": 1
+}

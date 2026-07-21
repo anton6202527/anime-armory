@@ -1,0 +1,10 @@
+{
+  "kind": "n2d_director_beat_sheet", "version": 1, "episode": "第1集", "status": "confirmed",
+  "beats": [
+    {"beat_id":"Beat_01","source_voiceover_range":"voiceover lines 1-4","dramatic_function":"倒叙悬念+时空与死局建立","audience_question":"她为什么要杀的不是妖？她醒在什么地方？","emotional_value_shift":{"from":"道德惊雷","to":"陌生与警惕"},"director_intent":"先以刀、人类目标和女主痛苦眼神制造无声钩，再用一炷香前的荒野建制回答时空、保留动机悬念。","must_keep_reaction":"姜月初睁眼后扫过囚服、尸骸、虎妖与裴长青的眼神链；听见过来时停半拍。"},
+    {"beat_id":"Beat_02","source_voiceover_range":"voiceover lines 5-8","dramatic_function":"威胁升级+利益同盟成立","audience_question":"濒死的裴长青为何还能压住她，他的承诺可信吗？","emotional_value_shift":{"from":"试探反抗","to":"被迫合作"},"director_intent":"用断刀入土替代说明，随后以稳定正反打让裴的残余权力和姜月初的现实计算同时成立。","must_keep_reaction":"断刀距脚半步入土后，姜月初由讥诮转为僵住；自由二字落下时她眼神短暂亮起又冷回去。"},
+    {"beat_id":"Beat_03","source_voiceover_range":"voiceover lines 9-13","dramatic_function":"假安全被打破+虎妖复生+搏命起手","audience_question":"穿心而死的虎妖为何能复生，裴长青还能否挡住它？","emotional_value_shift":{"from":"勉强有路","to":"绝对压迫"},"director_intent":"先让两人真的走出两步，再以画外咳声J-cut；从姜月初回头的视线切到虎妖起身，使反转不是突然换景。","must_keep_reaction":"裴长青看清胸口血洞仍在时血色尽褪；虎妖说完嘲讽后，裴不回头地喊快走。"},
+    {"beat_id":"Beat_04","source_voiceover_range":"voiceover lines 14-17","dramatic_function":"英雄尝试失败+死亡逼近+系统出现","audience_question":"裴被一脚击溃后，凡人姜月初还有什么活路？","emotional_value_shift":{"from":"搏命希望","to":"彻底绝望后出现一线诡异生机"},"director_intent":"把起手、命中、受击拆成可读三拍；虎妖伪善慢说压住节奏，随后在姜月初愤怒求生时让古卷从眼前展开。","must_keep_reaction":"裴落在她脚边与横刀同时入画；百妖谱亮起时姜月初先本能眨眼，确认不是幻觉后瞳孔收紧。"},
+    {"beat_id":"Beat_05","source_voiceover_range":"voiceover lines 18-22","dramatic_function":"规则揭示+道德选择+集尾反转","audience_question":"她会用杀生规则杀谁，刺下去后会获得什么？","emotional_value_shift":{"from":"抓住生机","to":"痛苦决绝"},"director_intent":"系统文字只做空面板+后期overlay；把女主视线从虎妖移到裴长青、裴递出逃生建议、手握刀三个动作逐级压近，刀入胸前硬断。","must_keep_reaction":"镜头必须停在姜月初听到拿刀快逃后的沉默和裴长青尚未理解的错愕；不提前给系统结算。"}
+  ]
+}

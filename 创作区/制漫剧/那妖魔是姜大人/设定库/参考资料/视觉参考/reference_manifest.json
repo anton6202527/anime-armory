@@ -1,0 +1,41 @@
+{
+  "kind": "n2d_visual_reference_manifest",
+  "version": 1,
+  "status": "confirmed_for_analysis_only",
+  "updated_at": "2026-07-21",
+  "references": [
+    {
+      "reference_id": "USER_REF_01",
+      "name": "姜月初主角气质参考",
+      "path": "设定库/参考资料/视觉参考/原始参考/用户参考_姜月初_20260721.jpg",
+      "sha256": "fae046d74744c8b5e00f7f98cff8ba044866478cc2dd61fdc022cbd256d6a86c",
+      "source": "user_provided_local_file",
+      "source_original_path": "/Users/wesley/Desktop/a8f5c2e60036a7bfe57f956b84b910d6.jpg",
+      "character_ids": [
+        "CHAR_01"
+      ],
+      "use_policy": "identity_analysis_only",
+      "rights_status": "user_provided_reference_pending_rights_review",
+      "eligible_for_generation": false,
+      "backend_upload_allowed": false,
+      "watermark_present": true,
+      "observations": [
+        "年轻东方女性，窄椭圆脸，清晰下颌，长杏眼，瞳色深，目光冷静主动",
+        "五官精致但保留真实骨相与自然肤质，体态纤长、肩颈舒展，有克制力量感",
+        "黑发与主动迎敌的气质可转译为姜月初身份 DNA；具体发型仍按原著和角色圣经另定"
+      ],
+      "forbidden_use": [
+        "不上传任何生成后端",
+        "不逐像素复制面孔、白衣、毛笔、黑金墨浪、山水背景或构图",
+        "不保留或移除后再利用原图平台水印",
+        "不把原图当作可发布镜头或可分发定妆资产"
+      ]
+    }
+  ],
+  "rules": {
+    "raw_references_are_generation_inputs": false,
+    "identity_policy": "只把脸型、五官比例、年龄感、眼神气质和体态抽象为文字 DNA；先由 Codex 从文字生成项目内原创无水印身份母本，再用母本做所有后端参考。",
+    "style_policy": "项目风格来自全局风格合同；外部图风格权重为零，不继承摄影、渲染、光色、服装、发型、姿态、道具、场景或 UI。",
+    "promotion_condition": "只有权利人明确确认可上传且提供无水印原件，当前文件 SHA 重新登记后，才可把 use_policy 提升为 identity_reference。"
+  }
+}

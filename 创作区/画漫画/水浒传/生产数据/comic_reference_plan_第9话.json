@@ -2,7 +2,7 @@
   "kind": "comic_reference_plan",
   "version": 2,
   "chapter": "第9话",
-  "generated_at": "2026-07-20T08:10:38+00:00",
+  "generated_at": "2026-07-21T12:05:43+00:00",
   "inputs": {
     "files": [
       {
@@ -13,7 +13,7 @@
       {
         "path": "出图/共享/identity_registry.json",
         "exists": true,
-        "sha256": "00b114f0c79a532d5a25a6fb2021ec7058256c0a9be19fedf6c2fdf9291c4fc0"
+        "sha256": "ff808928eaec1ef58e7f77023efbe9369a704e760ddb6ea842c8ea2f72b101aa"
       },
       {
         "path": "生产数据/comic_memory_anchor_第9话.json",
@@ -37,16 +37,17 @@
       "multi_character_reference_limit": 4,
       "non_character_reference_limit": 2,
       "style_reference_limit": 1,
-      "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
+      "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors.",
+      "executable_attachment_limit": 10
     },
     "memory_anchor_status": {
-      "status": "current",
+      "status": "stale",
       "path": "生产数据/comic_memory_anchor_第9话.json",
       "sha256": "505f55c3c45af45ad5e2e944b3a8044946a023df1d5d77bc817750e2a9cd39e7",
       "inputs_fingerprint": "8fd21dfff01cfa7ee094556e5e24b7b79d12fc08ab271b6d55c897cb05278874"
     }
   },
-  "inputs_fingerprint": "abf8202b5313a8ce2d5fc8bf7eed7d215565febf039b8f34f00993db445dbd6b",
+  "inputs_fingerprint": "93c44db6d506dd775f0b85d7e8204a6cced5bc49f56979d2bb33ee1abdfe5d88",
   "backend": {
     "adapter_id": "dreamina_image2image",
     "model": "Dreamina 5.0",
@@ -58,7 +59,8 @@
     "multi_character_reference_limit": 4,
     "non_character_reference_limit": 2,
     "style_reference_limit": 1,
-    "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors."
+    "notes": "Dreamina official CLI image2image route: 1-10 local image inputs are supported (verified 2026-07-16 with `dreamina image2image --help`); keep one slot for style_only when the panel also needs identity/location/prop anchors.",
+    "executable_attachment_limit": 10
   },
   "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
   "summary": {
@@ -66,7 +68,7 @@
     "panels_needing_action": 27,
     "panels_blocked": 0,
     "block": 0,
-    "warn": 53,
+    "warn": 50,
     "info": 0
   },
   "panel_plans": [
@@ -106,7 +108,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -427,7 +429,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "6c25230f4f24c3190ed6c6c1248302df65122cd2c50784da68c0e9126ecd3af9"
+      "panel_plan_sha256": "b25854cbe16e574f2e6a026bacc180deee2e6eaf5f8c47c109955ca277916ba5"
     },
     {
       "panel_id": "P002",
@@ -465,7 +467,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -786,7 +788,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "0a8b7912e1d2198975c81120b5d10b62a292286460d389c9d446ada3d16a2335"
+      "panel_plan_sha256": "86cbf9b2512937acb006fec797e761d91fcacb72b7e70effd3979b01e4f34c39"
     },
     {
       "panel_id": "P003",
@@ -810,7 +812,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1009,7 +1011,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "c7f1a4ff129f998e7e2429815768dd346b3ba800b62b9745a392150e7f5358fa"
+      "panel_plan_sha256": "9f9955872b597c3152aa5a979d2d5f3a8661ff32f298c37739b285880fffb832"
     },
     {
       "panel_id": "P004",
@@ -1026,7 +1028,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1123,7 +1125,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "1bb91327a65aff71851bcff18a60b414d7be10fdce433474b42bf5a70ec97826"
+      "panel_plan_sha256": "45967a9a84f1caacd6ebb20929c7713280a4b51ccf8c8d2bcd366f37c153d9bd"
     },
     {
       "panel_id": "P005",
@@ -1140,7 +1142,7 @@
         {
           "char_id": "CHAR_LI_JI",
           "name": "李吉",
-          "tier": "named_minimal",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1237,7 +1239,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "93556c468ebfaed56eec55274811e5c41de7838ab4a6a28b1ed94a5b8a7b789c"
+      "panel_plan_sha256": "3e784867a45230ae1fd0c7aaf5567f264dc95c5c8363140b64bde3897eaa05be"
     },
     {
       "panel_id": "P006",
@@ -1261,7 +1263,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1306,7 +1308,7 @@
         {
           "char_id": "CHAR_LI_JI",
           "name": "李吉",
-          "tier": "named_minimal",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1462,7 +1464,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "040dafbf29c0e96d4e713fd951ae560673d4f1a677774f375368d711e5666833"
+      "panel_plan_sha256": "b36887782bd3fbe5f03b66268eb6a25c26fc30fd9feb750e6d4619fd889c0ff5"
     },
     {
       "panel_id": "P007",
@@ -1486,7 +1488,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1673,7 +1675,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "5c4433e6871e63da5b05d6ca233c3c75160aa5b904b94018869aa15f076c0fa9"
+      "panel_plan_sha256": "8209267b8583ce214e36d67a8d372a76c71891becd293cb8fddc308fd13b41ea"
     },
     {
       "panel_id": "P008",
@@ -1697,7 +1699,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -1884,7 +1886,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "40fe775ad8ff218085557562f62d8d52b3978280fca56413bad67686f4b40b68"
+      "panel_plan_sha256": "876a976711fe4cdd3f2f4d305909b840f770af6b2dbbc87bf542c8e7466ba721"
     },
     {
       "panel_id": "P009",
@@ -1922,7 +1924,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -2243,7 +2245,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "eac38663c2f1ae0294b8ef2ebce016d255e58c3da007758cf9a79ca3c5c8072f"
+      "panel_plan_sha256": "67c8b4019afe047f6633fca12e5b36560f27f2abd1dbdbf31e62bad57566d3e8"
     },
     {
       "panel_id": "P010",
@@ -2260,7 +2262,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -2357,7 +2359,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "91d2eb242f53fb24fd646289d4073e93212869d460af5424de234eb1b70d1292"
+      "panel_plan_sha256": "fe18d962bb7e5350e1025cc3a4bd0743814b432640827f79497ef04ada83a188"
     },
     {
       "panel_id": "P011",
@@ -2374,7 +2376,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -2471,7 +2473,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "858dcba3f3ab5707f6e1c1e919e0211233546f826a791088cddd771f05dd6e55"
+      "panel_plan_sha256": "7b598e909e6d0e1b874a5410de7756b858fe54d3dc9e94b2470738f63b267be6"
     },
     {
       "panel_id": "P012",
@@ -2509,7 +2511,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -2830,7 +2832,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "3addc32cdb8cfc2966dcd19a7e7e2f618e7382db065a5e4c3d310bd89b3d0d1b"
+      "panel_plan_sha256": "5bdc6f6627b32e54782dea94025b438b9b45f236c24c0ba75d006c507e486941"
     },
     {
       "panel_id": "P013",
@@ -2847,7 +2849,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -2944,7 +2946,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "c4e4f49e5c6bea04fdeb610807b839a1a13de035bb8240a3f779d9d577c8d15e"
+      "panel_plan_sha256": "155680c88e5f668ef44e09c3bc8db9a0f8466f036812009d964faa595e26907c"
     },
     {
       "panel_id": "P014",
@@ -3063,7 +3065,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -3160,7 +3162,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "fe77ef28d5c4098528d2ee8fffced8e7dbc99ae1e70918fb02bfd3e3c59cada6"
+      "panel_plan_sha256": "60ccc8eceafab908b5d41acc53281acf5961da06bd506369fa13f7a6753237bc"
     },
     {
       "panel_id": "P016",
@@ -3177,7 +3179,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -3274,7 +3276,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "482b900c4955955c929fbe1b9ace1c42e3fcc9d05a320a9ecf912e2348639215"
+      "panel_plan_sha256": "b92c8f5ae4c5a72c5b8c9bf1af388ef0ba858fa95a4f0113fdbbc554a2b57ae9"
     },
     {
       "panel_id": "P017",
@@ -3291,7 +3293,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -3388,7 +3390,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "97ff6ee4f5f55a3831ff07e2df8ba87c419465c8adb4468092e8eb0054b66236"
+      "panel_plan_sha256": "b36259117d58580d6c4772ef06fcc6498f7b4c3f31ce5cd5a97d86a809064aaa"
     },
     {
       "panel_id": "P018",
@@ -3405,7 +3407,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -3502,7 +3504,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "993e9adc84bfae0acd7704bc9b234b954fa796ee22950bb721e4f6f466481654"
+      "panel_plan_sha256": "ec3dfb9a84cd11cfc1c6cfed99ad51a6e8d1d9c01e7142c427657e84cd5080fe"
     },
     {
       "panel_id": "P019",
@@ -3841,7 +3843,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -4162,7 +4164,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "e068e0abb5d5dd733a3ebfcae83939cdd72b67a0a99bafc8c1b5c0c5796b60cb"
+      "panel_plan_sha256": "fbebd8e1adc816ad0458f2e3e6342c974d2c08aefc1cb475d7cbf3e367cb4422"
     },
     {
       "panel_id": "P021",
@@ -4186,7 +4188,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -4210,31 +4212,40 @@
               "strength_hint": 0.72
             },
             {
+              "role": "back",
+              "path": "出图/共享/图片/CHAR_SHI_JIN__back.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_SHI_JIN__side.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 3,
-            "selected": 3,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "背身参考（背影/过肩格）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_LI_JI",
           "name": "李吉",
-          "tier": "named_minimal",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -4258,26 +4269,35 @@
               "strength_hint": 0.72
             },
             {
+              "role": "back",
+              "path": "出图/共享/图片/CHAR_LI_JI__back.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_LI_JI__side.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 4,
+            "requested": 5,
+            "selected": 4,
+            "dropped": 1
+          },
+          "dropped_references": [
+            {
               "role": "three_quarter",
               "path": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
               "strength_hint": 0.65
             }
           ],
-          "reference_budget": {
-            "limit": 4,
-            "requested": 3,
-            "selected": 3,
-            "dropped": 0
-          },
-          "dropped_references": [],
-          "missing_references": [
-            "背身参考（背影/过肩格）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         }
       ],
       "multi_subject": {
@@ -4315,7 +4335,7 @@
       "attachment_plan": {
         "limit": 10,
         "required_count": 4,
-        "selected_count": 8,
+        "selected_count": 10,
         "selected": [
           {
             "role": "front",
@@ -4368,22 +4388,40 @@
             "sha256": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "back",
+            "path": "出图/共享/图片/CHAR_SHI_JIN__back.png",
+            "strength_hint": 0.5,
             "id": "CHAR_SHI_JIN",
             "character_id": "CHAR_SHI_JIN",
             "required": false,
-            "sha256": "c2da06c9a03db3c9e8d284c5f0c3047a07693d3d0a37e1174749dbdbe68d47a9"
+            "sha256": "3c694c74c61dae19ad5ce14422bf89319a06797272a5a5a4b399b07ebdf0e8b9"
           },
           {
-            "role": "three_quarter",
-            "path": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
-            "strength_hint": 0.65,
+            "role": "back",
+            "path": "出图/共享/图片/CHAR_LI_JI__back.png",
+            "strength_hint": 0.5,
             "id": "CHAR_LI_JI",
             "character_id": "CHAR_LI_JI",
             "required": false,
-            "sha256": "f781b1fb77da39cbde0efe4c5a699b68e97198fda39ff41b33a1493010a7e47e"
+            "sha256": "e51286f4130d85f7256e54c2bae84ff600e307af1055295a2fa42d058e9eb3a9"
+          },
+          {
+            "role": "side",
+            "path": "出图/共享/图片/CHAR_SHI_JIN__side.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_SHI_JIN",
+            "character_id": "CHAR_SHI_JIN",
+            "required": false,
+            "sha256": "b313b7e4ae84984f566f569ee57c12d88f227d0c5885f9250223abd139b703c9"
+          },
+          {
+            "role": "side",
+            "path": "出图/共享/图片/CHAR_LI_JI__side.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_LI_JI",
+            "character_id": "CHAR_LI_JI",
+            "required": false,
+            "sha256": "f12f86c593fd1ce01ab28e1921148121096173faffba2f4ac84ac2e99d9246cd"
           }
         ],
         "missing_required": [],
@@ -4393,7 +4431,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4f3e05206cab09be0a7f584628cfb0ebf944bde66b2ddd260753b396d129ca7a"
+      "panel_plan_sha256": "611bf9ec29caff8484bbe62711fe8abfe12dca51e19946f171c58c1c602b5ba0"
     },
     {
       "panel_id": "P022",
@@ -4417,7 +4455,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -4465,7 +4503,7 @@
         {
           "char_id": "CHAR_LI_JI",
           "name": "李吉",
-          "tier": "named_minimal",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -4624,7 +4662,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "60b2073584748f71de777580338f2b472455a604dbdb45c0d39e90e54265c3a4"
+      "panel_plan_sha256": "c593c8c00a6c7900eff0b00c87eee6e3c177ae029e27df90d844ba791b3199ca"
     },
     {
       "panel_id": "P023",
@@ -4987,7 +5025,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -5308,7 +5346,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "9ede76647057879ac51bbec27918caa7e893d53047c14c25775c999defbcfbb5"
+      "panel_plan_sha256": "9a0e1c9df25d70e863782ed0fd11223fc1c941503994eac02f4df7ced5f6bf95"
     },
     {
       "panel_id": "P026",
@@ -5325,7 +5363,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -5422,7 +5460,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "058fc4b42a18c705d5dbe662eb998c664d9dc258fdc56a9f6f2444f19a8e2bdc"
+      "panel_plan_sha256": "94e8bcfc73d7c62cc69e740fa3405b19d425457089d6ab1f6d64e67b77b873a5"
     },
     {
       "panel_id": "P027",
@@ -5460,7 +5498,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -5781,7 +5819,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "c408bdd89f25c67df0955a063b5eba69ca778ba8fd747535f86593a0f61ef317"
+      "panel_plan_sha256": "37453409bbfda0a453fbd89b496410e23d23c7aa0b803d9985c29bce8db829e4"
     },
     {
       "panel_id": "P028",
@@ -5819,7 +5857,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -6140,7 +6178,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "1315e6660fce199d6036525e06849a0eb49bd1c0ba038aa49f37407f2f9adbfb"
+      "panel_plan_sha256": "ba8b413e003d329f9d1b5a3cf7cb8c854cb0dadb37a9a5bad6a407b5a3903607"
     },
     {
       "panel_id": "P029",
@@ -6157,7 +6195,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -6254,7 +6292,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "acd9cab7c91b8d1d4949a74a561d41272d12d028ba0246fc4685e7376f45b82a"
+      "panel_plan_sha256": "9ade9d0667b42967e547cb8b192e2ed84fd1ef16a4a4f28b2fff32fe13277a76"
     },
     {
       "panel_id": "P030",
@@ -6292,7 +6330,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -6613,7 +6651,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "1b9548a84cd6f80e311c5f495db341afa65a214b2b903793b42c04fa76b77306"
+      "panel_plan_sha256": "98246cd73be2009dc248eb48df857682f1a5c6edec925b07c3b79bbe2e0d2bb1"
     },
     {
       "panel_id": "P031",
@@ -6637,7 +6675,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -6836,7 +6874,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "3ae7ae4aa0fb81c3c36872bec9d4f30d3ecf517f9a9907ee708623344e837134"
+      "panel_plan_sha256": "91780d9d75a8e459645679ac5e4727a23d56b192f060b25530e7be55e6f2b5b1"
     },
     {
       "panel_id": "P032",
@@ -6860,7 +6898,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -7059,7 +7097,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "4dea2a0b608252c1bc941f4675599f420731a020f585cdf71f7d84a245944ec8"
+      "panel_plan_sha256": "faddc031daaa51debe1994751b8b845fb70327bb2d4cee6889ca12c71fecb5f4"
     },
     {
       "panel_id": "P033",
@@ -7076,7 +7114,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -7173,7 +7211,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "9ab2582c4f631c32d587251588cd46d22b1187e0625df1abb824bb084f7410c5"
+      "panel_plan_sha256": "5cfa04a0484f89cda5cea30eafd3a83c3a9121b08ad7b27d11ad05daa32ca2fc"
     },
     {
       "panel_id": "P034",
@@ -7190,7 +7228,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -7287,7 +7325,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "167a550350ef77a5ecd9ab02acdedd7159758fc4be2670d613379de47fa7e146"
+      "panel_plan_sha256": "ee718020acb64e9a92e39d05f52189971d9482aea1f0bdae47e22169c94ca43f"
     },
     {
       "panel_id": "P035",
@@ -7325,7 +7363,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -7646,7 +7684,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "7e54b366656201b35bf189a96fa123e7b133b8d4fe0cb363837ea5896a89ce80"
+      "panel_plan_sha256": "6c19af0e2f995e0cedc4bb6bb0a131740302ef26f75491963a690b60383184fd"
     },
     {
       "panel_id": "P036",
@@ -7684,7 +7722,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -7720,14 +7758,12 @@
             "dropped": 0
           },
           "dropped_references": [],
-          "missing_references": [
-            "全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
-          ],
+          "missing_references": [],
           "memory_anchor_reinjected": false,
           "escalation": null,
           "pose_gaze_directive": null,
           "prompt_required": [],
-          "needs_action": true
+          "needs_action": false
         },
         {
           "char_id": "CHAR_ZHU_WU",
@@ -8017,7 +8053,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "e20275794a4add12915ac1bf46ba0c27a29c6d1585bb39ffb362b1b4e0a792ba"
+      "panel_plan_sha256": "7bb0b0715a78c7c03d08f91eb8ae2bae34d91a1cd9ea934b39df1eecade1801a"
     },
     {
       "panel_id": "P037",
@@ -8034,7 +8070,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8131,7 +8167,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "e41f87e99d916ac7ce2a4eed84777f1c9a8c86ce4eec34c5c7959e2bcbf02359"
+      "panel_plan_sha256": "7bd43f3ee0fe2d960461b8f15838a52e9ff0ed8c794a8ebfe563dade7cdb6b2e"
     },
     {
       "panel_id": "P038",
@@ -8148,7 +8184,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8245,7 +8281,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "cfc28f701e27b634faec693b49171797675125f246c4b53d29c17d20fc1f8a84"
+      "panel_plan_sha256": "0fa441e2d82c6fc1b007c68641ae7e3d27d6c1350958bc5bc38d0fabc2b1d0e9"
     },
     {
       "panel_id": "P039",
@@ -8262,7 +8298,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8359,7 +8395,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "cc987a56c3387df9d9971632c0d3273fdd824df0898c6531a39cc2c9b5947dcf"
+      "panel_plan_sha256": "5b2833f183f6a66dc6088fa1bde4490de3d813a0f7fec2a5e5a4d2b9a39d51b7"
     },
     {
       "panel_id": "P040",
@@ -8376,7 +8412,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8473,7 +8509,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "5097adde74853cee62d2b9bc7c604b5d96bc763c62eab1fe92332ca3c251f577"
+      "panel_plan_sha256": "9fb5e44f477b8d674e4b4c194fc12765235d965d43c6627061e82450144c68a9"
     },
     {
       "panel_id": "P041",
@@ -8490,7 +8526,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8587,7 +8623,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "080ab0f24cffd56f5f42b70624db837cb99e8f2f7e43b331d291a4f9be28c8f9"
+      "panel_plan_sha256": "6c7c9d846161da8bec1fff14564ac050c3bea0a2cc1bae5e890ece38f69f32f1"
     },
     {
       "panel_id": "P042",
@@ -8604,7 +8640,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8701,7 +8737,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "830ba9361cc8dcf71203d787c7b39c890a059424e0ca78aafbebcb0d09aa78cc"
+      "panel_plan_sha256": "0f9157828fac254560cc85801570929fa947a7e63acc1cca1dde559a040533b3"
     },
     {
       "panel_id": "P043",
@@ -8718,7 +8754,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8815,7 +8851,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "cc5204f0b91d39c568ceb5d2e4bf0b520b87c21b53e006cd8ce5567fb9ca2b97"
+      "panel_plan_sha256": "d2bf9eeb399f330e23cbd9a01f79740461eb16baddd4d022241016c533b53339"
     },
     {
       "panel_id": "P044",
@@ -8832,7 +8868,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -8929,7 +8965,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": false,
-      "panel_plan_sha256": "9e002c253e195592d9f1f81acdacd3ae61a5c5803288d1cc0b78019281510cde"
+      "panel_plan_sha256": "be630ae247564e9f8a7b96fdea6e12e430c03314df604e075cee27cd6694c363"
     },
     {
       "panel_id": "P045",
@@ -8998,7 +9034,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -9154,7 +9190,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "1b9a3f3176000ad671e8ddb9caf9edf8b1b92d95edcd9c5fbc0fca7bbed6d994"
+      "panel_plan_sha256": "e5620743568429101e639394c73f0c638ca829314ab1130b13ffb191e92f24c1"
     },
     {
       "panel_id": "P046",
@@ -9340,7 +9376,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -9496,7 +9532,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "9ec9ef5cb6ada3b86109f232b2355ef74c20eb7b3823c55fbf158b739234d47c"
+      "panel_plan_sha256": "7059d3a6876f026061c22eb6b45eac7801b22ecbe3607c10510e412208807bdb"
     },
     {
       "panel_id": "P048",
@@ -9565,7 +9601,7 @@
         {
           "char_id": "CHAR_SHI_JIN",
           "name": "史进",
-          "tier": "recurring_standard",
+          "tier": "core_full",
           "binding": {
             "form_id": "FORM_BASE",
             "outfit_id": "OUTFIT_BASE",
@@ -9721,7 +9757,7 @@
       "blocked": false,
       "blocking_codes": [],
       "needs_action": true,
-      "panel_plan_sha256": "02fa209ec365db5af71b8d9c0dd5c57793ee5b1dc51dbbaf2c35de9e54445df5"
+      "panel_plan_sha256": "d7b7b84c32f33f64e596be9c5fc18982e8a6652764d26d644019fe280a4ecead"
     }
   ],
   "findings": [
@@ -9850,20 +9886,6 @@
     },
     {
       "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P021",
-      "character_id": "CHAR_SHI_JIN",
-      "message": "P021·史进：缺 背身参考（背影/过肩格）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P021",
-      "character_id": "CHAR_LI_JI",
-      "message": "P021·李吉：缺 背身参考（背影/过肩格）"
-    },
-    {
-      "severity": "warn",
       "code": "same_frame_color_collision",
       "panel": "P021",
       "message": "P021 多人同框主色撞色（易串脸）：CHAR_SHI_JIN↔CHAR_LI_JI（同主色「黑」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
@@ -9975,13 +9997,6 @@
       "severity": "warn",
       "code": "missing_reference",
       "panel": "P036",
-      "character_id": "CHAR_SHI_JIN",
-      "message": "P036·史进：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
-    },
-    {
-      "severity": "warn",
-      "code": "missing_reference",
-      "panel": "P036",
       "character_id": "CHAR_ZHU_WU",
       "message": "P036·朱武：缺 全身/三视图参考（远景/全身动作格·单张头肩定妆不够）"
     },
@@ -10056,5 +10071,5 @@
     }
   ],
   "notes": [],
-  "plan_sha256": "23166f682c8bc3572be155f5b1f201a7bc05dd072d16a080ddc6062a6bbb7413"
+  "plan_sha256": "263d54286d45106eafbfdf0aa5ca1d1c354a8d4a17efd819146eab8c8b4fffcb"
 }

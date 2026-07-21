@@ -1,0 +1,53 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 2,
+  "generated_at": "2026-07-21T12:03:11.286872+00:00",
+  "scope": "all",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第9集",
+      "blocker_id": "E0008-E0009:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0008-E0009",
+        "from_episode": 8,
+        "to_episode": 9,
+        "left_raw_rel": "脚本/第8集/raw.txt",
+        "right_raw_rel": "脚本/第9集/raw.txt",
+        "left_raw_sha256": "1a1ecfa0191739866f481c84f619e87813084569f856b4ffef3b9e8c95d0fc62",
+        "right_raw_sha256": "21973aae7b4a1e65930d4650ec311e500a96711f58ec6cee23b1cfc44cf62310",
+        "contract_sha256": "6c3cbd090e299e89a9631d1d9967ce2bb1f3b95bd1350564ee20bec6266743ab"
+      },
+      "decision": "pending",
+      "notes": "",
+      "reviewed_by": "",
+      "reviewed_at": "",
+      "semantic_evidence": {},
+      "applied_receipt": {}
+    },
+    {
+      "episode": "第9集",
+      "blocker_id": "E0009-E0010:weak_episode_end",
+      "blocker_code": "weak_episode_end",
+      "blocker_message": "上集收口无可验证的语义钩或悬念断点。",
+      "boundary_contract": {
+        "boundary_id": "E0009-E0010",
+        "from_episode": 9,
+        "to_episode": 10,
+        "left_raw_rel": "脚本/第9集/raw.txt",
+        "right_raw_rel": "脚本/第10集/raw.txt",
+        "left_raw_sha256": "21973aae7b4a1e65930d4650ec311e500a96711f58ec6cee23b1cfc44cf62310",
+        "right_raw_sha256": "24a409334eeb7c82d01f1b0c68cf8e0273987f84094a4ec277854b48fc236713",
+        "contract_sha256": "c5d6d2f08c84d55b9c799ddfa58bc1bb576fe894947ccc81fa3265fdc539ee53"
+      },
+      "decision": "pending",
+      "notes": "",
+      "reviewed_by": "",
+      "reviewed_at": "",
+      "semantic_evidence": {},
+      "applied_receipt": {}
+    }
+  ]
+}

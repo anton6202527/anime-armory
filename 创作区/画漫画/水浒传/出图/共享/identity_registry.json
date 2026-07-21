@@ -6578,7 +6578,7 @@
       "character_dna": "十八九岁；银盘般圆阔年轻面孔；浓直眉；高束黑发；精壮敏捷体态；上身九条青龙刺青为永久标志；少年锐气但不是粗豪中年脸",
       "variant_policy": "赤膊练武与穿衣拜师必须保持同脸、同发式、同体态与同一九龙刺青位置；只改变服装和情绪",
       "forbidden_inheritance": "影视演员脸；现代纹身风格；日式黑帮纹身；龙角魔龙；重甲；王进脸；临时木棒固化为身体标志",
-      "library_tier": "recurring_standard",
+      "library_tier": "core_full",
       "forms": {
         "FORM_BASE": {
           "id": "FORM_BASE",
@@ -6742,25 +6742,99 @@
             "height": 2304
           },
           "updated_at": "2026-07-19T15:14:12"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__side.png",
+          "sha256": "b313b7e4ae84984f566f569ee57c12d88f227d0c5885f9250223abd139b703c9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHI_JIN__side_dreamina__20260721T045708291363.md",
+            "prompt_sha256": "aee49a259d39f122c3454ec0eda478f7af67653241a0cc3bfaafcaf75ec6e884",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "0f1df320-a677-4229-98e5-0d6966f6d154"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-21T04:58:08"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_SHI_JIN__back.png",
+          "sha256": "3c694c74c61dae19ad5ce14422bf89319a06797272a5a5a4b399b07ebdf0e8b9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHI_JIN__back_dreamina__20260721T045808589175.md",
+            "prompt_sha256": "f793cf6d71d19a50267088a65427b5118805e77b4aaad9045bd6f698aea77744",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "4c9193fd-45ee-4a4b-8831-3937883ae54d"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_SHI_JIN__front.png",
+            "source_sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-21T04:59:06"
         }
       ],
       "status": "ready",
-      "updated_at": "2026-07-19T15:14:12",
+      "updated_at": "2026-07-21T04:59:06",
       "views": {
         "front": "出图/共享/图片/CHAR_SHI_JIN__front.png",
         "three_quarter": "出图/共享/图片/CHAR_SHI_JIN__three_quarter.png",
-        "face": "出图/共享/图片/CHAR_SHI_JIN__face.png"
+        "face": "出图/共享/图片/CHAR_SHI_JIN__face.png",
+        "side": "出图/共享/图片/CHAR_SHI_JIN__side.png",
+        "back": "出图/共享/图片/CHAR_SHI_JIN__back.png"
       },
       "view_readiness": {
         "required": [
           "front",
           "three_quarter",
+          "side",
+          "back",
           "face"
         ],
-        "tier": "recurring_standard",
+        "tier": "core_full",
         "ready": [
           "front",
           "three_quarter",
+          "side",
+          "back",
           "face"
         ],
         "missing": [],
@@ -6769,15 +6843,17 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "881ff9ed33e4d571ac49513e9d951ec280b0a4e3b1510c68d6a58807ecc8b8d7",
+        "fingerprint": "63c8ebc59ef9356cd3a7aa4b33ca9b4fc12021f65435dcd9431815638fbf9e0b",
         "readiness": "ready",
         "signoff_status": "current",
         "required_views": [
           "front",
           "three_quarter",
+          "side",
+          "back",
           "face"
         ],
-        "updated_at": "2026-07-19T07:17:24+00:00"
+        "updated_at": "2026-07-21T12:03:39+00:00"
       }
     },
     "CHAR_SHI_TAIGONG": {
@@ -7834,7 +7910,7 @@
       "display_name": "李吉",
       "character_dna": "精瘦猎户；晒黑窄脸；短髭；褐色短褐；绑腿草鞋；猎弓与空猎囊；谨慎畏缩气质固定",
       "forbidden_inheritance": "不得继承演员脸、现代猎装、枪械、清代辫发或临时庄客服装",
-      "library_tier": "named_minimal",
+      "library_tier": "core_full",
       "variant_policy": "村外查探与庄内报信阶段均继承同一晒黑窄脸、短髭和精瘦体态；只改变惶恐程度、动作与猎具位置。",
       "forms": {
         "FORM_BASE": {
@@ -7999,23 +8075,99 @@
             "height": 2048
           },
           "updated_at": "2026-07-20T10:10:23"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_LI_JI__side.png",
+          "sha256": "f12f86c593fd1ce01ab28e1921148121096173faffba2f4ac84ac2e99d9246cd",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_LI_JI__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_LI_JI__side_dreamina__20260721T045907206143.md",
+            "prompt_sha256": "e50cd779b04b86136ea2adbe61cacdd38ae34159b3a2673413ad9cfb4d80d863",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "0774c6ac-97d4-49ea-bca6-b1aa8306f6e7"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_LI_JI__front.png",
+            "source_sha256": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-21T05:00:00"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_LI_JI__back.png",
+          "sha256": "e51286f4130d85f7256e54c2bae84ff600e307af1055295a2fa42d058e9eb3a9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_LI_JI__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "attempts_used": 1,
+            "attempts_authorized": 2,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_LI_JI__back_dreamina__20260721T050000340670.md",
+            "prompt_sha256": "fa4047a9cfda47046ec70bb771506220dac85b2ead9144d1384f04ad28bca627",
+            "backend": "Dreamina official CLI",
+            "model": "Dreamina 5.0",
+            "model_version": "5.0",
+            "resolution_type": "2k",
+            "ratio": "3:4",
+            "submit_id": "548edbe9-5cfa-484a-ae2f-9e690deaa68a"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_LI_JI__front.png",
+            "source_sha256": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1728,
+            "height": 2304
+          },
+          "updated_at": "2026-07-21T05:00:58"
         }
       ],
       "status": "ready",
-      "updated_at": "2026-07-20T10:10:23",
+      "updated_at": "2026-07-21T05:00:59",
       "views": {
         "front": "出图/共享/图片/CHAR_LI_JI__front.png",
         "three_quarter": "出图/共享/图片/CHAR_LI_JI__three_quarter.png",
-        "face": "出图/共享/图片/CHAR_LI_JI__face.png"
+        "face": "出图/共享/图片/CHAR_LI_JI__face.png",
+        "side": "出图/共享/图片/CHAR_LI_JI__side.png",
+        "back": "出图/共享/图片/CHAR_LI_JI__back.png"
       },
       "view_readiness": {
         "required": [
           "front",
+          "three_quarter",
+          "side",
+          "back",
           "face"
         ],
-        "tier": "named_minimal",
+        "tier": "core_full",
         "ready": [
           "front",
+          "three_quarter",
+          "side",
+          "back",
           "face"
         ],
         "missing": [],
@@ -8024,14 +8176,17 @@
       "model_pack": {
         "kind": "comic_character_model_pack",
         "version": 1,
-        "fingerprint": "0a54f2154c265a20bbdf60a9a688edbc1f6bdca7cebdbd2078282e8a1e0674b2",
+        "fingerprint": "397344ea2d39b5bcde27437f9949f9460b8fbedadc3e61868786622eb117e4bc",
         "readiness": "ready",
         "signoff_status": "current",
         "required_views": [
           "front",
+          "three_quarter",
+          "side",
+          "back",
           "face"
         ],
-        "updated_at": "2026-07-20T02:11:28+00:00"
+        "updated_at": "2026-07-21T12:03:54+00:00"
       }
     },
     "LOC_SHI_THRESHING_GROUND": {
@@ -9158,8 +9313,21 @@
         "state_id": "STATE_BASE"
       },
       "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-20T12:19:43+00:00"
+      "status": "partial",
+      "updated_at": "2026-07-20T12:19:43+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "6fc8d08d433ae76e11485d5502d481c4662dda502a5cb3ffddb6b266f4c7e894",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-21T12:04:42+00:00"
+      }
     },
     "CHAR_JIN_CUILIAN": {
       "id": "CHAR_JIN_CUILIAN",
@@ -9218,8 +9386,21 @@
         "state_id": "STATE_BASE"
       },
       "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-20T12:19:43+00:00"
+      "status": "partial",
+      "updated_at": "2026-07-20T12:19:43+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "761a096cd73b21cddf0de125802f823aef41a3e160e9f1a583667510efbc36d7",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-21T12:04:42+00:00"
+      }
     },
     "CHAR_JIN_LAO": {
       "id": "CHAR_JIN_LAO",
@@ -9278,8 +9459,20 @@
         "state_id": "STATE_BASE"
       },
       "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-20T12:19:43+00:00"
+      "status": "partial",
+      "updated_at": "2026-07-20T12:19:43+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "7a1f656fb7610fbf9d0e24fd428cdd6461da2efca95bd124eef6b6cd1d9a8847",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-21T12:04:42+00:00"
+      }
     },
     "CHAR_ZHENG_TU": {
       "id": "CHAR_ZHENG_TU",
@@ -9338,8 +9531,20 @@
         "state_id": "STATE_BASE"
       },
       "reference_images": [],
-      "status": "needs_reference",
-      "updated_at": "2026-07-20T12:19:43+00:00"
+      "status": "partial",
+      "updated_at": "2026-07-20T12:19:43+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "ef1c693902df82a6abdbe43c3b58976a8501c6813fea87ab6be8e964678ab72f",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-21T12:04:43+00:00"
+      }
     },
     "LOC_PAN_TAVERN": {
       "id": "LOC_PAN_TAVERN",

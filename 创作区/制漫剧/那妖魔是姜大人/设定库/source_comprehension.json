@@ -1,0 +1,219 @@
+{
+  "kind": "n2d_source_comprehension",
+  "version": 1,
+  "register": "modern_zh",
+  "lang_guess": "modern_baihua",
+  "confidence": "high",
+  "signals": [
+    "现代白话特征：「的」密度 2.9%、现代虚词 3.0%"
+  ],
+  "scores": {
+    "classical_strong": 0.0182,
+    "de_density": 0.0285,
+    "modern_marker": 0.0302,
+    "yue_count": 13,
+    "trad_ratio": 0.0,
+    "cjk_ratio": 0.826
+  },
+  "source_traits": {
+    "content_chars": 1855067,
+    "chapter_markers": 819,
+    "long_form": true,
+    "power_system_likely": true
+  },
+  "source": "小说/那妖魔是姜大人.txt",
+  "status": "confirmed",
+  "comprehension_doc": "设定库/source_comprehension.md",
+  "understanding_contract": {
+    "modern_understanding": "现代女子姜月初穿越到大唐边地尸场，以囚犯身份卷入镇魔司队正裴长青与重伤虎妖的死局。百妖谱规定亲手斩杀可得道行、妖血可摹影能力。她为求生主动杀死濒死裴长青，随后以所得道行斩虎、摹影、入闻弦，并借裴的制服开启镇魔司假身份与斩妖升级长线。核心是生存选择、身份债与借妖斩妖的矛盾，而非无代价升级。",
+    "episode_promise_basis": [
+      {
+        "trace_id": "SRC_PROMISE_001",
+        "promise": "姜月初如何从必死尸场翻盘",
+        "opened_at": "第1章 / 第1集",
+        "payoff_or_progress": "第2集用二十年道行斩虎兑现首个反杀",
+        "risk_if_cut": "首集死亡压力与系统价值同时失效"
+      },
+      {
+        "trace_id": "SRC_PROMISE_002",
+        "promise": "百妖谱的收益、边界与代价",
+        "opened_at": "第1章系统显现",
+        "payoff_or_progress": "第2集明确道行、摹影和武学收益，后续逐层揭示限制",
+        "risk_if_cut": "系统流核心追更机制失去可信度"
+      },
+      {
+        "trace_id": "SRC_PROMISE_003",
+        "promise": "杀裴长青造成的身份与道德后果",
+        "opened_at": "第1集结尾",
+        "payoff_or_progress": "第3集埋葬换装，镇魔司追查时持续推进",
+        "risk_if_cut": "主角灰度和长线因果债消失"
+      },
+      {
+        "trace_id": "SRC_PROMISE_004",
+        "promise": "她如何从囚犯成为人人敬畏的姜大人",
+        "opened_at": "第3章误穿镇魔司制服",
+        "payoff_or_progress": "广武县、狼患、入镇魔司和后续大案逐步兑现",
+        "risk_if_cut": "书名级承诺断裂"
+      }
+    ],
+    "character_motives": [
+      {
+        "trace_id": "SRC_MOTIVE_001",
+        "character": "姜月初",
+        "want": "活下去、摆脱囚犯身份、弄清来历",
+        "obstacle": "虎妖、陌生时代、低身份、系统诱惑与镇魔秩序",
+        "choice_pressure": "不杀裴就没有资源抗虎，杀裴便主动越过底线",
+        "arc_delta": "被动求生者变为承担恶名的行动者，最终被称为姜大人"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_002",
+        "character": "裴长青",
+        "want": "完成斩虎职责并控制囚犯",
+        "obstacle": "致命伤势、虎妖复苏、武力衰竭",
+        "choice_pressure": "必须利用姜月初协助，却无法真正信任她",
+        "arc_delta": "掌控者转为被迫合作者，最终成为主角第一笔因果债"
+      },
+      {
+        "trace_id": "SRC_MOTIVE_003",
+        "character": "虎妖",
+        "want": "从围杀中恢复并反噬猎手",
+        "obstacle": "重伤、裴长青追击、姜月初获得系统",
+        "choice_pressure": "恢复速度与人类搏命速度赛跑",
+        "arc_delta": "伪装尸体复苏为威胁，后成为姜月初第一只被摹影的大妖"
+      }
+    ],
+    "causality_chain": [
+      {
+        "trace_id": "SRC_CAUSE_001",
+        "cause": "姜月初穿越后落在尸骸荒野",
+        "effect": "她缺信息缺资源，只能按即时危险行动",
+        "must_keep": "陌生化视角与求生目标",
+        "adaptation_note": "用视觉和短旁白压缩，不新增万能记忆"
+      },
+      {
+        "trace_id": "SRC_CAUSE_002",
+        "cause": "裴长青以自由为饵逼她协助",
+        "effect": "她接近武器和虎妖，也确认裴仍把她当囚犯",
+        "must_keep": "合作与背叛都有充分动机",
+        "adaptation_note": "用短促对白保留权力不对等"
+      },
+      {
+        "trace_id": "SRC_CAUSE_003",
+        "cause": "虎妖复活且常规攻击无效",
+        "effect": "裴长青濒死，姜月初不能靠逃跑脱险",
+        "must_keep": "杀裴取道行成为残酷但可理解的选择",
+        "adaptation_note": "不美化谋杀，不用长篇辩解"
+      },
+      {
+        "trace_id": "SRC_CAUSE_004",
+        "cause": "百妖谱给出斩杀结算规则",
+        "effect": "姜月初锁定唯一有把握杀死的裴长青",
+        "must_keep": "系统首次真正驱动人物选择",
+        "adaptation_note": "系统信息分三拍呈现"
+      },
+      {
+        "trace_id": "SRC_CAUSE_005",
+        "cause": "姜月初杀裴获得二十年道行",
+        "effect": "她拥有一次爆发斩虎的机会",
+        "must_keep": "首集钩子在次集及时兑现",
+        "adaptation_note": "数值、消耗与结果逐项对账"
+      }
+    ],
+    "foreshadowing_ledger": [
+      {
+        "trace_id": "SRC_FORESHADOW_001",
+        "setup": "姜月初为何成为囚犯并被押往边地",
+        "payoff_plan": "随镇魔司调查与姜家线逐步回收",
+        "status": "open",
+        "do_not_drop_reason": "决定身份主线与长线人物关系"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_002",
+        "setup": "百妖谱的来源、上限与代价",
+        "payoff_plan": "先展示可验证规则，来源延后；每次新能力增补合同",
+        "status": "open",
+        "do_not_drop_reason": "防止系统成为无成本许愿机"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_003",
+        "setup": "裴长青之死及镇魔司遗物",
+        "payoff_plan": "在镇魔司追查、伪装身份与良知压力中持续推进",
+        "status": "open",
+        "do_not_drop_reason": "把首集选择变成长线后果"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_004",
+        "setup": "虎妖接近鸣骨的恢复力",
+        "payoff_plan": "通过摹影与境界说明回收",
+        "status": "planned",
+        "do_not_drop_reason": "为首个力量跃迁提供可信标尺"
+      },
+      {
+        "trace_id": "SRC_FORESHADOW_005",
+        "setup": "那妖魔是姜大人的称谓反转",
+        "payoff_plan": "入镇魔司后逐层兑现她既斩妖也借妖为力",
+        "status": "open",
+        "do_not_drop_reason": "书名级总承诺"
+      }
+    ],
+    "adaptation_boundaries": {
+      "preserve": [
+        "姜月初的求生动机和主动选择",
+        "裴长青的威胁与自由交易",
+        "虎妖濒死复苏且常规攻击无效",
+        "百妖谱的斩杀、道行、妖血摹影规则",
+        "杀裴行为及其后续身份与伦理因果"
+      ],
+      "modernize_or_compress": [
+        "重复环境说明和重复惊惧改为可见动作",
+        "战力解释拆进战斗结果与系统短句",
+        "内心独白缩成冷幽默短句",
+        "行路与路人信息并入转场或物件"
+      ],
+      "do_not_change": [
+        "不得把杀裴改成意外误杀或裴主动献祭",
+        "不得提前洗白姜月初",
+        "不得无成本增删道行或自创新境界",
+        "不得把外部参考图中的水印、毛笔、白衣和山水背景当作剧情设定"
+      ]
+    },
+    "power_system_rules": {
+      "applicable": "yes",
+      "level_or_rank_rules": [
+        "原著已明示凡尘三境顺序为闻弦、鸣骨、成丹",
+        "更高境界未完成后文核验前不得提前发明",
+        "裴长青和虎妖均为重伤状态，这是首杀链成立的必要条件"
+      ],
+      "growth_constraints": [
+        "姜月初必须亲手完成有效斩杀才结算道行",
+        "妖血是摹影媒介，能力来源必须对应被斩妖物",
+        "第一笔固定账为斩裴得20年、20年全用于斩虎、斩虎得100年、75年摹影、余25年",
+        "越境爆发必须存在明确消耗、时限或后果"
+      ],
+      "combat_consistency_rules": [
+        "胜负由伤势、境界、武学熟练度和地形共同决定",
+        "每次越境先让观众看见对手伤势与主角付出的资源",
+        "新能力先建立视觉规则再使用，不靠旁白临时补丁",
+        "同集镜头中的伤口、兵器、服装破损和剩余道行连续"
+      ],
+      "not_applicable_reason": ""
+    },
+    "source_register_strategy": {
+      "register": "modern_zh",
+      "dialogue_style": "现代白话短句；姜月初保留少量冷幽默，古代角色保持克制硬朗，不堆网络热梗",
+      "terms_to_keep": [
+        "镇魔司",
+        "百妖谱",
+        "道行",
+        "摹影",
+        "闻弦",
+        "鸣骨",
+        "成丹"
+      ],
+      "terms_to_translate": [
+        "把重复修炼解释转成可见的伤势、速度和破坏结果",
+        "把长段心理活动转成眼神、停顿、手部动作和一句内心短句"
+      ]
+    }
+  }
+}

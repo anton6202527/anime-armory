@@ -1,0 +1,1649 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_source_analysis",
+  "generated_at": "2026-07-21",
+  "title": "那妖魔是姜大人",
+  "source": "n2d_source_text",
+  "stats": {
+    "characters": 1855067,
+    "chapters": 819,
+    "episode_scaffolds": 830
+  },
+  "source_integrity": {
+    "line_count": 103770,
+    "raw_chapter_heading_count": 1638,
+    "adjacent_duplicate_heading_count": 819,
+    "adjacent_duplicate_heading_examples": [
+      {
+        "line": 2,
+        "duplicate_of_line": 1,
+        "text": "第1章 百妖谱"
+      },
+      {
+        "line": 201,
+        "duplicate_of_line": 200,
+        "text": "第2章 收录：虎山神"
+      },
+      {
+        "line": 344,
+        "duplicate_of_line": 343,
+        "text": "第3章 那我还活鸡毛了，跳了兄弟"
+      },
+      {
+        "line": 481,
+        "duplicate_of_line": 480,
+        "text": "第4章 上盘村"
+      },
+      {
+        "line": 626,
+        "duplicate_of_line": 625,
+        "text": "第5章 战狼妖"
+      },
+      {
+        "line": 747,
+        "duplicate_of_line": 746,
+        "text": "第6章 虎妖赠神通"
+      },
+      {
+        "line": 909,
+        "duplicate_of_line": 908,
+        "text": "第7章 广武县"
+      },
+      {
+        "line": 1013,
+        "duplicate_of_line": 1012,
+        "text": "第8章 狼行千里"
+      },
+      {
+        "line": 1152,
+        "duplicate_of_line": 1151,
+        "text": "第9章 《武道正解》"
+      },
+      {
+        "line": 1294,
+        "duplicate_of_line": 1293,
+        "text": "第10章 境界之说"
+      },
+      {
+        "line": 1395,
+        "duplicate_of_line": 1394,
+        "text": "第11章 杀猪妖，镇魔司来人"
+      },
+      {
+        "line": 1519,
+        "duplicate_of_line": 1518,
+        "text": "第12章 妖化能力"
+      },
+      {
+        "line": 1641,
+        "duplicate_of_line": 1640,
+        "text": "第13章 提升实力"
+      },
+      {
+        "line": 1762,
+        "duplicate_of_line": 1761,
+        "text": "第14章 虎啸风雷，震彻长街！"
+      },
+      {
+        "line": 1887,
+        "duplicate_of_line": 1886,
+        "text": "第15章 战猪妖"
+      },
+      {
+        "line": 2009,
+        "duplicate_of_line": 2008,
+        "text": "第16章 凉州？"
+      },
+      {
+        "line": 2145,
+        "duplicate_of_line": 2144,
+        "text": "第17章 掉进狼窝里的哈士奇"
+      },
+      {
+        "line": 2251,
+        "duplicate_of_line": 2250,
+        "text": "第18章 入镇魔司"
+      },
+      {
+        "line": 2460,
+        "duplicate_of_line": 2459,
+        "text": "第19章 不想嫁，那便不嫁"
+      },
+      {
+        "line": 2567,
+        "duplicate_of_line": 2566,
+        "text": "第20章 她算什么东西？"
+      },
+      {
+        "line": 2669,
+        "duplicate_of_line": 2668,
+        "text": "第21章 不服？"
+      },
+      {
+        "line": 2777,
+        "duplicate_of_line": 2776,
+        "text": "第22章 新的妖患"
+      },
+      {
+        "line": 2876,
+        "duplicate_of_line": 2875,
+        "text": "第23章 如此隐忍"
+      },
+      {
+        "line": 2987,
+        "duplicate_of_line": 2986,
+        "text": "第24章 龙王"
+      },
+      {
+        "line": 3101,
+        "duplicate_of_line": 3100,
+        "text": "第25章 阿水"
+      },
+      {
+        "line": 3219,
+        "duplicate_of_line": 3218,
+        "text": "第26章 龙王爷想要个儿子"
+      },
+      {
+        "line": 3314,
+        "duplicate_of_line": 3313,
+        "text": "第27章 黑水村"
+      },
+      {
+        "line": 3423,
+        "duplicate_of_line": 3422,
+        "text": "第28章 报仇"
+      },
+      {
+        "line": 3527,
+        "duplicate_of_line": 3526,
+        "text": "第29章 血战龙王"
+      },
+      {
+        "line": 3647,
+        "duplicate_of_line": 3646,
+        "text": "第30章 斩龙王！"
+      },
+      {
+        "line": 3785,
+        "duplicate_of_line": 3784,
+        "text": "第31章 入鸣骨"
+      },
+      {
+        "line": 3900,
+        "duplicate_of_line": 3899,
+        "text": "第32章 《虎啸镇魔刀》"
+      },
+      {
+        "line": 4028,
+        "duplicate_of_line": 4027,
+        "text": "第33章 我升官了？"
+      },
+      {
+        "line": 4149,
+        "duplicate_of_line": 4148,
+        "text": "第34章 升官发财"
+      },
+      {
+        "line": 4273,
+        "duplicate_of_line": 4272,
+        "text": "第35章 全是刺头？！"
+      },
+      {
+        "line": 4368,
+        "duplicate_of_line": 4367,
+        "text": "第36章 在下姜月初"
+      },
+      {
+        "line": 4470,
+        "duplicate_of_line": 4469,
+        "text": "第37章 当官好啊，这官得当啊"
+      },
+      {
+        "line": 4586,
+        "duplicate_of_line": 4585,
+        "text": "第38章 妖兽血肉的珍贵"
+      },
+      {
+        "line": 4700,
+        "duplicate_of_line": 4699,
+        "text": "第39章 成丹大妖！"
+      },
+      {
+        "line": 4808,
+        "duplicate_of_line": 4807,
+        "text": "第40章 黑熊精"
+      },
+      {
+        "line": 4957,
+        "duplicate_of_line": 4956,
+        "text": "第41章 我们在这儿"
+      },
+      {
+        "line": 5092,
+        "duplicate_of_line": 5091,
+        "text": "第42章 镇魔司，又能奈我宝刹寺何？"
+      },
+      {
+        "line": 5245,
+        "duplicate_of_line": 5244,
+        "text": "第43章 如果他们能杀我，就尽管来"
+      },
+      {
+        "line": 5353,
+        "duplicate_of_line": 5352,
+        "text": "第44章 要开就大胆开"
+      },
+      {
+        "line": 5480,
+        "duplicate_of_line": 5479,
+        "text": "第45章 破庙"
+      },
+      {
+        "line": 5571,
+        "duplicate_of_line": 5570,
+        "text": "第46章 刀斩熊妖"
+      },
+      {
+        "line": 5694,
+        "duplicate_of_line": 5693,
+        "text": "第47章 《封口固气法》"
+      },
+      {
+        "line": 5851,
+        "duplicate_of_line": 5850,
+        "text": "第48章 先锋营校尉"
+      },
+      {
+        "line": 5969,
+        "duplicate_of_line": 5968,
+        "text": "第49章 姜月初的身世"
+      },
+      {
+        "line": 6094,
+        "duplicate_of_line": 6093,
+        "text": "第50章 姜校尉"
+      }
+    ],
+    "duplicate_heading_examples_truncated": true,
+    "chapter_headings_after_fold": 819,
+    "unique_chapter_count": 819,
+    "missing_chapter_numbers": [
+      708,
+      709,
+      710,
+      711,
+      712,
+      713,
+      714,
+      715,
+      716,
+      717,
+      808
+    ],
+    "missing_chapter_numbers_truncated": false,
+    "completion_status": "likely_ongoing",
+    "completion_clues": [
+      {
+        "line": 6496,
+        "text": "加更一章",
+        "kind": "ongoing"
+      },
+      {
+        "line": 10627,
+        "text": "缓一天，明天继续。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 14353,
+        "text": "开始存稿，明天开始，固定更新时间中午十二点。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 15166,
+        "text": "加更一章，补个觉。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 44969,
+        "text": "存完稿子会恢复以前的更新节奏。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 46590,
+        "text": "明天应该会继续爆更一波，不过可能没有十更，大概五六更左右吧。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 47120,
+        "text": "挂盐水去，请假得用了....",
+        "kind": "ongoing"
+      },
+      {
+        "line": 47440,
+        "text": "慢慢恢复更新了...感谢大家理解。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 51960,
+        "text": "等我在那边安顿下来，就恢复更新！！！",
+        "kind": "ongoing"
+      },
+      {
+        "line": 74131,
+        "text": "明天百万字书测，书测开始加更。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 75055,
+        "text": "大章三千字，今天晚上要出去一趟，加更不了一章了。",
+        "kind": "ongoing"
+      },
+      {
+        "line": 84608,
+        "text": "今天请假一天，出去找找思路",
+        "kind": "ongoing"
+      },
+      {
+        "line": 93143,
+        "text": "状态有些差，今天请假一天，发两章",
+        "kind": "ongoing"
+      },
+      {
+        "line": 98166,
+        "text": "请假一天，调整一下，这个月恢复三更",
+        "kind": "ongoing"
+      },
+      {
+        "line": 100806,
+        "text": "今日请假一天，两更",
+        "kind": "ongoing"
+      },
+      {
+        "line": 101219,
+        "text": "如今每天欠的一章，一周回家之后，两倍奉还！！！",
+        "kind": "ongoing"
+      },
+      {
+        "line": 101716,
+        "text": "后天回家了，八爪一定会全力还债的！",
+        "kind": "ongoing"
+      },
+      {
+        "line": 102119,
+        "text": "刚到，明天开始还债",
+        "kind": "ongoing"
+      },
+      {
+        "line": 102677,
+        "text": "还债第一天，求求各位没给评分的给个好评吧！（卡声鹤了，昨晚群里发了截图，真不是八爪言而无信",
+        "kind": "ongoing"
+      },
+      {
+        "line": 103126,
+        "text": "还债第二天，求求给个五星好评吧！！！这对小作者非常重要！",
+        "kind": "ongoing"
+      },
+      {
+        "line": 103334,
+        "text": "累迷茫了，休息一下，大家帮八爪算算，八爪欠了几章了！",
+        "kind": "ongoing"
+      },
+      {
+        "line": 103770,
+        "text": "歇一天，明天继续还债",
+        "kind": "ongoing"
+      }
+    ],
+    "suspected_captions": [
+      {
+        "line": 197,
+        "text": "横刀",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 342,
+        "text": "虎山神",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 370,
+        "text": "镇魔司制服——黑衣赤纹",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 624,
+        "text": "青面郎君",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 912,
+        "text": "广武县",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 1393,
+        "text": "猪妖",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 2007,
+        "text": "朱厌",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 2149,
+        "text": "凉州府镇魔都司",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 2565,
+        "text": "魏清",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 3645,
+        "text": "黑河水怪",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 5569,
+        "text": "黑山熊妖",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 7096,
+        "text": "白猿公",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 10036,
+        "text": "蛟姁",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 13871,
+        "text": "羌江龙王",
+        "kind": "suspected_caption"
+      },
+      {
+        "line": 13998,
+        "text": "姜月初",
+        "kind": "suspected_caption"
+      }
+    ],
+    "author_notes": [
+      {
+        "line": 3,
+        "text": "本书单身。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 4,
+        "text": "彦祖亦菲打卡处。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 3901,
+        "text": "前文已修改",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 6495,
+        "text": "被人说短了 TVT",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 6496,
+        "text": "加更一章",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 8088,
+        "text": "感谢大家的一路支持。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 8768,
+        "text": "六更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 10309,
+        "text": "十更奉上",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 12253,
+        "text": "今日三章，休息一天缓缓。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 12590,
+        "text": "晚上通宵码字。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 13075,
+        "text": "五更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 13076,
+        "text": "再次跪求为爱发电！给小作者添添币吧！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 13619,
+        "text": "五更奉上！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 14353,
+        "text": "开始存稿，明天开始，固定更新时间中午十二点。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 15166,
+        "text": "加更一章，补个觉。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 16295,
+        "text": "因为今天满30万字了，想冲一冲新书榜......所以更新的迟一点。（下午四五点才会刷新榜单）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 16296,
+        "text": "为了弥补，今日八更奉上。（其实差不多10更了，好几章都是3000字的大章）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 16762,
+        "text": "今日休息一天，三章奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 17350,
+        "text": "今日五更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 18047,
+        "text": "今日五更奉上！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 18732,
+        "text": "感谢大家的礼物支持",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 18733,
+        "text": "呜呜呜呜，小作者无以为报。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 20005,
+        "text": "十更奉上",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 20364,
+        "text": "今日三更",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 20365,
+        "text": "实在燃尽了...休息一天.....",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 20842,
+        "text": "今日本来五更的。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 22121,
+        "text": "十更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 22736,
+        "text": "今日四更（虽是四更，但字数已经超过一万字了）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 23963,
+        "text": "今日三更，整理一下思绪。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 23964,
+        "text": "明天十更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 24893,
+        "text": "今日七更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 26292,
+        "text": "十更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 26766,
+        "text": "今日三更（字数与四更差不多）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 26767,
+        "text": "休息一天。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 27377,
+        "text": "四更9500字，欠500",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 27378,
+        "text": "ovo",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 28109,
+        "text": "本来想六更的。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 28555,
+        "text": "各位大人的恩情，小作者无以回报！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 29969,
+        "text": "十更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 31869,
+        "text": "十更奉上。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 32463,
+        "text": "今日先三更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 33235,
+        "text": "小作者前面其实写过。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 33660,
+        "text": "明天十更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 33661,
+        "text": "求求为爱发电，催更！！！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 35533,
+        "text": "今日五更（昨日两更补上了）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 36305,
+        "text": "十更不了了....",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 38071,
+        "text": "今日四更万字！（相当于五更了）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 38072,
+        "text": "求求催更！为爱发电！！！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 39855,
+        "text": "十更奉上（其实2W2000字，等于11更了）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 40298,
+        "text": "感觉连续两天十更，真的要猝死了。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 40754,
+        "text": "八爪亦是如此。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 41146,
+        "text": "在存稿了，大概后天左右就能十更了。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 42183,
+        "text": "感谢大家支持。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 42184,
+        "text": "小作者会坚持完本的，已经在考虑其他城市定居了。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 43501,
+        "text": "今天九更吧，还有一章明天发布",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 44552,
+        "text": "元旦休息一下~",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 44969,
+        "text": "存完稿子会恢复以前的更新节奏。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 46590,
+        "text": "明天应该会继续爆更一波，不过可能没有十更，大概五六更左右吧。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 47120,
+        "text": "挂盐水去，请假得用了....",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 47440,
+        "text": "慢慢恢复更新了...感谢大家理解。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 47782,
+        "text": "八爪的章节大不大？大不大？！嗯？！说话~！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 48172,
+        "text": "八爪就是短啊！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 48173,
+        "text": "点点催更，让八爪变长变大！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 48804,
+        "text": "大家的催更果然有用。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 48955,
+        "text": "下午出去一趟，先发一章，傍晚回来继续码",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 49240,
+        "text": "晚上通宵，明天十更",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 49845,
+        "text": "剩下的白天发",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 50558,
+        "text": "剩下的晚上发，先睡一觉",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 51960,
+        "text": "等我在那边安顿下来，就恢复更新！！！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 53907,
+        "text": "催更破万，十更。（其实是偷偷存了点稿子，嘿嘿）",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 54268,
+        "text": "坏消息：催更没破万",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 54269,
+        "text": "好消息：明天依旧十更",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 54797,
+        "text": "今日先五更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 54798,
+        "text": "明天会补上今天欠的五更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 55784,
+        "text": "八更奉上",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 55785,
+        "text": "感谢支持",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 56124,
+        "text": "求求支持吧，不要养书了，求求催更，求求为爱发电，如果有礼物的话就更好了！！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 58596,
+        "text": "感谢大家一路支持！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 59696,
+        "text": "月初求求礼物，求求催更ovo",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 62277,
+        "text": "十更放在12号，以及除夕两天",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 63783,
+        "text": "九更两万字。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 63784,
+        "text": "求求礼物，求求支持吧......",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 65011,
+        "text": "小八爪能有今日，多谢各位大大的一路支持。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 65019,
+        "text": "一定一定，会将这本书好好写下去。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 69971,
+        "text": "不是不想爆更，字数越多，便越不像开头那样好写了...好多东西都要瞻前顾后，小作者最长的一本书就写了五十多万字，第一次写到百万字，后面每一步都是摸着石头过河......尽力完善大纲，让后期不会很快就崩。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 71509,
+        "text": "庆祝二群诞生，今日五更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 71881,
+        "text": "求求各位点点催更，跪下磕头了",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 74131,
+        "text": "明天百万字书测，书测开始加更。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 75055,
+        "text": "大章三千字，今天晚上要出去一趟，加更不了一章了。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 77854,
+        "text": "整本书篇幅大概在两百多万字。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 82627,
+        "text": "求求支持，多点点催更，如果有礼物的话就更好了。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 82628,
+        "text": "八爪给各位跪下了喵.....",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 83324,
+        "text": "明天清明，要去祭祖，先发两章，还有一章晚上更新",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 84608,
+        "text": "今天请假一天，出去找找思路",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 92527,
+        "text": "月初冲刺一波，差1000就2万粉丝了，给八爪点点关注吧......",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 93143,
+        "text": "状态有些差，今天请假一天，发两章",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 93972,
+        "text": "但其实说实话，更新了太多，很多奖励的条件字数要求都超出了。",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 98166,
+        "text": "请假一天，调整一下，这个月恢复三更",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 99971,
+        "text": "新地图，新境界，铺垫几章，理解一下",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 100806,
+        "text": "今日请假一天，两更",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 101016,
+        "text": "嘤嘤嘤，今天坐飞机刚到了大理，贪玩来不及码字了TVT！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 101017,
+        "text": "求求各位原谅八爪吧",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 101219,
+        "text": "如今每天欠的一章，一周回家之后，两倍奉还！！！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 101716,
+        "text": "后天回家了，八爪一定会全力还债的！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 102119,
+        "text": "刚到，明天开始还债",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 102677,
+        "text": "还债第一天，求求各位没给评分的给个好评吧！（卡声鹤了，昨晚群里发了截图，真不是八爪言而无信",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 103126,
+        "text": "还债第二天，求求给个五星好评吧！！！这对小作者非常重要！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 103334,
+        "text": "累迷茫了，休息一下，大家帮八爪算算，八爪欠了几章了！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 103455,
+        "text": "八爪，不差！",
+        "kind": "suspected_author_note"
+      },
+      {
+        "line": 103770,
+        "text": "歇一天，明天继续还债",
+        "kind": "suspected_author_note"
+      }
+    ]
+  },
+  "genre_candidates": [
+    {
+      "genre": "系统流",
+      "score": 5,
+      "signals": [
+        "系统",
+        "面板",
+        "签到",
+        "任务",
+        "奖励"
+      ]
+    },
+    {
+      "genre": "修仙/玄幻",
+      "score": 5,
+      "signals": [
+        "练气",
+        "宗门",
+        "妖兽",
+        "法宝",
+        "丹药"
+      ]
+    },
+    {
+      "genre": "悬疑",
+      "score": 5,
+      "signals": [
+        "尸体",
+        "凶手",
+        "线索",
+        "证据",
+        "真相"
+      ]
+    },
+    {
+      "genre": "女频情感",
+      "score": 4,
+      "signals": [
+        "夫人",
+        "王爷",
+        "重逢",
+        "心动"
+      ]
+    },
+    {
+      "genre": "都市异能",
+      "score": 3,
+      "signals": [
+        "觉醒",
+        "都市",
+        "医院"
+      ]
+    }
+  ],
+  "worldview_candidates": [
+    "本书单身。",
+    "彦祖亦菲打卡处。",
+    "----------------",
+    "神州大地，大唐王朝。",
+    "闻弦初境...莫非便是这方世界的修炼体系？",
+    "好在这个世界的大唐，疆域地理与她记忆中的历史大差不差。",
+    "她对这个世界的境界划分一窍不通。",
+    "话未开口，它的世界，便从中间，被一道雪亮的白线给分开了。"
+  ],
+  "characters": [
+    {
+      "name": "姜月初",
+      "mentions": 75,
+      "evidence": [
+        "姜月初有些无奈，率先开口道：“在下姜月初。",
+        "姜月初漠然答道：“还行。",
+        "姜月初漠然答道：“还行。"
+      ]
+    },
+    {
+      "name": "魏合",
+      "mentions": 13,
+      "evidence": [
+        "魏合摇了摇头，道：“认识说不上...清儿，你先下去吧。",
+        "魏合摇了摇头，解释道：“若只是太后柳氏，倒是没什么...关键是其背后的柳家。",
+        "魏合道：“届时，你若能入了总都司，再得总指挥使大人赏识，区区一个柳家，又算得了什么？"
+      ]
+    },
+    {
+      "name": "顾长歌",
+      "mentions": 13,
+      "evidence": [
+        "顾长歌笑道：“像姜姑娘这般年纪，便入了成丹的女子，整个大唐，或许也只有一人了。",
+        "顾长歌笑道：“像姜姑娘这般年纪，便入了成丹的女子，整个大唐，或许也只有一人了。",
+        "顾长歌讥讽道：“所以，索性只要那畜生在他镇守期间，不闹出太大动静，便睁一只眼闭一只眼，当做无事发生？"
+      ]
+    },
+    {
+      "name": "老者",
+      "mentions": 10,
+      "evidence": [
+        "老者低声道：“镇魔司在陇右道，只设有凉州这一处都司，若是小公子当真入了镇魔司，大抵，便是在此处了。",
+        "老者低声道：“镇魔司在陇右道，只设有凉州这一处都司，若是小公子当真入了镇魔司，大抵，便是在此处了。",
+        "老者摇了摇头，随后压低声音道：“不过有传言说，陆家那位在青城山修行的麒麟儿，前些日子送回来了一批好东西，似乎是......从某处陨落执棋大能的洞府中带出来的。"
+      ]
+    },
+    {
+      "name": "老太监",
+      "mentions": 10,
+      "evidence": [
+        "老太监连忙道：“陛下，您这是关心则乱。",
+        "老太监连忙道：“陛下，您这是关心则乱。",
+        "老太监道：“方才皇高祖亲自领着殿下入宫，说是方才的动静，是殿下赶路太急，如今......正在往这来呢！"
+      ]
+    },
+    {
+      "name": "王子昱",
+      "mentions": 9,
+      "evidence": [
+        "“在下王子昱。",
+        "王子昱侧过头，对着姜月初颔首道：“火候到了，去吧，祭出元神，将这心材熔炼进去。",
+        "王子昱思索片刻，继续道：“我之前倒是听闻过，在万妖大泽南处，便有一修士大族，名为陆家。"
+      ]
+    },
+    {
+      "name": "刘珂",
+      "mentions": 7,
+      "evidence": [
+        "刘珂皱眉道：“大人如今已是天字营郎将，是何等要事，竟需我等陪同？",
+        "刘珂皱眉道：“大人如今已是天字营郎将，是何等要事，竟需我等陪同？",
+        "刘珂微微一怔，随即正色道：“此乃我等分内之事，不敢当大人......”"
+      ]
+    },
+    {
+      "name": "陆长风",
+      "mentions": 7,
+      "evidence": [
+        "陆长风解释道：“虽说直接用本名也无不可。",
+        "陆长风闻言，长舒一口气，躬身道：“既然如此，那便是成了！",
+        "陆长风笑道：“这香火一道，本就是集万民之念，修自身之果。"
+      ]
+    },
+    {
+      "name": "刘沉",
+      "mentions": 6,
+      "evidence": [
+        "刘沉面色一沉，道：“你我皆知，镇魔司招人素来严苛，既然能入镇魔司，自然有其本事，是女子又如何？",
+        "刘沉解释道，“这刘珂自幼天赋出众，二十出头便入了闻弦，在陇右年轻一辈里，也算小有名气，可他毕竟是私生子，在山庄里处处受排挤......”",
+        "刘沉苦笑道，“金刚寺乃佛门大宗，只是这不戒和尚，喝酒吃肉，打架逛窑子，除了不杀生，什么戒都犯了个遍，最后被他师父一脚踹出了山门。"
+      ]
+    },
+    {
+      "name": "李清远",
+      "mentions": 6,
+      "evidence": [
+        "“在下李清远，忝为天字营郎将，往后，你我便是同僚了。",
+        "李清远闻言，道：“陇右与西域诸国、草原部族接壤，向来是兵家必争之地，大唐在此地屯驻重兵是不假，人口自然也算不得少。",
+        "李清远眉头一皱，思索片刻，缓缓道：“先前我倒是听闻，黑河倒灌三日，河水腥臭，鱼虾死绝......可我记得，此事不是早已了结了么？"
+      ]
+    },
+    {
+      "name": "周悬",
+      "mentions": 6,
+      "evidence": [
+        "“在下周悬，见过前辈。",
+        "周悬摇了摇头，老实巴交道：“区区突破观山的丹药，自然是有的。",
+        "周悬叹了口气，继续道：“传闻灵山当年，出现一尊白象，此妖不知是何跟脚，亦不知是何时得道......仿佛是一夜之间，便从这灵山深处冒了出来。"
+      ]
+    },
+    {
+      "name": "陈渊",
+      "mentions": 6,
+      "evidence": [
+        "“能得两位相助，自然是再好不过...在下陈渊，这位是苏柳。",
+        "陈渊开口道：“其实此次历练，宗内定下的规矩是需五人以上方可执行，我与苏师妹本想回峰里再寻几位帮手，如今既有二位道友加入，那便等我再去寻一人凑足五数便好。",
+        "“在下陈渊，这位是苏柳，我等皆是界青宗内门弟子。"
+      ]
+    },
+    {
+      "name": "魏清",
+      "mentions": 5,
+      "evidence": [
+        "魏清解释道，“衣服也是按你的尺寸选的，你试试合不合身。",
+        "魏清道：“果然书里说的没错，越是漂亮的女人，便越是喜欢骗人！",
+        "魏清道：“果然书里说的没错，越是漂亮的女人，便越是喜欢骗人！"
+      ]
+    },
+    {
+      "name": "陈通",
+      "mentions": 5,
+      "evidence": [
+        "陈通讥讽道：“管他什么爷，今儿个都得给熊爷腾地方。",
+        "”陈通连忙道，“周都尉派人过来传的话，说是请您过去清点一二。",
+        "陈通皱眉道，“那我们姜校尉呢？"
+      ]
+    },
+    {
+      "name": "结结巴巴",
+      "mentions": 5,
+      "evidence": [
+        "那化作瘦小汉子的蛇妖挤在最前面，脸上满是惊恐，指着门外，结结巴巴道：“狗......狗爷......我......我觉得这牢里挺好的，冬暖夏凉，还管饭，要不..",
+        "牛奔慌忙摆着手，结结巴巴道：“俺是说......是说......”",
+        "那管事狐妖擦了擦额头的冷汗，结结巴巴道：“老祖，玉京楼......玉京楼来人了！"
+      ]
+    },
+    {
+      "name": "点头",
+      "mentions": 5,
+      "evidence": [
+        "老太监躬着身子，点头道：“是......”",
+        "姜月初看了看四周，点头道：“请。",
+        "老太监闻言，点头道：“老奴知晓！"
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "name": "仙神洞府",
+      "mentions": 4,
+      "evidence": [
+        "虽说从九大道宗不禁止其他人族势力进入仙神洞府可以看出，道宗其实并不算小气，甚至颇有大宗风范，真心为人族考虑......",
+        "“师尊，各峰弟子皆已整点完毕，只是......师妹与师弟毕竟涉世尚浅，这般早早让他们进入仙神洞府，会不会......”"
+      ]
+    },
+    {
+      "name": "自己的小院",
+      "mentions": 2,
+      "evidence": [
+        "回到自己的小院，姜月初随手将门带上。",
+        "回到自己的小院，姜月初脱下身上玄黑衣袍，随手搭在椅背上，换了身干净的寻常衣物，整个人松快了不少。"
+      ]
+    },
+    {
+      "name": "几条街巷",
+      "mentions": 2,
+      "evidence": [
+        "二人就这么畅通无阻地走进了城门，穿过几条街巷，最终，在城西一处偏僻的角落里，停在了一座毫不起眼的寺庙前。",
+        "穿过几条街巷，他刻意避开了那些平日里狐朋狗友聚集的酒楼楚馆，一路向西，脚步越来越快。"
+      ]
+    },
+    {
+      "name": "金玉宫",
+      "mentions": 2,
+      "evidence": [
+        "回到金玉宫。",
+        "回到金玉宫。"
+      ]
+    },
+    {
+      "name": "晨光与村",
+      "mentions": 1,
+      "evidence": [
+        "姜月初就站在那儿，站在晨光与村落的阴影交界处。"
+      ]
+    },
+    {
+      "name": "一处偏殿",
+      "mentions": 1,
+      "evidence": [
+        "姜月初对着镇守大门的一名镇魔卫报上了名字，七拐八拐，来到一处偏殿。"
+      ]
+    },
+    {
+      "name": "了玄字营的后堂",
+      "mentions": 1,
+      "evidence": [
+        "两人说话间，已经来到了玄字营的后堂。"
+      ]
+    },
+    {
+      "name": "坊内一处小院",
+      "mentions": 1,
+      "evidence": [
+        "姜月初循着地址，来到坊内一处小院前。"
+      ]
+    },
+    {
+      "name": "了靖妖坊的小院",
+      "mentions": 1,
+      "evidence": [
+        "回到了靖妖坊的小院，将买来的东西一一放下，先是把布料和劲装收好，又将精米放进米缸。"
+      ]
+    },
+    {
+      "name": "一处宽阔的大殿",
+      "mentions": 1,
+      "evidence": [
+        "两人穿过几道长廊，最终来到一处宽阔的大殿前。"
+      ]
+    },
+    {
+      "name": "后衙的厅堂",
+      "mentions": 1,
+      "evidence": [
+        "钱有为在前面引着路，点头哈腰，一行人穿过前堂，来到后衙的厅堂。"
+      ]
+    },
+    {
+      "name": "靖妖坊的小院",
+      "mentions": 1,
+      "evidence": [
+        "回到靖妖坊的小院，已是黄昏。"
+      ]
+    }
+  ],
+  "foreshadowing_candidates": [
+    {
+      "id": "SETUP_001",
+      "description": "眼下自己身份本就尚未解决，不仅要躲避官府的追查，更不想再被一头死了儿子的大妖给盯上。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_002",
+      "description": "刘沉的脸色也不好看，他摆了摆手，“都忍着点，仔细查探，看看有没有线索。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_003",
+      "description": "黄字营的人若是追查过这边，定会留下线索。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_004",
+      "description": "以他们的行事风格，必然也会循着线索，去那回水湾一探究竟。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_005",
+      "description": "“都仔细点，看看有什么线索。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_006",
+      "description": "自己的身世并不是什么秘密，哪怕魏合懒得追究，可不代表，其他人也懒得追究。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_007",
+      "description": "李福连称不敢，小跑到前头，取出钥匙，将院门推开。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_008",
+      "description": "李福识趣，立刻送过钥匙，躬身告退。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_009",
+      "description": "难不成......这位姜姑娘，与大人有什么不为人知的渊源？",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_010",
+      "description": "徐长风的声音在雨中显得有些飘忽，“或许是那姜洵后来又治好了隐疾，又或许是他当真有几分不为人知的本事，得了先皇青睐，也未可",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_011",
+      "description": "“令牌是真的，镇魔司的制式，错不了。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_012",
+      "description": "“强求真相，便要做好被真相所伤的准备。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_013",
+      "description": "自己身上秘密太多，院里多出个外人，总归是不方便。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_014",
+      "description": "“点墨，便是渡过此天堑的第一步，以意御气，点染万物，神意为笔，真气为墨，于天地万灵之中，求得一丝印记。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_015",
+      "description": "魏合的声音变得有些悠远，“它们存在于天地之间，或亘古，或磅礴，或渺小，或凶戾，皆蕴含着一道独属于自身的印记。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_016",
+      "description": "“点墨境，便是以你自身神意为引，去感应这天地间的万灵，求得其中一道，在你这张白纸上，落下印记。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_017",
+      "description": "“这印记，便是你的第一笔墨，也是你登堂之路的根基。",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_018",
+      "description": "魏合看着她，神色严肃了几分，“山岳之灵，其印记厚重，得之者，肉身坚不可摧，江河之灵，其印记绵长，得之者，气血悠长，生生不",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_019",
+      "description": "魏合摇了摇头，“那得是何等惊才绝艳之辈，方能于这天地间，自行寻得一道灵印，并让其甘愿为你落下印记？",
+      "status": "candidate",
+      "payoff_ep": ""
+    },
+    {
+      "id": "SETUP_020",
+      "description": "唯有不戒和尚，眯着眼，有些意味深长。",
+      "status": "candidate",
+      "payoff_ep": ""
+    }
+  ],
+  "power_system": {
+    "has_power_system_signal": true,
+    "realm_terms": [
+      "练气",
+      "金丹",
+      "化神",
+      "合体",
+      "武者",
+      "武师",
+      "宗师",
+      "先天",
+      "后天",
+      "觉醒",
+      "超凡",
+      "神通"
+    ],
+    "system_terms": [
+      "系统",
+      "面板",
+      "属性",
+      "等级",
+      "任务",
+      "签到",
+      "战力"
+    ],
+    "notes": "候选项来自 n2d 源文本启发式扫描；正式等级/数值规则需在阶段1精修时人工确认。"
+  },
+  "visual_state_signals": [
+    {
+      "signal": "受伤",
+      "snippet": "裴长青用下巴指了指自己没受伤的右臂。"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "身旁重伤的裴长青闷哼一声，整个人直挺挺地摔在了地上。"
+    },
+    {
+      "signal": "觉醒",
+      "snippet": "一旦筋骨齐鸣，便可觉醒与生俱来的天赋神通！"
+    },
+    {
+      "signal": "换上",
+      "snippet": "换上这身镇魔司的衣服，同样凶险。"
+    },
+    {
+      "signal": "血迹",
+      "snippet": "往日里孩童追逐打闹的村道上，如今空无一人，只有凝固发黑的血迹和散落的破布衣衫。"
+    },
+    {
+      "signal": "断臂",
+      "snippet": "断臂，大腿，开膛破肚的躯干。"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "当初能一刀斩了那头虎妖，怕是有一大半的运气，是托了它本就重伤的福。"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "她现在身份敏感，断然不是能受重伤的。"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "这女子，分明已经受了不小的重伤！"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "这位镇魔司的大人，刚刚显然已经受了重伤。"
+    },
+    {
+      "signal": "换上",
+      "snippet": "将衣服换上，又寻了根布带，将一头长发利落地束在脑后，扎成一个高马尾。"
+    },
+    {
+      "signal": "血迹",
+      "snippet": "姜月初缓缓将刀从猪妖的脑袋里拔出，在它身上那件破烂的衣服上擦了擦血迹。"
+    },
+    {
+      "signal": "血迹",
+      "snippet": "墙角，路边，随处可见凝固发黑的血迹。"
+    },
+    {
+      "signal": "白发",
+      "snippet": "一个白发苍苍的老先生，被人用一杆毛笔，从眼眶钉死在了墙上。"
+    },
+    {
+      "signal": "觉醒",
+      "snippet": "妖物修行，踏入鸣骨，筋骨齐鸣，便可觉醒与生俱来的天赋神通。"
+    },
+    {
+      "signal": "受伤",
+      "snippet": "他猛地将身旁受伤的刘沉推开，整个人不退反进，竟是悍然冲向那头已然癫狂的猪妖！"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "方才还让他们束手无策，甚至连鸣骨境的许大人都重伤濒死的恐怖大妖。"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "这些东西，便是寻常校尉受了重伤，也未必舍得用。"
+    },
+    {
+      "signal": "换上",
+      "snippet": "“我帮你换上。"
+    },
+    {
+      "signal": "换上",
+      "snippet": "年轻人脸上的笑容一僵，随即又换上了一副委屈的神色，“母后，您又不是不知道，儿臣......”"
+    },
+    {
+      "signal": "断臂",
+      "snippet": "很快，他又翻出了一截断臂。"
+    },
+    {
+      "signal": "断臂",
+      "snippet": "断臂的手上，还死死攥着半截断裂的刀柄。"
+    },
+    {
+      "signal": "断臂",
+      "snippet": "刘沉走到那截断臂旁，蹲下身，看着那半截刀柄，细细查看。"
+    },
+    {
+      "signal": "重伤",
+      "snippet": "可他自己都已身受重伤，根本来不及救援。"
+    }
+  ],
+  "episode_briefs": [
+    {
+      "episode": "第1集",
+      "chars": 3291,
+      "opening": "第1章百妖谱第1章百妖谱本书单身。彦祖亦菲打卡处。----------------风里带着腥气。破败的荒野，枯草连天，不见人烟。姜月初愣愣地看着眼前的一切。她还",
+      "ending": "话音，让裴长青一愣。“什么...”可他还未来得及想明白这话是什么意思。下一秒。噗嗤。长刀没入他的胸口。横刀--------------凡尘三境：闻弦-鸣骨-成丹"
+    },
+    {
+      "episode": "第2集",
+      "chars": 2186,
+      "opening": "第2章收录：虎山神第2章收录：虎山神刀锋入肉的阻滞清晰地从掌心传来。温热的血，溅上她的脸颊。裴长青的眼睛瞪得滚圆，满是错愕无论如何，他也想不明白，为何眼前的少女",
+      "ending": "活到什么时候。”“说不定哪天我就下来陪你了，到时候在地府相遇，你可别揍我......”可在这妖魔横行的世道。一个人到了身不由己的时候，已经无所谓忍不忍心。虎山神"
+    },
+    {
+      "episode": "第3集",
+      "chars": 2504,
+      "opening": "第3章那我还活鸡毛了，跳了兄弟第3章那我还活鸡毛了，跳了兄弟月色凄冷。姜月初拖着裴长青的尸体，找到一块还算平整的土坡，用横刀挖着。挖了半天，也只是个浅坑。罢了。",
+      "ending": "广武县离最近的州郡，乃是兰州府。快马加鞭，一来一回，少说也要十天半月。到那时候，上盘村早就变成一座死村了。也就是说......眼前的镇魔司大人，便是唯一的希望。"
+    },
+    {
+      "episode": "第4集",
+      "chars": 2614,
+      "opening": "第4章上盘村第4章上盘村十几个铁打的汉子，就这么直挺挺地单膝跪在官道上。姜月初站在原地，一言不发。去？还是不去？这他妈的还用想吗？疯了才会去！她连自己都快顾不上",
+      "ending": "。这话虽也狠戾，可听起来，倒像是学着眼前这少女的腔调。念及此，青衫狼妖心中愈发烦躁。它不再多言，只是缓缓抬起一只爪子，五根利刃般的指甲弹出。“杀了她！”青面郎君"
+    },
+    {
+      "episode": "第5集",
+      "chars": 2015,
+      "opening": "第5章战狼妖第5章战狼妖随着青衫狼妖那一声令下。它身后那几头蓄势待发的小妖，再无半分犹豫。口中发出低低的呜咽，四肢着地，朝着姜月初猛冲而来。晨风萧瑟，卷起尘土。",
+      "ending": "动。一百五十二年道行，如开闸泄洪，尽数涌入那幅虎妖画卷。轰——周遭的一切，无论是陈青源的呼喊，还是那狼妖的咆哮，都在这一刻，尽数远去。天地，仿佛只剩下黑白二色。"
+    },
+    {
+      "episode": "第6集",
+      "chars": 3195,
+      "opening": "第6章虎妖赠神通第6章虎妖赠神通姜月初的意识，沉入一片无边无际的黑暗。【第一年，你出生了，你是南山的一只幼虎，生来孱弱，被母虎弃于山涧，若非一场山洪将你冲到下游",
+      "ending": "。这般行于世间，确实不妥。姜月初抬起头，看了眼一脸诚恳的陈青源。罢了。如今自己手握二百年道行，又拥有两门武学。区区县城，能奈自己如何？她终是点了下头。“带路。”"
+    },
+    {
+      "episode": "第7集",
+      "chars": 2065,
+      "opening": "第7章广武县第7章广武县广武县的城墙不高。青灰色的石砖之下，被风沙磨去了棱角，露出内里斑驳的土黄。广武县一行人打马而来，停在城门前。城门口的兵丁，挎着刀，站得不",
+      "ending": "己眼下面临的最大难题，不过是户籍路引。只要解决了这个，凭着金手指，天高海阔，哪里去不得？可如今看来，原身的身份，处处都是古怪。“诶...难啊，真难......”"
+    },
+    {
+      "episode": "第8集",
+      "chars": 2305,
+      "opening": "第8章狼行千里第8章狼行千里凉州府。风沙总是很大。城头的旗子，卷了边，懒洋洋地耷拉着。此地不是陇右道的治所，却比治所更紧要几分。只因那座矗立在城北，终年不见天日",
+      "ending": "门道。想罢，她重新躺下，将那柄横刀搁在枕边。事已至此，还是先睡觉吧。晚风徐徐穿过窗户，偶尔吹起少女的发丝，撩过嘴角。每当这时，她便会换个更舒服的姿势，继续睡去。"
+    },
+    {
+      "episode": "第9集",
+      "chars": 3006,
+      "opening": "第9章《武道正解》第9章《武道正解》天光未亮，只是窗纸上透着一层朦胧的青灰色。姜月初醒了。她睁着眼，看着陌生的房梁，听着院外隐约传来的几声鸡鸣。缓了一会，才回过",
+      "ending": "，说迟早会有镇魔司的大人前来查办。”“在下......在下也是因此，才斗胆问了一句，绝无他意！”他一口气说完，额头上已是冷汗涔涔，低着头，再不敢看姜月初的眼睛。"
+    },
+    {
+      "episode": "第10集",
+      "chars": 2034,
+      "opening": "第10章境界之说第10章境界之说风沙颇大。马蹄踩在黄土上，不快不慢，像是丈量着这片了无生趣的土地。姜月初半靠在马背上，一手牵着缰绳，另一只手，却捧着一卷书册，认",
+      "ending": "孔一缩，下意识地手按在了刀柄上。离得近了，才看清他们的模样。说是人，却又不像。两人脸上都生着一层细密的黑色短毛，鼻子向前凸起，嘴巴咧开时，能看到森白的獠牙。猪妖"
+    },
+    {
+      "episode": "第11集",
+      "chars": 2435,
+      "opening": "第11章杀猪妖，镇魔司来人第11章杀猪妖，镇魔司来人猪妖！姜月初的心猛地一沉。为首的那个猪妖，挠了挠裤裆，抱怨道：“大哥，父亲也太不够意思了！”“说是带咱们出来",
+      "ending": "许年拍了拍他的肩膀，“走吧，别想了，早一日到，兴许还能多救几个人。”“驾！”一声低喝，十几匹赤瞳驹再度迈开四蹄，刺破夜色，朝着那座已被妖魔盘踞的县城，疾驰而去。"
+    },
+    {
+      "episode": "第12集",
+      "chars": 2139,
+      "opening": "第12章妖化能力第12章妖化能力天色渐渐暗了。官道上，昏黄的余晖将一匹马和它身后的两具尸体，拖出长长的影子。“驾，驾！”姜月初催促了两声，可身下的马儿只是呼哧呼",
+      "ending": "眼可见的速度，迅速充盈起来。姜月初眼睛一亮。还真是大补之物！她不再犹豫，抓着猪腿，大口大口地撕咬起来。此刻，她忽然觉得。妖物.....真是个好东西啊......"
+    }
+  ]
+}

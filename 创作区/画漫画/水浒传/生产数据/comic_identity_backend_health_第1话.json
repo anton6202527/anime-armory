@@ -212,11 +212,64 @@
           "继承风格锚线色材质但未复制其人物与场景"
         ]
       }
+    },
+    {
+      "probe_id": "b89b1d507d358eea241e",
+      "started_at": "2026-07-21T04:52:31.507762",
+      "status": "failed",
+      "reason": "drift 修复前确认即梦通道健康（史进/李吉补定妆多视图）",
+      "model": "GPT Image 2",
+      "access_path": "Codex CLI",
+      "cli_version": "codex-cli 0.144.6",
+      "image_generation_feature": "stable",
+      "execution_mode": "isolated_ephemeral_workdir",
+      "requested_probe_mode": "auto",
+      "probe_scope": "reference_attached",
+      "probe_profile": "production-character-front",
+      "production_request_class": "historical_character_front",
+      "calibration_only": true,
+      "reference_inputs": [
+        {
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "role": "style_only"
+        }
+      ],
+      "timeout_sec": 180,
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/BACKEND_HEALTH__probe_production-character-front_codex__20260721T045231507865.md",
+      "prompt_sha256": "d97a4ea9746a4098ad8511f2edcd7e092c0978d2402aaffb230ef519381284d9",
+      "external_status": "",
+      "external_status_url": "",
+      "external_status_checked_at": "",
+      "asset_attempt_ledger_consumed": false,
+      "finished_at": "2026-07-21T04:55:31.559722",
+      "duration_sec": 180.016,
+      "codex_event_diagnostics": {
+        "json_event_count": 6,
+        "stdout_line_count": 6,
+        "stderr_line_count": 25,
+        "top_level_type_counts": {
+          "thread.started": 1,
+          "turn.started": 1,
+          "item.completed": 3,
+          "item.started": 1
+        },
+        "payload_type_counts": {},
+        "item_type_counts": {
+          "item.completed:agent_message": 2,
+          "item.started:command_execution": 1,
+          "item.completed:command_execution": 1
+        },
+        "image_generation_begin_seen": false,
+        "image_generation_end_seen": false,
+        "thread_id": "019f8485-3eb1-7ea3-9307-15914dc69525"
+      },
+      "error": "codex exit 124; class=backend_timeout; detail=timeout after 180s"
     }
   ],
   "schema_version": 1,
   "kind": "comic_identity_backend_health",
   "chapter": "第1话",
-  "updated_at": "2026-07-16T11:09:52+08:00",
-  "latest_status": "succeeded"
+  "updated_at": "2026-07-21T04:55:31.559722",
+  "latest_status": "failed"
 }

@@ -1,0 +1,145 @@
+{
+  "episode": "第1集",
+  "source": "第1章 百妖谱",
+  "target_duration_sec": [90, 120],
+  "retention_curve": [
+    {"node": "开场钩", "position": "0-3s", "beat": "姜月初持刀对准裴长青，宣告刀下不是妖", "payoff": "悬念+情绪"},
+    {"node": "钩子1", "position": "约15s", "beat": "穿越者成为罪臣之女、身陷尸场", "payoff": "信息"},
+    {"node": "钩子2", "position": "约35s", "beat": "自由交易刚成立，虎妖从死而复生", "payoff": "危机+反转"},
+    {"node": "钩子3", "position": "约65s", "beat": "裴长青搏命仍被一脚击溃", "payoff": "情绪+战力信息"},
+    {"node": "生机", "position": "约80s", "beat": "百妖谱开启并给出杀生换道行规则", "payoff": "信息"},
+    {"node": "集尾钩", "position": "约105s", "beat": "姜月初选择杀死奄奄一息的裴长青", "payoff": "道德反转+危机悬置"}
+  ],
+  "items": [
+    {
+      "source_span": "开篇作者互动语与章节重复标题",
+      "beat_function": "过渡",
+      "decision": "omit",
+      "change_type": "compress",
+      "reason": "非正文剧情，进入漫剧会破坏沉浸与首屏留存",
+      "delivery": "不进入voiceover或后续镜头",
+      "adaptation_delta": {"changed_from": "作者互动和重复章节名", "changed_to": "直接进入杀人倒叙钩", "preserved_function": "无剧情功能", "short_drama_reason": "首3秒必须建立可视冲突", "payoff_guard": "不影响任何伏笔或人物动机"},
+      "risk_if_removed": "无"
+    },
+    {
+      "source_span": "姜月初在荒野醒来，发现自己从现代穿越到大唐罪臣之女，周围遍地囚犯与镇魔司尸骸",
+      "beat_function": "状态+世界观+冲突",
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "保留身份与困境，压缩重复环境和心理描写",
+      "delivery": "voiceover镜头2-3，以荒野尸骸画面和两句内心独白承接",
+      "adaptation_delta": {"changed_from": "多段穿越说明、身份回忆与环境观察", "changed_to": "尸场醒来+罪臣贱籍两句建立", "preserved_function": "女主无依无靠且无法合法逃亡", "short_drama_reason": "15秒内立住人物欲望和死局", "payoff_guard": "保留现代思维、贱籍、妖魔横行三项后续因果"},
+      "risk_if_removed": "观众不理解女主为何想逃、为何急于求生"
+    },
+    {
+      "source_span": "虎妖看似死亡，胸口有巨大窟窿；裴长青重伤半跪，以断刀支撑",
+      "beat_function": "伏笔+状态",
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "虎妖假死与裴长青濒死是后续反转和杀人选择的双重前提",
+      "delivery": "voiceover镜头2、9及后续分镜建立镜头呈现，不增加解释台词",
+      "adaptation_delta": {"changed_from": "原文逐层观察", "changed_to": "同一尸场建立镜头内并置信息", "preserved_function": "建立两名潜在威胁的生死状态", "short_drama_reason": "让静音画面先讲清局势", "payoff_guard": "胸口血洞、裴左臂断裂和濒死均不得删"},
+      "risk_if_removed": "虎妖复生不构成反转，女主杀裴缺乏可行性"
+    },
+    {
+      "source_span": "姜月初企图逃走，裴长青掷出半截断刀将她吓住",
+      "beat_function": "冲突+关系",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "用一次强动作建立裴的威慑和女主处境",
+      "delivery": "voiceover镜头4-6；断刀破风和入土由音效、分镜承接",
+      "adaptation_delta": {"changed_from": "长段内心估算与试探", "changed_to": "一句威胁配断刀入土", "preserved_function": "姜月初无法直接逃、裴仍有余威", "short_drama_reason": "动作替代解释", "payoff_guard": "不能把裴改成无条件善人"},
+      "risk_if_removed": "两人的合作缺乏强制性，关系张力变软"
+    },
+    {
+      "source_span": "裴长青自报镇魔司队正，指出逃犯无路引难以生存，以脱籍自由换姜月初搀扶南行",
+      "beat_function": "动机+关系+世界观",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "这是女主选择留下及两人建立短暂利益同盟的必要因果",
+      "delivery": "voiceover镜头7-9直接对话；扶起和向南走留给表演",
+      "adaptation_delta": {"changed_from": "裴长段说明与姜月初职场吐槽", "changed_to": "身份、交易、盘算各一句", "preserved_function": "自由诱因与现实威胁", "short_drama_reason": "减少口播信息负荷", "payoff_guard": "保留镇魔司、贱籍、南行、自由承诺"},
+      "risk_if_removed": "姜月初不逃反而扶人会显得降智"
+    },
+    {
+      "source_span": "搀扶过程中的重量、体温、气味、步履细节",
+      "beat_function": "状态+过渡",
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "可视动作足以表达重伤与体力差，独立口播会拖慢复生前节奏",
+      "delivery": "合并入镜头9后的无台词表演：踉跄扶行两步",
+      "adaptation_delta": {"changed_from": "多段触觉嗅觉与动作描写", "changed_to": "一个费力搀扶动作", "preserved_function": "裴确实濒死、姜月初身体孱弱", "short_drama_reason": "把时长留给虎妖复生和道德选择", "payoff_guard": "需让观众看清裴无法自救"},
+      "risk_if_removed": "裴的濒死程度不够，集尾选择可信度下降"
+    },
+    {
+      "source_span": "虎妖咳嗽、叹息并重新站起，嘲讽镇魔卫杀不了它",
+      "beat_function": "冲突+反转+危机",
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "本集中段主反转与妖魔威胁的核心展示",
+      "delivery": "voiceover镜头10-12，先用画外声再揭示复生全貌",
+      "adaptation_delta": {"changed_from": "原文完整对话", "changed_to": "保留最具压迫感的两句", "preserved_function": "从假安全转入必死困局", "short_drama_reason": "先声后人制造一次视觉揭晓", "payoff_guard": "保留胸口血洞仍在、妖却恢复行动"},
+      "risk_if_removed": "全集最大反转和敌方压迫感消失"
+    },
+    {
+      "source_span": "裴长青推断虎妖半步鸣骨，解释妖族天赋神通，并疑惑其袭击动机",
+      "beat_function": "世界观+伏笔",
+      "decision": "defer",
+      "change_type": "compress",
+      "reason": "当前危机中停下解释境界会泄压；虎妖来意是长线疑问",
+      "delivery": "本集只以穿心不死展示能力；鸣骨与天赋神通在第2集战斗/系统结算时自然带出，袭击动机在后续调查线兑现",
+      "adaptation_delta": {"changed_from": "裴内心完整推理", "changed_to": "用不死事实先立谜", "preserved_function": "虎妖异常强大且来意可疑", "short_drama_reason": "危机段不插百科", "payoff_guard": "第2集必须出现鸣骨或复生能力解释"},
+      "risk_if_removed": "若后续不补，境界体系与袭击伏笔会断裂"
+    },
+    {
+      "source_span": "裴长青强催气血挥刀，被虎妖一脚踢飞，横刀落在姜月初脚边",
+      "beat_function": "冲突+后果+状态",
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "用短促动作兑现实力差，并把作案工具合理交到女主面前",
+      "delivery": "voiceover镜头13-14；动作以暴起、踢飞、刀落脚边三拍完成",
+      "adaptation_delta": {"changed_from": "一段完整攻击描写", "changed_to": "三拍高密度动作与女主失声", "preserved_function": "裴彻底失去战力、横刀可被女主拾取", "short_drama_reason": "增强命中可读性与情绪反应", "payoff_guard": "不得让裴主动求死或授意女主杀他"},
+      "risk_if_removed": "杀裴动作缺道具衔接，女主选择像编剧强推"
+    },
+    {
+      "source_span": "虎妖伪善劝二人放弃、承诺吃完立碑；姜月初以现代网文梗自嘲",
+      "beat_function": "冲突+性格",
+      "decision": "merge",
+      "change_type": "rewrite_detail",
+      "reason": "保留虎妖的恶趣味和姜月初求生欲，去除平台名称与过重网络梗",
+      "delivery": "voiceover镜头15-16一来一回",
+      "adaptation_delta": {"changed_from": "番茄最拉胯穿越者榜单", "changed_to": "我才活过来，凭什么又让我去死", "preserved_function": "现代人自我意识和强烈求生欲", "short_drama_reason": "避免出戏、强化普适情绪", "payoff_guard": "仍需留一丝黑色幽默而不做喜剧化"},
+      "risk_if_removed": "系统出现前缺少女主主动欲望，显得纯被动获救"
+    },
+    {
+      "source_span": "百妖谱展开：宿主、凡境、无武学、零道行；杀生获道行、妖血摹形夺神通、道行可尽付一击",
+      "beat_function": "世界观+选择+伏笔",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "保留直接驱动杀裴选择的三条规则，属性面板细项由画面字卡承接",
+      "delivery": "voiceover镜头17-18；画面同步显示极简金字，不逐字口播全部面板",
+      "adaptation_delta": {"changed_from": "完整面板与长括号说明", "changed_to": "两句规则+极简属性字卡", "preserved_function": "杀生得道行、妖血摹形、道行灌注", "short_drama_reason": "降低口播认知负荷", "payoff_guard": "零道行和凡境需在画面可见，第2集结算必须沿用同一规则"},
+      "risk_if_removed": "女主为何杀裴、下一集为何能反杀虎妖均无法成立"
+    },
+    {
+      "source_span": "姜月初意识到现场唯一能杀的活物是奄奄一息的裴长青，拾刀挣扎后道歉并刺入其胸口",
+      "beat_function": "选择+后果+集尾",
+      "decision": "dramatize",
+      "change_type": "reorder",
+      "reason": "保留主动杀人的道德重量，并将刺入瞬间同时用作冷开场预示和集尾兑现",
+      "delivery": "voiceover镜头1预示但不揭示完整对象；镜头19-22逐步揭开选择，刀落后立刻黑场",
+      "adaptation_delta": {"changed_from": "顺叙至长刀入胸", "changed_to": "开场闪回一瞬、集尾完整回到同一动作", "preserved_function": "姜月初为求生主动越过道德线", "short_drama_reason": "首屏强钩与尾部反转形成闭环", "payoff_guard": "不改成误杀、不改成裴自愿献祭、不在本集播放道行到账"},
+      "risk_if_removed": "首集核心人物选择与追更动力全部丧失"
+    },
+    {
+      "source_span": "章末凡尘三境：闻弦—鸣骨—成丹",
+      "beat_function": "世界观",
+      "decision": "defer",
+      "change_type": "preserve",
+      "reason": "本集尚未进入正式结算，完整境界表会削弱刀落后的硬断",
+      "delivery": "第2集系统结算和虎妖战力判断中带出闻弦、鸣骨；成丹在首次相关人物出现时解释",
+      "adaptation_delta": {"changed_from": "章末附注", "changed_to": "后续随剧情逐级揭示", "preserved_function": "凡尘三境体系", "short_drama_reason": "信息随用随给，减少首集名词负荷", "payoff_guard": "不得更改境界顺序"},
+      "risk_if_removed": "若后续漏补，会损害力量体系一致性"
+    }
+  ]
+}

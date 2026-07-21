@@ -1,0 +1,11 @@
+{
+  "kind":"n2d_vertical_composition_plan","version":1,"episode":"第1集","status":"confirmed",
+  "composition_rules":{"safe_zone":"核心脸与刀的接触点放中间60%宽度；底部18%留中文字幕；顶部12%避开标题/平台UI","face_readability":"关键情绪镜脸高至少占画面22%，ELS只承担空间不承担身份识别","overlay_policy":"百妖谱底框由AI画空白光幕，宿主/境界/武学/道行与规则全部由compose overlay","z_axis_depth":"优先用刀/枯草前景、人物中景、巨岩虎妖后景形成纵深，避免三人横向挤成一排"},
+  "beat_composition":[
+    {"beat_id":"Beat_01","primary_subject_zone":"姜月初脸在中上偏左，刀尖沿左下至中心对角线","foreground_midground_background":"前景刀锋；中景姜月初；背景裴和复生虎妖均只作不完整暗示；顺叙改为尸骸/姜/月初/巨岩三层","subtitle_clearance":"底部尸地保持低细节，不压刀尖","vertical_motion":"倒叙刀尖下落；顺叙从尸地向上揭示姜月初站起"},
+    {"beat_id":"Beat_02","primary_subject_zone":"说话者脸在中上左右三分区，断刀落在中下焦点","foreground_midground_background":"断刀前景；姜月初中景；裴后景后逐步拉平为正反打","subtitle_clearance":"字幕落枯草暗区，避开断刀与腰牌","vertical_motion":"姜月初后退后停住；裴由半跪到被扶起形成上升"},
+    {"beat_id":"Beat_03","primary_subject_zone":"虎妖头位于上中，二人肩背压在下侧形成尺度对照","foreground_midground_background":"二人肩背前景；枯草与横刀中景；巨岩和虎妖后景","subtitle_clearance":"底部肩背间保留暗区，虎妖台词不盖胸口血洞","vertical_motion":"虎妖从倚坐到站起，头部向上突破画面；裴反向冲入深处"},
+    {"beat_id":"Beat_04","primary_subject_zone":"命中点位于画面中心，姜月初反应脸在中上偏右","foreground_midground_background":"横刀/脚掌前景；裴受击中景；虎妖巨躯后景","subtitle_clearance":"动作命中时可短暂无字幕；台词字幕落最下安全区","vertical_motion":"裴弧线飞回并下坠，横刀旋落至底部"},
+    {"beat_id":"Beat_05","primary_subject_zone":"姜月初眼睛和脸在中上，空白面板偏右中部，横刀柄中下","foreground_midground_background":"手与刀前景；姜月初中景；虎妖仅作虚焦后景压迫；内心CU禁止其他实体清晰入画","subtitle_clearance":"系统overlay置中上与右中，字幕仍在底部且不重叠","vertical_motion":"古卷自下向上展开；姜月初目光向下落到裴，再举刀下落"}
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "kind": "n2d_story_integrity_ledger",
+  "version": 1,
+  "generated_at": "2026-07-21",
+  "episodes": [
+    {
+      "episode": "第1集",
+      "choices": [
+        {
+          "shot": 1,
+          "character": "姜月初",
+          "text": "活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子"
+        },
+        {
+          "shot": 12,
+          "character": "虎妖",
+          "text": "几个不入流的镇魔卫，也配杀我？"
+        },
+        {
+          "shot": 17,
+          "character": "百妖谱",
+          "text": "百妖谱开启。斩杀生物，可获道行。  💥爽点"
+        },
+        {
+          "shot": 18,
+          "character": "百妖谱",
+          "text": "妖血为墨，可摹其形，夺其神通；道行尽付一击，可借岁月之力杀敌。  ⚡钩子"
+        },
+        {
+          "shot": 19,
+          "character": "姜月初",
+          "text": "杀生得道行……可这里还有谁活着？|| 除了那头杀不死的虎妖——"
+        }
+      ],
+      "consequences": [
+        {
+          "shot": 17,
+          "character": "百妖谱",
+          "text": "百妖谱开启。斩杀生物，可获道行。  💥爽点"
+        }
+      ],
+      "motivations": [
+        {
+          "shot": 1,
+          "character": "姜月初",
+          "signals": [
+            "goal"
+          ],
+          "text": "活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子"
+        }
+      ],
+      "dialogue_functions": [
+        {
+          "shot": 1,
+          "role": "姜月初",
+          "tags": [
+            "decide",
+            "goal"
+          ],
+          "text": "活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子"
+        },
+        {
+          "shot": 2,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "一炷香前。大唐荒野，囚犯和镇魔卫死了一地。|| 我偏偏在死人堆里醒了。"
+        },
+        {
+          "shot": 3,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。  ⚡钩子"
+        },
+        {
+          "shot": 4,
+          "role": "裴长青",
+          "tags": [
+            "texture"
+          ],
+          "text": "过来。"
+        },
+        {
+          "shot": 5,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "你都快断气了，还想使唤我？"
+        },
+        {
+          "shot": 6,
+          "role": "裴长青",
+          "tags": [
+            "texture"
+          ],
+          "text": "你可以试试。下一刀，落的就不是地上。"
+        },
+        {
+          "shot": 7,
+          "role": "裴长青",
+          "tags": [
+            "texture"
+          ],
+          "text": "裴长青，陇右镇魔都司队正。扶我往南，我保你脱籍，还你自由。"
+        },
+        {
+          "shot": 8,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "一个将死之人的承诺……|| 总好过我现在就死。  ⚡钩子"
+        },
+        {
+          "shot": 9,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "好。先说清楚，那头虎妖真死了？"
+        },
+        {
+          "shot": 10,
+          "role": "虎妖",
+          "tags": [
+            "texture"
+          ],
+          "text": "别跑啊。|| 这荒郊野岭的，你们能去哪儿？  ⚡钩子"
+        },
+        {
+          "shot": 11,
+          "role": "裴长青",
+          "tags": [
+            "texture"
+          ],
+          "text": "不可能……我明明刺穿了你的心！"
+        },
+        {
+          "shot": 12,
+          "role": "虎妖",
+          "tags": [
+            "decide"
+          ],
+          "text": "几个不入流的镇魔卫，也配杀我？"
+        },
+        {
+          "shot": 13,
+          "role": "裴长青",
+          "tags": [
+            "texture"
+          ],
+          "text": "快走！"
+        },
+        {
+          "shot": 14,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "裴长青！"
+        },
+        {
+          "shot": 15,
+          "role": "虎妖",
+          "tags": [
+            "texture"
+          ],
+          "text": "莫再挣扎。等吃干净了，我替你们立碑。"
+        },
+        {
+          "shot": 16,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "我才活过来，凭什么又让我去死？  ⚡钩子"
+        },
+        {
+          "shot": 17,
+          "role": "百妖谱",
+          "tags": [
+            "action",
+            "consequence",
+            "decide"
+          ],
+          "text": "百妖谱开启。斩杀生物，可获道行。  💥爽点"
+        },
+        {
+          "shot": 18,
+          "role": "百妖谱",
+          "tags": [
+            "decide",
+            "evidence"
+          ],
+          "text": "妖血为墨，可摹其形，夺其神通；道行尽付一击，可借岁月之力杀敌。  ⚡钩子"
+        },
+        {
+          "shot": 19,
+          "role": "姜月初",
+          "tags": [
+            "decide"
+          ],
+          "text": "杀生得道行……可这里还有谁活着？|| 除了那头杀不死的虎妖——"
+        },
+        {
+          "shot": 20,
+          "role": "裴长青",
+          "tags": [
+            "action"
+          ],
+          "text": "拿刀……快逃。"
+        },
+        {
+          "shot": 21,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "|| 我想活。"
+        },
+        {
+          "shot": 22,
+          "role": "姜月初",
+          "tags": [
+            "texture"
+          ],
+          "text": "裴长青，|| 对不住了。  🪝集尾"
+        }
+      ]
+    }
+  ]
+}

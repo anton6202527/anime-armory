@@ -1,0 +1,15 @@
+{
+  "kind": "n2d_shot_timing_basis",
+  "version": 1,
+  "episode": "第1集",
+  "timing_basis": "text_estimate_no_audio",
+  "provisional": true,
+  "source": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/配音/timing_estimate.json",
+  "source_fingerprint": "83a1e72c78fa23c0c61ec4b621bfeae32467085e8553e6e953b76a5e9abaac94",
+  "final_voice_required_before_compose": true,
+  "restrictions": [
+    "not_final_mix",
+    "not_final_lipsync",
+    "visible_mouth_clips_follow production_mode_route"
+  ]
+}
