@@ -47,6 +47,8 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 
 渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`target_platform`、`platform_profile`、`text_layout_qc`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。`--formats webp+png` 会优先输出 WebP，遇到超高长图超过 WebP 单边限制时自动落 PNG 并写入 manifest。RTL 或需词典断行的文字会被 `text_layout_qc` 阻断当前 Pillow 草稿渲染，需改用人工/专业排版 renderer。长条图太高不便逐字检查时，加 `--qc-slots` 输出 `生产数据/qa_previews/第N话_lettering_slots.jpg`，manifest 会记录 `lettering_slot_qc` 路径和缺失槽位。
 
+嵌字几何 QC（确定性坐标检查）：`scripts/lettering_qc.py <作品根> 第N话 [--json --write]` 从 layout 槽位与 lettering 条目做纯几何检查——槽位越界画布（block·渲染必然裁字）、贴左右安全边距、跑出所属格、同格槽位互压、单格对白/旁白 >3、字号低于最小可读（28px@1440 宽等比换算）均出发现；comic-review 的 compose gate 会自动跑并把越界升为阻断。这层查"坐标合同"，与 `--qc-slots` 的人眼预览、`text_layout_qc` 的可渲染性检查三层正交。
+
 ## 嵌字原则
 
 文字不要烘焙在出图 prompt 里。推荐流程：

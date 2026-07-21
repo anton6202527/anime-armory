@@ -48,9 +48,10 @@ def test_unconditional_gates_do_not_condition_severity() -> None:
         if spec.get("may_be_setting_gated"):
             continue
         src = func_source(name)
-        assert '"block" if' not in src and "'block' if" not in src, (
-            f"{name} 引入了条件严重度（\"block\" if …）——若确需设置门控，"
-            "先把 charter 里 may_be_setting_gated 改为 True 并写明理由/日期"
+        has_conditional_severity = '"block" if' in src or "'block' if" in src
+        assert not (has_conditional_severity and "read_setting" in src), (
+            f"{name} 同时出现 read_setting 与条件严重度（\"block\" if …）——设置门控 severity "
+            "必须先把 charter 里 may_be_setting_gated 改为 True 并写明理由/日期"
         )
 
 
