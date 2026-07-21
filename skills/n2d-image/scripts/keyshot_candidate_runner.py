@@ -2,10 +2,10 @@
 """Generate real best-of-N keyshot candidates without overwriting final frames.
 
 This closes the production gap between ``keyshot_candidates.py`` (plan only) and
-``candidate_select.py`` (selects existing candidates only).  It reuses
-``codex_image_runner`` for prompt resolution, reference attachments, generation
-events, and Codex image generation, but redirects each keyshot's firstframe
-target into ``出图/<episode>/候选/<clip>/candidate_NN.png``.
+``candidate_select.py`` (selects existing candidates only).  It reuses the
+shared image target/compiler contract and dispatches to the project's selected
+official Codex or Dreamina runner, redirecting each keyshot's firstframe target
+into ``出图/<episode>/候选/<clip>/candidate_NN.png``.
 """
 from __future__ import annotations
 
@@ -128,7 +128,11 @@ def build_candidate_tasks(
                 mode="firstframe",
                 rel_path=rel_path,
                 section=source.section,
-                variant_note=f"关键镜 best-of-N 候选 {index:02d}/{count}；源目标 {source.rel_path}；候选目录按 {clip} 归档。",
+                variant_note=(
+                    f"关键镜 best-of-N 视觉候选 {index:02d}/{count}；"
+                    "保持同一分镜剧情、角色身份、服装、道具与导演构图合同，"
+                    "只允许自然微差以供后续成对选优。"
+                ),
             )
             tasks.append({
                 "clip": clip,
@@ -185,6 +189,17 @@ def run_candidate_select(root: Path, episode: str, *, apply_selection: bool, no_
     return proc.returncode
 
 
+def resolve_backend(root: Path, requested: str = "auto") -> str:
+    value = str(requested or "auto").strip().lower()
+    if value != "auto":
+        if value not in {"codex", "dreamina"}:
+            raise ValueError(f"unsupported keyshot candidate backend: {requested}")
+        return value
+    selection = cir.current_image_backend_selection(str(root))
+    selected = str(selection.get("backend") or selection.get("access") or "codex").strip().lower()
+    return "dreamina" if ("dreamina" in selected or "即梦" in selected) else "codex"
+
+
 def run_generation(
     root: Path,
     episode: str,
@@ -200,6 +215,10 @@ def run_generation(
     select_after: bool,
     apply_selection: bool,
     no_ledger: bool,
+    backend: str = "auto",
+    dreamina_poll_sec: int = 300,
+    dreamina_model_version: str = "5.0",
+    dreamina_resolution_type: str = "2k",
 ) -> Dict[str, Any]:
     plan = load_plan(root, episode)
     tasks = build_candidate_tasks(
@@ -221,6 +240,13 @@ def run_generation(
         "tasks": [],
     }
     task_id = os.environ.get("N2D_TASK_ID") or f"keyshot-candidates-{episode}"
+    resolved_backend = resolve_backend(root, backend)
+    summary["backend"] = resolved_backend
+    dreamina = None
+    if resolved_backend == "dreamina":
+        import dreamina_image_runner as dreamina  # type: ignore
+        if not dry_run:
+            dreamina.require_dreamina_image_signoff(root)
 
     if dry_run:
         for task in tasks:
@@ -258,15 +284,29 @@ def run_generation(
             summary["tasks"].append({"clip": task["clip"], "candidate": task["candidate"], "target": target.rel_path, "status": "skip_existing"})
             continue
         print(f"[candidate] {task['clip']} {task['candidate']} -> {target.rel_path}", flush=True)
-        ok = cir.process_target(
-            root,
-            episode,
-            target,
-            task_id=task_id,
-            timeout_sec=timeout_sec,
-            dry_run=False,
-            force=force,
-        )
+        if resolved_backend == "dreamina":
+            ok = dreamina.process_target(
+                root,
+                episode,
+                target,
+                task_id=task_id,
+                timeout_sec=timeout_sec,
+                poll_sec=dreamina_poll_sec,
+                model_version=dreamina_model_version,
+                resolution_type=dreamina_resolution_type,
+                dry_run=False,
+                force=force,
+            )
+        else:
+            ok = cir.process_target(
+                root,
+                episode,
+                target,
+                task_id=task_id,
+                timeout_sec=timeout_sec,
+                dry_run=False,
+                force=force,
+            )
         if ok:
             write_candidate_sidecar(root, episode, task, "pass")
             summary["generated"] += 1
@@ -303,6 +343,11 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--no-select", action="store_true", help="do not run candidate_select.py after generation")
     ap.add_argument("--apply-selection", action="store_true", help="pass --apply to candidate_select.py after generation")
     ap.add_argument("--no-ledger", action="store_true", help="pass --no-ledger to candidate_select.py")
+    ap.add_argument("--backend", choices=("auto", "codex", "dreamina"), default="auto",
+                    help="generation backend; auto follows the project's image backend selection")
+    ap.add_argument("--dreamina-poll-sec", type=int, default=int(os.environ.get("N2D_DREAMINA_IMAGE_POLL", "300")))
+    ap.add_argument("--dreamina-model-version", default=os.environ.get("N2D_DREAMINA_IMAGE_MODEL", "5.0"))
+    ap.add_argument("--dreamina-resolution-type", default=os.environ.get("N2D_DREAMINA_IMAGE_RESOLUTION", "2k"))
     ap.add_argument("--json", action="store_true")
     return ap
 
@@ -328,6 +373,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         select_after=not ns.no_select,
         apply_selection=ns.apply_selection,
         no_ledger=ns.no_ledger,
+        backend=ns.backend,
+        dreamina_poll_sec=ns.dreamina_poll_sec,
+        dreamina_model_version=ns.dreamina_model_version,
+        dreamina_resolution_type=ns.dreamina_resolution_type,
     )
     if ns.json or ns.dry_run:
         print(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True))

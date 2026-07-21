@@ -1,0 +1,11 @@
+{
+  "counts": {
+    "block": 0,
+    "warn": 0
+  },
+  "findings": [],
+  "kind": "n2d_motion_grammar_consistency",
+  "note": "no 设定库/motion_grammar.json; motion grammar consistency falls back to route risk flags",
+  "status": "pass",
+  "version": 1
+}

@@ -54,6 +54,59 @@
       "verdict": "ok"
     },
     {
+      "char": "CHAR_01__本集为14岁杂役常态",
+      "confirmed_at": "2026-07-19T13:58:17+00:00",
+      "floor": 0.4747,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/EP01_CLIP06.png",
+      "png_sha256": "4abcb8a5929b653ef684024b34b0ba93b8c127a31782b9ab47ec5ad988b93432",
+      "reason": "执行者已打开当前 exact-hash 原分辨率并与 CHAR_01 正面脸锚及45度全身锚并排核对：窄鹅蛋脸、内双长眼、眉眼鼻唇比例、旧灰布发带、低髻、十四岁年龄感一致；原始0.3706低分来自低头侧前角、冷月暗光与中远景缩脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.3706,
+      "shot": "Clip_06",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__本集为14岁杂役常态",
+      "confirmed_at": "2026-07-19T14:20:08+00:00",
+      "floor": 0.4747,
+      "human_signoff": false,
+      "original_verdict": "warn",
+      "png": "图片/EP01_CLIP06_a2.png",
+      "png_sha256": "d456fdd9a8f2d430ca131feadf8e120828f0a65662b476229b612ef7d7b003b5",
+      "reason": "执行者已打开当前 exact-hash 原分辨率并与 CHAR_01 正面脸锚及45度全身锚并排核对：窄鹅蛋脸、内双长眼、眉眼鼻唇比例、旧灰布发带、低髻与十四岁年龄感一致；原始0.4367 warn来自低头三分之二角度、微笑表情与冷月侧光。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.4367,
+      "score_vs_main": 0.424,
+      "shot": "Clip_06",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_01__本集为14岁杂役常态",
+      "confirmed_at": "2026-07-19T14:29:14+00:00",
+      "floor": 0.4747,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/EP01_CLIP07.png",
+      "png_sha256": "6367a55d4d19bdbc8f7e1baa4ab7837be87f1d315e574aa36cb78a8ecf3ec1fc",
+      "reason": "执行者已打开当前 exact-hash 原分辨率并与 CHAR_01 正面脸锚及45度全身锚并排核对：窄鹅蛋脸、内双长眼、眉眼鼻唇比例、旧灰布发带、低髻、灰褐短打与十四岁年龄感一致；原始0.386低分来自侧脸、中景缩脸与冷月侧光。",
+      "review_kind": "executor_visual",
+      "reviewer": "executor:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.386,
+      "score_vs_main": 0.3765,
+      "shot": "Clip_07",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
       "char": "CHAR_02__常态",
       "confirmed_at": "2026-07-16T00:48:43+00:00",
       "floor": 0.639,
@@ -73,6 +126,6 @@
     }
   ],
   "kind": "n2d_face_confirmations",
-  "updated_at": "2026-07-18T13:37:08+00:00",
+  "updated_at": "2026-07-19T14:29:14+00:00",
   "version": 1
 }

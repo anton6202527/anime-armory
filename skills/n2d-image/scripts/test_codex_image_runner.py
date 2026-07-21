@@ -1620,6 +1620,111 @@ def test_storyboard_prop_and_hand_insert_is_detail_face_exempt(tmp_path: Path) -
     assert beat["focus_ids"] == []
 
 
+def test_firstframe_filters_prop_that_enters_in_later_subshot(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP06",
+        "character_ids": ["CHAR_01"],
+        "object_ids": ["PROP_01", "PROP_水桶", "PROP_扁担"],
+        "continuity": {
+            "start_state": "少年弯腰将两桶置于碎石地，扁担仍在肩后",
+            "end_state": "少年双手托持破损黑盆",
+        },
+        "shots": [
+            {"t": "0-2.0s", "lens": "CU", "desc": "少年忽然看向画左下方"},
+            {"t": "2.0-4.5s", "lens": "insert", "desc": "破损黑盆卡在砂石间"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    (shared / "asset_registry.json").write_text(json.dumps({"assets": [
+        {"id": "PROP_01", "name": "破损黑盆"},
+        {"id": "PROP_水桶", "name": "水桶"},
+        {"id": "PROP_扁担", "name": "扁担"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_06", title="## 镜头 6",
+        body=(
+            "**目标落档**：`出图/第1集/图片/EP01_CLIP06.png`\n"
+            "场景：秀竹峰后山浅潭；破损黑盆；水桶；扁担。\n"
+            "保持一致：裤脚溅湿、抱住破损黑盆。\n"
+        ),
+        target_line="`出图/第1集/图片/EP01_CLIP06.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_06_first", clip="Clip_06", mode="firstframe",
+        rel_path="出图/第1集/图片/EP01_CLIP06.png", section=section,
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="dreamina",
+        model="Seedream 5.0", channel="official_cli",
+    )
+    prompt = str(compiled.get("prompt") or "")
+
+    assert beat["visible_objects"] == ["水桶", "扁担"]
+    assert beat["excluded_objects"] == ["破损黑盆"]
+    assert "本帧当前状态硬约束：少年弯腰将两桶置于碎石地，扁担仍在肩后" in prompt
+    assert "破损黑盆在本时点尚未入画" in prompt
+    assert "抱住破损黑盆" not in prompt
+
+
+def test_audience_only_prop_reveal_uses_character_hidden_underside(tmp_path: Path) -> None:
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True)
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP07",
+        "character_ids": ["CHAR_01"],
+        "object_ids": ["PROP_01"],
+        "entity_schedule": {"knowledge_state": {
+            "CHAR_01": ["仍不知盆底异常"],
+            "AUDIENCE": ["第一次看见盆底青金幽光"],
+        }},
+        "continuity": {"anchors": [{
+            "at_sec": 2.4,
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+        }]},
+        "shots": [
+            {"t": "0-2.4s", "lens": "MS", "desc": "少年抱盆转身"},
+            {"t": "2.4-3.9s", "lens": "ECU insert", "desc": "水滴滑过破损盆底，一缕青金幽光从细纹中亮起"},
+        ],
+    }]}, ensure_ascii=False), encoding="utf-8")
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({"characters": [
+        {"id": "CHAR_01", "name": "贺平生"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    (shared / "asset_registry.json").write_text(json.dumps({"assets": [
+        {"id": "PROP_01", "name": "破损黑盆"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_07", title="## 镜头 7",
+        body="**目标落档**：`出图/第1集/图片/EP01_CLIP07_a1.png`\n",
+        target_line="`出图/第1集/图片/EP01_CLIP07_a1.png`",
+    )
+    target = codex_image_runner.Target(
+        shot="Clip_07_a1", clip="Clip_07", mode="midframe",
+        rel_path="出图/第1集/图片/EP01_CLIP07_a1.png", section=section,
+    )
+
+    beat = codex_image_runner.storyboard_anchor_beat(tmp_path, "第1集", target)
+    compiled = codex_image_runner.compile_target_image_request(
+        tmp_path, "第1集", target, [], backend="dreamina",
+        model="Seedream 5.0", channel="official_cli",
+    )
+    prompt = str(compiled.get("prompt") or "")
+
+    assert beat["audience_only_reveal"] is True
+    assert "盆底外侧下表面" in prompt
+    assert "观众独享信息铁律" in prompt
+    assert "不得把异常画进角色可见的道具内腔/正面" in prompt
+
+
 def test_firstframe_does_not_render_video_jump_cuts_as_triptych(tmp_path: Path) -> None:
     storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
     storyboard.parent.mkdir(parents=True)
