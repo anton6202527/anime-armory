@@ -53,6 +53,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
@@ -4151,6 +4152,45 @@ def semantic_embedding_required(payload: Mapping[str, Any]) -> List[str]:
     return sorted(set(out))
 
 
+def run_external_semantic_drift(root: Path, ep: str) -> Optional[Dict[str, Any]]:
+    """Run semantic embedding in a dedicated heavy-dependency interpreter.
+
+    InsightFace and torch/transformers commonly live in different conda envs on
+    production Macs.  `N2D_SEMANTIC_PYTHON` lets image_qc retain full face QC in
+    the current interpreter while executing only the DINO sidecar elsewhere.
+    The sidecar remains read-only and its JSON is folded into this same report.
+    """
+    python = os.environ.get("N2D_SEMANTIC_PYTHON", "").strip()
+    if not python:
+        return None
+    script = Path(__file__).resolve().parent / "semantic_drift.py"
+    try:
+        proc = subprocess.run(
+            [python, str(script), str(root), ep, "--json"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=600,
+        )
+    except Exception as exc:
+        return {"available": False, "compared": 0, "findings": [],
+                "notes": [f"外置 semantic_drift 启动失败：{exc}"]}
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "unknown error").strip()[-800:]
+        return {"available": False, "compared": 0, "findings": [],
+                "notes": [f"外置 semantic_drift 退出码 {proc.returncode}：{detail}"]}
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        return {"available": False, "compared": 0, "findings": [],
+                "notes": [f"外置 semantic_drift JSON 无法解析：{exc}"]}
+    if isinstance(payload, dict):
+        payload.setdefault("execution_python", python)
+        return payload
+    return {"available": False, "compared": 0, "findings": [],
+            "notes": ["外置 semantic_drift 未返回 JSON object。"]}
+
+
 def summarize(payload: Dict[str, Any], *, strict_pixel: bool = False) -> Dict[str, Any]:
     """汇总各项机检 + lint，区分 hard（必须修）与 advisory（非阻断初筛）。
 
@@ -5023,13 +5063,14 @@ def _png_face_ratio_and_size(
     abspath: str,
     *,
     panel_count: Optional[int] = None,
-) -> Tuple[Optional[float], Optional[int], Optional[int]]:
-    """Return normalized face ratio, short edge and detected face count.
+) -> Tuple[Optional[float], Optional[int], Optional[int], Optional[int]]:
+    """Return normalized face ratio, signal short edge, face count and face-box short edge.
 
     A normal tight anchor uses the largest face bbox divided by the whole image.
-    A declared expression sheet instead normalizes the median detected face bbox
-    to one panel (whole area / panel_count); otherwise a valid 2x3 sheet is
-    guaranteed to look six times weaker than a single-face crop.
+    A declared six-panel expression sheet is a 3x2 grid: detections are assigned
+    by bbox centre, only the largest bbox in each occupied cell is retained, and
+    face area is normalized to one cell.  This suppresses a common Haar failure
+    where a neckline/lower-face false positive causes two boxes in one panel.
     """
     size: Optional[Tuple[int, int]] = None
     try:
@@ -5039,23 +5080,39 @@ def _png_face_ratio_and_size(
     except Exception:
         size = None
     if size is None:
-        return None, None, None
+        return None, None, None, None
     w, h = size
     min_dim = min(int(w), int(h)) if w and h else None
     ratio: Optional[float] = None
     detected_count: Optional[int] = None
+    face_box_min_dim: Optional[int] = None
     if face_mod is not None and hasattr(face_mod, "cv2_face_boxes") and w and h:
         try:
             boxes = face_mod.cv2_face_boxes(abspath)
         except Exception:
             boxes = None
-        if boxes is not None:
-            detected_count = len(boxes)
         if boxes:  # 非空=真检到脸；[]=检测器跑了但 0 脸（风格化脸常漏）→ 不据占比判
+            selected = list(boxes)
+            if panel_count == 6:
+                cells: Dict[Tuple[int, int], Any] = {}
+                for box in boxes:
+                    x, y, bw, bh = (int(box[0]), int(box[1]), int(box[2]), int(box[3]))
+                    col = min(2, max(0, int(((x + bw / 2.0) / float(w)) * 3)))
+                    row = min(1, max(0, int(((y + bh / 2.0) / float(h)) * 2)))
+                    previous = cells.get((row, col))
+                    if previous is None or bw * bh > int(previous[2]) * int(previous[3]):
+                        cells[(row, col)] = box
+                selected = list(cells.values())
+                detected_count = len(cells)
+                min_dim = min(max(1, int(w) // 3), max(1, int(h) // 2))
+            elif boxes is not None:
+                detected_count = len(boxes)
             ratios = sorted(
-                ((int(b[2]) * int(b[3])) / float(int(w) * int(h)) for b in boxes),
+                ((int(b[2]) * int(b[3])) / float(int(w) * int(h)) for b in selected),
                 reverse=True,
             )
+            if selected:
+                face_box_min_dim = min(min(int(b[2]), int(b[3])) for b in selected)
             if panel_count and len(ratios) >= 2:
                 sample = ratios[:min(len(ratios), panel_count)]
                 mid = len(sample) // 2
@@ -5063,7 +5120,9 @@ def _png_face_ratio_and_size(
                 ratio = median * panel_count
             else:
                 ratio = ratios[0]
-    return ratio, min_dim, detected_count
+        elif boxes is not None:
+            detected_count = 0
+    return ratio, min_dim, detected_count, face_box_min_dim
 
 
 def _character_form_is_non_human(char: Mapping[str, Any], form: Mapping[str, Any]) -> bool:
@@ -5117,7 +5176,7 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
                     continue  # 缺图非本门职责
                 res["checked"] += 1
                 panel_count = _expression_sheet_panel_count(label, rel)
-                ratio, min_dim, detected_count = _png_face_ratio_and_size(
+                ratio, min_dim, detected_count, face_box_min_dim = _png_face_ratio_and_size(
                     face_mod,
                     abspath,
                     panel_count=panel_count,
@@ -5138,12 +5197,17 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
                     })
                 if panel_count:
                     # Expression boards complement, rather than replace, the
-                    # separate canonical tight face anchor.  Apply the normal
-                    # per-panel signal floor, while retaining the core 1024px
-                    # resolution floor for the complete sheet.
+                    # separate canonical tight face anchor.  Judge its actual
+                    # 3x2 cell signal, not the complete mosaic short edge.
                     ratio_reason = weak_face_anchor_reason(ratio, None, core=False)
-                    size_reason = weak_face_anchor_reason(None, min_dim, core=core)
-                    reason = "；".join(part for part in (ratio_reason, size_reason) if part) or None
+                    signal_reasons: List[str] = []
+                    if min_dim is not None and min_dim < 384:
+                        signal_reasons.append(f"单格短边 {min_dim}px（最低 384px）")
+                    if face_box_min_dim is not None and face_box_min_dim < 96:
+                        signal_reasons.append(f"单格主脸框短边最小 {face_box_min_dim}px（最低 96px）")
+                    reason = "；".join(
+                        part for part in (ratio_reason, "；".join(signal_reasons)) if part
+                    ) or None
                 else:
                     reason = weak_face_anchor_reason(ratio, min_dim, core=core)
                 if reason:
@@ -5979,9 +6043,14 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
             if sd is not None:
                 try:
                     sdr = sd.analyze(root, ep, payload)
+                    if not sdr.get("available"):
+                        sdr = run_external_semantic_drift(root, ep) or sdr
                     payload["semantic_drift"] = sdr
                 except Exception as exc:
-                    payload["semantic_drift"] = {"available": False, "notes": [f"semantic_drift 失败：{exc}"], "findings": []}
+                    payload["semantic_drift"] = (
+                        run_external_semantic_drift(root, ep)
+                        or {"available": False, "notes": [f"semantic_drift 失败：{exc}"], "findings": []}
+                    )
             # 契约像素兜底（④·色调/光位）：把 00_总览 契约的暖冷·明暗意图量到实际帧像素上对照——
             # 补「色调基线/光位锚 声称焊像素却只验文本誊抄」这道洞。纯 Pillow·默认环境可跑·WARN 人判。
             tl = _load_sibling("tone_light_contract")

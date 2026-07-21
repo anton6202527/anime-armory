@@ -80,100 +80,100 @@
   "backend": "dreamina",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "Dreamina/即梦官方 CLI"
     },
     "exact_model_evidence_required": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": false
     },
     "exact_model_id": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
-      "value": ""
+      "value": "5.0"
     },
     "max_reference_images": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": null
     },
     "model": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)"
     },
     "model_precision": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "provider_model"
     },
     "negative_strategy": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "inline_constraints"
     },
     "official": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": false
     },
     "prompt_language": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "zh"
     },
     "prompt_profile": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "seedream_concise_natural_language"
     },
     "prompt_request_fields": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": [
         "aspect_ratio",
@@ -185,60 +185,60 @@
       ]
     },
     "reference_mode": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": "official_cli_references"
     },
     "supports_edit": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": true
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "official_docs",
-      "observed_text": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
-      "source": "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit",
+      "evidence_kind": "official_cli_help",
+      "observed_text": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
+      "source": "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "official_docs",
+  "evidence_kind": "official_cli_help",
   "kind": "n2d_image_backend_refresh_evidence",
   "model_evidence": {
-    "exact_model_id": "",
+    "exact_model_id": "5.0",
     "normalized_model_label": "即梦图像模型 (Seedream 系·版本以 per-run 官方证据为准)",
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
     "precision": "provider_model"
   },
-  "note": "2026-07-18 verified official CLI supports async image2image with 1-10 local references, model 5.0, 9:16, 2k/4k, query_result/list_task recovery; logged-in maestro account has 7934 credits.",
+  "note": "官方 CLI 当前可用 image2image；本地参考图 1-10 张；model 5.0；9:16；2k/4k；异步 submit/query；已登录 maestro，7038 credits，允许继续本项目已签核的 Dreamina 单向灾备与关键镜候选。",
   "source_urls": [],
   "sources": [
-    "Dreamina official CLI: dreamina --help, dreamina image2image -h, dreamina user_credit"
+    "dreamina image2image -h + dreamina user_credit (2026-07-20 08:00 Asia/Shanghai)"
   ],
-  "verified_at": "2026-07-18"
+  "verified_at": "2026-07-20"
 }

@@ -51,6 +51,8 @@ def test_build_candidate_tasks_maps_plan_clip_to_prompt_shot(tmp_path: Path) -> 
     assert tasks[0]["source_target"].rel_path == "出图/第1集/图片/Clip01_first.png"
     assert tasks[0]["target"].shot == "Clip_01_candidate_01"
     assert tasks[0]["target"].rel_path == "出图/第1集/候选/EP01_CLIP01/candidate_01.png"
+    assert "出图/" not in tasks[0]["target"].variant_note
+    assert "候选目录" not in tasks[0]["target"].variant_note
     assert tasks[1]["target"].rel_path == "出图/第1集/候选/EP01_CLIP01/candidate_02.png"
 
 
@@ -125,3 +127,13 @@ def test_skip_preflight_cannot_bypass_shared_first_interlock(tmp_path: Path, mon
     assert summary["shared_first_blocked"] is True
     assert summary["generated"] == 0
     assert calls == []
+
+
+def test_resolve_backend_auto_follows_dreamina_project(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        kcr.cir,
+        "current_image_backend_selection",
+        lambda _root: {"backend": "dreamina", "access": "Dreamina/即梦官方 CLI"},
+    )
+    assert kcr.resolve_backend(tmp_path, "auto") == "dreamina"
+    assert kcr.resolve_backend(tmp_path, "codex") == "codex"

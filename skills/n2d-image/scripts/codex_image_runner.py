@@ -3505,6 +3505,49 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         and re.search(r"insert|ECU|局部|特写", lens, re.I)
         and re.search(r"掌心|手指|手背|手腕|单手|双手|右手|左手|脚|鞋|桶|盆|容器|器具|扁担|道具|物件|伤口|水下", desc)
     )
+    knowledge_state = (clip.get("entity_schedule") or {}).get("knowledge_state") or {}
+    audience_knowledge = "；".join(
+        str(item or "").strip() for item in knowledge_state.get("AUDIENCE") or [] if str(item or "").strip()
+    )
+    character_knowledge = "；".join(
+        str(item or "").strip()
+        for key, values in knowledge_state.items()
+        if str(key).startswith("CHAR_")
+        for item in (values or [])
+        if str(item or "").strip()
+    )
+    audience_only_reveal = bool(
+        audience_knowledge
+        and re.search(r"不知|未察觉|没发现|不知道", character_knowledge)
+    )
+    continuity = clip.get("continuity") or {}
+    current_state = (
+        re.sub(r"\s+", " ", str(continuity.get("start_state") or "")).strip()
+        if target.mode == "firstframe"
+        else desc
+    )
+    visibility_text = "；".join(filter(None, (desc, current_state)))
+    asset_registry = load_json_file(root / "出图" / "共享" / "asset_registry.json")
+    clip_object_ids = {str(value or "").strip() for value in clip.get("object_ids") or []}
+    visible_objects: List[str] = []
+    excluded_objects: List[str] = []
+    excluded_object_aliases: List[str] = []
+    prop_nouns = ("扁担", "木牌", "水桶", "桶", "盆", "碗", "瓶", "壶", "灯", "剑", "刀", "枪", "鞋", "包")
+    for asset in asset_registry.get("assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        asset_id = str(asset.get("id") or "").strip()
+        if asset_id not in clip_object_ids:
+            continue
+        name = str(asset.get("name") or asset_id).strip()
+        aliases = [asset_id, name]
+        aliases.extend(noun for noun in prop_nouns if noun in name)
+        aliases = list(dict.fromkeys(alias for alias in aliases if alias))
+        if any(alias in visibility_text for alias in aliases):
+            visible_objects.append(name)
+        else:
+            excluded_objects.append(name)
+            excluded_object_aliases.extend(aliases)
     return {
         "anchor_index": anchor_index + 1,
         "frame_role": frame_role,
@@ -3520,6 +3563,13 @@ def storyboard_anchor_beat(root: Path, episode: str, target: Target) -> Dict[str
         "single_reaction": is_single_reaction,
         "faceless_insert": is_faceless_insert,
         "detail_insert": is_detail_insert,
+        "audience_only_reveal": audience_only_reveal,
+        "audience_knowledge": audience_knowledge,
+        "character_knowledge": character_knowledge,
+        "current_state": current_state,
+        "visible_objects": visible_objects,
+        "excluded_objects": excluded_objects,
+        "excluded_object_aliases": list(dict.fromkeys(excluded_object_aliases)),
     }
 
 
@@ -3606,8 +3656,11 @@ def compile_target_image_request(
     )
     if anchor_beat:
         still_motion = storyboard_motion_for_still(str(anchor_beat.get("video_prompt") or ""))
+        beat_desc = str(anchor_beat.get("desc") or "")
+        if anchor_beat.get("audience_only_reveal") and "盆底" in beat_desc:
+            beat_desc = beat_desc.replace("盆底", "盆底外侧下表面", 1)
         beat_action = "；".join(filter(None, (
-            str(anchor_beat.get("desc") or ""),
+            beat_desc,
             still_motion,
         )))
         # A multi-sub-shot section carries a merged dramatic objective.  Once
@@ -3615,13 +3668,53 @@ def compile_target_image_request(
         # actions from adjacent edit beats back into the provider prompt.
         # Replace it rather than append so the timed storyboard beat remains
         # the only action truth for this image.
-        contract["objective"] = f"本锚只呈现 storyboard 子镜头：{anchor_beat.get('desc') or beat_action}"
+        contract["objective"] = f"本锚只呈现 storyboard 子镜头：{beat_desc or beat_action}"
         contract["action"] = beat_action
         contract["composition"] = (
             f"本锚专属景别/机位：{anchor_beat.get('lens') or '继承 storyboard'}；"
             "继承同镜轴线、光位和身份，不合并前后子镜头的动作或景别"
         )
+        excluded_objects = list(anchor_beat.get("excluded_objects") or [])
+        excluded_object_aliases = list(anchor_beat.get("excluded_object_aliases") or [])
+        if excluded_object_aliases:
+            scene_clauses = [
+                clause.strip() for clause in re.split(r"[；;]", str(contract.get("scene") or ""))
+                if clause.strip()
+            ]
+            contract["scene"] = "；".join(
+                clause for clause in scene_clauses
+                if not any(alias and alias in clause for alias in excluded_object_aliases)
+            )
+            filtered_preserve: List[str] = []
+            for item in contract.get("preserve") or []:
+                clauses = [clause.strip() for clause in re.split(r"[；;]", str(item)) if clause.strip()]
+                kept = [
+                    clause for clause in clauses
+                    if not any(alias and alias in clause for alias in excluded_object_aliases)
+                ]
+                if kept:
+                    filtered_preserve.append("；".join(kept))
+            contract["preserve"] = filtered_preserve
+            contract["exclude"] = list(dict.fromkeys([
+                *(contract.get("exclude") or []),
+                *[f"{name}在本时点入画" for name in excluded_objects],
+            ]))
         guards = list(contract.get("policy_guards") or [])
+        if anchor_beat.get("audience_only_reveal"):
+            guards.insert(0, (
+                "观众独享信息铁律：本帧异常只允许出现在角色当前视线不可达的道具外侧、背面或下表面；"
+                "角色不得看见、触发或对异常作知情反应；不得把异常画进角色可见的道具内腔/正面。"
+                f"观众获得 `{anchor_beat.get('audience_knowledge')}`，角色仍保持 `{anchor_beat.get('character_knowledge')}`"
+            ))
+        current_state = str(anchor_beat.get("current_state") or "").strip()
+        if current_state:
+            guards.insert(0, f"本帧当前状态硬约束：{current_state}；不得使用同 Clip 后续状态替代")
+        if excluded_objects:
+            visible = "、".join(anchor_beat.get("visible_objects") or []) or "storyboard 当前明确可见实体"
+            guards.insert(0, (
+                f"定时子镜道具可见性铁律：当前只保留{visible}；"
+                f"{ '、'.join(excluded_objects) }在本时点尚未入画，必须完全不出现在像素中"
+            ))
         guards.insert(0, (
             "物理关键帧版式铁律：只生成一个连续相机画面；禁止分屏、三联画、多格漫画、拼贴、"
             "接触表或把跳切/蒙太奇的多个时刻同时画进一张图；剪辑变化只由视频阶段完成"

@@ -1,0 +1,2827 @@
+{
+  "counts": {
+    "block": 6,
+    "high": 0,
+    "medium": 14
+  },
+  "delivery_surface": {
+    "blocking_counts": {
+      "block": 6,
+      "high": 0
+    },
+    "required_domains": [
+      "剧情",
+      "角色",
+      "资产",
+      "镜头",
+      "音频",
+      "字幕",
+      "合规",
+      "生产操作"
+    ],
+    "status": "blocked"
+  },
+  "dependency_graph": {
+    "available": true,
+    "impact_plan": {},
+    "kind": "n2d_consistency_dependency_graph",
+    "path": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_dependency_graph_第1集.json",
+    "summary": {
+      "clips": 7,
+      "edges": 55,
+      "images": 17,
+      "nodes": 41,
+      "videos": 0
+    }
+  },
+  "domain_counts": {
+    "block": 5,
+    "high": 0,
+    "medium": 3
+  },
+  "domains": [
+    {
+      "counts": {
+        "block": 3,
+        "high": 0,
+        "medium": 9
+      },
+      "findings": [
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": " 节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：62.6 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "",
+          "message": " 节奏密度(Rhythm)   连续 4 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "",
+          "message": " 节奏密度(Rhythm)   开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 低梁下的羞辱』），疑慢热；开场镜时长 6.2s > 5s，前3秒易掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态转场视频证据(ST1)",
+          "loc": "",
+          "message": " 状态转场视频证据(ST1)   检测到 7 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "剧情经济性",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+          "message": "剧情经济性 story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `众杂役` 未进入 storyboard。；缺：众杂役",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `旁白` 未进入 storyboard。；缺：旁白",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `众杂役` 未进入 storyboard。；缺：众杂役",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ],
+      "key": "story",
+      "label": "剧情",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 25,
+        "high": 0,
+        "medium": 64
+      },
+      "findings": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ],
+      "key": "character",
+      "label": "角色",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 39
+      },
+      "findings": [
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_道具_木牌.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "asset",
+      "label": "资产",
+      "overall": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 1,
+        "high": 0,
+        "medium": 56
+      },
+      "findings": [
+        {
+          "dimension": "场景(O2)",
+          "loc": "",
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP05.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.068 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP06_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.204 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP06_a2.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.655 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP07.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.682 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP02_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.385 vs 场景中位 0.152）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": "",
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/常态, CHAR_01__, CHAR_01__本集为14岁杂役常态, CHAR_01中景, CHAR_01中景偏右）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频证据完整性(EVID)",
+          "loc": "",
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "shot",
+      "label": "镜头",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 1,
+        "high": 0,
+        "medium": 9
+      },
+      "findings": [
+        {
+          "dimension": "音乐衔接(BGM)",
+          "loc": "",
+          "message": " 音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「[镜头2] 众人哄笑短促混响，张老大」→「[镜头7-9] 扁担吱呀、水桶晃动、」；调性/速度whiplash，加渐变过渡或确认是卡点切。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "音乐衔接(BGM)",
+          "loc": "",
+          "message": " 音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头7-9] 扁担吱呀、水桶晃动、」→「[镜头13] 反向水滴后静音半拍，幽」；调性/速度whiplash，加渐变过渡或确认是卡点切。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "",
+          "message": " 语义谱系(P0)   配音角色 `众杂役` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "",
+          "message": " 语义谱系(P0)   配音角色 `旁白` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "",
+          "message": " 音乐母题(LM1)   本集有配乐/多角色但缺 设定库/leitmotif_registry.json——建议像 voice_key 一样为主要角色/情绪主题登记主题动机（subject→motif），保证跨集 BGM 母题可复现不串用。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "环境声(AMB)",
+          "loc": "",
+          "message": " 环境声(AMB)   本集涉 4 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第1集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第1集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        }
+      ],
+      "key": "audio",
+      "label": "音频",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 1
+      },
+      "findings": [
+        {
+          "dimension": "系列包装(PKG)",
+          "loc": "",
+          "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "subtitle",
+      "label": "字幕",
+      "overall": "warn",
+      "sources": [
+        "detect"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 4
+      },
+      "findings": [
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": "",
+          "message": " 世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ],
+      "key": "compliance",
+      "label": "合规",
+      "overall": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "compliance"
+      ]
+    },
+    {
+      "counts": {
+        "block": 2,
+        "high": 0,
+        "medium": 41
+      },
+      "findings": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_01__本集为14岁杂役常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_02__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_03__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "",
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "",
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "ops",
+      "label": "生产操作",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "score"
+      ]
+    }
+  ],
+  "entity_counts": {
+    "block": 1,
+    "high": 0,
+    "medium": 11
+  },
+  "intentional_discontinuity": {
+    "available": true,
+    "counts": {
+      "accepted": 0,
+      "block": 0,
+      "warn": 0
+    },
+    "kind": "n2d_intentional_discontinuity_audit",
+    "path": "创作区/制漫剧/仙界闭关小能手/生产数据/intentional_discontinuity_audit_第1集.json",
+    "status": "pass"
+  },
+  "kind": "n2d_consistency_ledger",
+  "root_causes": [
+    {
+      "anchor": "leitmotif_registry.json",
+      "dimensions": [
+        "音乐母题(LM1)"
+      ],
+      "domain": "audio",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": "设定库/leitmotif_registry.json",
+          "message": "音乐母题(LM1) [production一致性升级:关键场景] 本集有配乐/多角色但缺 设定库/leitmotif_registry.json——建议像 voice_key 一样为主要角色/情绪主题登记主题动机（subject→motif），保证跨集 BGM 母题可复现不串用。。如确认为可接受，写入 生产数据/consistency_advisory_si",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "character",
+      "dimensions": [
+        "脸(G1)",
+        "服装配色(N1)",
+        "发型(H1)",
+        "真值源(TRUTH)",
+        "伏笔兑现(SP1)",
+        "叙事状态(NS1)",
+        "image_prompt_lint"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "image_qc_第1集.json",
+      "dimensions": [
+        "出图落档QC"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 1 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "脸(G1)",
+        "服装配色(N1)",
+        "发型(H1)",
+        "锚点门(N3)"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第1集/图片",
+          "message": "脸(G1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第1集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第1集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第1集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第1集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第1集/图片",
+          "message": "服装配色(N1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "发型(H1)",
+          "loc": "出图/第1集/图片",
+          "message": "发型(H1) 一致性审计发现问题",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "candidate_selection_第1集.json",
+      "dimensions": [
+        "关键镜候选"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "关键镜候选",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/candidate_selection_第1集.json",
+          "message": "关键镜候选 production 出图后缺 candidate_selection_第1集.json；关键镜必须经过 best-of-N 选优而不是单张通过。生成候选后跑 `python3 skills/n2d-image/scripts/candidate_select.py \"创作区/制漫剧/仙界闭关小能手\" 第1集 --apply`。",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "自动审片总分"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "自动审片总分",
+          "loc": "生产数据/score_第1集.json",
+          "message": "缺 score JSON；验收总账无法闭环",
+          "severity": "block",
+          "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "shot",
+      "dimensions": [
+        "场景(O2)",
+        "色温调色(GRADE1)",
+        "视频证据完整性(EVID)",
+        "成本路由(K1)",
+        "multimodal_continuity",
+        "image_prompt_lint"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景(O2)",
+          "loc": null,
+          "message": " 场景(O2)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP05.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.068 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP06_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.204 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP06_a2.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.655 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP07.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.682 vs 场景中位 -0.469）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP01_CLIP02_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.385 vs 场景中位 0.152）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "视频证据完整性(EVID)",
+          "loc": null,
+          "message": " 视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "节奏密度(Rhythm)",
+        "剧情经济性",
+        "语义谱系(P0)"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": " 节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：62.6 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "剧情经济性",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+          "message": "剧情经济性 story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `众杂役` 未进入 storyboard。；缺：众杂役",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `旁白` 未进入 storyboard。；缺：旁白",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `众杂役` 未进入 storyboard。；缺：众杂役",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) 配音角色 `旁白` 未进入 storyboard。；缺：旁白",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "节奏密度(Rhythm) [production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：62.6。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=570e538a85f9，签收需包含 accepted=true/rev",
+          "severity": "block",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "脚本/第1集/storyboard.json",
+          "message": "节奏密度(Rhythm) [production一致性升级:重复同维度] 连续 4 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；findi",
+          "severity": "block",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "PROP_01",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 破损黑盆（`PROP_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:20>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 破损黑盆（`PROP_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:20>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset",
+      "dimensions": [
+        "结构化交互图谱(I2)",
+        "成本路由(K1)"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   出图/共享/图片/定妆_道具_木牌.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 扁担（`PROP_扁担`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 扁担（`PROP_扁担`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 扁担（`PROP_扁担`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 旧布包（`PROP_旧布包`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 旧布包（`PROP_旧布包`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 旧布包（`PROP_旧布包`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 木牌（`PROP_木牌`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 木牌（`PROP_木牌`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 木牌（`PROP_木牌`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 水桶（`PROP_水桶`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 水桶（`PROP_水桶`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/道具定妆.md ## 水桶（`PROP_水桶`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:23>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "audio",
+      "dimensions": [
+        "音乐衔接(BGM)",
+        "语义谱系(P0)",
+        "音乐母题(LM1)",
+        "环境声(AMB)"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "音乐衔接(BGM)",
+          "loc": null,
+          "message": " 音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「[镜头2] 众人哄笑短促混响，张老大」→「[镜头7-9] 扁担吱呀、水桶晃动、」；调性/速度whiplash，加渐变过渡或确认是卡点切。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "音乐衔接(BGM)",
+          "loc": null,
+          "message": " 音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头7-9] 扁担吱呀、水桶晃动、」→「[镜头13] 反向水滴后静音半拍，幽」；调性/速度whiplash，加渐变过渡或确认是卡点切。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   配音角色 `众杂役` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   配音角色 `旁白` 未进入 storyboard。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "音乐母题(LM1)",
+          "loc": null,
+          "message": " 音乐母题(LM1)   本集有配乐/多角色但缺 设定库/leitmotif_registry.json——建议像 voice_key 一样为主要角色/情绪主题登记主题动机（subject→motif），保证跨集 BGM 母题可复现不串用。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "环境声(AMB)",
+          "loc": null,
+          "message": " 环境声(AMB)   本集涉 4 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集",
+      "dimensions": [
+        "时间基准"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "时间基准",
+          "loc": "第1集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第1集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第1集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01",
+      "dimensions": [
+        "实体记忆(EMB)",
+        "image_prompt_lint",
+        "脸漂预案",
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（CHAR_01, CHAR_01/常态, CHAR_01__, CHAR_01__本集为14岁杂役常态, CHAR_01中景, CHAR_01中景偏右）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 多视图对齐初筛异常 CHAR_01/本集为14岁杂役常态：身体中心线不齐：front(0.399) vs three_quarter(0.618)，差 0.219>0.055——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "贺平生（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分68.3·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 贺平生（`CHAR_01/本集为14岁杂役常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:37>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "贺平生（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分62.3·multi_reference）：已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "贺平生（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分68.3·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 贺平生（`CHAR_01/本集为14岁杂役常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:37>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 多视图对齐初筛异常 CHAR_01/本集为14岁杂役常态：身体中心线不齐：front(0.399) vs three_quarter(0.618)，差 0.219>0.055——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01__本集为14岁杂役常态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__本集为14岁杂役常态",
+          "message": "character_consistency  CHAR_01__本集为14岁杂役常态 锚点门 N3：CHAR_01__本集为14岁杂役常态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__本集为14岁杂役常态",
+          "message": "character_consistency 锚点门 N3：CHAR_01__本集为14岁杂役常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_02",
+      "dimensions": [
+        "image_prompt_lint",
+        "脸漂预案",
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 多视图对齐初筛异常 CHAR_02/常态：比例不一：front 脸高是 side 的 2.52 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "张老大（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分84.0·multi_reference）：即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 张老大（`CHAR_02/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "张老大（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分78.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "张老大（CHAR_02）",
+          "message": "脸漂预案 本集脸漂风险 high（分84.0·multi_reference）：即梦图像模型 Seedream 系（渠道 Dreamina/即梦官方 CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 张老大（`CHAR_02/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 多视图对齐初筛异常 CHAR_02/常态：比例不一：front 脸高是 side 的 2.52 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_02__常态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__常态",
+          "message": "character_consistency  CHAR_02__常态 锚点门 N3：CHAR_02__常态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__常态",
+          "message": "character_consistency 锚点门 N3：CHAR_02__常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_03",
+      "dimensions": [
+        "image_prompt_lint",
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_03/常态「face_anchor」（出图/共享/图片/定妆_CHAR_03__常态.png）：脸占画面仅 1%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 韩老三（`CHAR_03/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 韩老三（`CHAR_03/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:33>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_03/常态「face_anchor」（出图/共享/图片/定妆_CHAR_03__常态.png）：脸占画面仅 1%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_03__常态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_03__常态",
+          "message": "character_consistency  CHAR_03__常态 锚点门 N3：CHAR_03__常态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_03__常态",
+          "message": "character_consistency 锚点门 N3：CHAR_03__常态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "character_consistency  图片/EP01_CLIP05.png 发型 H1 初筛：图片/EP01_CLIP05.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "outfit_consistency  图片/EP01_CLIP05.png 服装 N1 初筛：图片/EP01_CLIP05.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP01_CLIP05.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP01_CLIP05.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05_a1.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05_a1.png",
+          "message": "character_consistency  图片/EP01_CLIP05_a1.png 发型 H1 初筛：图片/EP01_CLIP05_a1.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP05_a1.png",
+          "message": "outfit_consistency  图片/EP01_CLIP05_a1.png 服装 N1 初筛：图片/EP01_CLIP05_a1.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP05_a1.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP01_CLIP05_a1.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP05_a1.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP01_CLIP05_a1.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06.png",
+          "message": "character_consistency  图片/EP01_CLIP06.png 发型 H1 初筛：图片/EP01_CLIP06.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP06.png",
+          "message": "outfit_consistency  图片/EP01_CLIP06.png 服装 N1 初筛：图片/EP01_CLIP06.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP01_CLIP06.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP06.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP01_CLIP06.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06_a2.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06_a2.png",
+          "message": "character_consistency  图片/EP01_CLIP06_a2.png 发型 H1 初筛：图片/EP01_CLIP06_a2.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP06_a2.png",
+          "message": "outfit_consistency  图片/EP01_CLIP06_a2.png 服装 N1 初筛：图片/EP01_CLIP06_a2.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP06_a2.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP01_CLIP06_a2.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP06_a2.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP01_CLIP06_a2.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07.png",
+          "message": "character_consistency  图片/EP01_CLIP07.png 发型 H1 初筛：图片/EP01_CLIP07.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP07.png",
+          "message": "outfit_consistency  图片/EP01_CLIP07.png 服装 N1 初筛：图片/EP01_CLIP07.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP01_CLIP07.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP01_CLIP07.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP01_CLIP07.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP01_CLIP07.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生图后端适配",
+        "风格化脸机检"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生图后端适配",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生图后端适配 统一标准已按「Dreamina」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "生图后端适配",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生图后端适配 适配层评分建议升档：当前「Dreamina」score=27，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "风格化脸机检",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "风格化脸机检 基础视觉风格「国漫写实」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODE",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "风格化脸机检",
+          "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "风格化脸机检 基础视觉风格「国漫写实」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "常态`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 杂役背景组（`GROUP_01/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/角色定妆.md ## 杂役背景组（`GROUP_01/常态`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "compliance",
+      "dimensions": [
+        "世界一致性(WCS)"
+      ],
+      "domain": "compliance",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": null,
+          "message": " 世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "compliance_manifest.json",
+      "dimensions": [
+        "合规前置"
+      ],
+      "domain": "compliance",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "合规前置",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/仙界闭关小能手/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生图后端连通性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生图后端连通性",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生图后端连通性 生图后端「Dreamina」无法自动探活：确认即梦官方 CLI 已登录·会员态有效（dreamina 控制台或一次 dry-run）。出图前请人工确认它能落 PNG（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "生图后端连通性",
+          "loc": "创作区/制漫剧/仙界闭关小能手/_设置.md",
+          "message": "生图后端连通性 生图后端「Dreamina」无法自动探活：确认即梦官方 CLI 已登录·会员态有效（dreamina 控制台或一次 dry-run）。出图前请人工确认它能落 PNG（如 curl 内网健康端点 / 确认即梦官方 CLI 已登录·会员有效 / 确认 API 额度），不通即停，勿静默兜底换后端。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/consistency_findings_第1集.json",
+          "message": "一致性总审 另有 29 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "ops",
+      "dimensions": [
+        "锚点门(N3)",
+        "风格(S1)",
+        "糊/低质(N4)",
+        "天气时辰(W1)",
+        "物理事件图(PHY)",
+        "成本路由(K1)",
+        "人审校准集(CAL)",
+        "一致性探针包(PROBE)"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_01__本集为14岁杂役常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_02__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_03__常态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": null,
+          "message": " 糊/低质(N4)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "vlm_canonical_第1集.json",
+      "dimensions": [
+        "fidelity-gate"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/仙界闭关小能手/生产数据/vlm_canonical_第1集.json",
+          "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1653>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1653>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 1（`EP01_CLIP01` · 低梁下的羞辱 · ensemble_blocking）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1597>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1597>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 2（`EP01_CLIP02` · 二十趟命令 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1314>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:40>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1314>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 3（`EP01_CLIP03` · 不肯离山 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:40>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1285>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:39>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1285>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 4（`EP01_CLIP04` · 先挑五趟 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:39>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1296>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1296>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 5（`EP01_CLIP05` · 第五次到潭边 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 水下破盆 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 水下破盆 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1342>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 水下破盆 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 水下破盆 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1342>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 6（`EP01_CLIP06` · 水下破盆 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:41>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 盆底幽光 · ）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 盆底幽光 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1311>1200",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 盆底幽光 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 盆底幽光 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1311>1200",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/第1集/prompt/01_分镜出图.md ## 镜头 7（`EP01_CLIP07` · 盆底幽光 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:38>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP05.png",
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "scene_consistency  图片/EP01_CLIP05.png 场景 O2 初筛：图片/EP01_CLIP05.png 光色（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "scene_consistency",
+          "loc": "图片/EP01_CLIP05.png",
+          "message": "scene_consistency 场景 O2 初筛：图片/EP01_CLIP05.png 光色（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_01",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/场景定妆.md ## 秀竹峰杂役大殿（`LOC_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/场景定妆.md ## 秀竹峰杂役大殿（`LOC_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_02",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/场景定妆.md ## 秀竹峰杂役院（`LOC_02`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/场景定妆.md ## 秀竹峰杂役院（`LOC_02`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_03",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/场景定妆.md ## 秀竹峰后山浅潭（`LOC_03`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/仙界闭关小能手/出图/共享/prompt/场景定妆.md ## 秀竹峰后山浅潭（`LOC_03`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:27>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "场景(O2)",
+        "糊/低质(N4)",
+        "天气时辰(W1)"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景(O2)",
+          "loc": "出图/第1集/图片",
+          "message": "场景(O2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "糊/低质(N4)",
+          "loc": "出图/第1集/图片",
+          "message": "糊/低质(N4) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "出图/第1集/图片",
+          "message": "天气时辰(W1) 光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "出图/第1集/图片",
+          "message": "天气时辰(W1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "出图/第1集/图片",
+          "message": "天气时辰(W1) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "story",
+      "dimensions": [
+        "节奏密度(Rhythm)",
+        "状态转场视频证据(ST1)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": null,
+          "message": " 节奏密度(Rhythm)   连续 4 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": null,
+          "message": " 节奏密度(Rhythm)   开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 低梁下的羞辱』），疑慢热；开场镜时长 6.2s > 5s，前3秒易掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态转场视频证据(ST1)",
+          "loc": null,
+          "message": " 状态转场视频证据(ST1)   检测到 7 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "subtitle",
+      "dimensions": [
+        "系列包装(PKG)"
+      ],
+      "domain": "subtitle",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "系列包装(PKG)",
+          "loc": null,
+          "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn] CHAR_01__本集为14岁杂役常态 锚点门(N3)    ",
+        "[warn] CHAR_01__本集为14岁杂役常态 脸(G1)    ",
+        "[warn] CHAR_01__本集为14岁杂役常态 脸(G1)    "
+      ],
+      "id": "CHAR_01",
+      "kind": "character",
+      "name": "贺平生",
+      "overall": "block",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn] CHAR_02__常态 锚点门(N3)    ",
+        "[warn] CHAR_02__常态 脸(G1)    ",
+        "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「[镜头2] 众人哄笑短促混响，张老大」→「[镜头7-9] "
+      ],
+      "id": "CHAR_02",
+      "kind": "character",
+      "name": "张老大",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_GROUP_01__常态.png 生成事件缺 cost/provider 记账；无法计算重试",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_GROUP_01__常态.png 生成事件缺 cost/provider 记账；无法计算重试"
+      ],
+      "id": "GROUP_01",
+      "kind": "character",
+      "name": "杂役背景组",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn] CHAR_03__常态 锚点门(N3)    ",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_CHAR_03__常态.png 生成事件缺 cost/provider 记账；无法计算重试性",
+        "[warn] character_consistency  CHAR_03__常态 锚点门 N3：CHAR_03__常态 主参考非单张清晰正脸（非阻断） "
+      ],
+      "id": "CHAR_03",
+      "kind": "character",
+      "name": "韩老三",
+      "overall": "warn",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png 生成事件缺 cost/provider 记账；无法计算重试性价"
+      ],
+      "id": "LOC_01",
+      "kind": "scene",
+      "name": "秀竹峰杂役大殿",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_木牌.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_木牌_比例.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_木牌_比例.png 生成事件缺 cost/provider 记账；无法计算重试性价比和"
+      ],
+      "id": "PROP_木牌",
+      "kind": "prop",
+      "name": "木牌",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_秀竹峰杂役院.png 生成事件缺 cost/provider 记账；无法计算重试性价比"
+      ],
+      "id": "LOC_02",
+      "kind": "scene",
+      "name": "秀竹峰杂役院",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_旧布包.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_旧布包_比例.png 生成事件缺 cost/provider 记账；无法计算重试性价比",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_旧布包_手持.png 生成事件缺 cost/provider 记账；无法计算重试性价比"
+      ],
+      "id": "PROP_旧布包",
+      "kind": "prop",
+      "name": "旧布包",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「[镜头2] 众人哄笑短促混响，张老大」→「[镜头7-9] ",
+        "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头7-9] 扁担吱呀、水桶晃动、」→「[镜头13] 反",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_扁担.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切"
+      ],
+      "id": "PROP_扁担",
+      "kind": "prop",
+      "name": "扁担",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（slow→fast）且无过渡：「[镜头2] 众人哄笑短促混响，张老大」→「[镜头7-9] ",
+        "[warn]  音乐衔接(BGM)   配乐相邻段速度两极硬接（fast→slow）且无过渡：「[镜头7-9] 扁担吱呀、水桶晃动、」→「[镜头13] 反",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_水桶.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切"
+      ],
+      "id": "PROP_水桶",
+      "kind": "prop",
+      "name": "水桶",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png 生成事件缺 cost/provider 记账；无法计算重试性价"
+      ],
+      "id": "LOC_03",
+      "kind": "scene",
+      "name": "秀竹峰后山浅潭",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_破损黑盆.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_破损黑盆_比例.png 生成事件缺 cost/provider 记账；无法计算重试性价",
+        "[warn]  成本路由(K1)   出图/共享/图片/定妆_道具_破损黑盆_手持.png 生成事件缺 cost/provider 记账；无法计算重试性价"
+      ],
+      "id": "PROP_01",
+      "kind": "prop",
+      "name": "破损黑盆",
+      "overall": "medium",
+      "prevent": "medium"
+    }
+  ],
+  "supplemental_reports": {
+    "audio_space_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_audio_space_consistency",
+      "path": "创作区/制漫剧/仙界闭关小能手/生产数据/audio_space_consistency_第1集.json",
+      "status": "pass"
+    },
+    "expression_state_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_expression_state_consistency",
+      "path": "创作区/制漫剧/仙界闭关小能手/生产数据/expression_state_consistency_第1集.json",
+      "status": "pass"
+    },
+    "motion_grammar_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_motion_grammar_consistency",
+      "path": "创作区/制漫剧/仙界闭关小能手/生产数据/motion_grammar_consistency_第1集.json",
+      "status": "pass"
+    }
+  },
+  "unattributed": [
+    "[warn]  场景(O2)    ",
+    "[warn]  风格(S1)    ",
+    "[warn]  风格(S1)    ",
+    "[warn]  风格(S1)    ",
+    "[warn]  色温调色(GRADE1)   图片/EP01_CLIP05.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.068",
+    "[warn]  色温调色(GRADE1)   图片/EP01_CLIP06_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 -0.",
+    "[warn]  色温调色(GRADE1)   图片/EP01_CLIP06_a2.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.6",
+    "[warn]  色温调色(GRADE1)   图片/EP01_CLIP07.png：色温/调色与同场景其它镜不一致——本镜偏冷(蓝)（暖冷 -0.682 ",
+    "[warn]  色温调色(GRADE1)   图片/EP01_CLIP02_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.3",
+    "[warn]  糊/低质(N4)    ",
+    "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+    "[warn]  天气时辰(W1)    ",
+    "[warn]  天气时辰(W1)    ",
+    "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+    "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+    "[warn]  语义谱系(P0)   配音角色 `众杂役` 未进入 storyboard。 ",
+    "[warn]  语义谱系(P0)   配音角色 `旁白` 未进入 storyboard。 ",
+    "[warn]  节奏密度(Rhythm)   节奏/留存 advisory 总分偏低：62.6 ",
+    "[warn]  节奏密度(Rhythm)   连续 4 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CL",
+    "[warn]  节奏密度(Rhythm)   开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 低梁下的羞辱』），疑慢热；开场镜时长 6",
+    "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
+    "[warn]  状态转场视频证据(ST1)   检测到 7 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 b",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/obj",
+    "[warn]  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系",
+    "[warn]  视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没",
+    "[warn]  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+    "[warn]  成本路由(K1)   出图/共享/图片/风格锚_国漫写实.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切",
+    "[warn]  成本路由(K1)   出图/共享/图片/风格锚_国漫写实.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切",
+    "[warn]  成本路由(K1)   出图/第1集/图片/EP01_CLIP01.png 生成事件缺 cost/provider 记账；无法计算重试性价比",
+    "[warn]  成本路由(K1)   出图/第1集/图片/EP01_CLIP01.png 生成事件缺 cost/provider 记账；无法计算重试性价比",
+    "[warn]  成本路由(K1)   出图/第1集/图片/EP01_CLIP01.png 生成事件缺 cost/provider 记账；无法计算重试性价比",
+    "[warn]  人审校准集(CAL)   检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全",
+    "[warn]  一致性探针包(PROBE)   项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样",
+    "[warn]  音乐母题(LM1)   本集有配乐/多角色但缺 设定库/leitmotif_registry.json——建议像 voice_key 一样",
+    "[warn]  环境声(AMB)   本集涉 4 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境",
+    "[warn]  叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/",
+    "[warn] character_consistency  图片/EP01_CLIP05.png 发型 H1 初筛：图片/EP01_CLIP05.png（",
+    "[warn] character_consistency  图片/EP01_CLIP05_a1.png 发型 H1 初筛：图片/EP01_CLIP05_a",
+    "[warn] character_consistency  图片/EP01_CLIP06.png 发型 H1 初筛：图片/EP01_CLIP06.png（",
+    "[warn] character_consistency  图片/EP01_CLIP06_a2.png 发型 H1 初筛：图片/EP01_CLIP06_a",
+    "[warn] character_consistency  图片/EP01_CLIP07.png 发型 H1 初筛：图片/EP01_CLIP07.png（",
+    "[warn] outfit_consistency  图片/EP01_CLIP05.png 服装 N1 初筛：图片/EP01_CLIP05.png（调色板",
+    "[warn] outfit_consistency  图片/EP01_CLIP05_a1.png 服装 N1 初筛：图片/EP01_CLIP05_a1.p",
+    "[warn] outfit_consistency  图片/EP01_CLIP06.png 服装 N1 初筛：图片/EP01_CLIP06.png（调色板",
+    "[warn] outfit_consistency  图片/EP01_CLIP06_a2.png 服装 N1 初筛：图片/EP01_CLIP06_a2.p",
+    "[warn] outfit_consistency  图片/EP01_CLIP07.png 服装 N1 初筛：图片/EP01_CLIP07.png（调色板",
+    "[warn] scene_consistency  图片/EP01_CLIP05.png 场景 O2 初筛：图片/EP01_CLIP05.png 光色（非",
+    "[warn] image_prompt_lint  None 镜头构图重复 EP01_CLIP04 ↔ EP01_CLIP05：首帧 dHash=5/64",
+    "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
+  ],
+  "version": 1
+}

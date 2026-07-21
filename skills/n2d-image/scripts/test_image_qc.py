@@ -2508,6 +2508,25 @@ def test_semantic_embedding_not_required_when_sidecar_ran_ok() -> None:
     assert image_qc.semantic_embedding_required(payload) == []
 
 
+def test_external_semantic_drift_uses_dedicated_interpreter(tmp_path, monkeypatch) -> None:
+    class Result:
+        returncode = 0
+        stdout = json.dumps({"available": True, "compared": 3, "findings": []})
+        stderr = ""
+
+    calls = []
+    monkeypatch.setenv("N2D_SEMANTIC_PYTHON", "/envs/n2d-qc/bin/python")
+    monkeypatch.setattr(image_qc.subprocess, "run", lambda argv, **kwargs: calls.append((argv, kwargs)) or Result())
+
+    payload = image_qc.run_external_semantic_drift(tmp_path, "第1集")
+
+    assert payload and payload["available"] is True and payload["compared"] == 3
+    assert payload["execution_python"] == "/envs/n2d-qc/bin/python"
+    assert calls[0][0][0] == "/envs/n2d-qc/bin/python"
+    assert calls[0][0][-1] == "--json"
+    assert calls[0][1]["timeout"] == 600
+
+
 def test_semantic_drift_findings_enter_summary_and_gate_findings() -> None:
     payload = {
         "semantic_drift": {"available": True, "findings": [
@@ -2946,7 +2965,10 @@ def test_audit_face_anchor_quality_normalizes_six_panel_expression_sheet(tmp_pat
         @staticmethod
         def cv2_face_boxes(_path):
             # Each face is only 3% of the complete sheet, but 18% of one 2x3 panel.
-            return [(0, 0, 180, 360)] * 6
+            return [
+                (110, 150, 180, 360), (510, 150, 180, 360), (910, 150, 180, 360),
+                (110, 1050, 180, 360), (510, 1050, 180, 360), (910, 1050, 180, 360),
+            ]
 
     monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
     (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
@@ -2975,7 +2997,10 @@ def test_audit_face_anchor_quality_blocks_incomplete_six_panel_expression_sheet(
     class FakeFaceModule:
         @staticmethod
         def cv2_face_boxes(_path):
-            return [(0, 0, 180, 360)] * 5
+            return [
+                (110, 150, 180, 360), (510, 150, 180, 360), (910, 150, 180, 360),
+                (110, 1050, 180, 360), (510, 1050, 180, 360),
+            ]
 
     monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
     (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
@@ -2991,6 +3016,41 @@ def test_audit_face_anchor_quality_blocks_incomplete_six_panel_expression_sheet(
         finding["level"] == "block" and finding["code"] == "expression_sheet_face_count"
         for finding in res["findings"]
     )
+
+
+def test_audit_face_anchor_quality_dedupes_false_boxes_within_expression_cells(tmp_path, monkeypatch):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    rel = "出图/共享/图片/定妆_少年_表情_六联表.png"
+    (root / rel).parent.mkdir(parents=True)
+    Image.new("RGB", (1672, 941), (128, 128, 128)).save(root / rel)
+
+    class FakeFaceModule:
+        @staticmethod
+        def cv2_face_boxes(_path):
+            # Six real faces plus five smaller neckline/lower-face false boxes.
+            return [
+                (186, 135, 175, 175), (238, 343, 115, 115),
+                (736, 132, 190, 190), (799, 343, 110, 110),
+                (1292, 128, 185, 185), (1358, 341, 109, 109),
+                (181, 609, 181, 181), (197, 824, 109, 109),
+                (737, 601, 187, 187), (799, 813, 110, 110),
+                (1291, 624, 182, 182),
+            ]
+
+    monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "少年", "scope": "核心长线主角", "forms": [{
+            "form": "常态",
+            "reference_atlas": {"expression_refs": [{"emotion": "六联表", "path": rel}]},
+        }]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+
+    assert not [f for f in res["findings"] if f["code"] == "expression_sheet_face_count"]
+    assert not [f for f in res["findings"] if f["code"] == "weak_face_anchor_core"]
 
 
 def test_native_multiref_tiers_by_persistent_subject():
