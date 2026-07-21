@@ -48,8 +48,8 @@ python3 skills/ad-review/scripts/asset_drift_report.py "<作品根>" --write
 （单镜孤立崩 → 只重抽该镜；同一资产多镜连崩 → 回定妆库/registry，别只重抽单图；产品/品牌资产崩 → P0）。
 `consistency_findings.py --write` 已自动带上它，无需单独记得跑。
 
-**诚实边界**：① 它**零像素、只聚合上游报告**，不会发现上游没发现的漂移——`PROD_`/`BRAND_` 的跨镜像素
-比对**仍是真空**（要堵得改 `asset_consistency.py` 的资产前缀排除）；② `noevidence ≠ ok`，上游对完全干净的
+**诚实边界**：① 它**零像素、只聚合上游报告**，不会发现上游没发现的漂移——产品跨镜像素统计来自
+`asset_consistency`（全帧启发式）与 `product_qc`（ROI 口径），本报表只汇总；② `noevidence ≠ ok`，上游对完全干净的
 镜头不留痕，故干净项目也会出 info，**缺证据不算通过**是刻意的；③ 它是"审"不是"门"——**恒不产 block**
 （`finding()` 在构造层强制降档），紧迫度读 `detail.priority` 而非 severity。硬闸仍是 `product_qc` 的
 prompt-lint 与 provenance。
