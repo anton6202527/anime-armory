@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_anchor_plan",
+  "episode": "第1集",
+  "params": {
+    "min_segment": 4.0,
+    "target_segment": 5.0,
+    "fight_target": 3.5,
+    "long_shot_threshold": 8.0,
+    "snap_tolerance": 1.5,
+    "default_midframe": false,
+    "midframe_exempt_below": 3.0
+  },
+  "planned": [
+    {
+      "clip_index": 2,
+      "clip_id": "EP01_CLIP02",
+      "duration": 11.52,
+      "rule": "R2 普通长镜（11.52s/4拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+          "at_sec": 5.76,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（11.52s/4拍）",
+          "source_duration": 11.52
+        }
+      ],
+      "added_cost": {
+        "images": 1,
+        "video_segments": 1
+      }
+    },
+    {
+      "clip_index": 3,
+      "clip_id": "EP01_CLIP03",
+      "duration": 11.989,
+      "rule": "R2 普通长镜（11.989s/4拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+          "at_sec": 5.99,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（11.989s/4拍）",
+          "source_duration": 11.989
+        }
+      ],
+      "added_cost": {
+        "images": 1,
+        "video_segments": 1
+      }
+    },
+    {
+      "clip_index": 5,
+      "clip_id": "EP01_CLIP05",
+      "duration": 11.608,
+      "rule": "R1 高运动信号（文本/运镜或大表情，11.608s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+          "at_sec": 3.87,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.608s）",
+          "source_duration": 11.608
+        },
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+          "at_sec": 7.74,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.608s）",
+          "source_duration": 11.608
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 7,
+      "clip_id": "EP01_CLIP07",
+      "duration": 10.811,
+      "rule": "R1 高运动信号（文本/运镜或大表情，10.811s）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+          "at_sec": 3.6,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
+          "source_duration": 10.811
+        },
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+          "at_sec": 7.21,
+          "use": "split",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
+          "source_duration": 10.811
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    },
+    {
+      "clip_index": 8,
+      "clip_id": "EP01_CLIP08",
+      "duration": 9.316,
+      "rule": "E1 storyboard 多镜位硬切边界",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP08_a1.png",
+          "at_sec": 3.6,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 9.316
+        },
+        {
+          "anchor_png": "出图/第1集/图片/EP01_CLIP08_a2.png",
+          "at_sec": 7.0,
+          "use": "edit_cut",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+          "source_duration": 9.316
+        }
+      ],
+      "added_cost": {
+        "images": 2,
+        "video_segments": 2
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "clip": "EP01_CLIP01",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "why": "已手动声明 anchors，人工优先"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    }
+  ],
+  "exempted": [],
+  "summary": {
+    "clips_planned": 5,
+    "total_anchors": 8,
+    "added_images": 8,
+    "added_video_segments": 8,
+    "exempted_clips": 0
+  },
+  "backend_selection": {
+    "backend": "",
+    "channel": "",
+    "supports_three_plus_frames": false,
+    "anchor_consumption_plan": {
+      "backend": "",
+      "execution_backend": "",
+      "frame_control_mode": "unknown",
+      "anchor_count": 1,
+      "need_end": true,
+      "consumption_mode": "unknown_manual_confirm",
+      "frame_strategy": "legacy_auto",
+      "consumes_mid_anchors_natively": false,
+      "consumes_endframe": false,
+      "requires_split_relay": false,
+      "reference_only": false,
+      "known_profile": false,
+      "supports_native_mid_anchors": false,
+      "supports_last_frame": false,
+      "auto_routable": true,
+      "action": "manual confirmation required before paid generation"
+    }
+  }
+}

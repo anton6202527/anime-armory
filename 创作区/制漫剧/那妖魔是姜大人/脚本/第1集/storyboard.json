@@ -5,7 +5,7 @@
   "title": "刀下不是妖",
   "status": "stage2_draft",
   "timing_basis": "text_estimate_no_audio",
-  "total_duration": 74.583,
+  "total_duration": 74.798,
   "core_attraction": {
     "category": "穿越死局 + 妖魔复生 + 杀人求生反转",
     "why_watch": "刚穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。",
@@ -447,10 +447,10 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
-            "at_sec": 5.37,
+            "at_sec": 5.76,
             "use": "split",
-            "reason": "auto: R2 普通长镜（10.747s/4拍）",
-            "source_duration": 10.747
+            "reason": "auto: R2 普通长镜（11.52s/4拍）",
+            "source_duration": 11.52
           }
         ]
       },
@@ -622,10 +622,10 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
-            "at_sec": 5.36,
+            "at_sec": 5.99,
             "use": "split",
-            "reason": "auto: R2 普通长镜（10.726s/4拍）",
-            "source_duration": 10.726
+            "reason": "auto: R2 普通长镜（11.989s/4拍）",
+            "source_duration": 11.989
           }
         ]
       },
@@ -976,17 +976,17 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
-            "at_sec": 3.96,
+            "at_sec": 3.87,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.89s）",
-            "source_duration": 11.89
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.608s）",
+            "source_duration": 11.608
           },
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
-            "at_sec": 7.93,
+            "at_sec": 7.74,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.89s）",
-            "source_duration": 11.89
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.608s）",
+            "source_duration": 11.608
           }
         ]
       },
@@ -1220,7 +1220,7 @@
       "id": "EP01_CLIP07",
       "beat_id": "Beat_04",
       "label": "百妖谱给出残酷选择",
-      "duration": 10.596,
+      "duration": 10.811,
       "voiceover_indices": [
         17,
         18
@@ -1396,29 +1396,22 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
-            "at_sec": 3.28,
+            "at_sec": 3.6,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
-            "source_duration": 13.101
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
+            "source_duration": 10.811
           },
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
-            "at_sec": 6.55,
+            "at_sec": 7.21,
             "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
-            "source_duration": 13.101
-          },
-          {
-            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a3.png",
-            "at_sec": 9.83,
-            "use": "split",
-            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
-            "source_duration": 13.101
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
+            "source_duration": 10.811
           }
         ]
       },
       "start_sec": 54.671,
-      "end_sec": 65.267
+      "end_sec": 65.482
     },
     {
       "id": "EP01_CLIP08",
@@ -1618,6 +1611,12 @@
           "editorial_intent": "刀入胸的短促声音即切全黑，不展示结算，以道德余震迫使追更。"
         },
         "need_endframe": false,
+        "entry_exit": "主角靠近半步；裴不主动移动；百妖谱保持主观记忆层，不出现道行灌注或结算面板。",
+        "shot_size": "ECU→CU→MS",
+        "eyeline": "左上/右下互看后失焦",
+        "expression_span": "大",
+        "end_anchor_required": true,
+        "previous_start_state_note": "裴右下濒死，横刀手边。",
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
@@ -1636,17 +1635,18 @@
             "at_sec": 5.6,
             "reason": "锁落刀后的错愕与战损增量",
             "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_a2.png",
+            "at_sec": 7.0,
+            "use": "edit_cut",
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 9.316
           }
-        ],
-        "entry_exit": "主角靠近半步；裴不主动移动；百妖谱保持主观记忆层，不出现道行灌注或结算面板。",
-        "shot_size": "ECU→CU→MS",
-        "eyeline": "左上/右下互看后失焦",
-        "expression_span": "大",
-        "end_anchor_required": true,
-        "previous_start_state_note": "裴右下濒死，横刀手边。"
+        ]
       },
-      "start_sec": 65.267,
-      "end_sec": 74.583
+      "start_sec": 65.482,
+      "end_sec": 74.798
     }
   ]
 }

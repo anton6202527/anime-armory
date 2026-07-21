@@ -1,51 +1,31 @@
 {
   "kind": "comic_split_blueprint",
   "version": 2,
-  "status": "draft",
-  "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。",
+  "status": "confirmed",
+  "policy": "一话一篇完整志怪，按诱惑—识破—反扑—救赎—讽刺闭环切话。",
   "chapters": [
     {
       "chapter": "第1话",
-      "chapter_type": "serial",
+      "working_title": "画皮",
+      "chapter_type": "standalone",
       "format_profile": "vertical_serial",
       "source_mode": "adapted",
-      "source_spans": [
-        {
-          "source_path": "源本/待补.txt",
-          "start": "第1章",
-          "end": "第1章"
-        }
-      ],
-      "reader_promise": "待补：本话向读者承诺什么体验/答案",
-      "core_conflict": "待补：谁想要什么、什么在阻止",
-      "turning_point": "待补：选择、反转或认知变化",
-      "payoff": "待补：本话兑现的爽点/情绪/信息",
-      "ending_mode": "cliffhanger",
-      "budget": {
-        "unit": "panels",
-        "target": 36,
-        "soft_range": [
-          24,
-          48
-        ]
-      },
-      "entry_state": {
-        "story": "待补：本话进入时的剧情状态"
-      },
+      "source_spans": [{"span_id": "SPAN_PAINTED_SKIN", "source_path": "源本/聊斋志异.docx", "start": "畫皮", "end": "畫皮"}],
+      "reader_promise": "首屏便看见美人皮囊下的异鬼，随后追看王生如何一步步把警告当成妄言，以及陈氏如何从死局中夺回一颗心。",
+      "core_conflict": "王生想保住私藏的美色，妻子与道士的警告却要他承认真相；他的自欺与妖鬼的杀意共同将家庭推向死局。",
+      "turning_point": "王生翻墙窥见青面锯齿的鬼正用彩笔画人皮，之前的美人叙事彻底翻面。",
+      "payoff": "道士斩鬼收烟，陈氏忍辱吞痰、吐出人心并将其纳回夫尸；王生复活却永留钱形疤痕。",
+      "ending_mode": "complete_closure",
+      "budget": {"unit": "panels", "target": 24, "soft_range": [22, 28]},
+      "entry_state": {"entities": {"CHAR_WANG": {"story_state": "已婚书生，早行遇到陌生女子前尚无邪祸。"}, "CHAR_CHEN": {"story_state": "王生之妻，尚不知丈夫将妖鬼带入家中。"}, "MON_PAINTED_SKIN": {"disguise_state": "以绘制人皮伪装成年轻女子，寻找替死者。"}}},
       "continuity_delta": [
-        {
-          "entity_id": "CHAR_MAIN",
-          "field": "story_state",
-          "from": "待补：进入状态",
-          "to": "待补：不可逆新状态",
-          "panel_id": "P001",
-          "reason": "待补：哪个可见事件造成变化"
-        }
+        {"entity_id": "CHAR_WANG", "field": "life_state", "from": "alive", "to": "dead_without_heart", "panel_id": "P014", "reason": "鬼毁拂破门、裂腹掬心。"},
+        {"entity_id": "MON_PAINTED_SKIN", "field": "existence_state", "from": "disguised_and_hunting", "to": "beheaded_and_sealed_as_smoke", "panel_id": "P017", "reason": "道士木剑斩首并以葫芦收尽鬼烟。"},
+        {"entity_id": "CHAR_CHEN", "field": "agency_state", "from": "warning_ignored", "to": "humiliated_but_active_savior", "panel_id": "P022", "reason": "她吞下疯乞之痰后吐出人心，亲手纳回夫尸。"},
+        {"entity_id": "CHAR_WANG", "field": "life_state", "from": "dead_without_heart", "to": "revived_with_permanent_scar", "panel_id": "P023", "reason": "陈氏合腹紧缚，夜半鼻息复现。"}
       ],
-      "exit_state": {
-        "story": "待补：下话必须继承的退出状态"
-      },
-      "status": "draft"
+      "exit_state": {"entities": {"CHAR_WANG": {"story_state": "复活，腹部留下如钱疤痕。"}, "CHAR_CHEN": {"story_state": "承受丈夫的恶果并完成救赎。"}, "MON_PAINTED_SKIN": {"existence_state": "已被斩除并封入葫芦。"}}},
+      "status": "confirmed"
     }
   ]
 }

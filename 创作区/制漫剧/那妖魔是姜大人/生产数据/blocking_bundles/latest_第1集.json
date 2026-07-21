@@ -1,16 +1,20 @@
 {
   "authority": "repair view only; it does not create a new gate or override existing verdicts",
-  "blocked": false,
+  "blocked": true,
   "blockers": [
     {
-      "message": "读 n2d-script 的 prompt 包 → 调 LLM 生成 → 注入项目；完成后回写进度再 run next。",
-      "step": "needs_agent_gen"
+      "message": "围读验收包未确认；先补齐 脚本/第1集/table_read_packet.json/md，确认台词/节奏/时长风险后把内容 status 改为 confirmed，再用 signoff.py 的 table_read profile 由明确 reviewer 身份签当前输入与证据哈希。",
+      "step": "story_acceptance_table_read"
+    },
+    {
+      "message": "P-2 导演排戏包未确认；先补齐 脚本/第1集/director_beat_sheet.json、axis_blocking_map.json、shot_progression_plan.json、transition_map.json、vertical_composition_plan.json、edit_rhythm_map.json，删除待补/TODO，把内容 status 改为 confirmed，并为每个接缝填写 seam_mode/seam_evidence；再用 signoff.py 的 p2 profile 由 director 与 producer/editor 两个角色组签当前哈希，才可进入阶段2分镜设计。",
+      "step": "director_blocking_pack"
     }
   ],
   "category": "creative_or_execution",
   "episode": "第1集",
   "episode_graph": {
-    "graph_hash": "6a6705bdc00e9c912fc05f958cf09319708c17ae55cc48a729858e5e0f3e7782",
+    "graph_hash": "4fd1177b3764fe81d6874f0e1e2a990859d4f1184764987c25696088c3f1c6ab",
     "lineage_gaps": 0,
     "status": "pass"
   },
@@ -20,14 +24,14 @@
     "return_to_stage": null,
     "stage": ""
   },
-  "generated_at": "2026-07-21T20:22:04+0800",
-  "headline": "第1集 阶段2·分镜设计：脚手架就绪，待代理生成",
+  "generated_at": "2026-07-21T20:31:17+0800",
+  "headline": "第1集 阶段2·分镜设计：确定性前置失败",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-script",
   "repair_commands": [
     "n2d-script 创作区/制漫剧/那妖魔是姜大人 第1集  (配音后定稿)"
   ],
   "stage_key": "script_stage2",
-  "stop_reason": "needs_agent_gen",
+  "stop_reason": "prework_failed",
   "version": 1
 }

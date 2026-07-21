@@ -4,8 +4,8 @@
 - 阶段：script_stage2
 - 题材原值：系统流
 - 命中 pack：chuanyue
-- 场景触发：storyboard_missing — 题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。
-- 状态：pass
+- 场景触发：scene_archetypes_triggered — storyboard 中已有镜头命中题材高风险场景。
+- 状态：warn
 
 ## QC Focus
 
@@ -18,4 +18,5 @@
 
 | packs | scene | clips | missing |
 |---|---|---|---|
-| - | 未触发（storyboard_missing） | - | - |
+| chuanyue | 系统面板/HUD | EP01_CLIP07 | EP01_CLIP07:degrade_plan |
+| chuanyue | 现代物品/知识落地 | EP01_CLIP01,EP01_CLIP02,EP01_CLIP03,EP01_CLIP04 | EP01_CLIP01:mount_contact,harness_lock; EP01_CLIP02:mount_contact,harness_lock; EP01_CLIP03:mount_contact,harness_lock; EP01_CLIP04:mount_contact,harness_lock |

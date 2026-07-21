@@ -52,7 +52,7 @@
       "path": "脚本/第1集/voiceover.txt",
       "exists": true,
       "kind": "file",
-      "sha256": "a159f9bdad5079f082618ebb7cba1f9b9487c6af34ccc4a49e7e81885ccbdcec"
+      "sha256": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812"
     },
     {
       "stage": "script_stage1",
@@ -94,14 +94,14 @@
       "path": "设定库/voice_casting.json",
       "exists": true,
       "kind": "file",
-      "sha256": "47cbefdbf50b0e5c3f438ba0aa53f86b8f81ca7309289bfb94db6a1da30f3de3"
+      "sha256": "0dbc1f2d557f541bbb055a4be4e2d362ff1b21df72cd5909eec1acb872955d68"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/timing_estimate.json",
       "exists": true,
       "kind": "file",
-      "sha256": "900fa6b5c4b4205218efbd7bc3a9b69205378852dc6bf20707317b7a8d88a7ac"
+      "sha256": "77bbcca360014dc6549e46c8e72f7b90983e0cee14d57cf7ee0c86a006b1576b"
     },
     {
       "stage": "voice",
@@ -175,35 +175,35 @@
       "path": "脚本/第1集/分镜剧本.md",
       "exists": true,
       "kind": "file",
-      "sha256": "635296dbb686e6fc9b6c64247732600dc20dbe3171f13dc791148b35875cd328"
+      "sha256": "220976f792abc805a86a1c814ef223942dac72bd79f7453d88e4589c48990bff"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/故事板.md",
       "exists": true,
       "kind": "file",
-      "sha256": "0a68363e61d4495b7a0d85ae34fe14e0d816e71d9546bd6eda6063e006981e44"
+      "sha256": "0647fe5f33840fd5f036ddbc662a65f15f251ee80574c866cd9645e950e75313"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "82cd6234fed3bad6ee2b48ccc858292ea0ad378c5914928218a0fbe51ce91d27"
+      "sha256": "dffbcc2bf737078e51ab098e41939c408739e982d435e54c3b3d5baf9be5cc25"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/素材清单.md",
       "exists": true,
       "kind": "file",
-      "sha256": "b9dedc5cc4c5305cd6e3ac3ff55e2f047d8e4ab1ffa23a16a0fc6f8b280d829b"
+      "sha256": "2ea9a17349b49ebce402ce35acdafccae82378596a955eebc4fdbdf2efa13640"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "175a8aa07235a6d4fbf5be145fe97ae2145f7fd37f3c01b89e14293da2c03daa"
+      "sha256": "8928b5d48eaa187cbda1c01ee6f6ba0a43be7dbf613529d929aa07b13fad1629"
     },
     {
       "stage": "script_stage2",
@@ -216,7 +216,7 @@
       "path": "脚本/第1集/镜头时长.json",
       "exists": true,
       "kind": "file",
-      "sha256": "b7c848f54473b73ebda59a8a370539fdd8145ccecbecf4a3193457c127c74b17"
+      "sha256": "452e715095dc373e36a39c1b369abeb5acb5f1c5cc904db04813bcaab48f8f55"
     },
     {
       "stage": "image_prompt",

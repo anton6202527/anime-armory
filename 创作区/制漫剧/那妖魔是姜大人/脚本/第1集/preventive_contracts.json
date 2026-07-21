@@ -1,6 +1,111 @@
 {
   "audio_timing": {
-    "dialogue_closeups": [],
+    "dialogue_closeups": [
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_01",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_01_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=3.884s；dialogue_indices=[1]；voiceover_indices=[1]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_02",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_02_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=11.52s；dialogue_indices=[3, 4]；voiceover_indices=[2, 3, 4]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_03",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_03_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=11.989s；dialogue_indices=[5, 6, 7]；voiceover_indices=[5, 6, 7]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_04",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_04_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=7.419s；dialogue_indices=[8, 9]；voiceover_indices=[8, 9]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_05",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_05_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=11.608s；dialogue_indices=[10, 11, 12, 13]；voiceover_indices=[10, 11, 12, 13]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_06",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_06_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=8.251s；dialogue_indices=[14, 15, 16]；voiceover_indices=[14, 15, 16]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_07",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_07_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=10.811s；dialogue_indices=[17, 18]；voiceover_indices=[17, 18]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_08",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_08_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=9.316s；dialogue_indices=[19, 20, 21, 22]；voiceover_indices=[19, 20, 21, 22]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      }
+    ],
     "mode": "混合自动路由",
     "native_av_policy": {
       "lipsync_policy": "可见口型镜先锁表演轨，缺失则生成neutral-mouth底片并后置口型pass。",
@@ -28,14 +133,416 @@
       "第1章_横刀入胸"
     ]
   },
-  "interaction_physics": [],
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "start_state: 未来片段，姜月初已持刀。",
+        "end_state: 刀尖停在裴长青胸前，尚未落刀。",
+        "entry_exit: 只交代刀、人、妖三角。；入画/现身：PROP_断刀、PROP_翻覆囚车",
+        "85mm手部ECU，横刀尚未接触裴长青；姜月初发抖，虎妖焦外压近，不展示伤口。"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01：画左前景主焦点",
+        "CHAR_02：画右中景濒死者",
+        "BEAST_01：上方后景焦外巨影"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "一炷香前的荒野死局",
+        "尸场空间一次建立。",
+        "姜月初摸到囚服，压住惊惧。",
+        "断刀封路，裴长青右前半跪。",
+        "start_state: 刀尖停在裴长青胸前，尚未落刀。",
+        "end_state: 断刀封路，姜月初停下。",
+        "entry_exit: 姜月初退路被封。；入画/现身：PROP_断刀、PROP_翻覆囚车；出画/画外保留：BEAST_01、PROP_翻覆囚车",
+        "35mm扫翻车尸场到囚服姜月初；断刀插地封路，反打右前半跪、左臂扭曲的裴长青。"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_01：画左中景主角",
+        "CHAR_02：画右前景半跪",
+        "BEAST_01：上方后景伪死",
+        "LOC_01/一炷香前；可见主体=CHAR_01/囚途残损态、CHAR_02/半跪重伤态、BEAST_01/伪死态、PROP_断刀、PROP_横刀、PROP_翻覆囚车、CHAR_01、CHAR_02；姜月初退路被封。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "以脱籍换搀扶",
+        "姜月初警惕讥诮。",
+        "裴长青报身份与条件。",
+        "主角转为盘算。",
+        "start_state: 断刀封路，姜月初停下。",
+        "end_state: 姜月初缩短到一臂半。",
+        "entry_exit: 姜月初向右前靠近。；出画/画外保留：BEAST_01、PROP_翻覆囚车；出画/画外保留：PROP_断刀；入画/现身：BEAST_01",
+        "50mm过肩反打，断刀作权力支点，听见自由身时姜月初眼神松动。"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_01：画左焦点",
+        "CHAR_02：画右焦点",
+        "LOC_01；可见主体=CHAR_01/囚途残损态、CHAR_02/半跪重伤态、PROP_断刀、PROP_横刀、CHAR_01、CHAR_02；姜月初向右前靠近。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "先活着再算账",
+        "路引与镇魔司压实死局。",
+        "姜月初答应并架起裴长青。",
+        "start_state: 姜月初缩短到一臂半。",
+        "end_state: 姜月初架起裴长青，面向画面下方。",
+        "entry_exit: 二人向下方走数步。；出画/画外保留：PROP_断刀；入画/现身：BEAST_01",
+        "50mm双人镜，姜月初绕到未伤右臂搀扶，伪死虎妖后景不消失。"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_01：画左中景",
+        "CHAR_02：画右中景",
+        "BEAST_01：上方后景伪死",
+        "LOC_01；可见主体=CHAR_01/囚途残损态、CHAR_02/重伤态、BEAST_01/伪死态、PROP_横刀、CHAR_01、CHAR_02、BEAST_01；二人向下方走数步。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "死妖咳嗽站起",
+        "胸伤仍在，虎妖由伏到立。",
+        "裴长青镇定崩塌。",
+        "虎妖逼近，裴长青喊快逃并拾横刀准备搏命。",
+        "start_state: 姜月初架起裴长青，面向画面下方。",
+        "end_state: 虎妖站立逼近，裴长青拾横刀准备搏命。",
+        "entry_exit: 虎妖从上后景向下。",
+        "35mm虎妖带贯穿伤起立，85mm裴长青失血色反应，先声后身；末尾裴长青单臂探向横刀。"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "risk_type": "reveal_reaction_chain",
+      "screen_positions": [
+        "CHAR_01：画左下人物层",
+        "CHAR_02：画右下反应层",
+        "BEAST_01：上方后景高位主体",
+        "LOC_01；可见主体=CHAR_01/囚途残损态、CHAR_02/重伤搀扶态、BEAST_01/复生态、PROP_横刀、CHAR_01、CHAR_02、BEAST_01；虎妖从上后景向下。"
+      ],
+      "vfx_layers": []
+    },
+    {
+      "action_decomposition": [
+        "裴长青单臂拾起横刀，沿右下至左上轴线搏命冲锋",
+        "虎妖正面抬腿，短促一脚命中裴长青躯干",
+        "裴长青与横刀沿原路跌回姜月初脚边",
+        "虎妖低机位威胁逼近，姜月初近景喊名并意识到自己又要死",
+        "拾刀搏命",
+        "虎足命中",
+        "人刀同落",
+        "姜月初喊名"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "虎妖足底与裴长青躯干衣料",
+        "裴长青落地时肩背与泥地",
+        "脱手横刀与泥地",
+        "裴的飞退方向、身体折线、衣摆与横刀惯性必须统一；虎妖支撑腿落地稳定，不悬浮。"
+      ],
+      "degrade_plan": "拆成拾刀、冲锋、接触、落地、威胁、反应六个短镜；接触帧用定格关键帧，不做端到端三人同框生成。",
+      "effect_cause": "裴的飞退方向、身体折线、衣摆与横刀惯性必须统一；虎妖支撑腿落地稳定，不悬浮。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "BEAST_01：上方后景高位",
+        "CHAR_01：画左中景主角",
+        "CHAR_02：画右下倒地",
+        "姜月初固定画左中景；裴长青从画右下拾刀冲向上方后景虎妖，受击后沿同一力线跌回姜月初脚边；虎妖不换位，只抬腿击退后继续逼近。",
+        "裴右下向左上进攻、右下回落；人物左右不互换。",
+        "裴从右下到左上，再沿同轴回落至姜月初脚边；虎妖保持左上高位。",
+        "50mm短跟冲锋→85mm接触特写→50mm落地关系镜→低机位虎妖威胁与姜月初反应硬切。"
+      ],
+      "vfx_layers": [
+        "裴的飞退方向、身体折线、衣摆与横刀惯性必须统一；虎妖支撑腿落地稳定，不悬浮。",
+        "VFX_百妖谱",
+        "VFX_系统面板"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "百妖谱给出残酷选择",
+        "空白卷轴展开，黑墨游走。",
+        "规则与虎爪交替。",
+        "看向右下裴长青。",
+        "start_state: 虎爪入前景，姜月初未持刀。",
+        "end_state: 主角理解规则，视线落在裴与横刀。",
+        "entry_exit: 现实位置不重置。；入画/现身：VFX_百妖谱、VFX_系统面板；出画/画外保留：VFX_百妖谱",
+        "旧纸卷轴、黑墨边缘，文字区空白供overlay；主角视线由虎妖落到裴长青。"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "面板文字全部交 compose overlay；视频只保留人物反应和干净负空间，必要时拆为人物反应 + 面板空镜。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "system_panel",
+      "screen_positions": [
+        "CHAR_01：画面中部主焦点",
+        "CHAR_02：右下现实层",
+        "BEAST_01：上方现实层焦外",
+        "LOC_01/主观系统层；可见主体=CHAR_01/囚途残损态、CHAR_02/濒死态、BEAST_01/复生态、PROP_横刀、VFX_百妖谱、VFX_系统面板、CHAR_01、CHAR_02、BEAST_01；现实位置不重置。"
+      ],
+      "vfx_layers": [
+        "VFX_系统面板/百妖谱",
+        "MOTIF_百妖谱系统面板",
+        "VFX_百妖谱",
+        "VFX_系统面板"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "拾刀盘算",
+        "裴催她快逃",
+        "我想活",
+        "道歉",
+        "单次落刀",
+        "递刀本意",
+        "姜月初确认目标",
+        "单次落刀与错愕"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "双手与刀柄",
+        "刀口与胸前衣料",
+        "刀路与衣料受力同向；裴无主动迎刀。"
+      ],
+      "degrade_plan": "手部、闭眼反应、错愕、血点落衣拆镜替代。",
+      "effect_cause": "刀路与衣料受力同向；裴无主动迎刀。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "CHAR_01：画左前景行动主体",
+        "CHAR_02：画右下受力主体",
+        "BEAST_01：上方后景焦外压力",
+        "LOC_01；可见主体=CHAR_01/囚途残损态、CHAR_02/濒死受刀态、BEAST_01/焦外、PROP_横刀、CHAR_01、CHAR_02；主角靠近半步；裴不主动移动。",
+        "姜左裴右，不反向",
+        "主角靠近半步，裴始终右下",
+        "手部→错愕反打→关系落幅"
+      ],
+      "vfx_layers": [
+        "刀路与衣料受力同向；裴无主动迎刀。",
+        "VFX_百妖谱"
+      ]
+    }
+  ],
   "kind": "n2d_preventive_contracts",
   "reference_slots": {
-    "assets": [],
-    "characters": [],
-    "scenes": []
+    "assets": [
+      {
+        "id": "PROP_断刀",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_横刀",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_翻覆囚车",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_百妖谱",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_系统面板",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      }
+    ],
+    "characters": [
+      {
+        "id": "BEAST_01/伪死态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "BEAST_01/复生态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "BEAST_01/复生态焦外",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "BEAST_01/焦外",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_01",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_01/囚途残损态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02/半跪重伤态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02/搏命冲锋至倒地濒死态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02/濒死受刀态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02/濒死态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02/重伤态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02/重伤搀扶态",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "LOC_01",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "scene"
+      }
+    ]
   },
-  "shots": [],
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "dramatic_function": "先展示不可逆选择，再回到选择前。",
+      "editing_intent": "用杀人结果作0–3秒冷开场，血点落衣后以match cut回切一炷香前，不提前解释系统。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_02",
+      "dramatic_function": "建立穿越身份、尸场死局与裴长青仍能控场。",
+      "editing_intent": "先用尸场全景建立空间，再按视线切裴长青与断刀，把穿越惊惧压进受控反应。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_03",
+      "dramatic_function": "用刀、路引和距离把被迫结盟变成行动。",
+      "editing_intent": "以85mm正反打交代条件，插入断刀/路引与靠近动作，裴长青声尾用L-cut延续到主角盘算。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_04",
+      "dramatic_function": "主角基于生存算计接受交易。",
+      "editing_intent": "从交易反打落到搀扶动作，用match on action接双人移动，并让虎妖咳声J-cut先入。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_05",
+      "dramatic_function": "推翻逃生路径，升级为绝对死局。",
+      "editing_intent": "按异响→回看→虎妖复生→裴长青失控反应的知识顺序切，完全站直时进入反应镜；裴喊快逃后拾起横刀准备搏命。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_06",
+      "dramatic_function": "让系统在马上被吃的压力下出现。",
+      "editing_intent": "以虎爪逼近作为外压起点，硬切主观规则层；现实站位不重置，系统出现不稀释迫近节奏。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_07",
+      "dramatic_function": "只解释改变当下决定的规则，把斩杀指向唯一活人。",
+      "editing_intent": "规则只按决定所需拆成三拍，卷轴/虎爪交替后用主角视线切到裴长青与递刀手。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_08",
+      "dramatic_function": "兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不确认生死与结算。",
+      "editing_intent": "视线从虎妖转向裴，按眼神—横刀—裴错愕—姜月初决绝逐级压近；刀入胸声后立刻黑场，不给结算。",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    }
+  ],
   "status": "confirmed",
   "version": 1
 }

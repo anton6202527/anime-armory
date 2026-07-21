@@ -3,14 +3,14 @@
   "version": 1,
   "episode": "第1集",
   "status": "pass",
-  "generated_at": "2026-07-21T12:28:07+00:00",
+  "generated_at": "2026-07-21T12:31:12+00:00",
   "generated_by": "skills/n2d-script/scripts/shot_reverse_contract.py",
   "sources": [
     {
       "name": "storyboard",
       "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
       "exists": true,
-      "sha256": "9f7620d9c65262420e96efad045e7c33a29c1b1769148770eedda21c9604b10c"
+      "sha256": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7"
     },
     {
       "name": "axis_blocking_map",

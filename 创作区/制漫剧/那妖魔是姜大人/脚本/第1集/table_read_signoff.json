@@ -12,19 +12,19 @@
           "sha256": "59080d6cf1bced46d5d4e64b961030774893066b68ca5c641f00ef866d46459e"
         }
       ],
-      "note": "用户明确确认第1集围读与P2导演排戏并授权登记。",
-      "reviewed_at": "2026-07-21T12:21:51+00:00",
+      "note": "用户明确确认第1集围读；分镜精修后按同一授权刷新当前输入哈希。",
+      "reviewed_at": "2026-07-21T12:31:45+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "director",
       "signed_evidence_fingerprint_sha": "a21a136eecc703e65b762b8479c88ab8e21f986f41eee1067c83e0ca9139427a",
-      "signed_input_fingerprint_sha": "3f521ee1a686a467c5d5b63e110a607a9be92359e5d9c89f136e1d54302a5370",
+      "signed_input_fingerprint_sha": "a73667ecef75ed98aee9e8e4548da0936450a5924b04cdc3b163fa1302473a7d",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "stage1_table_read",
   "authored_by": "agent:codex",
-  "created_at": "2026-07-21T12:20:20+00:00",
+  "created_at": "2026-07-21T12:31:45+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
@@ -36,9 +36,9 @@
   "input_fingerprint": {
     "files": {
       "合成/第1集/配音/时长清单.json": null,
-      "脚本/第1集/voiceover.txt": "d4912c0c3186b9c41252af8b79d023a0db28ea20b0afbc9d29667599a0d5ca41"
+      "脚本/第1集/voiceover.txt": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812"
     },
-    "sha": "3f521ee1a686a467c5d5b63e110a607a9be92359e5d9c89f136e1d54302a5370"
+    "sha": "a73667ecef75ed98aee9e8e4548da0936450a5924b04cdc3b163fa1302473a7d"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -51,6 +51,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-21T12:21:51+00:00",
+  "updated_at": "2026-07-21T12:31:45+00:00",
   "version": 1
 }

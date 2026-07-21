@@ -1,28 +1,9 @@
 {
   "kind": "comic_season_arc",
   "version": 2,
-  "status": "draft",
+  "status": "confirmed",
+  "season_premise": "以一话一奇事的完整闭环改编《聊斋志异》，每话把妖鬼奇观落回人心、礼法与欲望代价。",
   "chapters": [
-    {
-      "chapter": "第1话",
-      "core_conflict": "待补",
-      "ending_mode": "待补",
-      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
-      "promise_refs": []
-    },
-    {
-      "chapter": "第2话",
-      "core_conflict": "待补",
-      "ending_mode": "待补",
-      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
-      "promise_refs": []
-    },
-    {
-      "chapter": "第3话",
-      "core_conflict": "待补",
-      "ending_mode": "待补",
-      "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
-      "promise_refs": []
-    }
+    {"chapter": "第1话", "working_title": "画皮", "core_conflict": "王生坚信美色而否认危险，真相与欲望争夺他的判断。", "ending_mode": "complete_closure", "ending_intent": "怪谈完整闭合，以复活疤痕和评语留下寒意。", "promise_refs": ["PRM_001", "PRM_002"]}
   ]
 }

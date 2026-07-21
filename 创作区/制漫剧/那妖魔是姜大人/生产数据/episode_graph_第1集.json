@@ -1,12 +1,109 @@
 {
   "authority": "derived index only; _进度.md and existing gates remain authoritative",
-  "edges": [],
+  "edges": [
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_01"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_02"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_03"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_04"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_05"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_06"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_07"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_08"
+    }
+  ],
   "episode": "第1集",
-  "generated_at": "2026-07-21T20:22:04+0800",
-  "graph_hash": "6a6705bdc00e9c912fc05f958cf09319708c17ae55cc48a729858e5e0f3e7782",
+  "generated_at": "2026-07-21T20:31:17+0800",
+  "graph_hash": "4fd1177b3764fe81d6874f0e1e2a990859d4f1184764987c25696088c3f1c6ab",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
+    {
+      "clip": "Clip_01",
+      "duration_sec": 3.884,
+      "id": "clip:Clip_01",
+      "scene": "LOC_01/未来片段",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_02",
+      "duration_sec": 11.52,
+      "id": "clip:Clip_02",
+      "scene": "LOC_01/一炷香前",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_03",
+      "duration_sec": 11.989,
+      "id": "clip:Clip_03",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_04",
+      "duration_sec": 7.419,
+      "id": "clip:Clip_04",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_05",
+      "duration_sec": 11.608,
+      "id": "clip:Clip_05",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_06",
+      "duration_sec": 8.251,
+      "id": "clip:Clip_06",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_07",
+      "duration_sec": 10.811,
+      "id": "clip:Clip_07",
+      "scene": "LOC_01/主观系统层",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_08",
+      "duration_sec": 9.316,
+      "id": "clip:Clip_08",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
     {
       "episode": "第1集",
       "id": "episode:第1集",
@@ -14,15 +111,22 @@
     }
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-  "source_files": [],
+  "source_files": [
+    {
+      "bytes": 60564,
+      "path": "脚本/第1集/storyboard.json",
+      "role": "storyboard",
+      "sha256": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7"
+    }
+  ],
   "status": "pass",
   "summary": {
-    "edges": 0,
+    "edges": 8,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 1,
+    "nodes": 9,
     "routes": 0,
-    "story_clips": 0,
+    "story_clips": 8,
     "video_media": 0
   },
   "version": 1

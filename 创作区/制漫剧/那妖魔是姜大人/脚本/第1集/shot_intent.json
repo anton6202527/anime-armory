@@ -2,7 +2,7 @@
   "kind": "n2d_shot_intent",
   "version": 2,
   "episode": "第1集",
-  "storyboard_sha": "2e57d287c7fef37c2cbc23dacfed6f6aa90d2b84bb48f9a305df761087b8baf6",
+  "storyboard_sha": "b76ece6170c6568e5ff82a3fd6bddf8a014d4961166ce9b1c3d9943eafde25b7",
   "shots": [
     {
       "clip": "EP01_CLIP01",

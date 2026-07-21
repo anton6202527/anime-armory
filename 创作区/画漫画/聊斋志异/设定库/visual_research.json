@@ -1,74 +1,23 @@
 {
   "schema_version": 1,
   "kind": "comic_visual_research",
-  "status": "draft",
-  "scope": "待填：时代、地域、章节与主要角色/场景",
+  "status": "complete",
+  "scope": "第1话《画皮》；清初至清中期汉人市井、民居、书生与已婚女子日常服饰，以及道教木剑、拂尘、葫芦的克制奇幻化表达。",
   "project_style_anchor_id": "STYLE_LIAOZHAI_QING_GONGXI",
   "sources": [
-    {
-      "source_id": "FILM_001",
-      "title": "待填：官方/版权方影视条目",
-      "url": "",
-      "provider": "",
-      "accessed_at": "2026-07-21",
-      "type": "film_tv_narrative",
-      "usage_boundary": "research_only",
-      "findings": []
-    },
-    {
-      "source_id": "PRIMARY_001",
-      "title": "待填：博物馆/权威机构一手参考",
-      "url": "",
-      "provider": "",
-      "accessed_at": "2026-07-21",
-      "type": "museum_primary",
-      "usage_boundary": "research_only",
-      "findings": []
-    },
-    {
-      "source_id": "PRIMARY_002",
-      "title": "待填：第二项博物馆/权威机构一手参考",
-      "url": "",
-      "provider": "",
-      "accessed_at": "2026-07-21",
-      "type": "institution_primary",
-      "usage_boundary": "research_only",
-      "findings": []
-    }
+    {"source_id": "FILM_001", "title": "《画皮》的影视版本", "url": "https://www.cctv.com/teleplay/special/teleplay/special/C22240/20080925/107016_3.shtml", "provider": "中国中央电视台 CCTV.com", "accessed_at": "2026-07-21", "type": "film_tv_narrative", "usage_boundary": "research_only", "findings": ["官方资料强调《画皮》的核心功能是劝人认清事物本质，不应被纯娱乐化稀释。", "影视版本常为黄金时段柔化鬼怪，本项目则保留原作讽刺与寒意，但不复制任一版本。"]},
+    {"source_id": "PRIMARY_001", "title": "清代宫廷服饰制度及其文化内涵", "url": "https://www.dpm.org.cn/classify_detail/262014.html", "provider": "故宫博物院", "accessed_at": "2026-07-21", "type": "museum_primary", "usage_boundary": "research_only", "findings": ["清代服饰汉、满系统并存，场合、身份与等级决定廓形、窄袖和穿戴细节。", "本话角色为民间书生家庭，禁用宫廷龙纹、明黄与越级冠服。"]},
+    {"source_id": "PRIMARY_002", "title": "中国国家博物馆藏品总目录", "url": "https://www.chnmuseum.cn/zp/", "provider": "中国国家博物馆", "accessed_at": "2026-07-21", "type": "institution_primary", "usage_boundary": "research_only", "findings": ["作为器物、家具、织绣、书画等材质结构的权威索引，生产只提炼木、纸、漆、粗布、青砖等通用材质语法。", "不下载藏品图直接作生图附件，不复制具体藏品缺损、构图或纹样组合。"]},
+    {"source_id": "NARRATIVE_001", "title": "《扎纸匠，我在聊斋捉诡》剧集页", "url": "https://hongguoduanju.com/player/7600685100056972350/7600687793441885209", "provider": "红果短剧", "accessed_at": "2026-07-21", "type": "platform_narrative", "usage_boundary": "research_only", "findings": ["平台同题材运用高概念身份、快速妖鬼揭示和每集强兑现语法。", "本项目只借鉴首屏异象、滚动段尾新证据与整集闭环，不采用其穿越、捉鬼大佬或角色重写。"]}
   ],
   "derived_style": {
-    "summary": "",
+    "summary": "清代汉人市井生活结构上的工笔志怪彩漫：细墨线、低饱和石青与赭石、室内烛黄和鬼物青绿对置，纸纹、大片黑影和克制血色保留文言怪谈的寒意。",
     "decisions": [
-      {
-        "dimension": "character",
-        "decision": "",
-        "evidence_source_ids": []
-      },
-      {
-        "dimension": "environment",
-        "decision": "",
-        "evidence_source_ids": []
-      },
-      {
-        "dimension": "palette",
-        "decision": "",
-        "evidence_source_ids": []
-      }
+      {"dimension": "character", "decision": "王生用素青长衫和方巾表达市井读书人；陈氏用无等级纹样的交领上衣、素裙与挽发；妖鬼美人外皮粉白冷静，鬼体青面、锯齿、人形比例但不模仿任何演员。", "evidence_source_ids": ["FILM_001", "PRIMARY_001"]},
+      {"dimension": "environment", "decision": "王家宅院用青砖、深木、纸窗、素色床帐与狭长天井；市井与青帝庙道路保持民间尺度，不套宫廷台基或影视棚景。", "evidence_source_ids": ["PRIMARY_001", "PRIMARY_002"]},
+      {"dimension": "palette", "decision": "日常以墨灰、赭石、旧木棕为主；诱惑时增加胭脂粉，真相揭示切入石青、病绿和大黑，血色只在关键后果格中少量出现。", "evidence_source_ids": ["FILM_001", "PRIMARY_002", "NARRATIVE_001"]}
     ],
-    "do_not_copy": [
-      "影视演员脸、具体剧照构图与镜头",
-      "单一影视版本的整套服饰组合"
-    ]
+    "do_not_copy": ["影视演员脸、具体剧照构图与镜头", "单一影视版本的整套服饰组合", "红果同题材的穿越人设、角色台词与封面构图", "具体博物馆藏品的完整纹样和缺损特征"]
   },
-  "rights_rules": {
-    "research_only": true,
-    "no_actor_likeness_direct_anchor": true,
-    "no_film_still_as_generation_reference": true,
-    "no_specific_composition_replication": true,
-    "no_costume_combination_replication": true,
-    "only_licensed_or_open_assets_in_generation": true,
-    "notes": [
-      "本合同只保存 URL、研究发现与派生设计决策，不下载或挂载影视截图。"
-    ]
-  }
+  "rights_rules": {"research_only": true, "no_actor_likeness_direct_anchor": true, "no_film_still_as_generation_reference": true, "no_specific_composition_replication": true, "no_costume_combination_replication": true, "only_licensed_or_open_assets_in_generation": true, "notes": ["仅保存 URL、发现和派生设计决策；生图仅消费本项目原创定妆与风格锚。"]}
 }

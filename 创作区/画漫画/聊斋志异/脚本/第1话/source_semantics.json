@@ -1,0 +1,81 @@
+{
+  "schema_version": 2,
+  "kind": "comic_source_semantics",
+  "chapter": "第1话",
+  "status": "block",
+  "created_at": "2026-07-21T20:31:02",
+  "chapter_contract": {
+    "enforced": true,
+    "sha256": "8bd3f0530abddc54ebb5055529294b3b358ea5d052f5fa71ac549e257c9e95d6",
+    "source_mode": "adapted",
+    "format_profile": "vertical_serial",
+    "load_status": "loaded"
+  },
+  "source_language": "文言/古汉语",
+  "target_text_language": "中文",
+  "target_text_metadata": {
+    "lang": "zh-Hans",
+    "dir": "ltr",
+    "script": "Hans",
+    "line_break": "cjk"
+  },
+  "requires_normalization": true,
+  "normalization_reason": [
+    "manual_source_language"
+  ],
+  "source_files": [
+    {
+      "path": "源本/聊斋志异.docx",
+      "status": "read",
+      "chars": 493366,
+      "format": "docx",
+      "sha256": "e82d48275bb5e4970301e4aec80fe0b10fddc4e2cb2e574f809644a709e0ec4f"
+    }
+  ],
+  "source_slice": {
+    "chapter": "第1话",
+    "chars": 0,
+    "strategy": "split_blueprint.source_spans",
+    "selections": [
+      {
+        "span_id": "SPAN_PAINTED_SKIN",
+        "source_path": "源本/聊斋志异.docx",
+        "requested": {
+          "start": "畫皮",
+          "end": "畫皮",
+          "whole_file": false
+        },
+        "status": "invalid",
+        "reason": "source_span_label_invalid",
+        "source_unit_refs": []
+      }
+    ]
+  },
+  "glossary_reviewed": false,
+  "ambiguity_reviewed": false,
+  "proper_noun_glossary": [],
+  "segments": [],
+  "segment_policy": {
+    "coverage": "full",
+    "max_segments_legacy_ignored": 12,
+    "note": "不截断源文本；长段按 1200 字符拆块，所有源段都必须有改编决策。"
+  },
+  "adaptation_ledger": [],
+  "panel_script_contract": {
+    "required_panel_fields_when_normalized": [
+      "source_excerpt",
+      "meaning_zh",
+      "text_target",
+      "adaptation_note",
+      "source_segment_refs"
+    ],
+    "panel_script_path": "脚本/第1话/panel_script.json"
+  },
+  "checked_at": "2026-07-21T20:31:02",
+  "issues": [
+    "source span SPAN_PAINTED_SKIN is invalid: source_span_label_invalid",
+    "glossary_reviewed must be true after proper noun review",
+    "ambiguity_reviewed must be true after ambiguity review",
+    "segments must contain normalized source chunks"
+  ]
+}

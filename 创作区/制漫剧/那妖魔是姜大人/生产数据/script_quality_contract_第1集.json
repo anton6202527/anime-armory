@@ -1,9 +1,9 @@
 {
-  "content_hash": "f56759b30f033a21",
-  "contract_hash": "f56759b30f033a21",
+  "content_hash": "eed9ade34f226514",
+  "contract_hash": "eed9ade34f226514",
   "episode": "第1集",
   "findings": [],
-  "generated_at": "2026-07-21T12:29:25+00:00",
+  "generated_at": "2026-07-21T12:31:11+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -196,7 +196,7 @@
         "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "只解释改变当下决定的规则，把斩杀指向唯一活人。",
-        "duration": 10.596,
+        "duration": 10.811,
         "key_clip": false,
         "pacing_role": "核心机制首启与选择成形",
         "primary_runtime": true,
@@ -278,7 +278,7 @@
         "clip_id": "EP01_CLIP07",
         "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 10.596,
+        "duration": 10.811,
         "pacing_role": "核心机制首启与选择成形",
         "primary_runtime": true,
         "runtime_priority": "primary reveal"
@@ -310,7 +310,7 @@
       "muted_safe": true,
       "muted_safe_proof": "刀口、人类目标、后景虎妖与女主痛苦表情构成无需文字的三角冲突。",
       "onscreen_duration_sec": 2.2,
-      "onscreen_text": "活下去，先杀人——我刀下的不是妖",
+      "onscreen_text": "想活下去，先杀一个人——我刀下的不是妖",
       "visual_hook": "横刀悬在裴长青胸前，姜月初双手发抖；后景虎妖巨影压近，但刀口对准的是人。"
     },
     "pacing_allocation": {
@@ -345,9 +345,9 @@
           "EP01_CLIP07",
           "EP01_CLIP08"
         ],
-        "primary_duration": 74.583,
+        "primary_duration": 74.798,
         "primary_runtime_share": 1.0,
-        "total_duration": 74.583,
+        "total_duration": 74.798,
         "unclassified_duration": 0.0
       },
       "source": "storyboard.pacing_allocation"
@@ -395,7 +395,7 @@
   "source_sha256": {
     "adaptation_triage": "54801ba36ac1623860b41036975541047fc4b334e3a14f3eaff7dff11489caff",
     "story_quality_pack": "22ef9cfac0b4dc4c9a7a9077281beb353ab4f1c0d51d5f71597e9173fcd4b7a4",
-    "storyboard": "6b19ef43f97a2c410d448d86f1d0d9b36eea66b90fe0e796dda67fdbb657b989"
+    "storyboard": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7"
   },
   "status": "pass",
   "summary": {

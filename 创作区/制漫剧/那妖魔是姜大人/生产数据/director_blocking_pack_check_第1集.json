@@ -32,20 +32,26 @@
       "status": "pass"
     },
     {
-      "issues": [],
+      "issues": [
+        "input_fingerprint 缺失或过期；上游输入变化后必须重新签收",
+        "approval[user:wesley:director] 未绑定当前 input_fingerprint",
+        "approval[user:wesley:producer] 未绑定当前 input_fingerprint",
+        "缺 creative 审批；允许角色：director",
+        "缺 production 审批；允许角色：editor, producer"
+      ],
       "rel": "脚本/第1集/director_blocking_signoff.json",
-      "status": "pass"
+      "status": "block"
     }
   ],
-  "generated_at": "2026-07-21T12:22:04+00:00",
+  "generated_at": "2026-07-21T12:31:17+00:00",
   "kind": "n2d_director_blocking_pack_check",
   "next_when_blocked": "补齐 P-2 导演排戏包六件套并把内容 status 改为 confirmed；再用 signoff.py 由导演与制片/剪辑角色签收当前文件哈希。之后重跑 check，再进入阶段2分镜设计。",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "scaffold_command": "python3 skills/n2d-script/scripts/director_blocking_pack.py 创作区/制漫剧/那妖魔是姜大人 第1集 scaffold --write",
-  "status": "pass",
+  "status": "block",
   "summary": {
-    "block": 0,
-    "pass": 7,
+    "block": 1,
+    "pass": 6,
     "required": 7
   },
   "version": 1

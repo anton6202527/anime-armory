@@ -1,27 +1,32 @@
 {
   "kind": "comic_adaptation_strategy",
   "version": 2,
-  "status": "draft",
-  "adaptation_boundary": "待补：哪些内容不改编/如何镜外化（露骨/敏感/超纲情节的处理边界）",
+  "status": "confirmed",
+  "source_edition": {
+    "title": "聊斋志异（公版原文整理本）",
+    "project_source": "源本/聊斋志异.docx",
+    "source_sha256": "e82d48275bb5e4970301e4aec80fe0b10fddc4e2cb2e574f809644a709e0ec4f",
+    "adaptation_language": "简体中文，保留古典口吻的现代可读表达"
+  },
+  "adaptation_boundary": "首话完整改编《画皮》，保留诱惑、自欺、识破、反扑、惩戒、救赎和讽喻因果。性暗示与破腹掬心用门帘、剪影、血色纸纹和人物反应表达，不作露骨或猎奇特写。影视和短剧资料仅研究叙事功能，不复制演员脸、剧照构图、特定镜头或整套造型。",
+  "adaptation_principles": [
+    "整篇一话闭环，不为固定格数将高潮拆到下话。",
+    "王生的欲望与自欺是灾祸因，陈氏的屈辱与行动是救赎代价，不将责任推给女性外表。",
+    "竖向首屏直接出现‘画人皮’异象，再倒回早行相遇；每个滚动段落有一个新证据或不可逆后果。",
+    "文言叙述转为短旁白，对白优先保留人物立场与讽刺锋芒。"
+  ],
   "promise_ledger": [
-    {
-      "promise_id": "PRM_001",
-      "promise": "待补：向读者立的第一个核心悬念/欲望承诺",
-      "opened_chapter": "第1话",
-      "payoff_chapter": "待补",
-      "status": "open"
-    }
+    {"promise_id": "PRM_001", "promise": "美人为何深夜画一张人皮，王生何时才能看见真相？", "opened_chapter": "第1话", "payoff_chapter": "第1话", "status": "paid"},
+    {"promise_id": "PRM_002", "promise": "王生死后还能否回生，陈氏要付出什么代价？", "opened_chapter": "第1话", "payoff_chapter": "第1话", "status": "paid"}
   ],
   "causality_spine": [
-    "待补：全书因果链主干（事件A→导致B→逼出选择C…，改编时不可断的链）"
+    "王生贪色收留陌生女子 → 无视妻与道士警告 → 窥见画皮真相 → 为时已晚而被掬心。",
+    "陈氏承担后果 → 求道士、受疯乞辱试 → 吞痰后吐出人心 → 亲手将心纳回夫尸使其复活。",
+    "复活并非无代价的爽点；结尾用疤痕与异史氏评语回到‘见色而忘真’的讽刺。"
   ],
   "foreshadowing_ledger": [
-    {
-      "setup_id": "FSH_001",
-      "setup": "待补：伏笔内容",
-      "planted_chapter": "第1话",
-      "payoff_chapter": "待补",
-      "status": "planted"
-    }
+    {"setup_id": "FSH_001", "setup": "首屏异鬼铺皮执笔，读者先知危险而王生不知。", "planted_chapter": "第1话", "payoff_chapter": "第1话", "status": "paid"},
+    {"setup_id": "FSH_002", "setup": "道士见王生邪气萦绕，王生仍以为求财魔法。", "planted_chapter": "第1话", "payoff_chapter": "第1话", "status": "paid"},
+    {"setup_id": "FSH_003", "setup": "疯乞让陈氏吞下的浓痰停在胸间。", "planted_chapter": "第1话", "payoff_chapter": "第1话", "status": "paid"}
   ]
 }
