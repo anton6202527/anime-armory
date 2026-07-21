@@ -1,0 +1,38 @@
+{
+  "episode": "第1集",
+  "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
+  "generated_at": "2026-07-21T12:33:23+00:00",
+  "inputs": {
+    "director_blocking_pack.json": "脚本/第1集/director_blocking_pack.json",
+    "preventive_contracts.json": "脚本/第1集/preventive_contracts.json",
+    "script_quality_contract_第1集.json": "生产数据/script_quality_contract_第1集.json",
+    "source_comprehension.json": "设定库/source_comprehension.json",
+    "storyboard.json": "脚本/第1集/storyboard.json",
+    "voiceover.txt": "脚本/第1集/voiceover.txt",
+    "镜头时长.json": "脚本/第1集/镜头时长.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "生产数据/script_quality_contract_第1集.json": "82395f8e7bd570279ba0076ee4e84e2b16fde9dcf74cb633779c8913b7441a98",
+      "脚本/第1集/director_blocking_pack.json": "7cea8d35dc71cb4ba8b2c7e389f522ba4e71b0afa87a7fa3fa104f51ed16229a",
+      "脚本/第1集/preventive_contracts.json": "5125d8dbada317d912645e73aed5b692cbb9675f3c9c9e6e75b3edd0b6d6fecf",
+      "脚本/第1集/storyboard.json": "6b006f63bede687e15dff88cfb942c349588182eca2337a859c2bdd5f3a14a6a",
+      "脚本/第1集/voiceover.txt": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812",
+      "脚本/第1集/镜头时长.json": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb",
+      "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
+    },
+    "sha": "8d9c00d3feace0c7c51a1975ca42de99e7e50c7670c06ad39676bd1e12aca166"
+  },
+  "kind": "n2d_production_handoff_pack",
+  "required_files": [
+    "脚本/第1集/production_breakdown.json",
+    "脚本/第1集/continuity_breakdown.json",
+    "脚本/第1集/continuity_chain.json",
+    "脚本/第1集/continuity_bible.json",
+    "脚本/第1集/ai_shooting_schedule.json",
+    "脚本/第1集/ai_call_sheet.md"
+  ],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "status": "confirmed",
+  "version": 1
+}

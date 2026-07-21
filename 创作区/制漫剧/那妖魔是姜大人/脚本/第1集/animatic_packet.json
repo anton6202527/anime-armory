@@ -1,0 +1,125 @@
+{
+  "acceptance": {
+    "cliffhanger_or_payoff_clear": "accepted",
+    "image_generation_ready": "accepted",
+    "mid_episode_drag_checked": "accepted",
+    "opening_readable_without_sound": "accepted",
+    "reviewer": "",
+    "signoff_manifest": "脚本/第1集/animatic_signoff.json"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-07-21T12:33:52+00:00",
+  "inputs": {
+    "rough_audio": "合成/第1集/配音/voice_zh.wav",
+    "shot_durations": "脚本/第1集/镜头时长.json",
+    "storyboard": "脚本/第1集/storyboard.json",
+    "subtitle_zh": "脚本/第1集/字幕_中文.srt",
+    "timed_preview": "生产数据/animatic_第1集.html",
+    "timed_preview_manifest": "生产数据/animatic_第1集.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第1集/配音/voice_zh.wav": null,
+      "脚本/第1集/storyboard.json": "6b006f63bede687e15dff88cfb942c349588182eca2337a859c2bdd5f3a14a6a",
+      "脚本/第1集/字幕_中文.srt": "63297ee8cfa5143aebb3ff97367222636b68de1880f3714f0d54897c999ae3d9",
+      "脚本/第1集/镜头时长.json": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb"
+    },
+    "sha": "33cfbb51cd05242539052d54897d195d53a7a898e1a6e4da4df186f4d0c3ca4a"
+  },
+  "kind": "n2d_animatic_packet",
+  "machine_reference": {
+    "advisory": true,
+    "long_clips": {
+      "note": ">15s 需拆段计划、>20s 详拍叙事跨度已超上限（story_economy 同口径）",
+      "over_15s": 0,
+      "over_20s": 0
+    },
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": {
+      "block": 0,
+      "narration_heavy_clips": 0,
+      "over_budget_codes": [
+        "story_clip_over_economy_target"
+      ],
+      "warn": 1
+    },
+    "timing_estimate": {
+      "duration_sec": 74.798,
+      "line_count": 22,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "director_editor_producer",
+  "status": "confirmed",
+  "timeline": {
+    "clip_count": 8,
+    "clips": [
+      {
+        "clip_id": "EP01_CLIP01",
+        "dramatic_function": "先展示不可逆选择，再回到选择前。",
+        "duration_sec": 3.884,
+        "pacing_role": "冷开场主钩与核心反差",
+        "review_focus": "hook/reversal/seam/readability",
+        "transition": "时间回切。"
+      },
+      {
+        "clip_id": "EP01_CLIP02",
+        "dramatic_function": "建立穿越身份、尸场死局与裴长青仍能控场。",
+        "duration_sec": 11.52,
+        "pacing_role": "主干揭示：世界、身份、第一重威胁",
+        "review_focus": "rhythm/readability",
+        "transition": "视线切裴长青。"
+      },
+      {
+        "clip_id": "EP01_CLIP03",
+        "dramatic_function": "用刀、路引和距离把被迫结盟变成行动。",
+        "duration_sec": 11.989,
+        "pacing_role": "核心交易与人物关系",
+        "review_focus": "rhythm/readability",
+        "transition": "裴长青声尾延续。"
+      },
+      {
+        "clip_id": "EP01_CLIP04",
+        "dramatic_function": "主角基于生存算计接受交易。",
+        "duration_sec": 7.419,
+        "pacing_role": "交易落槌",
+        "review_focus": "rhythm/readability",
+        "transition": "虎妖咳声先入。"
+      },
+      {
+        "clip_id": "EP01_CLIP05",
+        "dramatic_function": "推翻逃生路径，升级为绝对死局。",
+        "duration_sec": 11.608,
+        "pacing_role": "虎妖复生反转主看点",
+        "review_focus": "rhythm/readability",
+        "transition": "拾刀动作接下一镜冲锋。"
+      },
+      {
+        "clip_id": "EP01_CLIP06",
+        "dramatic_function": "让系统在马上被吃的压力下出现。",
+        "duration_sec": 8.251,
+        "pacing_role": "系统前压力峰值",
+        "review_focus": "rhythm/readability",
+        "transition": "动作匹配后外压硬切内在规则。"
+      },
+      {
+        "clip_id": "EP01_CLIP07",
+        "dramatic_function": "只解释改变当下决定的规则，把斩杀指向唯一活人。",
+        "duration_sec": 10.811,
+        "pacing_role": "核心机制首启与选择成形",
+        "review_focus": "rhythm/readability",
+        "transition": "视线切递刀手。"
+      },
+      {
+        "clip_id": "EP01_CLIP08",
+        "dramatic_function": "兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不确认生死与结算。",
+        "duration_sec": 9.316,
+        "pacing_role": "冷开兑现与不可逆选择",
+        "review_focus": "hook/reversal/seam/readability",
+        "transition": "hard_cut_to_black"
+      }
+    ],
+    "estimated_total_sec": 74.798
+  },
+  "version": 1
+}

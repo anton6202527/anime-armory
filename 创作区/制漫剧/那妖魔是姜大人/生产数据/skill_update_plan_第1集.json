@@ -4,15 +4,15 @@
   "changed_skills": [],
   "commands": [],
   "contract_inheritance": null,
-  "created_at": "2026-07-21T12:32:40+00:00",
-  "current_stage": "script_stage2",
+  "created_at": "2026-07-21T12:32:51+00:00",
+  "current_stage": "image_prompt",
   "current_todo": {
-    "column": "字幕中",
-    "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集  (配音后定稿)",
-    "label": "阶段2·分镜设计",
+    "column": "出图prompt",
+    "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集",
+    "label": "出图prompt",
     "note": "",
-    "skill": "n2d-script",
-    "stage_key": "script_stage2",
+    "skill": "n2d-image",
+    "stage_key": "image_prompt",
     "status": "⬜"
   },
   "episode": "第1集",
@@ -24,11 +24,12 @@
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
   "newly_relevant_skills": [
+    "n2d-image",
     "n2d-voice"
   ],
   "notes": [
     "基线为 check 自动建立的临时基线（bootstrap）：从这一刻起能检测变更，但看不到此前已用过的更早 skill 版本所致的差异。确认当前产物可接受后，请 `record` 固化为正式基线（清除临时标记）。",
-    "n2d-voice 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。",
+    "n2d-image, n2d-voice 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。",
     "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 13 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第1集.json",
@@ -39,6 +40,7 @@
     "n2d",
     "n2d-batch",
     "n2d-dashboard",
+    "n2d-image",
     "n2d-lora",
     "n2d-review",
     "n2d-script",
@@ -46,7 +48,7 @@
     "n2d-voice"
   ],
   "rerun_from": null,
-  "rerun_until": "script_stage2",
+  "rerun_until": "image_prompt",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,

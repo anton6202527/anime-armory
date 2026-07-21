@@ -1,0 +1,43 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [],
+  "default_backend": "codex",
+  "episode": "第1集",
+  "high": 0,
+  "kind": "n2d_face_drift_risk",
+  "medium": 0,
+  "missing_3q_baseline": 0,
+  "notes": [
+    "identity_registry.json 缺失/无角色——无法算风险分。"
+  ],
+  "prior_drift_available": false,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_asset_face_risk": {
+    "assets": [],
+    "available": true,
+    "high": 0,
+    "low": 0,
+    "medium": 0,
+    "notes": [
+      "asset_registry.json 缺失/损坏——共享资产脸漂诊断跳过。"
+    ]
+  },
+  "version": 1
+}

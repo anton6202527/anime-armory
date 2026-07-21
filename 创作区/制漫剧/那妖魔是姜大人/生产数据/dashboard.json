@@ -1,12 +1,30 @@
 {
   "alert_counts": {
-    "critical": 0,
-    "warn": 0
+    "critical": 1,
+    "warn": 1
   },
-  "alerts": [],
+  "alerts": [
+    {
+      "kind": "qa_blockers",
+      "level": "critical",
+      "message": "QA 阻断 5 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "scope": "totals",
+      "threshold": 0,
+      "value": 5
+    },
+    {
+      "episode": "第1集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第1集 QA 阻断 5 项",
+      "scope": "第1集",
+      "threshold": 0,
+      "value": 5
+    }
+  ],
   "episodes": [
     {
-      "blockers_per_attempt": 0.0,
+      "blockers_per_attempt": 5.0,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -14,15 +32,15 @@
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": 1.0,
+      "deliverable_pass_rate": 0.0,
       "duration_hms": "15m00s",
       "duration_sec": 900.0,
-      "elapsed_per_finished_min_sec": null,
+      "elapsed_per_finished_min_sec": 721.944,
       "episode": "第1集",
-      "event_count": 1,
+      "event_count": 16,
       "false_positive_recoveries": 0,
-      "false_positive_recovery_rate": null,
-      "final_pass_rate": 1.0,
+      "false_positive_recovery_rate": 0.0,
+      "final_pass_rate": 0.0,
       "follow_next_rate": null,
       "generation_attempts": 1,
       "generation_fails": 0,
@@ -32,16 +50,47 @@
       "missing_deliverables": [],
       "one_pass_count": 1,
       "one_pass_rate": 1.0,
-      "progress_next_skill": "n2d-voice",
-      "progress_next_stage": "声音选角 / 时间基准 / 最终配音",
-      "qa_blockers": 0,
-      "qa_blockers_historical": 0,
+      "progress_next_skill": "n2d-image",
+      "progress_next_stage": "出图prompt",
+      "qa_blockers": 5,
+      "qa_blockers_historical": 5,
       "qa_gate_passes": 0,
-      "qa_gate_runs": 0,
-      "qa_infos": 0,
-      "qa_warnings": 0,
-      "qa_warnings_historical": 0,
-      "recent_blockers": [],
+      "qa_gate_runs": 1,
+      "qa_infos": 3,
+      "qa_warnings": 6,
+      "qa_warnings_historical": 6,
+      "recent_blockers": [
+        {
+          "dim": "空间硬控",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6",
+          "msg": "该 fight_exchange 模板具有 pose_reference_required: true 约束，必须配置 pose_image_path。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "实体排程",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#8",
+          "msg": "同一实体同时被登记为可见/必须出现和 offscreen_presence：VFX_百妖谱。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "持有账本(POS)",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
+          "msg": "storyboard 已出现核心道具/武器/证物/法宝的持有、交接、丢失或拾取（EP01_CLIP03:PROP_断刀/PROP_横刀/PROP_翻覆囚车、EP01_CLIP04:PROP_断刀/PROP_横刀、EP01_CLIP05:PROP_横刀、EP01_CLIP08:PROP_横刀），但缺 possession_ledger；请先在 创作区/制漫剧/那妖魔是姜大人/生产数据/possession_ledger_第1集.json 记录 clip、asset、holder、action，避免道具跨镜瞬移。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "P-3制片交接包",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第1集.json",
+          "msg": "P-3 制片交接包未通过：1/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第1集/production_breakdown.json: status 不是 confirmed；脚本/第1集/continuity_breakdown.json: status 不是 confirmed；脚本/第1集/continuity_chain.json: status 不是 confirmed；脚本/第1集/continuity_bible.json: status 不是 confirmed；脚本/第1集/ai_shooting_schedule.json: status 不是 confirmed；脚本/第1集/ai_call_sheet.md: 缺 status: confirmed / 状态: confirmed。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --stage image_prompt_preflight --write-missing`。",
+          "stage": "image_prompt_preflight"
+        },
+        {
+          "dim": "物料新鲜度",
+          "loc": "第1集",
+          "msg": "前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --stage image_prompt --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"创作区/制漫剧/那妖魔是姜大人\" 第1集` 固化新基线。（注：当前基线为自动建立的临时 bootstrap，看不到更早 skill 版本的差异；确认现有产物可接受后请 `record` 固化）",
+          "stage": "image_prompt_preflight"
+        }
+      ],
       "recoup_ratio": {},
       "redraw_categories": {},
       "redraw_count": 0,
@@ -54,10 +103,21 @@
       "release_spend_totals": {},
       "retention_15s": null,
       "retention_3s": null,
-      "runtime_hms": "—",
-      "runtime_sec": null,
-      "runtime_source": "",
+      "runtime_hms": "1m15s",
+      "runtime_sec": 74.798,
+      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
       "stages": {
+        "image_prompt_preflight": {
+          "duration_sec": 0.0,
+          "generation_attempts": 0,
+          "generation_fails": 0,
+          "generation_passes": 0,
+          "missing_deliverables": 0,
+          "qa_blockers": 5,
+          "qa_infos": 3,
+          "qa_warnings": 6,
+          "redraw_count": 0
+        },
         "script": {
           "duration_sec": 900.0,
           "generation_attempts": 1,
@@ -70,7 +130,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 0.0
+      "warnings_per_attempt": 6.0
     },
     {
       "blockers_per_attempt": null,
@@ -569,7 +629,7 @@
     }
   ],
   "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-21T12:15:15+00:00",
+  "generated_at": "2026-07-21T12:32:53+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1047,7 +1107,7 @@
   "retention_trend": {},
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.0,
+    "blockers_per_attempt": 5.0,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
@@ -1057,15 +1117,15 @@
     "consistency_warnings": 0,
     "cost_per_finished_min": {},
     "cost_totals": {},
-    "deliverable_pass_rate": 1.0,
+    "deliverable_pass_rate": 0.0,
     "duration_hms": "15m00s",
     "duration_sec": 900.0,
-    "elapsed_per_finished_min_sec": null,
+    "elapsed_per_finished_min_sec": 721.944,
     "episode_count": 10,
-    "event_count": 1,
+    "event_count": 16,
     "false_positive_recoveries": 0,
-    "false_positive_recovery_rate": null,
-    "final_pass_rate": 1.0,
+    "false_positive_recovery_rate": 0.0,
+    "final_pass_rate": 0.0,
     "flow_speed": {
       "first_episode_gate": "",
       "gates_passed": 0,
@@ -1081,11 +1141,11 @@
     "generation_passes": 1,
     "one_pass_count": 1,
     "one_pass_rate": 1.0,
-    "qa_blockers": 0,
-    "qa_blockers_historical": 0,
-    "qa_infos": 0,
-    "qa_warnings": 0,
-    "qa_warnings_historical": 0,
+    "qa_blockers": 5,
+    "qa_blockers_historical": 5,
+    "qa_infos": 3,
+    "qa_warnings": 6,
+    "qa_warnings_historical": 6,
     "recoup_ratio": {},
     "redraw_categories": {},
     "redraw_count": 0,
@@ -1095,9 +1155,9 @@
     "release_revenue_totals": {},
     "release_rows": 0,
     "release_spend_totals": {},
-    "runtime_hms": "—",
-    "runtime_sec": 0.0,
-    "warnings_per_attempt": 0.0
+    "runtime_hms": "1m15s",
+    "runtime_sec": 74.798,
+    "warnings_per_attempt": 6.0
   },
   "version": 1
 }

@@ -1,0 +1,44 @@
+{
+  "approvals": [],
+  "artifact_scope": "p3_production_handoff",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-21T12:32:52+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第1集/ai_call_sheet.md": "23b3f75c11991916012f4d23886b6a352e547f9635d320c089965f83d1fccaf9",
+      "脚本/第1集/ai_shooting_schedule.json": "5f4a0f5f34a7dbf3d69dea8671ea7b07c64d9def5dde6c49403ce71a4a9ca30b",
+      "脚本/第1集/continuity_bible.json": "ab8eccaec928bd123f6688c7b62be97affb71e4e4d03c2cae01bb46e57406110",
+      "脚本/第1集/continuity_breakdown.json": "0f022626b01b208f56cac759a2eae598c76f18e580e38980cc72388483cae000",
+      "脚本/第1集/continuity_chain.json": "8c86e99eeeef5aead9965f514863bd332a17e24e5e1dfef9430f8e44902079c8",
+      "脚本/第1集/production_breakdown.json": "4541453d565d6ab08c60165c4d8ea65d6e34bd07304e34526ae9394ae921a8c7"
+    },
+    "sha": "a91073eb5911eef925445f55caed7adaaff829a5d7adfec32dd08dbc5565f173"
+  },
+  "input_fingerprint": {
+    "files": {
+      "生产数据/script_quality_contract_第1集.json": "82395f8e7bd570279ba0076ee4e84e2b16fde9dcf74cb633779c8913b7441a98",
+      "脚本/第1集/animatic_signoff.json": "1b8d555ba315181fac14b82542550d8935dfdd20874dec6982da36e986d4d75b",
+      "脚本/第1集/director_blocking_signoff.json": "d626d7360ba3ae1a0084cde12503985b59357959421b1629adea7249a4b8e0b6",
+      "脚本/第1集/preventive_contracts.json": "5125d8dbada317d912645e73aed5b692cbb9675f3c9c9e6e75b3edd0b6d6fecf",
+      "脚本/第1集/storyboard.json": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7",
+      "脚本/第1集/voiceover.txt": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812",
+      "脚本/第1集/镜头时长.json": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb",
+      "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
+    },
+    "sha": "2f88a428ac966477cec438289c19c8cfe399da82f8ef48e696497b1a579792c5"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "handoff",
+      "roles": [
+        "assistant_director",
+        "producer",
+        "script_supervisor"
+      ]
+    }
+  ],
+  "status": "pending",
+  "version": 1
+}

@@ -9,7 +9,105 @@
 
 ## 阻断项
 
-- source span SPAN_PAINTED_SKIN is invalid: source_span_label_invalid
 - glossary_reviewed must be true after proper noun review
 - ambiguity_reviewed must be true after ambiguity review
-- segments must contain normalized source chunks
+- S001.adaptation_note is required
+- S001.meaning_zh is required
+- S001.text_target is required
+- S001.adaptation_decision must be finalized
+- S002.adaptation_note is required
+- S002.meaning_zh is required
+- S002.text_target is required
+- S002.adaptation_decision must be finalized
+- S003.adaptation_note is required
+- S003.meaning_zh is required
+- S003.text_target is required
+- S003.adaptation_decision must be finalized
+- S004.adaptation_note is required
+- S004.meaning_zh is required
+- S004.text_target is required
+- S004.adaptation_decision must be finalized
+- S005.adaptation_note is required
+- S005.meaning_zh is required
+- S005.text_target is required
+- S005.adaptation_decision must be finalized
+- S006.adaptation_note is required
+- S006.meaning_zh is required
+- S006.text_target is required
+- S006.adaptation_decision must be finalized
+- S007.adaptation_note is required
+- S007.meaning_zh is required
+- S007.text_target is required
+- S007.adaptation_decision must be finalized
+- S008.adaptation_note is required
+- S008.meaning_zh is required
+- S008.text_target is required
+- S008.adaptation_decision must be finalized
+- panel P001 source_segment_refs is required; an added bridge must declare adaptation_origin=original_bridge plus adaptation_note
+- source segments lack panel coverage: S001, S002, S003, S004, S005, S006, S007, S008
+
+## 分段释义与改编账
+
+### S001
+
+- 原文摘录: 《聊斋志异·画皮》源文选段
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S002
+
+- 原文摘录: 太原王生早行，遇一女郎，抱襥独奔，甚艰于步。急走趁之，乃二八姝丽。心相爱乐，问：“何夙夜踽踽独行？”女曰：“行道之人，不能解愁忧，何劳相问。”生曰：“卿何愁忧？或可效力，不辞也。”女黯然曰：“父母贪赂，鬻妾朱门。嫡妒甚，朝詈而夕楚辱之，所弗堪也，将远遁耳。”生言：“敝庐不远，即烦枉顾。”女喜，从之。女曰：“此所良佳。如怜妾而活之，须秘密，勿泄。”生诺之，使匿密室，过数日而人不知也。生微告妻。妻陈疑为大家媵妾，劝遣之。生不听。
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S003
+
+- 原文摘录: 偶适市，遇一道士，顾生而愕。道士曰：“君身邪气萦绕，何言无？”生又力白。道士乃去，曰：“惑哉！世固有死将临而不悟者。”生以其言异，颇疑女；转思明明丽人，何至为妖，意道士借魇禳以猎食者。无何，至斋门，门内杜，不得入；心疑所作，乃窥境而窗窥之，见一狞鬼，面翠色，齿巑巑如锯；铺人皮于榻上，执彩笔而画之；已而掷笔，举皮如振衣状，披于身，遂化为女子。睹此状，大惧，兽伏而出。
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S004
+
+- 原文摘录: 急追道士，遇于野，长跪乞救。道士曰：“此物亦良苦，甫能觅代者，予亦不忍伤其生。”乃以蝇拂授生，令挂寝门。一更许，但见女子来，望拂子不敢进；立而切齿，良久乃去。少时复来，罵曰：“道士吓我。终不然，宁入口而吐之耶！”取拂碎之，坏寝门而入，径登生床，裂生腹，掬生心而去。
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S005
+
+- 原文摘录: 妻号，生已死，腔血狼藉。陈氏遣人告道士，道士怒曰：“我固怜之，鬼子乃敢尔！”道士寻至南院，仗木剑，立庭心，呼曰：“孽魅！偿我拂子来！”媪出门欲遁，道士逐击之。媪仆，人皮划然而脱，化为厉鬼，卧嗥如猪。道士以木剑枭其首；身变作浓烟，匝地作堆。道士出一葫芦，拨其塞，置烟中，瞬息烟尽。道士塞口入囊，共视人皮，眉目手足，无不备具。道士卷之，如卷画轴声，亦囊之。
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S006
+
+- 原文摘录: 陈氏拜迎于门，哭求回生之法。道士曰：“我术浅，诚不能起死。我指一人，或能之。市上有疯者，时卧粪土中。试叩而哀之。倘狂辱夫人，夫人勿怒也。”陈氏见乞人颠歌道上，臭秽不可近。陈膝行而前。乞人笑曰：“佳人爱我乎？”陈告之以故。又大笑曰：“人尽夫也，活之何为？”陈固哀之。乞人怒以杖击陈。陈忍痛受之。市人渐集如堵。乞人咯痰唾盈把，举向陈吻曰：“食之！”陈红涨于面，有难色；既思道士之嘱，遂强啖焉。觉入喉中，硬如团絮，停结胸间。乞人大笑遂去，不知所在。
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S007
+
+- 原文摘录: 陈氏归，既悼夫亡之惨，又悔食唾之羞，但愿即死。陈抱尸收肠，且理且哭。哭极声嘶，顿欲呕，觉膈中结物突奔而出，已落腔中。惊而视之，乃人心也，在腔中突突犹跃，热气腾蒸如烟然。陈氏急以两手合腔，极力抱挤，乃裂缯帛急束之。以手抚尸，渐温。覆以衾裯。中夜视之，有鼻息矣。天明，竟活。视破处，痂结如钱，寻愈。
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明: 
+
+### S008
+
+- 原文摘录: 异史氏曰：“愚哉世人！明明妖也，而以为美。迷哉愚人！明明忠也，而以为妄。然爱人之色而渔之，妻亦将食人之唾而甘之矣。天道好还，但愚而迷者不悟耳。可哀也夫！”
+- 白话/中文释义: 
+- 目标嵌字/对白: 
+- 改编取舍: 待定
+- 改编说明:

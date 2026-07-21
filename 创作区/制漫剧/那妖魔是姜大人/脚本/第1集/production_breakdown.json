@@ -1,0 +1,496 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-21T12:33:23+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/濒死态",
+        "BEAST_01/复生态焦外"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/濒死态, BEAST_01/复生态焦外；关键物件 PROP_横刀。",
+        "camera": "景别/机位：ECU→CU；视线/轴线：姜月初向右下。；模板：冷开场·CU硬切。",
+        "post": "转场 时间回切。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+            "at_sec": 2.7,
+            "reason": "手部ECU切主角CU，锁刀口与虎妖焦外关系",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "刀口为何对准人",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_横刀"
+      ],
+      "scene": "LOC_01/未来片段",
+      "sound_needs": {
+        "dialogue_indices": [
+          1
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/半跪重伤态",
+        "BEAST_01/伪死态"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/半跪重伤态, BEAST_01/伪死态；关键物件 PROP_断刀, PROP_横刀, PROP_翻覆囚车。",
+        "camera": "景别/机位：WS→CU→MS；视线/轴线：左看右/右看左；模板：dialogue_shot_reverse。",
+        "post": "转场 视线切裴长青。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+            "at_sec": 5.76,
+            "reason": "auto: R2 普通长镜（11.52s/4拍）",
+            "source_duration": 11.52,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "一炷香前的荒野死局",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_断刀",
+        "PROP_横刀",
+        "PROP_翻覆囚车"
+      ],
+      "scene": "LOC_01/一炷香前",
+      "sound_needs": {
+        "dialogue_indices": [
+          3,
+          4
+        ],
+        "narration_indices": [
+          2
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_断刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/半跪重伤态"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/半跪重伤态；关键物件 PROP_断刀, PROP_横刀。",
+        "camera": "景别/机位：OTS/CU→MS→CU；视线/轴线：左看右/右看左；模板：dialogue_shot_reverse。",
+        "post": "转场 裴长青声尾延续。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+            "at_sec": 5.99,
+            "reason": "auto: R2 普通长镜（11.989s/4拍）",
+            "source_duration": 11.989,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "以脱籍换搀扶",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_断刀",
+        "PROP_横刀"
+      ],
+      "scene": "LOC_01",
+      "sound_needs": {
+        "dialogue_indices": [
+          5,
+          6,
+          7
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_断刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/重伤态",
+        "BEAST_01/伪死态"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/重伤态, BEAST_01/伪死态；关键物件 PROP_横刀。",
+        "camera": "景别/机位：MS→CU/MS；视线/轴线：共同看逃生方向；模板：dialogue_shot_reverse。",
+        "post": "转场 虎妖咳声先入。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+            "at_sec": 4.2,
+            "reason": "双人关系镜切主角答应并搀扶的动作落点",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "先活着再算账",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_横刀"
+      ],
+      "scene": "LOC_01",
+      "sound_needs": {
+        "dialogue_indices": [
+          8,
+          9
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/重伤搀扶态",
+        "BEAST_01/复生态"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/重伤搀扶态, BEAST_01/复生态；关键物件 PROP_横刀。",
+        "camera": "景别/机位：WS→CU→MS；视线/轴线：二人向上后景；模板：reveal_reaction_chain。",
+        "post": "转场 拾刀动作接下一镜冲锋。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+            "at_sec": 3.87,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.608s）",
+            "source_duration": 11.608,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+            "at_sec": 7.74,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.608s）",
+            "source_duration": 11.608,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "死妖咳嗽站起",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_横刀"
+      ],
+      "scene": "LOC_01",
+      "sound_needs": {
+        "dialogue_indices": [
+          10,
+          11,
+          12,
+          13
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/搏命冲锋至倒地濒死态",
+        "BEAST_01/复生态"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/搏命冲锋至倒地濒死态, BEAST_01/复生态；关键物件 PROP_横刀。",
+        "camera": "景别/机位：MS→CU→MS→CU；视线/轴线：上看虎妖再右下看裴；模板：fight_exchange。",
+        "post": "转场 动作匹配后外压硬切内在规则。；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+            "at_sec": 1.6,
+            "reason": "姜月初反应CU切虎妖低机位压迫镜",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "虎口最后威胁",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_横刀"
+      ],
+      "scene": "LOC_01",
+      "sound_needs": {
+        "dialogue_indices": [
+          14,
+          15,
+          16
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/濒死态",
+        "BEAST_01/复生态"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/濒死态, BEAST_01/复生态；关键物件 PROP_横刀, VFX_百妖谱, VFX_系统面板。",
+        "camera": "景别/机位：CU→插入→CU；视线/轴线：上后景→右下；模板：system_panel。",
+        "post": "转场 视线切递刀手。；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+            "at_sec": 3.6,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
+            "source_duration": 10.811,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+            "at_sec": 7.21,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
+            "source_duration": 10.811,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "百妖谱给出残酷选择",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_横刀",
+        "VFX_百妖谱",
+        "VFX_系统面板"
+      ],
+      "scene": "LOC_01/主观系统层",
+      "sound_needs": {
+        "dialogue_indices": [
+          17,
+          18
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；百妖谱面板亮起/计数跳变 UI 音效。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
+        "system_panels": [
+          "宿主：姜月初",
+          "境界：凡境",
+          "武学：无",
+          "道行：零",
+          "斩杀生物，可获道行"
+        ],
+        "vfx_assets": [
+          "VFX_百妖谱",
+          "VFX_系统面板"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、VFX_百妖谱；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01/囚途残损态",
+        "CHAR_02/濒死受刀态",
+        "BEAST_01/焦外"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/濒死受刀态, BEAST_01/焦外；关键物件 PROP_横刀, VFX_百妖谱。",
+        "camera": "景别/机位：ECU→CU→MS；视线/轴线：左上/右下互看后失焦；模板：fight_exchange。",
+        "post": "转场 hard_cut_to_black；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
+            "at_sec": 2.6,
+            "reason": "锁递刀本意和接刀位置",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
+            "at_sec": 3.6,
+            "reason": "锁递刀镜与误杀反应镜的硬切边界",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
+            "at_sec": 5.6,
+            "reason": "锁落刀后的错愕与战损增量",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_a2.png",
+            "at_sec": 7.0,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 9.316,
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 4 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "对不住了，刀落人身",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_横刀",
+        "VFX_百妖谱"
+      ],
+      "scene": "LOC_01",
+      "sound_needs": {
+        "dialogue_indices": [
+          19,
+          20,
+          21,
+          22
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
+        "system_panels": [],
+        "vfx_assets": [
+          "VFX_百妖谱"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "characters": [
+      "BEAST_01/伪死态",
+      "BEAST_01/复生态",
+      "BEAST_01/复生态焦外",
+      "BEAST_01/焦外",
+      "CHAR_01/囚途残损态",
+      "CHAR_02/半跪重伤态",
+      "CHAR_02/搏命冲锋至倒地濒死态",
+      "CHAR_02/濒死受刀态",
+      "CHAR_02/濒死态",
+      "CHAR_02/重伤态",
+      "CHAR_02/重伤搀扶态"
+    ],
+    "clip_count": 8,
+    "locations": [
+      "LOC_01"
+    ],
+    "objects": [
+      "PROP_断刀",
+      "PROP_横刀",
+      "PROP_翻覆囚车",
+      "VFX_百妖谱",
+      "VFX_系统面板"
+    ]
+  },
+  "version": 1
+}

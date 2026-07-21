@@ -1,0 +1,24 @@
+{
+  "kind": "n2d_redundancy_audit",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-07-21T12:32:52+00:00",
+  "thresholds": {
+    "pair_sim_warn": 0.6,
+    "strict_sim": 0.75,
+    "min_line_chars": 8,
+    "provenance": "internal-heuristic·confidence=low·2026-07，误报校准后再议升硬闸"
+  },
+  "summary": {
+    "voiceover_lines": 22,
+    "narration_ratio": 0.0,
+    "repeated_fact_phrases": 0,
+    "redundant_pairs": 0,
+    "repeated_composition_groups": 0,
+    "block": 0,
+    "warn": 0
+  },
+  "redundant_pairs": [],
+  "repeated_compositions": [],
+  "findings": []
+}

@@ -10,7 +10,7 @@
       "chapter_type": "standalone",
       "format_profile": "vertical_serial",
       "source_mode": "adapted",
-      "source_spans": [{"span_id": "SPAN_PAINTED_SKIN", "source_path": "源本/聊斋志异.docx", "start": "畫皮", "end": "畫皮"}],
+      "source_spans": [{"span_id": "SPAN_PAINTED_SKIN", "source_path": "源本/画皮_源文选段.txt", "whole_file": true}],
       "reader_promise": "首屏便看见美人皮囊下的异鬼，随后追看王生如何一步步把警告当成妄言，以及陈氏如何从死局中夺回一颗心。",
       "core_conflict": "王生想保住私藏的美色，妻子与道士的警告却要他承认真相；他的自欺与妖鬼的杀意共同将家庭推向死局。",
       "turning_point": "王生翻墙窥见青面锯齿的鬼正用彩笔画人皮，之前的美人叙事彻底翻面。",

@@ -1088,6 +1088,9 @@
           "虎妖台词保持近压迫混响"
         ],
         "physics_guard": "裴的飞退方向、身体折线、衣摆与横刀惯性必须统一；虎妖支撑腿落地稳定，不悬浮。",
+        "combat_micro_expression": "裴长青冲锋时咬紧后槽牙、瞳孔锁敌，命中瞬间由决绝转为失神；虎妖眼皮微压、嘴角带轻蔑；姜月初在落地反应镜中瞳孔骤缩、下颌松开。",
+        "secondary_motion": "裴长青衣摆与发束随冲锋向后，受击后沿飞退方向甩回；横刀脱手旋转不超过半周；虎妖鬃毛只有短促惯性。",
+        "apex_light": "命中帧沿用左上冷侧逆光，以衣料压缩和窄冷高光强调接触，不闪白、不加系统金光。",
         "execution_strategy": "regional_construct_required + split_composite_required：空场底板、裴冲锋、虎妖踢击、姜月初反应分take，统一轴线光位后合成。",
         "camera_rule": "沿冲锋力线短跟与硬切，不环绕、不越轴；接触帧优先动作可读性。",
         "continuity_must": [

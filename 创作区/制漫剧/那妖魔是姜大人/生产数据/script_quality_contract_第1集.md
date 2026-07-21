@@ -12,7 +12,7 @@
 - first_3s_visual_hook: visual_hook 横刀悬在裴长青胸前，姜月初双手发抖；后景虎妖巨影压近，但刀口对准的是人。 hook_type 反差/危机 content_proposition 她为什么不杀妖，反而要杀刚救她的人？ onscreen_text 想活下去，先杀一个人——我刀下的不是妖 onscreen_duration_sec 2.2 muted_safe_proof
 - retention_promise_ledger: 3
 - pacing_allocation: declared primary_runtime_focus EP01_CLIP01 EP01_CLIP05 EP01_CLIP06 EP01_CLIP07 EP01_CLIP08 selective_runtime EP01_CLIP02 EP01_CLIP03 EP01_CLIP04 compressed_clip_ids  strategy 首屏道德反
-- audience_question_ledger: 9
+- audience_question_ledger: 12
 - performance_cues: 0
 
 ## Clip 戏剧功能与时长角色

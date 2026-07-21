@@ -1,7 +1,27 @@
 # n2d 生产告警
 
 - root: 创作区/制漫剧/那妖魔是姜大人
-- generated_at: 2026-07-21T12:15:15+00:00
-- 告警数: 0（critical 0 / warn 0）
+- generated_at: 2026-07-21T12:32:53+00:00
+- 告警数: 2（critical 1 / warn 1）
 
-✅ 无告警：所有已配置阈值均未触发。
+| 级别 | 类型 | 范围 | 说明 |
+|---|---|---|---|
+| 🔴 critical | qa_blockers | totals | QA 阻断 5 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成 |
+| 🟡 warn | qa_blockers | 第1集 | 第1集 QA 阻断 5 项 |
+
+## 当前阈值
+```json
+{
+  "budget_cap": null,
+  "budget_warn_ratio": 0.8,
+  "final_pass_rate_floor": null,
+  "redraw_rate_ceiling": null,
+  "qa_blockers_ceiling": 0,
+  "cost_per_min_ceiling": null,
+  "recoup_floor": null,
+  "retention_3s_floor": null,
+  "bounce_3s_ceiling": null,
+  "follow_next_rate_floor": null,
+  "beat_density_variance_ceiling": null
+}
+```

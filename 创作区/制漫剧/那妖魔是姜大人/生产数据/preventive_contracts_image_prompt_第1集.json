@@ -1,0 +1,20 @@
+{
+  "contract_path": "脚本/第1集/preventive_contracts.json",
+  "episode": "第1集",
+  "findings": [],
+  "gates": [
+    "shot_intent_gate"
+  ],
+  "generated_at": "2026-07-21T12:32:52+00:00",
+  "kind": "n2d_preventive_contract_report",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "scaffolded": false,
+  "stage": "image_prompt",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "info": 0,
+    "warn": 0
+  },
+  "version": 1
+}

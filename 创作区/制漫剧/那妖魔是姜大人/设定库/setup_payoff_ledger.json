@@ -1,0 +1,62 @@
+{
+  "kind": "n2d_setup_payoff_ledger",
+  "version": 1,
+  "pairs": [
+    {
+      "id": "第1集-伏笔1",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "活下去，得先杀一个人。|| 可我刀下的——不是妖。",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔2",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔3",
+      "setup_ep": "第1集",
+      "payoff_ep": "第3集",
+      "desc": "一个将死之人的承诺……|| 总好过我现在就死。",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔4",
+      "setup_ep": "第1集",
+      "payoff_ep": "第1集",
+      "desc": "别跑啊。|| 这荒郊野岭的，你们能去哪儿？",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔5",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "我才活过来，凭什么又让我去死？",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔6",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "百妖谱开启。斩杀生物，可获得道行。  ⚡钩子",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔7",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "妖血为墨，可摹其形，夺其神通；道行尽付一击，可借岁月之力杀敌。",
+      "status": "open"
+    },
+    {
+      "id": "第1集-伏笔8",
+      "setup_ep": "第1集",
+      "payoff_ep": "第2集",
+      "desc": "裴长青，|| 对不住了。",
+      "status": "open"
+    }
+  ]
+}

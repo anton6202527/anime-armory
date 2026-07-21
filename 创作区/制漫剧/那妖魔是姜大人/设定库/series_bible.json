@@ -1,0 +1,338 @@
+{
+  "assets": [],
+  "characters": [],
+  "episodes": [
+    "第1集",
+    "第2集",
+    "第3集",
+    "第4集",
+    "第5集",
+    "第6集",
+    "第7集",
+    "第8集",
+    "第9集",
+    "第10集"
+  ],
+  "findings": [
+    {
+      "code": "missing_identity_registry",
+      "message": "缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。",
+      "severity": "warn"
+    },
+    {
+      "code": "missing_asset_registry",
+      "message": "缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。",
+      "severity": "info"
+    },
+    {
+      "code": "episode_missing_storyboard",
+      "message": "部分集缺 storyboard.json：第2集、第3集、第4集、第5集、第6集、第7集、第8集、第9集",
+      "severity": "info"
+    },
+    {
+      "code": "series_layers_not_registered",
+      "message": "以下剧级层尚未登记：setup_payoff_ledger、narrative_state_ledger、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
+      "severity": "info"
+    }
+  ],
+  "generated_at": "2026-07-21T12:32:52+00:00",
+  "kind": "n2d_series_bible",
+  "narrative_graph": {
+    "episode_nodes": [
+      {
+        "assets": [
+          "LOC_01",
+          "PROP_横刀",
+          "PROP_断刀",
+          "PROP_翻覆囚车",
+          "LOC_01光位",
+          "VFX_百妖谱",
+          "VFX_系统面板"
+        ],
+        "characters": [
+          "CHAR_01/囚途残损态",
+          "CHAR_02/濒死态",
+          "BEAST_01/复生态焦外",
+          "CHAR_02/半跪重伤态",
+          "BEAST_01/伪死态",
+          "CHAR_02/重伤态",
+          "CHAR_02/重伤搀扶态",
+          "BEAST_01/复生态",
+          "CHAR_02/搏命冲锋至倒地濒死态",
+          "CHAR_02/濒死受刀态",
+          "BEAST_01/焦外"
+        ],
+        "clip_count": 8,
+        "clips": [
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_横刀",
+              "PROP_断刀",
+              "PROP_翻覆囚车"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/濒死态",
+              "BEAST_01/复生态焦外"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_断刀",
+              "PROP_横刀",
+              "PROP_翻覆囚车"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/半跪重伤态",
+              "BEAST_01/伪死态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_断刀",
+              "PROP_横刀",
+              "PROP_翻覆囚车"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/半跪重伤态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP03"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_横刀",
+              "PROP_断刀"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/重伤态",
+              "BEAST_01/伪死态"
+            ],
+            "hook_signal": false,
+            "id": "EP01_CLIP04"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_横刀"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/重伤搀扶态",
+              "BEAST_01/复生态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP05"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "LOC_01光位",
+              "PROP_横刀",
+              "VFX_百妖谱",
+              "VFX_系统面板"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/搏命冲锋至倒地濒死态",
+              "BEAST_01/复生态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP06"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_横刀",
+              "VFX_百妖谱",
+              "VFX_系统面板"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/濒死态",
+              "BEAST_01/复生态"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP07"
+          },
+          {
+            "assets": [
+              "LOC_01",
+              "PROP_横刀",
+              "VFX_百妖谱"
+            ],
+            "characters": [
+              "CHAR_01/囚途残损态",
+              "CHAR_02/濒死受刀态",
+              "BEAST_01/焦外"
+            ],
+            "hook_signal": true,
+            "id": "EP01_CLIP08"
+          }
+        ],
+        "episode": "第1集",
+        "has_storyboard": true,
+        "hooks": [
+          "# 留存曲线：0–3秒杀人倒叙钩 → 尸骸穿越困局 → 自由交易 → 虎妖复生 → 镇魔司惨败 → 百妖谱生机 → 杀裴反转硬断",
+          "[镜头1·姜月初·短促决绝·快] 活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子",
+          "[镜头3·姜月初·苦涩克制·快] 穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。  ⚡钩子",
+          "[镜头8·姜月初·怀疑盘算·慢] 一个将死之人的承诺……|| 总好过我现在就死。  ⚡钩子",
+          "[镜头10·虎妖·沙哑戏谑·慢] 别跑啊。|| 这荒郊野岭的，你们能去哪儿？  ⚡钩子",
+          "[镜头16·姜月初·绝望愤怒·快] 我才活过来，凭什么又让我去死？  ⚡钩子"
+        ],
+        "threads": [
+          "；妖血可摹形夺神通；道行可尽付一击。系统金光不得改写尸场冷灰主光。姜月初视线由虎妖落向脚边横刀和",
+          "料，短促入肉声后立即全静并切黑。禁止系统播报、死亡确认和道行灌注。 ## 连续性红线 - 姜",
+          "t_proposition\": \"她为什么不杀妖，反而要杀刚救她的人？\", \"onscre",
+          "首屏道德反差、虎妖复生、裴搏命落败、系统规则和杀裴反转吃主时长；身份背景与交易用最短可读动作和对",
+          "面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。\" }, \"场景轴线视线",
+          "\"85mm CU/ECU系统和选择\", \"刀落硬切黑场\" ]",
+          "\"姜月初为求生将横刀刺入裴长青胸口，系统尚未结算，虎妖仍在逼近。\", \"open_thr",
+          "ch cut回切一炷香前，不提前解释系统。\", \"audience_effect\":"
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第2集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第3集",
+        "has_storyboard": false,
+        "hooks": [
+          "可两害相权，她宁可选那个看起来更不好惹的身份。",
+          "刚解决了生存危机，转头就掉进了身份的死局里。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第4集",
+        "has_storyboard": false,
+        "hooks": [
+          "找个没人的地方偷偷刷怪升级，一步一步变强，这才是穿越者的生存王道！"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第5集",
+        "has_storyboard": false,
+        "hooks": [
+          "她现在身份敏感，断然不是能受重伤的。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第6集",
+        "has_storyboard": false,
+        "hooks": [
+          "事情解决了，自己也得上路，想办法解决身份的问题。",
+          "可自己这身份......"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第7集",
+        "has_storyboard": false,
+        "hooks": [
+          "老妇人虽然诧异姜月初的身份，可见自家主人都对其恭敬无比，也是躬身道，“姑娘，这边请。”",
+          "可如今看来，原身的身份，处处都是古怪。"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第8集",
+        "has_storyboard": false,
+        "hooks": [],
+        "threads": [
+          "过身，脸上没什么表情。 “你觉得，是为什么？” “......属下不知。” “那就不要问。” “."
+        ]
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第9集",
+        "has_storyboard": false,
+        "hooks": [
+          "先不说姜家那桩案子处处透着古怪，便是眼下这冒牌的身份，也经不起细查。",
+          "和直接说明老子这镇魔司的身份是假的，有何区别？",
+          "自己是什么身份，也敢去打听镇魔司的要案？"
+        ],
+        "threads": []
+      },
+      {
+        "assets": [],
+        "characters": [],
+        "clip_count": 0,
+        "clips": [],
+        "episode": "第10集",
+        "has_storyboard": false,
+        "hooks": [
+          "那样一来，不仅身份问题迎刃而解，斩妖除魔更是名正言顺。",
+          "还得处处小心自己的身份问题。"
+        ],
+        "threads": []
+      }
+    ],
+    "hook_count": 19,
+    "thread_count": 9
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "truth_sources": {
+    "ambient_map": null,
+    "global_style": "设定库/global_style.md",
+    "leitmotif_registry": "设定库/leitmotif_registry.json",
+    "location_spatial_memory": null,
+    "narrative_state_ledger": null,
+    "scene_floorplan": null,
+    "series_packaging": null,
+    "setup_payoff_ledger": null,
+    "story_integrity_ledger": "设定库/story_integrity_ledger.json",
+    "thread_scheduler": "设定库/thread_scheduler.json",
+    "translation_glossary": null,
+    "ui_asset_registry": null,
+    "角色圣经": null
+  },
+  "version": 1
+}

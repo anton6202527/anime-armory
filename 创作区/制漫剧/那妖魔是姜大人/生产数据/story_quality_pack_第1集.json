@@ -4,9 +4,9 @@
     "findings": [],
     "payoff_contexts": [
       "穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。 audience_payoff",
-      "月初架起裴长青，面向画面下方。 rhythm 反转·压迫升级 label 死妖咳嗽站起 subtitle_lines",
-      "立。 dramatic_function 推翻逃生路径，升级为绝对死局。 continuity_story start_state",
-      "行结算和裴的生死。 dramatic_function 兑现开场反差：姜月初主动选择杀死濒死的裴长青换取生路。 continuity_story"
+      "流的镇魔卫，也配杀我？ 快逃！ rhythm 反转·压迫升级 dramatic_function 推翻逃生路径，升级",
+      "升级 dramatic_function 推翻逃生路径，升级为绝对死局。 scene LOC_01 audience_effect",
+      "rhythm 反转·留静音 dramatic_function 兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不"
     ],
     "questions": [
       {
@@ -18,57 +18,78 @@
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "魔卫。 audience_payoff 观众在首集看清她为何必须跨过道德线，并在横刀入胸处获得强烈反转与追更悬念。",
+        "question_context": "## 逐镜执行 ### EP01_CLIP01｜刀口为何对准人｜约4秒 未来片段。85mm 手部特写，姜月初双",
         "question_id": "Q02",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "反差/危机 content_proposition 她为什么不杀妖，反而要杀刚救她的人？ onscreen_text",
+        "question_context": "息：斩杀生物可得道行；妖血可摹形夺神通；道行可尽付一击。系统金光不得改写尸场冷灰主光。姜月初视线由虎妖落向脚边横刀和",
         "question_id": "Q03",
-        "signal": "为什么",
+        "signal": "系统",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "opened_at EP01_CLIP01 promise 姜月初为何把刀对准人而不是妖 payoff_due EP01_CLIP08",
+        "question_context": "愕；刀口刚没入胸前衣料，短促入肉声后立即全静并切黑。禁止系统播报、死亡确认和道行灌注。 ## 连续性红线 - 姜",
         "question_id": "Q04",
-        "signal": "为何",
+        "signal": "系统",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "opened_at EP01_CLIP05 promise 穿心虎妖为何复生，二人能否逃走 payoff_due 第2集 payoff_status",
+        "question_context": "魔卫。 audience_payoff 观众在首集看清她为何必须跨过道德线，并在横刀入胸处获得强烈反转与追更悬念。",
         "question_id": "Q05",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "open rhythm 冷开场·CU硬切 label 刀口为何对准人 subtitle_lines 活下去，得先杀一个",
+        "question_context": "反差/危机 content_proposition 她为什么不杀妖，反而要杀刚救她的人？ onscreen_text",
         "question_id": "Q06",
-        "signal": "为何",
+        "signal": "为什么",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "LOC_01/未来片段 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 dramatic_function",
+        "question_context": "opened_at EP01_CLIP01 promise 姜月初为何把刀对准人而不是妖 payoff_due EP01_CLIP08",
         "question_id": "Q07",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "择窗口压到几秒。 dramatic_function 让系统在马上被吃的压力下出现。 continuity_story",
+        "question_context": "opened_at EP01_CLIP05 promise 穿心虎妖为何复生，二人能否逃走 payoff_due 第2集 payoff_status",
         "question_id": "Q08",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "payoff_status open status open label 刀口为何对准人 subtitle_lines 活下去，得先杀一个",
+        "question_id": "Q09",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "LOC_01/未来片段 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 continuity_story",
+        "question_id": "Q10",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "加速·危机逼近 dramatic_function 让系统在马上被吃的压力下出现。 spectacle_story_function",
+        "question_id": "Q11",
         "signal": "系统",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "一击，可借岁月之力杀敌。 scene LOC_01/主观系统层 spectacle_story_function 建",
-        "question_id": "Q09",
+        "question_context": "spectacle_story_function 建立百妖谱视觉母题。 scene LOC_01/主观系统层 audience_effect 先兴奋再意识到伦理代",
+        "question_id": "Q12",
         "signal": "系统",
         "status": "paid_or_progressed"
       }
@@ -84,7 +105,7 @@
   "notes": [
     "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
   ],
-  "pack_hash": "f2f8d73f789a5252",
+  "pack_hash": "c399619b5bef94ef",
   "performance_prompt_cues": [],
   "summary": {
     "boundary_status": "n/a",

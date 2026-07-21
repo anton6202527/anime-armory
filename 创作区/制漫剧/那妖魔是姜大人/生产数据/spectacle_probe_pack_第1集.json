@@ -1,0 +1,120 @@
+{
+  "kind": "n2d_spectacle_probe_pack",
+  "version": 1,
+  "episode": "第1集",
+  "probe_clips": [
+    {
+      "spectacle_type": "fight_exchange",
+      "clip_id": "EP01_CLIP06",
+      "risk_score": 20,
+      "risk_tags": [
+        "long_clip_8s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "candidate_backends": [
+        "kling",
+        "seedance",
+        "dreamina"
+      ],
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "success_criteria": [
+        "identity/pose does not drift across start-mid-end",
+        "camera/path direction matches storyboard contract",
+        "no extra unplanned action beats or unreadable contact",
+        "usable first/last frame for downstream seam checks"
+      ],
+      "degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
+      "recommendations": [
+        "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+        "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+        "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+        "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+      ]
+    }
+  ],
+  "coverage_gaps": [
+    "chase",
+    "magic_burst",
+    "flight",
+    "mount_ride",
+    "vehicle_ride",
+    "vessel_flight",
+    "road_vehicle",
+    "stealth_stalk",
+    "large_establishing"
+  ],
+  "benchmark_write_path": "创作区/制漫剧/那妖魔是姜大人/生产数据/spectacle_backend_benchmark.json",
+  "benchmark_schema": {
+    "kind": "n2d_spectacle_backend_benchmark",
+    "version": 1,
+    "recommendations": {
+      "fight_exchange": {
+        "primary_backend": "kling",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "chase": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "magic_burst": {
+        "primary_backend": "dreamina",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "flight": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "mount_ride": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "vehicle_ride": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "vessel_flight": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "road_vehicle": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "stealth_stalk": {
+        "primary_backend": "seedance",
+        "score": null,
+        "evidence": "fill after probe"
+      },
+      "large_establishing": {
+        "primary_backend": "veo",
+        "score": null,
+        "evidence": "fill after probe"
+      }
+    }
+  },
+  "source_risk_summary": {
+    "clips": 8,
+    "max_score": 20,
+    "warn_or_higher": 8
+  }
+}

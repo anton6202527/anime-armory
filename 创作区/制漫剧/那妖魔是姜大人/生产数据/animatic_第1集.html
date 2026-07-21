@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第1集 Animatic</title>
+<style>
+body{margin:0;background:#111;color:#f4f0e8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:24px}
+h1{font-size:24px;margin:0 0 16px}
+.player{border:1px solid #333;background:#171717}
+.clip{display:none;min-height:540px;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.clip.active{display:flex}
+.clip img{max-width:100%;max-height:540px;object-fit:contain}
+.slate{width:100%;height:540px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#252525;gap:16px}
+.slate strong{font-size:54px}
+.slate span{font-size:22px;color:#cfc7b8}
+.meta{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.72);display:flex;gap:16px;align-items:center;padding:10px 14px;font-size:14px}
+.clip p{position:absolute;left:14px;right:14px;top:12px;margin:0;padding:10px 12px;background:rgba(0,0,0,.62);line-height:1.5}
+.controls{display:flex;gap:10px;align-items:center;margin:14px 0}
+button{font:inherit;padding:8px 12px;border:1px solid #555;background:#222;color:#fff}
+progress{width:100%;height:10px}
+pre{white-space:pre-wrap;background:#1c1c1c;padding:12px;overflow:auto}
+</style>
+</head>
+<body>
+<main>
+<h1>第1集 Animatic</h1>
+<div class="player"><section class="clip" data-duration="3.884"><div class="slate"><strong>EP01_CLIP01</strong><span>LOC_01/未来片段</span></div><div class="meta"><b>EP01_CLIP01</b><span>3.884s</span><span>冷开场主钩与核心反差</span><span>时间回切。</span></div><p>先展示不可逆选择，再回到选择前。</p></section><section class="clip" data-duration="11.52"><div class="slate"><strong>EP01_CLIP02</strong><span>LOC_01/一炷香前</span></div><div class="meta"><b>EP01_CLIP02</b><span>11.52s</span><span>主干揭示：世界、身份、第一重威胁</span><span>视线切裴长青。</span></div><p>建立穿越身份、尸场死局与裴长青仍能控场。</p></section><section class="clip" data-duration="11.989"><div class="slate"><strong>EP01_CLIP03</strong><span>LOC_01</span></div><div class="meta"><b>EP01_CLIP03</b><span>11.989s</span><span>核心交易与人物关系</span><span>裴长青声尾延续。</span></div><p>用刀、路引和距离把被迫结盟变成行动。</p></section><section class="clip" data-duration="7.419"><div class="slate"><strong>EP01_CLIP04</strong><span>LOC_01</span></div><div class="meta"><b>EP01_CLIP04</b><span>7.419s</span><span>交易落槌</span><span>虎妖咳声先入。</span></div><p>主角基于生存算计接受交易。</p></section><section class="clip" data-duration="11.608"><div class="slate"><strong>EP01_CLIP05</strong><span>LOC_01</span></div><div class="meta"><b>EP01_CLIP05</b><span>11.608s</span><span>虎妖复生反转主看点</span><span>拾刀动作接下一镜冲锋。</span></div><p>推翻逃生路径，升级为绝对死局。</p></section><section class="clip" data-duration="8.251"><div class="slate"><strong>EP01_CLIP06</strong><span>LOC_01</span></div><div class="meta"><b>EP01_CLIP06</b><span>8.251s</span><span>系统前压力峰值</span><span>动作匹配后外压硬切内在规则。</span></div><p>让系统在马上被吃的压力下出现。</p></section><section class="clip" data-duration="10.811"><div class="slate"><strong>EP01_CLIP07</strong><span>LOC_01/主观系统层</span></div><div class="meta"><b>EP01_CLIP07</b><span>10.811s</span><span>核心机制首启与选择成形</span><span>视线切递刀手。</span></div><p>只解释改变当下决定的规则，把斩杀指向唯一活人。</p></section><section class="clip" data-duration="9.316"><div class="slate"><strong>EP01_CLIP08</strong><span>LOC_01</span></div><div class="meta"><b>EP01_CLIP08</b><span>9.316s</span><span>冷开兑现与不可逆选择</span><span>hard_cut_to_black</span></div><p>兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不确认生死与结算。</p></section></div>
+<div class="controls"><button id="play">Play</button><button id="pause">Pause</button><button id="prev">Prev</button><button id="next">Next</button><span id="label"></span></div>
+<progress id="bar" value="0" max="1"></progress>
+<script type="application/json" id="timeline">[{&quot;clip_id&quot;: &quot;EP01_CLIP01&quot;, &quot;index&quot;: 1, &quot;start_sec&quot;: 0.0, &quot;duration_sec&quot;: 3.884, &quot;end_sec&quot;: 3.884, &quot;label&quot;: &quot;刀口为何对准人&quot;, &quot;scene&quot;: &quot;LOC_01/未来片段&quot;, &quot;dramatic_function&quot;: &quot;先展示不可逆选择，再回到选择前。&quot;, &quot;pacing_role&quot;: &quot;冷开场主钩与核心反差&quot;, &quot;transition&quot;: &quot;时间回切。&quot;, &quot;screen_direction&quot;: &quot;姜月初向右下。&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP02&quot;, &quot;index&quot;: 2, &quot;start_sec&quot;: 3.884, &quot;duration_sec&quot;: 11.52, &quot;end_sec&quot;: 15.404, &quot;label&quot;: &quot;一炷香前的荒野死局&quot;, &quot;scene&quot;: &quot;LOC_01/一炷香前&quot;, &quot;dramatic_function&quot;: &quot;建立穿越身份、尸场死局与裴长青仍能控场。&quot;, &quot;pacing_role&quot;: &quot;主干揭示：世界、身份、第一重威胁&quot;, &quot;transition&quot;: &quot;视线切裴长青。&quot;, &quot;screen_direction&quot;: &quot;左看右/右看左&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP03&quot;, &quot;index&quot;: 3, &quot;start_sec&quot;: 15.404, &quot;duration_sec&quot;: 11.989, &quot;end_sec&quot;: 27.393, &quot;label&quot;: &quot;以脱籍换搀扶&quot;, &quot;scene&quot;: &quot;LOC_01&quot;, &quot;dramatic_function&quot;: &quot;用刀、路引和距离把被迫结盟变成行动。&quot;, &quot;pacing_role&quot;: &quot;核心交易与人物关系&quot;, &quot;transition&quot;: &quot;裴长青声尾延续。&quot;, &quot;screen_direction&quot;: &quot;左看右/右看左&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP04&quot;, &quot;index&quot;: 4, &quot;start_sec&quot;: 27.393, &quot;duration_sec&quot;: 7.419, &quot;end_sec&quot;: 34.812, &quot;label&quot;: &quot;先活着再算账&quot;, &quot;scene&quot;: &quot;LOC_01&quot;, &quot;dramatic_function&quot;: &quot;主角基于生存算计接受交易。&quot;, &quot;pacing_role&quot;: &quot;交易落槌&quot;, &quot;transition&quot;: &quot;虎妖咳声先入。&quot;, &quot;screen_direction&quot;: &quot;共同看逃生方向&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP05&quot;, &quot;index&quot;: 5, &quot;start_sec&quot;: 34.812, &quot;duration_sec&quot;: 11.608, &quot;end_sec&quot;: 46.42, &quot;label&quot;: &quot;死妖咳嗽站起&quot;, &quot;scene&quot;: &quot;LOC_01&quot;, &quot;dramatic_function&quot;: &quot;推翻逃生路径，升级为绝对死局。&quot;, &quot;pacing_role&quot;: &quot;虎妖复生反转主看点&quot;, &quot;transition&quot;: &quot;拾刀动作接下一镜冲锋。&quot;, &quot;screen_direction&quot;: &quot;二人向上后景&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP06&quot;, &quot;index&quot;: 6, &quot;start_sec&quot;: 46.42, &quot;duration_sec&quot;: 8.251, &quot;end_sec&quot;: 54.671, &quot;label&quot;: &quot;虎口最后威胁&quot;, &quot;scene&quot;: &quot;LOC_01&quot;, &quot;dramatic_function&quot;: &quot;让系统在马上被吃的压力下出现。&quot;, &quot;pacing_role&quot;: &quot;系统前压力峰值&quot;, &quot;transition&quot;: &quot;动作匹配后外压硬切内在规则。&quot;, &quot;screen_direction&quot;: &quot;上看虎妖再右下看裴&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP07&quot;, &quot;index&quot;: 7, &quot;start_sec&quot;: 54.671, &quot;duration_sec&quot;: 10.811, &quot;end_sec&quot;: 65.482, &quot;label&quot;: &quot;百妖谱给出残酷选择&quot;, &quot;scene&quot;: &quot;LOC_01/主观系统层&quot;, &quot;dramatic_function&quot;: &quot;只解释改变当下决定的规则，把斩杀指向唯一活人。&quot;, &quot;pacing_role&quot;: &quot;核心机制首启与选择成形&quot;, &quot;transition&quot;: &quot;视线切递刀手。&quot;, &quot;screen_direction&quot;: &quot;上后景→右下&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}, {&quot;clip_id&quot;: &quot;EP01_CLIP08&quot;, &quot;index&quot;: 8, &quot;start_sec&quot;: 65.482, &quot;duration_sec&quot;: 9.316, &quot;end_sec&quot;: 74.798, &quot;label&quot;: &quot;对不住了，刀落人身&quot;, &quot;scene&quot;: &quot;LOC_01&quot;, &quot;dramatic_function&quot;: &quot;兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不确认生死与结算。&quot;, &quot;pacing_role&quot;: &quot;冷开兑现与不可逆选择&quot;, &quot;transition&quot;: &quot;hard_cut_to_black&quot;, &quot;screen_direction&quot;: &quot;左上/右下互看后失焦&quot;, &quot;image&quot;: &quot;&quot;, &quot;source&quot;: &quot;storyboard&quot;}]</script>
+<script>
+const clips=[...document.querySelectorAll('.clip')];
+let i=0,timer=null,start=0,elapsed=0;
+function show(n){clips.forEach(c=>c.classList.remove('active'));i=(n+clips.length)%clips.length;if(clips[i])clips[i].classList.add('active');elapsed=0;start=performance.now();tick();}
+function dur(){return Math.max(0.1,Number(clips[i]?.dataset.duration||1))*1000;}
+function tick(){document.getElementById('label').textContent=`${i+1}/${clips.length}`;document.getElementById('bar').value=Math.min(1,elapsed/dur());}
+function loop(){elapsed=performance.now()-start;if(elapsed>=dur()){show(i+1);start=performance.now();}tick();timer=requestAnimationFrame(loop);}
+document.getElementById('play').onclick=()=>{if(!timer){start=performance.now()-elapsed;timer=requestAnimationFrame(loop);}};
+document.getElementById('pause').onclick=()=>{if(timer)cancelAnimationFrame(timer);timer=null;};
+document.getElementById('prev').onclick=()=>show(i-1);
+document.getElementById('next').onclick=()=>show(i+1);
+show(0);
+</script>
+</main>
+</body>
+</html>

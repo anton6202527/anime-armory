@@ -1,0 +1,13 @@
+{
+  "kind": "n2d_identity_drift_report",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "generated_at": "2026-07-21T12:32:52+00:00",
+  "available": false,
+  "episodes": [],
+  "characters": {},
+  "recommendations": [],
+  "notes": [
+    "face consistency run skipped by --skip-face"
+  ]
+}
