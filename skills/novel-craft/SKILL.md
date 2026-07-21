@@ -42,6 +42,7 @@ description: Shared writing-primitives and deterministic production helpers for 
 | 章纲编织 | `references/outline.md` | 拆分定下后；进入逐章写作前 |
 | 黄金开篇（前三章 / 前 300 字） | `references/opening.md` | 写**第一章**前；留存生死线，字句级落地 |
 | 钩子库 + 爽点配比 | `references/hooks.md` | 写章末钩、设计爽点节奏、`novel-review` 查"钩子失效/平铺爽点"时 |
+| 结局/完本工艺（终局弧/清账/尾声落点） | `references/ending.md` | 进度过 ~85% 规划终局弧、完本前清账（伏笔/支线/must_answer）、`novel-score` 完本评估、防仓促收/无限拖/主题跑偏三形态烂尾 |
 | 题材化情绪三拍（15 题材模板 + 反套路） | `references/情绪节奏.md` | 写章、章纲、配 `tone_curve.json`、`novel-review` 查"情绪曲线/爽点平淡/无情绪点"时 |
 | 卷级大节奏（arc） | `references/arc-pacing.md` | 规划/回扫一个 story arc（5-20 章）；`novel-balance` 判卷级起伏 |
 | 张力账本 + 行级微张力 | `references/tension-ledger.md` | 追踪未解钩子 / 读者承诺 / 章级张力曲线 + 段落级 micro-tension；`novel-wiki` 逻辑哨兵、写时逐段自检 |

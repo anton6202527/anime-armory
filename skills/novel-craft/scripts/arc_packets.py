@@ -214,6 +214,9 @@ def build(root, start, end):
         "\n".join(f"- {thread}" for thread in threads) if threads else "（state_ledger 未登记未收线程；写前人工确认没有遗漏高价值伏笔。）",
         "",
         "## 写作纪律",
+        "- 弧段收束章（卷末大转折/高潮）落笔前先发散：按 premise-divergence.md §7 的 VS 口径一次性产 ≥3 个"
+        "转折候选（标典型度、刻意取低典型度尾部），挑「意外×合理×可持续」最高者——顺撇写第一直觉正是节拍复读"
+        "（plot_variety_audit）与叙事指纹同质化的根源。",
         "- 本弧段内不得连续 3 章缺少 `reader_contract_progress`。",
         "- 每章 state_delta 都要写 `theme_alignment`；整段不能只有事件推进。",
         "- 若新增设定、关系、能力代价、秘密揭示，必须进入对应章节 `state_delta_第NN章.json`。",

@@ -74,6 +74,10 @@ try:
 except Exception:  # pragma: no cover
     foreshadow_ledger = None
 try:
+    import knowledge_sentry  # noqa: E401  (novel-wiki/scripts) — 角色知情账（谁知道什么秘密）
+except Exception:  # pragma: no cover
+    knowledge_sentry = None
+try:
     extract_style = load_style_tool()
 except Exception:  # pragma: no cover
     extract_style = None
@@ -467,9 +471,9 @@ def _run_detector(label, module, project, out_name):
 CONSTORY_TAXONOMY = {
     "时间线与情节逻辑": ["timeline", "logic_sentry", "thread_resolution", "foreshadow",
                   "reader_contract", "hook_endings", "plot_variety", "chapter_transition",
-                  "manuscript_map"],
+                  "manuscript_map", "knowledge_state"],
     "人物刻画一致性": ["logic_sentry", "voice_drift", "minor_characters",
-                 "antagonist_scaling", "power_system"],
+                 "antagonist_scaling", "power_system", "knowledge_state"],
     "世界观与设定": ["logic_sentry", "power_system"],
     "事实与细节一致性": ["logic_sentry", "research_fact_support", "mechanical"],
     "叙事与文风": ["style_drift", "tone_curve", "mechanical", "plot_variety", "prose_craft"],
@@ -523,6 +527,8 @@ def main():
             # 伏笔超期先于 logic_sentry：analyze() 是单一真值源，产出 foreshadow_report.json，
             # logic_sentry 消费它而不是自己重新实现超期判定，消除两套实现的漂移。
             "foreshadow": _run_detector("伏笔超期", foreshadow_ledger, args.project_path, "foreshadow_report.json"),
+            # 剧情衔接侧②：知情账（掉马/悬疑的"谁知道什么"）——揭示超期(可阻断)/账目矛盾/泄密候选(建议级)。
+            "knowledge_state": _run_detector("知情状态", knowledge_sentry, args.project_path, "knowledge_report.json"),
             "logic_sentry": run_logic(args.project_path),
             "style_drift": run_style(args.project_path, args.anchor, cache=cache),
             "power_system": run_power_system(args.project_path),

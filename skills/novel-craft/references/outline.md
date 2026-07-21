@@ -2,7 +2,7 @@
 
 适用于 novel-spinoff / novel-expand / novel-condense 等需要章纲的场景。
 
-> 配套读：长篇在三幕之上还有**卷级中层节奏**（单卷 5-20 章的蓄力—爆发弧）见 `arc-pacing.md`；第一章的字句级开篇工艺见 `opening.md`；章末钩与爽点配比见 `hooks.md`；跨章伏笔登记见 `foreshadowing.md`。
+> 配套读：长篇在三幕之上还有**卷级中层节奏**（单卷 5-20 章的蓄力—爆发弧）见 `arc-pacing.md`；第一章的字句级开篇工艺见 `opening.md`；章末钩与爽点配比见 `hooks.md`；跨章伏笔登记见 `foreshadowing.md`；最后 10% 的终局弧启动点、清账顺序与尾声落点见 `ending.md`（章纲编到尾段时必读，别把"收"留到最后一章现想）。
 
 > 三幕不是唯一骨架。漫剧/微短剧/单元短章用**起承转结（四拍）+ 单元剧循环**往往更贴；成长冒险用 Story Circle、
 > 强情节悬疑用七点结构、类型爽文用 Save the Cat 15 拍。可选骨架清单与选型速查见 [`story-structures.md`](story-structures.md)；

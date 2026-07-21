@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3173 | 目录文本总行数 71169
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3193 | 目录文本总行数 72062
 
 # novel — 小说工坊调度入口
 
@@ -60,7 +60,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
 | 要写或审**专业、真实、行业感、别外行**的场景（医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文），或商业投稿/出海/改编前要事实证据层 | `novel-research`（产 `资料/专业资料包_<主题>.md` + `research_sources.json` + `research_scene_usage.json`；写章包自动引用，review 查证据缺口） |
 | **跑过 score、想据评分弱项直接开改写**（评分→改写串法） | `novel-rewrite --score-source 评分/score_report.json`（读 scores/verdict/deductions 预填 改动spec②，建议·待与用户要求对账） |
-| 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态 / 伏笔回收 / 关系温度** | `novel-wiki` |
+| 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态 / 伏笔回收 / 关系温度 / 知情账（谁知道什么秘密·掉马穿帮）** | `novel-wiki` |
 | 已写好若干章，要**模拟读者反馈 / 测留存 / 找弃书点** | `novel-simulate` |
 | 有平台后台、测试读者表单、评论导出，要**导入真实读者反馈 / 完读率 / 弃读点 / 评论掉点** | `novel-feedback` |
 | 想要**提取授权样本/项目 Demo 的文风指纹 / 保持笔力一致 / 查文风漂移** | `novel-style` |

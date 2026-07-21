@@ -37,3 +37,4 @@
 - [ ] 至少三个关键角色的反应是否不同？
 - [ ] 是否回答了一个旧问题，同时留下一个新动作或新钩子？
 - [ ] 新身份、知情人范围、旧案状态和未解问题是否写入 `state_delta`？
+- [ ] 知情面变化是否已记入知情账？（谁新得知/开始怀疑/当众公开 → `python3 skills/novel-wiki/scripts/knowledge_sentry.py learn/suspect/reveal`；写前该场在场各方"谁知道什么"以 `设定/knowledge_ledger.json` 为准，别靠现场重推）

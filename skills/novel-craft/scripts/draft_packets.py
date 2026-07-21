@@ -217,7 +217,8 @@ SCENE_GUIDES = (
                 "不要用大段说明替代现场动作；让证物、表情、沉默和打断承载信息。",
             ),
         },
-        "state_note": "本场揭示的新身份、真相、旧案状态、知情人范围和未回答问题必须写入 `state_delta`。",
+        "state_note": ("本场揭示的新身份、真相、旧案状态、知情人范围和未回答问题必须写入 `state_delta`；"
+                       "知情面变化（谁新得知/开始怀疑/当众公开）同步用 knowledge_sentry.py learn/suspect/reveal 记入知情账。"),
     },
     {
         "key": "confrontation",
@@ -585,6 +586,36 @@ def foreshadow_section_for_chapter(root, chapter, grace=FORESHADOW_GRACE):
         lines.append("> ⚠️ 以下伏笔已超期未收，本章优先考虑补收或显式作废（drop），避免烂尾：")
         for s in overdue:
             lines.append(f"- **{s.get('id')}**（{s.get('importance','medium')}·预期第{s['expected_payoff_chapter']}章·已超期）：{s.get('description','')}")
+    return "\n".join(lines) + "\n"
+
+
+def knowledge_section_for_chapter(root, chapter):
+    """读 novel-wiki 权威知情账，注入"在场知情面"：未公开秘密 × 谁知道/谁怀疑/谁误信。
+
+    只读、不改台账（与 foreshadow_section_for_chapter 同型，直读 JSON 不跨 skill import）。
+    掉马/悬疑的头号穿帮是知情错乱——不知情者说破、读者已知底牌当大反转再揭一次；
+    写章时把知情面摆在眼前，而不是靠模型现场重推"谁知道什么"。"""
+    ledger = load_json(os.path.join(root, "设定", "knowledge_ledger.json"), {}) or {}
+    secrets = [s for s in ledger.get("secrets") or []
+               if s.get("public_since") is None or int(s["public_since"]) >= int(chapter)]
+    if not secrets:
+        return ""
+    lines = ["\n## 知情面提醒（写前必读·台账权威源 knowledge_ledger.json）",
+             "> 对白与视角只允许用角色**此刻已知**的信息；让不知情者说破 = 穿帮，让读者早知道的底牌再当大反转 = 泄气。"]
+    for s in secrets[:8]:
+        knows = "、".join(
+            f"{h.get('name')}(第{h.get('learned_chapter', '?')}章知)" for h in s.get("holders", [])) or "无人"
+        sus = "、".join(x.get("name", "") for x in s.get("suspects", []))
+        wrong = "；".join(
+            f"{w.get('name')}误信「{w.get('believes', '')}」" for w in s.get("wrong_beliefs", []))
+        reader = (f"读者第{s['reader_knows_since']}章已知" if s.get("reader_knows_since") is not None
+                  else "读者未知（悬念型）")
+        planned = (f"，计划第{s['planned_reveal_chapter']}章揭示" if s.get("planned_reveal_chapter") else "")
+        extra = f"｜怀疑：{sus}" if sus else ""
+        extra += f"｜{wrong}" if wrong else ""
+        lines.append(f"- **{s.get('id')}**（{s.get('importance', 'medium')}）「{s.get('fact', '')}」"
+                     f"：知情 {knows}{extra}｜{reader}{planned}")
+    lines.append("> 本章若有人**新得知/开始怀疑/当众揭示**，写完后用 `python3 skills/novel-wiki/scripts/knowledge_sentry.py learn/suspect/reveal` 记账。")
     return "\n".join(lines) + "\n"
 
 
@@ -1581,6 +1612,10 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
     # 这里注入①预期回收章落在本章 ±grace 内的 pending 伏笔（该收了）②已严重超期的伏笔（补收）。
     foreshadow_section = foreshadow_section_for_chapter(root, chapter)
 
+    # 知情账注入（谁知道什么）：与伏笔台账同理——写第 N 章时把未公开秘密的知情面摆在眼前，
+    # 防"不知情者说破/已公开还瞒/读者已知底牌二次揭示"这类掉马·悬疑线最高发的知情错乱穿帮。
+    knowledge_section = knowledge_section_for_chapter(root, chapter)
+
     # 跨窗口语义检索（检索增强）：用本章章纲当 query，在前 3 章窗口**之外**的旧章里召回最相关的，
     # 补"固定窗口够不着久远相关旧章"的长程依赖盲区（写第230章想得起第47章埋的伏笔）。
     retrieval_section = ""
@@ -1707,7 +1742,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 
 ## 上一章承接
 {recent_chapters_excerpt(root, chapter)}
-{revision_section}{retrieval_section}{foreshadow_section}{loop_section}{voice_section}{cast_section}
+{revision_section}{retrieval_section}{foreshadow_section}{knowledge_section}{loop_section}{voice_section}{cast_section}
 {arc_mem_section}
 {scene_card_section}
 {special_scene_sections}

@@ -1,6 +1,6 @@
 ---
 name: novel-wiki
-description: 长篇小说逻辑一致性守护者 — 自动提取并维护《动态百科》,监控角色生死、地点变迁、道具归属、能力副作用等核心状态。提供"逻辑哨兵"功能,在写作前或写完后交叉比对最新章节与百科库,拦截硬性冲突(如死人复活、时间线倒流、技能副作用遗忘)。与 novel-review 配合,解决长篇小说"越写越崩"的问题。另含**storyworld 写前压力测试 `storyworld_pressure_test.py`**（角色能动性、世界规则、地理势力、时间因果、章纲压力、读者契约、力量进阶）和**力量体系自检引擎 `power_system.py`**：穿越/系统流/修仙的等级·成长值·战力逐章一致性机检（等级/境界/战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段），真值在 `设定/power_system_registry.json`。Use when asked to 维护百科, 查逻辑错误, 检查设定冲突, 动态设定, 逻辑哨兵, 写前压力测试, storyworld, 自动更新设定, 力量体系自检, 等级一致性, 战力崩坏, 升级体系, 系统面板, check novel consistency, world-building wiki, power system. Triggers 动态百科, 逻辑哨兵, 查冲突, 查死人复活, 设定对齐, 状态追踪, 写前压力测试, storyworld, 力量体系, 等级体系, 战力一致, 升级数值, 系统面板, novel wiki, logic sentry, power system.
+description: 长篇小说逻辑一致性守护者 — 自动提取并维护《动态百科》,监控角色生死、地点变迁、道具归属、能力副作用等核心状态。提供"逻辑哨兵"功能,在写作前或写完后交叉比对最新章节与百科库,拦截硬性冲突(如死人复活、时间线倒流、技能副作用遗忘)。与 novel-review 配合,解决长篇小说"越写越崩"的问题。另含**storyworld 写前压力测试 `storyworld_pressure_test.py`**（角色能动性、世界规则、地理势力、时间因果、章纲压力、读者契约、力量进阶）和**力量体系自检引擎 `power_system.py`**：穿越/系统流/修仙的等级·成长值·战力逐章一致性机检（等级/境界/战力只增不减、未知境界、越级过快、面板属性≤7、系统流久无升级桥段），真值在 `设定/power_system_registry.json`。另含**角色知情账 `knowledge_sentry.py`**：谁在第几章知道了什么秘密（掉马/身份/悬疑线的知情错乱机检——揭示超期、账目矛盾、泄密候选），真值在 `设定/knowledge_ledger.json`。Use when asked to 维护百科, 查逻辑错误, 检查设定冲突, 动态设定, 逻辑哨兵, 写前压力测试, storyworld, 自动更新设定, 力量体系自检, 等级一致性, 战力崩坏, 升级体系, 系统面板, 知情账, 谁知道什么, 掉马穿帮, check novel consistency, world-building wiki, power system. Triggers 动态百科, 逻辑哨兵, 查冲突, 查死人复活, 设定对齐, 状态追踪, 写前压力测试, storyworld, 力量体系, 等级体系, 战力一致, 升级数值, 系统面板, 知情账, 知情错乱, 掉马, 泄密穿帮, novel wiki, logic sentry, power system, knowledge ledger.
 ---
 
 # novel-wiki — 动态百科与逻辑哨兵
@@ -19,6 +19,25 @@ description: 长篇小说逻辑一致性守护者 — 自动提取并维护《�
 3. **伏笔台账 (Foreshadow Ledger)**：`foreshadow_ledger.py` 维护 `设定/foreshadowing_ledger.json`，把「埋了哪些伏笔、该在哪一章收、收没收」记成账。**伏笔的识别（哪段算埋、哪段算收）是 LLM/人工的活，脚本不做正则式"自动伏笔检测"**（中文长篇里那只会制造噪声）；脚本负责的确定性部分是：超期(overdue)判定、回收率计算、状态机合法迁移与 JSON 完整性——和 logic_sentry 的"只报硬冲突候选"同一条诚实边界。
 
 4. **角色别名脚手架 (Alias Scaffold)**：`alias_scaffold.py <作品根>` 从 角色卡/动态百科 抽**候选**别名（本名↔封号↔化名），并用正文共现/连通分量补一批 `candidate_clusters`（一簇疑似一个角色，供人逐簇确认），写 `设定/角色别名.json`（status=`draft`）。**人工核对后把 status 改 `confirmed`**，并把确认簇手动并入 `aliases/character_aliases`，`graph_sentry` 生命周期硬闸才会用它做实体消解——治"死亡记在本名、复现记在封号→硬闸漏判"（实体消解是确定性一致性闸的强制前置）。draft 期不影响判定；自动抽取/共现聚类可能误并同名角色或同场角色，故必须人确认才入硬闸。
+
+5. **角色知情账 (Knowledge Sentry)**：`knowledge_sentry.py` 维护 `设定/knowledge_ledger.json`——每条秘密记
+   knowers（第几章、怎么知道的）/ suspects / 误信者 / 读者知情章 / 计划揭示章 / 公开章（schema 见
+   `references/entity-schema.md §8`）。**得知/怀疑/公开的语义识别是 LLM/人工的活**（交互节点判断后用
+   `learn/suspect/reveal` 记账）；脚本管确定性部分：账目自洽（得知章 vs 公开章的序、与百科死亡章交叉）、
+   `reveal_overdue`（计划揭示超 grace 未公开，high/critical=阻断级，与伏笔超期同口径）、泄密候选
+   （`tell_keywords` 在任何知情锚点之前的章节出现——正文关键词扫描属脆弱启发式 B10，恒建议级）。
+   写作端 `draft_packets.py` 自动把未公开秘密的知情面注入写章包；review 端由 `consistency_audit.py`
+   子检测器 `knowledge_state` 汇总（`审稿/knowledge_report.json`）。
+
+```bash
+python3 skills/novel-wiki/scripts/knowledge_sentry.py "<作品根>" add \
+    --fact "沈念是前朝公主" --importance critical --holder 沈念:1 \
+    [--reader-since 1] [--planned-reveal 40] [--keywords 前朝公主,皇室血脉] [--linked-seed SEED_003]
+python3 skills/novel-wiki/scripts/knowledge_sentry.py "<作品根>" learn --id SECRET_001 --name 王敦 --at 12 --how 偷听
+python3 skills/novel-wiki/scripts/knowledge_sentry.py "<作品根>" suspect --id SECRET_001 --name 皇帝 --at 22
+python3 skills/novel-wiki/scripts/knowledge_sentry.py "<作品根>" reveal --id SECRET_001 --at 40
+python3 skills/novel-wiki/scripts/knowledge_sentry.py "<作品根>" scan [--through 60] [--grace 5]
+```
 
 ## 工作流
 
