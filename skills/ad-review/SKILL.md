@@ -41,9 +41,8 @@ python3 skills/ad-craft/scripts/stage_acceptance.py "<作品根>" --stage review
 python3 skills/ad-review/scripts/asset_drift_report.py "<作品根>" --write
 ```
 
-补的空档：`asset_consistency.py` 做 dHash 时**显式排除 `PROD_`/`BRAND_`**（只覆盖 CHAR_/LOC_/PROP_），
-而 `product_qc` 虽覆盖产品却只在**单批次内**比对——于是广告线最严的铁律「产品/logo/品牌色跨镜零漂移」，
-在**跨镜聚合**维度上没有任何机器统计：没人知道"哪个资产从第几镜开始崩"。本报表把已有各份机检汇总成
+补的空档：`asset_consistency.py` 现已把 `PROD_`/`BRAND_` 纳入跨镜 dHash（阈值比常规资产更紧 26bit、
+命中标 `priority=high` 置顶），而 `product_qc` 覆盖产品的**单批次内**比对——本报表再把已有各份机检汇总成
 **逐资产 × 逐镜**的 ok/warn/block/noevidence 时间线，标出 `first_bad_shot`、连崩镜数，并给修复建议
 （单镜孤立崩 → 只重抽该镜；同一资产多镜连崩 → 回定妆库/registry，别只重抽单图；产品/品牌资产崩 → P0）。
 `consistency_findings.py --write` 已自动带上它，无需单独记得跑。

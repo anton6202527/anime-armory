@@ -47,12 +47,15 @@ python3 skills/ad-craft/scripts/producer_pack.py "<拍广告作品根>"
 # 平台交付包：出视频/合成前把平台安全区和 cutdown 矩阵落档
 python3 skills/ad-craft/scripts/platform_pack.py "<拍广告作品根>"
 
-# 花钱/不可逆阶段 gate
+# 花钱/不可逆阶段 gate（每次运行自动落档 生产数据/gate_reports/<stage>.json，--no-record 可关）
 python3 skills/ad-craft/scripts/gate.py "<拍广告作品根>" --stage image
 python3 skills/ad-craft/scripts/gate.py "<拍广告作品根>" --stage video
 python3 skills/ad-craft/scripts/gate.py "<拍广告作品根>" --stage compose
 
 # 任一阶段完成前的统一验收；报告写 生产数据/stage_acceptance/<stage>.json
+# （voice 会核 voicemap 未失效、script 会核时间轴结构自洽、image 会核 registry 母本↔快照未陈旧、
+#   compose 会逐条复查交付文件真实存在；image/video/compose 还会 advisory 提示花钱 gate 未跑/已过期——
+#   验收管「完成」、gate 管「花钱」，两链各自成立但互相可见）
 python3 skills/ad-craft/scripts/stage_acceptance.py "<拍广告作品根>" --stage voice
 python3 skills/ad-craft/scripts/stage_acceptance.py "<拍广告作品根>" --stage review
 
