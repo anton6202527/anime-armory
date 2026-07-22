@@ -8,7 +8,7 @@
     "signoff_manifest": "脚本/第2集/table_read_signoff.json"
   },
   "episode": "第2集",
-  "generated_at": "2026-07-22T06:27:43+00:00",
+  "generated_at": "2026-07-22T06:50:02+00:00",
   "inputs": {
     "script_quality_contract": "生产数据/script_quality_contract_第2集.json",
     "timing_estimate": "合成/第2集/配音/timing_estimate.json",
@@ -17,11 +17,11 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "合成/第2集/配音/timing_estimate.json": "7138d0f9581625e3ba4dbef6496a7c082a8cdd4cdfea067c9bf5fc6d981d620f",
+      "合成/第2集/配音/timing_estimate.json": "93c0c38f64a5413afaea3802dea25431c1d47b759aaba24a3b684fdd535329d7",
       "合成/第2集/配音/时长清单.json": null,
-      "脚本/第2集/voiceover.txt": "637c4c7d3456541905d1edc79cc624e576c4ffb7d5122efd095e373d7380ab2e"
+      "脚本/第2集/voiceover.txt": "07a6746c59e90a4ef40c37c28ccf6a558859ecdd906c574b08a455b67fb64549"
     },
-    "sha": "523d484a2251ca6b8812b790915818fcaf39a4d71845bf59211fcece32586a4f"
+    "sha": "c4f8d1675340b6b6db6c6ebc6ca4516932fd5212a2ed1e21a75ccf65b25299d1"
   },
   "kind": "n2d_table_read_packet",
   "machine_reference": {
@@ -29,7 +29,7 @@
     "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
     "story_economy": "not_applicable_before_storyboard",
     "timing_estimate": {
-      "duration_sec": 71.727,
+      "duration_sec": 71.927,
       "line_count": 18,
       "split_suggested_lines": 0
     }

@@ -1,0 +1,47 @@
+{
+  "kind": "n2d_script_contract_application",
+  "episode": "第2集",
+  "accepted": true,
+  "scopes": [
+    {
+      "scope": "出图",
+      "prompt_path": "出图/第2集/prompt/01_分镜出图.md",
+      "prompt_sha256": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a",
+      "contract_path": "生产数据/script_quality_contract_第2集.json",
+      "contract_content_hash": "beb333dc8aa4b512",
+      "contract_file_sha256": "94a49f155dffc2bc1cddc57e423271592dfcba8ce6c00cee07250e8207087fb4",
+      "contract_sha256": "94a49f155dffc2bc1cddc57e423271592dfcba8ce6c00cee07250e8207087fb4",
+      "consumed_fields": [
+        "core_attraction",
+        "first_3s_visual_hook",
+        "retention_promise_ledger",
+        "pacing_allocation",
+        "clip_dramatic_function",
+        "audience_question_ledger",
+        "performance_cues"
+      ],
+      "applied_clip_ids": [
+        "EP02_CLIP01",
+        "EP02_CLIP02",
+        "EP02_CLIP03",
+        "EP02_CLIP04",
+        "EP02_CLIP05",
+        "EP02_CLIP06",
+        "EP02_CLIP07",
+        "EP02_CLIP08"
+      ],
+      "evidence": [
+        "出图总览写入本集可看性签收合同：核心看点、首屏钩、留存承诺、时长分配、观众问题账本。",
+        "逐镜 prompt 写入剧本可看性合同：dramatic_function、audience_effect、pacing_role/runtime_priority、spectacle_story_function。",
+        "导演视角八维与中文 prompt 按戏剧功能组织画面，而非只画剧情描述。"
+      ],
+      "reviewed_at": "2026-07-22T07:32:28+00:00"
+    }
+  ],
+  "reviewer": "Codex n2d-image prompt pack",
+  "reviewed_at": "2026-07-22T07:32:28+00:00",
+  "contract_path": "生产数据/script_quality_contract_第2集.json",
+  "contract_content_hash": "beb333dc8aa4b512",
+  "contract_file_sha256": "94a49f155dffc2bc1cddc57e423271592dfcba8ce6c00cee07250e8207087fb4",
+  "contract_sha256": "94a49f155dffc2bc1cddc57e423271592dfcba8ce6c00cee07250e8207087fb4"
+}

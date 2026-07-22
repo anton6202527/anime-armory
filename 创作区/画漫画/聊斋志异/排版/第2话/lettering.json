@@ -1,0 +1,583 @@
+{
+  "schema_version": 1,
+  "kind": "comic_lettering",
+  "chapter": "第2话",
+  "language_mode": "中文",
+  "text_metadata_version": 1,
+  "items": [
+    {
+      "item_id": "L001",
+      "panel_id": "P001",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "我胡氏之子，世居山洞。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "我胡氏之子，世居山洞。",
+      "tone": "",
+      "slot_id": "B001D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L002",
+      "panel_id": "P002",
+      "type": "narration",
+      "speaker": "",
+      "text": "父亲离家经商后，母亲每到夜里就像变了一个人。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S002：父亲外出经商，妇人夜间受狐祟。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "父亲离家经商后，母亲每到夜里就像变了一个人。",
+      "slot_id": "B002N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L003",
+      "panel_id": "P002",
+      "type": "sfx",
+      "speaker": "",
+      "text": "窸窣",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "窸窣",
+      "slot_id": "B002S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L004",
+      "panel_id": "P003",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "娘，你为什么把光都堵住？",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "娘，你为什么把光都堵住？",
+      "tone": "",
+      "slot_id": "B003D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L005",
+      "panel_id": "P003",
+      "type": "sfx",
+      "speaker": "",
+      "text": "嚓、嚓",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "嚓、嚓",
+      "slot_id": "B003S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L006",
+      "panel_id": "P004",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "出来！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "出来！",
+      "tone": "",
+      "slot_id": "B004D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L007",
+      "panel_id": "P004",
+      "type": "sfx",
+      "speaker": "",
+      "text": "嚓！",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "嚓！",
+      "slot_id": "B004S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L008",
+      "panel_id": "P005",
+      "type": "narration",
+      "speaker": "",
+      "text": "只差一点……但它会流血。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S003：血迹逾垣而去，入何氏园。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "只差一点……但它会流血。",
+      "slot_id": "B005N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L009",
+      "panel_id": "P006",
+      "type": "narration",
+      "speaker": "",
+      "text": "医药与驱禳，都只能换来几日安稳。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S003：贾人归，医药渐安；一夜妇复奔他室，扃门亦自开。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "医药与驱禳，都只能换来几日安稳。",
+      "slot_id": "B006N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L010",
+      "panel_id": "P006",
+      "type": "dialogue",
+      "speaker": "贾父",
+      "text": "门明明锁着。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "门明明锁着。",
+      "tone": "",
+      "slot_id": "B006D2",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L011",
+      "panel_id": "P006",
+      "type": "sfx",
+      "speaker": "",
+      "text": "吱呀——",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "吱呀——",
+      "slot_id": "B006S3",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L012",
+      "panel_id": "P007",
+      "type": "narration",
+      "speaker": "",
+      "text": "何氏园。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S004：儿薄暮潜入何氏园，伏莽探狐。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "何氏园。",
+      "slot_id": "B007N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L013",
+      "panel_id": "P007",
+      "type": "sfx",
+      "speaker": "",
+      "text": "沙……",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "沙……",
+      "slot_id": "B007S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L014",
+      "panel_id": "P008",
+      "type": "dialogue",
+      "speaker": "狐主（画外）",
+      "text": "明日，取一壶白酒来。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "明日，取一壶白酒来。",
+      "tone": "",
+      "slot_id": "B008D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L015",
+      "panel_id": "P009",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "这条尾巴，我要了。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "这条尾巴，我要了。",
+      "tone": "",
+      "slot_id": "B009D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L016",
+      "panel_id": "P009",
+      "type": "sfx",
+      "speaker": "",
+      "text": "叮",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "叮",
+      "slot_id": "B009S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L017",
+      "panel_id": "P010",
+      "type": "narration",
+      "speaker": "",
+      "text": "一滴都不能洒。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S004：儿隐以猎药置酒中。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "一滴都不能洒。",
+      "slot_id": "B010N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L018",
+      "panel_id": "P010",
+      "type": "sfx",
+      "speaker": "",
+      "text": "沙……",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "沙……",
+      "slot_id": "B010S2",
+      "style": {
+        "font": "project_default",
+        "size": 72,
+        "direction": "horizontal",
+        "bubble": "none",
+        "drawn_lettering_mode": "drawn_sfx",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      }
+    },
+    {
+      "item_id": "L019",
+      "panel_id": "P011",
+      "type": "narration",
+      "speaker": "",
+      "text": "找到你了。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S005：儿在市中认出长鬣人，暗中尾随。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "找到你了。",
+      "slot_id": "B011N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L020",
+      "panel_id": "P012",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "我辈混在人间，只恨这尾巴藏不住。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "我辈混在人间，只恨这尾巴藏不住。",
+      "tone": "",
+      "slot_id": "B012D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L021",
+      "panel_id": "P013",
+      "type": "dialogue",
+      "speaker": "狐仆",
+      "text": "两位主人，一个去北郭，一个就在你家。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "两位主人，一个去北郭，一个就在你家。",
+      "tone": "",
+      "slot_id": "B013D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L022",
+      "panel_id": "P014",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "酒，我请你。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "酒，我请你。",
+      "tone": "",
+      "slot_id": "B014D1",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L023",
+      "panel_id": "P015",
+      "type": "narration",
+      "speaker": "",
+      "text": "那一夜，母亲终于安睡。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S006：母安寝；父子至园，见两狐毙亭上、一狐死草中，且有秃尾刀痕。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "那一夜，母亲终于安睡。",
+      "slot_id": "B015N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L024",
+      "panel_id": "P016",
+      "type": "narration",
+      "speaker": "",
+      "text": "后来，他果然成了将军。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_source": "S006：父称儿为讨狐之陈平，教之骑射，后贵至总戎。",
+      "source_lang": "und",
+      "source_dir": "ltr",
+      "text_zh": "后来，他果然成了将军。",
+      "slot_id": "B016N1",
+      "style": {
+        "font": "project_default",
+        "size": 42,
+        "direction": "horizontal",
+        "bubble": "caption"
+      }
+    },
+    {
+      "item_id": "L025",
+      "panel_id": "P016",
+      "type": "dialogue",
+      "speaker": "贾儿",
+      "text": "此物最灵，一泄便知。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "此物最灵，一泄便知。",
+      "tone": "",
+      "slot_id": "B016D2",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    },
+    {
+      "item_id": "L026",
+      "panel_id": "P016",
+      "type": "dialogue",
+      "speaker": "贾父",
+      "text": "我儿，真是讨狐的小陈平。",
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk",
+      "text_zh": "我儿，真是讨狐的小陈平。",
+      "tone": "",
+      "slot_id": "B016D3",
+      "style": {
+        "font": "project_default",
+        "size": 44,
+        "direction": "horizontal",
+        "bubble": "round"
+      }
+    }
+  ],
+  "style_consistency": {
+    "baseline": "排版/lettering_style_baseline.json",
+    "dominant_styles": {
+      "dialogue": {
+        "font": "project_default",
+        "size": "44",
+        "direction": "horizontal",
+        "bubble": "round"
+      },
+      "narration": {
+        "font": "project_default",
+        "size": "42",
+        "direction": "horizontal",
+        "bubble": "caption"
+      },
+      "sfx": {
+        "font": "project_default",
+        "size": "72",
+        "direction": "horizontal",
+        "bubble": "none"
+      }
+    },
+    "mismatches": []
+  }
+}

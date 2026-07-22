@@ -854,7 +854,27 @@ VIDEO_FRAME_STRATEGIES = frozenset({
     "edit_cut_pending_assets",
     "reference_qc",
     "reroute_required",
+    "single_take_multishot",
 })
+
+
+def single_take_multishot_supported(
+    backend: Optional[str],
+    duration_sec: Optional[float] = None,
+) -> bool:
+    """storyboard `take_policy=single_take_multishot` 能否在该后端一次生成整个多镜位 Clip。
+
+    条件：后端 multishot_native（一次出多镜头叙事、跨镜一致）且 Clip 叙事跨度不超过该后端
+    单次生成上限（`max_clip_seconds`）。纯函数·可测；不满足时调用方必须回落 edit_cut 拆 take，
+    不得静默按单镜直提。"""
+    if not video_backend_supports_multishot(backend):
+        return False
+    if duration_sec is None:
+        return True
+    try:
+        return float(duration_sec) <= float(video_backend_max_seconds(backend, 8)) + 1e-9
+    except (TypeError, ValueError):
+        return False
 
 
 def select_video_frame_strategy(
@@ -866,21 +886,35 @@ def select_video_frame_strategy(
     need_end: bool = False,
     requires_mid_anchors: bool = False,
     explicit: Optional[str] = None,
+    take_policy: Optional[str] = None,
+    duration_sec: Optional[float] = None,
 ) -> Dict[str, object]:
     """Choose 1/2/N-frame execution from story grammar and native capability.
 
     `shot_count>1` means editorial coverage changes, not a continuous keyframe
     interpolation.  Such clips use separate edit-cut takes when boundary images
-    exist.  A middle anchor is otherwise required only for an explicitly risky
-    continuous shot.
+    exist — unless storyboard declares `take_policy=single_take_multishot` and
+    the backend can natively carry a multi-shot narrative inside one generation
+    (capability + duration gated; otherwise fall back to edit-cut takes).  A
+    middle anchor is otherwise required only for an explicitly risky continuous
+    shot.
     """
     control = video_backend_frame_control(backend, channel)
     supports_last = bool(control.get("supports_last_frame"))
     supports_native_mid = bool(control.get("supports_native_mid_anchors"))
     requested = str(explicit or "").strip().lower()
+    policy = str(take_policy or "").strip().lower()
     if requested in VIDEO_FRAME_STRATEGIES:
         strategy = requested
         reason = "explicit_storyboard_strategy"
+    elif int(shot_count or 0) > 1 and policy == "single_take_multishot":
+        if single_take_multishot_supported(backend, duration_sec):
+            strategy = "single_take_multishot"
+            reason = "storyboard_take_policy_single_take_and_backend_multishot_native"
+        else:
+            required_boundaries = max(1, int(shot_count) - 1)
+            strategy = "edit_cut" if int(anchor_count or 0) >= required_boundaries and need_end else "edit_cut_pending_assets"
+            reason = "single_take_multishot_fallback_backend_unsupported_or_span_exceeds_window"
     elif int(shot_count or 0) > 1:
         required_boundaries = max(1, int(shot_count) - 1)
         strategy = "edit_cut" if int(anchor_count or 0) >= required_boundaries and need_end else "edit_cut_pending_assets"
@@ -907,6 +941,7 @@ def select_video_frame_strategy(
         "shot_count": max(1, int(shot_count or 1)),
         "anchor_count": max(0, int(anchor_count or 0)),
         "need_end": bool(need_end),
+        "take_policy": policy,
         "supports_last_frame": supports_last,
         "supports_native_mid_anchors": supports_native_mid,
         "frame_control_mode": control.get("mode") or "unknown",
@@ -971,6 +1006,10 @@ def anchor_consumption_plan(
         mode = "native_multiframe" if supports_native_mid else "unsupported_mid_anchor"
     elif requested_strategy == "split_relay":
         mode = "split_relay" if supports_last else "unsupported_mid_anchor"
+    elif requested_strategy == "single_take_multishot":
+        # 多镜位一次生成：镜位切换由 multishot-native 后端在一条 take 内部完成，
+        # 不消费 edit_cut 边界锚为时间轴；首帧（+可选尾帧）仍按后端能力喂入。
+        mode = "single_take_multishot" if video_backend_supports_multishot(backend) else "unsupported_multishot_take"
     elif anchor_count > 0:
         if supports_native_mid:
             mode = "native_multiframe"
@@ -989,7 +1028,10 @@ def anchor_consumption_plan(
             mode = "unsupported_endframe"
         else:
             mode = "unknown_manual_confirm"
-    consumes_endframe = bool(need_end and mode in {"native_multiframe", "split_relay", "first_last", "edit_cut"})
+    consumes_endframe = bool(need_end and (
+        mode in {"native_multiframe", "split_relay", "first_last", "edit_cut"}
+        or (mode == "single_take_multishot" and supports_last)
+    ))
     plan: Dict[str, Any] = {
         "backend": normalize_video_backend(backend or "", default="") or (backend or ""),
         "execution_backend": key,

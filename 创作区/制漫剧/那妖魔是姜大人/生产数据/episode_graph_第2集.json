@@ -1,12 +1,109 @@
 {
   "authority": "derived index only; _进度.md and existing gates remain authoritative",
-  "edges": [],
+  "edges": [
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_01"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_02"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_03"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_04"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_05"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_06"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_07"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第2集",
+      "target": "clip:Clip_08"
+    }
+  ],
   "episode": "第2集",
-  "generated_at": "2026-07-22T14:37:42+0800",
-  "graph_hash": "bc3455e83f3bdd7ec281b3342546aa8c4f0dd9494a17a61d0f674c10eaec20c9",
+  "generated_at": "2026-07-22T14:59:50+0800",
+  "graph_hash": "2c1b41cb36e46fd839a4ecfaeff9b0115c0341033bdf58b04c04dc9fac67860f",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
+    {
+      "clip": "Clip_01",
+      "duration_sec": 12.606,
+      "id": "clip:Clip_01",
+      "scene": "尸骸荒野/夕/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_02",
+      "duration_sec": 12.076,
+      "id": "clip:Clip_02",
+      "scene": "尸骸荒野/夕/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_03",
+      "duration_sec": 7.39,
+      "id": "clip:Clip_03",
+      "scene": "尸骸荒野/夕/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_04",
+      "duration_sec": 5.27,
+      "id": "clip:Clip_04",
+      "scene": "百妖谱主观层/荒野叠化",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_05",
+      "duration_sec": 9.207,
+      "id": "clip:Clip_05",
+      "scene": "百妖谱主观层/荒野叠化",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_06",
+      "duration_sec": 10.52,
+      "id": "clip:Clip_06",
+      "scene": "尸骸荒野/夕/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_07",
+      "duration_sec": 10.645,
+      "id": "clip:Clip_07",
+      "scene": "尸骸荒野/夕/外",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_08",
+      "duration_sec": 4.213,
+      "id": "clip:Clip_08",
+      "scene": "尸骸荒野/百妖谱主观层",
+      "type": "story_clip"
+    },
     {
       "episode": "第2集",
       "id": "episode:第2集",
@@ -14,15 +111,22 @@
     }
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-  "source_files": [],
+  "source_files": [
+    {
+      "bytes": 52952,
+      "path": "脚本/第2集/storyboard.json",
+      "role": "storyboard",
+      "sha256": "438b1e806ccb7dce194703f0b3d0d7bc01bd43efc958c86f95e0971057f9d47b"
+    }
+  ],
   "status": "pass",
   "summary": {
-    "edges": 0,
+    "edges": 8,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 1,
+    "nodes": 9,
     "routes": 0,
-    "story_clips": 0,
+    "story_clips": 8,
     "video_media": 0
   },
   "version": 1

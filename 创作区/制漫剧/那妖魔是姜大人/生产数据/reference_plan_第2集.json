@@ -1,0 +1,143 @@
+{
+  "kind": "n2d_reference_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第2集",
+  "backend": "codex",
+  "backend_label": "GPT Image 2（渠道 Codex CLI）",
+  "backend_strategy": "multi_reference",
+  "clips": [
+    {
+      "clip_id": "EP02_CLIP01",
+      "lens": "ECU固定 MS微拉 CU缓推",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP02",
+      "lens": "CU缓推 LS短跟",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP03",
+      "lens": "CU固定+轻冲击 MS固定 CU结果镜",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP04",
+      "lens": "CU固定",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP05",
+      "lens": "CU缓推 MCU固定",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP06",
+      "lens": "MCU固定 CU轻拉",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP07",
+      "lens": "MS轻跟 CU固定",
+      "characters": []
+    },
+    {
+      "clip_id": "EP02_CLIP08",
+      "lens": "CU缓推 ECU固定",
+      "characters": []
+    }
+  ],
+  "shared_assets": {
+    "available": true,
+    "assets": [
+      {
+        "asset_id": "LOC_尸骸荒野",
+        "type": "scene",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "WEAPON_01",
+        "type": "weapon",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "WEAPON_横刀",
+        "type": "weapon",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "VFX_百妖谱",
+        "type": "vfx",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      },
+      {
+        "asset_id": "VFX_墨虎谱影",
+        "type": "vfx",
+        "face_policy": "faceless",
+        "requirement": "出图须背身/裁到下巴以下/无脸中性人台·禁清晰五官；落档像素核验 0 清晰脸。",
+        "face_refs": []
+      }
+    ],
+    "actions": [],
+    "notes": [],
+    "summary": {
+      "person_bearing_assets": 5,
+      "faceless": 5,
+      "face_locked": 0,
+      "actions": 0
+    }
+  },
+  "summary": {
+    "clip_count": 8,
+    "shared_person_bearing_assets": 5,
+    "shared_asset_actions": 0,
+    "weak_backend_large_delta_clips": 0,
+    "chars_need_native_registration": [],
+    "chars_need_lora": [],
+    "multi_subject_actions": [],
+    "action_required": [],
+    "multi_person_clips": 0,
+    "action_eyeline_lock_clips": 0,
+    "memory_anchor_reinjected_clips": 0,
+    "memory_anchor_contract": {
+      "status": "ready",
+      "available": true,
+      "path": "生产数据/memory_anchor_plan_第2集.json",
+      "sha256": "cfc07b693b643e15660dc3fb4b334032f981dbd57742f1ac53be481dcec9c9b7",
+      "required_rows": 0,
+      "required_char_keys": [],
+      "consumed_char_keys": [],
+      "consumed_clip_ids_by_char": {},
+      "missing_reference_rows": [],
+      "missing_reference_files": {},
+      "validated_reference_sha256_by_char": {},
+      "errors": [],
+      "source_fingerprint": {
+        "identity_drift_report_sha256": "1c974f7e406adac26ac80fd89a4a1d27fb57fec08e5a183c6735d0f51aa1337c",
+        "identity_registry_sha256": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8",
+        "storyboard_sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+      },
+      "current_source_fingerprint": {
+        "identity_registry_sha256": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8",
+        "identity_drift_report_sha256": "1c974f7e406adac26ac80fd89a4a1d27fb57fec08e5a183c6735d0f51aa1337c",
+        "storyboard_sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+      },
+      "unconsumed_char_keys": []
+    },
+    "required_char_keys": [],
+    "consumed_char_keys": [],
+    "consumed_clip_ids_by_char": {},
+    "tagged_multi_image_clips": 0,
+    "video_reference_candidate_clips": 0
+  },
+  "notes": []
+}

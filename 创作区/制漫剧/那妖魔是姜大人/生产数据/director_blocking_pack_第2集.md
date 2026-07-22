@@ -13,15 +13,15 @@
 
 ## Check
 
-- 状态：block
-- 通过：5/7
+- 状态：pass
+- 通过：7/7
 
 | 文件 | 状态 | 问题 |
 |---|---|---|
 | `脚本/第2集/director_beat_sheet.json` | pass | - |
-| `脚本/第2集/axis_blocking_map.json` | block | SR_TIGER_CONFRONT 缺正反打字段：shot_pairing |
+| `脚本/第2集/axis_blocking_map.json` | pass | - |
 | `脚本/第2集/shot_progression_plan.json` | pass | - |
-| `脚本/第2集/transition_map.json` | block | Seam_01 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断；Seam_02 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断；Seam_03 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断 |
+| `脚本/第2集/transition_map.json` | pass | - |
 | `脚本/第2集/vertical_composition_plan.json` | pass | - |
 | `脚本/第2集/edit_rhythm_map.json` | pass | - |
 | `脚本/第2集/director_blocking_signoff.json` | pass | - |

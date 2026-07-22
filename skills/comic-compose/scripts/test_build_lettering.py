@@ -214,3 +214,65 @@ def test_lettering_style_baseline_persists_and_flags_mismatch(tmp_path: Path) ->
     build_lettering.check_lettering_style_baseline(root, "第2话", ch2)
     mismatches = ch2["style_consistency"]["mismatches"]
     assert mismatches and "不一致" in mismatches[0]
+
+
+def _layout_two_dialogue_slots():
+    # panel has 3 script dialogues but D2 has empty target → layout emits slots
+    # only for D1 and D3, with content_ref binding them to the right lines.
+    return {
+        "reading_direction": "从上到下",
+        "segments": [{
+            "segment_id": "S001",
+            "reading_order": ["P001"],
+            "panels": [{
+                "panel_id": "P001",
+                "bubble_slots": [
+                    {"slot_id": "P001-b1", "type": "dialogue", "content_ref": "panel:P001.dialogue:1", "speaker": "甲"},
+                    {"slot_id": "P001-b3", "type": "dialogue", "content_ref": "panel:P001.dialogue:3", "speaker": "乙"},
+                ],
+            }],
+        }],
+    }
+
+
+def test_content_ref_binding_survives_empty_middle_dialogue():
+    panel_script = {
+        "chapter": "第1话",
+        "panels": [{
+            "panel_id": "P001",
+            "dialogue": [
+                {"speaker": "甲", "text_target": "第一句"},
+                {"speaker": "旁", "text_target": ""},            # empty → no slot, no balloon
+                {"speaker": "乙", "text_target": "第三句"},
+            ],
+        }],
+    }
+    result = build_lettering.build_lettering(panel_script, _layout_two_dialogue_slots(), {}, "中文")
+    dialogue = [it for it in result["items"] if it["type"] == "dialogue"]
+    # empty-target middle line produces no balloon; the two real lines bind to the
+    # slot that matches their content_ref (NOT positionally shifted)
+    assert len(dialogue) == 2
+    first = next(it for it in dialogue if it["content_ref"] == "panel:P001.dialogue:1")
+    third = next(it for it in dialogue if it["content_ref"] == "panel:P001.dialogue:3")
+    assert first["slot_id"] == "P001-b1" and first["speaker"] == "甲"
+    assert third["slot_id"] == "P001-b3" and third["speaker"] == "乙"
+    # slot speaker carried for review cross-check
+    assert third["slot_speaker"] == "乙"
+
+
+def test_content_ref_binding_leaves_unslotted_real_line_visible():
+    panel_script = {
+        "chapter": "第1话",
+        "panels": [{
+            "panel_id": "P001",
+            "dialogue": [
+                {"speaker": "甲", "text_target": "第一句"},
+                {"speaker": "乙", "text_target": "第二句"},  # no slot for dialogue:2
+                {"speaker": "丙", "text_target": "第三句"},
+            ],
+        }],
+    }
+    result = build_lettering.build_lettering(panel_script, _layout_two_dialogue_slots(), {}, "中文")
+    dialogue = [it for it in result["items"] if it["type"] == "dialogue"]
+    unslotted = [it for it in dialogue if it["content_ref"] == "panel:P001.dialogue:2"]
+    assert unslotted and unslotted[0]["slot_id"] == ""  # kept so review can flag it

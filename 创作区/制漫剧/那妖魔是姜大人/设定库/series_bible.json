@@ -113,7 +113,7 @@
   "findings": [
     {
       "code": "episode_missing_storyboard",
-      "message": "部分集缺 storyboard.json：第2集、第3集、第4集、第5集、第6集、第7集、第8集、第9集",
+      "message": "部分集缺 storyboard.json：第3集、第4集、第5集、第6集、第7集、第8集、第9集、第10集",
       "severity": "info"
     },
     {
@@ -122,7 +122,7 @@
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-21T19:59:30+00:00",
+  "generated_at": "2026-07-22T06:59:49+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -296,14 +296,148 @@
         ]
       },
       {
-        "assets": [],
-        "characters": [],
-        "clip_count": 0,
-        "clips": [],
+        "assets": [
+          "LOC_尸骸荒野",
+          "WEAPON_横刀",
+          "VFX_百妖谱",
+          "VFX_墨虎谱影",
+          "VFX_系统面板"
+        ],
+        "characters": [
+          "CHAR_01",
+          "CHAR_02",
+          "BEAST_01"
+        ],
+        "clip_count": 8,
+        "clips": [
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "WEAPON_横刀",
+              "VFX_百妖谱"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_02",
+              "BEAST_01"
+            ],
+            "hook_signal": true,
+            "id": "EP02_CLIP01"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "WEAPON_横刀",
+              "VFX_百妖谱"
+            ],
+            "characters": [
+              "CHAR_01",
+              "BEAST_01"
+            ],
+            "hook_signal": false,
+            "id": "EP02_CLIP02"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "WEAPON_横刀",
+              "VFX_百妖谱"
+            ],
+            "characters": [
+              "CHAR_01",
+              "BEAST_01"
+            ],
+            "hook_signal": true,
+            "id": "EP02_CLIP03"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "VFX_百妖谱",
+              "WEAPON_横刀",
+              "VFX_墨虎谱影"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": true,
+            "id": "EP02_CLIP04"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "VFX_百妖谱",
+              "VFX_墨虎谱影",
+              "WEAPON_横刀"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": true,
+            "id": "EP02_CLIP05"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "VFX_百妖谱",
+              "WEAPON_横刀",
+              "VFX_墨虎谱影"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": false,
+            "id": "EP02_CLIP06"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "WEAPON_横刀",
+              "VFX_百妖谱",
+              "VFX_墨虎谱影"
+            ],
+            "characters": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "hook_signal": true,
+            "id": "EP02_CLIP07"
+          },
+          {
+            "assets": [
+              "LOC_尸骸荒野",
+              "VFX_百妖谱",
+              "VFX_墨虎谱影",
+              "WEAPON_横刀",
+              "VFX_系统面板"
+            ],
+            "characters": [
+              "CHAR_01"
+            ],
+            "hook_signal": true,
+            "id": "EP02_CLIP08"
+          }
+        ],
         "episode": "第2集",
-        "has_storyboard": false,
-        "hooks": [],
-        "threads": []
+        "has_storyboard": true,
+        "hooks": [
+          "# 留存曲线：杀裴余震冷开场 → 二十年到账 → 虎爪压顶 → 一刀断首 → 百年道行反转 → 摹影虎山神 → 圆满刀法与未知进阶钩",
+          "[镜头1·姜月初·惊惧警觉·快] 裴长青死了。|| 是我亲手杀的。可虎爪，已经落下。  ⚡钩子",
+          "[镜头3·百妖谱·中性冷硬·慢] 击杀闻弦境生物，获得其道行二十年。  ⚡钩子",
+          "[镜头6·姜月初·孤注一掷·快] 二十年道行——|| 尽付一刀！  ⚡钩子",
+          "[镜头7·姜月初·咬牙爆发·快] 给我——斩！  💥爽点",
+          "[镜头9·百妖谱·中性冷硬·慢] 击杀闻弦境生物，获得其道行一百年。  ⚡钩子"
+        ],
+        "threads": [
+          "s | 留白·定格 | 摹影进阶隐患真相半露 | hard_cut：虎眼亮后切黑 | 爽点卡点",
+          "虎眼 apex 约 42s。字幕、系统文字与数值全部后期叠加。 { \"kind\": \"n",
+          "ssion_strategy\": \"系统解释只显示一次规则与一次数值结果，文字走overlay；",
+          "t\": \"ECU硬开，微拉建立三角，系统提示与虎爪倒计时并行\", \"audience",
+          "\"return_anchor\": \"系统主观层结束后回到姜月初右手握刀\" },",
+          "g_intent\": \"插入镜短拍，系统问题后硬切主角口外反应\", \"audienc",
+          "ct_strategy\": \"单人+系统主观层\", \"template\": \"sys",
+          "motif_id\": \"MOTIF_系统面板\", \"vfx_asset\": \"V"
+        ]
       },
       {
         "assets": [],
@@ -408,8 +542,8 @@
         "threads": []
       }
     ],
-    "hook_count": 19,
-    "thread_count": 9
+    "hook_count": 25,
+    "thread_count": 17
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "truth_sources": {

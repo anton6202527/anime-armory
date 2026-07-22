@@ -15,7 +15,11 @@ from pathlib import Path
 from typing import Any
 
 
-FINAL_DECISIONS = {"成画面", "并入", "旁白", "删除", "后文带出"}
+# Must be a subset of source_semantics_gate.ADAPTATION_DECISIONS (minus the
+# non-final 待定): a --decision override the gate later rejects is worse than
+# useless.  The old set wrote bare "旁白" (gate wants "成旁白") and lacked
+# 成对白/成拟声/保留原文.
+FINAL_DECISIONS = {"成画面", "成对白", "成旁白", "成拟声", "并入", "删除", "后文带出", "保留原文"}
 
 
 def load_json(path: Path) -> dict[str, Any]:

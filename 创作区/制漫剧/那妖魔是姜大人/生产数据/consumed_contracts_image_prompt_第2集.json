@@ -1,0 +1,60 @@
+{
+  "kind": "n2d_prompt_consumed_contracts",
+  "version": 1,
+  "episode": "第2集",
+  "scope": "image_prompt",
+  "accepted": true,
+  "reviewer": "Codex n2d-image prompt pack",
+  "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
+  "generated_at": "2026-07-22T07:32:28+00:00",
+  "contracts": [
+    {
+      "name": "storyboard",
+      "path": "脚本/第2集/storyboard.json",
+      "exists": true,
+      "sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+    },
+    {
+      "name": "continuity_chain",
+      "path": "脚本/第2集/continuity_chain.json",
+      "exists": true,
+      "sha256": "843d19c5f2bd410f49287b4952b3f94c1213adcae1582e00e9f752eaf451d077"
+    },
+    {
+      "name": "shot_reverse_contract",
+      "path": "脚本/第2集/shot_reverse_contract.json",
+      "exists": true,
+      "sha256": "890d88fe70aee641db51064bf1800ff7a105f21487be9c32f0d82867027559f5"
+    },
+    {
+      "name": "script_quality_contract",
+      "path": "生产数据/script_quality_contract_第2集.json",
+      "exists": true,
+      "sha256": "94a49f155dffc2bc1cddc57e423271592dfcba8ce6c00cee07250e8207087fb4"
+    },
+    {
+      "name": "director_camera_plan",
+      "path": "生产数据/director_camera_plan_第2集.json",
+      "exists": true,
+      "sha256": "6e404fb4c850148e29697a48f1ee7efd8a77c2ecaaaff4c62f148095fc2cedd2"
+    },
+    {
+      "name": "reference_plan",
+      "path": "生产数据/reference_plan_第2集.json",
+      "exists": true,
+      "sha256": "41e4a06eb27353b4465f9fce07b5a573bfb74cc0486ef2c3c5f9def413539b1e"
+    }
+  ],
+  "prompt_files": [
+    {
+      "path": "出图/第2集/prompt/00_总览.md",
+      "exists": true,
+      "sha256": "63e59ac53382eb343f400b94f64820fee396401584233e13ba4d0f0be64cb0b8"
+    },
+    {
+      "path": "出图/第2集/prompt/01_分镜出图.md",
+      "exists": true,
+      "sha256": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a"
+    }
+  ]
+}

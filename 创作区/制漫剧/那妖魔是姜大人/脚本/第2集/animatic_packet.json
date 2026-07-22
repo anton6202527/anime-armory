@@ -1,0 +1,125 @@
+{
+  "acceptance": {
+    "cliffhanger_or_payoff_clear": "accepted",
+    "image_generation_ready": "accepted",
+    "mid_episode_drag_checked": "accepted",
+    "opening_readable_without_sound": "accepted",
+    "reviewer": "",
+    "signoff_manifest": "脚本/第2集/animatic_signoff.json"
+  },
+  "episode": "第2集",
+  "generated_at": "2026-07-22T07:10:49+00:00",
+  "inputs": {
+    "rough_audio": "合成/第2集/配音/voice_zh.wav",
+    "shot_durations": "脚本/第2集/镜头时长.json",
+    "storyboard": "脚本/第2集/storyboard.json",
+    "subtitle_zh": "脚本/第2集/字幕_中文.srt",
+    "timed_preview": "生产数据/animatic_第2集.html",
+    "timed_preview_manifest": "生产数据/animatic_第2集.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第2集/配音/voice_zh.wav": null,
+      "脚本/第2集/storyboard.json": "b72e37ef51b8cb960ff213bdbe916de8890b14900cde0d7339772bb8a3f9f9ca",
+      "脚本/第2集/字幕_中文.srt": "82ba15defd3ad8484de8bd855a59f49575da31a1ba03a86ee21b0a0e3812a367",
+      "脚本/第2集/镜头时长.json": "cd25eb88aa8d44769314ba149777d584057b179cd1d61bbf954a1d661ea9d720"
+    },
+    "sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6"
+  },
+  "kind": "n2d_animatic_packet",
+  "machine_reference": {
+    "advisory": true,
+    "long_clips": {
+      "note": ">15s 需拆段计划、>20s 详拍叙事跨度已超上限（story_economy 同口径）",
+      "over_15s": 0,
+      "over_20s": 0
+    },
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": {
+      "block": 0,
+      "narration_heavy_clips": 0,
+      "over_budget_codes": [
+        "story_clip_over_economy_target"
+      ],
+      "warn": 2
+    },
+    "timing_estimate": {
+      "duration_sec": 71.927,
+      "line_count": 18,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "director_editor_producer",
+  "status": "confirmed",
+  "timeline": {
+    "clip_count": 8,
+    "clips": [
+      {
+        "clip_id": "EP02_CLIP01",
+        "dramatic_function": "承接上集后果并兑现第一笔道行",
+        "duration_sec": 12.606,
+        "pacing_role": "冷开场主钩与上集兑现",
+        "review_focus": "hook/reversal/seam/readability",
+        "transition": "动作接虎妖下扑"
+      },
+      {
+        "clip_id": "EP02_CLIP02",
+        "dramatic_function": "明确求生动机、资源代价与攻击起手",
+        "duration_sec": 12.076,
+        "pacing_role": "核心动作蓄力",
+        "review_focus": "rhythm/readability",
+        "transition": "同动作相位接命中镜"
+      },
+      {
+        "clip_id": "EP02_CLIP03",
+        "dramatic_function": "动作兑现与数值反转",
+        "duration_sec": 7.39,
+        "pacing_role": "全片第一动作爽点",
+        "review_focus": "rhythm/readability",
+        "transition": "虎血滴落接谱页墨线"
+      },
+      {
+        "clip_id": "EP02_CLIP04",
+        "dramatic_function": "抛出新规则并保留主角选择权",
+        "duration_sec": 5.27,
+        "pacing_role": "新规则短桥",
+        "review_focus": "rhythm/readability",
+        "transition": "墨线继续生长成虎形"
+      },
+      {
+        "clip_id": "EP02_CLIP05",
+        "dramatic_function": "系统母题视觉奇观与成长兑现",
+        "duration_sec": 9.207,
+        "pacing_role": "第二成长爽点",
+        "review_focus": "rhythm/readability",
+        "transition": "握刀手图形匹配到替裴合眼的手"
+      },
+      {
+        "clip_id": "EP02_CLIP06",
+        "dramatic_function": "锁定成长规则与跨集资源状态",
+        "duration_sec": 10.52,
+        "pacing_role": "成长规则确认",
+        "review_focus": "rhythm/readability",
+        "transition": "视线切至裴尸体"
+      },
+      {
+        "clip_id": "EP02_CLIP07",
+        "dramatic_function": "爽点后情绪偿债与主角弧推进",
+        "duration_sec": 10.645,
+        "pacing_role": "情绪峰与人物回报",
+        "review_focus": "rhythm/readability",
+        "transition": "姜月初抬眼看百妖谱虎影"
+      },
+      {
+        "clip_id": "EP02_CLIP08",
+        "dramatic_function": "长线异化悬念与下一集身份转折接力",
+        "duration_sec": 4.213,
+        "pacing_role": "集尾真相半露钩",
+        "review_focus": "hook/reversal/seam/readability",
+        "transition": "硬切黑"
+      }
+    ],
+    "estimated_total_sec": 71.927
+  },
+  "version": 1
+}

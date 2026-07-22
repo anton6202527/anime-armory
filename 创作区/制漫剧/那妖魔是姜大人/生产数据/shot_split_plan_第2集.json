@@ -1,0 +1,453 @@
+{
+  "decisions": [
+    {
+      "actions": [
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP02_CLIP01",
+      "duration_sec": 12.606,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "杀人余震与二十年到账",
+      "narrative_weight": 1,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 15,
+      "risk_tags": [
+        "long_clip_12s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 3.6,
+          "end_sec": 3.6,
+          "index": 1,
+          "parent_story_clip": "EP02_CLIP01",
+          "reason": "storyboard_editorial_cut",
+          "shot_description": "",
+          "shot_lens": "ECU固定",
+          "start_sec": 0.0,
+          "video_shot_id": "EP02_CLIP01_shot01"
+        },
+        {
+          "duration_sec": 5.0,
+          "end_sec": 8.6,
+          "index": 2,
+          "parent_story_clip": "EP02_CLIP01",
+          "reason": "storyboard_editorial_cut",
+          "shot_description": "",
+          "shot_lens": "MS微拉",
+          "start_sec": 3.6,
+          "video_shot_id": "EP02_CLIP01_shot02"
+        },
+        {
+          "duration_sec": 4.006,
+          "end_sec": 12.606,
+          "index": 3,
+          "parent_story_clip": "EP02_CLIP01",
+          "reason": "storyboard_editorial_cut",
+          "shot_description": "",
+          "shot_lens": "CU缓推",
+          "start_sec": 8.6,
+          "video_shot_id": "EP02_CLIP01_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP02_CLIP02",
+      "duration_sec": 12.076,
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "二十年尽付一刀",
+      "narrative_weight": 0,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 15,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.025,
+          "end_sec": 4.025,
+          "index": 1,
+          "parent_story_clip": "EP02_CLIP02",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP02_CLIP02_shot01"
+        },
+        {
+          "duration_sec": 4.026,
+          "end_sec": 8.051,
+          "index": 2,
+          "parent_story_clip": "EP02_CLIP02",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 4.025,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP02_CLIP02_shot02"
+        },
+        {
+          "duration_sec": 4.025,
+          "end_sec": 12.076,
+          "index": 3,
+          "parent_story_clip": "EP02_CLIP02",
+          "reason": "continuous_take_exceeds_generation_window",
+          "start_sec": 8.051,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP02_CLIP02_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP02_CLIP03",
+      "duration_sec": 7.39,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "一刀断虎首",
+      "narrative_weight": 2,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 18,
+      "risk_tags": [
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required"
+      ],
+      "clip": "EP02_CLIP04",
+      "duration_sec": 5.27,
+      "generation_risk": 3,
+      "grammar_need": 0,
+      "label": "百年道行与收录选择",
+      "narrative_weight": 1,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 6,
+      "risk_tags": [
+        "mouth_visible",
+        "closeup",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "compact_story",
+        "over_budget_sec": 0.0,
+        "recommended_action": "compress_or_narrate_before_video",
+        "rewrite_demo": "改成 3-6s：一句旁白承载信息，画面只拍能改变局势的物件/表情/动作。",
+        "target_story_clip_sec": {
+          "max": 6.0,
+          "min": 3.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required",
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
+      ],
+      "clip": "EP02_CLIP05",
+      "duration_sec": 9.207,
+      "generation_risk": 4,
+      "grammar_need": 1,
+      "label": "摹影虎山神获圆满刀法",
+      "narrative_weight": 2,
+      "pilot_candidate": false,
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+      "risk_score": 11,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 1.207,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "add_mid_or_multi_anchor",
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
+      ],
+      "clip": "EP02_CLIP06",
+      "duration_sec": 10.52,
+      "generation_risk": 3,
+      "grammar_need": 0,
+      "label": "结算闻弦初境与二十五年余额",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+      "risk_score": 8,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "compact_story",
+        "over_budget_sec": 4.52,
+        "recommended_action": "compress_or_narrate_before_video",
+        "rewrite_demo": "改成 3-6s：一句旁白承载信息，画面只拍能改变局势的物件/表情/动作。",
+        "target_story_clip_sec": {
+          "max": 6.0,
+          "min": 3.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP02_CLIP07",
+      "duration_sec": 10.645,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "替裴合眼与还命承诺",
+      "narrative_weight": 1,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 13,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_video_shots"
+      ],
+      "clip": "EP02_CLIP08",
+      "duration_sec": 4.213,
+      "generation_risk": 3,
+      "grammar_need": 1,
+      "label": "摹影进阶会变成什么",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
+      "risk_score": 6,
+      "risk_tags": [
+        "mouth_visible",
+        "closeup",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    }
+  ],
+  "episode": "第2集",
+  "findings": [
+    {
+      "clip": "EP02_CLIP02",
+      "code": "multi_subject_missing_slots_or_strategy",
+      "message": "清晰同框具名角色 ≥2 但缺 `多人同框身份槽位` 或 `多人同框执行策略`：2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区。剧情需要就照出，但必须登记 native_subject_slots / regional_construct_required / split_composite_required / shot_reverse_shot 等执行路径；远景群像请显式标 `远景/群像`。",
+      "score": 15,
+      "severity": "must",
+      "source": "shot_risk_audit"
+    },
+    {
+      "clip": "EP02_CLIP03",
+      "code": "multi_subject_missing_slots_or_strategy",
+      "message": "清晰同框具名角色 ≥2 但缺 `多人同框身份槽位` 或 `多人同框执行策略`：2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区。剧情需要就照出，但必须登记 native_subject_slots / regional_construct_required / split_composite_required / shot_reverse_shot 等执行路径；远景群像请显式标 `远景/群像`。",
+      "score": 18,
+      "severity": "must",
+      "source": "shot_risk_audit"
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "code": "multi_subject_missing_slots_or_strategy",
+      "message": "清晰同框具名角色 ≥2 但缺 `多人同框身份槽位` 或 `多人同框执行策略`：2-3 张清晰脸只是相对省钱/稳定的构图区，不是免登记区。剧情需要就照出，但必须登记 native_subject_slots / regional_construct_required / split_composite_required / shot_reverse_shot 等执行路径；远景群像请显式标 `远景/群像`。",
+      "score": 13,
+      "severity": "must",
+      "source": "shot_risk_audit"
+    }
+  ],
+  "kind": "n2d_shot_split_decision_plan",
+  "notes": [
+    "report-first；真正硬阻塞仍由 validate_storyboard_contract / shot_risk_audit / spectacle_contract_audit 执行。",
+    "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。",
+    "compress_before_video 表示先改编剧表达，不应把啰嗦剧情直接切成多个付费视频段。"
+  ],
+  "ok": false,
+  "summary": {
+    "add_anchor": 1,
+    "clips": 8,
+    "compress_before_video": 2,
+    "defer_to_composite": 6,
+    "direct_submit_blocked": 2,
+    "keep_single": 0,
+    "split_or_template": 8,
+    "story_economy_over_budget": 2,
+    "template_required": 6,
+    "video_shot_split": 7
+  }
+}

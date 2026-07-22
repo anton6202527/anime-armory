@@ -72,6 +72,7 @@ try:
         anchor_consumption_plan,
         quantize_video_duration,
         select_video_frame_strategy,
+        single_take_multishot_supported,
         video_backend_frame_control,
     )
 except ImportError:
@@ -82,6 +83,8 @@ except ImportError:
         "trim_mode": "trim_tail", "requires_split": False,
     }
     select_video_frame_strategy = lambda m, c=None, **kw: {"strategy": "first_only"}  # type: ignore
+    # 能力档缺失时 fail-closed：单拍多镜必须有真实能力档背书，否则回落拆 take。
+    single_take_multishot_supported = lambda backend, duration_sec=None: False  # type: ignore
     video_backend_frame_control = lambda m, c: {}  # type: ignore
 
 
@@ -931,6 +934,10 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
             row for row in shots if str(row.get("lens") or "").strip()
         ])
         if requested_strategy == "legacy_auto":
+            risk_anchor_present = any(
+                str(use or "split").strip().lower() in {"split", "keyframe"}
+                for use in (anchors_info or {}).get("uses") or []
+            )
             requested_strategy = str(select_video_frame_strategy(
                 backend,
                 "",
@@ -938,6 +945,8 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                 anchor_count=len(anchor_times),
                 need_end=bool(item.get("end_image_rel")),
                 requires_mid_anchors=bool(anchor_times and not shots),
+                take_policy="" if risk_anchor_present else str((anchors_info or {}).get("take_policy") or ""),
+                duration_sec=_story_duration(item),
             ).get("strategy") or "first_only")
             item["frame_strategy"] = requested_strategy
         frame_plan = anchor_consumption_plan(
@@ -951,7 +960,33 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         item["anchor_consumption"] = frame_plan
         item["anchor_consumption_mode"] = frame_plan.get("consumption_mode")
         item["video_shot_split_plan"] = video_shot_split_plan(item)
-        force_physical_split = requested_strategy == "edit_cut" or bool(item["video_shot_split_plan"].get("required"))
+        single_take_requested = requested_strategy == "single_take_multishot"
+        single_take_ok = False
+        if single_take_requested:
+            # 付费前复核（不信任编译期结论）：后端必须 multishot-native 且叙事跨度在单次生成窗口内；
+            # 不满足 fail-closed 阻断提交，回 prompt 阶段改 edit_cut 拆 take——不得静默按单镜直提。
+            single_take_ok = bool(single_take_multishot_supported(backend, _story_duration(item)))
+            if single_take_ok:
+                item["single_take_multishot"] = {
+                    "version": 1,
+                    "internal_shot_count": max(0, len(shots)),
+                    "story_span_sec": _story_duration(item),
+                    "policy": "multishot-native backend carries editorial shot changes inside one generation take; edit-cut boundary anchors are not consumed as timeline inputs",
+                }
+                item["video_shot_split_plan"] = {
+                    **item["video_shot_split_plan"],
+                    "required": False,
+                    "waived_by": "single_take_multishot",
+                }
+            else:
+                item["frame_strategy_issue"] = (
+                    "single_take_multishot requested but the prepared backend lacks multishot capability "
+                    "or the story span exceeds its single-generation window; "
+                    "recompile prompts (edit_cut takes) or reroute before paid generation"
+                )
+        force_physical_split = requested_strategy == "edit_cut" or (
+            bool(item["video_shot_split_plan"].get("required")) and not single_take_ok
+        )
 
         # 尝试接入原生多帧
         attached_mf = False
@@ -1463,6 +1498,7 @@ def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
         out[i] = {"times": times, "images": images, "uses": uses, "hints": hints,
                   "duration": clip.get("duration"),
                   "shots": _storyboard_shots(clip, clip.get("duration")),
+                  "take_policy": str(clip.get("take_policy") or cont.get("take_policy") or "").strip().lower(),
                   "end_state": str(cont.get("end_state") or ""),  # 末段转场 prompt 用它，比泛化句具体
                   "face_reveal_requirements": cont.get("face_reveal_requirements") or [],
                   "face_reveal_issues": face_reveal_issues}
@@ -2996,6 +3032,8 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
             "接触因果：接触前目标侧不得提前出现同一道具/伤口；单一道具数量全程守恒",
             "刺入证据：接触后可见刀长缩短、刀尖被目标遮挡、衣料/表面受力，禁止只贴在表面",
             "动作物理/镜头意图/构图",
+            "运镜克制：固定镜无漂移/呼吸式缩放；运动镜有登记的叙事动机且不炫技",
+            "视线表演：非 POV/破第四墙镜角色头眼锁戏内对象，无动机正视镜头或迎镜头转脸",
             "接缝/时序/闪烁/画面完整性",
             "音轨策略/字幕安全区（如适用）",
         ],

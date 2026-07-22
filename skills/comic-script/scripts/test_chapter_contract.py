@@ -74,3 +74,23 @@ def test_serial_requires_state_triplet_but_one_shot_does_not():
         entry_state=None, continuity_delta=None, exit_state=None,
     )
     assert not any(issue["code"].endswith("_state_missing") for issue in cc.validate_chapter_entry(standalone, 0))
+
+
+def test_placeholder_narrative_values_are_rejected():
+    for bad in ("TBD", "待定", "待补充", "x", "？", "—", "..."):
+        entry = _entry(turning_point=bad)
+        codes = {issue["code"] for issue in cc.validate_chapter_entry(entry, 0)}
+        assert "turning_point_placeholder" in codes, f"{bad!r} should be flagged"
+
+
+def test_terse_but_real_narrative_value_passes():
+    entry = _entry(reader_promise="反击", core_conflict="封锁")
+    codes = {issue["code"] for issue in cc.validate_chapter_entry(entry, 0)}
+    assert not any(code.endswith("_placeholder") for code in codes)
+
+
+def test_missing_and_placeholder_are_distinct_codes():
+    codes = {issue["code"] for issue in cc.validate_chapter_entry(_entry(payoff=""), 0)}
+    assert "payoff_missing" in codes and "payoff_placeholder" not in codes
+    codes = {issue["code"] for issue in cc.validate_chapter_entry(_entry(payoff="TBD"), 0)}
+    assert "payoff_placeholder" in codes and "payoff_missing" not in codes

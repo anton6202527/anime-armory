@@ -1,0 +1,473 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-22T07:10:49+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第2集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第2集.json",
+    "storyboard": "脚本/第2集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "EP02_CLIP01",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01, CHAR_02, BEAST_01；关键物件 WEAPON_横刀, VFX_百妖谱。",
+        "camera": "景别/机位：ECU→MS；视线/轴线：姜月初看右上虎妖；虎妖看左下姜月初；模板：铺垫·长镜。",
+        "post": "转场 动作接虎妖下扑；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
+            "at_sec": 3.6,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 12.606,
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
+            "at_sec": 8.6,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 12.606,
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
+            "at_sec": 12.0,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 12.606,
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP01_start.png",
+        "relay_boundary": false
+      },
+      "label": "杀人余震与二十年到账",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "WEAPON_横刀",
+        "VFX_百妖谱"
+      ],
+      "scene": "尸骸荒野/夕/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          1,
+          2,
+          3
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
+        "system_panels": [],
+        "vfx_assets": [
+          "VFX_百妖谱"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "BEAST_01"
+      ],
+      "clip_id": "EP02_CLIP02",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01, BEAST_01；关键物件 WEAPON_横刀。",
+        "camera": "景别/机位：CU→LS→MCU；视线/轴线：姜月初看虎妖胸颈破绽，虎妖看她持刀手；模板：dialogue_shot_reverse。",
+        "post": "转场 同动作相位接命中镜；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
+            "at_sec": 6.04,
+            "reason": "auto: R2 普通长镜（12.076s/4拍）",
+            "source_duration": 12.076,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "firstframe": "出图/第2集/图片/EP02_CLIP02_start.png",
+        "relay_boundary": true
+      },
+      "label": "二十年尽付一刀",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "WEAPON_横刀"
+      ],
+      "scene": "尸骸荒野/夕/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          4,
+          5,
+          6
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、BEAST_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "BEAST_01"
+      ],
+      "clip_id": "EP02_CLIP03",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01, BEAST_01；关键物件 WEAPON_横刀。",
+        "camera": "景别/机位：MCU→CU→MS；视线/轴线：姜月初视线锁定虎妖颈部破绽；模板：fight_exchange。",
+        "post": "转场 虎血滴落接谱页墨线；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP03_impact.png",
+            "at_sec": 1.12,
+            "reason": "导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
+            "at_sec": 2.12,
+            "reason": "导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前",
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "relay_boundary": false
+      },
+      "label": "一刀断虎首",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "WEAPON_横刀"
+      ],
+      "scene": "尸骸荒野/夕/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          7,
+          8,
+          9
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、BEAST_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP02_CLIP04",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01；关键物件 VFX_百妖谱。",
+        "camera": "景别/机位：CU/主观层；视线/轴线：姜月初视线落在上中谱页；模板：system_panel。",
+        "post": "转场 墨线继续生长成虎形；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "firstframe": "出图/第2集/图片/EP02_CLIP04_start.png",
+        "relay_boundary": true
+      },
+      "label": "百年道行与收录选择",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "VFX_百妖谱"
+      ],
+      "scene": "百妖谱主观层/荒野叠化",
+      "sound_needs": {
+        "dialogue_indices": [
+          10,
+          11
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；百妖谱面板亮起/计数跳变 UI 音效。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
+        "system_panels": [
+          "道行：一百年",
+          "检测到未收录妖物",
+          "是否消耗道行收录？"
+        ],
+        "vfx_assets": [
+          "VFX_百妖谱"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、VFX_百妖谱；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP02_CLIP05",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01；关键物件 VFX_百妖谱, VFX_墨虎谱影, WEAPON_横刀。",
+        "camera": "景别/机位：CU→ECU→MCU；视线/轴线：姜月初先看谱页后看持刀手；模板：system_panel。",
+        "post": "转场 握刀手图形匹配到替裴合眼的手；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
+            "at_sec": 3.07,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+            "source_duration": 9.207,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
+            "at_sec": 6.14,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+            "source_duration": 9.207,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "relay_boundary": false
+      },
+      "label": "摹影虎山神获圆满刀法",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "VFX_百妖谱",
+        "VFX_墨虎谱影",
+        "WEAPON_横刀"
+      ],
+      "scene": "百妖谱主观层/荒野叠化",
+      "sound_needs": {
+        "dialogue_indices": [
+          12,
+          13
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；百妖谱面板亮起/计数跳变 UI 音效。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
+        "system_panels": [
+          "消耗道行：七十五年",
+          "虎山神（摹影）",
+          "猛虎快刀（圆满）"
+        ],
+        "vfx_assets": [
+          "VFX_百妖谱",
+          "VFX_墨虎谱影"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、VFX_百妖谱、VFX_墨虎谱影、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP02_CLIP06",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01；关键物件 VFX_百妖谱, WEAPON_横刀。",
+        "camera": "景别/机位：MCU→CU；视线/轴线：先看刀锋，后看画左下裴尸体；模板：铺垫·长镜。",
+        "post": "转场 视线切至裴尸体；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+            "at_sec": 5.9,
+            "reason": "MCU握刀理解规则切至CU状态收起与视线下沉；以同一张脸、同一战损服装和同一冷侧光焊住切点",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP06_start.png",
+        "relay_boundary": false
+      },
+      "label": "结算闻弦初境与二十五年余额",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "VFX_百妖谱",
+        "WEAPON_横刀"
+      ],
+      "scene": "尸骸荒野/夕/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          14,
+          15
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；百妖谱面板亮起/计数跳变 UI 音效。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
+        "system_panels": [
+          "宿主：姜月初",
+          "境界：闻弦初境",
+          "武学：猛虎快刀（圆满）",
+          "道行：二十五年",
+          "虎山神（摹影）"
+        ],
+        "vfx_assets": [
+          "VFX_百妖谱"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP02_CLIP07",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01, CHAR_02；关键物件 WEAPON_横刀。",
+        "camera": "景别/机位：MS→CU；视线/轴线：姜月初视线落在裴的双眼；模板：留白·定格。",
+        "post": "转场 姜月初抬眼看百妖谱虎影；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
+            "at_sec": 3.55,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+            "source_duration": 10.645,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
+            "at_sec": 7.1,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+            "source_duration": 10.645,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP07_start.png",
+        "relay_boundary": false
+      },
+      "label": "替裴合眼与还命承诺",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "WEAPON_横刀"
+      ],
+      "scene": "尸骸荒野/夕/外",
+      "sound_needs": {
+        "dialogue_indices": [
+          16,
+          17
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP02_CLIP08",
+      "department_notes": {
+        "art": "场景 LOC_尸骸荒野；入画角色 CHAR_01；关键物件 VFX_百妖谱, VFX_墨虎谱影。",
+        "camera": "景别/机位：CU→ECU；视线/轴线：姜月初看上中虎影；虎影不看现实镜头而朝纸外正前；模板：system_panel。",
+        "post": "转场 硬切黑；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+            "at_sec": 2.5,
+            "reason": "姜月初前3/4脸抬眼切至谱页墨虎ECU；切点只换主焦点，不复制第二张人物脸",
+            "use": "edit_cut"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP08_start.png",
+        "relay_boundary": false
+      },
+      "label": "摹影进阶会变成什么",
+      "location_id": "LOC_尸骸荒野",
+      "props_and_objects": [
+        "VFX_百妖谱",
+        "VFX_墨虎谱影"
+      ],
+      "scene": "尸骸荒野/百妖谱主观层",
+      "sound_needs": {
+        "dialogue_indices": [
+          18
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；百妖谱面板亮起/计数跳变 UI 音效。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
+        "system_panels": [],
+        "vfx_assets": [
+          "VFX_百妖谱",
+          "VFX_墨虎谱影"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、VFX_墨虎谱影；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "characters": [
+      "BEAST_01",
+      "CHAR_01",
+      "CHAR_02"
+    ],
+    "clip_count": 8,
+    "locations": [
+      "LOC_尸骸荒野"
+    ],
+    "objects": [
+      "VFX_墨虎谱影",
+      "VFX_百妖谱",
+      "WEAPON_横刀"
+    ]
+  },
+  "version": 1
+}

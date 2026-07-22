@@ -169,6 +169,37 @@ def _nonempty(value: Any) -> bool:
     return value is not None
 
 
+# Vacuous-but-present values that currently pass every presence-only check.
+_PLACEHOLDER_TOKENS = {
+    "tbd", "tba", "todo", "n/a", "na", "none", "null", "?", "??", "???",
+    "待定", "待补", "待补充", "待填", "待写", "待定义", "暂无", "无", "略",
+    "同上", "见上", "见下", "见后文", "xx", "xxx", "...", "…",
+}
+_FILLER_RE = re.compile(r"^[\s\-—.·、,，。?？!！…*xX]+$")
+
+
+def _is_placeholder(value: Any) -> bool:
+    """True when a required narrative field is present but vacuous.
+
+    Presence-only validation lets `payoff: "TBD"` / `turning_point: "待定"` /
+    single-char stubs pass; a real beat is a described phrase, so these are
+    deterministically not-a-value.
+    """
+    if not isinstance(value, str):
+        return False
+    text = value.strip()
+    if not text:
+        return True
+    if text.lower() in _PLACEHOLDER_TOKENS:
+        return True
+    if _FILLER_RE.match(text):
+        return True
+    # A single character can't carry a narrative beat; 2+ CJK chars may be a
+    # terse-but-real value ("反击"/"封锁"), so only the explicit token set and
+    # filler patterns above reject those — no blanket short-length rule.
+    return len(text) <= 1
+
+
 def validate_source_span(span: Any, prefix: str) -> list[dict[str, str]]:
     issues: list[dict[str, str]] = []
     if not isinstance(span, Mapping):
@@ -225,8 +256,11 @@ def validate_chapter_entry(entry: Any, index: int) -> list[dict[str, str]]:
         issues.append({"code": "original_source_spans_not_empty", "message": f"{prefix} source_mode=original 时 source_spans 应为空。"})
 
     for key in ("reader_promise", "core_conflict", "turning_point", "payoff"):
-        if not _nonempty(entry.get(key)):
+        value = entry.get(key)
+        if not _nonempty(value):
             issues.append({"code": f"{key}_missing", "message": f"{prefix}.{key} 必填。"})
+        elif _is_placeholder(value):
+            issues.append({"code": f"{key}_placeholder", "message": f"{prefix}.{key} 是占位/空洞值（如 TBD/待定/单字），必须写出真实内容，否则闭环判据形同虚设。"})
     ending_mode = str(entry.get("ending_mode") or "")
     if ending_mode not in ENDING_MODES:
         issues.append({"code": "ending_mode_invalid", "message": f"{prefix}.ending_mode 须为精确枚举 {sorted(ENDING_MODES)} 之一。"})

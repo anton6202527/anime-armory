@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_motif_plan",
+  "episode": "第2集",
+  "genre": {
+    "genre": "系统流",
+    "confidence": 0.75,
+    "hits": 3,
+    "matched": [
+      "宿主",
+      "系统",
+      "面板"
+    ],
+    "by_genre": [
+      {
+        "genre": "系统流",
+        "hits": 3,
+        "matched": [
+          "宿主",
+          "系统",
+          "面板"
+        ]
+      },
+      {
+        "genre": "穿越",
+        "hits": 1,
+        "matched": [
+          "前世"
+        ]
+      },
+      {
+        "genre": "修仙",
+        "hits": 1,
+        "matched": [
+          "境界"
+        ]
+      },
+      {
+        "genre": "都市",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "宫斗",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "赘婿",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "战神",
+        "hits": 0,
+        "matched": []
+      }
+    ]
+  },
+  "motif_clips": [
+    {
+      "clip_index": 4,
+      "clip_id": "EP02_CLIP04",
+      "motif_type": "system_panel",
+      "motif_id": "MOTIF_系统面板",
+      "template": "system_panel",
+      "hits": 1,
+      "matched": [
+        "explicit_system_panel_contract"
+      ],
+      "rule": "显式 system_panel/MOTIF_系统面板 合同",
+      "growth_suggestion": {
+        "level": 1,
+        "panel_tier": "v1"
+      }
+    },
+    {
+      "clip_index": 5,
+      "clip_id": "EP02_CLIP05",
+      "motif_type": "system_panel",
+      "motif_id": "MOTIF_系统面板",
+      "template": "system_panel",
+      "hits": 1,
+      "matched": [
+        "explicit_system_panel_contract"
+      ],
+      "rule": "显式 system_panel/MOTIF_系统面板 合同",
+      "growth_suggestion": {
+        "level": 2,
+        "panel_tier": "v2"
+      }
+    },
+    {
+      "clip_index": 8,
+      "clip_id": "EP02_CLIP08",
+      "motif_type": "level_up",
+      "motif_id": "MOTIF_系统面板",
+      "template": "system_panel",
+      "hits": 1,
+      "matched": [
+        "进阶"
+      ],
+      "rule": "命中 level_up（1 词：进阶）",
+      "growth_suggestion": {
+        "level": 3,
+        "panel_tier": "v3"
+      }
+    }
+  ],
+  "summary": {
+    "genre": "系统流",
+    "motif_clips": 3,
+    "panel_clips": 3,
+    "storyboard_present": true
+  }
+}

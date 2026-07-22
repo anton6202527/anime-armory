@@ -547,6 +547,70 @@ def likely_blank_bubble_regions(path: Path) -> list[dict[str, int]]:
     return regions[:8]
 
 
+def likely_large_edge_blank_bands(path: Path) -> list[dict[str, Any]]:
+    """Find bright, low-detail paper-like bands touching a panel edge.
+
+    This is intentionally heuristic: a legitimate fog bank or pale sky can look
+    similar, so callers must keep the finding at WARN and request visual review.
+    """
+    try:
+        from PIL import Image, ImageChops, ImageStat
+    except ImportError:
+        return []
+    try:
+        image = Image.open(path).convert("L")
+    except OSError:
+        return []
+
+    src_w, src_h = image.size
+    max_w = 420
+    scale = min(1.0, max_w / max(src_w, 1))
+    if scale < 1.0:
+        image = image.resize((max(1, int(src_w * scale)), max(1, int(src_h * scale))))
+    w, h = image.size
+
+    def metrics(box: tuple[int, int, int, int]) -> tuple[float, float, float]:
+        band = image.crop(box)
+        stats = ImageStat.Stat(band)
+        dx = ImageChops.difference(
+            band.crop((1, 0, band.width, band.height)),
+            band.crop((0, 0, band.width - 1, band.height)),
+        )
+        dy = ImageChops.difference(
+            band.crop((0, 1, band.width, band.height)),
+            band.crop((0, 0, band.width, band.height - 1)),
+        )
+        edge_energy = (ImageStat.Stat(dx).mean[0] + ImageStat.Stat(dy).mean[0]) / 2
+        return stats.mean[0], stats.stddev[0], edge_energy
+
+    candidates: list[dict[str, Any]] = []
+    # Keep the largest matching band per edge. Fifteen percent is large enough
+    # to be compositionally material while avoiding ordinary gutters.
+    for edge in ("top", "bottom", "left", "right"):
+        match: dict[str, Any] | None = None
+        for fraction in (0.15, 0.20, 0.25, 0.30):
+            if edge == "top":
+                box = (0, 0, w, max(2, int(h * fraction)))
+            elif edge == "bottom":
+                box = (0, min(h - 2, int(h * (1 - fraction))), w, h)
+            elif edge == "left":
+                box = (0, 0, max(2, int(w * fraction)), h)
+            else:
+                box = (min(w - 2, int(w * (1 - fraction))), 0, w, h)
+            mean_luma, stddev, edge_energy = metrics(box)
+            if mean_luma >= 180 and stddev <= 12 and edge_energy <= 2.5:
+                match = {
+                    "edge": edge,
+                    "fraction": round(fraction, 2),
+                    "mean_luma": round(mean_luma, 2),
+                    "stddev": round(stddev, 2),
+                    "edge_energy": round(edge_energy, 2),
+                }
+        if match:
+            candidates.append(match)
+    return candidates
+
+
 def image_size(path: Path) -> tuple[int, int]:
     try:
         from PIL import Image
@@ -665,6 +729,21 @@ def post_qc_panel(
             }
         )
 
+    edge_blank_bands = likely_large_edge_blank_bands(path)
+    if edge_blank_bands:
+        edges = ", ".join(str(candidate["edge"]) for candidate in edge_blank_bands)
+        issues.append(
+            {
+                "severity": "warn",
+                "category": "large_edge_blank_band",
+                "confidence": "heuristic",
+                "reason": (
+                    f"found bright low-detail blank band(s) touching panel edge(s): {edges}; "
+                    "verify a text reservation was not rendered as empty paper"
+                ),
+            }
+        )
+
     verdict = "pass"
     if any(issue["severity"] == "block" for issue in issues):
         verdict = "block"
@@ -691,6 +770,7 @@ def post_qc_panel(
         "omitted_attachment_count": len(omitted_reference_records),
         "omitted_attachment_ids": [record.get("id", "") for record in omitted_reference_records],
         "blank_region_candidates": blank_regions,
+        "large_edge_blank_band_candidates": edge_blank_bands,
         "issues": issues,
         "manual_review_required": verdict != "pass",
     }

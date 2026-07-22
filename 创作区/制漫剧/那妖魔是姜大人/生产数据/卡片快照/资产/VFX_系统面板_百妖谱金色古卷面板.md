@@ -1,6 +1,6 @@
 # 道具卡 — 百妖谱金色古卷面板（ID: VFX_系统面板）
 
-- episode_scope: 第1集
+- episode_scope: 第2集
 - type: vfx
 - target_reference: `出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png`
 - source: `出图/共享/asset_registry.json`

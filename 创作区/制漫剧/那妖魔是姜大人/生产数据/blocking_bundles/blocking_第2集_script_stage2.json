@@ -1,14 +1,10 @@
 {
   "authority": "repair view only; it does not create a new gate or override existing verdicts",
-  "blocked": true,
+  "blocked": false,
   "blockers": [
     {
-      "message": "预防式合同未通过（episode_promise_gate）：preventive_contracts.status 不是 confirmed；承诺合同未签收。。先回 script_stage1 补齐 脚本/第2集/preventive_contracts.json 并确认后再继续。",
-      "step": "preventive_contracts"
-    },
-    {
-      "message": "P-2 导演排戏包未确认；先补齐 脚本/第2集/director_beat_sheet.json、axis_blocking_map.json、shot_progression_plan.json、transition_map.json、vertical_composition_plan.json、edit_rhythm_map.json，删除待补/TODO，把内容 status 改为 confirmed，并为每个接缝填写 seam_mode/seam_evidence；再用 signoff.py 的 p2 profile 由 director 与 producer/editor 两个角色组签当前哈希，才可进入阶段2分镜设计。",
-      "step": "director_blocking_pack"
+      "message": "读 n2d-script 的 prompt 包 → 调 LLM 生成 → 注入项目；完成后回写进度再 run next。",
+      "step": "needs_agent_gen"
     }
   ],
   "category": "creative_or_execution",
@@ -24,14 +20,14 @@
     "return_to_stage": null,
     "stage": ""
   },
-  "generated_at": "2026-07-22T14:37:42+0800",
-  "headline": "第2集 阶段2·分镜设计：确定性前置失败",
+  "generated_at": "2026-07-22T14:41:06+0800",
+  "headline": "第2集 阶段2·分镜设计：脚手架就绪，待代理生成",
   "kind": "n2d_blocking_bundle",
   "owner": "n2d-script",
   "repair_commands": [
     "n2d-script 创作区/制漫剧/那妖魔是姜大人 第2集  (配音后定稿)"
   ],
   "stage_key": "script_stage2",
-  "stop_reason": "prework_failed",
+  "stop_reason": "needs_agent_gen",
   "version": 1
 }

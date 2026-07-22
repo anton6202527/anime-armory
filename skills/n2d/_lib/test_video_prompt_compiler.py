@@ -20,6 +20,7 @@ def _contract(**overrides):
         "frame_strategy": "first_last",
         "primary_action": "她抬眼，握紧刀柄，然后停住。",
         "camera_motion": "缓慢推近，尾端固定",
+        "eyeline": "摄影机保持旁观者位置；她的头眼持续锁定画右的戏内对手，保持三分之四关系",
         "environment_motion": "衣袖只随抬手轻动",
         "rhythm": "克制推进，尾端留半拍",
         "end_state": "眼神定住，刀柄成为画面重心",
@@ -40,6 +41,8 @@ def test_seedance_compiler_keeps_submit_prompt_compact_and_motion_first():
     assert payload["profile"] == "zh_motion_first"
     assert "主动作：" in payload["prompt"]
     assert "镜头：" in payload["prompt"]
+    assert "视线与头部朝向：" in payload["prompt"]
+    assert "摄影机保持旁观者位置" in payload["prompt"]
     assert "identity_registry" not in payload["prompt"]
     assert "video_model_routes" not in payload["prompt"]
     assert len(payload["prompt"]) < 600

@@ -84,100 +84,100 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
-      "value": false
+      "value": true
     },
     "exact_model_id": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
-      "value": "GPT Image 2"
+      "value": ""
     },
     "max_reference_images": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "model_precision": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
-      "value": "provider_model"
+      "value": "normalized_family"
     },
     "negative_strategy": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "inline_constraints"
     },
     "official": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": false
     },
     "prompt_language": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "zh"
     },
     "prompt_profile": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "codex_gpt_image_agent_brief"
     },
     "prompt_request_fields": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": [
         "aspect_ratio",
@@ -186,60 +186,60 @@
       ]
     },
     "reference_mode": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
-      "source": "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session",
+      "evidence_kind": "local_probe",
+      "observed_text": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
+      "source": "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "official_cli_help",
+  "evidence_kind": "local_probe",
   "kind": "n2d_image_backend_refresh_evidence",
   "model_evidence": {
-    "exact_model_id": "GPT Image 2",
+    "exact_model_id": "",
     "normalized_model_label": "GPT Image 2",
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
-    "precision": "provider_model"
+    "precision": "normalized_family"
   },
-  "note": "Verified Codex CLI 0.144.6 accepts repeated --image attachments and JSON output schema; current Codex built-in imagegen successfully performs new generation and reference-image editing with PNG outputs. Seed remains unexposed/unsupported; masks, prices and quota are not exposed by local CLI help, so no capability claim is made for them.",
+  "note": "2026-07-22 当前会话 Codex 内置生图可用；项目模型口径 GPT Image 2，执行入口未暴露更细 exact model id",
   "source_urls": [],
   "sources": [
-    "local codex-cli 0.144.6: codex --version + codex exec --help; current built-in imagegen generation/edit calls succeeded in this session"
+    "local capability scan: image_backend_adapter.py scan + Codex built-in image_generation"
   ],
   "verified_at": "2026-07-22"
 }

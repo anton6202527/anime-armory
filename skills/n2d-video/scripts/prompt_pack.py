@@ -54,6 +54,11 @@ HIGH_RISK_CONTINUOUS_SHOTS = {
     "vessel_flight", "road_vehicle", "stealth_stalk", "magic_burst",
     "intimate_interaction", "hug_or_pull", "kiss_or_near_kiss",
 }
+DIRECT_GAZE_INTENT_RE = re.compile(
+    r"\bPOV\b|主观镜头|第一人称|破第四墙|对镜讲话|对镜表演|"
+    r"direct_address|look_into_camera|camera_address",
+    re.I,
+)
 
 
 def _frame_strategy_requires_mid(
@@ -366,6 +371,20 @@ def shot_reverse_contract_map(root: Path, ep: str) -> Dict[str, Mapping[str, Any
     return out
 
 
+def director_camera_plan_map(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
+    data = load_json(root / "生产数据" / f"director_camera_plan_{ep}.json")
+    rows = data.get("clips") if isinstance(data, Mapping) and isinstance(data.get("clips"), list) else []
+    out: Dict[str, Mapping[str, Any]] = {}
+    for idx, row in enumerate(rows, 1):
+        if not isinstance(row, Mapping):
+            continue
+        raw = str(row.get("clip_id") or "").strip()
+        if raw:
+            out[raw] = row
+            out[clip_id(raw, idx)] = row
+    return out
+
+
 def shot_reverse_video_line(pattern: Mapping[str, Any]) -> str:
     participants = pattern.get("participants") if isinstance(pattern.get("participants"), Mapping) else {}
     a = participants.get("A") if isinstance(participants.get("A"), Mapping) else {}
@@ -537,16 +556,106 @@ def shot_text(clip: Mapping[str, Any]) -> Tuple[str, str, str]:
     return "；".join(descs), "；".join(prompts), " → ".join(lenses)
 
 
-def motion_words(clip: Mapping[str, Any], route: Mapping[str, Any]) -> Tuple[str, str, str]:
+def camera_motivation(clip: Mapping[str, Any]) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    values: List[str] = []
+    for source in (clip, cont, contract):
+        for key in (
+            "camera_motivation", "movement_motivation", "camera_move_motivation",
+            "运镜动机", "镜头运动动机",
+        ):
+            value = one_line(source.get(key), "")
+            if value and value not in values:
+                values.append(value)
+    for shot in clip.get("shots") or []:
+        if not isinstance(shot, Mapping):
+            continue
+        for key in ("camera_motivation", "movement_motivation", "运镜动机"):
+            value = one_line(shot.get(key), "")
+            if value and value not in values:
+                values.append(value)
+    return "；".join(values)
+
+
+def direct_gaze_intended(clip: Mapping[str, Any]) -> bool:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    values: List[str] = []
+    for source in (clip, cont, contract):
+        for key in (
+            "template", "template_id", "shot_type", "camera_relation", "gaze_intent",
+            "eyeline_intent", "pov", "direct_address", "视线意图", "镜头关系",
+        ):
+            value = one_line(source.get(key), "")
+            if value:
+                values.append(value)
+    return bool(DIRECT_GAZE_INTENT_RE.search(" ".join(values)))
+
+
+def _positive_eyeline(value: Any) -> str:
+    text = one_line(value, "")
+    for phrase in (
+        "，不看镜头", ",不看镜头", "不看现实镜头而", "不看镜头", "不要看镜头", "禁止直视镜头",
+        "不得直视镜头", "avoid camera", "do not look at camera",
+    ):
+        text = text.replace(phrase, "")
+    return text.strip(" ；;,，。")
+
+
+def gaze_performance_guard(
+    clip: Mapping[str, Any], chars: Sequence[str], shot_reverse_pattern: Mapping[str, Any],
+) -> str:
+    subject = "、".join(chars) if chars else "本镜角色"
+    if direct_gaze_intended(clip):
+        return f"本镜为明确 POV/破第四墙叙事；{subject} 只在登记节拍内把视线落到摄影机，节拍外跟随戏内目标。"
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    targets: List[str] = []
+    eyeline = _positive_eyeline(cont.get("eyeline"))
+    if eyeline:
+        targets.append(eyeline)
+    participants = shot_reverse_pattern.get("participants") if isinstance(shot_reverse_pattern.get("participants"), Mapping) else {}
+    for row in participants.values():
+        if not isinstance(row, Mapping):
+            continue
+        direction = _positive_eyeline(row.get("eyeline_direction") or row.get("eyeline"))
+        if direction and direction not in targets:
+            targets.append(direction)
+    if targets:
+        return (
+            f"摄影机保持旁观者位置；逐角色的眼睛、鼻梁轴和头部朝向按以下戏内视线关系持续成立：{'；'.join(targets)}；"
+            "人物保持三分之四、侧向或过肩关系，转头只跟随各自戏内目标。"
+        )
+    return (
+        f"摄影机保持旁观者位置；{subject} 的眼睛、鼻梁轴和头部朝向持续锁定戏内对手、道具或动作落点，"
+        "保持三分之四、侧向或过肩关系，转头只跟随该戏内目标。"
+    )
+
+
+def motion_words(
+    clip: Mapping[str, Any], route: Mapping[str, Any], camera_plan: Optional[Mapping[str, Any]] = None,
+) -> Tuple[str, str, str]:
+    if isinstance(camera_plan, Mapping):
+        injection = camera_plan.get("video_prompt_injection") if isinstance(camera_plan.get("video_prompt_injection"), Mapping) else {}
+        planned = one_line(injection.get("镜头运动"), "")
+        recommended = camera_plan.get("recommended") if isinstance(camera_plan.get("recommended"), Mapping) else {}
+        if planned:
+            speed = one_line(recommended.get("speed"), "克制")
+            return "小幅；人物动作在画内完成，摄影机运动不与表演争夺注意", speed, planned
     rhythm = str(clip.get("rhythm") or "")
     shot_type = str(route.get("shot_type") or "")
     if any(x in shot_type for x in ("chase", "mount", "flight", "vehicle")) or any(x in rhythm for x in ("马队", "追", "压近")):
         return "中等；背景/前景视差动，主体不变形", "匀速压近；关键节点短暂停顿", "缓慢跟拍或微推，保持官道轴线"
     if any(x in shot_type for x in ("multi_character", "dialogue")):
-        return "小到中；人物槽位不漂移", "克制；表情和视线先动，身体后动", "固定或缓慢推近"
+        return "小到中；人物槽位不漂移", "克制；表情和视线先动，身体后动", "固定机位，锁定轴线与景别，摄影机保持完全静止"
+    motivation = camera_motivation(clip)
+    if motivation:
+        _, _, lenses = shot_text(clip)
+        camera = lenses if re.search(r"推|拉|摇|移|跟|升降|变焦|环绕|甩|固定", lenses) else "固定机位，锁定构图与轴线"
+        return "小幅；只执行本镜主动作链", f"克制；运镜动机={motivation}", camera
     if any(x in rhythm for x in ("钩子", "爽点", "尾")):
-        return "小幅；高光点只给一次明确动作", "蓄力后定住", "缓慢推近，尾端定格"
-    return "小幅；只执行本镜主动作链", "克制匀速", "固定或极缓推近"
+        return "小幅；高光点只给一次明确动作", "蓄力后定住", "固定机位，锁定高光落点，摄影机保持完全静止"
+    return "小幅；只执行本镜主动作链", "克制匀速", "固定机位，锁定构图与轴线，摄影机保持完全静止"
 
 
 def environment_motion(clip: Mapping[str, Any]) -> str:
@@ -860,6 +969,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
                 forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
                 contract_rows: Mapping[str, Mapping[str, Any]],
                 shot_reverse_rows: Mapping[str, Mapping[str, Any]],
+                camera_plan: Optional[Mapping[str, Any]] = None,
                 incoming_seam: Optional[Mapping[str, Any]] = None,
                 outgoing_seam: Optional[Mapping[str, Any]] = None) -> str:
     cid = clip_id(clip.get("id"), idx)
@@ -880,7 +990,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"forbidden_presence={one_line(entity.get('forbidden_presence'), 'modern vehicles, phones, random readable text, watermark')}; "
         f"eyeline={one_line(cont.get('eyeline'), '按出图轴线')}"
     )
-    amp, energy, camera = motion_words(clip, route)
+    amp, energy, camera = motion_words(clip, route, camera_plan)
     mouth = "yes" if mouths.get(cid) else "no"
     audio_line, normalized_audio_policy = native_audio_contract(route, mouth)
     negative_items = [
@@ -889,6 +999,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "新增未登记人物或道具",
         "改变场景、光位或构图",
         "随机文字、logo 或水印",
+        "无剧情动机的正视镜头、迎镜头转脸或对镜表演",
     ]
     if normalized_audio_policy == "native_speech":
         negative_items.append("旁白、额外台词或错误说话人")
@@ -907,6 +1018,11 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     )
     shot_reverse_pattern = shot_reverse_rows.get(raw_id) or shot_reverse_rows.get(cid) or {}
     shot_reverse_line = shot_reverse_video_line(shot_reverse_pattern) if isinstance(shot_reverse_pattern, Mapping) and shot_reverse_pattern else ""
+    gaze_guard = gaze_performance_guard(
+        clip,
+        chars,
+        shot_reverse_pattern if isinstance(shot_reverse_pattern, Mapping) else {},
+    )
     recipe = route.get("execution_recipe") if isinstance(route.get("execution_recipe"), Mapping) else {}
     assets = ", ".join([x for x in [location] + objects if x])
     asset_ids = [x for x in [location] + objects if x]
@@ -929,16 +1045,40 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     explicit_frame_strategy = cont.get("frame_strategy")
     if isinstance(explicit_frame_strategy, Mapping):
         explicit_frame_strategy = explicit_frame_strategy.get("strategy")
+    take_policy = str(clip.get("take_policy") or cont.get("take_policy") or "").strip().lower()
+    requires_mid = _frame_strategy_requires_mid(clip, route, execution_anchors, mid)
+    risk_anchor_present = any(
+        str(row.get("use") or "split").strip().lower() in {"split", "keyframe"}
+        for row in execution_anchors
+    )
+    # 安全优先：命中 R1-R3 高风险锚链或需中锚的镜，忽略单拍多镜声明，仍按锚帧链/拆段执行
+    # （与 shot_split_decision.single_take_policy_verdict / anchor_planner 同口径）。
+    effective_take_policy = "" if (requires_mid or risk_anchor_present) else take_policy
     strategy_plan = select_video_frame_strategy(
         route.get("primary_backend") or "generic",
         route.get("channel") or route.get("backend_channel") or "",
         shot_count=max(1, len(editorial_shots)),
         anchor_count=mid_count,
         need_end=bool(endframe) or needs_end_anchor(cont),
-        requires_mid_anchors=_frame_strategy_requires_mid(clip, route, execution_anchors, mid),
+        requires_mid_anchors=requires_mid,
         explicit=str(explicit_frame_strategy or ""),
+        take_policy=effective_take_policy,
+        duration_sec=clip.get("duration") if isinstance(clip.get("duration"), (int, float)) else None,
     )
     frame_strategy = str(strategy_plan.get("strategy") or "first_only")
+    single_take_ladder = ""
+    if frame_strategy == "single_take_multishot" and editorial_shots:
+        # 单拍多镜：一次生成承载多个镜位，主动作编成「镜头1/2/…」阶梯（Seedance/Kling 多镜叙事口径），
+        # 镜位切换由 multishot-native 后端在 take 内部完成，不再拆独立付费 take。
+        ladder_parts = []
+        for s_idx, shot in enumerate(editorial_shots, 1):
+            piece = one_line(shot.get("video_prompt") or shot.get("desc") or shot.get("description"), "")
+            lens = one_line(shot.get("lens") or shot.get("shot_size") or shot.get("camera"), "")
+            if piece or lens:
+                ladder_parts.append(f"镜头{s_idx}（{lens or '承接'}）：{piece or '承接上一镜动作'}")
+        if ladder_parts:
+            single_take_ladder = "；".join(ladder_parts)
+            action = single_take_ladder
     frame_control = anchor_consumption_plan(
         route.get("primary_backend") or "generic",
         route.get("channel") or route.get("backend_channel") or "",
@@ -984,6 +1124,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "scene": clip.get("scene"),
         "primary_action": action,
         "camera_motion": camera,
+        "eyeline": gaze_guard,
         "environment_motion": env_motion,
         "rhythm": clip.get("rhythm"),
         "end_state": end,
@@ -1014,6 +1155,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**起幅**：{start}",
         f"**落幅**：{end}",
         f"**场面调度**：{one_line(lenses, '按 storyboard 镜头链')}；角色={one_line(chars, '无')}；资产={assets or '无'}；轴线/视线={one_line(cont.get('eyeline'), '按出图总览')}",
+        f"**视线表演合同**：{gaze_guard}",
         f"**正反打视频合同**：{shot_reverse_line}" if shot_reverse_line else "**正反打视频合同**：本镜未登记 shot_reverse_contract；若临场改成反打/过肩，先回 n2d-script 生成合同。",
         f"**内心戏主体隔离**：{inner_focus or '非内心戏/按 entity_schedule 在场链执行'}",
         f"**表演节拍**：[0-30%] 承接首帧并建立状态；[30-75%] {action}；[75-100%] 停到落幅，给下一镜接点。",
@@ -1026,6 +1168,10 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**专项镜头模板**：template={one_line(route.get('template') or route.get('shot_type'), '无')}；blocking/continuity_must/negative 继承 storyboard，不临场改戏。",
         f"**模型路由**：{route_line}",
         f"**帧策略 / Frame Strategy**：strategy={frame_strategy}；reason={strategy_plan.get('reason')}；shot_count={strategy_plan.get('shot_count')}；anchor_count={strategy_plan.get('anchor_count')}；首尾帧后端不得把 split relay 冒充原生三帧。",
+        *([
+            f"**单拍多镜合同 / Single-Take Multishot**：take_policy=single_take_multishot；内部镜位 {len(editorial_shots)} 个由 multishot-native 后端一次生成（镜头阶梯：{single_take_ladder or '按 storyboard shots 顺序'}）；"
+            "不拆独立付费 take、不消费 edit_cut 边界锚为时间轴；后端不支持或时长超窗时必须回落 edit_cut 拆 take，不得静默按单镜直提。"
+        ] if frame_strategy == "single_take_multishot" else []),
         f"**接缝执行包 / Handoff Package**：{handoff_line}",
         f"**连续性链路 / Continuity Chain**：入点={incoming_line}；出点={outgoing_line}",
         f"**执行配方 / Execution Recipe**：{exec_line}",
@@ -1062,7 +1208,9 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "- ✅ Continuity Chain 保留在完整合同和锚帧输入层；提交 prompt 只保留动作、运镜、节奏、落幅。",
         "- ✅ ④人物运动动作链明确，幅度与能量可控。",
         "- ✅ ②镜头运动有结构化运镜词和速度。",
-        "- ✅ ⑦张力与节奏匹配，留白/爽点/压迫不乱甩。",
+        "- ✅ 运镜动机：摄影机运动能说明揭示了什么新信息；说不清时使用固定机位，由表演、画内调度与剪辑承载张力。",
+        "- ✅ 视线表演：非 POV/破第四墙镜头已写清戏内视线目标与头眼方向，角色不迎着摄影机转脸。",
+        "- ✅ ⑦张力与节奏匹配，留白/爽点/压迫不靠乱推、乱甩或随机环绕。",
         "- ✅ 模型路由、Motion Control、角色身份注册层、原生音画策略已继承。",
         "- ✅ 内心戏/心理反应镜只让主焦点运动；其他实体无结构化例外时不得清晰入画或抢动作。",
         "- ✅ 近景升格守卫：CU/MCU/反打落幅不得从小脸/远脸直接补新脸；缺近景锚帧则改保真拍法或回 n2d-image 补锚。",
@@ -1073,7 +1221,8 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "- [ ] 人物运动：方向正确，无肢体扭曲、脸部抖动、多人脸错乱。",
         "- [ ] 在场链：required_presence 在场，offscreen/forbidden 不乱入。",
         "- [ ] 物理守卫 / FeatureMelting：手部归属、遮挡、接触点、肢体边界、特征融化全部过。",
-        "- [ ] 镜头运动：推/拉/跟/固定等与 prompt 一致。",
+        "- [ ] 镜头运动：推/拉/跟/固定等与 prompt 一致；固定镜无漂移、呼吸式缩放或无意义重构，运动镜确实完成登记的叙事动机。",
+        "- [ ] 视线与迎镜头：抽起/中/止帧检查眼睛、鼻梁轴和头部朝向；非 POV/破第四墙镜角色始终看戏内对象，出现无动机正视镜头或迎镜头转脸即废料重跑。",
         "- [ ] 动态细节 & 环境交互成立，无现代物/文字/logo/水印。",
         "- [ ] 导演调度完成本镜意图，起幅/落幅可剪。",
         "- [ ] 模型路由结果符合 primary 强项；失败按 fallback/degrade_plan，不临场乱换。",
@@ -1090,6 +1239,7 @@ def render_clips(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapping
                  forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
                  contract_rows: Mapping[str, Mapping[str, Any]],
                  shot_reverse_rows: Mapping[str, Mapping[str, Any]],
+                 camera_plan_rows: Mapping[str, Mapping[str, Any]],
                  chain: Mapping[str, Any]) -> str:
     clips = [c for c in sb.get("clips") or [] if isinstance(c, Mapping)]
     incoming_map, outgoing_map = continuity_chain_maps(chain)
@@ -1109,6 +1259,7 @@ def render_clips(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapping
             mouths,
             contract_rows,
             shot_reverse_rows,
+            camera_plan_rows.get(str(clip.get("id") or "")) or camera_plan_rows.get(cid),
             incoming_map.get(cid),
             outgoing_map.get(cid),
         ))
@@ -1123,12 +1274,13 @@ def build(root: Path, ep: str) -> Tuple[str, str]:
     mouths = mouth_map(root, ep)
     contract_rows = contract_clip_map(root, ep)
     shot_reverse_rows = shot_reverse_contract_map(root, ep)
+    camera_plan_rows = director_camera_plan_map(root, ep)
     chain = continuity_chain(root, ep)
     image_overview_path = root / "出图" / ep / "prompt" / "00_总览.md"
     image_overview = image_overview_path.read_text(encoding="utf-8") if image_overview_path.is_file() else ""
     return (
         render_overview(root, ep, sb, route_rows, image_overview, forms, mouths),
-        render_clips(root, ep, sb, route_rows, forms, mouths, contract_rows, shot_reverse_rows, chain),
+        render_clips(root, ep, sb, route_rows, forms, mouths, contract_rows, shot_reverse_rows, camera_plan_rows, chain),
     )
 
 

@@ -20,10 +20,20 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
+_COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(_COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(_COMIC_LIB))
+try:
+    from text_metadata import estimated_line_count  # noqa: E402
+except ImportError:  # pragma: no cover - degrade gracefully if lib missing
+    estimated_line_count = None  # type: ignore
+
 KIND = "comic_lettering_qc"
+LINE_HEIGHT_RATIO = 1.3  # matches the draft renderer's line spacing
 SAFE_MARGIN_BASE = 40  # px @ 1440 宽
 MIN_FONT_BASE = 28  # px @ 1440 宽
 BASE_CANVAS_WIDTH = 1440
@@ -159,6 +169,12 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
                         ))
                 item = items_by_slot.get(sid) or {}
                 style = item.get("style") if isinstance(item.get("style"), dict) else {}
+                if str(style.get("direction") or "").strip() in {"vertical", "竖排", "縦書き", "縦書"}:
+                    findings.append(finding(
+                        "warn", "lettering_vertical_unsupported", pid,
+                        f"{pid} 槽位 {sid} 请求竖排（{style.get('direction')}），但草稿 Pillow renderer 只做横排，会被静默按横排渲染。",
+                        "改用人工/专业竖排排版 renderer，或确认本项目用横排后把 style.direction 改回 horizontal。",
+                    ))
                 size = style.get("size")
                 if isinstance(size, (int, float)) and str(item.get("type")) in {"dialogue", "narration"} and size < min_font:
                     findings.append(finding(
@@ -166,6 +182,25 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
                         f"{pid} 槽位 {sid} 字号 {size} 低于最小可读字号 {min_font:.0f}px（@画布宽 {seg_w:.0f}）。",
                         "调大 lettering style.size 或减字数扩气泡。",
                     ))
+                # Text-fit estimate: the draft renderer shrinks to a floor then
+                # draws anyway (no truncation, no containment), so overlong text
+                # silently spills past the bubble onto the art.  Estimate whether
+                # the text can fit the slot height at its font size.
+                if estimated_line_count is not None and isinstance(size, (int, float)) and size > 0 \
+                        and str(item.get("type")) in {"dialogue", "narration"}:
+                    fit_text = str(item.get("text_zh") or item.get("text") or "").strip()
+                    en_text = str(item.get("text_en") or "").strip()
+                    lines = estimated_line_count(fit_text, slot_w=int(w), font_size=int(size)) if fit_text else 0
+                    if en_text and en_text != fit_text:  # bilingual bubble stacks both
+                        lines += estimated_line_count(en_text, slot_w=int(w), font_size=int(size))
+                    needed_h = lines * size * LINE_HEIGHT_RATIO
+                    if lines and needed_h > h + size:  # allow one line of slack
+                        findings.append(finding(
+                            "warn", "lettering_text_overflow", pid,
+                            f"{pid} 槽位 {sid} 文字约 {lines} 行 × 字号 {size:.0f}（≈{needed_h:.0f}px 高）放不进槽位高 {h:.0f}px——"
+                            "渲染器到最小字号仍不截断，会溢出气泡压到画面。",
+                            "扩大气泡高度、缩短台词或分格分气泡后重跑 build_lettering.py 与 export_longstrip.py --render。",
+                        ))
                 slot_rects.append((sid, r))
             for i in range(len(slot_rects)):
                 for j in range(i + 1, len(slot_rects)):

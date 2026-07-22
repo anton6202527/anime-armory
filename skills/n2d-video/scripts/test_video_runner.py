@@ -1234,6 +1234,8 @@ def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> N
     assert calls and calls[0][1:4] == ("第1集", "Clip_01", video)
     assert item["native_av_sidecar"]["status"] == "updated"
     assert item["visual_review"]["verdict"] == "pass"
+    assert any("运镜克制" in row for row in item["visual_review"]["criteria"])
+    assert any("视线表演" in row and "迎镜头转脸" in row for row in item["visual_review"]["criteria"])
     assert video_runner.accepted_video_receipt_issues(tmp_path, "第1集", item) == []
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["native_av_sidecar"]["physics_path"].endswith("native_av_physics_第1集.json")

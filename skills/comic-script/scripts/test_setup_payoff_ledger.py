@@ -110,3 +110,33 @@ def test_end_to_end_build_and_gate(tmp_path):
     (root / "设定库" / "setup_payoff_ledger.json").write_text(json.dumps(ledger, ensure_ascii=False), encoding="utf-8")
     rc2 = sp.main([str(root), "第1话", "--strict"])
     assert rc2 == 0
+
+
+def test_unfilled_setup_stays_visible_in_later_chapters():
+    # H1: open setup planted 第1话 with empty payoff_chapter must resurface in 第3话
+    ledger = [{"desc": "半枚玉佩", "setup_chapter": "第1话", "payoff_chapter": "", "status": "open"}]
+    findings = sp.audit_chapter("第3话", detected=[], ledger_pairs=ledger)
+    assert any(f["code"] == "payoff_unplanned_open" and f["severity"] == "warn" for f in findings)
+
+
+def test_planting_chapter_not_double_flagged():
+    # in the planting chapter the detected-loop 'payoff_unfilled' fires; the
+    # carry-forward must NOT also fire for the same setup (no double report)
+    detected = [{"desc": "半枚玉佩", "setup_chapter": "第1话"}]
+    ledger = [{"desc": "半枚玉佩", "setup_chapter": "第1话", "payoff_chapter": "", "status": "open"}]
+    findings = sp.audit_chapter("第1话", detected, ledger)
+    assert sum(f["desc"] == "半枚玉佩" for f in findings) == 1
+    assert any(f["code"] == "payoff_unfilled" for f in findings)
+
+
+def test_devpack_seeded_unfilled_surfaces_even_when_never_detected():
+    # dev-pack seed never re-detected from panels → old code never flagged it
+    ledger = [{"desc": "开局的诅咒", "setup_chapter": "第1话", "payoff_chapter": "", "status": "open"}]
+    findings = sp.audit_chapter("第2话", detected=[], ledger_pairs=ledger)
+    assert any(f["code"] == "payoff_unplanned_open" for f in findings)
+
+
+def test_ongoing_open_setup_not_carried_forward():
+    ledger = [{"desc": "长线之谜", "setup_chapter": "第1话", "payoff_chapter": "", "status": "ongoing"}]
+    findings = sp.audit_chapter("第4话", detected=[], ledger_pairs=ledger)
+    assert not any(f["code"] == "payoff_unplanned_open" for f in findings)

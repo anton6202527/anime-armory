@@ -1,0 +1,66 @@
+{
+  "kind": "n2d_redundancy_audit",
+  "version": 1,
+  "episode": "第2集",
+  "generated_at": "2026-07-22T06:59:49+00:00",
+  "thresholds": {
+    "pair_sim_warn": 0.6,
+    "strict_sim": 0.75,
+    "min_line_chars": 8,
+    "provenance": "internal-heuristic·confidence=low·2026-07，误报校准后再议升硬闸"
+  },
+  "summary": {
+    "voiceover_lines": 18,
+    "narration_ratio": 0.0,
+    "repeated_fact_phrases": 0,
+    "redundant_pairs": 1,
+    "repeated_composition_groups": 1,
+    "block": 0,
+    "warn": 2
+  },
+  "redundant_pairs": [
+    {
+      "shots": [
+        3,
+        9
+      ],
+      "roles": [
+        "百妖谱",
+        "百妖谱"
+      ],
+      "similarity": 0.647,
+      "texts": [
+        "击杀闻弦境生物，获得其道行二十年。",
+        "击杀闻弦境生物，获得其道行一百年。"
+      ]
+    }
+  ],
+  "repeated_compositions": [
+    {
+      "clips": [
+        "EP02_CLIP05",
+        "EP02_CLIP06"
+      ],
+      "location": "LOC_尸骸荒野",
+      "lenses": [
+        "CU",
+        "MCU"
+      ],
+      "characters": [
+        "CHAR_01"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "redundant_voiceover_pair",
+      "message": "镜头3 与 镜头9 台词相似度 65%（『击杀闻弦境生物，获得其道行二十年。』≈『击杀闻弦境生物，获得其道行一百年。』）——同义反复/信息重复，合并成一句或删其一（小说式重复不应带进成片）。"
+    },
+    {
+      "severity": "warn",
+      "code": "repeated_composition_plan",
+      "message": "EP02_CLIP05、EP02_CLIP06 计划了相同的 (场景=LOC_尸骸荒野, 景别=CU/MCU, 角色=CHAR_01)——出图前换景别/机位（特写-中景-全景轮换、插入镜、反应镜）或合并镜头，否则成片会出现构图重复。"
+    }
+  ]
+}

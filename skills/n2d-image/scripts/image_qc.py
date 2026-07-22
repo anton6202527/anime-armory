@@ -1541,6 +1541,18 @@ def _positive_prompt_text(body: str) -> str:
         "",
         text,
     )
+    # Prompt packs repeat negative policy in two positive-contract regions:
+    # the QC table row and an inline ``风格禁忌=...；`` clause.  Those phrases
+    # are still prohibitions, not model-facing requests.  Leaving them in the
+    # semantic scan makes “禁止正面肖像摆拍” trip the frontal-portrait BLOCK for
+    # every action shot.  Strip only the labelled negative span so a later,
+    # genuinely positive “清晰正脸” instruction on the same line remains visible.
+    text = re.sub(r"(?im)^\s*\|[^\n|]*(?:禁忌|禁止项)\s*(?:/\s*QC)?[^\n]*\|\s*$", "", text)
+    text = re.sub(
+        r"(?i)(?:风格禁忌|禁忌项|禁止项)\s*[=：:]\s*[^；;\n]*(?:[；;]|$)",
+        "",
+        text,
+    )
     text = re.sub(r"(?im)(?:^|[。；;\s])\s*(?:限制|constraints?)\s*[：:].*$", "", text)
     return text
 
@@ -5067,7 +5079,8 @@ def _png_face_ratio_and_size(
     """Return normalized face ratio, signal short edge, face count and face-box short edge.
 
     A normal tight anchor uses the largest face bbox divided by the whole image.
-    A declared six-panel expression sheet is a 3x2 grid: detections are assigned
+    A declared six-panel expression sheet may be landscape 3x2 or portrait 2x3:
+    detections are assigned
     by bbox centre, only the largest bbox in each occupied cell is retained, and
     face area is normalized to one cell.  This suppresses a common Haar failure
     where a neckline/lower-face false positive causes two boxes in one panel.
@@ -5094,17 +5107,22 @@ def _png_face_ratio_and_size(
         if boxes:  # 非空=真检到脸；[]=检测器跑了但 0 脸（风格化脸常漏）→ 不据占比判
             selected = list(boxes)
             if panel_count == 6:
+                # ``two_by_three`` has appeared in both verbal conventions
+                # (columns×rows and rows×columns).  The raster orientation is
+                # unambiguous: portrait boards use 2 columns × 3 rows, while
+                # landscape boards use 3 columns × 2 rows.
+                cols, rows = (2, 3) if h > w else (3, 2)
                 cells: Dict[Tuple[int, int], Any] = {}
                 for box in boxes:
                     x, y, bw, bh = (int(box[0]), int(box[1]), int(box[2]), int(box[3]))
-                    col = min(2, max(0, int(((x + bw / 2.0) / float(w)) * 3)))
-                    row = min(1, max(0, int(((y + bh / 2.0) / float(h)) * 2)))
+                    col = min(cols - 1, max(0, int(((x + bw / 2.0) / float(w)) * cols)))
+                    row = min(rows - 1, max(0, int(((y + bh / 2.0) / float(h)) * rows)))
                     previous = cells.get((row, col))
                     if previous is None or bw * bh > int(previous[2]) * int(previous[3]):
                         cells[(row, col)] = box
                 selected = list(cells.values())
                 detected_count = len(cells)
-                min_dim = min(max(1, int(w) // 3), max(1, int(h) // 2))
+                min_dim = min(max(1, int(w) // cols), max(1, int(h) // rows))
             elif boxes is not None:
                 detected_count = len(boxes)
             ratios = sorted(
@@ -5198,7 +5216,7 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
                 if panel_count:
                     # Expression boards complement, rather than replace, the
                     # separate canonical tight face anchor.  Judge its actual
-                    # 3x2 cell signal, not the complete mosaic short edge.
+                    # per-cell signal, not the complete mosaic short edge.
                     ratio_reason = weak_face_anchor_reason(ratio, None, core=False)
                     signal_reasons: List[str] = []
                     if min_dim is not None and min_dim < 384:

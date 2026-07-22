@@ -4,7 +4,7 @@
 
 ## 结论
 
-行业里没有一份跨厂商、强制统一的“视频 Prompt ISO 标准”。真正稳定的共同结构是：**主体/首帧真值 → 可见动作 → 镜头运动 → 时序/节奏 → 环境响应 → 落幅**；参考图、首尾帧、角色 ID、控制图、音频和 negative prompt 属于请求参数或独立输入，不应伪装成长篇自然语言。
+行业里没有一份跨厂商、强制统一的“视频 Prompt ISO 标准”。真正稳定的共同结构是：**主体/首帧真值 → 可见动作 → 镜头运动 → 人物视线/头部朝向 → 时序/节奏 → 环境响应 → 落幅**；参考图、首尾帧、角色 ID、控制图、音频和 negative prompt 属于请求参数或独立输入，不应伪装成长篇自然语言。固定机位同样是明确的 camera motion 合同；不需要为了填“运动”而添加装饰性推拉。
 
 n2d 因此采用两层对象：
 
@@ -37,7 +37,8 @@ n2d 因此采用两层对象：
   "subject": ["CHAR_01"],
   "scene": "LOC_01",
   "primary_action": "角色抬眼并握紧刀柄",
-  "camera_motion": "缓慢推近，尾端固定",
+  "camera_motion": "固定机位，锁定构图与轴线，摄影机保持完全静止",
+  "eyeline": "摄影机保持旁观者位置；角色头眼持续锁定画右的戏内对手，保持三分之四关系",
   "environment_motion": "衣袖只随抬手轻动",
   "rhythm": "克制推进，尾端留半拍",
   "end_state": "眼神定住，刀柄成为画面重心",
@@ -56,7 +57,7 @@ n2d 因此采用两层对象：
 {
   "kind": "n2d_compiled_video_prompt",
   "version": 2,
-  "profile_version": "2026-07-10.2",
+  "profile_version": "2026-07-22.1",
   "clip_id": "Clip_01",
   "backend": "seedance",
   "profile": "zh_motion_first",
@@ -74,7 +75,7 @@ n2d 因此采用两层对象：
     "trim_mode": "trim_tail",
     "requires_split": false
   },
-  "prompt": "从首帧连续运动到尾帧。主动作：……镜头：……时间：0.25-2.70秒完成主动作，保持落幅到3.20秒；其余只保持供裁切。",
+  "prompt": "从首帧连续运动到尾帧。主动作：……镜头：……视线与头部朝向：……时间：0.25-2.70秒完成主动作，保持落幅到3.20秒；其余只保持供裁切。",
   "negative_prompt": "",
   "request_controls": {
     "frame_inputs": [],
@@ -91,7 +92,7 @@ n2d 因此采用两层对象：
 
 | profile | 后端 | 主语言 | 主 prompt | negative |
 |---|---|---|---|---|
-| `zh_motion_first` | Dreamina/即梦、Seedance、Kling/可灵、Wan、generic | 中文 | I2V：主动作 + 运镜 + 可选环境响应 + 节奏 + 落幅 + 最短正向保持；T2V 才补主体/场景 | 必要的短保持句可内联；不复制完整 negative 合同 |
+| `zh_motion_first` | Dreamina/即梦、Seedance、Kling/可灵、Wan、generic | 中文 | I2V：主动作 + 运镜 + 视线/头部朝向 + 可选环境响应 + 节奏 + 落幅 + 最短正向保持；T2V 才补主体/场景 | 必要的短保持句可内联；不复制完整 negative 合同 |
 | `runway_motion_positive` | Runway Gen-4 | 英文 | 只描述希望发生的运动；不重复输入图；不用否定命令 | 必须为空 |
 | `veo_cinematography` | Veo/Gemini | 英文 | subject/action/camera/context/rhythm/end hold | 单独的元素列表，不拼入主 prompt |
 | `english_motion_keyframe` | Luma/Pika | 英文 | keyframe-aware action + camera motion | 单独字段 |

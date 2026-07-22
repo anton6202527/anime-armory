@@ -1194,6 +1194,35 @@ def test_lint_strips_inline_constraint_after_aspect_ratio_space() -> None:
     assert "combat_frontal_portrait_bias" not in codes
 
 
+def test_lint_does_not_treat_labelled_style_taboo_as_positive_frontal_request() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 08 斜劈")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；attack_path=持刀斜劈。"
+        "\n| ⑧ 禁忌/QC | 欧美脸、血浆猎奇、正面肖像摆拍； |"
+        "\n### 后端编译提交 image prompt\n```text\n"
+        "动作瞬间：持刀斜劈；角色视线锁对手；非 POV 镜不看镜头；"
+        "视觉风格：冷灰写实3D国风；风格禁忌=欧美脸、正面肖像摆拍；画幅：9:16。\n```"
+    )
+
+    codes = {f["code"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert "combat_frontal_portrait_bias" not in codes
+
+
+def test_lint_keeps_positive_frontal_request_after_labelled_style_taboo() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态"}
+    blk = _char_block("Clip 08 斜劈")
+    blk["body"] += (
+        "\n**专项镜头模板**：fight_exchange；attack_path=持刀斜劈。"
+        "\n### 后端编译提交 image prompt\n```text\n"
+        "风格禁忌=欧美脸、正面肖像摆拍；动作瞬间：持刀斜劈，清晰正脸；"
+        "角色视线锁对手；非 POV 镜不看镜头。\n```"
+    )
+
+    codes = {f["code"] for f in image_qc.lint_shot_block(blk, valid)}
+    assert "combat_frontal_portrait_bias" in codes
+
+
 def test_lint_validates_identity_bindings_not_episode_state_prose() -> None:
     valid = {"CHAR_01", "CHAR_01/常态"}
     blk = _char_block("Clip 03", char_id="CHAR_01/常态")
@@ -2966,8 +2995,9 @@ def test_audit_face_anchor_quality_normalizes_six_panel_expression_sheet(tmp_pat
         def cv2_face_boxes(_path):
             # Each face is only 3% of the complete sheet, but 18% of one 2x3 panel.
             return [
-                (110, 150, 180, 360), (510, 150, 180, 360), (910, 150, 180, 360),
-                (110, 1050, 180, 360), (510, 1050, 180, 360), (910, 1050, 180, 360),
+                (160, 120, 180, 360), (760, 120, 180, 360),
+                (160, 720, 180, 360), (760, 720, 180, 360),
+                (160, 1320, 180, 360), (760, 1320, 180, 360),
             ]
 
     monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)
@@ -2998,8 +3028,9 @@ def test_audit_face_anchor_quality_blocks_incomplete_six_panel_expression_sheet(
         @staticmethod
         def cv2_face_boxes(_path):
             return [
-                (110, 150, 180, 360), (510, 150, 180, 360), (910, 150, 180, 360),
-                (110, 1050, 180, 360), (510, 1050, 180, 360),
+                (160, 120, 180, 360), (760, 120, 180, 360),
+                (160, 720, 180, 360), (760, 720, 180, 360),
+                (160, 1320, 180, 360),
             ]
 
     monkeypatch.setattr(image_qc, "_load_review_module", lambda _name: FakeFaceModule)

@@ -1,0 +1,194 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "让她活过下一爪 content_promise 本集立即兑现杀裴所得二十年如何转化为斩虎生机 viewer_question",
+      "到账 dramatic_function 承接上集后果并兑现第一笔道行 scene 尸骸荒野/夕/外 continuity_story",
+      "年。 spectacle_story_function 兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱",
+      "spectacle_story_function 兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。 rhythm",
+      "spectacle_story_function 兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。 rhythm 爽点",
+      "label 一刀断虎首 dramatic_function 动作兑现与数值反转 scene 尸骸荒野/夕/外 continuity_story",
+      "dramatic_function 系统母题视觉奇观与成长兑现 scene 百妖谱主观层/荒野叠化 continuity_story"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "EP02_CLIP08 | 4.213s | 留白·定格 | 摹影进阶隐患真相半露 | hard_cut：虎眼亮后切黑 | 爽点卡点",
+        "question_id": "Q01",
+        "signal": "真相",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "EP02_CLIP05 虎眼 apex 约 42s。字幕、系统文字与数值全部后期叠加。 收录：虎山神 杀裴换来的二十",
+        "question_id": "Q02",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "影虎山神获圆满刀法 dramatic_function 系统母题视觉奇观与成长兑现 scene 百妖谱主观层/荒野叠",
+        "question_id": "Q03",
+        "signal": "系统",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": true,
+    "current_head": "# 那妖魔是姜大人_第2集_配音文案\n# 取材：原著第2章《收录：虎山神》\n# 核心看点：姜月初背负杀人代价，用裴长青换来的二十年道行一刀斩虎，再以妖血摹影获得圆满刀法\n# 留存曲线：杀裴余震冷开场 → 二十年到账 → 虎爪压顶 → 一刀断首 → 百年道行反转 → 摹影虎山神 → 圆满刀法与未知进阶钩\n\n[镜头1·姜月初·惊惧警觉·快] 裴长青死了。|| 是我亲手杀的。可虎爪，已经落下。  ⚡钩子\n[镜头2·虎妖·讥诮轻蔑·慢] 人族最爱讲同袍之义。到头来，也不过如此。\n[镜头3·百妖谱·中性冷硬·慢] 击杀闻弦境生物，获得其道行二十年。  ⚡钩子\n[镜头4·姜月初·压抑决绝·快] 对错、良知……活下来以后，才有资格谈。|| 我想活。这二十年，是我唯一的生机，也是杀人的代价。\n[镜头5·虎妖·暴虐不屑·快] 小丫头，你也敢向我挥刀？",
+    "finding": "上集尾钩和本集冷开场缺共享信号；检查是否断承接。",
+    "hook_bridge": null,
+    "previous_episode": "第1集",
+    "previous_tail": "visual_hook 横刀悬在裴长青胸前，姜月初双手发抖；后景虎妖巨影压近，但刀口对准的是人。 hook_type 反差/危机 content_proposition 她为什么不杀妖，反而要杀刚救她的人？ onscreen_text 想活下去，先杀一个人——我刀下的不是妖 onscreen_duration_sec 2.2 muted_safe_proof 刀口、人类目标、后景虎妖与女主痛苦表情构成无需文字的三角冲突。 muted_safe True muted_readable True content_promise 她会如何用杀人的代价争得生路？ expected_metric primary retention_3s target 0.8\nhook_id OPEN_01 promise_type opening_hook hook_type 反差 opened_at EP01_CLIP01 promise 姜月初为何把刀对准人而不是妖 payoff_due EP01_CLIP08 payoff_status paid payoff_clip EP01_CLIP08 payof",
+    "shared_signals": [],
+    "status": "warn"
+  },
+  "episode": "第2集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "a925e16b3d4e9781",
+  "performance_prompt_cues": [
+    {
+      "clip": "EP02_CLIP01",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        },
+        {
+          "character_form": "CHAR_02/“濒死重伤态”",
+          "prompt_cue": "freeform=极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀"
+        },
+        {
+          "character_form": "BEAST_01/“穿心复生态”",
+          "prompt_cue": "freeform=说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP02",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        },
+        {
+          "character_form": "BEAST_01/“穿心复生态”",
+          "prompt_cue": "freeform=说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP03",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        },
+        {
+          "character_form": "BEAST_01/“穿心复生态”",
+          "prompt_cue": "freeform=说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP04",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP05",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP06",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        },
+        {
+          "character_form": "CHAR_02/“濒死重伤态”",
+          "prompt_cue": "freeform=极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀"
+        }
+      ]
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "inject_into": [
+        "image_prompt.performance",
+        "video_prompt.performance",
+        "voice_or_native_av.direction"
+      ],
+      "performance_signature_prompt": [
+        {
+          "character_form": "CHAR_01/“囚途残损态”",
+          "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "boundary_status": "warn",
+    "open_questions": 0,
+    "performance_cue_clips": 8
+  },
+  "version": 1
+}

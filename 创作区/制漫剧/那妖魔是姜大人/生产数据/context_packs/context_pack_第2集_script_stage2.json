@@ -65,7 +65,7 @@
       "sha256": "35994b3d78f5470ff1c201c977108199d96ce2007fa8285462832a275be30f4d"
     },
     {
-      "bytes": 3205,
+      "bytes": 3315,
       "exists": true,
       "preview": {
         "episode": "第2集",
@@ -84,7 +84,7 @@
         "version": 1
       },
       "relpath": "脚本/第2集/axis_blocking_map.json",
-      "sha256": "40dfb899aa1b4e51bf4bc0cc24134d6c99ed61574c4e6deb3e17f12d9658d58a"
+      "sha256": "fb144ec144f3d712c6a30ad502fc404917c773a1c08ed59e87d1b80d36973cc8"
     },
     {
       "bytes": 2295,
@@ -108,7 +108,7 @@
       "sha256": "a4381afa6841c7959d6d6a72218076d8d7e8f62fc3351934515459430bec596a"
     },
     {
-      "bytes": 1968,
+      "bytes": 2190,
       "exists": true,
       "preview": {
         "episode": "第2集",
@@ -125,7 +125,7 @@
         "version": 1
       },
       "relpath": "脚本/第2集/transition_map.json",
-      "sha256": "8f29ea4dd37b2d70facd205cc4c0b6e0aa6d2bd0b91d3215cbf866380739b4df"
+      "sha256": "dc89f9f93cd147b1235c2f961e888fae3dbbb540de00260050f5fa19f8122c3f"
     },
     {
       "bytes": 2123,
@@ -170,11 +170,11 @@
       "sha256": "344dbf476c6fc498e7cff7403898b83426c54b8c09a32e4ad6bb094bf38fbf2d"
     },
     {
-      "bytes": 1222,
+      "bytes": 921,
       "exists": true,
-      "preview": "# P-2 导演排戏包 — 第2集\n本包位于 Stage 1 台词之后、Stage 2 分镜之前，用来先锁导演排戏、镜头衔接和竖屏调度。\n## Required Files\n- `脚本/第2集/director_beat_sheet.json`\n- `脚本/第2集/axis_blocking_map.json`\n- `脚本/第2集/shot_progression_plan.json`\n- `脚本/第2集/transition_map.json`\n- `脚本/第2集/vertical_composition_plan.json`\n- `脚本/第2集/edit_rhythm_map.json`\n## Check\n- 状态：block\n- 通过：5/7\n| 文件 | 状态 | 问题 |\n|---|---|---|\n| `脚本/第2集/director_beat_sheet.json` | pass | - |\n| `脚本/第2集/axis_blocking_map.json` | block | SR_TIGER_CONFRONT 缺正反打字段：shot_pairing |\n| `脚本/第2集/shot_progression_plan.json` | pass | - |\n| `脚本/第2集/transition_map.json` | block | Seam_01 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断；Seam_02 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断；Seam_03 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断 |\n| `脚本/第2集/vertical_composition_plan.json` | pass | - |\n| `脚本/第2集/edit_rhythm_map.json` | pass | - |\n| `脚本/第2集/director_blocking_signoff.json` | pass | - |",
+      "preview": "# P-2 导演排戏包 — 第2集\n本包位于 Stage 1 台词之后、Stage 2 分镜之前，用来先锁导演排戏、镜头衔接和竖屏调度。\n## Required Files\n- `脚本/第2集/director_beat_sheet.json`\n- `脚本/第2集/axis_blocking_map.json`\n- `脚本/第2集/shot_progression_plan.json`\n- `脚本/第2集/transition_map.json`\n- `脚本/第2集/vertical_composition_plan.json`\n- `脚本/第2集/edit_rhythm_map.json`\n## Check\n- 状态：pass\n- 通过：7/7\n| 文件 | 状态 | 问题 |\n|---|---|---|\n| `脚本/第2集/director_beat_sheet.json` | pass | - |\n| `脚本/第2集/axis_blocking_map.json` | pass | - |\n| `脚本/第2集/shot_progression_plan.json` | pass | - |\n| `脚本/第2集/transition_map.json` | pass | - |\n| `脚本/第2集/vertical_composition_plan.json` | pass | - |\n| `脚本/第2集/edit_rhythm_map.json` | pass | - |\n| `脚本/第2集/director_blocking_signoff.json` | pass | - |",
       "relpath": "生产数据/director_blocking_pack_第2集.md",
-      "sha256": "97e527206bebfd77df78b1742af0a5f32b60b5cba14bba7df7d5df5059bd3788"
+      "sha256": "a227e67f4be54fafc03f7886aed1b21be50903520f5605f6ccc5accf812dc897"
     },
     {
       "bytes": 2274,
@@ -242,7 +242,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第2集.json",
-      "sha256": "47ce5fde3fa2eb0c12509a687a96405ed482caf51a9e4c2721de9e739e20c073"
+      "sha256": "3ac11043015c6f4c3b07d0cb3ca64a05a93d7e6a707afe1da2746a9e17c3bc1a"
     }
   ],
   "genre_pack_context": {
@@ -256,7 +256,7 @@
     },
     "active_scene_archetypes": [],
     "episode": "第2集",
-    "generated_at": "2026-07-22T06:37:42+00:00",
+    "generated_at": "2026-07-22T06:41:05+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",

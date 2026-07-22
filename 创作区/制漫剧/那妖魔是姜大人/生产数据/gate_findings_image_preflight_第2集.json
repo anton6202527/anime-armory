@@ -1,0 +1,2698 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "合规前置"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "合规前置",
+          "dim_key": "合规前置",
+          "dimension": "合规前置",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "时间基准"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "时间基准",
+          "dim_key": "时间基准",
+          "dimension": "时间基准",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "第2集",
+          "message": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "msg": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "voice",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "voice",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "关键镜候选"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "关键镜候选",
+          "dim_key": "关键镜候选",
+          "dimension": "关键镜候选",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第2集.json",
+          "message": "检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
+          "msg": "检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生图后端适配"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端适配",
+          "dim_key": "生图后端适配",
+          "dimension": "生图后端适配",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+          "msg": "统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "生图后端适配",
+          "dim_key": "生图后端适配",
+          "dimension": "生图后端适配",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+          "msg": "适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "脸漂预案",
+          "dim_key": "character_consistency",
+          "dimension": "脸漂预案",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "虎妖（BEAST_01）",
+          "message": "本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "msg": "本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "脸漂预案",
+          "dim_key": "character_consistency",
+          "dimension": "脸漂预案",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "姜月初（CHAR_01）",
+          "message": "本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "msg": "本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "物料漂移预案"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "物料漂移预案",
+          "dim_key": "物料漂移预案",
+          "dimension": "物料漂移预案",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "横刀（WEAPON_01）",
+          "message": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "msg": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "物料漂移预案",
+          "dim_key": "物料漂移预案",
+          "dimension": "物料漂移预案",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "横刀（WEAPON_横刀）",
+          "message": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "msg": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "风格化脸机检",
+          "dim_key": "character_consistency",
+          "dimension": "风格化脸机检",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+          "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "review",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "review",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "跨集色调"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "跨集色调",
+          "dim_key": "跨集色调",
+          "dimension": "跨集色调",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "本集色调基线基调「冷灰青黑+暗红夕照」与打样集 第1集「冷灰、土褐、墨黑」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "msg": "本集色调基线基调「冷灰青黑+暗红夕照」与打样集 第1集「冷灰、土褐、墨黑」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "剧情经济性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "剧情经济性",
+          "dim_key": "剧情经济性",
+          "dimension": "剧情经济性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "msg": "story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+          "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+          "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+          "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "image prompt compiler",
+          "dim_key": "image prompt compiler",
+          "dimension": "image prompt compiler",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 姜月初（`CHAR_01/“囚途残损态”`）",
+          "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "光影一致性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "光影一致性",
+          "dim_key": "光影一致性",
+          "dimension": "光影一致性",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+          "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image_prompt",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第2集/prompt",
+        "出视频/第2集/prompt",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "semantic_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第2集/prompt",
+            "出视频/第2集/prompt",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "storyboard.json",
+          "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位产物：出图/第2集/prompt、出视频/第2集/prompt、脚本/第2集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第2集/prompt/01_分镜出图.md",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_04",
+        "Clip_05",
+        "Clip_06",
+        "Clip_07",
+        "Clip_08"
+      ],
+      "dimensions": [
+        "state_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第2集/prompt/01_分镜出图.md",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_03",
+            "Clip_04"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第2集/prompt/01_分镜出图.md",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_03",
+            "Clip_05"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第2集/prompt/01_分镜出图.md",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_03",
+            "Clip_06"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第2集/prompt/01_分镜出图.md",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_03",
+            "Clip_07"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/共享/asset_registry.json",
+            "出图/共享/visual_state_ledger.json",
+            "出图/第2集/prompt/01_分镜出图.md",
+            "脚本/第2集/storyboard.json"
+          ],
+          "affected_shots": [
+            "Clip_03",
+            "Clip_08"
+          ],
+          "dim": "状态百科(P1)",
+          "dim_key": "state_continuity",
+          "dimension": "状态百科(P1)",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "状态百科(P1)",
+          "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。；定位镜头：Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_08；定位产物：出图/共享/asset_registry.json、出图/共享/visual_state_ledger.json、出图/第2集/prompt/01_分镜出图.md、脚本/第2集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "景别阶梯"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第2集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "出图/共享/prompt",
+            "出图/第2集/prompt"
+          ],
+          "affected_shots": [],
+          "dim": "景别阶梯",
+          "dim_key": "景别阶梯",
+          "dimension": "景别阶梯",
+          "episode": "第2集",
+          "gate_stage": "image_preflight",
+          "loc": "EP02_CLIP02→EP02_CLIP04",
+          "message": "连续 3 镜同景别 CU（EP02_CLIP02→EP02_CLIP04）——景别阶梯单调、缺远近或机位变化；按导演意图穿插不同景别/机位（或确认为设计内的同景别段）。",
+          "msg": "连续 3 镜同景别 CU（EP02_CLIP02→EP02_CLIP04）——景别阶梯单调、缺远近或机位变化；按导演意图穿插不同景别/机位（或确认为设计内的同景别段）。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。；定位产物：合规/compliance_manifest.json、脚本/第2集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、出图/共享/prompt、出图/第2集/prompt"
+    }
+  ],
+  "episode": "第2集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+      "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+      "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "时间基准",
+      "dim_key": "时间基准",
+      "dimension": "时间基准",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "第2集",
+      "message": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+      "msg": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "voice",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "关键镜候选",
+      "dim_key": "关键镜候选",
+      "dimension": "关键镜候选",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第2集.json",
+      "message": "检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
+      "msg": "检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划（普通关键镜 K>=3，动作/强情绪/多人同框自动升档，名场面封面级）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端适配",
+      "dim_key": "生图后端适配",
+      "dimension": "生图后端适配",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "message": "统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+      "msg": "统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "生图后端适配",
+      "dim_key": "生图后端适配",
+      "dimension": "生图后端适配",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "message": "适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+      "msg": "适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统一 `_设置.md` 与全部 prompt 的生图模型/渠道，并按新模型/渠道重做/刷新本集定妆、参考包和身份注册，禁止半集混用。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "脸漂预案",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "虎妖（BEAST_01）",
+      "message": "本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "msg": "本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "脸漂预案",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "姜月初（CHAR_01）",
+      "message": "本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+      "msg": "本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "横刀（WEAPON_01）",
+      "message": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "横刀（WEAPON_横刀）",
+      "message": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "百妖谱（VFX_百妖谱）",
+      "message": "本集物料漂移风险 medium（分46）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分46）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "百妖谱金色古卷面板（VFX_系统面板）",
+      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "墨虎谱影（VFX_墨虎谱影）",
+      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "LOC 尸骸荒野（LOC_尸骸荒野）",
+      "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+      "message": "director_camera_plan_第2集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第2集.json·SHA 绑定 plan+prompt）。",
+      "msg": "director_camera_plan_第2集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第2集.json·SHA 绑定 plan+prompt）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "风格化脸机检",
+      "dim_key": "character_consistency",
+      "dimension": "风格化脸机检",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "message": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+      "msg": "基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEID_MODEL 并重跑 full QC。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "review",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "物料新鲜度",
+      "dim_key": "物料新鲜度",
+      "dimension": "物料新鲜度",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "第2集",
+      "message": "skill 有改动但仅限横切/QC/gate 层（n2d, n2d-image），不影响本阶段输入物料；如需可跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 复核。",
+      "msg": "skill 有改动但仅限横切/QC/gate 层（n2d, n2d-image），不影响本阶段输入物料；如需可跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第2集` 复核。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "跨集色调",
+      "dim_key": "跨集色调",
+      "dimension": "跨集色调",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+      "message": "本集色调基线基调「冷灰青黑+暗红夕照」与打样集 第1集「冷灰、土褐、墨黑」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+      "msg": "本集色调基线基调「冷灰青黑+暗红夕照」与打样集 第1集「冷灰、土褐、墨黑」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "剧本可看性合同",
+      "dim_key": "剧本可看性合同",
+      "dimension": "剧本可看性合同",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/script_quality_contract_第2集.json",
+      "message": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
+      "msg": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "剧情经济性",
+      "dim_key": "剧情经济性",
+      "dimension": "剧情经济性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+      "message": "story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+      "msg": "story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+      "message": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+      "msg": "编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+      "message": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+      "msg": "编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "光影一致性",
+      "dim_key": "光影一致性",
+      "dimension": "光影一致性",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+      "message": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "msg": "色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "剧本可看性消费",
+      "dim_key": "剧本可看性消费",
+      "dimension": "剧本可看性消费",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+      "message": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "msg": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第2集/prompt",
+        "出视频/第2集/prompt",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "storyboard.json",
+      "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+      "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第2集/prompt/01_分镜出图.md",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_04"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第2集/prompt/01_分镜出图.md",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_05"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第2集/prompt/01_分镜出图.md",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_06"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第2集/prompt/01_分镜出图.md",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_07"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/共享/asset_registry.json",
+        "出图/共享/visual_state_ledger.json",
+        "出图/第2集/prompt/01_分镜出图.md",
+        "脚本/第2集/storyboard.json"
+      ],
+      "affected_shots": [
+        "Clip_03",
+        "Clip_08"
+      ],
+      "dim": "状态百科(P1)",
+      "dim_key": "state_continuity",
+      "dimension": "状态百科(P1)",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "状态百科(P1)",
+      "message": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "msg": "虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+      "rerun_scope": "修 visual_state_ledger / 出图分镜 prompt 的角色/道具状态锁；道具 lifecycle 未结构化的升级为 {states,transitions}；必要时回 storyboard / asset_registry 修状态演进。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 姜月初（`CHAR_01/“囚途残损态”`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 裴长青（`CHAR_02/“濒死重伤态”`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 虎妖（`BEAST_01/“穿心复生态”`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/场景定妆.md ## LOC 尸骸荒野（`LOC_尸骸荒野`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_01`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_横刀`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "image prompt compiler",
+      "dim_key": "image prompt compiler",
+      "dimension": "image prompt compiler",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 墨虎谱影（`VFX_墨虎谱影`）",
+      "message": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+      "msg": "共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第2集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "出图/共享/prompt",
+        "出图/第2集/prompt"
+      ],
+      "affected_shots": [],
+      "dim": "景别阶梯",
+      "dim_key": "景别阶梯",
+      "dimension": "景别阶梯",
+      "episode": "第2集",
+      "gate_stage": "image_preflight",
+      "loc": "EP02_CLIP02→EP02_CLIP04",
+      "message": "连续 3 镜同景别 CU（EP02_CLIP02→EP02_CLIP04）——景别阶梯单调、缺远近或机位变化；按导演意图穿插不同景别/机位（或确认为设计内的同景别段）。",
+      "msg": "连续 3 镜同景别 CU（EP02_CLIP02→EP02_CLIP04）——景别阶梯单调、缺远近或机位变化；按导演意图穿插不同景别/机位（或确认为设计内的同景别段）。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract、出图 prompt、共享定妆与资产注册层，再重跑 image_preflight；未过不得调用生图后端。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "image_preflight",
+  "generated_at": "2026-07-22T07:52:07+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "9ad1cd026c374bda3bdc39f53c94c1ba619eeb8ef822a2e83e1936a9298f0e43",
+      "出图/共享/identity_registry.json": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8",
+      "出图/共享/prompt": null,
+      "出图/共享/prompt/00_索引.md": "9b4b75a12657b58fdf5d6ae5f78d6534e1630de86b2dcdb0a09e05a9c54cdd5e",
+      "出图/共享/prompt/场景定妆.md": "0081a9c4af9294720644787a5f81be6861d73a2b672182161c51879eb8181485",
+      "出图/共享/prompt/特效定妆.md": "d56c4392ac85ad936467086586122e2743df8fcc6ce9a6489a86f52d718d833d",
+      "出图/共享/prompt/角色定妆.md": "8301127089638f27b7c744bf50aa7cf75f0dbef060dc136c4674e197349a7ed0",
+      "出图/共享/prompt/道具定妆.md": "d499dfc9b4dbccd5f03ee3caff37f09124243a0ac9ca58cf44e947a436cb185c",
+      "出图/共享/prompt/风格锚.md": "380de2fac0f3b32867e16d9a309296ddf7817908de3b27b023496eaec9713124",
+      "出图/共享/visual_state_ledger.json": null,
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态.png": "f59bb1dabda858862bdefcd033a27d1c5548068aaa928750936c300c9fd4a9d2",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png": "1814fce3c5e306a0b3eb691751612784f04a8a7dd0c789aa614a2382a019f390",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png": "80f54f059a1a2747bf40ca9a96351193fd91404c371260bc6145a2c027fce646",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png": "30cad826aee7b7391fe11a38a78c4edd6704433bf07be014ffb69e2a2dd7f325",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png": "0260df7443c2fa08f34e5c6661daa3f28002706fee4c77e2e455ca1a66d20774",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png": "587b9de963c9f053f0df55babcef3519d354350a5d9ccbed1ddc9455aa8890fc",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png": "72e27a955b7e764d746cd1a167b5c88466ac33ddd82c130e563ce5226cff3911",
+      "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png": "72e27a955b7e764d746cd1a167b5c88466ac33ddd82c130e563ce5226cff3911",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态.png": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png": "34472f5a8bd7384657bcbe00eaf840f38d418d10150d69b47e95a85a0b2d18d3",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png": "7486b5c1050b361a664fb96da22a7544ddf4bacaabb07ba1a6f7c0cb46659f93",
+      "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png": "6907dedab4f7d55bd070ceb4b765e70a8f94a41fbe1ff43d84d865dc8265bce9",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png": "62020cae9671713f59e48686969444e9ec7a77a6cf0307167da26a04f2198a4c",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png": "b2aa5313add850923b450aa61b02880f73153391b51026107829826b388cbf45",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png": "529779beffc9ccbf180bbd616957af209ffef63e682d91fc9eddb4fc85cc39fa",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png": "8dfba88209e0d8a37b707c5f952008c8b5cc93953c487f9e0da114f3b9368abf",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+      "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+      "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+      "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png": "684e345c9db2d41a07b78bdbf5134d053c1b9cbc17977a469c8c0337cbb41280",
+      "出图/共享/图片/定妆_场景_LOC_尸骸荒野_平面图.png": "9dd195f171758074ff50e70cf083240de9c3c25fd77b14afda2499c0d0957db0",
+      "出图/共享/图片/定妆_场景_尸骸荒野.png": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+      "出图/共享/图片/定妆_场景_尸骸荒野_反打.png": "684e345c9db2d41a07b78bdbf5134d053c1b9cbc17977a469c8c0337cbb41280",
+      "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png": "9dd195f171758074ff50e70cf083240de9c3c25fd77b14afda2499c0d0957db0",
+      "出图/共享/图片/定妆_武器_横刀.png": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+      "出图/共享/图片/定妆_武器_横刀_手持.png": "de473ac3f8d6c0c1bcbcd5a3800be6490d7c9f2523b5a19211fa52d84bc9bf0a",
+      "出图/共享/图片/定妆_武器_横刀_比例.png": "6223c678a5b78e17e6899235e59290242b8328f8af849955f5df59091a3ad647",
+      "出图/共享/图片/定妆_特效_墨虎谱影.png": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31",
+      "出图/共享/图片/定妆_特效_百妖谱.png": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5",
+      "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5",
+      "出图/共享/图片/定妆_道具_断刀.png": "3cb309b088075bf5c351adf6ebf116059412c847e59b92f5292097bf3a3c4b53",
+      "出图/共享/图片/定妆_道具_断刀_手持.png": "3cb309b088075bf5c351adf6ebf116059412c847e59b92f5292097bf3a3c4b53",
+      "出图/共享/图片/定妆_道具_断刀_比例.png": "3cb309b088075bf5c351adf6ebf116059412c847e59b92f5292097bf3a3c4b53",
+      "出图/共享/图片/定妆_道具_翻覆囚车.png": "7114a7750be84e7b624edeefc95980c6dbadbb220a358c97e4c68f3170b19798",
+      "出图/共享/图片/定妆_道具_翻覆囚车_反面.png": "ed997f84a0a58e73c5d03a87952ebf83fca65d9f69575f94fbe37526938369d8",
+      "出图/共享/图片/定妆_道具_翻覆囚车_比例.png": "7114a7750be84e7b624edeefc95980c6dbadbb220a358c97e4c68f3170b19798",
+      "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+      "出图/第2集/prompt": null,
+      "出图/第2集/prompt/00_总览.md": "63e59ac53382eb343f400b94f64820fee396401584233e13ba4d0f0be64cb0b8",
+      "出图/第2集/prompt/01_分镜出图.md": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a",
+      "出视频/第2集/prompt": null,
+      "合规/compliance_manifest.json": "674a9cc9322462ee4e11dc503fdb129fe819244f65e2495ac0917258de878452",
+      "脚本/第2集/storyboard.json": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957",
+      "设定库/characters/姜月初.md": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e",
+      "设定库/characters/虎妖.md": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c",
+      "设定库/characters/裴长青.md": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
+    },
+    "sha": "fbab0bbe0c0d313457e85ce307c9f1f7efe62a55e697eb445212f9e588e5d3a9"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "image prompt compiler": {
+        "block": 0,
+        "info": 0,
+        "warn": 20
+      },
+      "光影一致性": {
+        "block": 0,
+        "info": 0,
+        "warn": 8
+      },
+      "关键镜候选": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "剧情经济性": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "剧本可看性合同": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "剧本可看性消费": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "合规前置": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "导演运镜落实": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "时间基准": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "景别阶梯": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "物料新鲜度": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "物料漂移预案": {
+        "block": 0,
+        "info": 4,
+        "warn": 2
+      },
+      "状态百科(P1)": {
+        "block": 0,
+        "info": 0,
+        "warn": 5
+      },
+      "生图后端适配": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
+      },
+      "脸漂预案": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
+      },
+      "语义谱系(P0)": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "跨集色调": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "风格化脸机检": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      }
+    },
+    "severity": {
+      "block": 0,
+      "info": 8,
+      "warn": 47
+    },
+    "total": 55
+  },
+  "version": 1
+}

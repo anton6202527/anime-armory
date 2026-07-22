@@ -1,7 +1,7 @@
 {
-  "event_count": 357,
+  "event_count": 359,
   "kind": "n2d_flow_telemetry",
-  "last_event_at": "2026-07-22T14:37:42+0800",
+  "last_event_at": "2026-07-22T14:59:50+0800",
   "milestone_count": 336,
   "milestones": {
     "actual_rough_cut_planned": 23,
@@ -14,37 +14,38 @@
     "video_submit_failed": 3,
     "video_submitted": 23
   },
-  "next_action_count": 21,
+  "next_action_count": 23,
   "orchestrator_latency_ms": {
-    "max": 3275.01,
+    "max": 3505.474,
     "p50": 1634.038,
-    "p95": 2935.064
+    "p95": 3241.015
   },
   "prework": {
     "cache_hit_rate": 0.0,
     "cache_hits": 0,
-    "total": 376
+    "total": 427
   },
   "stage_transitions": {
     "script_stage1->script_stage2": 1,
     "script_stage1->voice": 1,
-    "script_stage2->image_prompt": 1,
+    "script_stage2->image_prompt": 2,
     "voice->script_stage2": 1
   },
   "stages": {
     "compose_proxy": 26,
-    "image_prompt": 6,
+    "image_prompt": 7,
     "script_stage1": 5,
-    "script_stage2": 8,
+    "script_stage2": 9,
     "video": 310,
     "voice": 2
   },
   "stop_reasons": {
+    "blocked_by_entry_check": 1,
     "blocked_by_gate": 1,
-    "needs_agent_gen": 5,
+    "needs_agent_gen": 6,
     "needs_stage_execution": 1,
     "prework_failed": 14
   },
-  "updated_at": "2026-07-22T14:37:42+0800",
+  "updated_at": "2026-07-22T14:59:50+0800",
   "version": 1
 }

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <rect width="1080" height="1920" fill="#edf0f2"/>
+  <line x1="80" y1="1710" x2="1000" y2="1710" stroke="#8a9096" stroke-width="8"/>
+  <path d="M180 1320 C360 1100 650 750 900 520" fill="none" stroke="#b8bec4" stroke-width="10" stroke-dasharray="24 18"/>
+  <g stroke="#222a31" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <circle cx="350" cy="910" r="75" fill="#d9dde0"/>
+    <path d="M350 995 L400 1240 L310 1500 M395 1235 L540 1455"/>
+    <path d="M380 1070 L230 1220 M390 1080 L585 980"/>
+    <path d="M245 1215 L680 945" stroke="#b47b2c" stroke-width="22"/>
+  </g>
+  <g stroke="#553f36" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <circle cx="780" cy="660" r="105" fill="#c1aaa0"/>
+    <path d="M755 765 L650 1040 L790 1320 M660 1030 L560 1300"/>
+    <path d="M700 835 L555 985 M730 830 L590 900"/>
+  </g>
+  <path d="M680 945 L735 785" stroke="#d94832" stroke-width="18" stroke-linecap="round"/>
+  <path d="M670 940 Q710 900 745 790" fill="none" stroke="#e1a43a" stroke-width="12"/>
+  <text x="70" y="120" font-family="Arial, sans-serif" font-size="46" fill="#222a31">EP02 CLIP03 cross-slash pose guide</text>
+  <text x="70" y="180" font-family="Arial, sans-serif" font-size="32" fill="#555d64">observer side view · Jiang lower-left → upper-right · tiger upper-right → lower-left</text>
+  <text x="70" y="1785" font-family="Arial, sans-serif" font-size="30" fill="#555d64">contact frame: blade touches neck; head still attached; no chest contact</text>
+</svg>

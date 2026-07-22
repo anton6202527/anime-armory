@@ -1,0 +1,21 @@
+{
+  "available": true,
+  "episode": "第2集",
+  "kind": "n2d_memory_anchor_plan",
+  "notes": [
+    "本集无需重注入记忆锚（无长间隔再登场 / 晚集 / 已测漂移角色）。"
+  ],
+  "rows": [],
+  "source_fingerprint": {
+    "identity_drift_report_sha256": "1c974f7e406adac26ac80fd89a4a1d27fb57fec08e5a183c6735d0f51aa1337c",
+    "identity_registry_sha256": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8",
+    "storyboard_sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+  },
+  "status": "ready",
+  "target_appearances": [
+    "CHAR_01/“囚途残损态”",
+    "CHAR_02/“濒死重伤态”",
+    "BEAST_01/“穿心复生态”"
+  ],
+  "version": 3
+}

@@ -27,7 +27,8 @@ def test_missing_camera_gets_prompt_injections():
     assert clip["findings"][0]["code"] == "camera_move_missing"
     assert "起幅·运动余量" in clip["image_prompt_injection"]
     assert "镜头运动" in clip["video_prompt_injection"]
-    assert clip["recommended"]["camera_move_zh"] in {"升降", "推镜头"}
+    assert clip["recommended"]["camera_move_zh"] == "固定机位"
+    assert "摄影机保持完全静止" in clip["video_prompt_injection"]["镜头运动"]
 
 
 def test_unstructured_camera_is_warned():
@@ -36,7 +37,7 @@ def test_unstructured_camera_is_warned():
     codes = {f["code"] for f in out["findings"]}
 
     assert "camera_move_unstructured" in codes
-    assert out["recommended"]["camera_move_zh"] == "推镜头"
+    assert out["recommended"]["camera_move_zh"] == "固定机位"
 
 
 def test_static_camera_is_recognized():
@@ -55,8 +56,8 @@ def test_overactive_closeup_is_warned():
     codes = {f["code"] for f in out["findings"]}
 
     assert "overactive_closeup" in codes
-    assert out["recommended"]["camera_move_zh"] == "推镜头"
-    assert out["recommended"]["speed"] == "轻微"
+    assert out["recommended"]["camera_move_zh"] == "固定机位"
+    assert out["recommended"]["speed"] == "静止"
 
 
 def test_write_plan_creates_sidecars(tmp_path):
@@ -145,3 +146,36 @@ def test_real_screen_insert_still_gets_screen_camera():
     assert dcp.classify_clip(clip)["screen"] is True
     assert out["recommended"]["camera_move_zh"] == "固定机位"
     assert "屏幕/面板镜" in out["recommended"]["reason"]
+
+
+def test_explicit_camera_motivation_allows_one_controlled_push():
+    clip = _clip("CU 特写", rhythm="反转·打脸")
+    clip["camera_motivation"] = "从人物反应转向刚被发现的物证"
+
+    out = dcp.analyze_clip(clip, 1)
+
+    assert out["recommended"]["camera_move_zh"] == "推镜头"
+    assert "从人物反应转向刚被发现的物证" in out["recommended"]["reason"]
+
+
+def test_unmotivated_direct_camera_gaze_is_warned_and_guarded():
+    clip = _clip("MCU 中近景", template="dialogue_shot_reverse")
+    clip["description"] = "她忽然正面直视镜头说出真相。"
+
+    out = dcp.analyze_clip(clip, 1)
+    codes = {f["code"] for f in out["findings"]}
+
+    assert "unmotivated_direct_camera_gaze" in codes
+    assert "戏内对手/道具/动作落点" in out["video_prompt_injection"]["视线表演"]
+
+
+def test_pov_direct_gaze_is_an_explicit_exception():
+    clip = _clip("CU 特写", template="POV")
+    clip["gaze_intent"] = "破第四墙，对镜讲话"
+    clip["description"] = "她直视镜头。"
+
+    out = dcp.analyze_clip(clip, 1)
+    codes = {f["code"] for f in out["findings"]}
+
+    assert "unmotivated_direct_camera_gaze" not in codes
+    assert "登记节拍内把视线落到摄影机" in out["video_prompt_injection"]["视线表演"]

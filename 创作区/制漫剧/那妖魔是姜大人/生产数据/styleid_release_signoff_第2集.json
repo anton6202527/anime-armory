@@ -1,0 +1,10 @@
+{
+  "kind": "n2d_styleid_release_signoff",
+  "version": 1,
+  "episode": "第2集",
+  "accepted": true,
+  "reviewer": "user:wesley",
+  "reason": "本集当前仅作 internal_only 内部漫剧制作；接受 ArcFace 降级机检，并以已授权的 executor_visual 逐张实际像素复核补强近景脸一致性。转正式投放前须改用可用 StyleID 后端或重新签收。",
+  "reviewed_at": "2026-07-22T15:30:00+08:00",
+  "expires_at": "2026-08-22T23:59:59+08:00"
+}

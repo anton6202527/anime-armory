@@ -180,6 +180,9 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "### 后端编译提交 prompt" in clips
     assert "kind=n2d_compiled_video_prompt" in clips
     assert "profile=zh_motion_first" in clips
+    assert "视线表演合同" in clips
+    assert "视线与头部朝向：摄影机保持旁观者位置" in clips
+    assert "固定机位，锁定轴线与景别，摄影机保持完全静止" in clips
     assert "执行配方约束" not in clips
     submitted = re.search(r"### 后端编译提交 prompt.*?```text\s*(.*?)```", clips, re.S)
     assert submitted is not None
@@ -203,6 +206,40 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "自检（生成后逐条过" in clips
     assert "冷月与火把光影轻微随动" not in clips
     assert "低雾/尘土/衣袂/火把烟" not in clips
+
+
+def test_motion_words_defaults_to_still_camera_without_motivation() -> None:
+    amp, energy, camera = prompt_pack.motion_words(
+        {"rhythm": "克制铺垫", "shots": [{"lens": "MCU"}]},
+        {"shot_type": "dialogue_reaction"},
+    )
+
+    assert "固定机位" in camera
+    assert "完全静止" in camera
+    assert "推近" not in camera
+
+
+def test_gaze_guard_keeps_character_on_story_target() -> None:
+    guard = prompt_pack.gaze_performance_guard(
+        {"continuity": {"eyeline": "看画右，不看镜头"}},
+        ["CHAR_01"],
+        {},
+    )
+
+    assert "摄影机保持旁观者位置" in guard
+    assert "戏内视线关系持续成立：看画右" in guard
+    assert "不看镜头" not in guard
+
+
+def test_gaze_guard_allows_explicit_pov_direct_address() -> None:
+    guard = prompt_pack.gaze_performance_guard(
+        {"template": "POV", "gaze_intent": "破第四墙"},
+        ["CHAR_01"],
+        {},
+    )
+
+    assert "明确 POV/破第四墙" in guard
+    assert "登记节拍内把视线落到摄影机" in guard
 
 
 def test_prompt_pack_fills_style_anchor_from_storyboard_when_overview_is_generic(tmp_path: Path) -> None:

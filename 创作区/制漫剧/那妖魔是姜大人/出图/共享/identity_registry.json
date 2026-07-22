@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-21T19:45:49+00:00",
+  "generated_at": "2026-07-22T07:10:49+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -894,6 +894,7 @@
           "performance_signature": "先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀",
           "signature_equipment": [
             "WEAPON_01",
+            "WEAPON_横刀",
             "VFX_系统面板"
           ],
           "self_check_passed": true,
@@ -1452,7 +1453,8 @@
           ],
           "performance_signature": "极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀",
           "signature_equipment": [
-            "WEAPON_01"
+            "WEAPON_01",
+            "WEAPON_横刀"
           ],
           "self_check_passed": true,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
@@ -2010,7 +2012,8 @@
           ],
           "performance_signature": "说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤",
           "signature_equipment": [
-            "WEAPON_01"
+            "WEAPON_01",
+            "WEAPON_横刀"
           ],
           "self_check_passed": true,
           "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",

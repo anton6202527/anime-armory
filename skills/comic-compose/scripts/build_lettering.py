@@ -141,9 +141,31 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
             )
             counter += 1
         dialogue_slots = panel_slots.get("dialogue") or []
+        # Bind each script dialogue to its layout slot by the authoritative
+        # content_ref (panel:PID.dialogue:N, 1-based), not by array index.  The
+        # layout only creates a slot for dialogues with real target text, so a
+        # positional pairing silently mis-attributes every balloon after an
+        # empty-target line.  Positional fallback only for legacy boards whose
+        # slots carry no content_ref.
+        slot_by_ref = {
+            str(s.get("content_ref") or "").strip(): s
+            for s in dialogue_slots
+            if isinstance(s, dict) and str(s.get("content_ref") or "").strip()
+        }
+        use_content_ref = bool(slot_by_ref)
         for idx, dialogue in enumerate(panel.get("dialogue") or []):
-            slot = dialogue_slots[idx] if idx < len(dialogue_slots) else {}
             dialogue_text = first_text(dialogue, ("text_target", "target_text", "text"))
+            content_ref = f"panel:{pid}.dialogue:{idx + 1}"
+            if use_content_ref:
+                # Layout intentionally emitted no balloon for an empty-target line —
+                # don't invent one.  A real line with no matching slot is kept
+                # (slot_id="") so review can flag the coverage gap instead of it
+                # silently rendering as a rogue floating bubble.
+                if not dialogue_text and content_ref not in slot_by_ref:
+                    continue
+                slot = slot_by_ref.get(content_ref, {})
+            else:
+                slot = dialogue_slots[idx] if idx < len(dialogue_slots) else {}
             items.append(
                 {
                     "item_id": f"L{counter:03d}",
@@ -159,6 +181,9 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
                     ),
                     "tone": dialogue.get("tone", ""),
                     "slot_id": slot.get("slot_id", ""),
+                    "content_ref": content_ref,
+                    "slot_speaker": str(slot.get("speaker") or ""),
+                    "tail": slot.get("tail") if isinstance(slot.get("tail"), dict) else {},
                     "style": {"font": "project_default", "size": 44, "direction": "horizontal", "bubble": "round"},
                 }
             )

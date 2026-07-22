@@ -20,7 +20,7 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-07-22T06:37:42+00:00",
+  "generated_at": "2026-07-22T06:41:05+00:00",
   "kind": "n2d_story_acceptance_packets_check",
   "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
   "packet_kind": "table_read",

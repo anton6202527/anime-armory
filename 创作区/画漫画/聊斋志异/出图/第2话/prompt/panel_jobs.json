@@ -3,7 +3,7 @@
   "kind": "comic_panel_jobs",
   "chapter": "第2话",
   "model": "GPT Image 2",
-  "channel": "内置 imagegen",
+  "channel": "Codex CLI",
   "backend_capabilities": {
     "adapter_id": "openai_gpt_image_project_memory",
     "model": "GPT Image 2",
@@ -20,6 +20,7 @@
   },
   "text_language": "中文",
   "render_stage": "完成稿",
+  "resolution_policy": "后端最高可达",
   "reference_plan": {
     "path": "生产数据/comic_reference_plan_第2话.json",
     "plan_sha256": "0f3651a8256ccfb44b16d66265842b3e11fc035b132b0a7744b013fb243f7610",
@@ -29,11 +30,12 @@
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 960
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：阴天市街窄巷，十岁贾儿侧身掀开短褐下摆，腰带上系着一条棕红假狐尾；画右长须男人低头审视尾根，眼神狐疑，后景酒肆人流虚化。；角色：CHAR_JIA_CHILD、MON_FOX_SERVANT；场景：县城市街窄巷；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:贾儿画左前景，狐仆画右中景，酒肆在右后。；光位/光色:阴天冷光，巷内微暗。；轴线/视线:贾儿向画右看狐仆脸，狐仆向画左下看假尾。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:none；人物站位/前后景:两人隔半臂，假尾位于两者视线交点，不发生身体接触。；视线/眼神契约：目标=贾儿看狐仆的反应；狐仆看腰带上的假尾；方向=贾儿向右上，狐仆向左下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；贾儿童稚脸与儿童身高明确，双手仅一手提衣摆；假尾以细带系腰。狐仆人形四肢完整、仅一条真实尾巴。；构图与表演：标题区留在上方灰墙；不烘焙文字。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:细线锁脸与尾带。；黑场计划:巷口与狐仆衣内压黑。；网点/灰阶计划:冷灰市街、靛灰童衣、棕红尾巴。；黑白灰可读性:孩子脸和尾巴最亮。；效果线/漫符计划:无发光特效。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_MARKET_STREET=县城市街 || PROP_FAKE_FOX_TAIL=假狐尾；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -51,7 +53,7 @@
       "source_contract_sha256": "2f1c5cbbdbd71c8f2c83adafb3148a2af4ea01ad155527200a332160349baf4a",
       "submit_prompt_sha256": "3094e98e3c4769df620460182bc553f921e8791fab2cd4e17b4c75298ad0cdb6",
       "submit_prompt_chars": 957,
-      "execution_input_sha256": "458369b0c0cbb3e21ecf747fee28261f71ac8b8bf71c400a93fe2e8cc6e58026",
+      "execution_input_sha256": "8edf2c338fbc7aad845343ef4ca71f6e04bf236a3f6802c8f1a19baae202b6d9",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -301,16 +303,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P001.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P001.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:22",
+      "artifact_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "2f1c5cbbdbd71c8f2c83adafb3148a2af4ea01ad155527200a332160349baf4a",
+      "generated_from_submit_prompt_sha256": "3094e98e3c4769df620460182bc553f921e8791fab2cd4e17b4c75298ad0cdb6",
+      "generated_from_execution_input_sha256": "8edf2c338fbc7aad845343ef4ca71f6e04bf236a3f6802c8f1a19baae202b6d9",
+      "master_path": "出图/第2话/masters/P001.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "32cc2d53b1d33134f762c4b7055a95fa9608d3690bf84095a5591a878017ff9a",
+        "master_path": "出图/第2话/masters/P001.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：深夜东卧房外，贾儿抱膝坐在画左门槛边不敢睡；紧闭的薄门内映出母亲坐在床边、对着一个不自然矮小影子低语的剪影。；角色：CHAR_JIA_CHILD、CHAR_JIA_MOTHER、MON_FOX_BROTHERS；场景：贾家东卧房门外；场景一致性契约：场景锚:LOC_JIA_HOME；空间布局:门在画右，贾儿在左前景；床影在门内右后。；光位/光色:左下油灯暖光，门内影子冷黑。；轴线/视线:贾儿向画右上看门内影子。；常驻物件:木格窗；矮桌油灯；北墙床榻；深木门；青砖地；承接上一格:P001（冷开场前的过去）；人物站位/前后景:贾儿在门外，母亲和狐影在门内，门板形成安全隔断。；视线/眼神契约：目标=门内母亲与矮影的轮廓；方向=画右上；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；贾儿全身蜷坐但手脚归属清楚；母亲与狐只作为两个分离剪影，不出现裸露或融合。；构图与表演：不表现裸露与情色；上方留旁白区。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:门影平黑，孩子细线。；黑场计划:门内压黑。；网点/灰阶计划:冷青夜与旧黄灯。；黑白灰可读性:孩子脸为唯一暖亮点。；效果线/漫符计划:仅门影，无妖气光。；拟声词画法:mode:drawn_sfx；text_hint:窸窣；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_JIA_MOTHER=贾母；角色DNA:长椭圆脸、温和眉眼、低髻；灰米上衣暗青长裙；三十岁左右；年龄/形态继承:STATE_POSSESSED 只改变眼下青黑、发髻松散和神态；STATE_RECOVERING 保留同一脸型与衣色；禁继承:不色情化、不喜剧疯癫、不换年龄骨相；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_BROTHERS=狐兄弟；角色DNA:二十余岁清瘦男子两名，五官相近但不复制；暗赭衣与墨青衣区分；细瞳、影子偶显狐耳；年龄/形态继承:人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分；禁继承:不直接兽头、不仙侠华服、不发光、不合并成一人 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_JIA_HOME=贾家青砖小院；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || CHAR_JIA_MOTHER：form=基础形态(STATE_POSSESSED 只改变眼下青黑、发髻松散和神态；STATE_RECOVERING 保留同一脸型与衣色)；不得:不色情化、不喜剧疯癫、不换年龄骨相；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_BROTHERS：form=基础形态(人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分)；不得:不直接兽头、不仙侠华服、不发光、不合并成一人；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -328,7 +351,7 @@
       "source_contract_sha256": "5d2011a7d86d1839ad40ec775fd523a44a9600103af3141e5752372335279333",
       "submit_prompt_sha256": "b039948555f86aa1211909b255efcee963b4c08aa50783c7bae1e93f813e463e",
       "submit_prompt_chars": 938,
-      "execution_input_sha256": "2c2f07d226dbaf1904348e85b97d5f9be9fa739a91edf05a76c7b98d9627d950",
+      "execution_input_sha256": "9a2e66ac8a21d52bec22a164bb0643723b5c5ee4275b27e8e5d09d632ecb8731",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -623,16 +646,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P002.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P002.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T15:14:53",
+      "artifact_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "5d2011a7d86d1839ad40ec775fd523a44a9600103af3141e5752372335279333",
+      "generated_from_submit_prompt_sha256": "b039948555f86aa1211909b255efcee963b4c08aa50783c7bae1e93f813e463e",
+      "generated_from_execution_input_sha256": "9a2e66ac8a21d52bec22a164bb0643723b5c5ee4275b27e8e5d09d632ecb8731",
+      "master_path": "出图/第2话/masters/P002.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+        "master_path": "出图/第2话/masters/P002.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：白日却昏暗的卧房，母亲背对画面把最后一块砖压进木格窗；矮桌边厨刀横在磨石上。贾儿站在门口，手扶门框，盯住刀而不是母亲的脸。；角色：CHAR_JIA_CHILD、CHAR_JIA_MOTHER；场景：贾家东卧房；场景一致性契约：场景锚:LOC_JIA_HOME；空间布局:窗画左、门画右、床北墙；刀在左下矮桌。；光位/光色:砖缝漏入细冷光，室内暗。；轴线/视线:贾儿画右看左下厨刀；母亲面向画左窗。；常驻物件:木格窗；矮桌油灯；北墙床榻；深木门；青砖地；承接上一格:P002；人物站位/前后景:母亲在窗前中景，孩子在门口后景，刀与两人分离。；视线/眼神契约：目标=贾儿看磨石上的厨刀；母亲看最后一块封窗砖；方向=贾儿向左下，母亲向左上；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；母亲一手扶砖一手撑窗，不同时磨刀；贾儿一手扶门，双脚完整。；构图与表演：不把母亲画成搞笑疯妇。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:砖缝和刀刃细线。；黑场计划:封窗后墙面压黑。；网点/灰阶计划:土灰、暗青、冷白刀线。；黑白灰可读性:刀刃和砖缝最亮。；效果线/漫符计划:刀声字后期嵌入。；拟声词画法:mode:drawn_sfx；text_hint:嚓、嚓；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_JIA_MOTHER=贾母；角色DNA:长椭圆脸、温和眉眼、低髻；灰米上衣暗青长裙；三十岁左右；年龄/形态继承:STATE_POSSESSED 只改变眼下青黑、发髻松散和神态；STATE_RECOVERING 保留同一脸型与衣色；禁继承:不色情化、不喜剧疯癫、不换年龄骨相；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_JIA_HOME=贾家青砖小院；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || CHAR_JIA_MOTHER：form=基础形态(STATE_POSSESSED 只改变眼下青黑、发髻松散和神态；STATE_RECOVERING 保留同一脸型与衣色)；不得:不色情化、不喜剧疯癫、不换年龄骨相；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -650,7 +694,7 @@
       "source_contract_sha256": "313ad3bc097854b22263c6658408257dfa8a5a3fd6fe942d13b38e4f5e1aa26f",
       "submit_prompt_sha256": "aab914c250c5e2c2d72144c68e85128dc36d786c068e664676b830c3593da9a5",
       "submit_prompt_chars": 952,
-      "execution_input_sha256": "191c3103f50c8b73e67b7a3c710b8155b88c0cf2b5b393a0153f6ab28d14ebe7",
+      "execution_input_sha256": "66d548cdb51efa90bdfe40a3f8cc789604507e16361a7d1cb282e3405a612b89",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -911,16 +955,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P003.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P003.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:22",
+      "artifact_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "313ad3bc097854b22263c6658408257dfa8a5a3fd6fe942d13b38e4f5e1aa26f",
+      "generated_from_submit_prompt_sha256": "aab914c250c5e2c2d72144c68e85128dc36d786c068e664676b830c3593da9a5",
+      "generated_from_execution_input_sha256": "66d548cdb51efa90bdfe40a3f8cc789604507e16361a7d1cb282e3405a612b89",
+      "master_path": "出图/第2话/masters/P003.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "3913d3e753ceee8a02dc31ec1773f87713b1063211d053d62af7afef99990cd3",
+        "master_path": "出图/第2话/masters/P003.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：夜里门隙前，一只赤狐正低身窜逃；贾儿从画左掀开覆灯的葫芦瓢，另一手持短厨刀向狐尾后端横斩，刀锋只触及尾毛，母亲在床边画外不入格。；角色：CHAR_JIA_CHILD、MON_FOX_BROTHERS；场景：贾家东卧房门口；场景一致性契约：场景锚:LOC_JIA_HOME；空间布局:门画右，灯画左下，狐沿右下逃。；光位/光色:骤开的油灯从左下照亮刀与狐尾。；轴线/视线:贾儿看右下狐尾。；常驻物件:木格窗；矮桌油灯；北墙床榻；深木门；青砖地；承接上一格:P003；人物站位/前后景:孩子画左、狐画右，刀横跨两者之间但不触及狐身。；视线/眼神契约：目标=逃狐腰后的尾根；方向=画右下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；贾儿双脚扎稳，一手提瓢一手持刀；刀与狐尾只有一个明确接触点；赤狐四足一尾。；构图与表演：儿童动作必须可信，不做武侠飞跃；少量尾端血迹即可。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:刀路与狐毛清线。；黑场计划:门外压黑。；网点/灰阶计划:旧黄灯、赤狐、蓝黑夜。；黑白灰可读性:刀刃、眼睛和断尾为亮点。；效果线/漫符计划:短促速度线沿刀路。；拟声词画法:mode:drawn_sfx；text_hint:嚓！；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_BROTHERS=狐兄弟；角色DNA:二十余岁清瘦男子两名，五官相近但不复制；暗赭衣与墨青衣区分；细瞳、影子偶显狐耳；年龄/形态继承:人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分；禁继承:不直接兽头、不仙侠华服、不发光、不合并成一人 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_JIA_HOME=贾家青砖小院；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_BROTHERS：form=基础形态(人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分)；不得:不直接兽头、不仙侠华服、不发光、不合并成一人；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -938,7 +1003,7 @@
       "source_contract_sha256": "37bae65d0ecff5fc16abb3dbafea9d08e1819f25ca938f7d502d24b9ce940a50",
       "submit_prompt_sha256": "ed8f3253f2210fef2382c483eb3a5ca663b17eb8808d7fd54e032518258dc576",
       "submit_prompt_chars": 962,
-      "execution_input_sha256": "5119b2c1f4fa6c4dfed313f0a141d0240c5e6e1d273ff88e9d37250c9e2683fa",
+      "execution_input_sha256": "7ebdb995ce525865bbc483de97d3ca7ece18730756ad0d7cb7146edb7bd35a0d",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -1199,16 +1264,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P004.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P004.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "37bae65d0ecff5fc16abb3dbafea9d08e1819f25ca938f7d502d24b9ce940a50",
+      "generated_from_submit_prompt_sha256": "ed8f3253f2210fef2382c483eb3a5ca663b17eb8808d7fd54e032518258dc576",
+      "generated_from_execution_input_sha256": "7ebdb995ce525865bbc483de97d3ca7ece18730756ad0d7cb7146edb7bd35a0d",
+      "master_path": "出图/第2话/masters/P004.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "53a81f32ec037270e2a71f6889946113db719ee44354be1786da407abf186e0f",
+        "master_path": "出图/第2话/masters/P004.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：黎明冷光里，贾儿蹲在青砖墙根，左手捏着一截湿血狐尾，右手指向跨过矮墙、延伸至荒园月门的稀疏血点。；角色：CHAR_JIA_CHILD；场景：贾家墙外通往何氏园的小路；场景一致性契约：场景锚:LOC_HE_GARDEN；空间布局:何氏园月门在右后，孩子在左前，血迹形成透视线。；光位/光色:右上黎明冷光。；轴线/视线:孩子向右后看血迹终点。；常驻物件:竹丛；矮亭；庭石；半塌月门；杂草；承接上一格:P004；人物站位/前后景:孩子、血迹、月门依次由前至后。；视线/眼神契约：目标=血点消失处的何氏园月门；方向=画右上；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；儿童蹲姿双脚与双手可读；断尾仅是一截，不与孩子身体连接。；服装契约：本格服装=基础服装；继承角色基础定妆中的服装结构、配色与标志配饰；绝不出现：不得改变领型、配饰、主色或标志纹样；领型、纽扣数、布料花纹、配饰按服装参考保持，不得代际漂移；构图与表演：血量克制。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:砖纹、尾毛、血点细线。；黑场计划:月门洞压暗。；网点/灰阶计划:冷灰黎明、暗红血点。；黑白灰可读性:断尾与指尖最清楚。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_HE_GARDEN=何氏园；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -1226,7 +1312,7 @@
       "source_contract_sha256": "d0adfe6db370d9e0d36c39552c8832585c6253a1f83d865a6b41d13e2ac6ec1f",
       "submit_prompt_sha256": "9bfb5c6937289ab25ad58f7e235205791b03d92509f900af5c76cbede8a6c757",
       "submit_prompt_chars": 895,
-      "execution_input_sha256": "b1619db4bc49dbe6a42b8791d9bb754848cfec751ee1886ff44cb3def72ba4a0",
+      "execution_input_sha256": "bc405c99874909426caf263462978d11cac875ce95850589fb459c67f7253396",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -1446,16 +1532,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P005.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P005.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "d0adfe6db370d9e0d36c39552c8832585c6253a1f83d865a6b41d13e2ac6ec1f",
+      "generated_from_submit_prompt_sha256": "9bfb5c6937289ab25ad58f7e235205791b03d92509f900af5c76cbede8a6c757",
+      "generated_from_execution_input_sha256": "bc405c99874909426caf263462978d11cac875ce95850589fb459c67f7253396",
+      "master_path": "出图/第2话/masters/P005.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "9e40c27d747c7d71222984ec0f5235fa42575d5372768c8098957530ba3f107a",
+        "master_path": "出图/第2话/masters/P005.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：夜间贾家院内，父亲用双手死死拉住东卧房门闩，木门却向画左自行裂开一道黑缝；贾儿在父亲身后举灯，母亲的衣角正从缝中掠过。；角色：CHAR_JIA_CHILD、CHAR_JIA_FATHER；场景：贾家院内；场景一致性契约：场景锚:LOC_JIA_HOME；空间布局:门画左，父亲居中，孩子在右后。；光位/光色:孩子手中油灯从右下照出门缝。；轴线/视线:父子均看左侧自行开启的门缝。；常驻物件:木格窗；矮桌油灯；北墙床榻；深木门；青砖地；承接上一格:P005；人物站位/前后景:父亲挡在孩子与门之间，母亲在门内，狐为画外力量。；视线/眼神契约：目标=门缝中掠过的母亲衣角；方向=画左；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；父亲双手只拉一根门闩；孩子一手持灯；母亲只露衣角作为画外移动，不重复身体；狐不直接显形。；构图与表演：不画夸张法术。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:门闩和手部清线。；黑场计划:门缝纯黑。；网点/灰阶计划:深棕木门、冷青院落、旧黄灯。；黑白灰可读性:门缝与灯形成明暗对冲。；效果线/漫符计划:门边轻微运动线。；拟声词画法:mode:drawn_sfx；text_hint:吱呀——；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_JIA_FATHER=贾父；角色DNA:方脸短须、眉骨略重、黑布巾；深褐长衫、旧青腰带、布靴；年龄/形态继承:全话保持普通商人朴素造型与父子身高比例；禁继承:不得官员化、富商员外化或清宫化；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_JIA_HOME=贾家青砖小院；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || CHAR_JIA_FATHER：form=基础形态(全话保持普通商人朴素造型与父子身高比例)；不得:不得官员化、富商员外化或清宫化；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -1473,7 +1580,7 @@
       "source_contract_sha256": "622951bc323ee8f401241aee01cc740cd16324c3564a5d3bc416179de2ab850d",
       "submit_prompt_sha256": "72e2d8923b51d32228f4eb71a8cfe8bf3bfa5ab8063e90d41ff7bbb4ba59b9bc",
       "submit_prompt_chars": 933,
-      "execution_input_sha256": "35b69f6ad53b0d3b6cac39cbcb06950be52389b08cef9944a79525510177c44a",
+      "execution_input_sha256": "7e16c089d95384a51bb039c13c8e76d0fd912cb63ff558905122a680bdc1c46c",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -1734,16 +1841,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P006.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P006.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "622951bc323ee8f401241aee01cc740cd16324c3564a5d3bc416179de2ab850d",
+      "generated_from_submit_prompt_sha256": "72e2d8923b51d32228f4eb71a8cfe8bf3bfa5ab8063e90d41ff7bbb4ba59b9bc",
+      "generated_from_execution_input_sha256": "7e16c089d95384a51bb039c13c8e76d0fd912cb63ff558905122a680bdc1c46c",
+      "master_path": "出图/第2话/masters/P006.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1122,
+        "native_height": 1402,
+        "native_sha256": "071d71146aeb996fe91a3323d5b5ea38fad857a99d8c092488f2495b09922fdf",
+        "master_path": "出图/第2话/masters/P006.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P007",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：月初升，贾儿伏在画左竹丛下，只露一只眼与压住竹叶的小手；中景矮亭前，两名清俊狐兄弟对坐，长须狐仆从右侧月门捧空壶走来。；角色：CHAR_JIA_CHILD、MON_FOX_BROTHERS、MON_FOX_SERVANT；场景：何氏园；场景一致性契约：场景锚:LOC_HE_GARDEN；空间布局:孩子左前竹丛，狐兄弟亭前，狐仆右后月门。；光位/光色:右上冷月光，竹下暗。；轴线/视线:孩子向右看亭前；狐兄弟看右后狐仆。；常驻物件:竹丛；矮亭；庭石；半塌月门；杂草；承接上一格:P006；人物站位/前后景:前景侦察者与中后景妖群至少隔十步，无接触。；视线/眼神契约：目标=贾儿看狐仆手中空酒壶；狐兄弟看狐仆；方向=贾儿向右上，狐兄弟向右；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；孩子有意裁切只露眼和一手；两狐主各一套身体且衣色区分；狐仆双手捧一只空壶、仅一尾。；构图与表演：人形妖狐克制，不长兽头。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:竹叶前景重线，人物细线。；黑场计划:竹下与亭顶压黑。；网点/灰阶计划:冷月石青、暗赭与墨青衣。；黑白灰可读性:空酒壶和孩子眼白为亮点。；效果线/漫符计划:无。；拟声词画法:mode:drawn_sfx；text_hint:沙……；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_BROTHERS=狐兄弟；角色DNA:二十余岁清瘦男子两名，五官相近但不复制；暗赭衣与墨青衣区分；细瞳、影子偶显狐耳；年龄/形态继承:人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分；禁继承:不直接兽头、不仙侠华服、不发光、不合并成一人 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_HE_GARDEN=何氏园；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_BROTHERS：form=基础形态(人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分)；不得:不直接兽头、不仙侠华服、不发光、不合并成一人；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -1761,7 +1889,7 @@
       "source_contract_sha256": "6ebcb7892c3370a2dcd83cc23267b077fcc4296e502319ef7c5e6a26d2f7ff00",
       "submit_prompt_sha256": "af5d8f04b9f7f501408cc45297c014a65230d86dfd9a2973da1dfd4882c43161",
       "submit_prompt_chars": 965,
-      "execution_input_sha256": "dd394b64ddd355200051006ae8519b6c643d9ab28f88a6d9e1096e7209f3946e",
+      "execution_input_sha256": "fc462c83caac92d423a564f359b16bc362391ddd589a5a036f93bf265f625929",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -2056,16 +2184,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P007.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P007.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "6ebcb7892c3370a2dcd83cc23267b077fcc4296e502319ef7c5e6a26d2f7ff00",
+      "generated_from_submit_prompt_sha256": "af5d8f04b9f7f501408cc45297c014a65230d86dfd9a2973da1dfd4882c43161",
+      "generated_from_execution_input_sha256": "fc462c83caac92d423a564f359b16bc362391ddd589a5a036f93bf265f625929",
+      "master_path": "出图/第2话/masters/P007.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "317a2f2773c88aa8d4244cb5bf7aadee416f0f10dc3ef85c6314b0b6f3f5650b",
+        "master_path": "出图/第2话/masters/P007.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P008",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 840
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：何氏园庭石上，长须狐仆侧卧假寐，老棕短衣掀开少许，腰后垂下一条真实暗棕狐尾；远处亭内只有两道模糊人影，贾儿的眼睛藏在前景叶缝。；角色：CHAR_JIA_CHILD、MON_FOX_SERVANT；场景：何氏园亭前；场景一致性契约：场景锚:LOC_HE_GARDEN；空间布局:庭石中景，亭后景，竹叶前景左。；光位/光色:月光从右上勾亮真实尾巴。；轴线/视线:孩子向右下看尾巴；狐仆闭眼。；常驻物件:竹丛；矮亭；庭石；半塌月门；杂草；承接上一格:P007；人物站位/前后景:贾儿与狐仆隔着竹丛，画外狐主在亭内。；视线/眼神契约：目标=贾儿看庭石边垂下的真实狐尾；方向=画右下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；狐仆人形双腿双臂完整，仅一条真实尾巴；孩子只露一双眼是有意窥视裁切。；构图与表演：尾巴真实连接狐仆腰后，与之后假尾区别清楚。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:尾毛细线。；黑场计划:亭内人物压成中黑剪影。；网点/灰阶计划:冷月青、老棕衣、暗棕尾。；黑白灰可读性:月光尾边最亮。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_HE_GARDEN=何氏园；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -2083,7 +2232,7 @@
       "source_contract_sha256": "651685d048bad79ed1a9dbe8d9a23a2981640a711f09272ca3d440805ae58b67",
       "submit_prompt_sha256": "707436aa7eee6b3b3f3abec01846d1d6a84c3e6fa85770dd68bce1ba3f362ce3",
       "submit_prompt_chars": 935,
-      "execution_input_sha256": "4da289ebc0c010dcc3e316833ebb80e959fecf44d6b508ab9e7717245dcf6326",
+      "execution_input_sha256": "a322ba3f9504f77c7c2c15d2e568366fdbf0bf990df91bf4cbaaad67c9284112",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -2333,16 +2482,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P008.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P008.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "651685d048bad79ed1a9dbe8d9a23a2981640a711f09272ca3d440805ae58b67",
+      "generated_from_submit_prompt_sha256": "707436aa7eee6b3b3f3abec01846d1d6a84c3e6fa85770dd68bce1ba3f362ce3",
+      "generated_from_execution_input_sha256": "a322ba3f9504f77c7c2c15d2e568366fdbf0bf990df91bf4cbaaad67c9284112",
+      "master_path": "出图/第2话/masters/P008.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "14e32ae105d074c351ba371bb24edced809fc1902116ca542c8bf8b88bd84d52",
+        "master_path": "出图/第2话/masters/P008.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P009",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：县城市街帽肆前，贾儿踮脚把铜钱推上木柜，另一手抓住一条棕红狐尾装饰；腰侧布袋露出粗陶白酒壶颈与折起的无字药纸包。；角色：CHAR_JIA_CHILD；场景：县城帽肆；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:帽肆画左，酒肆画右后，孩子居中。；光位/光色:阴天冷光，柜内弱暖光。；轴线/视线:孩子看左上方柜面。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:P008；人物站位/前后景:孩子与柜台隔一臂，三件道具分区清晰。；视线/眼神契约：目标=柜面上的狐尾装饰；方向=画左上；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；孩子一手付钱一手拿假尾；酒壶和药包在布袋中，均不与身体融合。；服装契约：本格服装=基础服装；继承角色基础定妆中的服装结构、配色与标志配饰；绝不出现：不得改变领型、配饰、主色或标志纹样；领型、纽扣数、布料花纹、配饰按服装参考保持，不得代际漂移；构图与表演：药纸包无文字无现代瓶。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:道具轮廓精确。；黑场计划:柜下压黑。；网点/灰阶计划:石青灰、棕红尾、土白陶壶。；黑白灰可读性:铜钱与陶壶口为亮点。；效果线/漫符计划:无。；拟声词画法:mode:drawn_sfx；text_hint:叮；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_MARKET_STREET=县城市街 || PROP_FAKE_FOX_TAIL=假狐尾 || PROP_POISON_WINE=药酒壶；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -2360,7 +2530,7 @@
       "source_contract_sha256": "8430559420d60250708f0cc0baf7ea132cdfc1a78057d0486a267a2bed703a12",
       "submit_prompt_sha256": "7819d28f01df33f673b0a647ee875cca191797382a20dff3b02d2c5b4cd601e6",
       "submit_prompt_chars": 904,
-      "execution_input_sha256": "dfe37668ec354f624bbc2be053ccf91b6f1fee42932f9d20dbf043fd12f18e13",
+      "execution_input_sha256": "be0fd524e3a2e0e67a2b301b1cf6af534d1dfc8c4fad2fcab73c267a6c14d6af",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -2591,16 +2761,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P009.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P009.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "8430559420d60250708f0cc0baf7ea132cdfc1a78057d0486a267a2bed703a12",
+      "generated_from_submit_prompt_sha256": "7819d28f01df33f673b0a647ee875cca191797382a20dff3b02d2c5b4cd601e6",
+      "generated_from_execution_input_sha256": "be0fd524e3a2e0e67a2b301b1cf6af534d1dfc8c4fad2fcab73c267a6c14d6af",
+      "master_path": "出图/第2话/masters/P009.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "647e7fbb4dc945bf5e792879c02346cc435a54eeebd7bf87171bec88e0e9c99a",
+        "master_path": "出图/第2话/masters/P009.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1080,
         "height": 780
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：无人暗巷石阶上，贾儿半跪，用折起的纸槽把少量猎药粉准确倒入粗陶白酒壶；假狐尾铺在一旁，麻绳塞与壶口分离可见。；角色：CHAR_JIA_CHILD；场景：县城市街暗巷；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:石阶前景，市街在后景出口。；光位/光色:巷口右上冷光。；轴线/视线:孩子低头看壶口。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:P009；人物站位/前后景:孩子、壶、纸包形成紧凑三角，无他人在场。；视线/眼神契约：目标=白酒壶口与落下的药粉；方向=画左下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；孩子双手各自扶纸槽和酒壶；药粉落点唯一；假尾是旁置道具。；服装契约：本格服装=基础服装；继承角色基础定妆中的服装结构、配色与标志配饰；绝不出现：不得改变领型、配饰、主色或标志纹样；领型、纽扣数、布料花纹、配饰按服装参考保持，不得代际漂移；构图与表演：不提供现实毒药配方或标签。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手、纸槽、壶口细线。；黑场计划:巷深处压黑。；网点/灰阶计划:灰石、土白陶、棕红尾。；黑白灰可读性:药粉和壶口最亮。；效果线/漫符计划:无。；拟声词画法:mode:drawn_sfx；text_hint:沙……；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_MARKET_STREET=县城市街 || PROP_FAKE_FOX_TAIL=假狐尾 || PROP_POISON_WINE=药酒壶；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -2618,7 +2809,7 @@
       "source_contract_sha256": "9e4cf5d9e527ca0a81b4806dde0e8b149a544ed221b9b96fc102c0b1928def5a",
       "submit_prompt_sha256": "c4b25e7321b1751042f3d60b3d89469b2f675bf14af6df0f77c3e0563704a087",
       "submit_prompt_chars": 900,
-      "execution_input_sha256": "ac9acba0fcbb9db588c2273e34bc621542ec90a8acb0f632f635d7ecd3d5a000",
+      "execution_input_sha256": "0c73413bb7480cd0526f6b1a1eefb96c6689970c24888e1344e0159c5a907106",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -2849,16 +3040,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P010.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P010.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "9e4cf5d9e527ca0a81b4806dde0e8b149a544ed221b9b96fc102c0b1928def5a",
+      "generated_from_submit_prompt_sha256": "c4b25e7321b1751042f3d60b3d89469b2f675bf14af6df0f77c3e0563704a087",
+      "generated_from_execution_input_sha256": "0c73413bb7480cd0526f6b1a1eefb96c6689970c24888e1344e0159c5a907106",
+      "master_path": "出图/第2话/masters/P010.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "773a97de6bb991024d9fe09f2d388f7b1a1e1e7d679f3618ffc09b7528ee55fe",
+        "master_path": "出图/第2话/masters/P010.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 920
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：拥挤市街中，长须狐仆穿老棕短衣从画右走向酒肆；贾儿系好假尾，借一名挑担行人遮挡身体，只从画左后探出半张脸跟随。；角色：CHAR_JIA_CHILD、MON_FOX_SERVANT；场景：县城市街；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:帽肆左、酒肆右；狐仆右前，孩子左后。；光位/光色:阴天漫射光。；轴线/视线:孩子向右前看狐仆背影。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:P010；人物站位/前后景:孩子与狐仆相隔数人，无接触。；视线/眼神契约：目标=狐仆老棕衣与长须侧影；方向=画右；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；孩子假尾清楚系腰但不拖地；狐仆真实尾巴藏在衣下不重复出现；挑担人只作遮挡。；构图与表演：人群减线，主角清楚。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:主角重线、人群淡线。；黑场计划:人群衣褶局部压黑。；网点/灰阶计划:灰街与棕衣。；黑白灰可读性:孩子眼睛为焦点。；效果线/漫符计划:轻微纵向行进线。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_MARKET_STREET=县城市街 || PROP_FAKE_FOX_TAIL=假狐尾；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -2876,7 +3088,7 @@
       "source_contract_sha256": "9fe0b0bf106d885cd3693c0218858f9edd70db7bb2140c09f89d67058ba6e88b",
       "submit_prompt_sha256": "1f2d6d15ac7c5d8184833be1175b05c5a313b800d89062c3d1605dc39dff4542",
       "submit_prompt_chars": 907,
-      "execution_input_sha256": "afae3dd0cf367b2bd726870030004143b37beed0b8da1eb7b893adc8f373ba50",
+      "execution_input_sha256": "e6541a51feedd75112c0a011e3f50ed8bf09e2cef7891d5426b0e3b0a8cbe8bb",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -3126,16 +3338,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P011.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P011.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "9fe0b0bf106d885cd3693c0218858f9edd70db7bb2140c09f89d67058ba6e88b",
+      "generated_from_submit_prompt_sha256": "1f2d6d15ac7c5d8184833be1175b05c5a313b800d89062c3d1605dc39dff4542",
+      "generated_from_execution_input_sha256": "e6541a51feedd75112c0a011e3f50ed8bf09e2cef7891d5426b0e3b0a8cbe8bb",
+      "master_path": "出图/第2话/masters/P011.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "4bc6a99e3c9d7ebad91375075e0eb6946bd35c636e7b16ad33d8528fcd2c44d3",
+        "master_path": "出图/第2话/masters/P011.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P012",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 960
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：市街侧巷，贾儿压低声音，左手提起衣摆露出腰带假尾，右手把粗陶酒壶藏在身后；狐仆俯身靠近，视线锁在尾根，警惕开始松动。；角色：CHAR_JIA_CHILD、MON_FOX_SERVANT；场景：县城市街侧巷；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:贾儿左、狐仆右、酒肆出口后景；沿用前格市街环境。；光位/光色:阴天冷光，墙面留对白区。；轴线/视线:贾儿看狐仆眼睛；狐仆看假尾。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:P011；人物站位/前后景:狐仆俯身但不触碰孩子，酒壶位于孩子背后。；视线/眼神契约：目标=贾儿看狐仆眼神变化；狐仆看假尾系带；方向=贾儿向右上，狐仆向左下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；孩子一手提衣一手藏壶；假尾系带明确；狐仆双手自然垂落、真实尾巴仍藏衣下。；构图与表演：贾儿镇定但仍是孩子，不做邪魅表情。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:锁定脸、手、尾带。；黑场计划:狐仆背后墙角压黑。；网点/灰阶计划:冷灰墙、靛灰童衣、棕红假尾。；黑白灰可读性:假尾与孩子眼睛最亮。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || LOC_MARKET_STREET=县城市街 || PROP_FAKE_FOX_TAIL=假狐尾 || PROP_POISON_WINE=药酒壶；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -3153,7 +3386,7 @@
       "source_contract_sha256": "d078c332148c314361c031c0f1e7252aed3aac1e81c0858a303e75fafb0ea1ed",
       "submit_prompt_sha256": "94b3af41b2e2c203d973ea6d3e0fafd0707c473c2c717c19077c0b53d12c93ae",
       "submit_prompt_chars": 957,
-      "execution_input_sha256": "26cd802f602a8be9ff4dca7ea8d9078910b1cd55979eb56bed29d9d47b3defed",
+      "execution_input_sha256": "f6ad061d001fe76697744a46c9657f88396bdcdad8bce75feab4115589869320",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -3403,16 +3636,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P012.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P012.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "d078c332148c314361c031c0f1e7252aed3aac1e81c0858a303e75fafb0ea1ed",
+      "generated_from_submit_prompt_sha256": "94b3af41b2e2c203d973ea6d3e0fafd0707c473c2c717c19077c0b53d12c93ae",
+      "generated_from_execution_input_sha256": "f6ad061d001fe76697744a46c9657f88396bdcdad8bce75feab4115589869320",
+      "master_path": "出图/第2话/masters/P012.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "fc518783868e926b30805bfa54b4d9a02bc1c95c60b75800867b57d52d212250",
+        "master_path": "出图/第2话/masters/P012.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P013",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1188,
         "height": 840
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：狐仆靠墙低声指向巷外两个方向，贾儿仰头听着，藏在背后的手攥紧酒壶麻绳；墙上两人的影子中，狐仆影子隐约带尖耳。；角色：CHAR_JIA_CHILD、MON_FOX_SERVANT；场景：县城市街侧巷；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:两人沿左右轴线，墙在后。；光位/光色:巷口右上冷光形成墙影。；轴线/视线:孩子向右上看狐仆；狐仆向巷外指。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:P012；人物站位/前后景:两人相距一臂，墙影与实体位置一致。；视线/眼神契约：目标=贾儿看狐仆嘴与指向；狐仆看巷外两条去路；方向=贾儿向右上，狐仆向右外；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；狐仆只用一只手指路；孩子背后一手握酒绳；狐兄弟只作为谈及对象，不在实体画面重复出现。；构图与表演：尖耳只在影子里轻微暗示。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:指向与攥绳手清线。；黑场计划:墙影压黑。；网点/灰阶计划:冷灰与墨黑。；黑白灰可读性:孩子握绳手为次焦点。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_MARKET_STREET=县城市街 || PROP_POISON_WINE=药酒壶；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -3430,7 +3684,7 @@
       "source_contract_sha256": "3cbc3f980490ac5a17657e4b4f389996332a1163d46eb93656a519a4a3ee40d2",
       "submit_prompt_sha256": "b5d77841e18dd03a36c6264dd8f1e57dae89dce4cf5a837dc6cd7e8ffd3cbaae",
       "submit_prompt_chars": 924,
-      "execution_input_sha256": "e63516973042c7a355f84400f522f2c4ba5ddb00937421c548f79b42a8098a1d",
+      "execution_input_sha256": "e3e96c038d3f281b1cf0415072eb83188953066ab90306cbd0a4eae3ff2cb163",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -3680,16 +3934,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P013.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P013.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "3cbc3f980490ac5a17657e4b4f389996332a1163d46eb93656a519a4a3ee40d2",
+      "generated_from_submit_prompt_sha256": "b5d77841e18dd03a36c6264dd8f1e57dae89dce4cf5a837dc6cd7e8ffd3cbaae",
+      "generated_from_execution_input_sha256": "e3e96c038d3f281b1cf0415072eb83188953066ab90306cbd0a4eae3ff2cb163",
+      "master_path": "出图/第2话/masters/P013.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "4aa2e9055244aa899929f1468ea8310d73205c64400779f2122f0d8592fbc333",
+        "master_path": "出图/第2话/masters/P013.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P014",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1088
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：贾儿双手把封好的粗陶酒壶递向狐仆；狐仆笑着伸双手接壶，酒壶悬在两人之间，后景市街人流从缝隙穿过。；角色：CHAR_JIA_CHILD、MON_FOX_SERVANT；场景：县城市街侧巷；场景一致性契约：场景锚:LOC_MARKET_STREET；空间布局:贾儿左、狐仆右、酒壶正中。；光位/光色:上方冷光照亮壶封。；轴线/视线:两人均看酒壶交接点。；常驻物件:帽肆木架；酒肆陶壶；旧布幡；石板路；承接上一格:P013；人物站位/前后景:两人隔一只酒壶，只有手与壶接触。；视线/眼神契约：目标=封好的白酒壶；方向=双方视线向中下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；贾儿两手托壶底与壶颈；狐仆两手接住外侧，四手分属清楚；假尾仍系孩子腰后。；构图与表演：孩子表情克制，不露胜利笑。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:四手与壶口清线。；黑场计划:两人身后压暗，壶留亮。；网点/灰阶计划:土白陶壶、棕衣、靛灰童衣。；黑白灰可读性:酒壶为最高亮值。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_MARKET_STREET=县城市街 || PROP_POISON_WINE=药酒壶；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -3707,7 +3982,7 @@
       "source_contract_sha256": "df1cad39a9623a1ed56e7965f4217d99e7d98ca0507266da4a1f11ef10fcd5e9",
       "submit_prompt_sha256": "1c052993dffa30e5ce9f9a6cef86f426564364faa37f88f64358b4aa7724da94",
       "submit_prompt_chars": 904,
-      "execution_input_sha256": "b5118f6ef4ef8a4bb33abba044c7d8163c17d369c0a9b54e3fc34abecf72fa91",
+      "execution_input_sha256": "ee8a8f80e37bd86b5d049da374f7f2efac074060c0770bd3df7dc200d52d7ab2",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -3957,16 +4232,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P014.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P014.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "df1cad39a9623a1ed56e7965f4217d99e7d98ca0507266da4a1f11ef10fcd5e9",
+      "generated_from_submit_prompt_sha256": "1c052993dffa30e5ce9f9a6cef86f426564364faa37f88f64358b4aa7724da94",
+      "generated_from_execution_input_sha256": "ee8a8f80e37bd86b5d049da374f7f2efac074060c0770bd3df7dc200d52d7ab2",
+      "master_path": "出图/第2话/masters/P014.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "d4445849af93d011e4a7d8944e43e5041fa82a0654fda1ac951a942d1644e63b",
+        "master_path": "出图/第2话/masters/P014.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P015",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1088
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：何氏园清晨，贾儿独自提灯站在画右前景，亭边两只赤狐与草中一只秃尾赤狐静止倒卧，未尽酒壶滚在月门石阶旁；父亲只作为画外跟随者，不显实体。；角色：CHAR_JIA_CHILD、MON_FOX_BROTHERS、MON_FOX_SERVANT；场景：何氏园；场景一致性契约：场景锚:LOC_HE_GARDEN；空间布局:贾儿在画右前景，亭边两狐居中，秃尾狐在画左草丛，酒壶靠近石阶。；光位/光色:将尽未尽的冷月与孩子手中旧黄灯形成双光源。；轴线/视线:孩子向左下看秃尾狐与酒壶。；常驻物件:竹丛；矮亭；庭石；半塌月门；杂草；承接上一格:P014；人物站位/前后景:孩子与三狐尸身保持数步距离，酒壶位于两者之间形成因果连线。；视线/眼神契约：目标=秃尾狐的旧刀痕与滚落酒壶；方向=画左下；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；孩子一套完整身体和一盏灯；三只狐各四足一尾，其中仅狐仆为秃尾，尸身不血腥、不拟人化复活。；构图与表演：死亡画面克制，不画口吐大量血。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物与证据清线，园景压暗。；黑场计划:亭内与草丛压黑，尸身轮廓留冷灰边光。；网点/灰阶计划:冷青园景与旧黄提灯。；黑白灰可读性:酒壶与秃尾旧刀痕形成两个证据亮点。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_FOX_BROTHERS=狐兄弟；角色DNA:二十余岁清瘦男子两名，五官相近但不复制；暗赭衣与墨青衣区分；细瞳、影子偶显狐耳；年龄/形态继承:人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分；禁继承:不直接兽头、不仙侠华服、不发光、不合并成一人 || MON_FOX_SERVANT=长鬣狐仆；角色DNA:四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾；年龄/形态继承:人形与赤狐形共享暗棕毛色和断尾特征；禁继承:不兽人化、不狼人化、不多肢、不发光 || LOC_HE_GARDEN=何氏园 || PROP_POISON_WINE=药酒壶；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_BROTHERS：form=基础形态(人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分)；不得:不直接兽头、不仙侠华服、不发光、不合并成一人；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || MON_FOX_SERVANT：form=基础形态(人形与赤狐形共享暗棕毛色和断尾特征)；不得:不兽人化、不狼人化、不多肢、不发光；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -3984,7 +4280,7 @@
       "source_contract_sha256": "56c8b4d4fa777e384447e30d1cc5ce1c2ae06aa27a45a4dfd37b025a88f284bf",
       "submit_prompt_sha256": "4d17f74efb35e6d71fef7b77e19d92bd5bcb8d474800220f54d863f57c37c0e2",
       "submit_prompt_chars": 1005,
-      "execution_input_sha256": "537c13ade2cb1b7cd44ab23ea8010edc92078366b6e288035b84a1f0c148a6a5",
+      "execution_input_sha256": "8fe532a9fa58deca7f495a8b77a4a67e3c2fe08c8bf7a439625842aae11989c2",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -4268,16 +4564,37 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P015.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P015.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "56c8b4d4fa777e384447e30d1cc5ce1c2ae06aa27a45a4dfd37b025a88f284bf",
+      "generated_from_submit_prompt_sha256": "4d17f74efb35e6d71fef7b77e19d92bd5bcb8d474800220f54d863f57c37c0e2",
+      "generated_from_execution_input_sha256": "8fe532a9fa58deca7f495a8b77a4a67e3c2fe08c8bf7a439625842aae11989c2",
+      "master_path": "出图/第2话/masters/P015.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "45a7338e390ff6aea09c65b3f96d9f40794df5b006b20f0d924efe093cd0ad8c",
+        "master_path": "出图/第2话/masters/P015.png",
+        "derived_resize": false
+      }
     },
     {
       "panel_id": "P016",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1160
       },
+      "resolution_policy": "后端最高可达",
       "production_contract_prompt": "无字漫画分格画面，自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)；画面事实：清晨何氏园月门外，父亲蹲下与贾儿平视，一手按在孩子肩上；贾儿已摘下假尾卷在手里。远处留白中以淡墨叠出成年后的骑射剪影，不画具体官服纹章。；角色：CHAR_JIA_CHILD、CHAR_JIA_FATHER；场景：何氏园月门外；场景一致性契约：场景锚:LOC_HE_GARDEN；空间布局:父子左前，月门右后，留白骑射剪影在上方远景。；光位/光色:清晨冷光转暖，从右上落下。；轴线/视线:父子互看；剪影朝画面上方前进。；常驻物件:竹丛；矮亭；庭石；半塌月门；杂草；承接上一格:P015；人物站位/前后景:父子相距半臂，手掌只接触孩子肩部；成年剪影为未来意象。；视线/眼神契约：目标=父亲看孩子眼睛；孩子看父亲眼睛；方向=父向左下，子向右上；人物完整性契约：脸型、眼型/眼距、发际线、发型轮廓和服装主色继承登记；头、躯干、手脚、关键道具与接触点完整可读；父亲蹲姿和孩子身高比例准确；父亲单手搭肩；孩子双手卷住可拆卸假尾；成年剪影与童年实体用淡墨和距离明确区分，不当作同场第二身体。；构图与表演：结尾不是功名炫耀，而是父亲第一次真正看见孩子。上方留旁白区。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:前景清线，未来剪影淡墨。；黑场计划:月门留中黑，人物脸保持亮。；网点/灰阶计划:晨灰青渐入浅赭。；黑白灰可读性:父子脸最高亮，剪影淡。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_JIA_CHILD=贾儿；角色DNA:十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋；年龄/形态继承:成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化；禁继承:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_JIA_FATHER=贾父；角色DNA:方脸短须、眉骨略重、黑布巾；深褐长衫、旧青腰带、布靴；年龄/形态继承:全话保持普通商人朴素造型与父子身高比例；禁继承:不得官员化、富商员外化或清宫化；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || STYLE_LIAOZHAI_QING_GONGXI=聊斋清代工笔志怪；备注:见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图 || LOC_HE_GARDEN=何氏园 || PROP_FAKE_FOX_TAIL=假狐尾；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字；逐角色结构化状态合同：CHAR_JIA_CHILD：form=基础形态(成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化)；不得:不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态) || CHAR_JIA_FATHER：form=基础形态(全话保持普通商人朴素造型与父子身高比例)；不得:不得官员化、富商员外化或清宫化；outfit=基础服装(继承角色基础定妆中的服装结构、配色与标志配饰)；不得:不得改变领型、配饰、主色或标志纹样；expression=中性表情；state=基础状态(除非剧情状态账明确变更，否则延续此状态)",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
@@ -4295,7 +4612,7 @@
       "source_contract_sha256": "f9ab5d2dfae50754b1bb4fc884eb33018f439b882c4f8adbe2e638bfd0b60788",
       "submit_prompt_sha256": "bc435e599a307285defae28e50f43bc3f904abaea1d62476e08ae8020c944d4c",
       "submit_prompt_chars": 982,
-      "execution_input_sha256": "f490f396e8c8ecda8a1325ab224c5b5542246dd1bd2f112f51283075e062065e",
+      "execution_input_sha256": "3db978a925f309d3d58e0f33923fb082318c2941ad788528760c6030a02332db",
       "consumed_contracts": {
         "reference_plan": {
           "path": "生产数据/comic_reference_plan_第2话.json",
@@ -4545,8 +4862,28 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
         "executable_attachment_limit": 5
       },
-      "result_path": "",
-      "source": "内置 imagegen"
+      "result_path": "出图/第2话/panels/P016.png",
+      "source": "Codex CLI",
+      "post_qc": "warn",
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P016.json",
+      "model": "GPT Image 2",
+      "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+      "generated_at": "2026-07-22T14:56:23",
+      "artifact_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+      "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+      "reference_input_count": 5,
+      "generated_from_contract_sha256": "f9ab5d2dfae50754b1bb4fc884eb33018f439b882c4f8adbe2e638bfd0b60788",
+      "generated_from_submit_prompt_sha256": "bc435e599a307285defae28e50f43bc3f904abaea1d62476e08ae8020c944d4c",
+      "generated_from_execution_input_sha256": "3db978a925f309d3d58e0f33923fb082318c2941ad788528760c6030a02332db",
+      "master_path": "出图/第2话/masters/P016.png",
+      "resolution_provenance": {
+        "policy": "后端最高可达",
+        "native_width": 1024,
+        "native_height": 1536,
+        "native_sha256": "84afdc119f6f0e9e062f614c3918891dcf9bb4cb136a02be2ad2cdf66593f918",
+        "master_path": "出图/第2话/masters/P016.png",
+        "derived_resize": false
+      }
     }
   ]
 }

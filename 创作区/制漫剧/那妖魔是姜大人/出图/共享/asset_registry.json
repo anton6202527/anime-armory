@@ -1,72 +1,72 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-21T13:45:44+00:00",
+  "generated_at": "2026-07-22T07:30:50+00:00",
   "assets": [
     {
-      "id": "LOC_01",
+      "id": "LOC_尸骸荒野",
       "type": "scene",
-      "name": "尸骸荒野",
+      "name": "LOC 尸骸荒野",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:25:39.874002+00:00"
+            "reviewed_at": "2026-07-22T07:32:28.207579+00:00"
           }
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:25:39.874208+00:00"
+            "reviewed_at": "2026-07-22T07:32:28.207707+00:00"
           }
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared reverse reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:25:39.874219+00:00"
+            "reviewed_at": "2026-07-22T07:32:28.207719+00:00"
           }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野_平面图.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared floor_plan reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:25:39.874227+00:00"
+            "reviewed_at": "2026-07-22T07:32:28.207727+00:00"
           }
         }
       },
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "设定库/locations/尸骸荒野.md",
+          "path": "生产数据/卡片快照/场景/LOC_尸骸荒野.md",
           "status": "ready",
-          "sha256": "7817b42c5d71f16b728d739920a67f7d9f88a2196d804e081388a810f674fccb"
+          "sha256": "764bcfddb951b3e3fcf26c2028ba8f025740ae4797bb4a128f9c51275a7df953"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
           "status": "ready",
           "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
         }
       ],
       "constraints": {
         "layout": "保持 storyboard 场景轴线和地标。",
-        "light_anchor": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
-        "axis_rules": "巨岩虎妖—南向车辙为纵深轴；姜月初画左、裴长青画右；二人看虎妖均向画左后景。",
+        "light_anchor": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+        "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
@@ -76,9 +76,9 @@
         ],
         "lighting_signature": {
           "color_temperature": "mixed_cool_warm",
-          "saturation_profile": "controlled",
+          "saturation_profile": "low_desaturated",
           "key_light_direction": "left",
-          "source_text": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。；阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
+          "source_text": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光；尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
           "numeric_measurement": "pending_after_landed_frame_qc"
         }
       },
@@ -88,15 +88,15 @@
         "不要把本场景随机改成仙宫、现代空间或无关地点"
       ],
       "scene_dna": {
-        "belonging_anchor": "尸骸荒野",
+        "belonging_anchor": "LOC 尸骸荒野",
         "landmarks": [
-          "尸骸荒野"
+          "LOC 尸骸荒野"
         ],
         "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "大唐西北边荒；连片枯草、风蚀黄土、零散黑灰巨岩与翻覆木囚车；尸骸分散形成押送队伍遇袭轨迹 阴天将雨的白昼，铅灰云层，荒风持续；冷色漫射天光，偶有微弱侧逆光 冷灰、土褐、炭黑、极少暗赤；死寂、血腥、空旷、无处躲藏",
-        "color_lighting_weather": "阴天冷色漫射光，主光从画面左上后方进入，右前冷色环境光补脸；系统金光不改变主光。",
+        "architecture_materials": "主景、反打与平面图。",
+        "color_lighting_weather": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
         "resident_assets": [
-          "尸骸荒野"
+          "LOC 尸骸荒野"
         ],
         "forbidden": [
           "现代物件",
@@ -111,33 +111,33 @@
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
       "floor_plan": "保持 storyboard 场景轴线和地标。",
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "巨岩虎妖—南向车辙为纵深轴；姜月初画左、裴长青画右；二人看虎妖均向画左后景。",
-      "screen_direction_rules": "巨岩虎妖—南向车辙为纵深轴；姜月初画左、裴长青画右；二人看虎妖均向画左后景。",
+      "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
+      "screen_direction_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
       "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+            "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
             "status": "ready",
             "human_review": {
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-21T13:25:39.874237+00:00"
+              "reviewed_at": "2026-07-22T07:32:28.207737+00:00"
             }
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+            "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png",
             "status": "ready",
             "human_review": {
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared back reference passed finalized review",
-              "reviewed_at": "2026-07-21T13:25:39.874243+00:00"
+              "reviewed_at": "2026-07-22T07:32:28.207744+00:00"
             }
           }
         }
       },
-      "self_check_at": "2026-07-21T13:25:39+00:00",
+      "self_check_at": "2026-07-22T07:32:28+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
     },
@@ -182,7 +182,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/WEAPON_01_横刀.md",
           "status": "ready",
-          "sha256": "251a3738b789e1b60d9380519d0347562c4e5e68234ff51919d3c5d07a9528f5"
+          "sha256": "ced1994c650d9f8b9094e2cbf9e7f97f9f0f316bb7f660b0c0dd6d52ab1a7edd"
         },
         {
           "slot": "primary_reference",
@@ -294,402 +294,6 @@
       "artifact_sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
     },
     {
-      "id": "PROP_横刀",
-      "type": "prop",
-      "name": "横刀",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:29:12.920706+00:00"
-          }
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:29:12.920915+00:00"
-          }
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared in_hand reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:29:12.920926+00:00"
-          }
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_横刀.md",
-          "status": "ready",
-          "sha256": "4285d1d572ad70e9e99c386ac71d80b042f7fe745f33c9622de813facc7648ff"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "ready",
-          "sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
-        }
-      ],
-      "constraints": {
-        "blade_topology": [
-          "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。",
-          "weapon_count=1；single_hilt=1；single_straight_blade=1；主角只持一把实体横刀；副手/后手不得生成短刃、匕首、副刀或第二把刀。"
-        ],
-        "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移",
-          "副刀",
-          "短刃",
-          "匕首",
-          "右手第二把刀",
-          "副手持刀",
-          "后手短刀",
-          "双持",
-          "刀鞘变成刀刃",
-          "光效变成实体刀刃"
-        ],
-        "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
-        "face_policy": "faceless"
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要让横刀结构/颜色/尺寸漂移",
-        "不要现代物件",
-        "不要文字水印",
-        "不要结构漂移",
-        "不要数量漂移",
-        "不要副刀",
-        "不要短刃",
-        "不要匕首",
-        "不要右手第二把刀",
-        "不要副手持刀",
-        "不要后手短刀",
-        "不要双持",
-        "不要刀鞘变成刀刃",
-        "不要光效变成实体刀刃"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "横刀"
-        ],
-        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "横刀"
-        ],
-        "forbidden": [
-          "横刀结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
-      "lifecycle": {
-        "first_seen": "第1集",
-        "state_order": [
-          "共享定妆",
-          "本集引用"
-        ],
-        "status": "active"
-      },
-      "weapon_profile": {
-        "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
-        "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；单一实体武器轮廓，不复制第二把刀刃。",
-        "blade_topology": "weapon_count=1；single_hilt=1；single_straight_blade=1；只允许一把实体横刀入画；副手/后手不得出现短刃、匕首、副刀或第二把刀。",
-        "scale": "按角色手部比例，竖屏可读但不夸张。",
-        "material": "暗银金属、低反光、战损血尘克制呈现。",
-        "palette": "暗银、黑柄、冷灰血尘",
-        "ornament_motif": "镇魔司制式，低调克制。",
-        "carry_modes": [
-          "手持",
-          "落地",
-          "近景局部"
-        ],
-        "combat_usage": "单武器动作道具；可双手配合一把横刀或一手持刀一手空手/护身，但不得双持，不得补出副手短刃。",
-        "vfx_signature": "刀光/光轨/残影为半透明运动轨迹，不是实体武器，不可画成第二把刀刃。",
-        "forbidden_drift": [
-          "不要副刀",
-          "不要短刃",
-          "不要匕首",
-          "不要右手第二把刀",
-          "不要副手持刀",
-          "不要后手短刀",
-          "不要双持",
-          "不要刀鞘变成刀刃"
-        ]
-      },
-      "character_id": null,
-      "alias_of": "WEAPON_01",
-      "weapon_like_role": "entity_weapon",
-      "self_check_at": "2026-07-21T13:29:12+00:00",
-      "self_check_by": "image_qc.mark_finalized",
-      "artifact_sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
-    },
-    {
-      "id": "PROP_断刀",
-      "type": "prop",
-      "name": "断刀",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_断刀.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:31:39.093157+00:00"
-          }
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_断刀_比例.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:31:39.093370+00:00"
-          }
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_断刀_手持.png",
-          "status": "ready"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_断刀.md",
-          "status": "ready",
-          "sha256": "fe9e2e23d98e8895d86d1d472fd90920e04d7c238e92f60b9b159a6c1998a621"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_断刀.png",
-          "status": "ready",
-          "sha256": "3cb309b088075bf5c351adf6ebf116059412c847e59b92f5292097bf3a3c4b53"
-        }
-      ],
-      "constraints": {
-        "blade_topology": [
-          "weapon_count=1；single_hilt=1；broken_blade=1；cutting_edge_count=1；残存刀身保持单面刃与厚钝刀背，断口粗粝且明确终止；断口之后不得补出刀尖、完整刀身、第二把刀刃或实体光刃。",
-          "weapon_count=1；single_hilt=1；broken_blade=1；jagged_break=1；仅一把断裂横刀，断口之后不得续出完整刀身或第二把刀。"
-        ],
-        "vfx_boundary": "断口只允许少量冷光/血尘边缘高光，不得生长实体刀刃。",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移",
-          "完整长刀",
-          "第二把刀",
-          "副刀",
-          "匕首",
-          "双持",
-          "断口长出新刀刃",
-          "刀光变实体"
-        ],
-        "structure": "镇魔司横刀的战损断裂态：保留单一黑柄旧金属护手与半截暗银单刃刀身，断口粗粝清晰；只是一把断刀，不补全、不复制。",
-        "face_policy": "faceless"
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要让断刀结构/颜色/尺寸漂移",
-        "不要现代物件",
-        "不要文字水印",
-        "不要结构漂移",
-        "不要数量漂移",
-        "不要完整长刀",
-        "不要第二把刀",
-        "不要副刀",
-        "不要匕首",
-        "不要双持",
-        "不要断口长出新刀刃",
-        "不要刀光变实体"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "断刀 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "断刀"
-        ],
-        "spatial_layout": "断刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "镇魔司横刀的战损断裂态：保留单一黑柄旧金属护手与半截暗银单刃刀身，断口粗粝清晰；只是一把断刀，不补全、不复制。",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "断刀"
-        ],
-        "forbidden": [
-          "断刀结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "镇魔司横刀的战损断裂态：保留单一黑柄旧金属护手与半截暗银单刃刀身，断口粗粝清晰；只是一把断刀，不补全、不复制。",
-      "lifecycle": {
-        "first_seen": "第1集",
-        "state_order": [
-          "共享定妆",
-          "本集引用"
-        ],
-        "status": "active"
-      },
-      "weapon_profile": {
-        "design_intent": "同场镇魔司横刀的明确战损态，用断裂形态表现败局与资源匮乏，不是新武器品类。",
-        "silhouette": "单一黑柄旧护手连接半截直身单刃刀，断口粗粝、不规则但可读。",
-        "blade_topology": "weapon_count=1；single_hilt=1；broken_blade=1；jagged_break=1；断口后无续刃、无第二实体刀。",
-        "scale": "完整横刀约一半到三分之二长度，仍按角色手部比例，不缩成匕首。",
-        "material": "暗银旧钢、哑光黑柄、旧金属护手、克制血尘与磨损。",
-        "palette": "暗银、冷灰、黑柄、少量暗红血尘。",
-        "ornament_motif": "镇魔司制式低调纹样，与 WEAPON_01 同源，不新增华丽装饰。",
-        "carry_modes": [
-          "伤员手持",
-          "地面遗落",
-          "断口近景"
-        ],
-        "combat_usage": "只能作为残损防身/证据道具，不恢复完整刀路，不与完整横刀混成双持。",
-        "vfx_signature": "断口少量冷色边缘高光或血尘；不发射光刃，不补出实体续刃。",
-        "forbidden_drift": [
-          "不要补全长刀",
-          "不要第二把刀",
-          "不要变匕首",
-          "不要双持",
-          "不要断口长出光刃"
-        ]
-      },
-      "character_id": null,
-      "weapon_like_role": "entity_weapon",
-      "self_check_at": "2026-07-21T13:31:39+00:00",
-      "self_check_by": "image_qc.mark_finalized",
-      "artifact_sha256": "3cb309b088075bf5c351adf6ebf116059412c847e59b92f5292097bf3a3c4b53"
-    },
-    {
-      "id": "PROP_翻覆囚车",
-      "type": "prop",
-      "name": "翻覆囚车",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:37:56.093723+00:00"
-          }
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车_比例.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:37:56.093930+00:00"
-          }
-        },
-        "reverse": {
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车_反面.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared reverse reference passed finalized review",
-            "reviewed_at": "2026-07-21T13:37:56.093940+00:00"
-          }
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_翻覆囚车.md",
-          "status": "ready",
-          "sha256": "7f01f94d0a9b441cd4601341064d2099c4fcf8b6e83f3cbafd46c310a07de670"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_翻覆囚车.png",
-          "status": "ready",
-          "sha256": "7114a7750be84e7b624edeefc95980c6dbadbb220a358c97e4c68f3170b19798"
-        }
-      ],
-      "constraints": {
-        "structure": "翻覆囚车",
-        "face_policy": "faceless",
-        "must_not_have": [
-          "现代物件",
-          "文字水印",
-          "结构漂移",
-          "数量漂移"
-        ]
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要让翻覆囚车结构/颜色/尺寸漂移",
-        "不要现代物件",
-        "不要文字水印",
-        "不要结构漂移",
-        "不要数量漂移"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "翻覆囚车 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "翻覆囚车"
-        ],
-        "spatial_layout": "翻覆囚车只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "翻覆囚车",
-        "color_lighting_weather": "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。",
-        "resident_assets": [
-          "翻覆囚车"
-        ],
-        "forbidden": [
-          "翻覆囚车结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "翻覆囚车",
-      "lifecycle": {
-        "first_seen": "第1集",
-        "state_order": [
-          "共享定妆",
-          "本集引用"
-        ],
-        "status": "active"
-      },
-      "self_check_at": "2026-07-21T13:37:56+00:00",
-      "self_check_by": "image_qc.mark_finalized",
-      "artifact_sha256": "7114a7750be84e7b624edeefc95980c6dbadbb220a358c97e4c68f3170b19798"
-    },
-    {
       "id": "VFX_系统面板",
       "type": "vfx",
       "name": "百妖谱金色古卷面板",
@@ -710,7 +314,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/VFX_系统面板_百妖谱金色古卷面板.md",
           "status": "ready",
-          "sha256": "d5dcafbb47da1c7b7e57e58fa096a609a2f9fbd876ca11eff2f0321b1036ecee"
+          "sha256": "0166d13b391c26dd73b4e03f2028348bb5d1b4b5be0400c5394f0adc6835d47b"
         },
         {
           "slot": "primary_reference",
@@ -766,6 +370,163 @@
       "artifact_sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
     },
     {
+      "id": "WEAPON_横刀",
+      "type": "weapon",
+      "name": "横刀",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:19:23.687687+00:00"
+          }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:19:23.687892+00:00"
+          }
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:19:23.687914+00:00"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/WEAPON_横刀.md",
+          "status": "ready",
+          "sha256": "c702fb869492cb46cd6ae4f5ff541eb9c3fb451a98e357c0738da9b61bf8ea41"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "status": "ready",
+          "sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
+        }
+      ],
+      "constraints": {
+        "structure": "同一把唐横刀，刃长、刀镡、刀柄缠绳不漂。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "blade_topology": [
+          "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让横刀结构/颜色/尺寸漂移",
+        "不要变成长剑",
+        "不要华丽仙剑",
+        "不要现代军刀",
+        "不要多把复制",
+        "不要副刀",
+        "不要短刃",
+        "不要匕首",
+        "不要右手第二把刀",
+        "不要副手持刀",
+        "不要后手短刀",
+        "不要双持",
+        "不要刀鞘变成刀刃",
+        "不要双刃",
+        "不要多刃",
+        "不要双向开刃",
+        "不要第二把刀刃",
+        "不要光效变成实体刀刃"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "横刀"
+        ],
+        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "同一把唐横刀，刃长、刀镡、刀柄缠绳不漂。",
+        "color_lighting_weather": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+        "resident_assets": [
+          "横刀"
+        ],
+        "forbidden": [
+          "横刀结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "weapon_profile": {
+        "design_intent": "同一把唐横刀，刃长、刀镡、刀柄缠绳不漂。",
+        "silhouette": "同一把唐横刀，刃长、刀镡、刀柄缠绳不漂。；单一实体武器轮廓，不复制第二把刀刃。",
+        "blade_topology": "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。",
+        "scale": "按角色手部比例，竖屏可读但不夸张。",
+        "material": "暗银金属、低反光、战损血尘克制呈现。",
+        "palette": "暗银、黑柄、冷灰血尘",
+        "ornament_motif": "镇魔司制式，低调克制。",
+        "carry_modes": [
+          "手持",
+          "落地",
+          "近景局部"
+        ],
+        "combat_usage": "本集关键动作道具；实体刀刃数量和握持点必须唯一，只允许一把实体武器；副手/后手不得补出短刃、匕首、副刀或第二把刀，不可变成长剑/仙剑/现代军刀，不可多把复制。",
+        "vfx_signature": "不主动发光；只继承场景光位。刀光/爪光/VFX 只能是半透明光效，不得被渲染成第二把实体刀刃。",
+        "forbidden_drift": [
+          "不要变成长剑",
+          "不要华丽仙剑",
+          "不要现代军刀",
+          "不要副刀",
+          "不要短刃",
+          "不要匕首",
+          "不要右手第二把刀",
+          "不要副手持刀",
+          "不要后手短刀",
+          "不要双持",
+          "不要刀鞘变成刀刃",
+          "不要双刃",
+          "不要多刃",
+          "不要第二把刀刃",
+          "不要让光效变成实体刀刃"
+        ]
+      },
+      "owner": "剧情资产",
+      "character_id": null,
+      "weapon_like_role": "entity_weapon",
+      "self_check_at": "2026-07-22T07:19:23+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6"
+    },
+    {
       "id": "VFX_百妖谱",
       "type": "vfx",
       "name": "百妖谱",
@@ -786,7 +547,7 @@
           "slot": "asset_card",
           "path": "生产数据/卡片快照/资产/VFX_百妖谱.md",
           "status": "ready",
-          "sha256": "b5cfeb31b60f8b027cea8a574142ca5fa940d28b77d04e3b362df43dd46fa691"
+          "sha256": "351a9d5fed54f2476d47bb58337c8b5357342e759f63413f5ef9831c845d2e66"
         },
         {
           "slot": "primary_reference",
@@ -836,6 +597,78 @@
       "self_check_at": "2026-07-21T13:39:55+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5"
+    },
+    {
+      "id": "VFX_墨虎谱影",
+      "type": "vfx",
+      "name": "墨虎谱影",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_墨虎谱影.png",
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-22T07:32:28.281823+00:00"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/VFX_墨虎谱影.md",
+          "status": "ready",
+          "sha256": "1c4cea80d7cfa29399769f9e45a506fe733b865c11e83e4fc3ee54be4d30cefd"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_特效_墨虎谱影.png",
+          "status": "ready",
+          "sha256": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31"
+        }
+      ],
+      "constraints": {
+        "structure": "由 BEAST_01 剪影派生的纸上墨虎，无字、黑墨旧金、不可脱离谱页实体化。",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让墨虎谱影结构/颜色/尺寸漂移",
+        "不要随机改色",
+        "不要遮挡主体脸",
+        "不要现代科幻UI",
+        "不要过度血腥猎奇"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "墨虎谱影 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "墨虎谱影"
+        ],
+        "spatial_layout": "墨虎谱影只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "由 BEAST_01 剪影派生的纸上墨虎，无字、黑墨旧金、不可脱离谱页实体化。",
+        "color_lighting_weather": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+        "resident_assets": [
+          "墨虎谱影"
+        ],
+        "forbidden": [
+          "墨虎谱影结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": true,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_at": "2026-07-22T07:32:28+00:00",
+      "self_check_by": "image_qc.mark_finalized",
+      "artifact_sha256": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31"
     }
   ],
   "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"

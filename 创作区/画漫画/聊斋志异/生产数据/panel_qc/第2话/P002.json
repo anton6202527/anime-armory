@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第2话",
+  "panel_id": "P002",
+  "created_at": "2026-07-22T15:14:53",
+  "verdict": "warn",
+  "path": "出图/第2话/panels/P002.png",
+  "size": {
+    "width": 1024,
+    "height": 1536
+  },
+  "expected_size": {
+    "width": 1296,
+    "height": 1120
+  },
+  "resolution_policy": "后端最高可达",
+  "resolution_provenance": {
+    "policy": "后端最高可达",
+    "native_width": 1024,
+    "native_height": 1536,
+    "native_sha256": "9863e5e862b0e5d8e51e7b6c295bf9a3fe255d62d637a2b5ebba1eef0b22e771",
+    "master_path": "出图/第2话/masters/P002.png",
+    "derived_resize": false
+  },
+  "declared_reference_count": 5,
+  "declared_reference_binding_count": 5,
+  "reference_input_count": 5,
+  "attached_equivalent_count": 5,
+  "composite_attachment_count": 0,
+  "omitted_attachment_count": 0,
+  "omitted_attachment_ids": [],
+  "blank_region_candidates": [],
+  "large_edge_blank_band_candidates": [],
+  "issues": [
+    {
+      "severity": "warn",
+      "category": "size",
+      "reason": "image size 1024x1536 differs from job size 1296x1120"
+    }
+  ],
+  "manual_review_required": true
+}

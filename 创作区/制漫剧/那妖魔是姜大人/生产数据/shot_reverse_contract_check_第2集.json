@@ -3,11 +3,11 @@
   "version": 1,
   "episode": "第2集",
   "status": "pass",
-  "generated_at": "2026-07-22T06:37:41+00:00",
+  "generated_at": "2026-07-22T06:55:27+00:00",
   "contract_path": "脚本/第2集/shot_reverse_contract.json",
   "report_path": "生产数据/shot_reverse_contract_第2集.md",
   "summary": {
-    "patterns": 0,
+    "patterns": 2,
     "block": 0,
     "warn": 0,
     "info": 0

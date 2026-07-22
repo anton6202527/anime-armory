@@ -121,3 +121,23 @@ def test_missing_inputs_graceful(tmp_path: Path) -> None:
     report = lettering_qc.analyze(root, "第1话")
     assert report["findings"] == []
     assert report["notes"]
+
+
+def test_overflowing_text_is_flagged(tmp_path: Path) -> None:
+    # a tall wall of CJK text in a short slot cannot fit at font 44
+    slot = {"slot_id": "B1", "type": "dialogue", "x": 120, "y": 76, "w": 300, "h": 80}
+    long_text = "这是一段非常非常长的台词" * 8
+    items = [{"item_id": "L001", "panel_id": "P001", "type": "dialogue",
+              "slot_id": "B1", "text": long_text, "text_zh": long_text, "style": {"size": 44}}]
+    root = write_fixture(tmp_path, [slot], items)
+    report = lettering_qc.analyze(root, "第1话")
+    assert "lettering_text_overflow" in codes(report)
+
+
+def test_short_text_fits_no_overflow(tmp_path: Path) -> None:
+    slot = {"slot_id": "B1", "type": "dialogue", "x": 120, "y": 76, "w": 430, "h": 300}
+    items = [{"item_id": "L001", "panel_id": "P001", "type": "dialogue",
+              "slot_id": "B1", "text": "来了。", "text_zh": "来了。", "style": {"size": 44}}]
+    root = write_fixture(tmp_path, [slot], items)
+    report = lettering_qc.analyze(root, "第1话")
+    assert "lettering_text_overflow" not in codes(report)

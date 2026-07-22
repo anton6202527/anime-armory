@@ -5,7 +5,7 @@
       "evidence": [
         {
           "path": "脚本/第2集/axis_blocking_map.json",
-          "sha256": "40dfb899aa1b4e51bf4bc0cc24134d6c99ed61574c4e6deb3e17f12d9658d58a"
+          "sha256": "fb144ec144f3d712c6a30ad502fc404917c773a1c08ed59e87d1b80d36973cc8"
         },
         {
           "path": "脚本/第2集/director_beat_sheet.json",
@@ -21,19 +21,19 @@
         },
         {
           "path": "脚本/第2集/transition_map.json",
-          "sha256": "8f29ea4dd37b2d70facd205cc4c0b6e0aa6d2bd0b91d3215cbf866380739b4df"
+          "sha256": "dc89f9f93cd147b1235c2f961e888fae3dbbb540de00260050f5fa19f8122c3f"
         },
         {
           "path": "脚本/第2集/vertical_composition_plan.json",
           "sha256": "82e0fe4f38b48d3022eaf7c230d65115df714449277b47f791cf0da2df04c057"
         }
       ],
-      "note": "依据用户明确授权，批准第2话P2排戏：斩虎按五相位拍清，系统奇观与情绪偿债分层。",
-      "reviewed_at": "2026-07-22T06:37:41+00:00",
+      "note": "依据用户授权，按当前voiceover复核P2排戏通过。",
+      "reviewed_at": "2026-07-22T06:50:02+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "director",
-      "signed_evidence_fingerprint_sha": "b4de307435b54f953ad558f4a102b9d83bd14949ac4fdf2d247004fb39bc0383",
-      "signed_input_fingerprint_sha": "e2f5ee820b1d4c5f5a1604610891af106a8d97c46f159fbedebf6c3dc1198c56",
+      "signed_evidence_fingerprint_sha": "a45f1332ba0ebdfa107385194e697caf5954484426fcb2aebeae583469a92d03",
+      "signed_input_fingerprint_sha": "fca61b5dad9770cd3655532098ede55886a6f07586a7b79ef23a862fe191051c",
       "unresolved_risks": [],
       "waiver_reason": ""
     },
@@ -42,7 +42,7 @@
       "evidence": [
         {
           "path": "脚本/第2集/axis_blocking_map.json",
-          "sha256": "40dfb899aa1b4e51bf4bc0cc24134d6c99ed61574c4e6deb3e17f12d9658d58a"
+          "sha256": "fb144ec144f3d712c6a30ad502fc404917c773a1c08ed59e87d1b80d36973cc8"
         },
         {
           "path": "脚本/第2集/director_beat_sheet.json",
@@ -58,46 +58,46 @@
         },
         {
           "path": "脚本/第2集/transition_map.json",
-          "sha256": "8f29ea4dd37b2d70facd205cc4c0b6e0aa6d2bd0b91d3215cbf866380739b4df"
+          "sha256": "dc89f9f93cd147b1235c2f961e888fae3dbbb540de00260050f5fa19f8122c3f"
         },
         {
           "path": "脚本/第2集/vertical_composition_plan.json",
           "sha256": "82e0fe4f38b48d3022eaf7c230d65115df714449277b47f791cf0da2df04c057"
         }
       ],
-      "note": "依据用户明确授权，批准第2话P2制作方案与竖屏动作降级路径。",
-      "reviewed_at": "2026-07-22T06:37:41+00:00",
+      "note": "依据用户授权，按当前voiceover复核P2制作合同通过。",
+      "reviewed_at": "2026-07-22T06:50:02+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "producer",
-      "signed_evidence_fingerprint_sha": "b4de307435b54f953ad558f4a102b9d83bd14949ac4fdf2d247004fb39bc0383",
-      "signed_input_fingerprint_sha": "e2f5ee820b1d4c5f5a1604610891af106a8d97c46f159fbedebf6c3dc1198c56",
+      "signed_evidence_fingerprint_sha": "a45f1332ba0ebdfa107385194e697caf5954484426fcb2aebeae583469a92d03",
+      "signed_input_fingerprint_sha": "fca61b5dad9770cd3655532098ede55886a6f07586a7b79ef23a862fe191051c",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "p2_director_blocking",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-22T06:37:41+00:00",
+  "created_at": "2026-07-22T06:50:02+00:00",
   "episode": "第2集",
   "evidence_fingerprint": {
     "files": {
-      "脚本/第2集/axis_blocking_map.json": "40dfb899aa1b4e51bf4bc0cc24134d6c99ed61574c4e6deb3e17f12d9658d58a",
+      "脚本/第2集/axis_blocking_map.json": "fb144ec144f3d712c6a30ad502fc404917c773a1c08ed59e87d1b80d36973cc8",
       "脚本/第2集/director_beat_sheet.json": "35994b3d78f5470ff1c201c977108199d96ce2007fa8285462832a275be30f4d",
       "脚本/第2集/edit_rhythm_map.json": "344dbf476c6fc498e7cff7403898b83426c54b8c09a32e4ad6bb094bf38fbf2d",
       "脚本/第2集/shot_progression_plan.json": "a4381afa6841c7959d6d6a72218076d8d7e8f62fc3351934515459430bec596a",
-      "脚本/第2集/transition_map.json": "8f29ea4dd37b2d70facd205cc4c0b6e0aa6d2bd0b91d3215cbf866380739b4df",
+      "脚本/第2集/transition_map.json": "dc89f9f93cd147b1235c2f961e888fae3dbbb540de00260050f5fa19f8122c3f",
       "脚本/第2集/vertical_composition_plan.json": "82e0fe4f38b48d3022eaf7c230d65115df714449277b47f791cf0da2df04c057"
     },
-    "sha": "b4de307435b54f953ad558f4a102b9d83bd14949ac4fdf2d247004fb39bc0383"
+    "sha": "a45f1332ba0ebdfa107385194e697caf5954484426fcb2aebeae583469a92d03"
   },
   "input_fingerprint": {
     "files": {
-      "脚本/第2集/table_read_packet.json": "44289f938faaec8f5efbc54750080de97085b04775855fbd4046b29f9cf5ef4a",
-      "脚本/第2集/table_read_signoff.json": "757f06588f51e0fce1ede35a9be114cd768303114286324d83984011bce7f5d2",
-      "脚本/第2集/voiceover.txt": "637c4c7d3456541905d1edc79cc624e576c4ffb7d5122efd095e373d7380ab2e",
+      "脚本/第2集/table_read_packet.json": "67d42e0aba99682bd61907b99ab0b73018d0d11b61ab590b24cccf64da431980",
+      "脚本/第2集/table_read_signoff.json": "a4cfb109803e10248a4e5425ed3eb45381e1182c55e1fd339d825e91b5d8aab9",
+      "脚本/第2集/voiceover.txt": "07a6746c59e90a4ef40c37c28ccf6a558859ecdd906c574b08a455b67fb64549",
       "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
     },
-    "sha": "e2f5ee820b1d4c5f5a1604610891af106a8d97c46f159fbedebf6c3dc1198c56"
+    "sha": "fca61b5dad9770cd3655532098ede55886a6f07586a7b79ef23a862fe191051c"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -116,6 +116,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-22T06:37:41+00:00",
+  "updated_at": "2026-07-22T06:50:02+00:00",
   "version": 1
 }

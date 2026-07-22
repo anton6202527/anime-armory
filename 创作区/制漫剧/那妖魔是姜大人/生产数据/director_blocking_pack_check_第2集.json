@@ -7,11 +7,9 @@
       "status": "pass"
     },
     {
-      "issues": [
-        "SR_TIGER_CONFRONT 缺正反打字段：shot_pairing"
-      ],
+      "issues": [],
       "rel": "脚本/第2集/axis_blocking_map.json",
-      "status": "block"
+      "status": "pass"
     },
     {
       "issues": [],
@@ -19,13 +17,9 @@
       "status": "pass"
     },
     {
-      "issues": [
-        "Seam_01 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断",
-        "Seam_02 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断",
-        "Seam_03 seam_mode 必须显式选择标准枚举，不能只靠 transition 推断"
-      ],
+      "issues": [],
       "rel": "脚本/第2集/transition_map.json",
-      "status": "block"
+      "status": "pass"
     },
     {
       "issues": [],
@@ -43,15 +37,15 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-07-22T06:37:42+00:00",
+  "generated_at": "2026-07-22T06:41:06+00:00",
   "kind": "n2d_director_blocking_pack_check",
   "next_when_blocked": "补齐 P-2 导演排戏包六件套并把内容 status 改为 confirmed；再用 signoff.py 由导演与制片/剪辑角色签收当前文件哈希。之后重跑 check，再进入阶段2分镜设计。",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "scaffold_command": "python3 skills/n2d-script/scripts/director_blocking_pack.py 创作区/制漫剧/那妖魔是姜大人 第2集 scaffold --write",
-  "status": "block",
+  "status": "pass",
   "summary": {
-    "block": 2,
-    "pass": 5,
+    "block": 0,
+    "pass": 7,
     "required": 7
   },
   "version": 1

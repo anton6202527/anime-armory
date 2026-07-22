@@ -1,8 +1,8 @@
 # 漫画 Gate — image_preflight — 第2话
 
-- 生成时间：2026-07-22T11:47:04
-- 结论：warn
-- block/warn/info：0 / 6 / 1
+- 生成时间：2026-07-22T14:49:33
+- 结论：block
+- block/warn/info：1 / 6 / 1
 
 ## 记录
 
@@ -27,6 +27,7 @@
 
 | severity | code | artifact | reason | return_to | suggested_fix |
 |---|---|---|---|---|---|
+| block | panel_jobs_stale_contract | 出图/第2话/prompt/panel_jobs.json | 这些格的落盘出图包与当前脚本/收尾/风格契约不一致（改了契约没重建出图包）：P001、P002、P003、P004、P005、P006、P007、P008、P009、P010、P011、P012、P013、P014、P015、P016 | image | 重跑 comic-image/scripts/build_panel_jobs.py（陈旧格自动回 planned），再重抽这些格。 |
 | info | climax_at_tail | 生产数据/comic_chapter_beat_audit_第2话.json | 高潮候选在 93%；确认中段是否有足够支撑。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | payoff_overdue | 生产数据/comic_setup_payoff_audit_第2话.json | 伏笔「首屏异鬼铺皮执笔，读者先知危险而王生不知。」兑现话 第1话 已早于本话 第2话 但仍 open——坑该收没收=长线断供/忘坑；补收并标 done，或改 payoff_chapter/标 ongoing。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |
 | warn | payoff_overdue | 生产数据/comic_setup_payoff_audit_第2话.json | 伏笔「道士见王生邪气萦绕，王生仍以为求财魔法。」兑现话 第1话 已早于本话 第2话 但仍 open——坑该收没收=长线断供/忘坑；补收并标 done，或改 payoff_chapter/标 ongoing。 | comic-script | 按机检建议回 comic-script 修分话/分格后重跑。 |

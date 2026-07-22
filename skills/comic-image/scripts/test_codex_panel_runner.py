@@ -137,6 +137,35 @@ def test_post_qc_counts_one_attachment_reused_for_multiple_semantic_roles(
     assert payload["verdict"] == "pass"
 
 
+def test_large_edge_blank_band_detector_finds_paper_like_top_reservation(tmp_path: Path) -> None:
+    from PIL import Image, ImageDraw
+
+    panel = tmp_path / "blank_top.png"
+    image = Image.new("RGB", (600, 900), (193, 190, 181))
+    draw = ImageDraw.Draw(image)
+    for y in range(270, 900, 12):
+        draw.line((0, y, 600, 900 - (y % 100)), fill=(25 + y % 90, 35, 45), width=7)
+    image.save(panel)
+
+    candidates = runner.likely_large_edge_blank_bands(panel)
+
+    assert any(candidate["edge"] == "top" and candidate["fraction"] >= 0.2 for candidate in candidates)
+
+
+def test_large_edge_blank_band_detector_ignores_full_frame_art(tmp_path: Path) -> None:
+    from PIL import Image
+
+    panel = tmp_path / "full_frame.png"
+    image = Image.new("RGB", (600, 900))
+    pixels = image.load()
+    for y in range(900):
+        for x in range(600):
+            pixels[x, y] = ((x * 17 + y * 7) % 256, (x * 5 + y * 13) % 256, (x * 11 + y * 3) % 256)
+    image.save(panel)
+
+    assert runner.likely_large_edge_blank_bands(panel) == []
+
+
 def test_post_qc_blocks_max_resolution_without_native_master(tmp_path: Path, monkeypatch) -> None:
     panel = tmp_path / "P020.png"
     panel.write_bytes(b"png")

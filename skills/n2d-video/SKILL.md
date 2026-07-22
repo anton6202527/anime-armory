@@ -64,7 +64,8 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **资产身份注册层继承铁律**：出视频前先跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`，读取 `生产数据/identity_adapter_matrix.json` 和 `出图/共享/identity_registry.json`；含角色 Clip 若目标后端有 `registered/ready` 的 Character ID / Face Lock / reference controls，必须写入平台参数；若是 `fallback_reference_group` / `unregistered`，prompt 明确回退到首帧 + 尾帧 + reference_group，并把高危镜头登记为后续注册候选。image2video 每帧独立推理会**累积漂移**，**极端角度 / 大暗部 / 人物在画面太小**时尤其崩；各后端用法见 `references/platforms.md` 各档案「角色一致性」行。
 - **配角近景身份锁定铁律**：CU/MCU/反打/说话镜不能只写“reference_group 保持一致”。必须新增 `近景/反打身份锁定`，把脸型、五官比例、发型发髻、标志配饰、服装配色、脸部特写/表情参考、无原生 Face Lock 时的低幅度表情/小角度转头限制写清。配角没有脸部特写或连续脸漂时，改用更稳的保真拍法：MCU/OTS/侧脸/手部/物件反应镜，别继续用泛化形容词硬撑正脸近景。
 - **近景表情一致性铁律（治"近景不同表情时脸漂"）**：近景人物跨情绪变表情（哭/笑/怒/惊）最易**脸被表情带着重画**。`近景/反打身份锁定` 必带三子字段——**表情锚**（起→止，各引 `expressions` 对应情绪定妆图）、**表情幅度**（微/中/大，CU≤中、配角CU≤微）、**锁脸不锁情**（表情只动面部肌肉，脸型/五官比例/眼距/鼻梁/下颌/痣疤 must hold，写进 negative）。**继承出图的 `微表情节拍`（FACS/AU 级）**：近景人物运动段把表情写成**起 AU 组 → 止 AU 组**的肌肉级演化（眉峰/眼轮匝肌/嘴角微动/呼吸微颤），而非"由怒转哀"这种空洞情绪标签——AU 级线索就是首尾双帧只插值的目标态，避免模型在中间帧自由重画脸（见 n2d-image「近景微表情深化铁律」，script→image→video 三层同源）。**表情幅度=大的近景**走「近景大表情变化类 Clip」首尾双帧只插值（首=起表情、尾=止表情定妆图，`mode=frames2video`）或改为 MCU 保真实现，禁止单首帧让模型自由生成跨情绪表情。料源在 `n2d-image` 的 `reference_group.expressions` 同源情绪定妆；缺则该角大表情近景必须先回 `n2d-image` 补表情定妆，或改为中小幅表情/反打实现。详见 `references/prompt_format.md`「近景大表情变化类 Clip」。
-- **运镜服务情绪/节奏，不是炫技**（`n2d/references/导演节奏.md §四/§五`）：从 `故事板.md` 的节奏注记派生运镜——逼近/聚焦=推近、释放/孤独=拉远、代入=跟、**高光/爽点=环绕或轻甩**、克制/压迫=固定。铺垫段运镜缓慢，爽点 Clip 运镜短促有冲击。每条视频 prompt 带一个**张力词**（克制/紧张/爆发/释放）锚定这条镜头的情绪强度。
+- **固定机位默认 + 运镜动机铁律**：运镜是叙事手法，不是每镜必配的“电影感”。普通镜、对白/反打、近景大表情默认固定机位；张力先由表演、画内调度、停顿、声音和剪辑产生。只有能写清 `camera_motivation/运镜动机`（移动揭示什么新信息、改变什么空间关系）或确有连续空间位移时才启用推/拉/跟/升降；爽点/高光本身不自动授权环绕、轻甩或冲击变焦。运动也只用一种，落点后停稳。
+- **视线表演合同铁律**：含人物 Clip 必须把正向 `视线与头部朝向` 编译进模型提交 prompt。摄影机默认旁观者；除 storyboard 明确 POV、破第四墙或对镜叙事外，角色眼睛、鼻梁轴和头部朝向持续锁定戏内对手/道具/动作落点，保持三分之四、侧向或 OTS 关系。生成后抽起/中/止帧查无动机正视镜头与迎镜头转脸，命中即废料重跑。
 - **运镜用结构化词典铁律（`镜头运动` 字段·治"运镜全是自由散文"）**：`镜头运动` 不写自由散文，从 **`skills/n2d/_lib/n2d_const.py:CAMERA_MOVE_LEXICON`** 取结构化运镜词（推/拉/摇/移/升降/变焦/环绕/跟拍/甩镜/弧线/手持/固定），并**填满该词的 slot**——速度（`CAMERA_SPEED_WORDS`：缓慢/匀速/快速/轻微/急速冲击）+ 方向/起止点/弧度。运镜是 2026 一等控制项（Seedance 参考视频定义运动、Kling 专用 motion-control 端点），结构化词比散文稳得多。`gate.py --stage video` ⑤运镜结构化会对未用词典词或缺速度档的 `镜头运动` 记 WARN（`normalize_camera_move` 归一）。
 - **导演运镜 sidecar 消费铁律（gate 强制·治"规划好没落片"）**：若 `生产数据/director_camera_plan_第N集.json/md` 存在，生成 `01_clips.md` 时必须逐 Clip 读取 `video_prompt_injection`，把 `导演意图`、`起幅`、`落幅`、`镜头运动`、`运动精修`、`动态细节` 写进对应字段；若 sidecar 提供 `后端控制写法`，按该 Clip 路由后端真正消费的控制习惯落地（Kling motion brush / Seedance Shot 标号 / 其他自然语言），不要只保留通用运镜句。若 sidecar 缺失但 `storyboard.json` 已定稿，先回 n2d-script 跑 `python3 skills/n2d-script/scripts/director_camera_plan.py <作品根> 第N集 --write`。人工可改写建议，但必须保持 `镜头运动` 仍命中 `CAMERA_MOVE_LEXICON` 或固定机位词，并保留速度/方向/起止点。**`gate.py --stage video_preflight/video` 跑 `check_director_camera_plan_consumption` 收据**：sidecar 在但 `01_clips.md` 里零导演运镜词汇=规划没落片，含高潮/关键镜→付费前 BLOCK，普通镜→WARN。要**逐镜精确归属**（而非整包烟雾），落结构化签收档 `生产数据/director_camera_plan_applied_第N集.json`，在 `scopes` 里加 `{scope:"出视频", prompt_path, prompt_sha256, applied_clip_ids:[...]}`（SHA 绑定 plan+本 prompt，plan/prompt 改了须重签），gate 会按 `applied_clip_ids` 逐镜判落实。
 - **打斗 motion 视觉盛宴消费（P0-2·与出图同源）**：打斗/法术/动作高潮镜的 route 会带 `motion_spectacle_guidance` 机器字段（`n2d-model-router` 按本剧 `style_contract` 风格族自动注入·与出图 runner `combat_spectacle_guidance_for_style` 同一真值源）。写该 Clip 视频 prompt 的运动/动态细节段时**必须落实这份风格自适应指导**（cinematic 体积光+motion blur / cel 赛璐璐速度线 / ink 飞白泼墨 / flat 夸张图形化），治"首帧是盛宴、运动段平淡"的图↔视频不对称；切勿给赛璐璐/水墨剧硬塞写实 motion blur。
@@ -283,21 +284,22 @@ python3 skills/n2d-video/scripts/script_contract_receipt.py <作品根> 第N集 
 1. ✅ 首帧 PNG 已落档并与 Clip 编号匹配
 2. ✅ 剧本可看性合同：dramatic_function / audience_effect / retention promise / audience question 已进入完整 Clip 合同，并已跑 `script_contract_receipt.py --scope 出视频`；不要求逐字进入模型 prompt
 3. ✅ 导演调度：导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍 / 运动精修 / 环境交互齐全，且服务本集导演一致性契约
-4. ✅ prompt compiler v2：只有一个 `后端编译提交 prompt`；metadata 的 backend/mode/language/native_audio_policy 与 route 一致；必须有 `frame_strategy` 和 `story_span/edit_target/backend_request` 三套时钟；提交文本包含主动作 + 运镜 + 明确动作/保持窗口，I2V 不重述整套视觉设定
+4. ✅ prompt compiler v2：只有一个 `后端编译提交 prompt`；metadata 的 backend/mode/language/native_audio_policy 与 route 一致；必须有 `frame_strategy` 和 `story_span/edit_target/backend_request` 三套时钟；提交文本包含主动作 + 运镜 + 视线与头部朝向 + 明确动作/保持窗口，I2V 不重述整套视觉设定
 5. ✅ ④人物运动：动作链明确、幅度与能量可控、可由首帧自然推出
 6. ✅ 物理守卫：运动精修写明重心、锁定部位、遮挡层级和不穿模/不拉脸约束
-7. ✅ ②镜头运动：推/拉/跟/环绕/固定等词明确，速度词明确，不只写"运镜"
-8. ✅ 动态细节 & 环境交互：烛火/雨丝/衣袂/雾气/灵光等 ≥1 条，且包含动作对光影/粒子/道具/背景的反馈，不改首帧设定
-9. ✅ ⑦张力：运镜与"节奏/张力"一致（铺垫缓慢、爽点短促、留白定格）
-10. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
-11. ✅ 在场链：已读取 `entity_schedule.required_presence/offscreen_presence/forbidden_presence` 与 `continuity.entry_exit`，正向只保留登记实体，负向禁止未登记人物/道具/背景路人
-12. ✅ 接缝执行包 / 执行配方：first/end/mid 锚帧、anchor_consumption、frame_inputs/reference_inputs/control_inputs/audio_inputs 在完整合同和 runner 真实入参中齐全；不复制进模型文本，也不得退化成裸文本+单首帧
-13. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/policy_resolution/rationale/degrade_plan，且平台参数只写目标后端支持的能力
-14. ✅ 原生音画策略：已填 audio_intent/risk/mouth_visible/speech_policy/compose_policy；route=native_speech 的说话镜写 native_speech + 保留原片音轨，非 native_speech 镜默认 `视频生成音频策略=无声视频流`、audio_intent=none、compose_policy=丢弃，只有显式 `视频生成音频策略=低风险环境声` 的低风险无口型无台词镜头才 opt-in 环境声/音效；凡保留原片音轨、低音量混入环境声、native_sfx 或 native_speech，都必须同步写 `生产数据/native_av_physics_第N集.json`，逐 Clip 结构化记录声源、口型、动作声可见证据、空间声学和后期保留策略
-15. ✅ 复杂镜头：已继承 `专项镜头模板`，且人物运动/镜头运动/衔接约束未违反 template_contract
-16. ✅ 角色身份注册层：含角色 Clip 已读取 `identity_adapter_matrix.json` + `identity_registry.json`，明确 Character ID/Face Lock/reference controls/LoRA 或 fallback reference_group，且未违反高危角度/禁漂项
-17. ✅ 近景身份锁定：CU/MCU/反打/说话镜已写脸型、五官比例、发型发髻、标志配饰、服装配色、脸部特写/表情参考或实现分解方案；已写 表情锚/表情幅度/锁脸不锁情，大表情近景已走首尾双帧或 MCU 保真实现
-18. ✅ 复杂动作实现：复杂动作已有控制资产或实现分解方案，不靠删戏/降目标规避
+7. ✅ ②镜头运动：推/拉/跟/固定等词明确；摄影机运动有独立叙事动机，说不清动机时明确固定且摄影机不漂移
+8. ✅ 视线表演：非 POV/破第四墙镜已写戏内视线目标和头眼方向，角色不迎摄影机转脸；直视摄影机有明确叙事合同
+9. ✅ 动态细节 & 环境交互：只使用 storyboard 已登记的环境响应，且不改首帧设定
+10. ✅ ⑦张力：先由表演、画内调度、停顿和剪辑成立；运镜仅在有动机时辅助，不以乱推、乱甩、环绕代替张力
+11. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
+12. ✅ 在场链：已读取 `entity_schedule.required_presence/offscreen_presence/forbidden_presence` 与 `continuity.entry_exit`，正向只保留登记实体，负向禁止未登记人物/道具/背景路人
+13. ✅ 接缝执行包 / 执行配方：first/end/mid 锚帧、anchor_consumption、frame_inputs/reference_inputs/control_inputs/audio_inputs 在完整合同和 runner 真实入参中齐全；不复制进模型文本，也不得退化成裸文本+单首帧
+14. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/policy_resolution/rationale/degrade_plan，且平台参数只写目标后端支持的能力
+15. ✅ 原生音画策略：已填 audio_intent/risk/mouth_visible/speech_policy/compose_policy；route=native_speech 的说话镜写 native_speech + 保留原片音轨，非 native_speech 镜默认 `视频生成音频策略=无声视频流`、audio_intent=none、compose_policy=丢弃，只有显式 `视频生成音频策略=低风险环境声` 的低风险无口型无台词镜头才 opt-in 环境声/音效；凡保留原片音轨、低音量混入环境声、native_sfx 或 native_speech，都必须同步写 `生产数据/native_av_physics_第N集.json`，逐 Clip 结构化记录声源、口型、动作声可见证据、空间声学和后期保留策略
+16. ✅ 复杂镜头：已继承 `专项镜头模板`，且人物运动/镜头运动/衔接约束未违反 template_contract
+17. ✅ 角色身份注册层：含角色 Clip 已读取 `identity_adapter_matrix.json` + `identity_registry.json`，明确 Character ID/Face Lock/reference controls/LoRA 或 fallback reference_group，且未违反高危角度/禁漂项
+18. ✅ 近景身份锁定：CU/MCU/反打/说话镜已写脸型、五官比例、发型发髻、标志配饰、服装配色、脸部特写/表情参考或实现分解方案；已写 表情锚/表情幅度/锁脸不锁情，大表情近景已走首尾双帧或 MCU 保真实现
+19. ✅ 复杂动作实现：复杂动作已有控制资产或实现分解方案，不靠删戏/降目标规避
 
 ### 自检（生成后逐条过 · 落档闸门）
 > 生成后过/重跑判定。筛选宽容：轻微偏差放行，只命中硬伤才重跑或改 prompt。
@@ -308,7 +310,8 @@ python3 skills/n2d-video/scripts/script_contract_receipt.py <作品根> 第N集 
 - [ ] 物理守卫：禁动部位、接触点、手部归属、脸部轮廓和发髻稳定，无穿模、拉脸或特征融化
 - [ ] 接触因果与道具守恒：刀/枪/箭/手持物在首次接触前只能存在于施力者一侧，目标侧不得提前长出同一道具或新增伤口；逐帧核对道具数量、持有者、运动方向和首次接触帧。发现“刀未落胸口先有刀”“一柄变两柄”一律硬伤重出。
 - [ ] 刺入/嵌入可读性：若剧本写刺入、没入、钉入，落幅必须同时看到可见刀长缩短、刀尖/末段被目标遮挡、衣料或表面内陷/裂口/单一入点与受阻停顿；仅把完整刀尖贴在胸口或横放表面不算完成动作。大位移必须补“临触未接触”与“刺入停住”动作锚，必要时拆成两段生成再接力。
-- [ ] 镜头运动：符合 prompt 的推/拉/跟/固定等设计，无突兀乱甩或无意义缩放
+- [ ] 镜头运动：符合 prompt 的推/拉/跟/固定等设计；固定镜无漂移/呼吸式缩放，运动镜确实完成登记的叙事动机
+- [ ] 视线与迎镜头：抽起/中/止帧检查眼睛、鼻梁轴和头部朝向；非 POV/破第四墙镜始终看戏内对象，无动机正视镜头或迎镜头转脸即废料重跑
 - [ ] 动态细节 & 环境交互：至少 1 个动态细节成立，动作对光影/粒子/道具/背景的反馈成立，且没有引入现代物件/文字/logo/水印
 - [ ] 导演调度：视频实际完成本镜导演意图；起幅、落幅、场面调度、表演节拍、运动精修、环境交互没有偏离；未违反 `00_总览.md` 本集导演一致性契约
 - [ ] 模型路由：结果符合本镜 primary 后端的强项；若连续失败，按 fallback_backends/degrade_plan 重跑，不临场乱换后端
@@ -480,6 +483,7 @@ python3 skills/n2d-video/scripts/multishot_runner.py accept <作品根> <multish
 | 视频 prompt 只写“不要新增人物”，没继承在场名单 | 读取 `storyboard.json.entity_schedule`，把 required/offscreen/forbidden 和 entry_exit 写进正负约束；没有登记的人和道具一律禁止出现 |
 | 上一 Clip 有人，下一 Clip 突然没有 | 回 `n2d-script` 补 `continuity.entry_exit` / `offscreen_presence` / 空镜换场 / 时间跳跃；视频 prompt 只能继承这个解释，不能临场编 |
 | 已有 `director_camera_plan_第N集` 但视频 prompt 没消费 | 把 `video_prompt_injection` 落进每 Clip 的导演调度七字段和 `镜头运动`；人工改写也要保留结构化运镜词、速度、方向、起落幅 |
+| 每个镜头都缓推/缩放，人物还会迎着摄影机转脸 | 删除装饰性运镜：无 `camera_motivation/运镜动机` 就固定机位；在完整合同和 compiled prompt 写正向戏内视线目标、三分之四/侧向/OTS 头眼关系，生成后抽起中止帧验收 |
 | `00_总览.md` 只列 Clip 表，没有本集导演一致性契约 | 补 `本集导演一致性契约`：主色调、镜头语法、轴线、剧情状态锁、场景状态；否则 gate 阻断 |
 | 视觉一致性契约凭手抄、改错轴线/光位没人发现 | 从出图总览原样誊抄五字段后跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第N集`——光位锚/轴线漂移或缺字段=block，必须修复再出视频；细化可以（超集），改写不行 |
 | 没跑 `gate.py --stage video_preflight` 就调生视频模型/渠道 | 先跑确定性 preflight gate；有 block 先修 prompt/故事板/尾帧，视频贵，不靠生成后碰运气 |

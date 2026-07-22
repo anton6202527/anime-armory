@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第2话",
+  "panel_id": "P003",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_JIA_CHILD",
+      "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+      "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "CHAR_JIA_CHILD",
+      "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+      "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d",
+      "role": "back",
+      "required": true
+    },
+    {
+      "id": "CHAR_JIA_MOTHER",
+      "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+      "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+      "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_JIA_HOME",
+      "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+      "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221",
+      "role": "location",
+      "required": true
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-22T14:56:22"
+}

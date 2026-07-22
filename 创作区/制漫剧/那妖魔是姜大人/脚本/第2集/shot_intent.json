@@ -1,0 +1,150 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 2,
+  "episode": "第2集",
+  "storyboard_sha": "42a8ddd98247911f38d110a11730c381fb4e04c230bddd3c2b8c1ea9e23b83a5",
+  "shots": [
+    {
+      "clip": "EP02_CLIP01",
+      "clip_no": 1,
+      "expression_span": "大",
+      "seam_mode": "match_on_action",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP02",
+      "clip_no": 2,
+      "expression_span": "中",
+      "seam_mode": "continuous_take_relay",
+      "need_endframe": true,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP03",
+      "clip_no": 3,
+      "expression_span": "大",
+      "seam_mode": "insert_cutaway",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP04",
+      "clip_no": 4,
+      "expression_span": "微",
+      "seam_mode": "continuous_take_relay",
+      "need_endframe": true,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP05",
+      "clip_no": 5,
+      "expression_span": "大",
+      "seam_mode": "graphic_match",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP06",
+      "clip_no": 6,
+      "expression_span": "中",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP07",
+      "clip_no": 7,
+      "expression_span": "大",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "clip_no": 8,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "姜月初",
+      "from_shot": 2,
+      "to_shot": null,
+      "field": "",
+      "desc": "脸颊血点、手抖、灰囚衣染血",
+      "source": "seed"
+    },
+    {
+      "character": "姜月初",
+      "from_shot": 2,
+      "to_shot": null,
+      "field": "",
+      "desc": "伤势恢复但血污保留，握刀姿态变专业",
+      "source": "seed"
+    },
+    {
+      "character": "虎妖",
+      "from_shot": 2,
+      "to_shot": null,
+      "field": "",
+      "desc": "胸口贯穿旧伤、右眼血痕",
+      "source": "seed"
+    },
+    {
+      "character": "虎妖",
+      "from_shot": 2,
+      "to_shot": null,
+      "field": "",
+      "desc": "命中后断首死亡",
+      "source": "seed"
+    },
+    {
+      "character": "裴长青",
+      "from_shot": 2,
+      "to_shot": null,
+      "field": "",
+      "desc": "死亡、胸口刀伤、黑红制服重损",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/seam_mode/need_endframe/end_anchor_required/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

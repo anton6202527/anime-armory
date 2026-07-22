@@ -52,7 +52,7 @@
       "path": "脚本/第2集/voiceover.txt",
       "exists": true,
       "kind": "file",
-      "sha256": "637c4c7d3456541905d1edc79cc624e576c4ffb7d5122efd095e373d7380ab2e"
+      "sha256": "07a6746c59e90a4ef40c37c28ccf6a558859ecdd906c574b08a455b67fb64549"
     },
     {
       "stage": "script_stage1",
@@ -94,14 +94,14 @@
       "path": "设定库/voice_casting.json",
       "exists": true,
       "kind": "file",
-      "sha256": "211730077014d7b134034170629ab541fd72302ddd10d2d3a28ce4b307346bbb"
+      "sha256": "7b40c798b78569ea61500cf726b7734abe2cc1084f7fffedc5f4d0417a30d797"
     },
     {
       "stage": "voice",
       "path": "合成/第2集/配音/timing_estimate.json",
       "exists": true,
       "kind": "file",
-      "sha256": "7138d0f9581625e3ba4dbef6496a7c082a8cdd4cdfea067c9bf5fc6d981d620f"
+      "sha256": "93c0c38f64a5413afaea3802dea25431c1d47b759aaba24a3b684fdd535329d7"
     },
     {
       "stage": "voice",
@@ -124,78 +124,86 @@
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/director_beat_sheet.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "35994b3d78f5470ff1c201c977108199d96ce2007fa8285462832a275be30f4d"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/axis_blocking_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "fb144ec144f3d712c6a30ad502fc404917c773a1c08ed59e87d1b80d36973cc8"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/shot_progression_plan.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "a4381afa6841c7959d6d6a72218076d8d7e8f62fc3351934515459430bec596a"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/transition_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "dc89f9f93cd147b1235c2f961e888fae3dbbb540de00260050f5fa19f8122c3f"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/vertical_composition_plan.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "82e0fe4f38b48d3022eaf7c230d65115df714449277b47f791cf0da2df04c057"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/edit_rhythm_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "344dbf476c6fc498e7cff7403898b83426c54b8c09a32e4ad6bb094bf38fbf2d"
     },
     {
       "stage": "script_stage2",
       "path": "生产数据/director_blocking_pack_第2集.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "a227e67f4be54fafc03f7886aed1b21be50903520f5605f6ccc5accf812dc897"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/分镜剧本.md",
       "exists": true,
       "kind": "file",
-      "sha256": "f5f1a384749238dc06ec177d07001a5970c34498d9c2dce27de699b8d5907534"
+      "sha256": "156aa5e77c7d106c01a8391b7803b62380b68c30c06f6ffec1304d8d77b5a29a"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/故事板.md",
       "exists": true,
       "kind": "file",
-      "sha256": "69b5a72282d603b5b5dd8da43b325e459246adec73b1e391fbd73e2f6e7764fe"
+      "sha256": "d48cc66895614362ffe20f31e233191b159f75fffa7e1989c3c8cc40715e7cb7"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/storyboard.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/素材清单.md",
       "exists": true,
       "kind": "file",
-      "sha256": "97141e27dd5e4158f1384fc00d47ca3c42c04b682f42818799efd30e8e9e0293"
+      "sha256": "19d6fb7f2d8de756e65b030f301918748567239b2546cb11452ca2b4dd3d76bf"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+      "sha256": "82ba15defd3ad8484de8bd855a59f49575da31a1ba03a86ee21b0a0e3812a367"
     },
     {
       "stage": "script_stage2",
@@ -206,40 +214,44 @@
     {
       "stage": "script_stage2",
       "path": "脚本/第2集/镜头时长.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "cd25eb88aa8d44769314ba149777d584057b179cd1d61bbf954a1d661ea9d720"
     },
     {
       "stage": "image_prompt",
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "75073f6ab6e69253fd32bcd8d9d710710d385ec4ccf2e1158ccd1273577f6bc6"
+      "sha256": "9b4b75a12657b58fdf5d6ae5f78d6534e1630de86b2dcdb0a09e05a9c54cdd5e"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第2集/prompt/00_总览.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "63e59ac53382eb343f400b94f64820fee396401584233e13ba4d0f0be64cb0b8"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第2集/prompt/01_分镜出图.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 40
+      "file_count": 44
     },
     {
       "stage": "image",
       "path": "出图/第2集/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 7
     },
     {
       "stage": "video_prompt",
@@ -308,7 +320,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "配音",
-  "last_progress_value": "⏳rough",
-  "last_progress_state": "rough"
+  "last_progress_column": "出图",
+  "last_progress_value": "7/23",
+  "last_progress_state": "partial"
 }

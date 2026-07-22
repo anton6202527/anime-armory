@@ -28,6 +28,30 @@
             "title": "系统",
             "attrs": {},
             "_note": "占位·按剧情填实际等级/属性数值（overlay 文字层据此渲染）"
+          },
+          {
+            "at_clip": "EP02_CLIP04",
+            "level": 1,
+            "panel_tier": "v1",
+            "title": "系统",
+            "attrs": {},
+            "_note": "占位·按剧情填实际等级/属性数值（overlay 文字层据此渲染）"
+          },
+          {
+            "at_clip": "EP02_CLIP05",
+            "level": 2,
+            "panel_tier": "v2",
+            "title": "系统",
+            "attrs": {},
+            "_note": "占位·按剧情填实际等级/属性数值（overlay 文字层据此渲染）"
+          },
+          {
+            "at_clip": "EP02_CLIP08",
+            "level": 3,
+            "panel_tier": "v3",
+            "title": "系统",
+            "attrs": {},
+            "_note": "占位·按剧情填实际等级/属性数值（overlay 文字层据此渲染）"
           }
         ]
       },

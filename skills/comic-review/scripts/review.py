@@ -116,9 +116,19 @@ def display_path(root: Path, path: Path) -> str:
 
 
 def ordered_panel_ids(layout: dict) -> list[str]:
+    # Honor the layout's authoritative reading order (== authored panels array),
+    # not a (y,x) sort — the latter reverses RTL rows and records the sequence
+    # backwards.
     ids: list[str] = []
     for segment in layout.get("segments") or []:
-        panels = sorted(segment.get("panels") or [], key=lambda p: (p.get("y", 0), p.get("x", 0)))
+        panels = [p for p in (segment.get("panels") or []) if isinstance(p, dict)]
+        order = segment.get("reading_order")
+        if isinstance(order, list) and order:
+            by_id = {str(p.get("panel_id")): p for p in panels}
+            listed = {str(pid) for pid in order}
+            panels = [by_id[str(pid)] for pid in order if str(pid) in by_id] + [
+                p for p in panels if str(p.get("panel_id")) not in listed
+            ]
         for panel in panels:
             pid = panel.get("panel_id")
             if pid and pid not in ids:
@@ -1027,6 +1037,31 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
     if unknown_slots:
         add_issue(issues, "warn", "排版/" + chapter + "/lettering.json", "lettering 引用了 layout 不存在的 slot：" + ", ".join(unknown_slots), "comic-compose", "同步 layout 和 lettering 的 slot_id", "lettering")
 
+    # A dialogue with real text but no bound slot renders as a rogue floating
+    # bubble over the art (content_ref matched nothing / 台词数 > 气泡数).
+    dialogue_items = [item for item in (lettering.get("items") or []) if str(item.get("type")) == "dialogue"]
+    unbound_dialogue = [
+        str(item.get("item_id"))
+        for item in dialogue_items
+        if str(item.get("text_zh") or item.get("text") or "").strip() and not str(item.get("slot_id") or "").strip()
+    ]
+    if unbound_dialogue:
+        add_issue(issues, "warn", "排版/" + chapter + "/lettering.json",
+                  "有台词没有对应 layout 气泡槽位（content_ref 无匹配），导出会渲染成漂浮气泡盖在画上：" + ", ".join(unbound_dialogue[:20]),
+                  "comic-compose", "在 layout 为这些台词补 dialogue slot（content_ref 对应），或核对台词数=气泡数后重导出", "lettering")
+    # Speaker on the script line vs. on the geometric bubble slot must agree, or
+    # the bubble tail points at the wrong/absent character.
+    speaker_mismatch = [
+        f"{item.get('item_id')}({item.get('speaker')}≠{item.get('slot_speaker')})"
+        for item in dialogue_items
+        if str(item.get("speaker") or "").strip() and str(item.get("slot_speaker") or "").strip()
+        and str(item.get("speaker")).strip() != str(item.get("slot_speaker")).strip()
+    ]
+    if speaker_mismatch:
+        add_issue(issues, "warn", "排版/" + chapter + "/lettering.json",
+                  "台词说话人与气泡槽位说话人不一致（气泡尾可能指向错的人）：" + ", ".join(speaker_mismatch[:20]),
+                  "comic-compose", "核对 content_ref 绑定，以及 layout 气泡的 speaker / tail.target", "lettering")
+
     lettering_style = lettering.get("style_consistency") if isinstance(lettering.get("style_consistency"), dict) else {}
     for mismatch in lettering_style.get("mismatches") or []:
         add_issue(
@@ -1233,6 +1268,19 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
                     "发布/商用前确认授权并更新 _meta.json",
                     "rights",
                 )
+    if manifest.get("font_status") == "pillow_default_fallback" and manifest.get("lettering_rendered"):
+        # No usable font was found, so嵌字 rendered with Pillow's bitmap default —
+        # zero CJK coverage → 中文全成 .notdef 豆腐块/空白，但 text_size 仍"放得下"。
+        # 这是渲染完整性问题（非授权问题），发布态直接阻断，其它态也必须 warn。
+        add_issue(
+            issues,
+            "block" if publish_like else "warn",
+            "排版/" + chapter + "/export_manifest.json",
+            "font_status=pillow_default_fallback：没有可用字体，嵌字用 Pillow 默认位图字渲染，中文会变成豆腐块/空白（本机无对应字体时整章文字不可读）",
+            "comic-compose",
+            "安装/指定一个覆盖目标语言的字体后重新 export_longstrip --render；CI/异机导出务必核对 font_status",
+            "lettering",
+        )
     if manifest.get("font_status") == "system_font_draft":
         if publish_like:
             add_issue(

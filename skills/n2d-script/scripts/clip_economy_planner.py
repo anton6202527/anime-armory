@@ -1,0 +1,438 @@
+#!/usr/bin/env python3
+"""Clip economy planner: episode-level generation-count budget + merge-first proposals.
+
+治「简单叙事被拆成太多付费视频 clip」：story_economy_audit 管单 Clip 时长预算，
+本脚本管**集级生成次数**——统计当前 storyboard 会产生多少次付费生成（含镜位拆分与
+长镜拆段），对照 2026 多镜叙事后端现实（单次生成可承载多个镜位：Seedance 2.0 单次
+4-15s 一次 3-5 镜、Kling 3.0 multi-shot 单次 15s；采集日期 2026-07-22），给出：
+
+  • 相邻同场景/同实体链的**合并候选组**（merge_or_single_take）：并成一个
+    story_clip + `take_policy=single_take_multishot`，镜位切换交 multishot-native
+    后端一次生成内部完成；
+  • 弱信息微镜（compact/micro/montage 经济类）**并入相邻强戏**候选（fold_into_neighbor）；
+  • 当前 vs 合并后的预计生成次数与密度指标。
+
+宪法边界（B10）：全部启发式判定 report-only，findings 只到 warn 且标
+`confidence=heuristic`，不做硬阻断；合并是否执行由编剧在阶段2精修时决定（改
+storyboard 属签收产物变更，脚本不自动改写）。安全边界：命中高动作模板/已声明
+锚链/超单次生成硬上限的 Clip 不进合并候选（与 shot_split_decision 的
+single_take_policy_verdict 同口径，安全拆分优先于省次数）。
+
+用法：python3 clip_economy_planner.py <作品根> <第N集> [--write] [--json] [--max-take-sec 15]
+产物：生产数据/clip_economy_plan_第N集.json/md
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import os
+import re
+import sys
+from pathlib import Path
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+
+HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
+
+from shot_split_decision import (  # noqa: E402
+    VIDEO_SHOT_HARD_MAX_SEC,
+    clip_take_policy,
+    duration_of,
+    plan_video_shot_segments,
+)
+
+try:
+    import story_economy_audit as sea  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover - planner degrades to duration-only signals
+    sea = None  # type: ignore
+
+KIND = "n2d_clip_economy_plan"
+VERSION = 1
+
+# 多镜叙事后端现实的快照参考（采集日期 2026-07-22·会过期，仅作报告口径，不做阻断阈值）：
+# Seedance 2.0 单次 4-15s 且一次可承载 3-5 个镜头；Kling 3.0 multi-shot 单次 15s；
+# Seedance 2.5 基础 30s（可延长）。简单叙事 1 分钟 ≈ 4-6 次生成是可达口径。
+CAPABILITY_SNAPSHOT_DATE = "2026-07-22"
+DEFAULT_MAX_TAKE_SEC = 15.0
+DENSITY_WARN_PER_MIN = 10.0  # 每分钟预计生成次数超过它 → warn（heuristic，report-only）
+
+# 不进合并候选的高风险信号：高动作模板、显式锚链、奇观镜（安全拆分/锚帧链优先）。
+HIGH_RISK_TEMPLATE_RE = re.compile(
+    r"(fight|combat|chase|battle|打斗|追逐|法术|武技|渡劫|突破|爆发|magic_burst|spectacle)",
+    re.I,
+)
+
+
+def now_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+
+
+def ep_label(value: str) -> str:
+    text = str(value or "").strip()
+    if text.startswith("第") and text.endswith("集"):
+        return text
+    m = re.search(r"\d+", text)
+    return f"第{m.group(0)}集" if m else text
+
+
+def write_atomic(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def clip_id(clip: Mapping[str, Any], idx: int) -> str:
+    return str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}")
+
+
+def load_storyboard(root: Path, ep: str) -> Tuple[List[Dict[str, Any]], Optional[str]]:
+    path = root / "脚本" / ep / "storyboard.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except OSError:
+        return [], f"缺 {path}"
+    except json.JSONDecodeError as exc:
+        return [], f"storyboard.json 不可解析：{exc}"
+    clips = data.get("clips") if isinstance(data, dict) else None
+    if not isinstance(clips, list) or not clips:
+        return [], "storyboard.json 缺非空 clips[]"
+    return [c for c in clips if isinstance(c, dict)], None
+
+
+def _location_key(clip: Mapping[str, Any]) -> str:
+    loc = str(clip.get("location_id") or "").strip()
+    if loc:
+        return loc
+    scene = str(clip.get("scene") or "").strip()
+    return scene[:20]
+
+
+def _entity_set(clip: Mapping[str, Any]) -> frozenset:
+    chars = [str(x) for x in clip.get("character_ids") or []]
+    entity = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    required = [str(x) for x in entity.get("required_presence") or []]
+    return frozenset(chars) | frozenset(required)
+
+
+def _seam_mode(clip: Mapping[str, Any]) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    return str(cont.get("seam_mode") or "").strip().lower()
+
+
+def _has_anchor_chain(clip: Mapping[str, Any]) -> bool:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    return bool(cont.get("anchors") or cont.get("midframe"))
+
+
+def _high_risk(clip: Mapping[str, Any]) -> bool:
+    template = str(clip.get("template") or "")
+    if HIGH_RISK_TEMPLATE_RE.search(template):
+        return True
+    if _has_anchor_chain(clip):
+        return True
+    if clip.get("spectacle_story_function"):
+        return True
+    return False
+
+
+def estimate_takes(clip: Mapping[str, Any], idx: int) -> int:
+    """当前 storyboard 口径下该 Clip 预计的付费生成次数（复用 shot_split_decision 真值逻辑）。"""
+    cid = clip_id(clip, idx)
+    duration = duration_of(clip)
+    if clip_take_policy(clip) == "single_take_multishot" and duration is not None and duration <= VIDEO_SHOT_HARD_MAX_SEC and not _high_risk(clip):
+        return 1
+    shots = clip.get("shots") if isinstance(clip.get("shots"), list) else None
+    segments = plan_video_shot_segments(cid, duration, shots)
+    return max(1, len(segments))
+
+
+def mergeable(clip: Mapping[str, Any]) -> Tuple[bool, str]:
+    """该 Clip 能否进入合并候选组。返回 (可否, 不可原因)。"""
+    duration = duration_of(clip)
+    if duration is None:
+        return False, "缺时长"
+    if _high_risk(clip):
+        return False, "高动作模板/锚链/奇观镜（安全拆分优先）"
+    if str(clip.get("shared_video") or clip.get("reuse_video") or "").strip():
+        return False, "共享/复用视频 clip 不合并"
+    return True, ""
+
+
+def find_merge_groups(
+    clips: Sequence[Mapping[str, Any]],
+    max_take_sec: float,
+) -> List[Dict[str, Any]]:
+    """相邻同场景/实体重叠链 → 合并候选组（组内合计 ≤ max_take_sec）。"""
+    groups: List[Dict[str, Any]] = []
+    chain: List[Tuple[int, Mapping[str, Any]]] = []
+
+    def flush() -> None:
+        if len(chain) >= 2:
+            members = [clip_id(c, i) for i, c in chain]
+            total = sum(float(duration_of(c) or 0.0) for _, c in chain)
+            groups.append({
+                "group_id": f"MERGE_{len(groups)+1:02d}",
+                "members": members,
+                "combined_sec": round(total, 3),
+                "location": _location_key(chain[0][1]),
+                "suggestion": "merge_or_single_take",
+                "proposal": (
+                    "并成一个 story_clip：各源 Clip 降级为内部 shots[] 镜位行，"
+                    "写 take_policy=single_take_multishot 交 multishot-native 后端一次生成；"
+                    "或保留分镜但把弱信息成员并入相邻强戏。"
+                ),
+            })
+        chain.clear()
+
+    for i, clip in enumerate(clips, 1):
+        ok, _why = mergeable(clip)
+        if not ok:
+            flush()
+            continue
+        seam = _seam_mode(clip)
+        if seam == "intentional_discontinuity":
+            flush()
+        if chain:
+            prev_i, prev = chain[-1]
+            same_loc = _location_key(clip) == _location_key(prev) and _location_key(clip) != ""
+            overlap = bool(_entity_set(clip) & _entity_set(prev)) or (not _entity_set(clip) or not _entity_set(prev))
+            total = sum(float(duration_of(c) or 0.0) for _, c in chain) + float(duration_of(clip) or 0.0)
+            if not (same_loc and overlap and total <= max_take_sec + 1e-9):
+                flush()
+        chain.append((i, clip))
+    flush()
+    return groups
+
+
+def find_fold_candidates(
+    clips: Sequence[Mapping[str, Any]],
+    economy_rows: Mapping[str, Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    """弱信息微镜（compact/micro/montage）→ 并入相邻强戏候选（不独立成付费 clip）。"""
+    out: List[Dict[str, Any]] = []
+    for i, clip in enumerate(clips, 1):
+        cid = clip_id(clip, i)
+        row = economy_rows.get(cid) or {}
+        economy_class = str(row.get("economy_class") or "")
+        duration = duration_of(clip)
+        if economy_class not in {"compact_story", "micro_reaction", "montage_bridge"}:
+            continue
+        if duration is None or duration > 4.0:
+            continue
+        if _high_risk(clip):
+            continue
+        neighbor = None
+        if i - 2 >= 0:
+            neighbor = clip_id(clips[i - 2], i - 1)
+        elif i < len(clips):
+            neighbor = clip_id(clips[i], i + 1)
+        out.append({
+            "clip": cid,
+            "duration_sec": duration,
+            "economy_class": economy_class,
+            "suggestion": "fold_into_neighbor",
+            "neighbor": neighbor,
+            "proposal": "短弱信息镜不独立成付费生成：并入相邻强戏做起幅/落幅节拍，或改一句旁白/屏幕文案。",
+        })
+    return out
+
+
+def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) -> Dict[str, Any]:
+    ep = ep_label(ep)
+    clips, err = load_storyboard(root, ep)
+    if err:
+        return {
+            "kind": KIND, "version": VERSION, "episode": ep, "generated_at": now_iso(),
+            "ok": False, "summary": {}, "merge_groups": [], "fold_candidates": [],
+            "findings": [{"severity": "warn", "code": "missing_storyboard", "message": err,
+                          "confidence": "heuristic"}],
+        }
+
+    economy_rows: Dict[str, Mapping[str, Any]] = {}
+    if sea is not None:
+        try:
+            report = sea.build_report(root, ep)
+            economy_rows = {
+                str(row.get("clip")): row
+                for row in report.get("clips") or []
+                if isinstance(row, Mapping)
+            }
+        except Exception:
+            economy_rows = {}
+
+    per_clip: List[Dict[str, Any]] = []
+    total_span = 0.0
+    current_takes = 0
+    for i, clip in enumerate(clips, 1):
+        cid = clip_id(clip, i)
+        duration = duration_of(clip)
+        takes = estimate_takes(clip, i)
+        current_takes += takes
+        if duration is not None:
+            total_span += duration
+        ok, why = mergeable(clip)
+        per_clip.append({
+            "clip": cid,
+            "duration_sec": duration,
+            "estimated_takes": takes,
+            "take_policy": clip_take_policy(clip),
+            "economy_class": str((economy_rows.get(cid) or {}).get("economy_class") or ""),
+            "mergeable": ok,
+            **({"merge_blocked_reason": why} if why else {}),
+        })
+
+    merge_groups = find_merge_groups(clips, max_take_sec)
+    fold_candidates = find_fold_candidates(clips, economy_rows)
+
+    member_ids = set()
+    by_id = {row["clip"]: row for row in per_clip}
+    for g in merge_groups:
+        group_takes = 0
+        for m in g["members"]:
+            member_ids.add(m)
+            group_takes += int((by_id.get(m) or {}).get("estimated_takes") or 1)
+        g["current_takes"] = group_takes
+    folded_ids = {c["clip"] for c in fold_candidates} - member_ids
+    projected_takes = (
+        current_takes
+        - sum(int((by_id.get(m) or {}).get("estimated_takes") or 1) for m in member_ids)
+        + len(merge_groups)
+        - len(folded_ids)
+    )
+    projected_takes = max(len(merge_groups) if clips else 0, projected_takes)
+
+    minutes = total_span / 60.0 if total_span > 0 else 0.0
+    takes_per_min = round(current_takes / minutes, 2) if minutes else None
+    projected_per_min = round(projected_takes / minutes, 2) if minutes else None
+
+    findings: List[Dict[str, Any]] = []
+    if takes_per_min is not None and takes_per_min > DENSITY_WARN_PER_MIN:
+        findings.append({
+            "severity": "warn",
+            "code": "generation_density_high",
+            "confidence": "heuristic",
+            "message": (
+                f"当前每分钟预计生成 {takes_per_min} 次（> {DENSITY_WARN_PER_MIN:g}/min 口径）。"
+                f"多镜叙事后端（快照 {CAPABILITY_SNAPSHOT_DATE}）单次可承载多个镜位；"
+                f"按下方 merge/fold 候选合并后约 {projected_per_min}/min。简单叙事优先合并，不必逐节拍独立成付费 clip。"
+            ),
+        })
+    if merge_groups:
+        findings.append({
+            "severity": "warn",
+            "code": "merge_candidates_available",
+            "confidence": "heuristic",
+            "message": (
+                f"发现 {len(merge_groups)} 组相邻同场景合并候选，合并后本集预计生成次数 "
+                f"{current_takes} → {projected_takes}。合并属阶段2精修的签收变更，由编剧确认后改 storyboard，本脚本不自动改写。"
+            ),
+        })
+
+    summary = {
+        "clips": len(clips),
+        "total_span_sec": round(total_span, 3),
+        "current_estimated_takes": current_takes,
+        "projected_takes_after_merge": projected_takes,
+        "takes_per_minute": takes_per_min,
+        "projected_takes_per_minute": projected_per_min,
+        "merge_groups": len(merge_groups),
+        "fold_candidates": len(fold_candidates),
+        "max_take_sec": max_take_sec,
+        "capability_snapshot_date": CAPABILITY_SNAPSHOT_DATE,
+    }
+    return {
+        "kind": KIND,
+        "version": VERSION,
+        "episode": ep,
+        "generated_at": now_iso(),
+        "ok": True,
+        "summary": summary,
+        "clips": per_clip,
+        "merge_groups": merge_groups,
+        "fold_candidates": fold_candidates,
+        "findings": findings,
+        "rules": [
+            "生成次数预算按集看，不只按单 Clip 时长看：简单叙事优先「更少更长的多镜单拍」而不是逐节拍独立 clip。",
+            "合并候选只提案不执行：改 storyboard 是签收产物变更，须编剧在阶段2精修确认。",
+            "高动作模板/锚链/奇观镜不进合并候选：安全拆分与锚帧链优先于省次数（与 shot_split_decision 同口径）。",
+            "本报告全部启发式、report-only（宪法 B10）；密度口径带能力快照日期，会过期，执行前按 C2 刷新。",
+        ],
+    }
+
+
+def render_md(plan: Mapping[str, Any]) -> str:
+    s = plan.get("summary") or {}
+    lines = [
+        "# Clip 经济性规划（生成次数预算 + 合并候选）",
+        "",
+        f"- episode: {plan.get('episode')}",
+        f"- 当前预计生成次数: {s.get('current_estimated_takes')}（{s.get('takes_per_minute')}/min）",
+        f"- 合并后预计: {s.get('projected_takes_after_merge')}（{s.get('projected_takes_per_minute')}/min）",
+        f"- 合并候选组: {s.get('merge_groups')} · 并入相邻强戏候选: {s.get('fold_candidates')}",
+        f"- 能力快照: {s.get('capability_snapshot_date')}（单次多镜上限口径 {s.get('max_take_sec')}s·会过期）",
+        "",
+        "## 合并候选组",
+        "",
+    ]
+    for g in plan.get("merge_groups") or []:
+        lines.append(
+            f"- **{g.get('group_id')}**（{g.get('location')}·合计 {g.get('combined_sec')}s）："
+            f"{' + '.join(g.get('members') or [])} → {g.get('proposal')}"
+        )
+    if not plan.get("merge_groups"):
+        lines.append("- 无（相邻镜要么不同场景，要么高风险/超单次窗口）")
+    lines += ["", "## 并入相邻强戏候选", ""]
+    for c in plan.get("fold_candidates") or []:
+        lines.append(
+            f"- {c.get('clip')}（{c.get('duration_sec')}s·{c.get('economy_class')}）→ 并入 {c.get('neighbor')}：{c.get('proposal')}"
+        )
+    if not plan.get("fold_candidates"):
+        lines.append("- 无")
+    findings = plan.get("findings") or []
+    if findings:
+        lines += ["", "## Findings（全部 heuristic·report-only）", ""]
+        for f in findings:
+            lines.append(f"- {str(f.get('severity')).upper()} {f.get('code')}: {f.get('message')}")
+    lines += ["", "## Rules", ""]
+    for rule in plan.get("rules") or []:
+        lines.append(f"- {rule}")
+    return "\n".join(lines)
+
+
+def write_outputs(root: Path, ep: str, plan: Mapping[str, Any]) -> Tuple[Path, Path]:
+    out = root / "生产数据"
+    out.mkdir(parents=True, exist_ok=True)
+    json_path = out / f"clip_economy_plan_{ep}.json"
+    md_path = out / f"clip_economy_plan_{ep}.md"
+    write_atomic(json_path, json.dumps(plan, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    write_atomic(md_path, render_md(plan) + "\n")
+    return json_path, md_path
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    ap = argparse.ArgumentParser(description="n2d clip economy planner (generation-count budget + merge-first)")
+    ap.add_argument("root")
+    ap.add_argument("episode")
+    ap.add_argument("--write", action="store_true")
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--max-take-sec", type=float, default=DEFAULT_MAX_TAKE_SEC,
+                    help="单次多镜生成的合计时长口径（默认 15s；按所选后端能力档调整）")
+    ns = ap.parse_args(argv)
+    root = Path(ns.root.rstrip("/"))
+    ep = ep_label(ns.episode)
+    plan = build_plan(root, ep, max_take_sec=float(ns.max_take_sec))
+    if ns.write:
+        jp, mp = write_outputs(root, ep, plan)
+        plan = {**plan, "outputs": {"json": str(jp), "markdown": str(mp)}}
+    if ns.json:
+        print(json.dumps(plan, ensure_ascii=False, indent=2))
+    else:
+        print(render_md(plan))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

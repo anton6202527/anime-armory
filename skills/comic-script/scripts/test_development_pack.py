@@ -204,3 +204,33 @@ def test_source_without_unit_markers_is_not_judged(tmp_path):
     source_path.write_text("一段没有任何章节标记的散文。", encoding="utf-8")
     report = dp.check_pack(tmp_path)
     assert not [g for g in report["gaps"] if "coverage_incomplete" in g["code"]]
+
+
+def test_vacuous_coverage_exception_does_not_suppress_gap():
+    blueprint = {
+        "chapters": [
+            {"chapter": "第1话", "source_mode": "adapted",
+             "source_spans": [{"source_path": "s.md", "start": "第1章", "end": "第1章"}]},
+            {"chapter": "第2话", "source_mode": "adapted",
+             "source_spans": [{"source_path": "s.md", "start": "第3章", "end": "第3章",
+                               "coverage_exception": "x"}]},  # vacuous
+        ]
+    }
+    codes = {i["code"] for i in dp._coverage_issues(blueprint)}
+    assert "source_coverage_exception_vacuous" in codes
+    assert "source_coverage_gap" in codes  # still fires — not suppressed
+
+
+def test_substantive_coverage_exception_suppresses_gap():
+    blueprint = {
+        "chapters": [
+            {"chapter": "第1话", "source_mode": "adapted",
+             "source_spans": [{"source_path": "s.md", "start": "第1章", "end": "第1章"}]},
+            {"chapter": "第2话", "source_mode": "adapted",
+             "source_spans": [{"source_path": "s.md", "start": "第3章", "end": "第3章",
+                               "coverage_exception": "第2章删改，编辑确认后文带出"}]},
+        ]
+    }
+    codes = {i["code"] for i in dp._coverage_issues(blueprint)}
+    assert "source_coverage_exception_vacuous" not in codes
+    assert "source_coverage_gap" not in codes

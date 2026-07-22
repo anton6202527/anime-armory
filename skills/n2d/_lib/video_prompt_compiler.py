@@ -19,7 +19,7 @@ from n2d_platform_profiles import quantize_video_duration
 
 KIND = "n2d_compiled_video_prompt"
 VERSION = 2
-PROFILE_VERSION = "2026-07-10.2"
+PROFILE_VERSION = "2026-07-22.1"
 COMPILED_HEADING = "### 后端编译提交 prompt"
 
 _RUNWAY_NEGATIVE_RE = re.compile(
@@ -228,6 +228,11 @@ def compile_video_prompt(contract: Mapping[str, Any], backend: Any = None) -> Di
         contract.get("camera_motion"),
         120,
     )
+    eyeline = _compact(
+        contract.get("eyeline_en") if english_profile and contract.get("eyeline_en") else
+        contract.get("eyeline") or contract.get("gaze_performance"),
+        180,
+    )
     environment = _compact(
         contract.get("environment_motion_en") if english_profile and contract.get("environment_motion_en") else
         contract.get("environment_motion"),
@@ -241,7 +246,7 @@ def compile_video_prompt(contract: Mapping[str, Any], backend: Any = None) -> Di
     subject = _compact(contract.get("subject_en") if english_profile and contract.get("subject_en") else contract.get("subject"), 100)
     scene = _compact(contract.get("scene_en") if english_profile and contract.get("scene_en") else contract.get("scene"), 120)
     rhythm = _compact(contract.get("rhythm_en") if english_profile and contract.get("rhythm_en") else contract.get("rhythm"), 100)
-    language = "mixed" if english_profile and _CJK_RE.search(" ".join((action, camera, environment, end_state, subject, scene, rhythm))) else preferred_language
+    language = "mixed" if english_profile and _CJK_RE.search(" ".join((action, camera, eyeline, environment, end_state, subject, scene, rhythm))) else preferred_language
     audio_policy = _one_line(contract.get("native_audio_policy")) or "none"
     frame_strategy = _one_line(contract.get("frame_strategy")) or "first_only"
     opening_mode = (
@@ -263,6 +268,8 @@ def compile_video_prompt(contract: Mapping[str, Any], backend: Any = None) -> Di
             parts.append(f"Primary action: {action}.")
         if camera:
             parts.append(f"Camera: {camera}.")
+        if eyeline:
+            parts.append(f"Eyeline and head direction: {eyeline}.")
         if environment:
             parts.append(f"Environment motion: {environment}.")
         if rhythm:
@@ -282,6 +289,8 @@ def compile_video_prompt(contract: Mapping[str, Any], backend: Any = None) -> Di
             parts.append(f"主动作：{action}。")
         if camera:
             parts.append(f"镜头：{camera}。")
+        if eyeline:
+            parts.append(f"视线与头部朝向：{eyeline}。")
         if environment:
             parts.append(f"环境响应：{environment}。")
         if rhythm:
@@ -374,6 +383,7 @@ def lint_compiled_prompt(payload: Mapping[str, Any]) -> Dict[str, List[str]]:
         if _one_line(payload.get("frame_strategy")) not in {
             "first_only", "first_last", "native_multiframe", "split_relay",
             "edit_cut", "edit_cut_pending_assets", "reference_qc", "reroute_required",
+            "single_take_multishot",
         }:
             errors.append("missing_or_invalid_frame_strategy")
         edit_target = _as_positive_float(duration_plan.get("edit_target_sec"))

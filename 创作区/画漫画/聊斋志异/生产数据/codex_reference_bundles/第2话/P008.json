@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第2话",
+  "panel_id": "P008",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_JIA_CHILD",
+      "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+      "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "MON_FOX_SERVANT",
+      "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+      "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+      "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_HE_GARDEN",
+      "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+      "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_JIA_CHILD",
+      "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+      "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+      "role": "face",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-22T14:56:23"
+}

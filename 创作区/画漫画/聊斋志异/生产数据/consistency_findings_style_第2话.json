@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "style_consistency",
+  "chapter": "第2话",
+  "created_at": "2026-07-22T15:20:51",
+  "summary": {
+    "panel_count": 16,
+    "finding_count": 7,
+    "block_count": 0,
+    "warn_count": 7,
+    "info_count": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P002",
+      "artifact": "出图/第2话/panels/P002.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.3751（中位 0.059），线宽代理 edge_density=0.0524（中位 0.086）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P003",
+      "artifact": "出图/第2话/panels/P003.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.3565（中位 0.059），线宽代理 edge_density=0.055（中位 0.086）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P004",
+      "artifact": "出图/第2话/panels/P004.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.2626（中位 0.059），线宽代理 edge_density=0.0593（中位 0.086）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P006",
+      "artifact": "出图/第2话/panels/P006.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.2614（中位 0.059），线宽代理 edge_density=0.0424（中位 0.086）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.2497（中位 0.059），线宽代理 edge_density=0.058（中位 0.086）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "tone_value_outlier",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.4109（中位 0.059），线宽代理 edge_density=0.0797（中位 0.086）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "style_consistency",
+      "code": "style_anchor_drift",
+      "panel_id": "",
+      "artifact": "出图/共享/style_baseline.json",
+      "reason": "本话整体指纹与风格锚图最高相似度仅 0.7094，风格锚可能已失去约束力。",
+      "return_to_stage": "image",
+      "suggested_fix": "并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
+      "evidence_family": "cross_chapter_baseline",
+      "confidence": "heuristic"
+    }
+  ]
+}

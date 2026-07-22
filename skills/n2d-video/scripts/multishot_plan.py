@@ -124,11 +124,14 @@ def _primary_is_multishot(routes_payload: Optional[Mapping[str, Any]]) -> bool:
     if not isinstance(routes_payload, Mapping):
         return False
     try:
-        from n2d_platform_profiles import is_multishot_native_backend
+        from n2d_platform_profiles import MULTISHOT_NATIVE_BACKENDS, normalize_video_backend
     except Exception:
         return bool(routes_payload.get("multishot_groups"))
     for r in routes_payload.get("routes") or []:
-        if isinstance(r, Mapping) and is_multishot_native_backend(r.get("primary_backend") or ""):
+        if not isinstance(r, Mapping):
+            continue
+        key = normalize_video_backend(str(r.get("primary_backend") or ""), default="")
+        if key and key in MULTISHOT_NATIVE_BACKENDS:
             return True
     return bool(routes_payload.get("multishot_groups"))
 
@@ -146,6 +149,16 @@ def build(root: str, ep: str) -> Dict[str, Any]:
         notes.append("选择点已开启但 primary 后端非 multishot_native——无法激活原生多镜，仍逐镜独立出。")
     elif not setting_on:
         notes.append("选择点『原生多镜生成』未开启（默认逐镜独立出）；开启后支持多镜的后端可一次 co-generate 接力组。")
+        candidate_groups = [
+            g for g in (routes.get("multishot_groups") or [])
+            if isinstance(g, Mapping) and len([m for m in (g.get("members") or []) if str(m)]) >= 2
+        ] if backend_ok else []
+        saved = sum(len([m for m in (g.get("members") or []) if str(m)]) - 1 for g in candidate_groups)
+        if saved > 0:
+            notes.append(
+                f"省额度推荐：primary 后端支持原生多镜，当前候选 {len(candidate_groups)} 组；"
+                f"在 _设置.md 写 `原生多镜生成: 开启` 可把本集生成次数减少约 {saved} 次（组内接缝由模型内部消除）。"
+            )
     plan = resolve_plan(routes or {}, active=active)
     try:
         from video_execution_adapter import execution_status

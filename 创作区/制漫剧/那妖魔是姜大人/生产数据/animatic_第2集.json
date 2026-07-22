@@ -1,0 +1,164 @@
+{
+  "editorial_timeline": {
+    "outputs": {
+      "animatic_snapshot": "生产数据/timelines/第2集/animatic_timeline.otio",
+      "otio": "生产数据/timelines/第2集/editorial_timeline.otio",
+      "sidecar": "生产数据/editorial_timeline_第2集.json"
+    },
+    "phase": "animatic",
+    "status": "ready"
+  },
+  "episode": "第2集",
+  "findings": [],
+  "generated_at": "2026-07-22T07:10:49+00:00",
+  "inputs": {
+    "episode_images": "出图/第2集/图片",
+    "shot_durations": "脚本/第2集/镜头时长.json",
+    "storyboard": "脚本/第2集/storyboard.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/第2集/图片": null,
+      "脚本/第2集/storyboard.json": "b72e37ef51b8cb960ff213bdbe916de8890b14900cde0d7339772bb8a3f9f9ca",
+      "脚本/第2集/镜头时长.json": "cd25eb88aa8d44769314ba149777d584057b179cd1d61bbf954a1d661ea9d720"
+    },
+    "sha": "77565280a80a31853ab27e93b96c73b6dccaf5e6921408b285a3ea9335b0dffc"
+  },
+  "json_path": "生产数据/animatic_第2集.json",
+  "kind": "n2d_animatic_preview",
+  "notes": [
+    "HTML 预览按 storyboard 时长播放；缺图片时使用文字 slate，仍可检查节奏和信息可读性。",
+    "正式出图前 animatic_packet 仍需人工/agent confirmed 签收。"
+  ],
+  "preview_artifact": "生产数据/animatic_第2集.html",
+  "status": "pass",
+  "summary": {
+    "clip_count": 8,
+    "image_backed_clips": 0,
+    "text_slate_clips": 8,
+    "total_duration_sec": 71.927
+  },
+  "timeline": [
+    {
+      "clip_id": "EP02_CLIP01",
+      "dramatic_function": "承接上集后果并兑现第一笔道行",
+      "duration_sec": 12.606,
+      "end_sec": 12.606,
+      "image": "",
+      "index": 1,
+      "label": "杀人余震与二十年到账",
+      "pacing_role": "冷开场主钩与上集兑现",
+      "scene": "尸骸荒野/夕/外",
+      "screen_direction": "姜月初看右上虎妖；虎妖看左下姜月初",
+      "source": "storyboard",
+      "start_sec": 0.0,
+      "transition": "动作接虎妖下扑"
+    },
+    {
+      "clip_id": "EP02_CLIP02",
+      "dramatic_function": "明确求生动机、资源代价与攻击起手",
+      "duration_sec": 12.076,
+      "end_sec": 24.682,
+      "image": "",
+      "index": 2,
+      "label": "二十年尽付一刀",
+      "pacing_role": "核心动作蓄力",
+      "scene": "尸骸荒野/夕/外",
+      "screen_direction": "姜月初看虎妖胸颈破绽，虎妖看她持刀手",
+      "source": "storyboard",
+      "start_sec": 12.606,
+      "transition": "同动作相位接命中镜"
+    },
+    {
+      "clip_id": "EP02_CLIP03",
+      "dramatic_function": "动作兑现与数值反转",
+      "duration_sec": 7.39,
+      "end_sec": 32.072,
+      "image": "",
+      "index": 3,
+      "label": "一刀断虎首",
+      "pacing_role": "全片第一动作爽点",
+      "scene": "尸骸荒野/夕/外",
+      "screen_direction": "姜月初视线锁定虎妖颈部破绽",
+      "source": "storyboard",
+      "start_sec": 24.682,
+      "transition": "虎血滴落接谱页墨线"
+    },
+    {
+      "clip_id": "EP02_CLIP04",
+      "dramatic_function": "抛出新规则并保留主角选择权",
+      "duration_sec": 5.27,
+      "end_sec": 37.342,
+      "image": "",
+      "index": 4,
+      "label": "百年道行与收录选择",
+      "pacing_role": "新规则短桥",
+      "scene": "百妖谱主观层/荒野叠化",
+      "screen_direction": "姜月初视线落在上中谱页",
+      "source": "storyboard",
+      "start_sec": 32.072,
+      "transition": "墨线继续生长成虎形"
+    },
+    {
+      "clip_id": "EP02_CLIP05",
+      "dramatic_function": "系统母题视觉奇观与成长兑现",
+      "duration_sec": 9.207,
+      "end_sec": 46.549,
+      "image": "",
+      "index": 5,
+      "label": "摹影虎山神获圆满刀法",
+      "pacing_role": "第二成长爽点",
+      "scene": "百妖谱主观层/荒野叠化",
+      "screen_direction": "姜月初先看谱页后看持刀手",
+      "source": "storyboard",
+      "start_sec": 37.342,
+      "transition": "握刀手图形匹配到替裴合眼的手"
+    },
+    {
+      "clip_id": "EP02_CLIP06",
+      "dramatic_function": "锁定成长规则与跨集资源状态",
+      "duration_sec": 10.52,
+      "end_sec": 57.069,
+      "image": "",
+      "index": 6,
+      "label": "结算闻弦初境与二十五年余额",
+      "pacing_role": "成长规则确认",
+      "scene": "尸骸荒野/夕/外",
+      "screen_direction": "先看刀锋，后看画左下裴尸体",
+      "source": "storyboard",
+      "start_sec": 46.549,
+      "transition": "视线切至裴尸体"
+    },
+    {
+      "clip_id": "EP02_CLIP07",
+      "dramatic_function": "爽点后情绪偿债与主角弧推进",
+      "duration_sec": 10.645,
+      "end_sec": 67.714,
+      "image": "",
+      "index": 7,
+      "label": "替裴合眼与还命承诺",
+      "pacing_role": "情绪峰与人物回报",
+      "scene": "尸骸荒野/夕/外",
+      "screen_direction": "姜月初视线落在裴的双眼",
+      "source": "storyboard",
+      "start_sec": 57.069,
+      "transition": "姜月初抬眼看百妖谱虎影"
+    },
+    {
+      "clip_id": "EP02_CLIP08",
+      "dramatic_function": "长线异化悬念与下一集身份转折接力",
+      "duration_sec": 4.213,
+      "end_sec": 71.927,
+      "image": "",
+      "index": 8,
+      "label": "摹影进阶会变成什么",
+      "pacing_role": "集尾真相半露钩",
+      "scene": "尸骸荒野/百妖谱主观层",
+      "screen_direction": "姜月初看上中虎影；虎影不看现实镜头而朝纸外正前",
+      "source": "storyboard",
+      "start_sec": 67.714,
+      "transition": "硬切黑"
+    }
+  ],
+  "version": 1
+}

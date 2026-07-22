@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第2话",
+  "panel_id": "P011",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_JIA_CHILD",
+      "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+      "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "MON_FOX_SERVANT",
+      "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+      "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+      "role": "front",
+      "required": true
+    },
+    {
+      "id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+      "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_MARKET_STREET",
+      "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+      "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "PROP_FAKE_FOX_TAIL",
+      "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+      "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676",
+      "role": "prop",
+      "required": true
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-22T14:56:23"
+}

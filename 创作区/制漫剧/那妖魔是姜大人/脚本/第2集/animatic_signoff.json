@@ -1,0 +1,112 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第2集.html",
+          "sha256": "5c93de0b58559fd609172fe9583a04545fd12181b1fb0be3e6679ab3c33ec421"
+        },
+        {
+          "path": "生产数据/animatic_第2集.json",
+          "sha256": "60554ffabc6acf2f3aa66bda18ca5bfa4c8ad0df513254bbe0e511006d5c1561"
+        },
+        {
+          "path": "生产数据/timelines/第2集/animatic_timeline.otio",
+          "sha256": "3e247c4aa1afbb21aee6c94469fcfb5382238e05aa8681af6649e867da1a7b78"
+        },
+        {
+          "path": "脚本/第2集/animatic_packet.json",
+          "sha256": "96d4f46c3a05e4e66dd1ff6cbad1304542c18d2181ced904d9856a7929f7477a"
+        },
+        {
+          "path": "脚本/第2集/animatic_packet.md",
+          "sha256": "27324a4e9bdfbe7188608da2f7abe66156991514e7dbaf28bcba33c4b00c4638"
+        }
+      ],
+      "note": "",
+      "reviewed_at": "2026-07-22T07:10:49+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "68347747e041a9f9f42a79537de62e726b205b11dfcc0a9fdd0da7c08553c03d",
+      "signed_input_fingerprint_sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第2集.html",
+          "sha256": "5c93de0b58559fd609172fe9583a04545fd12181b1fb0be3e6679ab3c33ec421"
+        },
+        {
+          "path": "生产数据/animatic_第2集.json",
+          "sha256": "60554ffabc6acf2f3aa66bda18ca5bfa4c8ad0df513254bbe0e511006d5c1561"
+        },
+        {
+          "path": "生产数据/timelines/第2集/animatic_timeline.otio",
+          "sha256": "3e247c4aa1afbb21aee6c94469fcfb5382238e05aa8681af6649e867da1a7b78"
+        },
+        {
+          "path": "脚本/第2集/animatic_packet.json",
+          "sha256": "96d4f46c3a05e4e66dd1ff6cbad1304542c18d2181ced904d9856a7929f7477a"
+        },
+        {
+          "path": "脚本/第2集/animatic_packet.md",
+          "sha256": "27324a4e9bdfbe7188608da2f7abe66156991514e7dbaf28bcba33c4b00c4638"
+        }
+      ],
+      "note": "",
+      "reviewed_at": "2026-07-22T07:10:49+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "68347747e041a9f9f42a79537de62e726b205b11dfcc0a9fdd0da7c08553c03d",
+      "signed_input_fingerprint_sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "stage2_animatic",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-22T07:10:49+00:00",
+  "episode": "第2集",
+  "evidence_fingerprint": {
+    "files": {
+      "生产数据/animatic_第2集.html": "5c93de0b58559fd609172fe9583a04545fd12181b1fb0be3e6679ab3c33ec421",
+      "生产数据/animatic_第2集.json": "60554ffabc6acf2f3aa66bda18ca5bfa4c8ad0df513254bbe0e511006d5c1561",
+      "生产数据/timelines/第2集/animatic_timeline.otio": "3e247c4aa1afbb21aee6c94469fcfb5382238e05aa8681af6649e867da1a7b78",
+      "脚本/第2集/animatic_packet.json": "96d4f46c3a05e4e66dd1ff6cbad1304542c18d2181ced904d9856a7929f7477a",
+      "脚本/第2集/animatic_packet.md": "27324a4e9bdfbe7188608da2f7abe66156991514e7dbaf28bcba33c4b00c4638"
+    },
+    "sha": "68347747e041a9f9f42a79537de62e726b205b11dfcc0a9fdd0da7c08553c03d"
+  },
+  "input_fingerprint": {
+    "files": {
+      "合成/第2集/配音/voice_zh.wav": null,
+      "脚本/第2集/storyboard.json": "b72e37ef51b8cb960ff213bdbe916de8890b14900cde0d7339772bb8a3f9f9ca",
+      "脚本/第2集/字幕_中文.srt": "82ba15defd3ad8484de8bd855a59f49575da31a1ba03a86ee21b0a0e3812a367",
+      "脚本/第2集/镜头时长.json": "cd25eb88aa8d44769314ba149777d584057b179cd1d61bbf954a1d661ea9d720"
+    },
+    "sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "editorial",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-22T07:10:49+00:00",
+  "version": 1
+}

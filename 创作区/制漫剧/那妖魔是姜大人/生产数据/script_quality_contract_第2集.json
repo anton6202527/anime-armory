@@ -1,0 +1,495 @@
+{
+  "content_hash": "beb333dc8aa4b512",
+  "contract_hash": "beb333dc8aa4b512",
+  "episode": "第2集",
+  "findings": [],
+  "generated_at": "2026-07-22T06:59:48+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "pacing_allocation",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "adaptation_triage": {
+      "decisions": [
+        "dramatize",
+        "merge",
+        "narrate"
+      ],
+      "items": 10,
+      "path": "脚本/第2集/adaptation_triage.json"
+    },
+    "audience_question_ledger": {
+      "ending_hook": true,
+      "findings": [],
+      "payoff_contexts": [
+        "让她活过下一爪 content_promise 本集立即兑现杀裴所得二十年如何转化为斩虎生机 viewer_question",
+        "到账 dramatic_function 承接上集后果并兑现第一笔道行 subtitle_lines 裴长青死了。是",
+        "label 一刀断虎首 dramatic_function 动作兑现与数值反转 subtitle_lines 给我——斩！",
+        "惊喜 spectacle_story_function 兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱",
+        "spectacle_story_function 兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。 continuity_story",
+        "spectacle_story_function 兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。 continuity_story",
+        "dramatic_function 系统母题视觉奇观与成长兑现 subtitle_lines 消耗道行七十五年。摹其影"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "EP02_CLIP08 | 4.213s | 留白·定格 | 摹影进阶隐患真相半露 | hard_cut：虎眼亮后切黑 | 爽点卡点",
+          "question_id": "Q01",
+          "signal": "真相",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "EP02_CLIP05 虎眼 apex 约 42s。字幕、系统文字与数值全部后期叠加。 收录：虎山神 杀裴换来的二十",
+          "question_id": "Q02",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "影虎山神获圆满刀法 dramatic_function 系统母题视觉奇观与成长兑现 subtitle_lines 消",
+          "question_id": "Q03",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": "惊惧→确认生机",
+        "clip_id": "EP02_CLIP01",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "承接上集后果并兑现第一笔道行",
+        "duration": 12.606,
+        "key_clip": true,
+        "pacing_role": "冷开场主钩与上集兑现",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "理解选择→屏息",
+        "clip_id": "EP02_CLIP02",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "明确求生动机、资源代价与攻击起手",
+        "duration": 12.076,
+        "key_clip": false,
+        "pacing_role": "核心动作蓄力",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "爆发→死寂→惊喜",
+        "clip_id": "EP02_CLIP03",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "动作兑现与数值反转",
+        "duration": 7.39,
+        "key_clip": true,
+        "pacing_role": "全片第一动作爽点",
+        "primary_runtime": true,
+        "runtime_priority": "primary highlight",
+        "spectacle_clip": true,
+        "spectacle_story_function": "兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。"
+      },
+      {
+        "audience_effect": "好奇→决定",
+        "clip_id": "EP02_CLIP04",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "抛出新规则并保留主角选择权",
+        "duration": 5.27,
+        "key_clip": false,
+        "pacing_role": "新规则短桥",
+        "primary_runtime": true,
+        "runtime_priority": "primary information",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "神秘→爽感",
+        "clip_id": "EP02_CLIP05",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "系统母题视觉奇观与成长兑现",
+        "duration": 9.207,
+        "key_clip": true,
+        "pacing_role": "第二成长爽点",
+        "primary_runtime": true,
+        "runtime_priority": "primary highlight",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "理解规则→情绪回落",
+        "clip_id": "EP02_CLIP06",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "锁定成长规则与跨集资源状态",
+        "duration": 10.52,
+        "key_clip": false,
+        "pacing_role": "成长规则确认",
+        "primary_runtime": true,
+        "runtime_priority": "primary information",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "共情与道德余震",
+        "clip_id": "EP02_CLIP07",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "爽点后情绪偿债与主角弧推进",
+        "duration": 10.645,
+        "key_clip": false,
+        "pacing_role": "情绪峰与人物回报",
+        "primary_runtime": true,
+        "runtime_priority": "primary emotional",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "不安与追更欲",
+        "clip_id": "EP02_CLIP08",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "长线异化悬念与下一集身份转折接力",
+        "duration": 4.213,
+        "key_clip": true,
+        "pacing_role": "集尾真相半露钩",
+        "primary_runtime": true,
+        "runtime_priority": "primary cliffhanger",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      }
+    ],
+    "clip_pacing_roles": [
+      {
+        "clip_id": "EP02_CLIP01",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 12.606,
+        "pacing_role": "冷开场主钩与上集兑现",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP02_CLIP02",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 12.076,
+        "pacing_role": "核心动作蓄力",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP02_CLIP03",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 7.39,
+        "pacing_role": "全片第一动作爽点",
+        "primary_runtime": true,
+        "runtime_priority": "primary highlight"
+      },
+      {
+        "clip_id": "EP02_CLIP04",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 5.27,
+        "pacing_role": "新规则短桥",
+        "primary_runtime": true,
+        "runtime_priority": "primary information"
+      },
+      {
+        "clip_id": "EP02_CLIP05",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 9.207,
+        "pacing_role": "第二成长爽点",
+        "primary_runtime": true,
+        "runtime_priority": "primary highlight"
+      },
+      {
+        "clip_id": "EP02_CLIP06",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.52,
+        "pacing_role": "成长规则确认",
+        "primary_runtime": true,
+        "runtime_priority": "primary information"
+      },
+      {
+        "clip_id": "EP02_CLIP07",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 10.645,
+        "pacing_role": "情绪峰与人物回报",
+        "primary_runtime": true,
+        "runtime_priority": "primary emotional"
+      },
+      {
+        "clip_id": "EP02_CLIP08",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 4.213,
+        "pacing_role": "集尾真相半露钩",
+        "primary_runtime": true,
+        "runtime_priority": "primary cliffhanger"
+      }
+    ],
+    "core_attraction": "杀裴换来的二十年道行一刀斩虎，再以七十五年摹影虎山神、获得圆满猛虎快刀。",
+    "first_3s_visual_hook": {
+      "content_promise": "本集立即兑现杀裴所得二十年如何转化为斩虎生机",
+      "content_proposition": "她杀人换来的力量能否让她活过下一爪",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.8
+      },
+      "hook_type": "危机",
+      "muted_readable": true,
+      "muted_safe_proof": "关声仍能从死者、带血刀手和压顶虎爪读懂杀人后仍将被杀",
+      "onscreen_text": "亲手杀人换来的二十年道行，究竟够不够她活下来？",
+      "viewer_question": "二十年，够她活下来吗？",
+      "visual_hook": "裴长青失焦的眼在下前景，姜月初带血颤手居中，上方巨大虎爪已经落下"
+    },
+    "pacing_allocation": {
+      "declared": {
+        "compressed_clip_ids": [],
+        "compression_strategy": "系统解释只显示一次规则与一次数值结果，文字走overlay；普通喘息并入战后留白。",
+        "highlight_budget_note": "主时长押在杀人后果、斩虎五相位、摹影视觉奇观和对裴的情绪偿债。",
+        "primary_runtime_focus": [
+          "EP02_CLIP01",
+          "EP02_CLIP03",
+          "EP02_CLIP04",
+          "EP02_CLIP05",
+          "EP02_CLIP07",
+          "EP02_CLIP08"
+        ]
+      },
+      "rule": "主时长优先给核心看点/爽点/打斗/反转/兑现；桥接、解释、气氛、普通反应镜必须短，不能用压缩说明保留低优先级长镜；长镜必须重定级为 primary/highlight。",
+      "runtime_summary": {
+        "compressed_clip_ids": [],
+        "compressed_duration": 0.0,
+        "compressed_runtime_share": 0.0,
+        "primary_clip_ids": [
+          "EP02_CLIP01",
+          "EP02_CLIP02",
+          "EP02_CLIP03",
+          "EP02_CLIP04",
+          "EP02_CLIP05",
+          "EP02_CLIP06",
+          "EP02_CLIP07",
+          "EP02_CLIP08"
+        ],
+        "primary_duration": 71.927,
+        "primary_runtime_share": 1.0,
+        "total_duration": 71.927,
+        "unclassified_duration": 0.0
+      },
+      "source": "storyboard.pacing_allocation"
+    },
+    "performance_cues": [
+      {
+        "clip": "EP02_CLIP01",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          },
+          {
+            "character_form": "CHAR_02/“濒死重伤态”",
+            "prompt_cue": "freeform=极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀"
+          },
+          {
+            "character_form": "BEAST_01/“穿心复生态”",
+            "prompt_cue": "freeform=说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP02",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          },
+          {
+            "character_form": "BEAST_01/“穿心复生态”",
+            "prompt_cue": "freeform=说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP03",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          },
+          {
+            "character_form": "BEAST_01/“穿心复生态”",
+            "prompt_cue": "freeform=说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP04",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP05",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP06",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP07",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          },
+          {
+            "character_form": "CHAR_02/“濒死重伤态”",
+            "prompt_cue": "freeform=极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀"
+          }
+        ]
+      },
+      {
+        "clip": "EP02_CLIP08",
+        "inject_into": [
+          "image_prompt.performance",
+          "video_prompt.performance",
+          "voice_or_native_av.direction"
+        ],
+        "performance_signature_prompt": [
+          {
+            "character_form": "CHAR_01/“囚途残损态”",
+            "prompt_cue": "freeform=先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀"
+          }
+        ]
+      }
+    ],
+    "retention_promise_ledger": [
+      {
+        "bait_risk": "low",
+        "hook_id": "EP02_OPEN",
+        "opened_at": "EP02_CLIP01",
+        "payoff_clip": "EP02_CLIP03",
+        "payoff_due": "EP02_CLIP03",
+        "payoff_evidence": "二十年尽付一刀，虎首在命中后落地",
+        "payoff_status": "paid",
+        "promise": "杀裴所得二十年能否救命",
+        "promise_type": "opening_hook"
+      },
+      {
+        "bait_risk": "low",
+        "hook_id": "EP02_SYSTEM",
+        "opened_at": "EP02_CLIP04",
+        "payoff_clip": "EP02_CLIP05",
+        "payoff_due": "EP02_CLIP05",
+        "payoff_evidence": "扣除七十五年，摹影成功并获得猛虎快刀圆满",
+        "payoff_status": "paid",
+        "promise": "百年道行收录虎山神会得到什么",
+        "promise_type": "mid_hook"
+      },
+      {
+        "bait_risk": "medium",
+        "delayed_payoff_ep": "后续相关集",
+        "hook_id": "EP02_TAIL",
+        "opened_at": "EP02_CLIP08",
+        "payoff_due": "后续摹影进阶剧情",
+        "promise": "摹影继续进阶会把姜月初变成什么",
+        "promise_type": "cliffhanger"
+      }
+    ]
+  },
+  "source_paths": {
+    "adaptation_triage": "脚本/第2集/adaptation_triage.json",
+    "story_quality_pack": "生产数据/story_quality_pack_第2集.json",
+    "storyboard": "脚本/第2集/storyboard.json"
+  },
+  "source_sha256": {
+    "adaptation_triage": "d5055bced196c9da29b033167b62fbe1e74cc4a80d9b85319097c4e5334b2122",
+    "story_quality_pack": "9300e66de5e6791fa72e99b4d090aa15028aa86b35f956f111bacee585f0eccb",
+    "storyboard": "438b1e806ccb7dce194703f0b3d0d7bc01bd43efc958c86f95e0971057f9d47b"
+  },
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "clips": 8,
+    "compressed_runtime_share": 0.0,
+    "open_questions": 0,
+    "primary_runtime_share": 1.0,
+    "status": "pass",
+    "warnings": 0
+  },
+  "version": 1
+}

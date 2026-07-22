@@ -417,6 +417,19 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
                 skipped.append({"clip": cid, "why": f"已有单 midframe，但命中 {rule}，升级为 continuity.anchors[]"})
             else:
                 skipped.append({"clip": cid, "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"})
+        take_policy = str(clip.get("take_policy") or cont.get("take_policy") or "").strip().lower()
+        if editorial_boundaries and take_policy == "single_take_multishot" and (
+            rule is None or rule.startswith("R2")
+        ):
+            # 单拍多镜：镜位切换由 multishot-native 后端在一次生成内部完成，不需要 edit_cut 边界图，
+            # 也不新增付费视频段；后端能力复核与回落在出视频阶段执行。R2「普通长镜」的中段漂移
+            # 前提是连续单拍，多镜后端在内部镜位切换处自带再锚定，故 R2 不否决该策略；
+            # R1 高运动/大表情与 R3 漂移实证仍安全优先，保留锚帧链。
+            skipped.append({
+                "clip": cid,
+                "why": "take_policy=single_take_multishot：内部镜位一次生成，不产 edit_cut 边界锚；R1 高运动/R3 漂移实证时才回到锚帧链",
+            })
+            continue
         if editorial_boundaries:
             anchors = [{
                 "anchor_png": anchor_png_name(clip, ep, i, k),

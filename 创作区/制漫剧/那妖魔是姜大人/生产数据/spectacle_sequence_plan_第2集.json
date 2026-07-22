@@ -1,0 +1,211 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第2集",
+  "clips": [
+    {
+      "clip_id": "Clip_03",
+      "source_id": "EP02_CLIP03",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "loc": "LOC_尸骸荒野",
+      "assets": [
+        "BEAST_01",
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "screen_direction": "姜月初左→右，虎妖右→左",
+      "spatial_path": "双方沿西南—东北轴相向，错身后各落原轴两侧",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "侧面固定，命中轻推5%，不环绕",
+      "in_state": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触",
+      "out_state": "姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成",
+      "continuity_text": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触 姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成 姜月初视线锁定虎妖颈部破绽 MCU→CU→MS 大 发力AU4+AU7+AU24→落势瞳孔散、张口喘息 虎血滴落接谱页墨线 insert_cutaway 虎妖血滴与落地虎首 系统主观层结束后回到姜月初右手握刀 False True 出图/第2集/图片/EP02_CLIP03_impact.png 1.12 keyframe 导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点 出图/第2集/图片/EP02_CLIP03_recovery.png 2.12 split 导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前 虎妖由活体进入死亡态，不消失；姜月初仍在原场；出画/画外保留：BEAST_01、WEAPON_横刀；入画/现身：VFX_百妖谱 与EP02_CLIP02尾帧同图：虎爪将触未触，刀未命中",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_ACTION_01",
+      "sequence_type": "fight_exchange",
+      "clip_order": [
+        "Clip_03"
+      ],
+      "spectacle_types": [
+        "fight_exchange"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "BEAST_01",
+          "CHAR_01",
+          "CHAR_02"
+        ],
+        "locs": [
+          "LOC_尸骸荒野"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "姜月初左→右，虎妖右→左"
+        ],
+        "spatial_path_global": [
+          "双方沿西南—东北轴相向，错身后各落原轴两侧"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "侧面固定，命中轻推5%，不环绕"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_03",
+          "in": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触",
+          "out": "姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成",
+          "continuity": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触 姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成 姜月初视线锁定虎妖颈部破绽 MCU→CU→MS 大 发力AU4+AU7+AU24→落势瞳孔散、张口喘息 虎血滴落接谱页墨线 insert_cutaway 虎妖血滴与落地虎首 系统主观层结束后回到姜月初右手握刀 False True 出图/第2集/图片/EP02_CLIP03_impact.png 1.12 keyframe 导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点 出图/第2集/图片/EP02_CLIP03_recovery.png 2.12 split 导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前 虎妖由活体进入死亡态，不消失；姜月初仍在原场；出画/画外保留：BEAST_01、WEAPON_横刀；入画/现身：VFX_百妖谱 与EP02_CLIP02尾帧同图：虎爪将触未触，刀未命中"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "pose_sequence"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 1,
+    "sequences": 1,
+    "action_sequences": 1,
+    "large_scene_sequences": 0,
+    "multi_clip_sequences": 0
+  }
+}

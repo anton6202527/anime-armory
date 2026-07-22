@@ -1,0 +1,209 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第2集",
+  "generated_at": "2026-07-22T07:10:49+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP02_CLIP01",
+      "end_state": "姜月初拔刀转向虎妖，横刀低垂，二十年已到账",
+      "eyeline": "姜月初看右上虎妖；虎妖看左下姜月初",
+      "knowledge_state": {
+        "BEAST_01": [
+          "不知道百妖谱规则"
+        ],
+        "CHAR_01": [
+          "杀裴可得道行",
+          "尚不知二十年是否足够"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：WEAPON_横刀、VFX_百妖谱；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01",
+        "WEAPON_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看右上虎妖；虎妖看左下姜月初；转场方式：动作接虎妖下扑。",
+      "shot_reverse_continuity": {},
+      "start_state": "承接第1集：横刀刚刺入裴胸口，虎妖在东北背景",
+      "transition_guard": "动作接虎妖下扑",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP02",
+      "end_state": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触",
+      "eyeline": "姜月初看虎妖胸颈破绽，虎妖看她持刀手",
+      "knowledge_state": {
+        "BEAST_01": [
+          "仍轻敌"
+        ],
+        "CHAR_01": [
+          "决定消耗全部二十年"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：WEAPON_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "BEAST_01",
+        "WEAPON_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看虎妖胸颈破绽，虎妖看她持刀手；转场方式：同动作相位接命中镜。",
+      "shot_reverse_continuity": {
+        "axis_line": "姜月初西南—虎妖东北斜轴",
+        "buffer_or_reestablishing": "虎爪insert与侧面preimpact承担空间重建",
+        "camera_coverage": "clean singles + insert + side action master",
+        "coverage_order": "空间锚→姜月初CU→虎妖反打→虎爪insert→侧面preimpact",
+        "crossing_axis_policy": "命中前不越轴；下一Clip错身后用虎首落地insert重建方向",
+        "eyeline_match": "姜月初看右上虎妖胸颈，虎妖看左下持刀手",
+        "lens_height_distance_match": "单人反打维持相近主体尺度；虎妖略低机位表现压迫，侧面镜回同一水平线",
+        "screen_sides": {
+          "left_lower": "CHAR_01",
+          "right_upper": "BEAST_01"
+        },
+        "shot_pairing": "姜月初决心CU / 虎妖轻敌低机位MCU / 虎爪insert / 侧面双主体preimpact"
+      },
+      "start_state": "姜月初拔刀转向虎妖，横刀低垂，二十年已到账",
+      "transition_guard": "同动作相位接命中镜",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、BEAST_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP03",
+      "end_state": "姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成",
+      "eyeline": "姜月初视线锁定虎妖颈部破绽",
+      "knowledge_state": {
+        "BEAST_01": [
+          "临死才意识到误判"
+        ],
+        "CHAR_01": [
+          "确认二十年可斩虎",
+          "获得一百年"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：WEAPON_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "BEAST_01",
+        "WEAPON_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初视线锁定虎妖颈部破绽；转场方式：虎血滴落接谱页墨线。",
+      "shot_reverse_continuity": {},
+      "start_state": "虎爪距姜月初额前尚有一臂，横刀刚进入横斩起点，双方尚未接触",
+      "transition_guard": "虎血滴落接谱页墨线",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、BEAST_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP04",
+      "end_state": "姜月初明确选择收录，百妖谱开始吸收虎血",
+      "eyeline": "姜月初视线落在上中谱页",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道可收录但未知馈赠"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：VFX_百妖谱；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "VFX_百妖谱"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初视线落在上中谱页；转场方式：墨线继续生长成虎形。",
+      "shot_reverse_continuity": {},
+      "start_state": "姜月初单膝跪地，虎妖身首分离且已静止，百年结算完成",
+      "transition_guard": "墨线继续生长成虎形",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、VFX_百妖谱；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP05",
+      "end_state": "墨虎完成收录，姜月初伤势恢复并重新握住横刀",
+      "eyeline": "姜月初先看谱页后看持刀手",
+      "knowledge_state": {
+        "CHAR_01": [
+          "理解收录会换来长久能力"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：VFX_百妖谱、VFX_墨虎谱影、WEAPON_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "VFX_百妖谱",
+        "VFX_墨虎谱影",
+        "WEAPON_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初先看谱页后看持刀手；转场方式：握刀手图形匹配到替裴合眼的手。",
+      "shot_reverse_continuity": {},
+      "start_state": "姜月初明确选择收录，百妖谱开始吸收虎血",
+      "transition_guard": "握刀手图形匹配到替裴合眼的手",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、VFX_百妖谱、VFX_墨虎谱影、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP06",
+      "end_state": "状态结算完成，姜月初松刀并看向裴尸体",
+      "eyeline": "先看刀锋，后看画左下裴尸体",
+      "knowledge_state": {
+        "CHAR_01": [
+          "确认收录优于一次性消耗",
+          "决定保留二十五年"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：VFX_百妖谱、WEAPON_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "WEAPON_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：先看刀锋，后看画左下裴尸体；转场方式：视线切至裴尸体。",
+      "shot_reverse_continuity": {},
+      "start_state": "墨虎完成收录，姜月初伤势恢复并重新握住横刀",
+      "transition_guard": "视线切至裴尸体",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、WEAPON_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP07",
+      "end_state": "裴双眼已合，姜月初右手停在其额前，横刀放在右膝旁",
+      "eyeline": "姜月初视线落在裴的双眼",
+      "knowledge_state": {
+        "CHAR_01": [
+          "承认杀裴代价并立下或许还命的愿望"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：WEAPON_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初视线落在裴的双眼；转场方式：姜月初抬眼看百妖谱虎影。",
+      "shot_reverse_continuity": {},
+      "start_state": "状态结算完成，姜月初松刀并看向裴尸体",
+      "transition_guard": "姜月初抬眼看百妖谱虎影",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP02_CLIP08",
+      "end_state": "墨虎双眼短亮，姜月初未得到答案，切黑",
+      "eyeline": "姜月初看上中虎影；虎影不看现实镜头而朝纸外正前",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道摹影可进阶但未知后果"
+        ]
+      },
+      "location_id": "LOC_尸骸荒野",
+      "props_continuity": "关键物件保持可追踪：VFX_百妖谱、VFX_墨虎谱影；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "VFX_墨虎谱影"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看上中虎影；虎影不看现实镜头而朝纸外正前；转场方式：硬切黑。",
+      "shot_reverse_continuity": {},
+      "start_state": "裴双眼已合，姜月初右手停在其额前，横刀放在右膝旁",
+      "transition_guard": "硬切黑",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、VFX_墨虎谱影；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

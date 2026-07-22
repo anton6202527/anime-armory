@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -43,6 +44,11 @@ SCREEN_WORDS = ("系统面板", "screen_insert", "system_panel", "面板", "光�
 OVERACTIVE_WORDS = ("旋转", "360", "环绕飞", "飞行", "急速", "极速", "快速拉近", "急推", "急拉", "甩镜", "螺旋", "翻滚")
 CLOSEUP_WORDS = ("ECU", "CU", "BCU", "MCU", "特写", "近景", "中近景", "close")
 WIDE_WORDS = ("ELS", "LS", "远景", "全景", "大全景", "定场", "wide", "establishing")
+DIRECT_GAZE_INTENT_WORDS = (
+    "POV", "主观镜头", "第一人称", "破第四墙", "对镜讲话", "对镜表演",
+    "direct_address", "look_into_camera", "camera_address",
+)
+DIRECT_GAZE_RISK_RE = re.compile(r"正面直视镜头|直视镜头|看向镜头|面对镜头|迎着镜头|look(?:s|ing)?\s+(?:into|at)\s+(?:the\s+)?camera", re.I)
 
 
 def episode_label(value: str) -> str:
@@ -92,6 +98,46 @@ def _continuity(clip: Dict[str, Any]) -> Dict[str, Any]:
 
 def _template_contract(clip: Dict[str, Any]) -> Dict[str, Any]:
     return _dict(clip.get("template_contract"))
+
+
+def clip_camera_motivation(clip: Dict[str, Any]) -> str:
+    """Return an explicit reason for moving the camera, never a generic dramatic label."""
+    cont = _continuity(clip)
+    tpl = _template_contract(clip)
+    values: List[str] = []
+    for source in (clip, cont, tpl):
+        for key in (
+            "camera_motivation", "movement_motivation", "camera_move_motivation",
+            "运镜动机", "镜头运动动机",
+        ):
+            value = str(source.get(key) or "").strip()
+            if value and value not in values:
+                values.append(value)
+    for shot in clip.get("shots") or []:
+        if not isinstance(shot, dict):
+            continue
+        for key in ("camera_motivation", "movement_motivation", "运镜动机"):
+            value = str(shot.get(key) or "").strip()
+            if value and value not in values:
+                values.append(value)
+    return "；".join(values)
+
+
+def clip_allows_direct_gaze(clip: Dict[str, Any]) -> bool:
+    """Direct-to-camera gaze is opt-in for POV/direct address/fourth-wall shots."""
+    cont = _continuity(clip)
+    tpl = _template_contract(clip)
+    values: List[str] = []
+    for source in (clip, cont, tpl):
+        for key in (
+            "template", "template_id", "shot_type", "camera_relation", "gaze_intent",
+            "eyeline_intent", "pov", "direct_address", "视线意图", "镜头关系",
+        ):
+            value = str(source.get(key) or "").strip()
+            if value:
+                values.append(value)
+    text = " ".join(values)
+    return _has_any(text, DIRECT_GAZE_INTENT_WORDS)
 
 
 def clip_shot_size(clip: Dict[str, Any]) -> str:
@@ -197,17 +243,27 @@ def _recommendation(move: str, speed: str, direction: str, end_size: str, reason
 def recommend_camera_move(clip: Dict[str, Any]) -> Dict[str, str]:
     flags = classify_clip(clip)
     shot = clip_shot_size(clip)
-    rhythm = clip_rhythm(clip)
+    motivation = clip_camera_motivation(clip)
+    existing = extract_camera_text(clip)
+    normalized = normalize_camera_move(existing) if existing else {
+        "moves": [], "speeds": [], "is_static": False, "recognized": False,
+    }
+
+    if normalized.get("is_static"):
+        return _recommendation(
+            "固定机位", "静止", "锁定构图、轴线与景别；人物和环境只在画内运动", shot or "storyboard 景别",
+            "storyboard 已选择静机位；保留这项主动导演决定，让表演、停顿与画内调度承载张力。",
+        )
 
     if flags["screen"]:
         return _recommendation(
-            "固定机位", "轻微", "锁定屏幕/光幕平面，不漂移", shot or "insert",
+            "固定机位", "静止", "锁定屏幕/光幕平面和可读区域", shot or "insert",
             "屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。",
         )
     if flags["big_expression"] and flags["closeup"]:
         return _recommendation(
-            "推镜头", "轻微", "沿视线轴轻推，最后稳定停住", "CU/MCU",
-            "大表情近景最怕脸被运动重画；轻微推近比环绕/甩镜更稳，也能把情绪怼近。",
+            "固定机位", "静止", "锁定人物与戏内视线目标的相对关系", "CU/MCU",
+            "大表情近景让眉眼、呼吸和停顿自己产生张力；静机位同时降低迎镜头转脸与脸漂风险。",
         )
     if flags["action"] and flags["peak"] and not flags["closeup"]:
         return _recommendation(
@@ -220,38 +276,63 @@ def recommend_camera_move(clip: Dict[str, Any]) -> Dict[str, str]:
             "动作过程需要空间方向清楚；匀速移镜比自由漂浮更容易守轴线和人物站位。",
         )
     if flags["peak"] and flags["closeup"]:
+        if motivation:
+            return _recommendation(
+                "推镜头", "缓慢", "沿人物视线/证据物方向推近，落点后停稳", "CU",
+                f"已声明运镜动机：{motivation}。只执行一次缓推，不叠加其他运动。",
+            )
         return _recommendation(
-            "推镜头", "缓慢", "沿人物视线/证据物方向推近", "CU",
-            "反转/打脸/觉醒在近景里用推近强化压迫，不用大幅旋转破坏表演。",
+            "固定机位", "静止", "锁定人物与证据物的构图关系", "CU",
+            "峰值近景没有独立运镜动机时保持静止；反转靠表演、证据落点和剪辑显现。",
         )
     if flags["peak"]:
+        if motivation:
+            return _recommendation(
+                "冲击变焦", "急速冲击", "仅在揭示瞬间收至关键物/表情，随即停稳", "MCU/CU",
+                f"已声明运镜动机：{motivation}。峰值只用一次短促冲击。",
+            )
         return _recommendation(
-            "冲击变焦", "急速冲击", "在揭示瞬间收至关键物/表情", "MCU/CU",
-            "峰值拍需要短促冲击，但只在揭示瞬间使用，避免整镜廉价乱动。",
+            "固定机位", "静止", "锁定揭示物、人物反应和画面重心", shot or "MS/MCU",
+            "峰值不自动等于冲击运镜；没有明确动机时由动作落点、反应和硬切制造冲击。",
         )
     if flags["release"]:
+        if motivation:
+            return _recommendation(
+                "拉镜头", "缓慢", "由人物退到场景关系，保留孤立感", "MS/LS",
+                f"已声明运镜动机：{motivation}。缓拉只服务人物与环境关系的显露。",
+            )
         return _recommendation(
-            "拉镜头", "缓慢", "由人物退到场景关系，保留孤立感", "MS/LS",
-            "余韵/孤独/退场用拉远释放情绪，并给下一镜留转场空间。",
+            "固定机位", "静止", "让人物在固定构图中退场或停留", shot or "MS/LS",
+            "余韵段没有独立动机时保持静止，让空白、距离和人物离画产生释放感。",
         )
     if flags["wide"]:
+        if motivation:
+            return _recommendation(
+                "升降", "缓慢", "单向揭示此前被遮挡的空间层次，落点后停稳", "LS/ELS",
+                f"已声明运镜动机：{motivation}。运动只负责一次空间揭示。",
+            )
         return _recommendation(
-            "升降", "缓慢", "轻微上升/下降揭示空间层次", "LS/ELS",
-            "定场镜用升降建立地理和权力关系，不抢人物表演。",
+            "固定机位", "静止", "用前中后景和人物入出画建立空间关系", "LS/ELS",
+            "定场镜先用朴实固定构图交代地理与权力关系；空间没有新增信息时不移动摄影机。",
         )
     if flags["dialogue"]:
         return _recommendation(
-            "固定机位", "轻微", "过肩/反打保持轴线，只允许呼吸式微推", shot or "MCU",
-            "对白/反打优先表演和脸稳；固定机位或微推比无目的漂移更有戏。",
+            "固定机位", "静止", "过肩/反打保持轴线、景别和视线目标", shot or "MCU",
+            "对白/反打优先听说关系、停顿与反应；摄影机静止能避免角色迎镜头表演。",
         )
     if flags["setup"]:
+        if motivation:
+            return _recommendation(
+                "推镜头", "缓慢", "从场面关系慢推到新出现的人物/物证", "MS/MCU",
+                f"已声明运镜动机：{motivation}。推近必须对应新增信息，而不是装饰性靠近。",
+            )
         return _recommendation(
-            "推镜头", "缓慢", "从场面关系慢推到人物/物证", "MS/MCU",
-            "铺垫和压迫段用慢推聚焦信息，让观众逐步靠近秘密。",
+            "固定机位", "静止", "锁定场面关系，让人物/物证在画内显露", shot or "MS/MCU",
+            "铺垫与压迫不默认慢推；静止构图、等待和画内调度往往更有张力。",
         )
     return _recommendation(
-        "推镜头", "轻微", "沿主体动作/视线方向轻推", shot or "MS/MCU",
-        "默认给镜头一点目的性：轻微推近能增加叙事关注，同时风险低。",
+        "固定机位", "静止", "锁定构图、轴线与戏内视线目标", shot or "MS/MCU",
+        "普通镜默认静机位；张力先由人物表演、画内调度、声音与剪辑产生，运镜需要另写叙事动机。",
     )
 
 
@@ -261,7 +342,7 @@ def camera_phrase(rec: Dict[str, str]) -> str:
     direction = rec["direction"]
     end_size = rec["end_size"]
     if "固定" in move:
-        return f"固定机位，{direction}，只允许{speed}呼吸式微动"
+        return f"固定机位，{direction}；摄影机保持完全静止，人物呼吸与环境微动留在画内"
     if end_size:
         return f"{speed}{move}，{direction}，落到{end_size}"
     return f"{speed}{move}，{direction}"
@@ -313,10 +394,16 @@ def build_prompt_injections(
     tension = tension_word(clip)
     reason = rec["reason"]
     backend_control = backend_control or {"control_idiom": "natural_language", "source": "no_route"}
+    is_static = "固定" in rec["camera_move_zh"]
+    direct_gaze = clip_allows_direct_gaze(clip)
     image = {
-        "镜头/机位": f"{shot}；按导演运镜预留起幅，首帧不是摆拍肖像。",
-        "起幅·运动余量": f"为「{phrase}」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。",
-        "构图防呆": "角色视线锁戏内目标；非 POV 镜不看镜头；光位、轴线、角色状态继承 storyboard visual_contract。",
+        "镜头/机位": f"{shot}；{'锁定静止构图，以画内调度组织张力' if is_static else '按已声明运镜动机组织起幅与落幅'}，首帧不是摆拍肖像。",
+        "起幅·运动余量": (
+            "固定机位不预留摄影机漂移空间；只给人物动作方向、戏内视线与出入画保留 15%-25% 空间。"
+            if is_static else f"为「{phrase}」预留前景/背景运动余量；主体不要顶边，动作方向留 15%-25% 空间。"
+        ),
+        "构图防呆": "光位、轴线、角色状态继承 storyboard visual_contract；摄影机是旁观者，角色头眼朝向戏内目标。" if not direct_gaze else "光位、轴线、角色状态继承 storyboard visual_contract；本镜已明确 POV/破第四墙，直视摄影机只发生在登记节拍。",
+        "视线表演": "眼睛、鼻梁轴与头部朝向持续锁定戏内对手/道具/动作落点，以三分之四、侧向或过肩关系表演。" if not direct_gaze else "按 POV/破第四墙合同，在登记节拍内把视线落到摄影机；节拍外恢复戏内目标。",
         "导演意图": reason,
     }
     video = {
@@ -324,8 +411,9 @@ def build_prompt_injections(
         "起幅": "继承首帧构图、光位、轴线和角色状态，不重定视觉设定。",
         "落幅": f"落在{rec['end_size'] or shot}，动作/表情在最后 0.3-0.5 秒稳定住，方便接缝。",
         "镜头运动": phrase,
+        "视线表演": image["视线表演"],
         "后端控制写法": backend_control_instruction(rec, backend_control, str(clip.get("clip_id") or clip.get("id") or "")),
-        "运动精修": f"张力={tension}；镜头运动只服务情绪，不追加未声明的旋转、漂浮、急甩。",
+        "运动精修": f"张力={tension}；无明确叙事动机时保持固定，张力先由表演、画内调度、停顿与剪辑产生；有动机也只执行一种单向运动。",
         "动态细节": "人物运动、服饰/发丝/尘雾/光效按本镜动作小幅响应，背景不闪烁、不重构。",
     }
     return image, video
@@ -362,17 +450,32 @@ def analyze_clip(clip: Dict[str, Any], index: int, backend_control: Optional[Dic
         })
 
     flags = classify_clip(clip)
+    motivation = clip_camera_motivation(clip)
+    if camera_text and norm["moves"] and not norm["is_static"] and not motivation and not (flags["action"] and not flags["closeup"]):
+        findings.append({
+            "severity": "warn",
+            "code": "unmotivated_camera_motion",
+            "message": "已声明摄影机运动但没有 camera_motivation/运镜动机；普通镜应改固定，或补清楚运动揭示了什么新信息。",
+        })
+    gaze_text = " ".join(str(clip.get(key) or "") for key in ("description", "label", "camera_relation", "gaze_intent", "eyeline_intent"))
+    gaze_text += " " + str(_continuity(clip).get("eyeline") or "")
+    if DIRECT_GAZE_RISK_RE.search(gaze_text) and not clip_allows_direct_gaze(clip):
+        findings.append({
+            "severity": "warn",
+            "code": "unmotivated_direct_camera_gaze",
+            "message": "角色被写成正视/面对摄影机，但本镜没有 POV、破第四墙或对镜叙事合同；改为锁定戏内对象与三分之四/侧向头眼关系。",
+        })
     if camera_text and flags["closeup"] and _has_any(camera_text, OVERACTIVE_WORDS):
         findings.append({
             "severity": "warn",
             "code": "overactive_closeup",
-            "message": "近景/大表情镜出现旋转、飞行、急速等高风险运镜，容易造成脸漂和廉价感；改为固定或轻微推近。",
+            "message": "近景/大表情镜出现旋转、飞行、急速等高风险运镜，容易造成脸漂、迎镜头和廉价感；优先改为固定机位。",
         })
-    if flags["big_expression"] and flags["closeup"] and rec["camera_move_zh"] not in ("固定机位", "推镜头"):
+    if flags["big_expression"] and flags["closeup"] and rec["camera_move_zh"] != "固定机位":
         findings.append({
             "severity": "warn",
             "code": "big_expression_needs_stable_camera",
-            "message": "大表情近景应优先固定/轻推，复杂环绕或快速跟拍会让表情和身份被重画。",
+            "message": "大表情近景应优先固定，复杂环绕、推近或快速跟拍会让表情和身份被重画，也更容易把脸吸向摄影机。",
         })
 
     return {
@@ -431,7 +534,7 @@ def build_plan(storyboard: Dict[str, Any], episode: str, root: str = "") -> Dict
     unstructured_count = sum(1 for c in analyzed for f in c["findings"] if f.get("code") == "camera_move_unstructured")
     return {
         "kind": "n2d_director_camera_plan",
-        "version": 2,
+        "version": 3,
         "episode": episode,
         "summary": {
             "clips": len(analyzed),
@@ -482,6 +585,7 @@ def format_markdown(plan: Dict[str, Any]) -> str:
             f"镜头/机位：{clip['image_prompt_injection']['镜头/机位']}",
             f"起幅·运动余量：{clip['image_prompt_injection']['起幅·运动余量']}",
             f"构图防呆：{clip['image_prompt_injection']['构图防呆']}",
+            f"视线表演：{clip['image_prompt_injection']['视线表演']}",
             "```",
             "",
             "视频注入：",
@@ -490,6 +594,7 @@ def format_markdown(plan: Dict[str, Any]) -> str:
             f"起幅：{clip['video_prompt_injection']['起幅']}",
             f"落幅：{clip['video_prompt_injection']['落幅']}",
             f"镜头运动：{clip['video_prompt_injection']['镜头运动']}",
+            f"视线表演：{clip['video_prompt_injection']['视线表演']}",
             f"后端控制写法：{clip['video_prompt_injection']['后端控制写法']}",
             f"运动精修：{clip['video_prompt_injection']['运动精修']}",
             f"动态细节：{clip['video_prompt_injection']['动态细节']}",

@@ -158,11 +158,30 @@ def contains_placeholder(value: Any) -> bool:
     return bool(PLACEHOLDER_RE.search(json.dumps(value, ensure_ascii=False)))
 
 
+_VACUOUS_JUSTIFICATION = {
+    "x", "xx", "xxx", "tbd", "tba", "todo", "n/a", "na", "无", "略",
+    "待定", "待补", "待补充", "待填", "-", "—", "...", "…", "?", "？", "??",
+}
+
+
+def _is_vacuous_justification(text: Any) -> bool:
+    """A one-char / placeholder justification must not silently disable a check."""
+    value = str(text or "").strip()
+    if not value:
+        return True
+    if value.lower() in _VACUOUS_JUSTIFICATION:
+        return True
+    if re.fullmatch(r"[\s\-—.·、,，。?？!！…*xX]+", value):
+        return True
+    return len(value) <= 2
+
+
 def _coverage_issues(blueprint: Mapping[str, Any]) -> List[Dict[str, str]]:
     """Check deterministic gaps/overlaps in declared source ranges.
 
     A deliberate gap/overlap remains possible, but it must be documented on
-    the later span as ``coverage_exception``.  No prose heuristic is used.
+    the later span as a *substantive* ``coverage_exception`` — a placeholder
+    string no longer silently disables overlap/gap/order detection.
     """
     issues: List[Dict[str, str]] = []
     previous: Dict[tuple[str, str], tuple[int, int, str]] = {}
@@ -192,7 +211,14 @@ def _coverage_issues(blueprint: Mapping[str, Any]) -> List[Dict[str, str]]:
                 continue
             key = (source_path, start[1])
             prior = previous.get(key)
-            exception = str(span.get("coverage_exception") or "").strip()
+            raw_exception = str(span.get("coverage_exception") or "").strip()
+            exception = bool(raw_exception) and not _is_vacuous_justification(raw_exception)
+            if raw_exception and not exception:
+                issues.append({
+                    "code": "source_coverage_exception_vacuous",
+                    "message": f"{source_path} {chapter} 的 coverage_exception 是占位/空洞值（{raw_exception!r}），"
+                               "不能豁免覆盖检查；写明删改/延后/复用的真实理由。",
+                })
             if prior:
                 prior_start, prior_end, prior_chapter = prior
                 if start[0] <= prior_end and not exception:

@@ -233,6 +233,7 @@ def audit_chapter(chapter: str, detected: Sequence[Mapping[str, Any]],
     findings: List[Dict[str, Any]] = []
     by_desc = {str(p.get("desc") or p.get("id")): p for p in ledger_pairs if isinstance(p, Mapping)}
     cur = chapter_num(chapter)
+    unfilled_flagged: set[str] = set()
     for d in detected:
         match = by_desc.get(d["desc"])
         if match is None:
@@ -243,6 +244,7 @@ def audit_chapter(chapter: str, detected: Sequence[Mapping[str, Any]],
             findings.append({"severity": "must", "code": "payoff_unfilled", "desc": d["desc"],
                              "message": f"伏笔「{d['desc']}」在账本里但没填兑现话（payoff_chapter 空）——"
                                         "补 payoff_chapter（哪话兑现）或标 status=ongoing。"})
+            unfilled_flagged.add(d["desc"])
     for p in ledger_pairs:
         if not isinstance(p, Mapping):
             continue
@@ -251,6 +253,17 @@ def audit_chapter(chapter: str, detected: Sequence[Mapping[str, Any]],
         payoff_raw = str(p.get("payoff_chapter") or "").strip()
         payoff_n = chapter_num(payoff_raw)
         status = str(p.get("status") or "open")
+        # H1 carry-forward: an open setup that never got a planned payoff chapter
+        # must stay visible in EVERY chapter at/after its planting chapter — the
+        # detected-loop `payoff_unfilled` above only fires in the planting chapter
+        # (or never, for development_pack-seeded foreshadows that are never
+        # re-detected from panels), so it would otherwise go silent forever.
+        if _is_open_unfilled(p) and desc not in unfilled_flagged and (
+            cur is None or setup_n is None or cur >= setup_n
+        ):
+            findings.append({"severity": "warn", "code": "payoff_unplanned_open", "desc": desc,
+                             "message": f"伏笔「{desc}」始终没填兑现话（payoff_chapter 空）且未 done/ongoing——"
+                                        "长线埋了不收的风险；补 payoff_chapter（计划哪话兑现）或标 status=ongoing/done。"})
         if payoff_n is not None and setup_n is not None and payoff_n < setup_n:
             findings.append({"severity": "warn", "code": "payoff_before_setup", "desc": desc,
                              "message": f"伏笔「{desc}」兑现话 {payoff_raw} 早于种下话 第{setup_n}话——账本填反了，核对。"})

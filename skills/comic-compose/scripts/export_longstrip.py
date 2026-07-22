@@ -97,11 +97,29 @@ def save_canvas(image: Any, path: Path, fmt: str) -> None:
         image.save(path)
 
 
+def segment_panels_in_reading_order(seg: dict) -> list[dict]:
+    """Panels in the segment's authored reading order.
+
+    The layout's `reading_order` (== the authored `panels` array order,
+    validated by build_layout) is authoritative.  A `(y,x)` coordinate sort
+    reverses RTL rows (reader-first panel has the larger x), silently recording
+    the sequence backwards, so it must not be used to derive reading order.
+    """
+    panels = [p for p in seg.get("panels", []) if isinstance(p, dict)]
+    order = seg.get("reading_order")
+    if isinstance(order, list) and order:
+        by_id = {str(p.get("panel_id")): p for p in panels}
+        listed = {str(pid) for pid in order}
+        ordered = [by_id[str(pid)] for pid in order if str(pid) in by_id]
+        ordered.extend(p for p in panels if str(p.get("panel_id")) not in listed)
+        return ordered
+    return panels
+
+
 def ordered_panel_ids(layout: dict) -> list[str]:
     ids: list[str] = []
     for seg in layout.get("segments", []):
-        panels = sorted(seg.get("panels", []), key=lambda p: (p.get("y", 0), p.get("x", 0)))
-        for panel in panels:
+        for panel in segment_panels_in_reading_order(seg):
             pid = panel.get("panel_id")
             if pid and pid not in ids:
                 ids.append(pid)
@@ -573,7 +591,7 @@ def render_layout_pages(
     lettering_stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
 
     for idx, segment in enumerate(layout.get("segments", []), 1):
-        panels = sorted(segment.get("panels", []), key=lambda p: (p.get("y", 0), p.get("x", 0)))
+        panels = segment_panels_in_reading_order(segment)
         width = int(segment.get("width") or max((float(p.get("x", 0)) + float(p.get("w", 0)) for p in panels), default=0))
         height = int(segment.get("height") or max((float(p.get("y", 0)) + float(p.get("h", 0)) for p in panels), default=0))
         if width <= 0 or height <= 0:

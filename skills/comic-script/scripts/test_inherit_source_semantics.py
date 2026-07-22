@@ -53,3 +53,17 @@ def test_inherit_preserves_target_contract_and_resets_decisions() -> None:
     assert [item["meaning_zh"] for item in result["segments"]] == ["一义", "二义", "三义"]
     assert [item["adaptation_decision"] for item in result["segments"]] == ["删除", "并入", "后文带出"]
     assert result["semantic_inheritance"]["preserved_target_contract"] is True
+
+
+def test_final_decisions_are_all_accepted_by_the_gate():
+    # inherit's --decision overrides must be values source_semantics_gate treats
+    # as finalized, else the gate rejects what inherit wrote.
+    import importlib.util as _ilu
+    gate_path = SCRIPT.with_name("source_semantics_gate.py")
+    gspec = _ilu.spec_from_file_location("source_semantics_gate", gate_path)
+    gmod = _ilu.module_from_spec(gspec)
+    gspec.loader.exec_module(gmod)
+    gate_final = set(gmod.ADAPTATION_DECISIONS) - {"待定"}
+    assert MODULE.FINAL_DECISIONS <= gate_final
+    assert "旁白" not in MODULE.FINAL_DECISIONS  # the old broken value
+    assert "成旁白" in MODULE.FINAL_DECISIONS

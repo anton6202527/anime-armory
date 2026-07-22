@@ -276,9 +276,40 @@ def decide_actions(
     return actions
 
 
+def clip_take_policy(clip: Mapping[str, Any]) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    return str(clip.get("take_policy") or cont.get("take_policy") or "").strip().lower()
+
+
+def single_take_policy_verdict(
+    clip: Mapping[str, Any],
+    risk_row: Mapping[str, Any],
+    actions: Sequence[str],
+) -> Tuple[bool, str]:
+    """storyboard `take_policy=single_take_multishot` 是否在本 Clip 生效。
+
+    生效条件：叙事跨度 ≤ 单次生成硬上限，且不属于高生成风险/需多锚镜。
+    不生效时返回 (False, 忽略原因)——安全拆分与锚帧链优先于省次数。"""
+    if clip_take_policy(clip) != "single_take_multishot":
+        return False, ""
+    duration = duration_of(clip)
+    if duration is None or duration > VIDEO_SHOT_HARD_MAX_SEC:
+        return False, (
+            f"take_policy 忽略：叙事跨度 {duration if duration is not None else '未知'}s 超过单次生成硬上限 "
+            f"{VIDEO_SHOT_HARD_MAX_SEC:g}s，仍按镜位/生成窗口拆 take"
+        )
+    # 真高风险才否决（多镜后端在内部镜位切换处自带再锚定，单纯「长于 8s」不算）：
+    # 大表情跨度、奇观镜、高生成风险桶（score>=9）。与 anchor_planner「R1/R3 才回锚帧链」同口径。
+    tags = set(risk_row.get("tags") or [])
+    if risk_row.get("spectacle_type") or "large_expression_span" in tags or generation_risk_bucket(risk_row) >= 4:
+        return False, "take_policy 忽略：大表情/奇观/高生成风险镜，安全拆分与锚帧链优先于省生成次数"
+    return True, ""
+
+
 def primary_action(actions: Sequence[str]) -> str:
     priority = [
         "compress_before_video",
+        "single_take_multishot",
         "split_video_shots",
         "template_required",
         "split_establish_detail_reaction",
@@ -303,6 +334,7 @@ def action_note(action: str) -> str:
         "defer_to_composite": "把文字、光效、证据标记、复杂同框等交给分层出图或后期合成，避免视频后端自由生成。",
         "split_video_shots": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
         "compress_before_video": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+        "single_take_multishot": "storyboard 声明 take_policy=single_take_multishot：内部镜位由 multishot-native 后端一次生成（Seedance/Kling 多镜叙事口径），不拆独立付费 take；后端不支持或跨度超窗时由出视频阶段回落 edit_cut 拆 take。",
     }
     return notes.get(action, "")
 
@@ -341,10 +373,19 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             row = {}
         economy_row = economy_rows.get(cid, {})
         actions = decide_actions(clip, row, idx, economy_row)
+        single_take, policy_ignored_reason = single_take_policy_verdict(clip, row, actions)
+        if single_take:
+            actions = [a for a in actions if a != "split_video_shots"]
+            actions.insert(0, "single_take_multishot")
         primary = primary_action(actions)
         tags = list(row.get("tags") or [])
         duration = duration_of(clip)
         video_segments = plan_video_shot_segments(cid, duration, clip.get("shots") if isinstance(clip.get("shots"), list) else None)
+        if single_take:
+            # 内部镜位保留为「一次生成内的镜头阶梯」信息，不再是独立付费 take。
+            for seg in video_segments:
+                seg["reason"] = "single_take_multishot_internal_shot"
+                seg["physical_take"] = False
         decisions.append({
             "clip": cid,
             "label": clip.get("label", ""),
@@ -366,11 +407,14 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
                 "over_budget_sec": economy_row.get("over_budget_sec"),
                 "rewrite_demo": economy_row.get("rewrite_demo"),
             } if economy_row else {},
+            "take_policy": clip_take_policy(clip),
+            "single_take_multishot": single_take,
+            **({"take_policy_ignored_reason": policy_ignored_reason} if policy_ignored_reason else {}),
             "video_shot_policy": {
                 "story_clip_plan_threshold_sec": VIDEO_SHOT_PLAN_THRESHOLD_SEC,
                 "video_shot_hard_max_sec": VIDEO_SHOT_HARD_MAX_SEC,
                 "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
-                "direct_submit_allowed": not video_segments and not (duration is not None and duration > VIDEO_SHOT_HARD_MAX_SEC),
+                "direct_submit_allowed": (single_take or not video_segments) and not (duration is not None and duration > VIDEO_SHOT_HARD_MAX_SEC),
             },
             "video_shot_segments": video_segments,
         })
@@ -388,6 +432,8 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         "add_anchor": sum(1 for d in decisions if "add_mid_or_multi_anchor" in d["actions"]),
         "defer_to_composite": sum(1 for d in decisions if "defer_to_composite" in d["actions"]),
         "video_shot_split": sum(1 for d in decisions if "split_video_shots" in d["actions"]),
+        "single_take_multishot": sum(1 for d in decisions if d.get("single_take_multishot")),
+        "take_policy_ignored": sum(1 for d in decisions if d.get("take_policy_ignored_reason")),
         "compress_before_video": sum(1 for d in decisions if "compress_before_video" in d["actions"]),
         "direct_submit_blocked": sum(1 for d in decisions if not d["video_shot_policy"]["direct_submit_allowed"]),
         "story_economy_over_budget": sum(1 for d in decisions if float((d.get("story_economy") or {}).get("over_budget_sec") or 0.0) > 0.0),

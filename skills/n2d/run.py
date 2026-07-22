@@ -2101,6 +2101,13 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 [root, ep, "--write", "--json"],
             ),
             (
+                # 集级生成次数预算 + 合并候选（2026-07-22 clip 经济性回修）：治「简单叙事拆成太多付费 clip」。
+                # report-only（宪法 B10·全启发式）；产物落 生产数据/clip_economy_plan_<集>.*
+                "clip_economy_planner",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "clip_economy_planner.py"),
+                [root, ep, "--write", "--json"],
+            ),
+            (
                 "audience_emotion_account",
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "audience_emotion_account.py"),
                 [root, ep, "--write", "--json"],

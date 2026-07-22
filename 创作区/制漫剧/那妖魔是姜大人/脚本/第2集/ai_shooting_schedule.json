@@ -1,0 +1,417 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-22T07:10:49+00:00",
+  "inputs": {
+    "batch_queue": "生产数据/batch_queue.json",
+    "continuity_bible": "脚本/第2集/continuity_bible.json",
+    "production_breakdown": "脚本/第2集/production_breakdown.json",
+    "storyboard": "脚本/第2集/storyboard.json"
+  },
+  "kind": "n2d_ai_shooting_schedule",
+  "owner": "assistant_director",
+  "policy": {
+    "call_sheet_is_ordering_not_authorization": true,
+    "do_not_batch_past_unreviewed_high_risk_clip": true,
+    "high_risk_first": true
+  },
+  "status": "confirmed",
+  "summary": {
+    "clip_count": 8,
+    "high_risk": 8,
+    "medium_risk": 0
+  },
+  "tasks": [
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP01:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP01 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP01",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
+            "at_sec": 3.6,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 12.606,
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
+            "at_sec": 8.6,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 12.606,
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
+            "at_sec": 12.0,
+            "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "source_duration": 12.606,
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP01",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP01",
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP01_start.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP01",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP01"
+      },
+      "estimated_duration_sec": 12.606,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 1,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "铺垫·长镜",
+        "tier": "high"
+      },
+      "scene": "尸骸荒野/夕/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP02:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP02 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP02",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
+            "at_sec": 6.04,
+            "reason": "auto: R2 普通长镜（12.076s/4拍）",
+            "source_duration": 12.076,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP02",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP02",
+        "endframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "firstframe": "出图/第2集/图片/EP02_CLIP02_start.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP02",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP02"
+      },
+      "estimated_duration_sec": 12.076,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 2,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "dialogue_shot_reverse",
+        "tier": "high"
+      },
+      "scene": "尸骸荒野/夕/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP03:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP03 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP03",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP03_impact.png",
+            "at_sec": 1.12,
+            "reason": "导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
+            "at_sec": 2.12,
+            "reason": "导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前",
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP03",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP03",
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP03",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP03"
+      },
+      "estimated_duration_sec": 7.39,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 3,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "fight_exchange",
+        "tier": "high"
+      },
+      "scene": "尸骸荒野/夕/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP04:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP04 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP04",
+      "dependencies": {
+        "anchors": [],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP04",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP04",
+        "endframe": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "firstframe": "出图/第2集/图片/EP02_CLIP04_start.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP04",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP04"
+      },
+      "estimated_duration_sec": 5.27,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 4,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "system_panel",
+        "tier": "high"
+      },
+      "scene": "百妖谱主观层/荒野叠化",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP05:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP05 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP05",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
+            "at_sec": 3.07,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+            "source_duration": 9.207,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
+            "at_sec": 6.14,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+            "source_duration": 9.207,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP05",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP05",
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP05",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP05"
+      },
+      "estimated_duration_sec": 9.207,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 5,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "system_panel",
+        "tier": "high"
+      },
+      "scene": "百妖谱主观层/荒野叠化",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP06:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP06 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP06",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+            "at_sec": 5.9,
+            "reason": "MCU握刀理解规则切至CU状态收起与视线下沉；以同一张脸、同一战损服装和同一冷侧光焊住切点",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP06",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP06",
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP06_start.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP06",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP06"
+      },
+      "estimated_duration_sec": 10.52,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 6,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "铺垫·长镜",
+        "tier": "high"
+      },
+      "scene": "尸骸荒野/夕/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP07:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP07 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP07",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
+            "at_sec": 3.55,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+            "source_duration": 10.645,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
+            "at_sec": 7.1,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+            "source_duration": 10.645,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP07",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP07",
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP07_start.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP07",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP07"
+      },
+      "estimated_duration_sec": 10.645,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 7,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "留白·定格",
+        "tier": "high"
+      },
+      "scene": "尸骸荒野/夕/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第2集:EP02_CLIP08:image_video",
+        "rerun_scope": "只重跑 EP02_CLIP08 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP02_CLIP08",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+            "at_sec": 2.5,
+            "reason": "姜月初前3/4脸抬眼切至谱页墨虎ECU；切点只换主焦点，不复制第二张人物脸",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP08",
+        "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP08",
+        "endframe": "",
+        "firstframe": "出图/第2集/图片/EP02_CLIP08_start.png",
+        "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP08",
+        "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP08"
+      },
+      "estimated_duration_sec": 4.213,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 8,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "system_panel",
+        "tier": "high"
+      },
+      "scene": "尸骸荒野/百妖谱主观层",
+      "schedule_bucket": "pilot_high_risk_first"
+    }
+  ],
+  "version": 1
+}

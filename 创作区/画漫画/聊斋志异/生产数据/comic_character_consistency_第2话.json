@@ -1,0 +1,1643 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_consistency",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/聊斋志异",
+  "chapter": "第2话",
+  "created_at": "2026-07-22T15:24:28",
+  "available": true,
+  "capabilities": {
+    "pillow": true,
+    "ccip": true
+  },
+  "verdict": "warn",
+  "summary": {
+    "character_count": 5,
+    "panel_binding_count": 32,
+    "finding_count": 18,
+    "block_count": 0,
+    "warn_count": 18,
+    "info_count": 0
+  },
+  "contact_sheet": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+  "characters": [
+    {
+      "character_id": "CHAR_JIA_CHILD",
+      "references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "role": "face",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "role": "front",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "role": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+          "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "role": "side",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+          "sha256": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "role": "back",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+          "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第2话/panels/P001.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P002",
+          "path": "出图/第2话/panels/P002.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第2话/panels/P003.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第2话/panels/P004.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第2话/panels/P005.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第2话/panels/P006.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第2话/panels/P007.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第2话/panels/P008.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第2话/panels/P009.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第2话/panels/P010.png",
+          "char_count": 1
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第2话/panels/P011.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第2话/panels/P012.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第2话/panels/P013.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第2话/panels/P014.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第2话/panels/P015.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第2话/panels/P016.png",
+          "char_count": 2
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.0587,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.7979,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7024,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6737,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.0813,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.7081,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.5518,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.646,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P003",
+          "ccip": {
+            "available": true,
+            "difference": 0.061,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.816,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8087,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6044,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P004",
+          "ccip": {
+            "available": true,
+            "difference": 0.0234,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.7478,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6422,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6421,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P005",
+          "ccip": {
+            "available": true,
+            "difference": 0.0577,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.6582,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6238,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6079,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P006",
+          "ccip": {
+            "available": true,
+            "difference": 0.1264,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.7694,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6412,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6248,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P007",
+          "ccip": {
+            "available": true,
+            "difference": 0.2126,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.5039,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.3405,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5261,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P008",
+          "ccip": {
+            "available": true,
+            "difference": 0.1282,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.6601,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4816,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.4726,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P009",
+          "ccip": {
+            "available": true,
+            "difference": 0.1163,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8841,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8123,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7525,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P010",
+          "ccip": {
+            "available": true,
+            "difference": 0.0313,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.7786,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7693,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6966,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P011",
+          "ccip": {
+            "available": true,
+            "difference": 0.1166,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.839,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8382,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6447,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P012",
+          "ccip": {
+            "available": true,
+            "difference": 0.0277,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.9041,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8217,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7892,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P013",
+          "ccip": {
+            "available": true,
+            "difference": 0.1291,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8541,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7575,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6738,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P014",
+          "ccip": {
+            "available": true,
+            "difference": 0.0549,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8712,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8581,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7854,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P015",
+          "ccip": {
+            "available": true,
+            "difference": 0.0425,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.5126,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.2936,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6028,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P016",
+          "ccip": {
+            "available": true,
+            "difference": 0.071,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.777,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7484,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6976,
+            "reference": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    },
+    {
+      "character_id": "CHAR_JIA_FATHER",
+      "references": [
+        {
+          "id": "CHAR_JIA_FATHER",
+          "role": "face",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+          "sha256": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618"
+        },
+        {
+          "id": "CHAR_JIA_FATHER",
+          "role": "front",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+          "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2"
+        },
+        {
+          "id": "CHAR_JIA_FATHER",
+          "role": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+          "sha256": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P006",
+          "path": "出图/第2话/panels/P006.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第2话/panels/P016.png",
+          "char_count": 2
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P006",
+          "ccip": {
+            "available": true,
+            "difference": 0.0698,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.6294,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4503,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5667,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P016",
+          "ccip": {
+            "available": true,
+            "difference": 0.0992,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8558,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8399,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6731,
+            "reference": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    },
+    {
+      "character_id": "CHAR_JIA_MOTHER",
+      "references": [
+        {
+          "id": "CHAR_JIA_MOTHER",
+          "role": "face",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+          "sha256": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9"
+        },
+        {
+          "id": "CHAR_JIA_MOTHER",
+          "role": "front",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+          "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664"
+        },
+        {
+          "id": "CHAR_JIA_MOTHER",
+          "role": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+          "sha256": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P002",
+          "path": "出图/第2话/panels/P002.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P003",
+          "path": "出图/第2话/panels/P003.png",
+          "char_count": 2
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.1085,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.5728,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4311,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6158,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P003",
+          "ccip": {
+            "available": true,
+            "difference": 0.0956,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.6744,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.6508,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5959,
+            "reference": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    },
+    {
+      "character_id": "MON_FOX_BROTHERS",
+      "references": [
+        {
+          "id": "MON_FOX_BROTHERS",
+          "role": "face",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+          "sha256": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f"
+        },
+        {
+          "id": "MON_FOX_BROTHERS",
+          "role": "front",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P002",
+          "path": "出图/第2话/panels/P002.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第2话/panels/P004.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第2话/panels/P007.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第2话/panels/P015.png",
+          "char_count": 3
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P002",
+          "ccip": {
+            "available": true,
+            "difference": 0.1462,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.6021,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4632,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6933,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P004",
+          "ccip": {
+            "available": true,
+            "difference": 0.1217,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.4914,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4866,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6849,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P007",
+          "ccip": {
+            "available": true,
+            "difference": 0.2107,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.3924,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.274,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.5395,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P015",
+          "ccip": {
+            "available": true,
+            "difference": 0.1542,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.4501,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.2596,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6782,
+            "reference": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    },
+    {
+      "character_id": "MON_FOX_SERVANT",
+      "references": [
+        {
+          "id": "MON_FOX_SERVANT",
+          "role": "face",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+          "sha256": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "role": "front",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        }
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第2话/panels/P001.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第2话/panels/P007.png",
+          "char_count": 3
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第2话/panels/P008.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第2话/panels/P011.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第2话/panels/P012.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第2话/panels/P013.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第2话/panels/P014.png",
+          "char_count": 2
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第2话/panels/P015.png",
+          "char_count": 3
+        }
+      ],
+      "metrics": [
+        {
+          "panel_id": "P001",
+          "ccip": {
+            "available": true,
+            "difference": 0.1323,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.7784,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7077,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7723,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P007",
+          "ccip": {
+            "available": true,
+            "difference": 0.2219,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.4375,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.3252,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.4952,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P008",
+          "ccip": {
+            "available": true,
+            "difference": 0.0472,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.566,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.4383,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.4422,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P011",
+          "ccip": {
+            "available": true,
+            "difference": 0.1227,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8319,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8188,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.724,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P012",
+          "ccip": {
+            "available": true,
+            "difference": 0.1736,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.876,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7841,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.8519,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P013",
+          "ccip": {
+            "available": true,
+            "difference": 0.0482,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8478,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.7674,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.7801,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P014",
+          "ccip": {
+            "available": true,
+            "difference": 0.1147,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "threshold": 0.178,
+            "same_character": true,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.8423,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.8364,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.855,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        },
+        {
+          "panel_id": "P015",
+          "ccip": {
+            "available": true,
+            "difference": 0.196,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "threshold": 0.178,
+            "same_character": false,
+            "threshold_published": 0.178,
+            "threshold_baseline": 0.178,
+            "threshold_baseline_source": "published",
+            "threshold_source": "published"
+          },
+          "face": {
+            "score": 0.4615,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.5,
+            "floor_source": "fixed"
+          },
+          "hair": {
+            "score": 0.2807,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+            "available": true,
+            "floor": 0.46,
+            "floor_source": "fixed"
+          },
+          "outfit": {
+            "score": 0.6818,
+            "reference": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "available": true,
+            "floor": 0.42,
+            "floor_source": "fixed"
+          }
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_JIA_CHILD",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "CHAR_JIA_CHILD CCIP 身份距离 0.2126 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_CHILD",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "CHAR_JIA_CHILD hair 指纹与参考图相似度偏低：score=0.341。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_CHILD",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "CHAR_JIA_CHILD hair 指纹与参考图相似度偏低：score=0.294。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_FATHER",
+      "panel_id": "P006",
+      "artifact": "出图/第2话/panels/P006.png",
+      "reason": "CHAR_JIA_FATHER hair 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_MOTHER",
+      "panel_id": "P002",
+      "artifact": "出图/第2话/panels/P002.png",
+      "reason": "CHAR_JIA_MOTHER hair 指纹与参考图相似度偏低：score=0.431。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P004",
+      "artifact": "出图/第2话/panels/P004.png",
+      "reason": "MON_FOX_BROTHERS face 指纹与参考图相似度偏低：score=0.491。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_BROTHERS CCIP 身份距离 0.2107 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_BROTHERS face 指纹与参考图相似度偏低：score=0.392。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_BROTHERS hair 指纹与参考图相似度偏低：score=0.274。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_BROTHERS face 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_BROTHERS hair 指纹与参考图相似度偏低：score=0.260。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_SERVANT CCIP 身份距离 0.2219 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_SERVANT face 指纹与参考图相似度偏低：score=0.438。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_SERVANT hair 指纹与参考图相似度偏低：score=0.325。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P008",
+      "artifact": "出图/第2话/panels/P008.png",
+      "reason": "MON_FOX_SERVANT hair 指纹与参考图相似度偏低：score=0.438。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_SERVANT CCIP 身份距离 0.196 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_SERVANT face 指纹与参考图相似度偏低：score=0.462。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_SERVANT hair 指纹与参考图相似度偏低：score=0.281。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    }
+  ],
+  "notes": [
+    "VLM 并排判定任务包已刷新：生产数据/comic_vlm_judge_tasks_第2话.json（裁决 0/57）；由多模态 agent 看图执行并写回 verdict 文件。",
+    "已生成角色一致性并排复核图：生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"
+  ]
+}

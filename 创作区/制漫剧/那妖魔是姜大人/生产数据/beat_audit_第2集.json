@@ -1,0 +1,40 @@
+{
+  "kind": "n2d_beat_audit",
+  "version": 1,
+  "episode": "第2集",
+  "generated_at": "2026-07-22T06:59:48+00:00",
+  "stats": {
+    "shots": 18,
+    "hooks": 9,
+    "payoffs": 2,
+    "info_payoff_shots": [
+      3,
+      9,
+      13,
+      14
+    ],
+    "emo_payoff_shots": [
+      1,
+      3,
+      7,
+      9,
+      13
+    ],
+    "has_reversal": true,
+    "has_ending_hook": true,
+    "has_timings": true,
+    "has_storyboard": true
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "code": "cold_open_pull_thin",
+      "msg": "开场拉力 0.30（命中层：conflict）达地板但偏单薄——可测试叠加第二条强层（冲突+悬念/反转）；是否提升留存以本项目 A/B 数据为准"
+    },
+    {
+      "severity": "info",
+      "code": "slow_cold_open_speed",
+      "msg": "开场首镜标注慢语速：黄金3秒忌拖沓铺垫，开场提速或把慢拍后移（与冷开场情绪判据互补）"
+    }
+  ]
+}

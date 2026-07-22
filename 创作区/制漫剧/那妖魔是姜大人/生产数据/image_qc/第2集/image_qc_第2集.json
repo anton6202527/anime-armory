@@ -1,0 +1,3365 @@
+{
+  "artifact_namespace": {
+    "available": true,
+    "declared_targets": 24,
+    "notes": [],
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md",
+    "stale": []
+  },
+  "asset_face_policy": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 6,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [
+        {
+          "anchor_policy": "non_human_creature",
+          "box_ratio": 0.0,
+          "char": "BEAST_01__穿心复生态",
+          "faces": 0,
+          "reason": "non_human_anchor_policy",
+          "verdict": "ok"
+        },
+        {
+          "box_ratio": 0.0105,
+          "char": "CHAR_01__囚途残损态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0086,
+          "char": "CHAR_02__濒死重伤态",
+          "faces": 1,
+          "verdict": "warn"
+        }
+      ],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {
+        "BEAST_01__穿心复生态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "CHAR_01__囚途残损态": {
+          "ep_mean_score": 0.4829,
+          "ep_n_shots": 8,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 5
+        },
+        "CHAR_02__濒死重伤态": {
+          "floor": 0.6624,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        }
+      },
+      "encoder": "arcface_buffalo_l",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": [
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_end.png",
+          "score": 0.6677,
+          "score_vs_main": 0.6386,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 1,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP01_start.png",
+          "score": 0.4905,
+          "score_vs_main": 0.4516,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 2,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP01_start_a1.png",
+          "score": 0.5241,
+          "score_vs_main": 0.5123,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP01_start_a2.png",
+          "score": 0.6827,
+          "score_vs_main": 0.6802,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP01_start_a3.png",
+          "score": 0.6677,
+          "score_vs_main": 0.6386,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP02_preimpact.png",
+          "score": 0.3443,
+          "score_vs_main": 0.277,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP02_start.png",
+          "score": 0.3612,
+          "score_vs_main": 0.2264,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP02_CLIP02_start_a1.png",
+          "score": 0.5043,
+          "score_vs_main": 0.4381,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "BEAST_01__穿心复生态": {
+          "floor": 0.9906,
+          "intra_pairs": 6
+        },
+        "CHAR_01__囚途残损态": {
+          "floor": 0.9817,
+          "intra_pairs": 6
+        },
+        "CHAR_02__濒死重伤态": {
+          "floor": 0.8329,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/Clip01_end.png",
+          "score": 0.6598,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP01_start.png",
+          "score": 0.9049,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP01_start_a1.png",
+          "score": 0.8413,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP01_start_a2.png",
+          "score": 0.5448,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP01_start_a3.png",
+          "score": 0.6598,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP02_preimpact.png",
+          "score": 0.0948,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP02_start.png",
+          "score": 0.1395,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP02_CLIP02_start_a1.png",
+          "score": 0.2687,
+          "verdict": "block"
+        }
+      ]
+    },
+    "human_anatomy": {
+      "available": true,
+      "extra_threshold": 6,
+      "locator": "肤色启发",
+      "notes": [
+        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
+      ],
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_尸骸荒野",
+          "name": "LOC 尸骸荒野",
+          "type": "scene"
+        },
+        {
+          "id": "VFX_墨虎谱影",
+          "name": "墨虎谱影",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_百妖谱",
+          "name": "百妖谱",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_系统面板",
+          "name": "百妖谱金色古卷面板",
+          "type": "vfx"
+        },
+        {
+          "id": "WEAPON_01",
+          "name": "横刀",
+          "type": "weapon"
+        },
+        {
+          "id": "WEAPON_横刀",
+          "name": "横刀",
+          "type": "weapon"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "姜月初",
+        "CHAR_01",
+        "CHAR_01__囚途残损态",
+        "CHAR_01__囚途残损态_脸部特写_脸锚裁切",
+        "CHAR_01__囚途残损态_表情_六联表",
+        "CHAR_01__囚途残损态_45度",
+        "CHAR_01__囚途残损态_后45度",
+        "裴长青",
+        "CHAR_02",
+        "CHAR_02__濒死重伤态",
+        "CHAR_02__濒死重伤态_脸部特写_脸锚裁切",
+        "CHAR_02__濒死重伤态_表情_克制",
+        "CHAR_02__濒死重伤态_45度",
+        "CHAR_02__濒死重伤态_后45度",
+        "虎妖",
+        "BEAST_01",
+        "BEAST_01__穿心复生态",
+        "BEAST_01__穿心复生态_脸部特写_脸锚裁切",
+        "BEAST_01__穿心复生态_表情_克制",
+        "BEAST_01__穿心复生态_45度",
+        "BEAST_01__穿心复生态_后45度"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第2集",
+      "groups": {
+        "LOC_尸骸荒野": {
+          "median_dist": 0.5,
+          "shots": 3
+        },
+        "VFX_百妖谱": {
+          "median_dist": 0.5,
+          "shots": 3
+        },
+        "VFX_系统面板": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "WEAPON_01": {
+          "median_dist": 0.5,
+          "shots": 3
+        },
+        "WEAPON_横刀": {
+          "median_dist": 0.5,
+          "shots": 3
+        }
+      },
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "BEAST_01__穿心复生态": {
+          "floor": 0.9925,
+          "intra_pairs": 6
+        },
+        "CHAR_01__囚途残损态": {
+          "floor": 0.9839,
+          "intra_pairs": 6
+        },
+        "CHAR_02__濒死重伤态": {
+          "floor": 0.6426,
+          "intra_pairs": 6
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/Clip01_end.png",
+          "score": 0.8522,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP01_start.png",
+          "score": 0.8687,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP01_start_a1.png",
+          "score": 0.7725,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP01_start_a2.png",
+          "score": 0.5263,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP01_start_a3.png",
+          "score": 0.8522,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP02_preimpact.png",
+          "score": 0.0924,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP02_start.png",
+          "score": 0.3022,
+          "verdict": "block"
+        },
+        {
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9839,
+          "png": "图片/EP02_CLIP02_start_a1.png",
+          "score": 0.3458,
+          "verdict": "block"
+        }
+      ]
+    },
+    "scene": {
+      "available": true,
+      "groups": {
+        "LOC_尸骸荒野": {
+          "constraints": {
+            "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
+            "lighting_signature": {
+              "color_temperature": "mixed_cool_warm",
+              "key_light_direction": "left",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "low_desaturated",
+              "source_text": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光；尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 27.0,
+          "registered_id": "LOC_尸骸荒野",
+          "shots": 8
+        }
+      },
+      "impact_physics": [],
+      "notes": [
+        "场景[LOC_尸骸荒野] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[LOC_尸骸荒野] 已注册light_anchor：尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光。验收时请重点核对。",
+        "场景[LOC_尸骸荒野] 已注册axis_rules：尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初。验收时请重点核对。",
+        "场景[LOC_尸骸荒野] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[LOC_尸骸荒野] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[LOC_尸骸荒野] 已注册lighting_signature：{'color_temperature': 'mixed_cool_warm', 'saturation_profile': 'low_desaturated', 'key_light_direction': 'left', 'source_text': '尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光；尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
+      ],
+      "shots": []
+    },
+    "seam": {
+      "availability_reason": "ready",
+      "available": true,
+      "contradictions": [],
+      "notes": [],
+      "seams": [
+        {
+          "action_shift": 0.077,
+          "action_verdict": null,
+          "color_dist": 0.0601,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 34,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "EP02_CLIP02_start.png",
+          "relative_outlier": false,
+          "seam_mode": "match_on_action",
+          "struct_verdict": "block",
+          "tail": "Clip01_end.png",
+          "transition": "动作接虎妖下扑",
+          "verdict": "info"
+        }
+      ]
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [],
+    "history_chars": 2
+  },
+  "episode": "第2集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 6,
+    "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_02/“濒死重伤态”「face_anchor」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_02/“濒死重伤态”「克制」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      }
+    ],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/face_confirmations.json",
+    "rows": []
+  },
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 5,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_start.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP06_start.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP07_start.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP08_start.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+        "shot": "Clip_08"
+      }
+    ],
+    "precision_level": "full",
+    "required": 5,
+    "skipped": [
+      {
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "png": "出图/第2集/图片/EP02_CLIP02_start.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "png": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_02"
+      },
+      {
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/EP02_CLIP03_impact.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_03"
+      },
+      {
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_03"
+      },
+      {
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/Clip03_end.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_03"
+      }
+    ],
+    "unclassified": [
+      {
+        "face_verdict": "ok",
+        "label": "lint_unclassified",
+        "png": "图片/EP02_CLIP02_preimpact.png",
+        "reason": "unclassified_face_shot",
+        "shot": "Clip_02"
+      }
+    ],
+    "verdict": "ok"
+  },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/human_image_review.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "9ad1cd026c374bda3bdc39f53c94c1ba619eeb8ef822a2e83e1936a9298f0e43",
+      "出图/共享/identity_registry.json": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8",
+      "出图/共享/style_anchor_registry.json": "c3698c5b3475f1ce1a32840b7de957cd06e40ad0716e1dd8ee5a8862b00018bd",
+      "出图/共享/图片/定妆_武器_横刀.png": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+      "出图/共享/图片/定妆_特效_墨虎谱影.png": "ec1cd909cc4eab92e7cd2893f11abc254e11425ac3b58c23766a64ec2ddaea31",
+      "出图/共享/图片/定妆_特效_百妖谱.png": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5",
+      "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png": "6ccd1708baff9b495f64f66b2a7d12de2f20df2dfcdd6c69c934c2803cd7a2e5",
+      "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+      "出图/第2集/prompt/00_总览.md": "63e59ac53382eb343f400b94f64820fee396401584233e13ba4d0f0be64cb0b8",
+      "出图/第2集/prompt/01_分镜出图.md": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a",
+      "出图/第2集/图片/Clip01_end.png": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
+      "出图/第2集/图片/EP02_CLIP01_start.png": "7fd76ce98b905bf35333dcff4aea99cc46ec7e594483a2253a67383bde597033",
+      "出图/第2集/图片/EP02_CLIP01_start_a1.png": "307344e36eb722c82f989b893215d50df074f94bfd3277696b76d1aaa9e97514",
+      "出图/第2集/图片/EP02_CLIP01_start_a2.png": "af89a8a6ba3bbd53abf8f1e7e5822f4b2a14ed0e6ef097160ace6f7f5e094813",
+      "出图/第2集/图片/EP02_CLIP01_start_a3.png": "3a04ed793714aef9563a6e6b62577d47c82a8c01734b2e9b0cd8c1ce1c9494e5",
+      "出图/第2集/图片/EP02_CLIP02_preimpact.png": "6342382cc69502901c8885abe82660ebe756eaa849d6d3cd76355a96dad840b4",
+      "出图/第2集/图片/EP02_CLIP02_start.png": "e70555f12748daa6cab1e739f80497b17ad4c67368940239f3e97a43d74d8050",
+      "出图/第2集/图片/EP02_CLIP02_start_a1.png": "c64035c133cc1fa9770dcdc758794ac0ca272e40bb3aa9e31eb74789fc3c2bc7",
+      "生产数据/image_qc/第2集/face_confirmations.json": null,
+      "生产数据/image_qc/第2集/human_image_review.json": null,
+      "生产数据/image_qc/第2集/prop_shape_confirmations.json": "026c99dde220be90f8b7649fedaba147d82102377b2ae4899cf6bd88b35752a5",
+      "脚本/第2集/storyboard.json": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+    },
+    "sha": "c3dbd934aa0197a10b59fe25c55ffde5e1c440613763cf5f9c29941b39ec3803"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP01_start.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "png": "出图/第2集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "png": "出图/第2集/图片/EP02_CLIP02_start.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "png": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/EP02_CLIP03_impact.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01",
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "png": "出图/第2集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_start.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+        "png": "出图/第2集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP06_start.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP07_start.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_02/“濒死重伤态”"
+        ],
+        "label": "镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+        "png": "出图/第2集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP08_start.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”"
+        ],
+        "label": "镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+        "png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+        "shot": "Clip_08"
+      }
+    ],
+    "findings": [
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_02/“濒死重伤态”「face_anchor」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_02/“濒死重伤态”「克制」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_01/“囚途残损态”：视平线不齐：three_quarter(0.14) vs back(0.43)，跨视图脸中心高度差 29%>6%；比例不一：front 脸高是 rear_three_quarter 的 2.00 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_02/“濒死重伤态”：脚底线不齐：side(0.950) vs rear_three_quarter(1.000)，差 0.050>0.035；身体中心线不齐：side(0.485) vs rear_three_quarter(0.625)，差 0.140>0.055——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "turnaround_misaligned",
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 BEAST_01/“穿心复生态”：脚底线不齐：rear_three_quarter(0.936) vs side(0.972)，差 0.036>0.035；视平线不齐：rear_three_quarter(0.29) vs back(0.90)，跨视图脸中心高度差 61%>6%；比例不一：side 脸高是 back 的 2.11 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 8
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+    "confirmed": 11,
+    "pending": 2,
+    "targets": [
+      {
+        "asset": "VFX_墨虎谱影",
+        "asset_name": "墨虎谱影",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "ab007203928b709090794904d5dbf9d83c38caa168db73705a763b8e2ce687d3",
+        "label": "共享主参考·墨虎谱影",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ],
+        "png": "出图/共享/图片/定妆_特效_墨虎谱影.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_特效_墨虎谱影.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_墨虎谱影.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "由 BEAST_01 剪影派生的纸上墨虎",
+          "无字",
+          "黑墨旧金",
+          "不可脱离谱页实体化"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_墨虎谱影_shared_primary_定妆_特效_墨虎谱影_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "VFX_百妖谱",
+        "asset_name": "百妖谱",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
+        "label": "共享主参考·百妖谱",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ],
+        "png": "出图/共享/图片/定妆_特效_百妖谱.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_特效_百妖谱.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_百妖谱.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "百妖谱"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_shared_primary_定妆_特效_百妖谱_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "VFX_系统面板",
+        "asset_name": "百妖谱金色古卷面板",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
+        "label": "共享主参考·百妖谱金色古卷面板",
+        "must_not_have": [
+          "AI生成可读文字",
+          "现代手机UI",
+          "随机蓝色科幻屏",
+          "乱码文字"
+        ],
+        "png": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "金色古卷空光幕",
+          "符纹边框固定",
+          "内部文字区留空",
+          "数值由 compose overlay 叠加"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_系统面板_shared_primary_定妆_特效_百妖谱金色古卷面板_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "共享主参考·横刀",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "出图/共享/图片/定妆_武器_横刀.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_shared_primary_定妆_武器_横刀_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_横刀",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+        "label": "共享主参考·横刀",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "出图/共享/图片/定妆_武器_横刀.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
+        "reason": "shared_primary_registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "shared_primary",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "同一把唐横刀",
+          "刃长",
+          "刀镡",
+          "刀柄缠绳不漂"
+        ],
+        "shot": "shared_primary",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_shared_primary_定妆_武器_横刀_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "VFX_百妖谱",
+        "asset_name": "百妖谱",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c5a7179fa251fa81a1ab927ab7934e27a329b943f43cd4ccccd86db7e9a9dbfe",
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_百妖谱.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "百妖谱"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_百妖谱_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "VFX_系统面板",
+        "asset_name": "百妖谱金色古卷面板",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "57ea72e0af7a8d8c60bcd1b726cdb0e79ffe04c7c0255c02d9a5967b1d530a7b",
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "must_not_have": [
+          "AI生成可读文字",
+          "现代手机UI",
+          "随机蓝色科幻屏",
+          "乱码文字"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "金色古卷空光幕",
+          "符纹边框固定",
+          "内部文字区留空",
+          "数值由 compose overlay 叠加"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/VFX_系统面板_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_横刀",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+        "label": "镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "同一把唐横刀",
+          "刃长",
+          "刀镡",
+          "刀柄缠绳不漂"
+        ],
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/EP02_CLIP02_start.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/EP02_CLIP02_start.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_02_EP02_CLIP02_start_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_横刀",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+        "label": "镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/EP02_CLIP02_start.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/EP02_CLIP02_start.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "同一把唐横刀",
+          "刃长",
+          "刀镡",
+          "刀柄缠绳不漂"
+        ],
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_02_EP02_CLIP02_start_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "c0278b47072ed7501e989ec7c4d84271949a3a641c8b4595bb2d4f67b69cda98",
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/EP02_CLIP02_preimpact.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "single_straight_blade=1",
+          "主角只持一把实体横刀",
+          "副手",
+          "后手不得生成短刃",
+          "匕首",
+          "副刀或第二把刀",
+          "大唐镇魔司制式横刀",
+          "暗银直身刀刃",
+          "黑色刀柄",
+          "旧金属护手",
+          "战损血尘克制",
+          "单把实体武器",
+          "刀光只作半透明运动轨迹",
+          "刀光",
+          "光轨",
+          "残影只能是半透明运动轨迹或边缘高光",
+          "不得变成实体刀刃",
+          "第二把刀或可握持武器"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_01_Clip_03_EP02_CLIP02_preimpact_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_横刀",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "contract_fingerprint": "081ec4ef475bd4f2b43d4ef2060eddd27d6f9b2d6bf1797a78e91da825a84579",
+        "label": "镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃"
+        ],
+        "png": "图片/EP02_CLIP02_preimpact.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/EP02_CLIP02_preimpact.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "scope": "episode_shot",
+        "shape_contract": [
+          "weapon_count=1",
+          "single_hilt=1",
+          "single_blade=1",
+          "cutting_edge_count=1",
+          "一侧为连续锋利刃口",
+          "另一侧为连续厚钝刀背",
+          "刀尖偏向刃侧",
+          "不得居中形成对称剑尖",
+          "禁止双面开刃",
+          "双刃剑轮廓或第二条锋刃",
+          "同一把唐横刀",
+          "刃长",
+          "刀镡",
+          "刀柄缠绳不漂"
+        ],
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/prop_shape_review/WEAPON_横刀_Clip_03_EP02_CLIP02_preimpact_compare.png",
+        "stitched": true
+      }
+    ],
+    "total": 13
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [],
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "semantic_drift": {
+    "available": true,
+    "compared": 8,
+    "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start.png DINO/CLIP cosine=0.02 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start_a1.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start_a2.png DINO/CLIP cosine=0.46 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP02_CLIP01_start_a3.png DINO/CLIP cosine=0.37 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      }
+    ],
+    "floor": 0.55
+  },
+  "shot_scale_contract": {
+    "available": false,
+    "findings": [],
+    "notes": [
+      "shot_scale_contract 失败：too many values to unpack (expected 2)"
+    ]
+  },
+  "shot_variety": {
+    "available": true,
+    "clips_checked": 1,
+    "duplicate_pairs": [],
+    "findings": [],
+    "notes": [],
+    "static_pairs": []
+  },
+  "state_ledger": {
+    "advise": true,
+    "available": true,
+    "ledger_present": false,
+    "markers": [
+      "染血",
+      "血污"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_fingerprint": {
+      "contrast": 113.0,
+      "edge": 24.2,
+      "sat": 17.0
+    },
+    "anchor_status": "ok",
+    "available": true,
+    "checked": 8,
+    "distance": 0.264,
+    "episode_fingerprint": {
+      "contrast": 123.0,
+      "edge": 23.4,
+      "sat": 31.5
+    },
+    "findings": [],
+    "intent": {
+      "anchors": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风.png"
+      ],
+      "style_name": "冷灰写实3D国风漫剧",
+      "taboos": [
+        "欧美脸",
+        "白衣仙女化",
+        "页游塑料甲",
+        "随机霓虹",
+        "光效遮脸",
+        "血浆猎奇",
+        "正面肖像摆拍"
+      ]
+    }
+  },
+  "summary": {
+    "advisory": 18,
+    "by_check": {
+      "anchors": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 8,
+        "warn": 0
+      },
+      "face_reference_coverage_unclassified": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 1
+      },
+      "hair": {
+        "block": 3,
+        "noface": 0,
+        "ok": 5,
+        "warn": 0
+      },
+      "human_anatomy": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 6
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 3,
+        "noface": 0,
+        "ok": 5,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 2,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "semantic_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 5
+      }
+    },
+    "degraded": false,
+    "hard_blocks": 2,
+    "unavailable_visual_checks": [],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": true,
+    "checked": 8,
+    "findings": [],
+    "intent": {
+      "brightness": "dark",
+      "evidence": "冷灰青黑+暗红夕照；百妖谱与刀弧使用克制旧金",
+      "warmth": "cool"
+    },
+    "luma_median": 71.5,
+    "warmth_median": 0.0
+  },
+  "turnaround_alignment": {
+    "available": true,
+    "checked_forms": 3,
+    "findings": [
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              105,
+              104,
+              104
+            ],
+            "border_delta_p90": 32,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              103,
+              103,
+              103
+            ],
+            "border_delta_p90": 33,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              108,
+              108,
+              108
+            ],
+            "border_delta_p90": 36,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              105,
+              105,
+              105
+            ],
+            "border_delta_p90": 30,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              115,
+              114,
+              115
+            ],
+            "border_delta_p90": 35,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "back": [
+            0.4312,
+            0.0431
+          ],
+          "front": [
+            0.1394,
+            0.0801
+          ],
+          "rear_three_quarter": [
+            0.3753,
+            0.0401
+          ],
+          "three_quarter": [
+            0.1367,
+            0.076
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_01/“囚途残损态”：视平线不齐：three_quarter(0.14) vs back(0.43)，跨视图脸中心高度差 29%>6%；比例不一：front 脸高是 rear_three_quarter 的 2.00 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              111,
+              109,
+              109
+            ],
+            "bbox_normalized": [
+              0.2472,
+              0.0516,
+              0.7306,
+              0.9609
+            ],
+            "border_delta_p90": 22,
+            "centerline": 0.4889,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9609,
+            "head_top": 0.0516,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9094,
+            "subject_width": 0.4833
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              113,
+              111,
+              112
+            ],
+            "bbox_normalized": [
+              0.2556,
+              0.0547,
+              0.7417,
+              0.9719
+            ],
+            "border_delta_p90": 23,
+            "centerline": 0.4986,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9719,
+            "head_top": 0.0547,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9172,
+            "subject_width": 0.4861
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              110,
+              108,
+              109
+            ],
+            "bbox_normalized": [
+              0.2778,
+              0.0406,
+              0.9722,
+              1.0
+            ],
+            "border_delta_p90": 27,
+            "centerline": 0.625,
+            "confidence": "heuristic",
+            "foot_bottom": 1.0,
+            "head_top": 0.0406,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9594,
+            "subject_width": 0.6944
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              120,
+              118,
+              119
+            ],
+            "bbox_normalized": [
+              0.325,
+              0.0594,
+              0.6444,
+              0.95
+            ],
+            "border_delta_p90": 24,
+            "centerline": 0.4847,
+            "confidence": "heuristic",
+            "foot_bottom": 0.95,
+            "head_top": 0.0594,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.8906,
+            "subject_width": 0.3194
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              117,
+              115,
+              116
+            ],
+            "border_delta_p90": 29,
+            "confidence": "heuristic",
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": false,
+            "method": "border_median_foreground_bbox_v1",
+            "reason": "non_uniform_or_busy_border"
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "front": [
+            0.1483,
+            0.073
+          ],
+          "three_quarter": [
+            0.1609,
+            0.0682
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 CHAR_02/“濒死重伤态”：脚底线不齐：side(0.950) vs rear_three_quarter(1.000)，差 0.050>0.035；身体中心线不齐：side(0.485) vs rear_three_quarter(0.625)，差 0.140>0.055——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      },
+      {
+        "body_views": {
+          "back": {
+            "background_delta": 28,
+            "background_rgb": [
+              103,
+              102,
+              102
+            ],
+            "bbox_normalized": [
+              0.1139,
+              0.0437,
+              0.8917,
+              0.9594
+            ],
+            "border_delta_p90": 8,
+            "centerline": 0.5028,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9594,
+            "head_top": 0.0437,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9156,
+            "subject_width": 0.7778
+          },
+          "front": {
+            "background_delta": 28,
+            "background_rgb": [
+              101,
+              101,
+              101
+            ],
+            "bbox_normalized": [
+              0.1028,
+              0.0375,
+              0.8889,
+              0.9641
+            ],
+            "border_delta_p90": 8,
+            "centerline": 0.4958,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9641,
+            "head_top": 0.0375,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9266,
+            "subject_width": 0.7861
+          },
+          "rear_three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              107,
+              106,
+              106
+            ],
+            "bbox_normalized": [
+              0.1917,
+              0.0469,
+              0.8139,
+              0.9359
+            ],
+            "border_delta_p90": 9,
+            "centerline": 0.5028,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9359,
+            "head_top": 0.0469,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.8891,
+            "subject_width": 0.6222
+          },
+          "side": {
+            "background_delta": 28,
+            "background_rgb": [
+              101,
+              101,
+              101
+            ],
+            "bbox_normalized": [
+              0.2528,
+              0.0344,
+              0.7139,
+              0.9719
+            ],
+            "border_delta_p90": 9,
+            "centerline": 0.4833,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9719,
+            "head_top": 0.0344,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.9375,
+            "subject_width": 0.4611
+          },
+          "three_quarter": {
+            "background_delta": 28,
+            "background_rgb": [
+              102,
+              102,
+              102
+            ],
+            "bbox_normalized": [
+              0.1278,
+              0.0453,
+              0.8583,
+              0.9437
+            ],
+            "border_delta_p90": 13,
+            "centerline": 0.4931,
+            "confidence": "heuristic",
+            "foot_bottom": 0.9437,
+            "head_top": 0.0453,
+            "image_size": {
+              "height": 1672,
+              "width": 941
+            },
+            "measurable": true,
+            "method": "border_median_foreground_bbox_v1",
+            "subject_height": 0.8984,
+            "subject_width": 0.7306
+          }
+        },
+        "code": "turnaround_misaligned",
+        "confidence": "heuristic",
+        "face_views": {
+          "back": [
+            0.9049,
+            0.0371
+          ],
+          "front": [
+            0.3759,
+            0.0604
+          ],
+          "rear_three_quarter": [
+            0.291,
+            0.0604
+          ],
+          "side": [
+            0.5224,
+            0.0783
+          ],
+          "three_quarter": [
+            0.3307,
+            0.0419
+          ]
+        },
+        "level": "warn",
+        "msg": "多视图对齐初筛异常 BEAST_01/“穿心复生态”：脚底线不齐：rear_three_quarter(0.936) vs side(0.972)，差 0.036>0.035；视平线不齐：rear_three_quarter(0.29) vs back(0.90)，跨视图脸中心高度差 61%>6%；比例不一：side 脸高是 back 的 2.11 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启发式证据，按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。"
+      }
+    ],
+    "forms": [
+      {
+        "character_id": "CHAR_01",
+        "core": true,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "2302f786d03052edad886c560e7ddbf5261c33b5c5cc25e9cc3ac017b6fb2a1a",
+                "png_sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+                "reasons": [],
+                "registry_binding_fingerprint": "2302f786d03052edad886c560e7ddbf5261c33b5c5cc25e9cc3ac017b6fb2a1a",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-07-21T19:45:32+00:00",
+                "reviewer": "automation:codex",
+                "valid": true,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+              "png_sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "7435e5f201e130c58aa63cd835ed373c0950e4ed6f092dd2e0e863c0b24e3577",
+                "png_sha256": "c796839b9a9192f3e74de6feb8da597500a38ede8dd33c2de72c4499f1af77d6",
+                "reasons": [
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": "e0d5d9b4370a926fc7226737bf716171c6e2c6ee844cf70ae86add53c65853ff",
+                "review_kind": "executor_visual",
+                "reviewed_at": "2026-07-21T19:35:25+00:00",
+                "reviewer": "automation:codex",
+                "valid": false,
+                "verdict": "pass"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+              "png_sha256": "7486b5c1050b361a664fb96da22a7544ddf4bacaabb07ba1a6f7c0cb46659f93"
+            }
+          ],
+          "valid": true
+        },
+        "form": "“囚途残损态”",
+        "library_tier": "core_full",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": "77082d7975d7a43086be29530a3e48be7ac04c8a3d03d8922217d614a5cd4290",
+            "png_sha256": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f",
+            "reasons": [],
+            "registry_binding_fingerprint": "77082d7975d7a43086be29530a3e48be7ac04c8a3d03d8922217d614a5cd4290",
+            "review_kind": "executor_visual",
+            "reviewed_at": "2026-07-21T13:03:23+00:00",
+            "reviewer": "automation:codex",
+            "valid": true,
+            "verdict": "pass"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+          "png_sha256": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f"
+        },
+        "views": {
+          "back": {
+            "face_geometry": {
+              "center_y": 0.4312,
+              "confidence": "heuristic",
+              "face_height": 0.0431
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "c2946aa298a476971c4ba099031f399ed0c4aaefab734afdb44c79fff6d93a7c",
+              "png_sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+              "reasons": [],
+              "registry_binding_fingerprint": "c2946aa298a476971c4ba099031f399ed0c4aaefab734afdb44c79fff6d93a7c",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-21T13:03:23+00:00",
+              "reviewer": "automation:codex",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                105,
+                104,
+                104
+              ],
+              "border_delta_p90": 32,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+            "png_sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.1394,
+              "confidence": "heuristic",
+              "face_height": 0.0801
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "811666586af9e3b897c01437c9a3c3d1c3d06b677a7d910356975f3a4373efb6",
+              "png_sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+              "reasons": [],
+              "registry_binding_fingerprint": "811666586af9e3b897c01437c9a3c3d1c3d06b677a7d910356975f3a4373efb6",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-21T13:03:22+00:00",
+              "reviewer": "automation:codex",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                103,
+                103,
+                103
+              ],
+              "border_delta_p90": 33,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+            "png_sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "face_geometry": {
+              "center_y": 0.3753,
+              "confidence": "heuristic",
+              "face_height": 0.0401
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
+              "png_sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+              "reasons": [],
+              "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-21T13:03:22+00:00",
+              "reviewer": "automation:codex",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                108,
+                108,
+                108
+              ],
+              "border_delta_p90": 36,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+            "png_sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "cdc3ee073e03f1bc60f026cd4478b1b62f042207303f5dd828eb6bd80683820d",
+              "png_sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+              "reasons": [],
+              "registry_binding_fingerprint": "cdc3ee073e03f1bc60f026cd4478b1b62f042207303f5dd828eb6bd80683820d",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-21T13:03:22+00:00",
+              "reviewer": "automation:codex",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                105,
+                105,
+                105
+              ],
+              "border_delta_p90": 30,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+            "png_sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+            "view": "side"
+          },
+          "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.1367,
+              "confidence": "heuristic",
+              "face_height": 0.076
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
+              "png_sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+              "reasons": [],
+              "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
+              "review_kind": "executor_visual",
+              "reviewed_at": "2026-07-21T13:03:22+00:00",
+              "reviewer": "automation:codex",
+              "valid": true,
+              "verdict": "pass"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                115,
+                114,
+                115
+              ],
+              "border_delta_p90": 35,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+            "png_sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "CHAR_02",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "4144e1d21ef39a09dea61934a68a8c93196f751b748093a55b2c7088524ff840",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-07-21T14:59:58.214390+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+              "png_sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "074dfbff959622e0cf8b1d94b647d40c345585d17efd62588e8d40713234e69c",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-07-21T14:59:58.214381+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+              "png_sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513"
+            }
+          ],
+          "valid": false
+        },
+        "form": "“濒死重伤态”",
+        "library_tier": "recurring_standard",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "d9112c05abd33aa9e9f5e13e18d05b8d8bb59bd31c2a9f1a60fb05a30e08d35c",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.214422+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                111,
+                109,
+                109
+              ],
+              "bbox_normalized": [
+                0.2472,
+                0.0516,
+                0.7306,
+                0.9609
+              ],
+              "border_delta_p90": 22,
+              "centerline": 0.4889,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9609,
+              "head_top": 0.0516,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9094,
+              "subject_width": 0.4833
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png",
+            "png_sha256": "8dfba88209e0d8a37b707c5f952008c8b5cc93953c487f9e0da114f3b9368abf",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.1483,
+              "confidence": "heuristic",
+              "face_height": 0.073
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "1673f6ffc375a073dfe935187dc6cb65620f8afd0efc42142037a61ec66f7243",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.214346+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                113,
+                111,
+                112
+              ],
+              "bbox_normalized": [
+                0.2556,
+                0.0547,
+                0.7417,
+                0.9719
+              ],
+              "border_delta_p90": 23,
+              "centerline": 0.4986,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9719,
+              "head_top": 0.0547,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9172,
+              "subject_width": 0.4861
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+            "png_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "64b02d23e23c81d0cc4c353638e48a95d9f721169e9c2aa4ed7076c18f932ae4",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.214414+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                110,
+                108,
+                109
+              ],
+              "bbox_normalized": [
+                0.2778,
+                0.0406,
+                0.9722,
+                1.0
+              ],
+              "border_delta_p90": 27,
+              "centerline": 0.625,
+              "confidence": "heuristic",
+              "foot_bottom": 1.0,
+              "head_top": 0.0406,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9594,
+              "subject_width": 0.6944
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+            "png_sha256": "529779beffc9ccbf180bbd616957af209ffef63e682d91fc9eddb4fc85cc39fa",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "human_review": {
+              "expected_registry_binding_fingerprint": "1b790295ad816cad0c2b3834b05b8df51668f34031ed578c344797922e4d57cf",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.214407+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                120,
+                118,
+                119
+              ],
+              "bbox_normalized": [
+                0.325,
+                0.0594,
+                0.6444,
+                0.95
+              ],
+              "border_delta_p90": 24,
+              "centerline": 0.4847,
+              "confidence": "heuristic",
+              "foot_bottom": 0.95,
+              "head_top": 0.0594,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.8906,
+              "subject_width": 0.3194
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png",
+            "png_sha256": "62020cae9671713f59e48686969444e9ec7a77a6cf0307167da26a04f2198a4c",
+            "view": "side"
+          },
+          "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.1609,
+              "confidence": "heuristic",
+              "face_height": 0.0682
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "0784e48685364e9046156c082fb43cc4d442c5510e5270ebdad2743043c46716",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.214399+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                117,
+                115,
+                116
+              ],
+              "border_delta_p90": 29,
+              "confidence": "heuristic",
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": false,
+              "method": "border_median_foreground_bbox_v1",
+              "reason": "non_uniform_or_busy_border"
+            },
+            "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+            "png_sha256": "6907dedab4f7d55bd070ceb4b765e70a8f94a41fbe1ff43d84d865dc8265bce9",
+            "view": "three_quarter"
+          }
+        }
+      },
+      {
+        "character_id": "BEAST_01",
+        "core": false,
+        "expression_bucket": {
+          "candidates": [
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "69e2d66004c05704cb51f20199862ad25a5fa550f910528ee83edc39a312e849",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-07-21T14:59:58.315223+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png",
+              "png_sha256": "72e27a955b7e764d746cd1a167b5c88466ac33ddd82c130e563ce5226cff3911"
+            },
+            {
+              "human_review": {
+                "expected_registry_binding_fingerprint": "6b33a1d8fea6d04a03f85d668b61ecd4f6ff7fd7de99f8b299d504e4d8b74441",
+                "png_sha256": null,
+                "reasons": [
+                  "character_id_missing_or_mismatch",
+                  "form_missing_or_mismatch",
+                  "library_tier_missing_or_mismatch",
+                  "view_missing_or_mismatch",
+                  "path_missing_or_mismatch",
+                  "review_contract_missing_or_mismatch",
+                  "registry_binding_fingerprint_kind_missing_or_mismatch",
+                  "criteria_incomplete",
+                  "explicit_current_pixels_confirmation_missing",
+                  "png_sha256_missing_or_stale",
+                  "registry_binding_fingerprint_missing_or_stale"
+                ],
+                "registry_binding_fingerprint": null,
+                "review_kind": "human",
+                "reviewed_at": "2026-07-21T14:59:58.315208+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "valid": false,
+                "verdict": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+              "png_sha256": "72e27a955b7e764d746cd1a167b5c88466ac33ddd82c130e563ce5226cff3911"
+            }
+          ],
+          "valid": false
+        },
+        "form": "“穿心复生态”",
+        "library_tier": "recurring_standard",
+        "turnaround_board": {
+          "human_review": {
+            "expected_registry_binding_fingerprint": null,
+            "png_sha256": null,
+            "reasons": [
+              "verdict_not_pass",
+              "reviewer_missing",
+              "review_kind_missing_or_invalid",
+              "reviewed_at_missing",
+              "character_id_missing_or_mismatch",
+              "form_missing_or_mismatch",
+              "library_tier_missing_or_mismatch",
+              "view_missing_or_mismatch",
+              "review_contract_missing_or_mismatch",
+              "registry_binding_fingerprint_kind_missing_or_mismatch",
+              "criteria_incomplete",
+              "explicit_current_pixels_confirmation_missing",
+              "png_missing_or_unreadable"
+            ],
+            "registry_binding_fingerprint": null,
+            "review_kind": null,
+            "reviewed_at": null,
+            "reviewer": null,
+            "valid": false,
+            "verdict": null
+          },
+          "path": null,
+          "png_sha256": null
+        },
+        "views": {
+          "back": {
+            "face_geometry": {
+              "center_y": 0.9049,
+              "confidence": "heuristic",
+              "face_height": 0.0371
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "784fd4f2216db492791d6ecac7b08271e6049361ba2c7cfea7f427fbb7770cd9",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.315276+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                103,
+                102,
+                102
+              ],
+              "bbox_normalized": [
+                0.1139,
+                0.0437,
+                0.8917,
+                0.9594
+              ],
+              "border_delta_p90": 8,
+              "centerline": 0.5028,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9594,
+              "head_top": 0.0437,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9156,
+              "subject_width": 0.7778
+            },
+            "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png",
+            "png_sha256": "587b9de963c9f053f0df55babcef3519d354350a5d9ccbed1ddc9455aa8890fc",
+            "view": "back"
+          },
+          "front": {
+            "face_geometry": {
+              "center_y": 0.3759,
+              "confidence": "heuristic",
+              "face_height": 0.0604
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "ba4c06eb0a1eaacffc953467d40424f46e141974df67f43bf032d5935b5279f1",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.315148+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                101,
+                101,
+                101
+              ],
+              "bbox_normalized": [
+                0.1028,
+                0.0375,
+                0.8889,
+                0.9641
+              ],
+              "border_delta_p90": 8,
+              "centerline": 0.4958,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9641,
+              "head_top": 0.0375,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9266,
+              "subject_width": 0.7861
+            },
+            "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+            "png_sha256": "f59bb1dabda858862bdefcd033a27d1c5548068aaa928750936c300c9fd4a9d2",
+            "view": "front"
+          },
+          "rear_three_quarter": {
+            "face_geometry": {
+              "center_y": 0.291,
+              "confidence": "heuristic",
+              "face_height": 0.0604
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "9966cd9997d67c3c41bfb6bb4033c050565af5d37c487839f9bbb8f09c42ef11",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.315264+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                107,
+                106,
+                106
+              ],
+              "bbox_normalized": [
+                0.1917,
+                0.0469,
+                0.8139,
+                0.9359
+              ],
+              "border_delta_p90": 9,
+              "centerline": 0.5028,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9359,
+              "head_top": 0.0469,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.8891,
+              "subject_width": 0.6222
+            },
+            "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+            "png_sha256": "0260df7443c2fa08f34e5c6661daa3f28002706fee4c77e2e455ca1a66d20774",
+            "view": "rear_three_quarter"
+          },
+          "side": {
+            "face_geometry": {
+              "center_y": 0.5224,
+              "confidence": "heuristic",
+              "face_height": 0.0783
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "70738bbb737a7916585900d26b6054ac3777529df2c3f5364f32e78d0a2e1027",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.315252+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                101,
+                101,
+                101
+              ],
+              "bbox_normalized": [
+                0.2528,
+                0.0344,
+                0.7139,
+                0.9719
+              ],
+              "border_delta_p90": 9,
+              "centerline": 0.4833,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9719,
+              "head_top": 0.0344,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.9375,
+              "subject_width": 0.4611
+            },
+            "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png",
+            "png_sha256": "80f54f059a1a2747bf40ca9a96351193fd91404c371260bc6145a2c027fce646",
+            "view": "side"
+          },
+          "three_quarter": {
+            "face_geometry": {
+              "center_y": 0.3307,
+              "confidence": "heuristic",
+              "face_height": 0.0419
+            },
+            "human_review": {
+              "expected_registry_binding_fingerprint": "7a8a144bdcbe0c758bdf7b0eb6f2be0cd53273259b001555757475cf84e96590",
+              "png_sha256": null,
+              "reasons": [
+                "character_id_missing_or_mismatch",
+                "form_missing_or_mismatch",
+                "library_tier_missing_or_mismatch",
+                "view_missing_or_mismatch",
+                "path_missing_or_mismatch",
+                "review_contract_missing_or_mismatch",
+                "registry_binding_fingerprint_kind_missing_or_mismatch",
+                "criteria_incomplete",
+                "explicit_current_pixels_confirmation_missing",
+                "png_sha256_missing_or_stale",
+                "registry_binding_fingerprint_missing_or_stale"
+              ],
+              "registry_binding_fingerprint": null,
+              "review_kind": "human",
+              "reviewed_at": "2026-07-21T14:59:58.315239+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "valid": false,
+              "verdict": "accepted"
+            },
+            "machine_evidence": {
+              "background_delta": 28,
+              "background_rgb": [
+                102,
+                102,
+                102
+              ],
+              "bbox_normalized": [
+                0.1278,
+                0.0453,
+                0.8583,
+                0.9437
+              ],
+              "border_delta_p90": 13,
+              "centerline": 0.4931,
+              "confidence": "heuristic",
+              "foot_bottom": 0.9437,
+              "head_top": 0.0453,
+              "image_size": {
+                "height": 1672,
+                "width": 941
+              },
+              "measurable": true,
+              "method": "border_median_foreground_bbox_v1",
+              "subject_height": 0.8984,
+              "subject_width": 0.7306
+            },
+            "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+            "png_sha256": "1814fce3c5e306a0b3eb691751612784f04a8a7dd0c789aa614a2382a019f390",
+            "view": "three_quarter"
+          }
+        }
+      }
+    ],
+    "human_review_required": [],
+    "notes": [],
+    "version": 2,
+    "view_contract": [
+      "front",
+      "three_quarter",
+      "side",
+      "rear_three_quarter",
+      "back"
+    ]
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

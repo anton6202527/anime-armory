@@ -4,15 +4,26 @@
   "project_root": ".",
   "chapter": "第2话",
   "stage": "image_preflight",
-  "created_at": "2026-07-22T11:47:04",
-  "verdict": "warn",
+  "created_at": "2026-07-22T14:49:33",
+  "verdict": "block",
   "summary": {
-    "finding_count": 7,
-    "block_count": 0,
+    "finding_count": 8,
+    "block_count": 1,
     "warn_count": 6,
     "info_count": 1
   },
   "findings": [
+    {
+      "severity": "block",
+      "dimension": "comic_gate",
+      "code": "panel_jobs_stale_contract",
+      "artifact": "出图/第2话/prompt/panel_jobs.json",
+      "reason": "这些格的落盘出图包与当前脚本/收尾/风格契约不一致（改了契约没重建出图包）：P001、P002、P003、P004、P005、P006、P007、P008、P009、P010、P011、P012、P013、P014、P015、P016",
+      "return_to_stage": "image",
+      "suggested_fix": "重跑 comic-image/scripts/build_panel_jobs.py（陈旧格自动回 planned），再重抽这些格。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
     {
       "severity": "info",
       "dimension": "comic_gate",
@@ -164,7 +175,7 @@
       {
         "path": "脚本/第2话/source_semantics.json",
         "exists": true,
-        "sha256": "8503aea563325706452ef72f5472baa0c470595595fa8117babff75857d49579",
+        "sha256": "0f5fa6313b4b15d50ee7bc617c342ebad5d3a25b3e986b42a42aab657e740bb3",
         "size": 12284
       },
       {
@@ -538,7 +549,7 @@
         "size": 52871
       }
     ],
-    "sha256": "c08ff696136c213ac526fb09fb15362489f6b8facaaaf19f138133f294b897f0"
+    "sha256": "d7e687025976eaf5c8eac20ce9fca07870b8b96ad746bad9cdeba93f13e57078"
   },
-  "receipt_id": "6653b15c11782d928ab41fa464ef103c1144b8c58e53afdf282457dead3b5b64"
+  "receipt_id": "ba395e762f0b8316b276f714a8dc263f1dbd62819a45d6964893f5bc0e997554"
 }

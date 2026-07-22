@@ -1,7 +1,7 @@
 {
   "audio_generated": false,
   "episode": "第2集",
-  "generated_at": "2026-07-22T06:27:42+00:00",
+  "generated_at": "2026-07-22T06:50:02+00:00",
   "kind": "n2d_timing_estimate",
   "lines": [
     {
@@ -343,7 +343,7 @@
       ],
       "end": 61.64,
       "estimated_duration_sec": 4.571,
-      "gap_after": 0.4,
+      "gap_after": 0.6,
       "idx": 15,
       "line_index": 16,
       "line_type": "character_dialogue",
@@ -363,14 +363,14 @@
         4.161,
         6.191
       ],
-      "end": 67.114,
+      "end": 67.314,
       "estimated_duration_sec": 5.074,
       "gap_after": 0.4,
       "idx": 16,
       "line_index": 17,
       "line_type": "character_dialogue",
       "split_suggested": false,
-      "start": 62.04,
+      "start": 62.24,
       "timing_basis": "text_estimate_no_audio",
       "文本": "不过你也别抱太大希望。说不定哪天，我就下去陪你了。",
       "时长": 5.074,
@@ -385,14 +385,14 @@
         3.455,
         5.14
       ],
-      "end": 71.727,
+      "end": 71.927,
       "estimated_duration_sec": 4.213,
       "gap_after": 0.0,
       "idx": 17,
       "line_index": 18,
       "line_type": "character_dialogue",
       "split_suggested": false,
-      "start": 67.514,
+      "start": 67.714,
       "timing_basis": "text_estimate_no_audio",
       "文本": "摹影只是第一步。那下一步，会把我变成什么？",
       "时长": 4.213,
@@ -408,7 +408,7 @@
     "voice_identity_approval"
   ],
   "policy": "time_basis_first_without_disposable_wav",
-  "source_fingerprint": "5ec97cecfecc07fcf9ff2f51492d774d207e51f8497326416b1968419d27c969",
+  "source_fingerprint": "2f3927c4177183a64f12ad665cf68ff2fc87b651b7327e6982872d7ac1590051",
   "source_path": "脚本/第2集/voiceover.txt",
   "status": "provisional",
   "suitable_for": [
@@ -419,7 +419,7 @@
   ],
   "summary": {
     "dialogue_lines": 18,
-    "duration_sec": 71.727,
+    "duration_sec": 71.927,
     "line_count": 18,
     "narration_or_offscreen_lines": 0,
     "split_suggested_lines": 0

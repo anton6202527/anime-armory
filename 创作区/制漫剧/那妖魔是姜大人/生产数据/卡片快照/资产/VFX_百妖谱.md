@@ -1,6 +1,6 @@
 # 道具卡 — 百妖谱（ID: VFX_百妖谱）
 
-- episode_scope: 第1集
+- episode_scope: 第2集
 - type: vfx
 - target_reference: `出图/共享/图片/定妆_特效_百妖谱.png`
 - source: `出图/共享/asset_registry.json`

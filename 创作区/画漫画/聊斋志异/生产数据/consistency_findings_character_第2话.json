@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "character_consistency",
+  "chapter": "第2话",
+  "created_at": "2026-07-22T15:24:28",
+  "summary": {
+    "character_count": 5,
+    "panel_binding_count": 32,
+    "finding_count": 18,
+    "block_count": 0,
+    "warn_count": 18,
+    "info_count": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "CHAR_JIA_CHILD",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "CHAR_JIA_CHILD CCIP 身份距离 0.2126 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_CHILD",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "CHAR_JIA_CHILD hair 指纹与参考图相似度偏低：score=0.341。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_CHILD",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "CHAR_JIA_CHILD hair 指纹与参考图相似度偏低：score=0.294。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_FATHER",
+      "panel_id": "P006",
+      "artifact": "出图/第2话/panels/P006.png",
+      "reason": "CHAR_JIA_FATHER hair 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "CHAR_JIA_MOTHER",
+      "panel_id": "P002",
+      "artifact": "出图/第2话/panels/P002.png",
+      "reason": "CHAR_JIA_MOTHER hair 指纹与参考图相似度偏低：score=0.431。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P004",
+      "artifact": "出图/第2话/panels/P004.png",
+      "reason": "MON_FOX_BROTHERS face 指纹与参考图相似度偏低：score=0.491。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_BROTHERS CCIP 身份距离 0.2107 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_BROTHERS face 指纹与参考图相似度偏低：score=0.392。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_BROTHERS hair 指纹与参考图相似度偏低：score=0.274。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_BROTHERS face 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_BROTHERS",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_BROTHERS hair 指纹与参考图相似度偏低：score=0.260。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_SERVANT CCIP 身份距离 0.2219 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_SERVANT face 指纹与参考图相似度偏低：score=0.438。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P007",
+      "artifact": "出图/第2话/panels/P007.png",
+      "reason": "MON_FOX_SERVANT hair 指纹与参考图相似度偏低：score=0.325。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P008",
+      "artifact": "出图/第2话/panels/P008.png",
+      "reason": "MON_FOX_SERVANT hair 指纹与参考图相似度偏低：score=0.438。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "ccip_identity_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_SERVANT CCIP 身份距离 0.196 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_SERVANT face 指纹与参考图相似度偏低：score=0.462。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    },
+    {
+      "severity": "warn",
+      "dimension": "character_consistency",
+      "code": "hair_fingerprint_low",
+      "character_id": "MON_FOX_SERVANT",
+      "panel_id": "P015",
+      "artifact": "出图/第2话/panels/P015.png",
+      "reason": "MON_FOX_SERVANT hair 指纹与参考图相似度偏低：score=0.281。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。"
+    }
+  ]
+}
