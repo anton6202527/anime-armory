@@ -1,0 +1,10 @@
+{
+  "kind":"n2d_shot_progression_plan","version":1,"episode":"第2集","status":"confirmed","generated_at":"2026-07-22T06:30:00+00:00",
+  "rules":{"establishing":"开场3秒用裴失焦眼、姜月初颤手、上方虎爪同一纵深关系完成微型定场；战后以侧面LS重建尸场。","scale_ladder":"ECU后果→MS三角→CU决心→LS扑击→MCU交错→ECU结果→主观系统→CU情绪。","peak_closeup":"斩击峰值给姜月初眼睛与刀柄CU，命中结果给虎首落地insert；圆满刀法给重新握刀CU。","movement_motivation":"只在威胁逼近、道行灌注、动作交错和系统力量倒灌时运动；悔意段固定机位。"},
+  "progressions":[
+    {"beat_id":"Beat_01","start_shot_size":"ECU","peak_shot_size":"CU","release_shot_size":"MS","camera_move":"刀尖微拉到三角关系，再缓推姜月初眼睛","camera_motivation":"由杀人后果揭示仍在逼近的虎爪，再把选择收回她的眼神","must_have_insert_or_reaction":"裴瞳孔失焦、血滴、百妖谱二十年overlay、姜月初聚焦反应"},
+    {"beat_id":"Beat_02","start_shot_size":"LS","peak_shot_size":"MCU/CU","release_shot_size":"LS","camera_move":"虎扑短跟、灌刀环绕不超过15度、交错固定侧拍、虎首落地硬切","camera_motivation":"速度交给主体与背景，不用大幅乱摇；命中瞬间必须让接触关系可读","must_have_insert_or_reaction":"虎爪将触未触、双手握刀、刀弧遮挡命中、主角单膝落势、虎首后落"},
+    {"beat_id":"Beat_03","start_shot_size":"CU","peak_shot_size":"ECU","release_shot_size":"MCU","camera_move":"从血滴上摇到谱页，墨线成虎缓推，力量倒灌快速拉近后定住","camera_motivation":"由现实妖血进入系统摹影，再回到主角身体状态变化","must_have_insert_or_reaction":"七十五年扣除overlay、墨虎眼亮、姜月初伤势恢复、握刀契合"},
+    {"beat_id":"Beat_04","start_shot_size":"MCU","peak_shot_size":"CU","release_shot_size":"ECU","camera_move":"状态结算固定，走回裴尸体轻跟，合眼后缓推谱影虎眼","camera_motivation":"从能力理解回落到代价，再把悬念聚焦于摹影进阶","must_have_insert_or_reaction":"25年余额、合眼手部、姜月初前3/4悔意脸、虎影眼睛短亮"}
+  ]
+}

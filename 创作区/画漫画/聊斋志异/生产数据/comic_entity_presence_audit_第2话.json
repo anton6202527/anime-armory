@@ -1,0 +1,109 @@
+{
+  "kind": "comic_entity_presence_audit",
+  "version": 1,
+  "generated_at": "2026-07-22T03:47:03+00:00",
+  "chapter": "第2话",
+  "summary": {
+    "panels": 16,
+    "registry_entities": 17,
+    "panels_with_schedule": 0,
+    "must": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "findings": [],
+  "derived_schedule": {
+    "P001": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "MON_FOX_SERVANT",
+      "PROP_FAKE_FOX_TAIL"
+    ],
+    "P002": [
+      "CHAR_JIA_CHILD",
+      "CHAR_JIA_MOTHER",
+      "LOC_JIA_HOME",
+      "MON_FOX_BROTHERS"
+    ],
+    "P003": [
+      "CHAR_JIA_CHILD",
+      "CHAR_JIA_MOTHER",
+      "LOC_JIA_HOME"
+    ],
+    "P004": [
+      "CHAR_JIA_CHILD",
+      "LOC_JIA_HOME",
+      "MON_FOX_BROTHERS"
+    ],
+    "P005": [
+      "CHAR_JIA_CHILD",
+      "LOC_HE_GARDEN"
+    ],
+    "P006": [
+      "CHAR_JIA_CHILD",
+      "CHAR_JIA_FATHER",
+      "LOC_JIA_HOME"
+    ],
+    "P007": [
+      "CHAR_JIA_CHILD",
+      "LOC_HE_GARDEN",
+      "MON_FOX_BROTHERS",
+      "MON_FOX_SERVANT"
+    ],
+    "P008": [
+      "CHAR_JIA_CHILD",
+      "LOC_HE_GARDEN",
+      "MON_FOX_SERVANT"
+    ],
+    "P009": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "PROP_FAKE_FOX_TAIL",
+      "PROP_POISON_WINE"
+    ],
+    "P010": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "PROP_FAKE_FOX_TAIL",
+      "PROP_POISON_WINE"
+    ],
+    "P011": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "MON_FOX_SERVANT",
+      "PROP_FAKE_FOX_TAIL"
+    ],
+    "P012": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "MON_FOX_SERVANT",
+      "PROP_FAKE_FOX_TAIL",
+      "PROP_POISON_WINE"
+    ],
+    "P013": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "MON_FOX_SERVANT",
+      "PROP_POISON_WINE"
+    ],
+    "P014": [
+      "CHAR_JIA_CHILD",
+      "LOC_MARKET_STREET",
+      "MON_FOX_SERVANT",
+      "PROP_POISON_WINE"
+    ],
+    "P015": [
+      "CHAR_JIA_CHILD",
+      "LOC_HE_GARDEN",
+      "MON_FOX_BROTHERS",
+      "MON_FOX_SERVANT",
+      "PROP_POISON_WINE"
+    ],
+    "P016": [
+      "CHAR_JIA_CHILD",
+      "CHAR_JIA_FATHER",
+      "LOC_HE_GARDEN",
+      "PROP_FAKE_FOX_TAIL"
+    ]
+  }
+}

@@ -67,6 +67,19 @@ def read_setting(root: Path, key: str, default: str) -> str:
     return default
 
 
+# Only these settings change name-board geometry.  Binding the human approval to
+# a hash of this subset (instead of the whole _设置.md) means editing a
+# generation-only setting (生图模型/生图渠道/网点策略…) no longer stales an
+# already-approved name board and forces a fresh submit-review/approve cycle.
+GEOMETRY_SETTING_KEYS = ("漫画形态", "阅读方向", "页面尺寸", "原稿规格")
+
+
+def settings_geometry_sha256(root: Path) -> str:
+    values = {key: read_setting(root, key, "") for key in GEOMETRY_SETTING_KEYS}
+    payload = json.dumps(values, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def parse_width(value: str, default: int = 1440) -> int:
     match = re.match(r"\s*(\d+)\s*x", value)
     if match:
@@ -525,6 +538,7 @@ def build_name_board(root: Path, chapter: str) -> dict[str, Any]:
             "panel_script_sha256": sha256_file(panel_path),
             "settings": "_设置.md",
             "settings_sha256": sha256_file(settings_path),
+            "settings_geometry_sha256": settings_geometry_sha256(root),
         },
         "approval": {},
     }
@@ -574,7 +588,13 @@ def verify_upstream(root: Path, chapter: str, board: dict[str, Any]) -> list[str
     panel_path = root / "脚本" / chapter / "panel_script.json"
     if receipt.get("panel_script_sha256") != sha256_file(panel_path):
         errors.append("panel_script 已变化，当前缩略分镜/name board 已 stale")
-    if receipt.get("settings_sha256") != sha256_file(root / "_设置.md"):
+    # Prefer the geometry-subset hash; fall back to the whole-file hash only for
+    # legacy receipts written before the subset existed (they re-approve once,
+    # then get the narrower binding).
+    if "settings_geometry_sha256" in receipt:
+        if receipt.get("settings_geometry_sha256") != settings_geometry_sha256(root):
+            errors.append("影响几何的设置（漫画形态/阅读方向/页面尺寸/原稿规格）已变化，当前缩略分镜/name board 已 stale")
+    elif receipt.get("settings_sha256") != sha256_file(root / "_设置.md"):
         errors.append("_设置.md 已变化，当前缩略分镜/name board 已 stale")
     return errors
 
@@ -616,6 +636,7 @@ def transition_existing(
             "subject_sha256": approval_subject_sha256(board),
             "panel_script_sha256": (board.get("upstream_receipt") or {}).get("panel_script_sha256", ""),
             "settings_sha256": (board.get("upstream_receipt") or {}).get("settings_sha256", ""),
+            "settings_geometry_sha256": (board.get("upstream_receipt") or {}).get("settings_geometry_sha256", ""),
         }
     else:
         raise NameBoardError(f"未知状态：{target}")

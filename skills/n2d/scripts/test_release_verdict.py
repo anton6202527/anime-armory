@@ -342,3 +342,40 @@ def test_identity_drift_skip_face_skeleton_blocks_strict(tmp_path: Path) -> None
 def test_identity_drift_missing_report_warns_strict_only(tmp_path: Path) -> None:
     assert release_verdict.check_identity_drift(tmp_path, "第1集", "commercial")["status"] == "warn"
     assert release_verdict.check_identity_drift(tmp_path, "第1集", "demo")["status"] == "pass"
+
+
+# ── release_verdict.check_gate 新鲜度耦合（Finding 1 回归）──────────────────────
+# 绿闸（block=0）也必须证明 gate 凭据对应当前产物：video/compose 重出 clip/母版后旧绿不算数。
+# 此前 check_gate 只数 block、无视 inputs_fingerprint → 陈旧绿闸误判 pass。
+def test_check_gate_blocks_when_receipt_fingerprint_is_stale(tmp_path: Path) -> None:
+    root = tmp_path
+    episode = "第1集"
+    clip = root / "出视频" / episode / "视频" / "Clip_01.mp4"
+    clip.parent.mkdir(parents=True, exist_ok=True)
+    clip.write_bytes(b"clip-v1")
+    fp = artifact_fingerprint(str(root), [f"出视频/{episode}/视频/Clip_01.mp4"])
+    _write_json(root / "生产数据" / f"gate_findings_video_{episode}.json", {
+        "kind": "n2d_consistency_findings", "version": 1, "gate_stage": "video",
+        "findings": [], "summary": {"severity": {"block": 0, "warn": 0}},
+        "inputs_fingerprint": fp,
+    })
+    # 绿且新鲜 → pass
+    assert release_verdict.check_gate(root, episode)["status"] == "pass"
+    # 闸后重出 clip → 指纹陈旧 → block（旧绿不算数）
+    clip.write_bytes(b"clip-v2-REGENERATED")
+    verdict = release_verdict.check_gate(root, episode)
+    assert verdict["status"] == "block"
+    assert "陈旧" in verdict["message"] and "video" in verdict["message"]
+
+
+def test_check_gate_warns_when_receipt_lacks_verifiable_fingerprint(tmp_path: Path) -> None:
+    root = tmp_path
+    episode = "第1集"
+    _write_json(root / "生产数据" / f"gate_findings_compose_{episode}.json", {
+        "kind": "n2d_consistency_findings", "version": 1, "gate_stage": "compose",
+        "findings": [], "summary": {"severity": {"block": 0, "warn": 0}},
+        # 无 inputs_fingerprint（旧报告）
+    })
+    verdict = release_verdict.check_gate(root, episode)
+    assert verdict["status"] == "warn"
+    assert "inputs_fingerprint" in verdict["message"]

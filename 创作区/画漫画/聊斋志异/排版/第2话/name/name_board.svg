@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="486" viewBox="0 0 1012 486">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">阴天市街窄巷，十岁贾儿侧身掀开短褐下摆，腰带上系着一条棕红假狐…</text>
+<rect x="46" y="131" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="146">P002</text>
+<text class="note" x="51" y="161">深夜东卧房外，贾儿抱膝坐在画左门槛边不敢睡；紧闭的薄门内映出母…</text>
+<rect x="57" y="200" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="215">P003</text>
+<text class="note" x="62" y="230">白日却昏暗的卧房，母亲背对画面把最后一块砖压进木格窗；矮桌边厨…</text>
+<rect x="46" y="248" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="263">P004</text>
+<text class="note" x="51" y="278">夜里门隙前，一只赤狐正低身窜逃；贾儿从画左掀开覆灯的葫芦瓢，另…</text>
+<rect x="57" y="318" width="242" height="42" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="333">P005</text>
+<text class="note" x="62" y="348">黎明冷光里，贾儿蹲在青砖墙根，左手捏着一截湿血狐尾，右手指向跨…</text>
+<rect x="46" y="366" width="264" height="63" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="381">P006</text>
+<text class="note" x="51" y="396">夜间贾家院内，父亲用双手死死拉住东卧房门闩，木门却向画左自行裂…</text>
+<text class="note" x="38" y="448">hook: P006 false_relief</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="374" y="62" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="77">P007</text>
+<text class="note" x="379" y="92">月初升，贾儿伏在画左竹丛下，只露一只眼与压住竹叶的小手；中景矮…</text>
+<rect x="385" y="146" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="161">P008</text>
+<text class="note" x="390" y="176">何氏园庭石上，长须狐仆侧卧假寐，老棕短衣掀开少许，腰后垂下一条…</text>
+<rect x="385" y="204" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="219">P009</text>
+<text class="note" x="390" y="234">县城市街帽肆前，贾儿踮脚把铜钱推上木柜，另一手抓住一条棕红狐尾…</text>
+<rect x="396" y="262" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="277">P010</text>
+<text class="note" x="401" y="281">无人暗巷石阶上，贾儿半跪，用折起的纸槽把少量猎药粉准确倒入粗陶…</text>
+<rect x="385" y="294" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="309">P011</text>
+<text class="note" x="390" y="324">拥挤市街中，长须狐仆穿老棕短衣从画右走向酒肆；贾儿系好假尾，借…</text>
+<rect x="374" y="352" width="264" height="77" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="367">P012</text>
+<text class="note" x="379" y="382">市街侧巷，贾儿压低声音，左手提起衣摆露出腰带假尾，右手把粗陶酒…</text>
+<text class="note" x="366" y="448">hook: P012 turning_point</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="713" y="62" width="242" height="63" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="77">P013</text>
+<text class="note" x="718" y="92">狐仆靠墙低声指向巷外两个方向，贾儿仰头听着，藏在背后的手攥紧酒…</text>
+<rect x="702" y="131" width="264" height="95" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="146">P014</text>
+<text class="note" x="707" y="161">贾儿双手把封好的粗陶酒壶递向狐仆；狐仆笑着伸双手接壶，酒壶悬在…</text>
+<rect x="702" y="232" width="264" height="95" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="247">P015</text>
+<text class="note" x="707" y="262">何氏园清晨，贾儿独自提灯站在画右前景，亭边两只赤狐与草中一只秃…</text>
+<rect x="702" y="334" width="264" height="95" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="349">P016</text>
+<text class="note" x="707" y="364">清晨何氏园月门外，父亲蹲下与贾儿平视，一手按在孩子肩上；贾儿已…</text>
+<text class="note" x="694" y="448">hook: P016 closure</text>
+</svg>

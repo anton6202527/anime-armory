@@ -26,6 +26,77 @@
       ],
       "exit_state": {"entities": {"CHAR_WANG": {"life_state": "revived_with_permanent_scar"}, "CHAR_CHEN": {"agency_state": "humiliated_but_active_savior"}, "MON_PAINTED_SKIN": {"existence_state": "beheaded_and_sealed_as_smoke"}}},
       "status": "confirmed"
+    },
+    {
+      "chapter": "第2话",
+      "working_title": "贾儿",
+      "chapter_type": "one_shot",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_JIA_CHILD",
+          "source_path": "源本/贾儿_源文选段.txt",
+          "whole_file": true
+        }
+      ],
+      "reader_promise": "首屏先看十岁孩子戴着假狐尾混入妖群；随后追看他如何在母亲被狐祟、父亲与驱禳都失效时，独自识破巢穴、套出真话并借一壶酒反杀三狐。",
+      "core_conflict": "狐妖控制母亲并反复潜入家中，成人束手无策；十岁贾儿必须在不能泄露计划、力量又远逊妖物的条件下靠观察与伪装救母。",
+      "turning_point": "贾儿在市上戴假狐尾冒充同类，骗长鬣狐仆说出两位狐主正是祟母之妖，并让对方主动接走毒酒。",
+      "payoff": "三狐饮下毒酒毙命，母亲当夜安睡并逐渐痊愈；父亲终于看懂孩子的沉默与胆识，称他为‘讨狐之陈平’。",
+      "ending_mode": "complete_closure",
+      "budget": {
+        "unit": "panels",
+        "target": 16,
+        "soft_range": [15, 18]
+      },
+      "entry_state": {
+        "entities": {
+          "CHAR_WANG": {"life_state": "revived_with_permanent_scar"},
+          "CHAR_CHEN": {"agency_state": "humiliated_but_active_savior"},
+          "MON_PAINTED_SKIN": {"existence_state": "beheaded_and_sealed_as_smoke"},
+          "CHAR_JIA_CHILD": {"agency_state": "watchful_but_powerless"},
+          "CHAR_JIA_MOTHER": {"health_state": "fox_possessed"},
+          "MON_FOX_BROTHERS": {"threat_state": "hidden_and_active"}
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "MON_FOX_BROTHERS",
+          "field": "threat_state",
+          "from": "hidden_and_active",
+          "to": "dead",
+          "panel_id": "P015",
+          "reason": "贾儿骗狐仆取走掺药白酒，三狐在何氏园饮后毙命。"
+        },
+        {
+          "entity_id": "CHAR_JIA_MOTHER",
+          "field": "health_state",
+          "from": "fox_possessed",
+          "to": "released_and_recovering",
+          "panel_id": "P015",
+          "reason": "三狐毙命后她当夜安睡，神志与身体随后恢复。"
+        },
+        {
+          "entity_id": "CHAR_JIA_CHILD",
+          "field": "agency_state",
+          "from": "watchful_but_powerless",
+          "to": "proven_strategist",
+          "panel_id": "P016",
+          "reason": "父亲发现三狐尸身与秃尾证据，理解并认可孩子完整的反制计划。"
+        }
+      ],
+      "exit_state": {
+        "entities": {
+          "CHAR_WANG": {"life_state": "revived_with_permanent_scar"},
+          "CHAR_CHEN": {"agency_state": "humiliated_but_active_savior"},
+          "MON_PAINTED_SKIN": {"existence_state": "beheaded_and_sealed_as_smoke"},
+          "CHAR_JIA_CHILD": {"agency_state": "proven_strategist"},
+          "CHAR_JIA_MOTHER": {"health_state": "released_and_recovering"},
+          "MON_FOX_BROTHERS": {"threat_state": "dead"}
+        }
+      },
+      "status": "confirmed"
     }
   ]
 }

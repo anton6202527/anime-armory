@@ -3,35 +3,35 @@
   "clips": [
     {
       "audio_streams": [],
-      "clip": "Clip_02_part3",
+      "clip": "Clip_02_part1",
       "clip_index": 2,
-      "duration_sec": 4.016016,
-      "file": "Clip_02_一炷香前的荒野死局_part3.mp4",
+      "duration_sec": 5.791667,
+      "file": "Clip_02_一炷香前的荒野死局_part1.mp4",
       "file_clip": "Clip_02",
-      "fps": 24.149,
+      "fps": 24.0,
       "frames": [
         {
           "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_3603d32c4fde_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_02_mid.jpg",
-          "time_sec": 2.008
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_3603d32c4fde_02_mid.jpg",
+          "time_sec": 2.896
         },
         {
           "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_03_end.jpg",
-          "time_sec": 3.816
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_3603d32c4fde_03_end.jpg",
+          "time_sec": 5.592
         }
       ],
       "has_audio": false,
       "height": 1280,
-      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
@@ -52,7 +52,27 @@
     "rewritten_reports": 0
   },
   "frame_store": "生产数据/video_qc/第1集/_frames",
-  "intra_clips": [],
+  "intra_clips": [
+    {
+      "clip": "Clip_02_part1",
+      "double_frame": false,
+      "file": "Clip_02_一炷香前的荒野死局_part1.mp4",
+      "file_clip": "Clip_02",
+      "lens": "",
+      "max_dist": 30,
+      "pairs": [
+        {
+          "color_dist": 0.0564,
+          "dist": 30
+        },
+        {
+          "color_dist": 0.0364,
+          "dist": 29
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
   "kind": "n2d_video_qc",
   "machine_notes": [
     "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
@@ -61,27 +81,40 @@
     "delivery_mismatch_warns": 0,
     "intra_blocks": 0,
     "intra_checked": 1,
-    "intra_warns": 0,
+    "intra_warns": 1,
     "seam_blocks": 0,
-    "seam_info": 0,
+    "seam_info": 1,
     "seam_warns": 1,
-    "seams_checked": 1
+    "seams_checked": 2
   },
   "root": ".",
   "seams": [
     {
-      "color_dist": 0.1921,
+      "color_dist": 0.2761,
       "color_verdict": "warn",
-      "dist": 31,
+      "dist": 27,
       "from_clip": "Clip_01",
       "same_scene_color_jump": true,
       "seam_mode": "intentional_discontinuity",
       "strictness": "info",
-      "struct_verdict": "block",
+      "struct_verdict": "warn",
       "to_clip": "Clip_02",
       "transition": "时间回切。",
       "verdict": "warn",
-      "verdict_if_relay": "block"
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.0312,
+      "color_verdict": "ok",
+      "dist": 23,
+      "from_clip": "Clip_02",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_03",
+      "transition": "视线切裴长青。",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
     }
   ],
   "version": 1

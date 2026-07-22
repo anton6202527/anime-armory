@@ -155,6 +155,31 @@ def read_setting(root: Path, key: str, default: str) -> str:
     return default
 
 
+# Only these settings change layout geometry (geometry_profile / canvas / segment
+# height).  Binding the human approval to a hash of this subset instead of the
+# whole _设置.md means a generation-only setting edit no longer stales an
+# already-approved layout and forces a fresh submit-review/approve cycle.
+GEOMETRY_SETTING_KEYS = ("漫画形态", "阅读方向", "页面尺寸", "原稿规格", "单话分段高度")
+# Must mirror comic-name's GEOMETRY_SETTING_KEYS exactly (layout re-implements
+# name-board verification for cross-line independence, so it recomputes the name
+# board's own geometry hash — a different key set would never match).
+NAME_GEOMETRY_SETTING_KEYS = ("漫画形态", "阅读方向", "页面尺寸", "原稿规格")
+
+
+def _settings_subset_sha256(root: Path, keys: tuple[str, ...]) -> str:
+    values = {key: read_setting(root, key, "") for key in keys}
+    payload = json.dumps(values, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def settings_geometry_sha256(root: Path) -> str:
+    return _settings_subset_sha256(root, GEOMETRY_SETTING_KEYS)
+
+
+def name_settings_geometry_sha256(root: Path) -> str:
+    return _settings_subset_sha256(root, NAME_GEOMETRY_SETTING_KEYS)
+
+
 def parse_width(value: str, default: int = 1440) -> int:
     match = re.match(r"\s*(\d+)\s*x", value)
     if match:
@@ -221,7 +246,10 @@ def verify_name_board(
     receipt = name_board.get("upstream_receipt") if isinstance(name_board.get("upstream_receipt"), dict) else {}
     if receipt.get("panel_script_sha256") != sha256_file(root / "脚本" / chapter / "panel_script.json"):
         errors.append("name_board 的 panel_script SHA 已过期")
-    if receipt.get("settings_sha256") != sha256_file(root / "_设置.md"):
+    if "settings_geometry_sha256" in receipt:
+        if receipt.get("settings_geometry_sha256") != name_settings_geometry_sha256(root):
+            errors.append("name_board 的几何设置 SHA 已过期")
+    elif receipt.get("settings_sha256") != sha256_file(root / "_设置.md"):
         errors.append("name_board 的 settings SHA 已过期")
     approval = name_board.get("approval") if isinstance(name_board.get("approval"), dict) else {}
     if name_board.get("workflow_status") != "approved" or approval.get("status") != "approved":
@@ -648,6 +676,7 @@ def build_layout(
             "name_approval_subject_sha256": ((name_board.get("approval") or {}).get("subject_sha256") if isinstance(name_board.get("approval"), dict) else ""),
             "settings": "_设置.md",
             "settings_sha256": sha256_file(root / "_设置.md"),
+            "settings_geometry_sha256": settings_geometry_sha256(root),
             "legacy_name_waiver": bool(allow_legacy_name and name_board.get("schema_version") != 2),
         },
         "approval": {},
@@ -739,11 +768,17 @@ def verify_layout_upstream(
     current = {
         "panel_script_sha256": sha256_file(root / "脚本" / chapter / "panel_script.json"),
         "name_board_sha256": sha256_file(root / "排版" / chapter / "name_board.json"),
-        "settings_sha256": sha256_file(root / "_设置.md"),
     }
     for key, value in current.items():
         if receipt.get(key) != value:
             errors.append(f"layout upstream {key} 已过期")
+    # Prefer the geometry-subset hash; fall back to whole-file only for legacy
+    # receipts written before the subset existed.
+    if "settings_geometry_sha256" in receipt:
+        if receipt.get("settings_geometry_sha256") != settings_geometry_sha256(root):
+            errors.append("影响几何的设置（漫画形态/阅读方向/页面尺寸/原稿规格/单话分段高度）已变化，layout 已过期")
+    elif receipt.get("settings_sha256") != sha256_file(root / "_设置.md"):
+        errors.append("layout upstream settings_sha256 已过期")
     return errors
 
 
@@ -789,6 +824,7 @@ def transition_existing(
             "panel_script_sha256": (layout.get("upstream_receipt") or {}).get("panel_script_sha256", ""),
             "name_board_sha256": (layout.get("upstream_receipt") or {}).get("name_board_sha256", ""),
             "settings_sha256": (layout.get("upstream_receipt") or {}).get("settings_sha256", ""),
+            "settings_geometry_sha256": (layout.get("upstream_receipt") or {}).get("settings_geometry_sha256", ""),
         }
     else:
         raise LayoutError(f"未知状态：{target}")

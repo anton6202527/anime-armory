@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "kind": "comic_character_view_generation",
+  "chapter": "第2话",
+  "created_at": "2026-07-22T11:07:17",
+  "characters": [
+    "MON_FOX_SERVANT",
+    "MON_FOX_BROTHERS"
+  ],
+  "views": [
+    "front",
+    "face"
+  ],
+  "backend": "auto",
+  "attempted_backends": [
+    "codex",
+    "dreamina"
+  ],
+  "codex_execution_mode": "isolated_ephemeral_workdir",
+  "max_attempts_total": 1,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第2话.json",
+  "previous_manifest_archive": "生产数据/history/comic_identity_views_第2话__20260722T110717135965.json",
+  "previous_manifest_sha256": "43148f0bd2346f44befe675e72cd45b5afb381116bfca167bfea6be3a8b2faf5",
+  "contact_sheet": "生产数据/comic_identity_views_第2话_contact_sheet.jpg",
+  "generated": 0,
+  "skipped": 4,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-22T11:07:16",
+      "status": "character_view_reused",
+      "ref_id": "MON_FOX_SERVANT",
+      "view": "front",
+      "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+      "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+      "anchor_path": "",
+      "anchor_kind": "registry_anchor",
+      "backend": "",
+      "model": "",
+      "attempt": ""
+    },
+    {
+      "ts": "2026-07-22T11:07:16",
+      "status": "character_view_reused",
+      "ref_id": "MON_FOX_SERVANT",
+      "view": "face",
+      "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+      "sha256": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+      "anchor_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "",
+      "model": "",
+      "attempt": ""
+    },
+    {
+      "ts": "2026-07-22T11:07:17",
+      "status": "character_view_reused",
+      "ref_id": "MON_FOX_BROTHERS",
+      "view": "front",
+      "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+      "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+      "anchor_path": "",
+      "anchor_kind": "registry_anchor",
+      "backend": "",
+      "model": "",
+      "attempt": ""
+    },
+    {
+      "ts": "2026-07-22T11:07:17",
+      "status": "character_view_reused",
+      "ref_id": "MON_FOX_BROTHERS",
+      "view": "face",
+      "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+      "sha256": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+      "anchor_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "",
+      "model": "",
+      "attempt": ""
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "kind":"n2d_edit_rhythm_map","version":1,"episode":"第2集","status":"confirmed","generated_at":"2026-07-22T06:30:00+00:00",
+  "timeline":{"first_3s_hook":"裴长青失焦眼、姜月初带血颤手、上方虎爪同屏，静音即读懂杀人后仍将被杀。","first_6s_proposition":"系统宣布二十年道行，明确本集看点是她能否把杀人代价变成反杀。","hook_cadence":"约0秒杀人后果、12秒二十年到账、28秒尽付一刀、42秒断首、52秒百年反转、75秒圆满刀法、100秒摹影隐患。","cliffhanger":"虎山神谱影眼睛短亮，姜月初问下一步会把自己变成什么，问题未回答即切黑。"},
+  "beats":[
+    {"beat_id":"Beat_01","estimated_seconds":"0-24s","tempo":"后果短拍→压迫长镜→系统重音→决心加速","reaction_cut":"二十年到账后姜月初瞳孔聚焦","sound_or_bgm_cue":"刀拔短响后低频抽空；二十年落字一记心跳；虎爪风声持续逼近"},
+    {"beat_id":"Beat_02","estimated_seconds":"24-50s","tempo":"蓄力慢长→扑击碎切→命中顿帧→战后留白","reaction_cut":"姜月初单膝落地、等待结果的一息","sound_or_bgm_cue":"爪风与战鼓加速；斩字前0.15秒抽真空；命中同帧低频drop；落首后1秒静默"},
+    {"beat_id":"Beat_03","estimated_seconds":"50-82s","tempo":"百年重音→选择短拍→摹影慢奇观→圆满硬切","reaction_cut":"姜月初伤势恢复后重新握刀的惊异","sound_or_bgm_cue":"百年低频重音；古卷与墨滴声；圆满落字金属泛音上扬并收束"},
+    {"beat_id":"Beat_04","estimated_seconds":"82-108s","tempo":"状态结算短拍→悔意长镜→虎眼ECU悬断","reaction_cut":"替裴合眼后手停半拍","sound_or_bgm_cue":"埙残气和荒风；结尾反向低虎啸，切黑静音"}
+  ]
+}

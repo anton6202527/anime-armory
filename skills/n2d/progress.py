@@ -204,10 +204,16 @@ def _verify_dag_prereqs(root, ep, col, val):
 
 
 def do_set(root, ep, col, val):
-    _verify_gate_receipt(root, ep, col, val)
-    _verify_dag_prereqs(root, ep, col, val)
     p = prog_path(root)
     with progress_lock(root):
+        # 凭据/DAG 校验移入锁内：`_verify_dag_prereqs` 读 `_进度.md` 判上游列，必须与随后的
+        # 写入对**同一快照**原子。否则并发 worker（batch runner --limit>1）或 update_plan 回滚
+        # 会在「读校验」与「加锁写入」之间改动上游列 → 校验基于陈旧快照通过，却写下压在非法
+        # 上游之上的下游 ✅（TOCTOU）。progress_lock 文档承诺 serialize read-modify-write——
+        # read（校验读表）此前漏在锁外，此处补齐。两个校验均不自持锁、失败 sys.exit(2)（经 finally
+        # 正常释放锁），移入安全。
+        _verify_gate_receipt(root, ep, col, val)
+        _verify_dag_prereqs(root, ep, col, val)
         lines = open(p, encoding='utf-8').read().split('\n')
         header = None; hidx = {}
         for i, ln in enumerate(lines):

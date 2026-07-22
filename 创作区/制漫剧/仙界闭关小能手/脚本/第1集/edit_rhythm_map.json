@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_edit_rhythm_map", "version": 1, "episode": "第1集", "status": "confirmed",
-  "timeline": {"first_3s_hook": "巨掌压肩、瘦小少年被围笑", "first_6s_proposition": "被嫌弃少年遭仙门底层压榨", "hook_cadence": "0秒受辱/12秒苦役/24秒主动选择/38秒异物/46秒幽光", "cliffhanger": "幽光硬断，第2集承接盆中水异常"},
-  "beats": [
-    {"beat_id": "Beat_01", "estimated_seconds": "约12秒", "tempo": "短促硬切→压迫慢推→反应定住", "reaction_cut": "贺平生垂眼短答", "sound_or_bgm_cue": "哄笑骤停，二十趟落木击"},
-    {"beat_id": "Beat_02", "estimated_seconds": "约20秒", "tempo": "背景压缩→劳作碎切→选择放慢", "reaction_cut": "看巨缸后重新起担", "sound_or_bgm_cue": "脚步水声逐渐加快"},
-    {"beat_id": "Beat_03", "estimated_seconds": "约14秒", "tempo": "计数加速→发现骤慢→ECU留白", "reaction_cut": "自嘲一笑后留给观众", "sound_or_bgm_cue": "反向水滴+静音半拍+泛音"}
-  ]
-}

@@ -1753,6 +1753,70 @@ def _unique(items: Iterable[Any]) -> List[str]:
     return out
 
 
+# 各 gate stage 的「新鲜度锚定产物」globs（相对作品根）。收据 inputs_fingerprint 必须覆盖
+# **本阶段所认证的产物 + 上游身份真值**，否则「绿闸」的指纹只剩 storyboard.json：闸后换脸/重出
+# PNG/改角色卡都判 fresh，等于闸验声明不验现实（正是 gate_receipt 模块要堵的洞）。
+# 只锚定内容型真值（PNG/MP4/prompt/角色卡/字幕），不含机器每轮重写的账本。glob 在盖章时快照展开；
+# 记录列表内文件被改/删即失配（fingerprint_is_fresh 按记录键重算）——闸后重出/换素材必被抓。
+_GATE_FRESHNESS_GLOBS: Dict[str, Tuple[str, ...]] = {
+    "image": (
+        "出图/{ep}/图片/**/*.png",
+        "出图/共享/图片/**/*.png",
+        "出图/{ep}/prompt/**/*.md",
+        "出图/共享/prompt/**/*.md",
+        "设定库/characters/**/*.md",
+        "设定库/characters/**/*.json",
+    ),
+    "video": (
+        "出视频/{ep}/视频/**/*.mp4",
+        "出视频/{ep}/prompt/**/*.md",
+        "出图/{ep}/图片/**/*.png",
+        "设定库/characters/**/*.md",
+        "设定库/characters/**/*.json",
+    ),
+    "compose": (
+        "合成/{ep}/成片*.mp4",
+        "出视频/{ep}/视频/**/*.mp4",
+        "脚本/{ep}/字幕_中文.srt",
+        "脚本/{ep}/字幕_英文.srt",
+    ),
+    "review": (
+        "合成/{ep}/成片*.mp4",
+    ),
+}
+# preflight（花钱前）与落档回验共用同一组锚定：preflight 时产物多半尚不存在，glob 展开为空、
+# 指纹自然只含 storyboard（preflight 收据本就不授权进度 ✅，见 gate_receipt.ENFORCED_COLUMN_GATE_STAGE）。
+_GATE_FRESHNESS_GLOBS["image_preflight"] = _GATE_FRESHNESS_GLOBS["image"]
+_GATE_FRESHNESS_GLOBS["video_preflight"] = _GATE_FRESHNESS_GLOBS["video"]
+# prompt-preflight（写 prompt 前的闸）同族：产物多半尚未生成，glob 展开为空无害；
+# 但 video_prompt_preflight 要核验已就绪的首帧 PNG、image_prompt_preflight 要核验角色卡/上游，
+# 漏登记会让这两个 stage 的收据退回 storyboard-only。GATE_STAGES 全集必须都有锚定（下方测试守 set 相等）。
+_GATE_FRESHNESS_GLOBS["image_prompt_preflight"] = _GATE_FRESHNESS_GLOBS["image"]
+_GATE_FRESHNESS_GLOBS["video_prompt_preflight"] = _GATE_FRESHNESS_GLOBS["video"]
+
+
+def _gate_freshness_extra_files(root: str, episode: str, stage: str) -> List[str]:
+    """本阶段新鲜度锚定产物的**具体**相对路径（glob 在盖章时快照展开，只取现存文件）。
+
+    与 findings 无关：即使 0 findings（绿闸），也覆盖本阶段认证的 PNG/MP4/prompt + 角色卡，
+    使闸后任何对这些文件的修改/删除都让收据 stale，逼重跑闸门再回写进度完成态。"""
+    ep = normalize_episode(episode)
+    out: set = set()
+    for pattern in _GATE_FRESHNESS_GLOBS.get(str(stage), ()):  # 未登记 stage → 空（回退旧行为，只锚 storyboard）
+        abs_pattern = os.path.join(root, pattern.format(ep=ep))
+        for match in glob.glob(abs_pattern, recursive=True):
+            if not os.path.isfile(match):
+                continue
+            rel = os.path.relpath(match, root).replace(os.sep, "/")
+            # 跳过 `_` 前缀缓存目录（_downloads/_work/_clipcache/_voicecache/_proxy…）：
+            # 架构约定其为可重建缓存、非业务真值，锚进去会因缓存 churn 造成假 stale。
+            # 只看路径段是否以 `_` 起头，不误伤 定妆_主角.png 这类名内下划线。
+            if any(seg.startswith("_") for seg in rel.split("/")):
+                continue
+            out.add(rel)
+    return sorted(out)
+
+
 def gate_findings_payload(root: str, episode: str, stage: str, findings: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Convert gate.py findings into batch-compatible n2d_consistency_findings."""
     rows: List[Dict[str, Any]] = []
@@ -1835,7 +1899,10 @@ def gate_findings_payload(root: str, episode: str, stage: str, findings: List[Di
             for a in (row.get("affected_artifacts") or [])
             if isinstance(a, str) and a.strip()
         }
-        | {f"脚本/{episode}/storyboard.json"}
+        | {f"脚本/{normalize_episode(episode)}/storyboard.json"}
+        # 阶段级新鲜度锚定：不依赖 findings 是否指向产物。绿闸也覆盖本阶段认证的
+        # PNG/MP4/prompt + 角色卡，堵「闸后重出/换脸/改卡仍判 fresh」的证声明不证现实。
+        | set(_gate_freshness_extra_files(root, episode, stage))
     )
     inputs_fingerprint = None
     if artifact_fingerprint is not None:

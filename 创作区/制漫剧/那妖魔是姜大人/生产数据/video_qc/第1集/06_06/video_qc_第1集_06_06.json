@@ -1,0 +1,108 @@
+{
+  "batch": "06_06",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_06_part4",
+      "clip_index": 6,
+      "duration_sec": 4.016667,
+      "file": "Clip_06_虎口最后威胁_part4.mp4",
+      "file_clip": "Clip_06",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_06_part4_382b3735_235d81fdbe97_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_06_part4_382b3735_235d81fdbe97_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_06_part4_382b3735_235d81fdbe97_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第1集/06_06/contact_sheet_06_06.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第1集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第1集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第1集/_frames",
+  "intra_clips": [
+    {
+      "clip": "Clip_06_part4",
+      "double_frame": false,
+      "file": "Clip_06_虎口最后威胁_part4.mp4",
+      "file_clip": "Clip_06",
+      "lens": "",
+      "max_dist": 35,
+      "pairs": [
+        {
+          "color_dist": 0.0342,
+          "dist": 35
+        },
+        {
+          "color_dist": 0.0454,
+          "dist": 32
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 1,
+    "seam_blocks": 0,
+    "seam_info": 0,
+    "seam_warns": 1,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.2325,
+      "color_verdict": "warn",
+      "dist": 34,
+      "from_clip": "Clip_05",
+      "same_scene_color_jump": true,
+      "seam_mode": "match_on_action",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_06",
+      "transition": "拾刀动作接下一镜冲锋。",
+      "verdict": "warn",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

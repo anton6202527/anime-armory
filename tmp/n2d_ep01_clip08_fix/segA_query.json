@@ -1,0 +1,26 @@
+{
+  "submit_id": "0547dcbf-a467-486a-9fd4-b5331c1c5992",
+  "prompt": "动作连续性硬锁：画面全程只能有一柄横刀。姜月初双手握住同一刀柄，从左肩上方完成一次短促下落，刀身作为同一刚体连续运动，不复制、不残影成第二柄刀。她在刀尖距裴长青左上胸衣料2至3厘米处急停，必须保留清晰空气间隙，本段绝不接触胸口、绝不刺入、绝不新增血点。裴长青坐地不主动迎刀，虎妖继续从后景逼近。固定85mm机位，身份、服装、发型、站位稳定，无文字水印。",
+  "gen_status": "success",
+  "result_json": {
+    "images": [],
+    "videos": [
+      {
+        "path": "tmp/n2d_ep01_clip08_fix/segA/0547dcbf-a467-486a-9fd4-b5331c1c5992_video_1.mp4",
+        "fps": 24,
+        "width": 720,
+        "height": 1280,
+        "format": "mp4",
+        "duration": 4.042
+      }
+    ]
+  },
+  "credit_count": 56,
+  "queue_info": {
+    "queue_idx": 0,
+    "priority": 1,
+    "queue_status": "Finish",
+    "queue_length": 0,
+    "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_end_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}"
+  }
+}

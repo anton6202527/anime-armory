@@ -82,9 +82,32 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def write_json(path: Path, data: dict) -> None:
+def atomic_write_text(path: Path, text: str) -> None:
+    """Crash-safe text write: temp file in the same dir + os.replace.
+
+    panel_jobs.json is the single source of truth for every panel's status /
+    result_path / SHA provenance and is rewritten after every panel inside a
+    long, network-bound, kill-prone generation loop.  A bare write_text leaves
+    it truncated on interruption; downstream loaders swallow the JSONDecodeError
+    and report the whole chapter as "missing".  Writing the temp file in the
+    same directory keeps os.replace on one filesystem (no cross-device rename).
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    fd, tmp_name = tempfile.mkstemp(dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp")
+    tmp = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(text)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+    except BaseException:
+        tmp.unlink(missing_ok=True)
+        raise
+
+
+def write_json(path: Path, data: dict) -> None:
+    atomic_write_text(path, json.dumps(data, ensure_ascii=False, indent=2) + "\n")
 
 
 def png_valid(path: Path) -> bool:
@@ -591,6 +614,26 @@ def post_qc_panel(
             }
         )
 
+    resolution_policy = str(job.get("resolution_policy") or "")
+    provenance = job.get("resolution_provenance") if isinstance(job.get("resolution_provenance"), dict) else {}
+    if resolution_policy == "后端最高可达":
+        if not provenance.get("master_path") or not provenance.get("native_sha256"):
+            issues.append(
+                {
+                    "severity": "block",
+                    "category": "resolution_lineage",
+                    "reason": "最高分辨率策略缺少独立原生 master 路径或 SHA，不能证明该格不是低分图/整话图裁切放大",
+                }
+            )
+        if provenance.get("upscaled"):
+            issues.append(
+                {
+                    "severity": "block",
+                    "category": "resolution_upscale",
+                    "reason": "layout 派生图需要放大原生 master；必须改用更高原生档重新生成，不能插值冒充高清",
+                }
+            )
+
     declared_bindings = [
         ref for ref in job.get("references") or []
         if isinstance(ref, dict) and ref.get("id")
@@ -638,6 +681,8 @@ def post_qc_panel(
         "path": rel_to_root(root, path),
         "size": {"width": actual_w, "height": actual_h},
         "expected_size": {"width": expected_w, "height": expected_h},
+        "resolution_policy": resolution_policy or "legacy_unspecified",
+        "resolution_provenance": provenance,
         "declared_reference_count": declared_attachment_count,
         "declared_reference_binding_count": len(declared_bindings),
         "reference_input_count": len(reference_records),
@@ -680,7 +725,7 @@ def build_prompt(job: dict[str, Any], project_name: str, chapter: str, reference
     negative = f"\n独立负向字段：{negative_prompt}" if negative_prompt else ""
     return f"""请用内置 image_generation 工具生成一张漫画分格 PNG。
 
-目标尺寸：{width}x{height}，长宽比约 {width / max(height, 1):.3f}
+目标画幅：{width}x{height}，长宽比约 {width / max(height, 1):.3f}。请使用当前工具可返回的最高原生分辨率生成；不要为了匹配目标画布先缩小输出。
 {ref_line}
 
 模型提交 prompt：
@@ -737,6 +782,8 @@ def validate_compiled_job(job: dict[str, Any], expected_backend: str = "") -> No
             ],
             "panel_plan_sha256": str(reference_plan.get("panel_plan_sha256") or ""),
         }
+        if job.get("resolution_policy"):
+            material["resolution_policy"] = str(job.get("resolution_policy"))
         actual_execution_hash = hashlib.sha256(
             json.dumps(material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
@@ -1051,8 +1098,12 @@ def main() -> int:
                 if not args.continue_on_qc_block:
                     return 3
             continue
+        final.parent.mkdir(parents=True, exist_ok=True)
         for attempt in range(1, max_attempts + 1):
-            with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
+            # Temp dir under the panel dir (not $TMPDIR): keeps os.replace on one
+            # filesystem so the atomic rename can't raise cross-device link after
+            # the paid image is already generated.
+            with tempfile.TemporaryDirectory(prefix=f".comic-codex-{pid}-", dir=str(final.parent)) as tmp:
                 temp_path = Path(tmp) / f"{pid}.png"
                 prompt = build_prompt(job, root.name, args.chapter, reference_records)
                 proc = run_codex(
@@ -1086,6 +1137,25 @@ def main() -> int:
                     })
                     print(f"[retry] {pid} attempt {attempt}/{max_attempts}: {error}", file=sys.stderr, flush=True)
                     continue
+                native_w, native_h = image_size(temp_path)
+                master = root / "出图" / args.chapter / "masters" / f"{pid}.png"
+                master.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(temp_path, master)
+                target_size = job.get("size") or {}
+                target_w = int(target_size.get("width") or native_w)
+                target_h = int(target_size.get("height") or native_h)
+                fit_scale = max(target_w / max(native_w, 1), target_h / max(native_h, 1))
+                job["master_path"] = rel_to_root(root, master)
+                job["resolution_provenance"] = {
+                    "requested_resolution_tier": "highest_available",
+                    "maximum_verified": False,
+                    "native_size": {"width": native_w, "height": native_h},
+                    "native_sha256": file_sha256(master),
+                    "master_path": rel_to_root(root, master),
+                    "derivative_size": {"width": target_w, "height": target_h},
+                    "normalization_scale": round(fit_scale, 6),
+                    "upscaled": fit_scale > 1.0,
+                }
                 if not args.no_resize:
                     resize_png(temp_path, job.get("size") or {})
                 final.parent.mkdir(parents=True, exist_ok=True)

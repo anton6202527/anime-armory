@@ -1,0 +1,56 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第2集/table_read_packet.json",
+          "sha256": "44289f938faaec8f5efbc54750080de97085b04775855fbd4046b29f9cf5ef4a"
+        },
+        {
+          "path": "脚本/第2集/table_read_packet.md",
+          "sha256": "841663730d379a13d2330725d2a2319d69140889d3df24ebbb2515166f657f02"
+        }
+      ],
+      "note": "依据用户明确授权，围读通过：系统数值精确，姜月初、虎妖与百妖谱声线区分明确，估时风险已知。",
+      "reviewed_at": "2026-07-22T06:27:43+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "3b8f0ff215cbc778866b0521c4d8dada5e7451d6fd07d3de3e8ab26ab5ace943",
+      "signed_input_fingerprint_sha": "619aea69a369ec0eebe4dfb1ba7a82fe6d9df0d93a187af6fb0aeae56a23bd66",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "stage1_table_read",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-22T06:27:43+00:00",
+  "episode": "第2集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第2集/table_read_packet.json": "44289f938faaec8f5efbc54750080de97085b04775855fbd4046b29f9cf5ef4a",
+      "脚本/第2集/table_read_packet.md": "841663730d379a13d2330725d2a2319d69140889d3df24ebbb2515166f657f02"
+    },
+    "sha": "3b8f0ff215cbc778866b0521c4d8dada5e7451d6fd07d3de3e8ab26ab5ace943"
+  },
+  "input_fingerprint": {
+    "files": {
+      "合成/第2集/配音/时长清单.json": null,
+      "脚本/第2集/voiceover.txt": "637c4c7d3456541905d1edc79cc624e576c4ffb7d5122efd095e373d7380ab2e"
+    },
+    "sha": "619aea69a369ec0eebe4dfb1ba7a82fe6d9df0d93a187af6fb0aeae56a23bd66"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "editorial",
+      "roles": [
+        "director",
+        "head_writer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-22T06:27:43+00:00",
+  "version": 1
+}

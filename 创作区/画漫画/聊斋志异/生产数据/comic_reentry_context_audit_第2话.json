@@ -1,0 +1,22 @@
+{
+  "kind": "comic_reentry_context_audit",
+  "version": 1,
+  "generated_at": "2026-07-22T03:47:03+00:00",
+  "chapter": "第2话",
+  "prior_chapter": "第1话",
+  "skipped_reason": "自足话（standalone/oneshot/四格）——不吃前情",
+  "thresholds": {
+    "opening_window": 3
+  },
+  "summary": {
+    "panels": 16,
+    "prior_chapters": 1,
+    "known_entities": 16,
+    "chapter_entities": 5,
+    "must": 0,
+    "warn": 0,
+    "info": 0,
+    "skipped": true
+  },
+  "findings": []
+}

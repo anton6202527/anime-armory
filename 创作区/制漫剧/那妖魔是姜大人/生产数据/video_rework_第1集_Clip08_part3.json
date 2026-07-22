@@ -1,0 +1,72 @@
+{
+  "kind": "n2d_video_local_action_rework",
+  "version": 1,
+  "episode": "第1集",
+  "story_clip": "Clip_08",
+  "physical_clip": "Clip_08_part3",
+  "created_at": "2026-07-22T13:52:14+0800",
+  "reason": "原视频在落刀完成前凭空复制出第二柄胸口刀，且最终刀尖只贴住衣料，未形成刺入的遮挡、受力和位移证据。",
+  "action_contract": {
+    "phase_1": "唯一一柄横刀从左肩上方下落，在裴长青左上胸前 2–3cm 处急停；此阶段严禁接触和新增胸口刀。",
+    "phase_2": "同一柄横刀沿既有轴线前送 6–8cm；刀尖和末段刀身被衣料遮挡，衣料内陷并形成单一入点；受阻停住且不拔刀。",
+    "hard_constraints": [
+      "全程只有一柄 PROP_横刀",
+      "刀身作为同一刚体连续运动",
+      "接触前胸口不得出现第二柄刀",
+      "刺入后刀尖不可见",
+      "无贯穿、无拔刀、无喷溅"
+    ]
+  },
+  "keyframes": [
+    {
+      "path": "出图/第1集/图片/EP01_CLIP08_a2.png",
+      "role": "windup_start",
+      "sha256": "f35a954ba0dc89c41b18efec7ffb9b9466c0c919486a5c8447adc09a4b6ff544"
+    },
+    {
+      "path": "出图/第1集/图片/EP01_CLIP08_precontact.png",
+      "role": "precontact_air_gap",
+      "sha256": "3e63a924952c64b43e7d3362091e02a32874d8a7b764e9d112f5a77616af7963"
+    },
+    {
+      "path": "出图/第1集/图片/EP01_CLIP08_penetration_end.png",
+      "role": "penetration_end",
+      "sha256": "f516b463077f94f5d7489f9b42091f92259e95cf0672fc610b83153618e9925b"
+    }
+  ],
+  "generation_segments": [
+    {
+      "submit_id": "0547dcbf-a467-486a-9fd4-b5331c1c5992",
+      "provider": "dreamina",
+      "model_version": "seedance2.0_vip",
+      "duration_sec": 4,
+      "credit_count": 56,
+      "start_role": "windup_start",
+      "end_role": "precontact_air_gap",
+      "visual_review": "pass：20帧密集检查仅一柄刀，完整落刀后保持明确未接触状态。"
+    },
+    {
+      "submit_id": "44b72c7c-5550-4cf1-9599-4c0494f38d15",
+      "provider": "dreamina",
+      "model_version": "seedance2.0_vip",
+      "duration_sec": 4,
+      "credit_count": 56,
+      "start_role": "precontact_air_gap",
+      "end_role": "penetration_end",
+      "visual_review": "pass：20帧密集检查同一刀沿轴线前送，末段刀身被胸前衣料遮挡并停住。"
+    }
+  ],
+  "assembly": {
+    "method": "segment_A 4.0s + segment_B speed-compressed to 1.88s; hard action relay at identical precontact anchor",
+    "edit_target_sec": 5.88,
+    "output": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+    "output_sha256": "9206fa165b3429adf9125836e1f40a14f310b7090649a85768a4285b0da538e5",
+    "previous_output_backup": "废料/出视频/第1集/Clip08_action返工前/Clip_08_对不住了，刀落人身_part3.mp4"
+  },
+  "review": {
+    "reviewer": "automation:codex",
+    "current_pixels_confirmed": true,
+    "verdict": "pass",
+    "notes": "已查看最终 24 帧密集表与接力点 8 帧表：落刀前胸口没有第二柄刀；动作先停在胸前，再由同一柄刀完成短距刺入；刀尖在落幅被衣料遮挡，持刀手、人物身份与虎妖背景连续。"
+  }
+}

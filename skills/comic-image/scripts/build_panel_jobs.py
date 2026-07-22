@@ -44,6 +44,8 @@ PRESERVE_GENERATION_KEYS = {
     "post_qc",
     "last_error",
     "generated_from_execution_input_sha256",
+    "resolution_provenance",
+    "master_path",
 }
 LEGACY_MAX_REFERENCE_IMAGES_PER_JOB = 6
 LEGACY_SINGLE_CHARACTER_REFERENCE_LIMIT = 4
@@ -727,6 +729,7 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
     style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     text_language = read_setting(root, "文字语言", "中文")
     render_stage = read_setting(root, "出图稿层", "完成稿")
+    resolution_policy = read_setting(root, "生图分辨率策略", "后端最高可达")
     registry = load_reference_registry(root)
     plan = reference_plan_for_build(root, chapter, reference_plan)
     plan_by_panel = {
@@ -786,6 +789,7 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
         execution_input = {
             "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
             "size": size,
+            "resolution_policy": resolution_policy,
             "references": [{"id": ref.get("id"), "path": ref.get("path"), "sha256": ref.get("sha256")} for ref in references],
             "character_bindings": [{key: row.get(key) for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")} for row in bindings],
             "panel_plan_sha256": str(panel_plan.get("panel_plan_sha256") or ""),
@@ -798,6 +802,7 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
                 "panel_id": pid,
                 "status": "planned",
                 "size": size,
+                "resolution_policy": resolution_policy,
                 "production_contract_prompt": production_prompt,
                 "production_negative_contract": PRODUCTION_NEGATIVE_CONTRACT,
                 "prompt_source_kind": "compiled_submit_prompt",
@@ -836,6 +841,7 @@ def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None =
         "backend_capabilities": caps.to_dict() if caps else {},
         "text_language": text_language,
         "render_stage": render_stage,
+        "resolution_policy": resolution_policy,
         "reference_plan": {
             "path": str(Path("生产数据") / f"comic_reference_plan_{chapter}.json"),
             "plan_sha256": str(plan.get("plan_sha256") or ""),
@@ -855,7 +861,11 @@ def job_is_stale(old: dict, new: dict) -> bool:
     """
     if str(old.get("submit_prompt_sha256") or "") != str(new.get("submit_prompt_sha256") or ""):
         return True
-    return (old.get("size") or {}) != (new.get("size") or {})
+    return (
+        (old.get("size") or {}) != (new.get("size") or {})
+        or str(old.get("resolution_policy") or "按最终画布")
+        != str(new.get("resolution_policy") or "后端最高可达")
+    )
 
 
 def preserve_ready_jobs(root: Path, chapter: str, jobs: dict) -> tuple[int, list[str]]:

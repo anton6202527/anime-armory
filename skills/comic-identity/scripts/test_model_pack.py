@@ -178,3 +178,42 @@ def test_monster_default_managed_by_tier_and_opt_out(tmp_path: Path) -> None:
     audited = {row["character_id"] for row in payload["characters"]}
     assert audited == {"CHAR_A", "MON_TIGER"}
     assert payload["summary"]["monsters"] == 1
+
+
+def test_build_montage_creates_labelled_contact_sheet(tmp_path: Path) -> None:
+    from PIL import Image
+    registry = registry_fixture(tmp_path)
+    # replace fake headers with real PNGs so the montage actually stitches them
+    for rel in registry["assets"]["CHAR_A"]["views"].values():
+        Image.new("RGB", (256, 384), (100, 120, 140)).save(tmp_path / rel)
+    result = model_pack.build_montage(tmp_path, registry, "CHAR_A")
+    assert result["status"] == "ok"
+    out = tmp_path / result["path"]
+    assert out.is_file()
+    stitched = Image.open(out)
+    assert stitched.width > 256  # five views stitched horizontally into one sheet
+    assert set(result["views"]) == {"front", "three_quarter", "side", "back", "face"}
+
+
+def test_build_montage_tolerates_unreadable_views(tmp_path: Path) -> None:
+    # fixture writes fake PNG headers (not decodable) → placeholder tiles, still ok
+    registry = registry_fixture(tmp_path)
+    result = model_pack.build_montage(tmp_path, registry, "CHAR_A")
+    assert result["status"] == "ok"
+    assert (tmp_path / result["path"]).is_file()
+
+
+def test_check_attaches_montage_for_needs_approval(tmp_path: Path) -> None:
+    from PIL import Image
+    registry = registry_fixture(tmp_path)
+    for rel in registry["assets"]["CHAR_A"]["views"].values():
+        Image.new("RGB", (256, 384), (90, 90, 90)).save(tmp_path / rel)
+    (tmp_path / "出图" / "共享").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    rc = model_pack.main([str(tmp_path), "check", "--characters", "CHAR_A", "--write"])
+    assert rc == 1  # needs_approval
+    report = json.loads((tmp_path / "生产数据" / "comic_model_pack_report.json").read_text(encoding="utf-8"))
+    char = report["characters"][0]
+    assert char["montage"]
+    assert (tmp_path / char["montage"]).is_file()

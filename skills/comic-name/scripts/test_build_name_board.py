@@ -180,3 +180,46 @@ def test_default_cli_writes_waiting_not_complete_until_explicit_approval(tmp_pat
     )
     assert build_name_board.main() == 0
     assert "✅" in (root / "_进度.md").read_text(encoding="utf-8")
+
+
+def _minimal_project(root: Path, chapter: str = "第1话") -> None:
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "_设置.md").write_text(
+        "- 漫画形态：条漫\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n- 原稿规格：数字条漫\n"
+        "- 生图模型：模型A\n- 网点策略：风格驱动\n",
+        encoding="utf-8",
+    )
+    write_json(
+        root / "脚本" / chapter / "panel_script.json",
+        {"panels": [{"panel_id": "P001", "story_function": "opening_hook", "description": "开场。"}]},
+    )
+
+
+def test_generation_only_setting_change_does_not_stale_name_board(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    _minimal_project(root, chapter)
+    board = build_name_board.build_name_board(root, chapter)
+    assert build_name_board.verify_upstream(root, chapter, board) == []
+    # edit a generation-only setting → must NOT stale a geometry approval
+    (root / "_设置.md").write_text(
+        "- 漫画形态：条漫\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n- 原稿规格：数字条漫\n"
+        "- 生图模型：模型B\n- 网点策略：显式tone_plan\n",
+        encoding="utf-8",
+    )
+    assert build_name_board.verify_upstream(root, chapter, board) == []
+
+
+def test_geometry_setting_change_stales_name_board(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    _minimal_project(root, chapter)
+    board = build_name_board.build_name_board(root, chapter)
+    # edit a geometry setting → MUST stale
+    (root / "_设置.md").write_text(
+        "- 漫画形态：页漫\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n- 原稿规格：数字条漫\n"
+        "- 生图模型：模型A\n- 网点策略：风格驱动\n",
+        encoding="utf-8",
+    )
+    errors = build_name_board.verify_upstream(root, chapter, board)
+    assert any("几何" in e for e in errors)

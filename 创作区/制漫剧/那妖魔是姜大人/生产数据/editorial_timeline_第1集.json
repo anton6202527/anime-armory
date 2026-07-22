@@ -1,11 +1,11 @@
 {
-  "accepted_story_clip_count": 3,
-  "actual_story_clip_count": 3,
+  "accepted_story_clip_count": 8,
+  "actual_story_clip_count": 8,
   "animatic_snapshot_path": "生产数据/timelines/第1集/animatic_timeline.otio",
   "animatic_snapshot_sha256": "7a7e339f9c09b9792996283cb99687d293f4f79e765418e49349211bba119812",
-  "duration_sec": 77.5,
+  "duration_sec": 77.495,
   "episode": "第1集",
-  "generated_at": "2026-07-22T01:53:18+00:00",
+  "generated_at": "2026-07-22T05:54:22+00:00",
   "kind": "n2d_editorial_timeline",
   "media": [
     {
@@ -19,9 +19,9 @@
       "sha256": "c2f9b69cfbddb32ea73c03436427378a143b2bccc41685898da618e92769bb88"
     },
     {
-      "available_sec": 6.017,
+      "available_sec": 5.792,
       "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
-      "sha256": "b4d5c3c4a8bf5e5ff2d4a1556b41e97c6c2d3abc5dbe0d90a516b35cb8004892"
+      "sha256": "c4255ac85dfd90a5e75b2ba5d31dc2de005c0f367f4e3f2840bd0341b7086b14"
     },
     {
       "available_sec": 6.017,
@@ -49,29 +49,79 @@
       "sha256": "21f1f3c6a5e9e26e28777696cac51f2c4f7b5d121f655dd7b9e0aa57dcdf9091"
     },
     {
-      "available_sec": 9.4,
-      "path": "出图/第1集/图片/Clip04_first.png",
-      "sha256": "5e511875d56ba813cef79e8f2ccbfb10c1416c76a30e666e5e8673b115f75774"
+      "available_sec": 5.017,
+      "path": "出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4",
+      "sha256": "495ce3f384eb555cd1e79cf5e98a4f77a25b34c9ad16ccb66e9b3a90b5cd51fa"
     },
     {
-      "available_sec": 7.88,
-      "path": "出图/第1集/图片/Clip05_first.png",
-      "sha256": "72413fc47afe1e2983f9fc936f477beac7473ab78b7e07015525ab1cef7a0a8b"
+      "available_sec": 6.017,
+      "path": "出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4",
+      "sha256": "fda221ee75f73b5317525f8b252f5cf9559650f89e6df074fbcf86290e0ace05"
     },
     {
-      "available_sec": 8.8,
-      "path": "出图/第1集/图片/Clip06_first.png",
-      "sha256": "2c8d2d006a9e7ac722ffe7682f1a5c67dc4fa58b29add20c81a9179aa654cd4e"
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4",
+      "sha256": "b6d21f92e9d9902afac767de537784ec22fdc8be0a913c8088140d242def6d1e"
     },
     {
-      "available_sec": 7.06,
-      "path": "出图/第1集/图片/Clip07_first.png",
-      "sha256": "d626a750d548b216e7765792cbc0674d65cb6ff9adea10677f9e9e3f9114d865"
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4",
+      "sha256": "47f84dcb2bde8d1d44fec71faf5a842d304406e4817ea9ef4501e9b06de7a044"
     },
     {
-      "available_sec": 12.88,
-      "path": "出图/第1集/图片/Clip08_first.png",
-      "sha256": "9fe6b917cf3bcabb862900fc5768201a38e3667b520613fb6aa0e89fcd7da86b"
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4",
+      "sha256": "0f74f71644e808b0d95f0a070e240794d4ec2b7ab74f4d38cf2445f0ad5319d1"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4",
+      "sha256": "390eb6c3a59d08aecc7bf31861350762f86026cd38d86c81d982459930b03da6"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4",
+      "sha256": "3cf27fd09bf9c56eb199e7a55a29b38dbf4900136a67967f7463b1492d859b3a"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4",
+      "sha256": "a7b749c9f56ad71fe7d2dcdd082cf45199edde295a6587830d6107129fa753a2"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4",
+      "sha256": "6bf80054dad1e364ed2ae8c0239e3d011c465bad500f8b0d54577b401623d1d8"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4",
+      "sha256": "57f8d08e923778e300c6ab872b4f02770d5f534dce9c7cb494ea329844bd55c7"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4",
+      "sha256": "c74a5eb35e0404e60d63953f27d071c475477ebacfad5800f33597b5220dcfcb"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4",
+      "sha256": "fd6b1982b7a14ab005228ab590ccbf618619279837bb0b4e1a66773a8a7b0fc3"
+    },
+    {
+      "available_sec": 4.016,
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4",
+      "sha256": "3f5db709f5e5df1a258b520c34f4c818c83fdd752b778b93936000d7e63a931a"
+    },
+    {
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4",
+      "sha256": "a28aaed5a7bef194772209657bc4ff48e2bf452f7e05e46c0e34be8b616790de"
+    },
+    {
+      "available_sec": 5.875,
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+      "sha256": "9206fa165b3429adf9125836e1f40a14f310b7090649a85768a4285b0da538e5"
     },
     {
       "available_sec": 77.5,
@@ -81,8 +131,8 @@
   ],
   "missing_picture_slots": [],
   "otio_path": "生产数据/timelines/第1集/editorial_timeline.otio",
-  "otio_sha256": "8d28e09f2dbce9c40b1c624080e2d06293c434f80e72c2c25378b0980479813b",
-  "phase": "assembly",
+  "otio_sha256": "d5ecb18adc73b0db2333e78bd3cdd0056d91ce4e1d34ff0029c86661f29dbce5",
+  "phase": "rough_cut",
   "planned_audio_slot_count": 0,
   "rate": 30.0,
   "seams": [

@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_director_beat_sheet", "version": 1, "episode": "第1集", "status": "confirmed",
-  "inputs": {"voiceover": "脚本/第1集/voiceover.txt", "development_pack": "开发包/"},
-  "beats": [
-    {"beat_id": "Beat_01", "source_voiceover_range": "voiceover lines 1-4", "source_voiceover_hint": "受辱与二十趟命令", "dramatic_function": "冷开场冲突+主角低谷", "director_intent": "用体型、低机位和骤停笑声压实阶层", "emotional_value_shift": {"from": "谨慎期待", "to": "当众受辱"}, "audience_question": "他为何仍留在仙门", "must_keep_reaction": "垂眼但不后退的半拍"},
-    {"beat_id": "Beat_02", "source_voiceover_range": "voiceover lines 5-8", "source_voiceover_hint": "动机与主动先挑五趟", "dramatic_function": "动机建立+主动选择", "director_intent": "把身世压成物件，把欲望压到扁担受力", "emotional_value_shift": {"from": "被迫承担", "to": "主动试路"}, "audience_question": "他如何撑过苦役", "must_keep_reaction": "看巨缸发怵后重新起担"},
-    {"beat_id": "Beat_03", "source_voiceover_range": "voiceover lines 9-13", "source_voiceover_hint": "第五趟与破盆异光", "dramatic_function": "选择后果+核心道具登场+悬念", "director_intent": "用普通破盆与异常微光反差硬断", "emotional_value_shift": {"from": "精疲力竭", "to": "误把机缘当破烂"}, "audience_question": "破盆究竟是什么", "must_keep_reaction": "自嘲一笑后留半拍给幽光"}
-  ]
-}

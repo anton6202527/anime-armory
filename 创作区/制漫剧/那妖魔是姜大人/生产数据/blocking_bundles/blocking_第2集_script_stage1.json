@@ -1,0 +1,33 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": true,
+  "blockers": [
+    {
+      "message": "P-1 开发包未确认；先补齐 开发包/series_bible.md、adaptation_strategy.json、season_arc.json、production_feasibility.json、pilot_greenlight.md，删除待补/TODO，把内容 status 改为 confirmed，再用 signoff.py 的 p1 profile 由 creative 与 producer 两个角色组签当前输入与五件套哈希，才可进入阶段1写词。",
+      "step": "development_pack"
+    }
+  ],
+  "category": "creative_or_execution",
+  "episode": "第2集",
+  "episode_graph": {
+    "graph_hash": "bc3455e83f3bdd7ec281b3342546aa8c4f0dd9494a17a61d0f674c10eaec20c9",
+    "lineage_gaps": 0,
+    "status": "pass"
+  },
+  "gate": {
+    "affected_artifacts": [],
+    "findings_path": null,
+    "return_to_stage": null,
+    "stage": ""
+  },
+  "generated_at": "2026-07-22T14:18:16+0800",
+  "headline": "第2集 阶段1·剧本改编：确定性前置失败",
+  "kind": "n2d_blocking_bundle",
+  "owner": "n2d-script",
+  "repair_commands": [
+    "n2d-script 创作区/制漫剧/那妖魔是姜大人 第2集"
+  ],
+  "stage_key": "script_stage1",
+  "stop_reason": "prework_failed",
+  "version": 1
+}

@@ -33,6 +33,26 @@ DETERMINISTIC_STAGE_SCRIPTS = {
     "出图包": "skills/comic-image/scripts/build_panel_jobs.py",
 }
 
+# Copy-pasteable "run this next" hint per stage, so a batch stop is never a
+# dead-end that only names a stage.  Descriptive only — points at a draft/check
+# command, never an approval or paid generation.
+STAGE_HINT_COMMAND = {
+    "源本/企划": 'python3 skills/comic-script/scripts/development_pack.py "{root}" scaffold --write   # 填完后 check --strict --json',
+    "漫画脚本": 'python3 skills/comic-script/scripts/source_semantics_gate.py "{root}" --chapter {ch}',
+    "缩略分镜": 'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch} --check',
+    "页面排版": 'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch} --check',
+    "原稿收尾": 'python3 skills/comic-finishing/scripts/build_finishing_plan.py "{root}" --chapter {ch} --check',
+    "出图包": 'python3 skills/comic-image/scripts/build_panel_jobs.py "{root}" --chapter {ch} --check',
+    "出图": 'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage image_preflight',
+    "嵌字合成": 'python3 skills/comic-compose/scripts/export_longstrip.py "{root}" --chapter {ch} --render --qc-slots',
+    "审查": 'python3 skills/comic-review/scripts/review.py "{root}" --chapter {ch}',
+}
+
+
+def stage_hint_command(root: Path, chapter: str, stage: str) -> str:
+    template = STAGE_HINT_COMMAND.get(stage, "")
+    return template.format(root=root, ch=chapter) if template else ""
+
 
 def repo_root() -> Path:
     cur = Path(__file__).resolve()
@@ -277,6 +297,52 @@ def run_compose_stage(repo: Path, root: Path, chapter: str) -> int:
     return run_gate(repo, root, chapter, "compose")
 
 
+STAGE_STOP_NOTE = {
+    "源本/企划": "创作阶段：改编策略/分话/分格由 comic-script 完成，不自动跑",
+    "漫画脚本": "创作阶段：source trace/分格由 comic-script 完成，不自动跑",
+    "缩略分镜": "⏸ 人工签收停点：draft → --submit-review → --approve --reviewed-by <签收人>",
+    "页面排版": "⏸ 人工签收停点：draft → --submit-review → --approve --reviewed-by <签收人>",
+    "原稿收尾": "确定性阶段：build_finishing_plan（免费，只写计划）",
+    "出图包": "确定性阶段：build_panel_jobs（免费，编译出图包）",
+    "出图": "⏸ 付费生成停点：需项目授权后才跑 panel runner（会花钱）",
+    "嵌字合成": "确定性阶段：export_longstrip 渲染 + compose gate",
+    "审查": "⏸ 人工验收停点：review gate pass 后仍需人工确认 审查 列",
+}
+
+
+def plan_chapter(root: Path, chapter: str) -> int:
+    """Dry-run: print the ordered stage plan from the current frontier without
+    executing anything — every stop point (human signoff / paid generation) is
+    labelled so the user can see scope before committing."""
+    headers: list[str] = []
+    progress = root / "_进度.md"
+    if progress.is_file():
+        for line in progress.read_text(encoding="utf-8").splitlines():
+            stripped = line.strip()
+            if stripped.startswith("|") and "话" in stripped and "源本" in stripped:
+                headers = [cell.strip() for cell in stripped.strip("|").split("|")]
+                break
+    stages = effective_stages(root, headers)
+    frontier = read_stage(root, chapter)
+    print(f"[comic-batch --dry-run] project={root.name} chapter={chapter} 当前前沿={frontier}", flush=True)
+    if frontier == "完成":
+        print("  本话主流程已完成（仍需人工发布前复核）。", flush=True)
+        return 0
+    try:
+        start = stages.index(frontier)
+    except ValueError:
+        start = 0
+    print("  从当前前沿起的阶段计划（只预览，不执行）：", flush=True)
+    for idx, stage in enumerate(stages[start:], 1):
+        note = STAGE_STOP_NOTE.get(stage, "")
+        print(f"    {idx}. {stage} — {note}", flush=True)
+        hint = stage_hint_command(root, chapter, stage)
+        if hint:
+            print(f"       运行: {hint}", flush=True)
+    print("  说明：批跑会在每个 ⏸ 停点停下等人工/授权，不会自动越过签收或付费生成。", flush=True)
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="漫画线流程推进与批跑")
     parser.add_argument("project_root")
@@ -288,10 +354,14 @@ def main() -> int:
     parser.add_argument("--image-max-attempts", type=int, default=1)
     parser.add_argument("--timeout-sec", type=int, default=240)
     parser.add_argument("--max-steps", type=int, default=12, help="单次调用最多推进多少个阶段（防循环）")
+    parser.add_argument("--dry-run", action="store_true", help="只打印从当前前沿起的阶段计划与停点，不执行任何阶段")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
     repo = repo_root()
+
+    if args.dry_run:
+        return plan_chapter(root, args.chapter)
 
     if args.stage == "image":
         print(f"[comic-batch] project={root.name} chapter={args.chapter} stage=出图(手动指定)", flush=True)
@@ -306,6 +376,9 @@ def main() -> int:
             return 0
         if stage in CREATIVE_STAGES:
             print(f"[comic-batch] next stage is {stage}; creative stage — use comic-script first", flush=True)
+            hint = stage_hint_command(root, args.chapter, stage)
+            if hint:
+                print(f"  运行: {hint}", flush=True)
             return 2
         if stage in {"缩略分镜", "页面排版"}:
             status = editorial_status(root, args.chapter, stage)
@@ -335,6 +408,9 @@ def main() -> int:
             return rc
         else:
             print(f"[comic-batch] next stage is {stage}; use the matching comic-* skill first", flush=True)
+            hint = stage_hint_command(root, args.chapter, stage)
+            if hint:
+                print(f"  运行: {hint}", flush=True)
             return 2
         if rc != 0:
             return rc
@@ -345,7 +421,14 @@ def main() -> int:
                 return 0
         new_stage = read_stage(root, args.chapter)
         if new_stage == stage:
-            print(f"[comic-batch] stage {stage} ran but 前沿未推进；检查该阶段脚本输出后再续跑", flush=True)
+            print(
+                f"[comic-batch] stage {stage} 已运行但前沿未推进"
+                "（多为该阶段只产出 draft/需人工签收，或产物未过 --check，不是自动失败）。",
+                flush=True,
+            )
+            hint = stage_hint_command(root, args.chapter, stage)
+            if hint:
+                print(f"  复核该阶段产物: {hint}", flush=True)
             return 2
     print("[comic-batch] 达到 --max-steps 上限，停止；再次运行可继续推进", flush=True)
     return 0

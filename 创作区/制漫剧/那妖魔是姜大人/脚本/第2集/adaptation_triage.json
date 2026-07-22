@@ -1,0 +1,117 @@
+{
+  "episode": "第2集",
+  "source": "第2章 收录：虎山神",
+  "target_duration_sec": [90, 120],
+  "core_highlight": "姜月初用杀裴换来的二十年道行一刀断虎首，再以七十五年道行摹影虎山神、获得圆满猛虎快刀。",
+  "retention_curve": [
+    {"node": "开场钩", "position": "0-3s", "beat": "裴长青瞳孔失焦，姜月初承认自己亲手杀人", "payoff": "后果+情绪"},
+    {"node": "钩子1", "position": "约12s", "beat": "百妖谱结算第一笔二十年道行", "payoff": "信息"},
+    {"node": "危机", "position": "约28s", "beat": "虎爪压顶，二十年尽付一刀", "payoff": "危机+欲望"},
+    {"node": "爽点1", "position": "约42s", "beat": "人与妖交错，虎首落地", "payoff": "情绪+动作"},
+    {"node": "反转", "position": "约52s", "beat": "斩虎再得一百年道行", "payoff": "信息"},
+    {"node": "爽点2", "position": "约75s", "beat": "摹影虎山神，获得圆满猛虎快刀", "payoff": "成长+视觉奇观"},
+    {"node": "集尾钩", "position": "约100s", "beat": "姜月初意识到摹影仍可进阶，却不知会把自己变成什么", "payoff": "真相半露+长线悬念"}
+  ],
+  "items": [
+    {
+      "source_span": "裴长青被刺后死亡，姜月初第一次亲手杀人并承受现代人的道德重压",
+      "beat_function": "后果+人物弧",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "必须承接第1集刀落后果，但避免重复完整刺杀动作",
+      "delivery": "镜头1以失焦眼神、血滴、姜月初颤手和一句承认完成",
+      "adaptation_delta": {"changed_from": "多段杀人心理描写", "changed_to": "三秒后果冷开场", "preserved_function": "主动杀人的道德重量", "short_drama_reason": "立即兑现上集悬念", "payoff_guard": "不得改成误杀、自愿献祭或无责任事故"},
+      "risk_if_removed": "女主灰度选择失去后果，人物显得冷血或断片"
+    },
+    {
+      "source_span": "虎妖嘲讽人族同袍之义，误判姜月初的杀人行为无益",
+      "beat_function": "冲突+反差",
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "保留虎妖轻敌与女主行为反差，压缩重复评判",
+      "delivery": "镜头2一句讥讽，随后由系统结算打脸",
+      "adaptation_delta": {"changed_from": "虎妖多段不齿与疑惑", "changed_to": "一句轻蔑后立刻反转", "preserved_function": "虎妖因误判而给女主窗口", "short_drama_reason": "让信息回报紧贴对手误判", "payoff_guard": "虎妖必须不知道百妖谱规则"},
+      "risk_if_removed": "二十年到账缺少反差，虎妖为何不立即扑杀不清楚"
+    },
+    {
+      "source_span": "【击杀闻弦境生物，获得其道行二十年】。击杀裴长青获得二十年道行，姜月初压下道德思考，将其全部灌入一击",
+      "beat_function": "系统规则+选择+代价",
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "这是第1集承诺的直接兑现和本集反杀因果",
+      "delivery": "镜头3-6以结算字卡、视线转向虎妖、道行灌刀三拍呈现",
+      "adaptation_delta": {"changed_from": "完整内心推演所需道行", "changed_to": "唯一生机+二十年尽付一刀", "preserved_function": "资源数量、一次性消耗和求生选择", "short_drama_reason": "动作前只保留可验证规则", "payoff_guard": "二十年必须全部消耗，不能凭空剩余"},
+      "risk_if_removed": "反杀变成无条件开挂"
+    },
+    {
+      "source_span": "虎妖原本在镇魔卫围杀中着实受了不小的伤，依靠天赋神通逃过一劫；随后挥爪，姜月初横斩；二者交错，姜月初重创，虎头延迟滚落",
+      "beat_function": "核心战斗+爽点",
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "本集北极星动作看点，需拆清起手、交错、落势、结果",
+      "delivery": "镜头5-8四拍；刀爪接近不穿插、命中以刀弧遮挡，虎首落地独立结果镜",
+      "adaptation_delta": {"changed_from": "一段连续横斩描写", "changed_to": "虎爪压顶—灌刀—交错—断首四相位", "preserved_function": "姜月初以命搏命并受反噬", "short_drama_reason": "保证动作因果和接触点可读", "payoff_guard": "虎妖原有重伤必须保留，女主不得无伤碾压"},
+      "risk_if_removed": "二十年道行没有视觉兑现"
+    },
+    {
+      "source_span": "【击杀闻弦境生物，获得其道行一百年】【检测到未收录妖物，是否消耗道行收录？】斩虎获得一百年道行，百妖谱询问是否收录未收录妖物",
+      "beat_function": "数值反转+新规则",
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "建立百妖谱可重复升级循环",
+      "delivery": "镜头9-11先显示百年入账，再提出消耗选择",
+      "adaptation_delta": {"changed_from": "女主脱力后连续面板提示", "changed_to": "留白后分两次信息投放", "preserved_function": "一百年收益与主动收录选择", "short_drama_reason": "让观众先吃到数值反转再理解新机制", "payoff_guard": "收录必须由姜月初明确选择"},
+      "risk_if_removed": "系统从一次性外挂变成无成长逻辑"
+    },
+    {
+      "source_span": "消耗七十五年，以虎血摹影虎山神；【成功摹影虎山神，获得妖物馈赠。】【猛虎快刀（圆满）】并恢复身体",
+      "beat_function": "视觉奇观+成长兑现+状态变化",
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "系统流核心复现母题，必须让墨线成虎、力量倒灌和握刀变化可见",
+      "delivery": "镜头12-14；文字走后期overlay，底图只呈墨金谱页与虎影",
+      "adaptation_delta": {"changed_from": "长段绘卷动画与一炷香感悟", "changed_to": "墨线成虎—虎眼亮—力量倒灌—握刀契合", "preserved_function": "七十五年成本、能力名称、圆满等级和伤势恢复", "short_drama_reason": "把解释改成连续视觉结果", "payoff_guard": "暖金占比克制，不能让百妖谱人格化替她决策"},
+      "risk_if_removed": "本集第二爽点与作品母题缺失"
+    },
+    {
+      "source_span": "面板显示闻弦初境、【武学：猛虎快刀（圆满）】、道行二十五年、【已收录妖物：虎山神（摹影）】",
+      "beat_function": "状态账本+力量体系",
+      "decision": "narrate",
+      "change_type": "compress",
+      "reason": "需锁定数值但不逐项长口播",
+      "delivery": "镜头15画面overlay列四项，声音只读三项关键状态",
+      "adaptation_delta": {"changed_from": "完整面板与多段疑问", "changed_to": "极简结算卡", "preserved_function": "闻弦初境、圆满刀法、25年余额、摹影状态", "short_drama_reason": "降低认知负荷", "payoff_guard": "四项必须在画面可读且跨集连续"},
+      "risk_if_removed": "下一集战力和资源余额无法对账"
+    },
+    {
+      "source_span": "姜月初替裴长青合眼并道歉，设想未来还命，承认自己也可能死",
+      "beat_function": "情绪峰+人物弧",
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "证明她没有把裴只当数值包，承接长期偿债动机",
+      "delivery": "镜头16-17以合眼、放下手和两句克制独白完成",
+      "adaptation_delta": {"changed_from": "完整尸边自语", "changed_to": "两句道歉与黑色幽默", "preserved_function": "负罪感、还命愿望和求生性格", "short_drama_reason": "爽点后保留道德余震", "payoff_guard": "不能把她洗成毫无责任或立即释怀"},
+      "risk_if_removed": "角色只剩冷酷升级机器"
+    },
+    {
+      "source_span": "姜月初思考摹影是否还能更进一步，决定保留二十五年备用",
+      "beat_function": "长线悬念+资源决策",
+      "decision": "dramatize",
+      "change_type": "add_hook",
+      "reason": "原文已有进阶疑问，强化为集尾真相半露，不提前借用第3章事件",
+      "delivery": "镜头18虎影眼睛短亮，她问下一步会把自己变成什么后切黑",
+      "adaptation_delta": {"changed_from": "中段思考后收敛心神", "changed_to": "移至章末作为身份/异化钩", "preserved_function": "摹影存在后续层级且25年暂不消耗", "short_drama_reason": "为下一集身份冒用和长期借妖风险留追更问题", "payoff_guard": "不得暗示百妖谱已有自主人格或确认会妖化"},
+      "risk_if_removed": "斩虎与升级讲完即收，缺少追下一集动力"
+    },
+    {
+      "source_span": "重复喘息、体感、风草与作者式总结；虎妖想不通少女杀一个将死之人有何益处；网络键盘生死梗压成杀人的道德冲击；风与野草作为搏杀和死寂的见证",
+      "beat_function": "氛围+主题",
+      "decision": "merge",
+      "change_type": "compress",
+      "reason": "氛围并入爽点后留白，主题由合眼和道歉动作承担",
+      "delivery": "镜头8与16的无台词表演、风声和血滴声",
+      "adaptation_delta": {"changed_from": "多段环境与总结旁白", "changed_to": "两处声音留白", "preserved_function": "战后死寂与身不由己主题", "short_drama_reason": "避免结尾说教", "payoff_guard": "保留人物对选择代价的反应"},
+      "risk_if_removed": "若连留白也删，战斗与悔意之间会显得机械"
+    }
+  ]
+}

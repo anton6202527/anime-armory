@@ -17,6 +17,20 @@
         "姜月初",
         "裴长青"
       ]
+    },
+    {
+      "id": "THREAD_E0002",
+      "thread_id": "T_E0002",
+      "source": "story_integrity_audit",
+      "status": "candidate",
+      "opened_ep": "第2集",
+      "last_touched_ep": "第2集",
+      "next_due_ep": "第3集",
+      "payoff_ep": "",
+      "open_question": "不过你也别抱太大希望。|| 说不定哪天，我就下去陪你了。 摹影只是第一步。|| 那下一步，会把我变成什么？  🪝集尾",
+      "touch_keywords": [
+        "姜月初"
+      ]
     }
   ]
 }

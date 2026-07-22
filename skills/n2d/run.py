@@ -120,6 +120,17 @@ def _stage_cache_inputs(root: str, ep: str) -> List[str]:
     """Stage-independent superset of contracts/media that report-only planners consume."""
     return [
         os.path.join(root, "脚本", ep, "**", "*"),
+        # 设定库 语义真值输入（角色场景卡 / 全局画风 / 源理解合同）：image_prompt 前沿的缓存审计
+        # ——antecedent_audit / setup_payoff_gate / story_integrity / source_adaptation——都读它们，
+        # 但旧指纹只含 脚本/ + 根设置 + _lib，**改角色卡/源理解合同不失效缓存 → 陈旧审计结果**。
+        # 只纳入作者手写、prework 从不回写的稳定真值（characters/locations 仅 split_novel.py 初次生成；
+        # global_style.md / source_comprehension.* 作者签收后稳定），不纳入机器每轮重写的账本，
+        # 既补上一致性漏洞又不击穿缓存。多失效=安全方向（与 prework_cache 模块设计法一致）。
+        os.path.join(root, "设定库", "characters", "**", "*"),
+        os.path.join(root, "设定库", "locations", "**", "*"),
+        os.path.join(root, "设定库", "global_style.md"),
+        os.path.join(root, "设定库", "source_comprehension.json"),
+        os.path.join(root, "设定库", "source_comprehension.md"),
         os.path.join(root, "出图", "共享", "**", "*.json"),
         os.path.join(root, "出图", "共享", "**", "*.png"),
         os.path.join(root, "出图", ep, "prompt", "**", "*"),

@@ -137,6 +137,49 @@ def test_post_qc_counts_one_attachment_reused_for_multiple_semantic_roles(
     assert payload["verdict"] == "pass"
 
 
+def test_post_qc_blocks_max_resolution_without_native_master(tmp_path: Path, monkeypatch) -> None:
+    panel = tmp_path / "P020.png"
+    panel.write_bytes(b"png")
+    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
+    monkeypatch.setattr(runner, "image_size", lambda _path: (1200, 900))
+    monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    job = {
+        "panel_id": "P020",
+        "size": {"width": 1200, "height": 900},
+        "resolution_policy": "后端最高可达",
+        "references": [],
+    }
+
+    payload = runner.post_qc_panel(tmp_path, "第1话", job, panel, [], [])
+
+    assert payload["verdict"] == "block"
+    assert {issue["category"] for issue in payload["issues"]} == {"resolution_lineage"}
+
+
+def test_post_qc_blocks_upscaled_derivative(tmp_path: Path, monkeypatch) -> None:
+    panel = tmp_path / "P021.png"
+    panel.write_bytes(b"png")
+    monkeypatch.setattr(runner, "png_valid", lambda _path: True)
+    monkeypatch.setattr(runner, "image_size", lambda _path: (1200, 900))
+    monkeypatch.setattr(runner, "likely_blank_bubble_regions", lambda _path: [])
+    job = {
+        "panel_id": "P021",
+        "size": {"width": 1200, "height": 900},
+        "resolution_policy": "后端最高可达",
+        "resolution_provenance": {
+            "master_path": "出图/第1话/masters/P021.png",
+            "native_sha256": "a" * 64,
+            "upscaled": True,
+        },
+        "references": [],
+    }
+
+    payload = runner.post_qc_panel(tmp_path, "第1话", job, panel, [], [])
+
+    assert payload["verdict"] == "block"
+    assert "resolution_upscale" in {issue["category"] for issue in payload["issues"]}
+
+
 def test_gate_receipt_must_bind_current_panel_jobs_sha(tmp_path: Path) -> None:
     jobs = tmp_path / "出图" / "第1话" / "prompt" / "panel_jobs.json"
     jobs.parent.mkdir(parents=True)
@@ -178,3 +221,20 @@ def test_skip_gate_waiver_is_persistent_and_sha_bound(tmp_path: Path) -> None:
     assert payload["panel_jobs_sha256"] == runner.file_sha256(jobs)
     assert payload["targets"] == ["P001"]
     assert (path.parent / "image_preflight_第1话_latest.json").is_file()
+
+
+def test_write_json_is_atomic_and_valid(tmp_path):
+    target = tmp_path / "nested" / "panel_jobs.json"
+    runner.write_json(target, {"jobs": [{"panel_id": "P001", "status": "ready"}]})
+    # valid JSON, trailing newline, no leftover temp files in the dir
+    assert json.loads(target.read_text(encoding="utf-8"))["jobs"][0]["panel_id"] == "P001"
+    leftovers = [p.name for p in target.parent.iterdir() if p.name != "panel_jobs.json"]
+    assert leftovers == []
+
+
+def test_write_json_overwrite_keeps_only_final(tmp_path):
+    target = tmp_path / "panel_jobs.json"
+    runner.write_json(target, {"v": 1})
+    runner.write_json(target, {"v": 2})
+    assert json.loads(target.read_text(encoding="utf-8"))["v"] == 2
+    assert [p.name for p in tmp_path.iterdir()] == ["panel_jobs.json"]

@@ -702,6 +702,7 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
                     "reason": str(item.get("reason") or ""),
                     "evidence": str(item.get("evidence") or ""),
                     "artifact_sha256": recorded_sha,
+                    "sha_bound": bool(recorded_sha),
                     "source": display_path(root, path),
                 }
         for panel_id in data.get("accepted_panels") or []:
@@ -715,6 +716,7 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
                     "accepted_at": str(data.get("accepted_at") or ""),
                     "reason": "accepted by panel list",
                     "evidence": "",
+                    "sha_bound": False,
                     "source": display_path(root, path),
                 }
     qc_dir = root / "生产数据" / "panel_qc" / chapter
@@ -737,6 +739,7 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
             "accepted_at": str(manual.get("reviewed_at") or manual.get("accepted_at") or ""),
             "reason": str(manual.get("reason") or ""),
             "evidence": display_path(root, qc_path),
+            "sha_bound": bool(str(manual.get("artifact_sha256") or "").strip()),
             "source": display_path(root, qc_path),
         }
     return accepted
@@ -971,11 +974,12 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         if not slot_qc:
             add_issue(
                 issues,
-                "info",
+                "warn",
                 "排版/" + chapter + "/export_manifest.json",
-                "manifest 未记录嵌字槽位 QC 接触表，长条图过高时不便逐字复核",
+                "已嵌字但 manifest 未记录嵌字槽位 QC 接触表：气泡遮挡脸/关键作画没有任何机检，"
+                "缺接触表则嵌字人审是盲签，无法逐字复核越界/贴边/遮挡",
                 "comic-compose",
-                "用 export_longstrip.py --render --qc-slots 重新导出",
+                "用 export_longstrip.py --render --qc-slots 重新导出，凭槽位接触表做嵌字人审",
                 "lettering",
             )
         else:
@@ -1126,6 +1130,21 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
             "疑似烘焙空白气泡已人审签收为误报：" + str(acceptance.get("reason") or "计划内亮部/雾面/叙事道具"),
             "comic-review",
             "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+            "image",
+        )
+    unbound_raw_bubble_hits = [
+        hit for hit in accepted_raw_bubble_hits
+        if not raw_bubble_acceptance.get(hit["panel_id"], {}).get("sha_bound")
+    ]
+    if unbound_raw_bubble_hits:
+        add_issue(
+            issues,
+            "warn",
+            "出图/" + chapter + "/panels",
+            "以下烘焙气泡签收未绑定 artifact_sha256，重抽/改图后不会自动失效，可能永久掩盖真实的空白气泡问题："
+            + ", ".join(hit["panel_id"] for hit in unbound_raw_bubble_hits[:18]),
+            "comic-review",
+            "在 raw_bubble_acceptance 记录里为每条签收补 artifact_sha256（当前图 SHA），或改用 panel_qc.manual_review 并记录 SHA。",
             "image",
         )
 

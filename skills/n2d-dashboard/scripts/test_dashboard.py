@@ -1035,3 +1035,130 @@ def test_flow_speed_metrics_tracks_first_episode_and_gate_throughput():
     assert metrics["time_to_first_episode_hours"] == 24.0
     assert metrics["gates_passed"] == 2
     assert metrics["gates_passed_per_day"] == 2.0
+
+
+def test_gate_findings_fingerprint_anchors_certified_artifacts_not_just_storyboard(tmp_path: Path) -> None:
+    """绿闸（0 findings）的 inputs_fingerprint 必须覆盖本阶段认证的 PNG/prompt + 角色卡，
+    而非只有 storyboard.json——否则闸后重出/换脸/改卡仍判 fresh（证声明不证现实）。"""
+    root = str(tmp_path)
+    ep = "第1集"
+    files = [
+        "脚本/第1集/storyboard.json",
+        "出图/第1集/图片/镜头1_a.png",
+        "出图/共享/图片/定妆_主角.png",
+        "出图/第1集/prompt/00_总览.md",
+        "设定库/characters/主角.md",
+    ]
+    for rel in files:
+        p = tmp_path / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("v1", encoding="utf-8")
+
+    payload = dashboard.gate_findings_payload(root, ep, "image", [])  # 绿闸，无 findings
+    keys = set(payload["inputs_fingerprint"]["files"].keys())
+    assert "脚本/第1集/storyboard.json" in keys
+    assert "出图/第1集/图片/镜头1_a.png" in keys          # 本集认证产物
+    assert "出图/共享/图片/定妆_主角.png" in keys          # 共享定妆参考
+    assert "设定库/characters/主角.md" in keys             # 角色卡身份真值
+
+
+def test_gate_receipt_goes_stale_when_png_redrawn_after_green_gate(tmp_path: Path) -> None:
+    from skill_snapshot import fingerprint_is_fresh  # dashboard 已把 _lib 入 sys.path
+
+    root = str(tmp_path)
+    ep = "第1集"
+    (tmp_path / "脚本/第1集").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "脚本/第1集/storyboard.json").write_text("{}", encoding="utf-8")
+    png = tmp_path / "出图/第1集/图片/镜头1_a.png"
+    png.parent.mkdir(parents=True, exist_ok=True)
+    png.write_text("pixels-v1", encoding="utf-8")
+
+    payload = dashboard.gate_findings_payload(root, ep, "image", [])
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is True
+    png.write_text("pixels-v2-REDRAWN", encoding="utf-8")  # 闸后重出
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is False
+
+
+def test_gate_findings_fingerprint_stage_scoped_video_anchors_clips(tmp_path: Path) -> None:
+    root = str(tmp_path)
+    ep = "第1集"
+    (tmp_path / "脚本/第1集").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "脚本/第1集/storyboard.json").write_text("{}", encoding="utf-8")
+    clip = tmp_path / "出视频/第1集/视频/Clip_01.mp4"
+    clip.parent.mkdir(parents=True, exist_ok=True)
+    clip.write_text("mp4", encoding="utf-8")
+
+    payload = dashboard.gate_findings_payload(root, ep, "video", [])
+    keys = set(payload["inputs_fingerprint"]["files"].keys())
+    assert "出视频/第1集/视频/Clip_01.mp4" in keys
+
+
+def test_gate_findings_video_receipt_stale_on_clip_regen_and_ignores_download_cache(tmp_path: Path) -> None:
+    from skill_snapshot import fingerprint_is_fresh
+
+    root = str(tmp_path)
+    ep = "第1集"
+    for rel in ["脚本/第1集/storyboard.json", "出视频/第1集/视频/Clip_01_part1.mp4",
+                "出视频/第1集/视频/_downloads/raw.mp4", "出图/第1集/图片/镜头1.png",
+                "设定库/characters/主角.md"]:
+        p = tmp_path / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("v1", encoding="utf-8")
+
+    payload = dashboard.gate_findings_payload(root, ep, "video", [])
+    keys = set(payload["inputs_fingerprint"]["files"].keys())
+    assert "出视频/第1集/视频/Clip_01_part1.mp4" in keys      # 认证 clip
+    assert "出图/第1集/图片/镜头1.png" in keys                 # 首帧
+    assert "设定库/characters/主角.md" in keys                 # 角色卡
+    assert not any("_downloads" in k for k in keys)           # `_` 缓存排除
+
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is True
+    (tmp_path / "出视频/第1集/视频/_downloads/raw.mp4").write_text("changed", encoding="utf-8")
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is True  # 缓存变化不影响
+    (tmp_path / "出视频/第1集/视频/Clip_01_part1.mp4").write_text("v2-REGEN", encoding="utf-8")
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is False  # 闸后重出必失配
+
+
+def test_gate_findings_compose_receipt_anchors_master_and_ignores_voicecache(tmp_path: Path) -> None:
+    from skill_snapshot import fingerprint_is_fresh
+
+    root = str(tmp_path)
+    ep = "第1集"
+    for rel in ["脚本/第1集/storyboard.json", "合成/第1集/成片_第1集_hybrid.mp4",
+                "合成/第1集/_voicecache/zh/x.wav", "出视频/第1集/视频/Clip_01.mp4",
+                "脚本/第1集/字幕_中文.srt"]:
+        p = tmp_path / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("v1", encoding="utf-8")
+
+    payload = dashboard.gate_findings_payload(root, ep, "compose", [])
+    keys = set(payload["inputs_fingerprint"]["files"].keys())
+    assert "合成/第1集/成片_第1集_hybrid.mp4" in keys          # 母版
+    assert "脚本/第1集/字幕_中文.srt" in keys                  # 烧录字幕
+    assert not any("_voicecache" in k for k in keys)          # `_` 缓存排除
+
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is True
+    (tmp_path / "合成/第1集/成片_第1集_hybrid.mp4").write_text("MASTER-V2", encoding="utf-8")
+    assert fingerprint_is_fresh(payload["inputs_fingerprint"], root) is False  # 换母版必失配
+
+
+def test_gate_freshness_globs_cover_every_gate_stage(tmp_path: Path) -> None:
+    """漂移守卫：每个 GATE_STAGES 都必须在 _GATE_FRESHNESS_GLOBS 有锚定，否则该 stage 的
+    收据 inputs_fingerprint 退回 storyboard-only（即 #3 修的洞在新 stage 上复现）。"""
+    from n2d_schema import GATE_STAGES  # 契约真值源（dashboard 已把 _lib 入 sys.path）
+    assert set(dashboard._GATE_FRESHNESS_GLOBS) == set(GATE_STAGES), (
+        "新增/改动 GATE_STAGES 后必须同步 _GATE_FRESHNESS_GLOBS（含 preflight 别名）。"
+    )
+
+
+def test_gate_findings_prompt_preflight_anchors_upstream_not_only_storyboard(tmp_path: Path) -> None:
+    root = str(tmp_path)
+    ep = "第1集"
+    for rel in ["脚本/第1集/storyboard.json", "出图/第1集/图片/镜头1.png", "设定库/characters/主角.md"]:
+        p = tmp_path / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("v1", encoding="utf-8")
+    payload = dashboard.gate_findings_payload(root, ep, "video_prompt_preflight", [])
+    keys = set(payload["inputs_fingerprint"]["files"].keys())
+    assert "出图/第1集/图片/镜头1.png" in keys       # 已就绪首帧被锚定
+    assert "设定库/characters/主角.md" in keys        # 角色卡被锚定

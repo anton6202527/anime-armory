@@ -1,0 +1,10 @@
+{
+  "kind":"n2d_director_beat_sheet","version":1,"episode":"第2集","status":"confirmed","generated_at":"2026-07-22T06:30:00+00:00",
+  "inputs":{"development_pack":"开发包/","voiceover":"脚本/第2集/voiceover.txt"},
+  "beats":[
+    {"beat_id":"Beat_01","source_voiceover_range":"voiceover lines 1-4","dramatic_function":"后果承接→系统反转→求生决定","audience_question":"杀裴真的能让她活下来吗？","emotional_value_shift":{"from":"杀人失神","to":"压下悔意、抓住唯一生机"},"director_intent":"让裴的死亡、逼近虎爪和二十年到账同时存在，观众看清她不是冷血而是在倒计时中选择。","must_keep_reaction":"二十年到账后保留姜月初眼神由散乱聚焦的半拍。"},
+    {"beat_id":"Beat_02","source_voiceover_range":"voiceover lines 5-9","dramatic_function":"压迫→孤注一掷→越境反杀→百年反转","audience_question":"二十年道行能不能挡住虎妖一爪？","emotional_value_shift":{"from":"体型与战力绝对劣势","to":"一刀断首但身体透支"},"director_intent":"动作必须按虎爪落下、灌刀、横斩交错、主角落势、虎首落地五相位拍清，不用光效掩盖因果。","must_keep_reaction":"虎首落地前先停一息在姜月初单膝跪地的虚脱反应。"},
+    {"beat_id":"Beat_03","source_voiceover_range":"voiceover lines 10-13","dramatic_function":"新规则→主动选择→视觉奇观→成长兑现","audience_question":"斩虎得到的百年道行会换来什么？","emotional_value_shift":{"from":"濒临脱力","to":"伤势恢复、获得圆满刀法"},"director_intent":"把七十五年成本、墨线成虎和力量倒灌连续可视化；百妖谱只有规则，不替她选择。","must_keep_reaction":"圆满二字落下后给姜月初重新握刀、发现手感改变的惊异近景。"},
+    {"beat_id":"Beat_04","source_voiceover_range":"voiceover lines 14-18","dramatic_function":"规则理解→状态结算→情绪偿债→长线悬念","audience_question":"借妖之力会不会让她也变成妖？","emotional_value_shift":{"from":"升级后的短暂欣喜","to":"悔意与对进阶的警惕"},"director_intent":"先把25年余额锁账，再回到裴的尸体；结尾用纸上虎影眼睛短亮制造异化疑问，不确认答案。","must_keep_reaction":"替裴合眼后让手停在半空一拍，再切虎影。"}
+  ]
+}

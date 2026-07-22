@@ -18,7 +18,7 @@ from typing import Any, Mapping
 COMIC_LIB = Path(__file__).resolve().parents[1] / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
-from contracts import sha256_file, stage_inputs_fingerprint  # noqa: E402
+from contracts import sha256_file, stable_sha256, stage_inputs_fingerprint  # noqa: E402
 from platform_profiles import profile_for_platform, validate_manifest  # noqa: E402
 from settings import get_setting  # noqa: E402
 
@@ -309,7 +309,42 @@ def check_review_receipt(root: Path, chapter: str) -> list[dict[str, Any]]:
         or report_inputs.get("sha256") != receipt.get("inputs_fingerprint_sha256")
     ):
         return [issue("review_gate_report_invalid", "review gate 报告合同、verdict 或输入指纹与 receipt 不一致。", domain="production")]
-    if receipt.get("verdict") == "block":
+    # Don't trust the recorded verdict: recompute it from the findings' own
+    # severities.  A hand-edit that flips verdict block→warn while leaving
+    # block-severity findings in place (and re-hashing report_sha256, which the
+    # gate report file is not itself part of the review fingerprint) would
+    # otherwise pass every check above and release the chapter.
+    report_findings = report.get("findings") if isinstance(report.get("findings"), list) else []
+    recomputed_verdict = (
+        "block" if any(isinstance(f, Mapping) and f.get("severity") == "block" for f in report_findings)
+        else "warn" if any(isinstance(f, Mapping) and f.get("severity") == "warn" for f in report_findings)
+        else "pass"
+    )
+    if recomputed_verdict != report.get("verdict"):
+        return [issue(
+            "review_gate_report_verdict_tampered",
+            f"review gate 报告 verdict={report.get('verdict')!r} 与其 findings 严重度重算值 {recomputed_verdict!r} 不一致（疑似手改绕过 block）。",
+            domain="production",
+        )]
+    # Recompute the receipt_id over the same material the gate signs, so tampering
+    # with findings content (not just the verdict field) is caught.
+    recorded_receipt_id = str(report.get("receipt_id") or "")
+    if recorded_receipt_id:
+        expected_receipt_id = stable_sha256({
+            "project_root": ".",
+            "chapter": chapter,
+            "stage": "review",
+            "inputs": report_inputs.get("sha256"),
+            "verdict": report.get("verdict"),
+            "findings": report_findings,
+        })
+        if recorded_receipt_id != expected_receipt_id:
+            return [issue(
+                "review_gate_receipt_id_mismatch",
+                "review gate receipt_id 与报告内容重算值不一致（findings/verdict/输入被改动过）。",
+                domain="production",
+            )]
+    if recomputed_verdict == "block" or receipt.get("verdict") == "block":
         return [issue("review_gate_blocked", "review gate 仍有 block。", domain="production")]
     return []
 

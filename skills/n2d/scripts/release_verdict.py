@@ -288,22 +288,57 @@ def gate_files(root: Path, episode: str) -> List[Path]:
     return [Path(p) for p in sorted(glob.glob(str(production_dir(root) / f"gate_findings_*_{episode}.json")))]
 
 
+def _gate_stage_of(path: Path, data: Any, episode: str) -> str:
+    """gate_findings 的阶段名：优先读 payload.gate_stage，回退解析文件名 gate_findings_<stage>_<ep>.json。"""
+    if isinstance(data, dict):
+        stage = str(data.get("gate_stage") or "").strip()
+        if stage:
+            return stage
+    name = path.name
+    prefix, suffix = "gate_findings_", f"_{normalize_episode(episode)}.json"
+    if name.startswith(prefix) and name.endswith(suffix):
+        return name[len(prefix):-len(suffix)] or name
+    return name
+
+
 def check_gate(root: Path, episode: str) -> Dict[str, Any]:
     files = gate_files(root, episode)
     if not files:
         return component("gate", "block", "缺 gate_findings_* 报告；不能证明各阶段 gate 跑过。", path=relpath(root, production_dir(root)))
     block = warn = 0
     samples: List[str] = []
+    stale: List[str] = []          # 指纹证明陈旧的阶段（跑过后产物又变，旧绿不算数）
+    unverifiable: List[str] = []   # 缺可核验 inputs_fingerprint 的阶段（旧报告，无法证明对应当前产物）
     for path in files:
         data = load_json(path)
         b, w, s = finding_counts(data)
         block += b
         warn += w
         samples.extend(s)
+        # 新鲜度耦合：绿闸（block=0）也必须证明凭据对应**当前产物**。gate_findings 的 inputs_fingerprint
+        # 现覆盖本阶段认证的 PNG/clip/母版/角色卡（见 dashboard.gate_findings_payload）；此前 check_gate
+        # 只数 block、无视指纹——video/compose 重出 clip/母版后旧绿仍判 pass（image 阶段另有 check_image_qc
+        # 独立验新鲜度兜底，video/compose 没有，check_gate 是其唯一质量后盾）。与 check_image_qc 同口径 fail-closed。
+        fp = data.get("inputs_fingerprint") if isinstance(data, dict) else None
+        fresh = fingerprint_is_fresh(fp, str(root))
+        if fresh is False:
+            stale.append(_gate_stage_of(path, data, episode))
+        elif fresh is None:
+            unverifiable.append(_gate_stage_of(path, data, episode))
     if block:
         return component("gate", "block", f"gate 仍有 block={block}, warn={warn}。", details=samples[:5])
-    if warn:
-        return component("gate", "warn", f"gate 有 warn={warn}，需结合 taxonomy 判断是否只可 demo。", details=samples[:5])
+    if stale:
+        return component(
+            "gate", "block",
+            f"gate 凭据陈旧：{'、'.join(sorted(set(stale)))} 跑过后产物又变（clip/母版/图/角色卡被改），"
+            f"绿闸不算数；对当前产物重跑对应 gate 后再裁决。",
+            details=samples[:5])
+    if warn or unverifiable:
+        msg = f"gate 有 warn={warn}"
+        if unverifiable:
+            msg += f"；{'、'.join(sorted(set(unverifiable)))} 凭据缺可核验 inputs_fingerprint（旧报告，无法证明对应当前产物，建议重跑 gate 盖新鲜指纹）"
+        msg += "，需结合 taxonomy 判断是否只可 demo。"
+        return component("gate", "warn", msg, details=samples[:5])
     return component("gate", "pass", f"gate 通过；reports={len(files)}。")
 
 

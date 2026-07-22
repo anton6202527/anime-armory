@@ -1,0 +1,79 @@
+{
+  "baseline_bootstrapped": false,
+  "changed_files": [
+    "skills/n2d-dashboard/scripts/dashboard.py",
+    "skills/n2d/SKILL.md",
+    "skills/n2d/progress.py",
+    "skills/n2d/run.py",
+    "skills/n2d/scripts/release_verdict.py"
+  ],
+  "changed_skills": [
+    "n2d",
+    "n2d-dashboard"
+  ],
+  "commands": [
+    "python3 skills/n2d-review/scripts/self_audit.py --json"
+  ],
+  "contract_inheritance": null,
+  "created_at": "2026-07-22T06:37:42+00:00",
+  "current_stage": "script_stage2",
+  "current_todo": {
+    "column": "分镜设计",
+    "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集  (配音后定稿)",
+    "label": "阶段2·分镜设计",
+    "note": "",
+    "skill": "n2d-script",
+    "stage_key": "script_stage2",
+    "status": "⬜"
+  },
+  "episode": "第2集",
+  "execution_steps": [
+    {
+      "command": "python3 skills/n2d-review/scripts/self_audit.py --json",
+      "role": "self_audit",
+      "type": "command"
+    }
+  ],
+  "gate_refresh_needed": false,
+  "gate_refresh_stages": [],
+  "image_consistency": null,
+  "image_qc_environment": null,
+  "kind": "n2d_skill_update_plan",
+  "needs_record": false,
+  "newly_relevant_skills": [],
+  "notes": [
+    "变动集中在 n2d/_lib/review/dashboard/batch/n2d 等横切层，或只涉及该集尚未到达的阶段文件；先重跑 gate/审查/计划，不默认重抽图。"
+  ],
+  "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.json",
+  "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.md",
+  "rebuild_needed": false,
+  "regen_mode": "最小",
+  "relevant_skills": [
+    "n2d",
+    "n2d-batch",
+    "n2d-dashboard",
+    "n2d-lora",
+    "n2d-review",
+    "n2d-script",
+    "n2d-update",
+    "n2d-voice"
+  ],
+  "rerun_from": null,
+  "rerun_until": "script_stage2",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_lock_changed_files": [],
+  "shared_lock_reuse": false,
+  "smart_suggestions": [],
+  "snapshot_changed_files": [
+    "skills/n2d-dashboard/scripts/dashboard.py",
+    "skills/n2d/SKILL.md",
+    "skills/n2d/progress.py",
+    "skills/n2d/run.py",
+    "skills/n2d/scripts/release_verdict.py"
+  ],
+  "source_drift": {
+    "status": "clean"
+  },
+  "strict_image_refresh": false,
+  "three_frame_compliance": null
+}

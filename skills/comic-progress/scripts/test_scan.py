@@ -271,3 +271,49 @@ def test_non_restricted_model_pack_signoff_requires_reason_and_matching_characte
     })
     gaps = scan._identity_gaps(tmp_path, "第1话")
     assert gaps[0]["code"] == "model_pack_signoff_identity_missing"
+
+
+def _write_underclaim_progress(root: Path) -> None:
+    (root / "_设置.md").write_text("- 传统原稿流程：启用\n", encoding="utf-8")
+    (root / "_进度.md").write_text(
+        """# 进度
+
+| 话 | 源本/企划 | 漫画脚本 | 缩略分镜 | 页面排版 | 原稿收尾 | 出图包 | 出图 | 嵌字合成 | 审查 |
+|---|---|---|---|---|---|---|---|---|---|
+| 第1话 | 🟡 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+""",
+        encoding="utf-8",
+    )
+
+
+def test_next_command_is_copy_pasteable(tmp_path: Path) -> None:
+    front = {"chapter": "第1话", "next_stage": "缩略分镜", "next_skill": "comic-name", "complete": False}
+    cmd = scan.next_command_for(tmp_path, "第1话", front)
+    assert "build_name_board.py" in cmd
+    assert "--chapter 第1话" in cmd
+    assert str(tmp_path) in cmd
+
+
+def test_under_claim_disclosure_fires_when_downstream_artifacts_exist(tmp_path: Path) -> None:
+    # table claims frontier at 源本/企划 but a panel_script already exists
+    write_json(tmp_path / "脚本" / "第1话" / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+    disclosure = scan.under_claim_disclosure(tmp_path, "第1话", "源本/企划")
+    assert disclosure is not None
+    assert "panel_script.json" in disclosure["hint"]
+    assert any(item["stage"] == "script" for item in disclosure["present"])
+
+
+def test_under_claim_disclosure_silent_when_table_matches_disk(tmp_path: Path) -> None:
+    # nothing downstream on disk → no false reconciliation note
+    assert scan.under_claim_disclosure(tmp_path, "第1话", "源本/企划") is None
+    # claimed frontier already past script → not an under-claim case
+    write_json(tmp_path / "脚本" / "第1话" / "panel_script.json", {"panels": []})
+    assert scan.under_claim_disclosure(tmp_path, "第1话", "页面排版") is None
+
+
+def test_summarize_surfaces_under_claim(tmp_path: Path) -> None:
+    _write_underclaim_progress(tmp_path)
+    write_json(tmp_path / "脚本" / "第1话" / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+    summary = scan.summarize_project(tmp_path)
+    assert summary["under_claim_disclosures"]
+    assert summary["under_claim_disclosures"][0]["chapter"] == "第1话"

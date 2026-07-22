@@ -191,7 +191,7 @@
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "a4b5ed2ee988f7405cb4f29c25721fb60eb53c45a359a627709fbfe9552b687d"
+      "sha256": "847a3fafcb89aa31cccba232e8aa7f5f5f0edac7914e72d61ce2a909b5f73295"
     },
     {
       "stage": "script_stage2",
@@ -239,7 +239,7 @@
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "77b9ad2c0154bfedddcfae65df1929dd73d011bc7d0228f4a7c1b9d5e3b23704"
+      "sha256": "1294c116e03f62f773c05344eeca19378cbb682e635932c22f17b93b76154b3d"
     },
     {
       "stage": "image",
@@ -253,28 +253,28 @@
       "path": "出图/第1集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 31
+      "file_count": 34
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第1集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "f17902c2d70eb5a8c1887705c0fc7dd0d78d28ec4a1fff472c9065a3b053881a"
+      "sha256": "42c6be952e3cdb10d3234fee8c90b8ba66a1b37faa63a968762af058ddb48947"
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第1集/prompt/01_clips.md",
       "exists": true,
       "kind": "file",
-      "sha256": "43ae545f68d416fb43ac9a2edb1052d2282770434453e7db2d1bf26e2d6791b6"
+      "sha256": "648ff8e06e342f121e8cd747ef29f53cb02c48eb37626c9ab2d93cc07fc4e5ba"
     },
     {
       "stage": "video",
       "path": "出视频/第1集/视频",
       "exists": true,
       "kind": "dir",
-      "file_count": 8
+      "file_count": 28
     },
     {
       "stage": "compose",
@@ -299,7 +299,7 @@
       "path": "生产数据/consistency_ledger_第1集.json",
       "exists": true,
       "kind": "file",
-      "sha256": "b3dca7ff24ecc1314063083a85edf4d8800dd0cccda90028911194246cbf2585"
+      "sha256": "342ebb9bdd95adbdee34eb2f5667a41847ecbc39f751dc11f60edca3599accf7"
     },
     {
       "stage": "review",
@@ -327,6 +327,6 @@
     }
   ],
   "last_progress_column": "视频",
-  "last_progress_value": "3/8",
-  "last_progress_state": "partial"
+  "last_progress_value": "8/8",
+  "last_progress_state": "done"
 }

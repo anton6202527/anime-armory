@@ -104,3 +104,26 @@ def test_batch_checks_approved_artifact_before_syncing_stale_progress(tmp_path: 
     assert batch.main() == 0
     assert calls and "--check" in calls[0]
     assert "| 第1话 | ✅ | ✅ | ✅ | ⬜ |" in (tmp_path / "_进度.md").read_text(encoding="utf-8")
+
+
+def test_plan_chapter_is_read_only_and_lists_stop_points(tmp_path: Path, capsys) -> None:
+    (tmp_path / "_设置.md").write_text("- 传统原稿流程：启用\n", encoding="utf-8")
+    (tmp_path / "_进度.md").write_text(
+        """# 进度
+
+| 话 | 源本/企划 | 漫画脚本 | 缩略分镜 | 页面排版 | 原稿收尾 | 出图包 | 出图 | 嵌字合成 | 审查 |
+|---|---|---|---|---|---|---|---|---|---|
+| 第1话 | ✅ | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+""",
+        encoding="utf-8",
+    )
+    before = (tmp_path / "_进度.md").read_text(encoding="utf-8")
+    rc = batch.plan_chapter(tmp_path, "第1话")
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "当前前沿=缩略分镜" in out
+    assert "⏸ 人工签收停点" in out  # name/layout signoff
+    assert "⏸ 付费生成停点" in out  # image generation
+    assert "build_name_board.py" in out
+    # dry-run must not mutate the progress table
+    assert (tmp_path / "_进度.md").read_text(encoding="utf-8") == before

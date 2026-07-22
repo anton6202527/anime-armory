@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_generation_attempt_ledger",
+  "chapter": "第2话",
+  "updated_at": "2026-07-22T11:06:14.867820",
+  "attempts": [
+    {
+      "attempt_id": "4b542696cc4af9c46426",
+      "started_at": "2026-07-22T11:06:14.867820",
+      "status": "started",
+      "generation_kind": "view",
+      "asset_id": "CHAR_JIA_MOTHER",
+      "variant": "side",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 1,
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "prompt_sha256": "1ccc66d18e4ef47b7ca2784f00209d1e685073d257d366a9af7fd7c05922eea0"
+    }
+  ]
+}

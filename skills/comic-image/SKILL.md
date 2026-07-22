@@ -9,7 +9,7 @@ description: 画漫画出图阶段。Builds strict per-panel production contract
 
 ## 输入
 
-- `_设置.md`：生图模型、生图渠道、参考一致性策略、定妆级别、文字语言、基础视觉风格。
+- `_设置.md`：生图模型、生图渠道、生图分辨率策略、参考一致性策略、定妆级别、文字语言、基础视觉风格。
 - `设定库/story_bible.md`。
 - `脚本/第N话/panel_script.json`。
 - `排版/第N话/layout.json`。
@@ -21,6 +21,7 @@ description: 画漫画出图阶段。Builds strict per-panel production contract
 - `出图/共享/prompt/00_索引.md`：本话需要的共享参考索引。
 - `出图/第N话/prompt/panel_jobs.json`：逐格出图任务包，schema 见 `references/prompt_job_schema.md`。
 - `出图/第N话/panels/P001.png` 等面板图。
+- `出图/第N话/masters/P001.png` 等后端最高原生分辨率母图；`panels/` 只能是由对应 master 等比裁切并向下采样得到的排版工作图，不得反向放大。
 - `生产数据/codex_reference_bundles/第N话/Pxxx.json`：Codex 真实图片参考入参证据。
 - `生产数据/panel_qc/第N话/Pxxx.json`：每格落盘后即时 deterministic QC，记录 PNG/尺寸/参考输入/疑似烘焙气泡问题；人工视觉判断仍需现场复核。
 - `_进度.md`：job 包完成标 `出图包=✅`；面板图齐全标 `出图=✅`。
@@ -99,7 +100,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 ```bash
 python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --max-attempts 2 --timeout-sec 600 --continue-on-qc-block
+  --max-attempts 2 --timeout-sec 600 --resolution-type 4k --continue-on-qc-block
 ```
 
 `comic-batch` 会读取本项目 `_设置.md` 的生图模型/渠道，在 Codex 与 Dreamina runner 之间自动分派；已明确选定的渠道不可被批跑器静默改写。
@@ -154,11 +155,11 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 ```bash
 # 单格 smoke test；若已有旧后端正式图，--force 会先归档到 candidates/
 python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --targets P001 --limit 1 --force --model-version 5.0 --resolution-type 2k
+  --targets P001 --limit 1 --force --model-version 5.0 --resolution-type 4k
 
 # smoke test 人审通过后继续全部未完成格
 python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
-  --model-version 5.0 --resolution-type 2k
+  --model-version 5.0 --resolution-type 4k
 ```
 
 即梦 runner 与 Codex runner 使用同一个 `image_preflight`、编译合同校验、旧图归档、逐格 QC 和进度条件，但各自写独立 reference bundle；切后端后必须整话保持单一生成配方，旧后端成功图只能保留为候选/视觉复核材料，不能混在最终 ready 集合里。
@@ -184,7 +185,11 @@ python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画
 7. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 8. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
 9. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装，不能在执行期再次静默改写已哈希的提交词。
-10. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；`block` 先修当前格，不把坏图继续传给排版合成。
+10. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器，以及下面的原生清晰度血统；`block` 先修当前格，不把坏图继续传给排版合成。
+    - `_设置.md` 默认 `生图分辨率策略=后端最高可达`。runner 必须在提交前读取当前模型/渠道的实时能力或本机 CLI `--help`，请求其可实际返回的最高原生档；具体 `2k/4k/尺寸枚举` 会变化，不得把旧版本上限永久写死。后端没有显式分辨率参数时，执行包装仍要明确要求最高原生输出，并在 manifest 标记 `maximum_verified=false`，不得声称已达到最高档。
+    - **一格一次原生生成**：正式 panel 必须各自拥有独立生成的 master。禁止先生成整页/整话/多格拼图，再从 864px、1024px 等合成图裁出多格并放大冒充逐格高清；同一个 master 被多个无明确分区合成合同的 panel 复用，属于确定性 BLOCK。
+    - 原始服务端文件必须无损保存在 `出图/第N话/masters/Pxxx.png`（或后端 runner 已有的等价 raw candidate），记录 `requested_resolution_tier / maximum_verified / native_size / native_sha256 / master_path`。`panels/Pxxx.png` 只可由该 master 等比安全裁切并**向下采样**到 layout 画布；任一轴需要放大、先缩小再放大、只留导出图不留 master，均为确定性 BLOCK。
+    - “水墨、柔焦、像素漫画”等是画风，不是降低像素尺寸的许可。像素风也应以最高原生画布生成/归档，需要硬边时用 nearest-neighbor 制作派生图，但不得降低 master 分辨率。
 11. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
 12. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
 13. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无 `qc_block` 或待重抽目标后把 `出图` 标 `✅`。
@@ -204,7 +209,7 @@ python3 skills/comic-image/scripts/dreamina_panel_runner.py "创作区/画漫画
 - 需要文字的区域只写“预留低细节留白区域”，不要画空白气泡；气泡形状、文字、中英双语由 `comic-compose` 绘制。
 - 动作格写清手、脚、武器、道具和地面的接触点；脚部叙事必须能看出鞋靴/脚尖/小腿和地面受力，不能用手掌替代脚掌。
 - 复杂动作拆分为多格或标注分层/合成建议。
-- 输出尺寸跟随 `layout.json` 的面板比例。
+- 输出画幅跟随 `layout.json` 的面板比例；生成 master 使用后端最高可达的原生分辨率，排版工作图只从 master 向下采样，不能把 layout 的较小像素尺寸误当模型生成上限。
 - 传统漫画完成稿要写清目标稿层：清线稿、墨线+黑场、网点完成稿或彩色完成稿；不要只写“漫画风”。网点、速度线、集中线、冲击闪、漫符必须服务阅读和动作路径，不遮挡脸、手、脚、关键道具或最终文字槽。
 - 不写具体在世画师、具体 IP、角色名或“某作品同款”作为风格提示；改写成可执行视觉特征。
 

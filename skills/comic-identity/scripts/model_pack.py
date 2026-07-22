@@ -364,6 +364,53 @@ def write_stable_report(path: Path, payload: dict[str, Any]) -> dict[str, Any]:
     return payload
 
 
+def build_montage(root: Path, registry: Mapping[str, Any], character_id: str) -> dict[str, Any]:
+    """Stitch a character's required views into one labelled contact sheet so the
+    定妆 human sign-off isn't semi-blind (opening five files by hand).  It's a
+    review view — deletable/rebuildable, never machine truth.  No-op if Pillow is
+    unavailable or no view is readable."""
+    try:
+        from PIL import Image, ImageDraw
+    except ImportError:
+        return {"status": "skipped", "reason": "pillow_unavailable"}
+    assets = registry.get("assets") if isinstance(registry.get("assets"), Mapping) else {}
+    asset = assets.get(character_id) if isinstance(assets, Mapping) and isinstance(assets.get(character_id), Mapping) else {}
+    required = required_views(asset)
+    if not required:
+        return {"status": "skipped", "reason": "no_required_views"}
+    tile_h, label_h, pad = 320, 22, 8
+    thumbs: list[tuple[str, Any]] = []
+    for view in required:
+        record = _view_record(asset, view)
+        raw = str(record.get("path") or "").strip()
+        path = resolve_path(root, raw) if raw else None
+        image = None
+        if path and path.is_file():
+            try:
+                src = Image.open(path).convert("RGB")
+                width = max(1, int(src.width * tile_h / max(1, src.height)))
+                image = src.resize((width, tile_h))
+            except (OSError, ValueError):
+                image = None
+        if image is None:
+            image = Image.new("RGB", (int(tile_h * 0.7), tile_h), (48, 48, 48))
+        thumbs.append((view, image))
+    if not thumbs:
+        return {"status": "skipped", "reason": "no_readable_views"}
+    total_w = sum(image.width for _, image in thumbs) + pad * (len(thumbs) + 1)
+    canvas = Image.new("RGB", (total_w, tile_h + label_h + pad * 2), (245, 245, 245))
+    draw = ImageDraw.Draw(canvas)
+    x = pad
+    for view, image in thumbs:
+        canvas.paste(image, (x, pad))
+        draw.text((x + 2, pad + tile_h + 3), view, fill=(0, 0, 0))
+        x += image.width + pad
+    out = root / "生产数据" / "model_pack_montage" / f"{character_id}.jpg"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(out, "JPEG", quality=88)
+    return {"status": "ok", "path": rel_to_root(root, out), "views": [view for view, _ in thumbs]}
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="漫画角色 turnaround/model-pack 技术检查与人审签收")
     parser.add_argument("project_root")
@@ -410,6 +457,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         confirmations = {key: bool(args.confirm_all) for key in REQUIRED_CONFIRMATIONS}
         create_signoff(root, registry, selected[0], args.reviewer, args.reason, confirmations)
     reports = [apply_character_readiness(root, registry, cid) for cid in selected]
+    # Build the sign-off contact sheet for any character that still needs human
+    # approval, so the reviewer has a single side-by-side view before signing.
+    for report in reports:
+        if report.get("readiness") in {"needs_approval", "needs_fix"}:
+            montage = build_montage(root, registry, str(report.get("character_id") or ""))
+            if montage.get("status") == "ok":
+                report["montage"] = montage["path"]
     if args.write or args.command == "signoff":
         registry_file.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     payload = {
@@ -422,10 +476,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.write or args.command == "signoff":
         out = root / "生产数据" / "comic_model_pack_report.json"
         payload = write_stable_report(out, payload)
-    print(json.dumps(payload, ensure_ascii=False, indent=2) if args.json else (
-        f"model-pack: ready={payload['summary']['ready']} needs_approval={payload['summary']['needs_approval']} "
-        f"needs_fix={payload['summary']['needs_fix']}"
-    ))
+    if args.json:
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        print(
+            f"model-pack: ready={payload['summary']['ready']} needs_approval={payload['summary']['needs_approval']} "
+            f"needs_fix={payload['summary']['needs_fix']}"
+        )
+        for report in reports:
+            if report.get("montage"):
+                print(f"  并排签收接触表 {report.get('character_id')}: {report['montage']}")
     return 0 if payload["summary"]["needs_fix"] == 0 and payload["summary"]["needs_approval"] == 0 else 1
 
 

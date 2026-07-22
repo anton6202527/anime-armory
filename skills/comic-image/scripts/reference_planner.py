@@ -428,6 +428,19 @@ def plan_character_in_panel(
     if panel_outfit and is_wearable_character:
         required_roles.add("outfit")
 
+    # Tag references that are critical because of a *panel-specific variation*
+    # (换装 outfit, back panel, extreme-angle side, strong-emotion expression,
+    # action ¾) — i.e. required_roles beyond the baseline identity core.  The
+    # single per-subject anchor the allocator picks already covers front/face
+    # identity, so promoting those too would force two mandatory attachments per
+    # character and needlessly over-constrain ordinary multi-character panels.
+    # A variation-critical ref (e.g. the garment reference built to stop
+    # 领型/纽扣/花纹 drift) must instead survive the cross-subject budget as
+    # mandatory and can never be silently demoted to a droppable "extra".
+    variation_critical_roles = required_roles - {"front", "face", "anchor"}
+    for _ref in refs:
+        _ref["panel_critical"] = str(_ref.get("role") or "") in variation_critical_roles
+
     def reference_priority(row: Mapping[str, Any]) -> tuple[int, int]:
         role = str(row.get("role") or "")
         if role == "memory_anchor":
@@ -781,8 +794,18 @@ def allocate_panel_attachments(
                 continue
             item["id"] = cid
             item["character_id"] = cid
-            item["required"] = False
-            extras.append(item)
+            # A panel-critical ref (outfit on a 换装 panel, back on a back panel,
+            # …) is mandatory alongside the identity anchor.  If it no longer
+            # fits the budget, over_capacity fires with a split suggestion —
+            # instead of the old silent drop that left only prose protecting the
+            # wardrobe change.
+            if item.get("panel_critical"):
+                item["required"] = True
+                mandatory.append(item)
+                seen_paths.add(str(item.get("path")))
+            else:
+                item["required"] = False
+                extras.append(item)
         extras_by_character.append(extras)
     for asset_id in panel_asset_ids(panel):
         path = asset_reference_path(root, registry, asset_id)

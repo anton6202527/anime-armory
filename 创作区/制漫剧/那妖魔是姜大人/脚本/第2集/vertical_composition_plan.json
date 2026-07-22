@@ -1,0 +1,10 @@
+{
+  "kind":"n2d_vertical_composition_plan","version":1,"episode":"第2集","status":"confirmed","generated_at":"2026-07-22T06:30:00+00:00",
+  "composition_rules":{"safe_zone":"底部18%只放中文字幕；顶部12%避开关键信息；系统overlay放上中偏右且不遮脸。","face_readability":"姜月初关键情绪镜脸高至少画面高度22%，正脸或前3/4；虎妖表情镜头眼鼻口轮廓可读。","z_axis_depth":"虎妖上后景、姜月初中下景、手刀前景形成纵深，避免横排挤脸。","overlay_policy":"百妖谱底框与墨虎由图像生成；所有中文、数值、境界与技能名由compose叠加。"},
+  "beat_composition":[
+    {"beat_id":"Beat_01","primary_subject_zone":"姜月初中下偏左，裴眼与刀在下前景，虎爪从右上侵入","foreground_midground_background":"血滴/刀柄—姜月初脸—虎妖上身与阴云","vertical_motion":"虎爪向下、姜月初视线由下抬上","subtitle_clearance":"下方字幕避开裴眼与刀尖，必要时上移至安全线"},
+    {"beat_id":"Beat_02","primary_subject_zone":"姜月初中下，虎妖上中形成压顶；交错时两者沿对角线分层","foreground_midground_background":"虎爪/刀弧—姜月初—虎妖与尘雾","vertical_motion":"虎妖下扑、姜月初逆向起刀、虎首后落","subtitle_clearance":"动作峰值字幕保持底部，不覆盖刀爪接触区"},
+    {"beat_id":"Beat_03","primary_subject_zone":"姜月初中下，百妖谱在上中偏右，墨虎由下向上成形","foreground_midground_background":"血滴/手—姜月初—半透明谱页与墨虎","vertical_motion":"墨线向上勾勒虎形，力量由上向下倒灌身体","subtitle_clearance":"系统overlay与字幕分区，overlay不进入底部18%"},
+    {"beat_id":"Beat_04","primary_subject_zone":"姜月初与裴位于中下，虎影眼位于上中结尾焦点","foreground_midground_background":"合眼手部—姜月初前3/4脸—虎影与荒野","vertical_motion":"姜月初俯身、手落下、最后视线抬向虎眼","subtitle_clearance":"悔意台词下方留净，结尾问句不遮虎眼"}
+  ]
+}

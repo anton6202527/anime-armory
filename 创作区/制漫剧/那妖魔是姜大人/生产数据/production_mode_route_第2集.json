@@ -1,0 +1,66 @@
+{
+  "clip_routes": [],
+  "decision": {
+    "advisory_only": true,
+    "aligned": true,
+    "reasons": [
+      "本集同时包含不同声音需求，按镜头路由：可见口型对白走表演音轨/后期表演驱动，旁白与口外音只锁估算节奏，动作/空镜画面先行，native_speech 镜单独处理。"
+    ],
+    "recommended_mode": "混合自动路由",
+    "risks": [],
+    "selected_mode": "混合自动路由"
+  },
+  "episode": "第2集",
+  "generated_at": "2026-07-22T06:37:42+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "_设置.md": "6fff3d258e49d1de4d1d3ce793ac9a74eabb6f821ab003227bcb7e61cc18bbe1",
+      "合成/第2集/配音/timing_estimate.json": "7138d0f9581625e3ba4dbef6496a7c082a8cdd4cdfea067c9bf5fc6d981d620f",
+      "合成/第2集/配音/时长清单.json": null,
+      "脚本/第2集/storyboard.json": null,
+      "脚本/第2集/voiceover.txt": "637c4c7d3456541905d1edc79cc624e576c4ffb7d5122efd095e373d7380ab2e",
+      "设定库/voice_casting.json": "211730077014d7b134034170629ab541fd72302ddd10d2d3a28ce4b307346bbb"
+    },
+    "sha": "71febb1c5198b1f28386714fd38ea85c8556767cf163dca4523c0f50b9bb2075"
+  },
+  "kind": "n2d_production_mode_route",
+  "mode_source": "explicit_user",
+  "next": "执行逐镜声音路线；最终配音只在音色锁定后批量渲染。",
+  "signals": {
+    "action_or_montage_clip_count": 0,
+    "audio_strategy_counts": {},
+    "character_dialogue_count": 18,
+    "closeup_speaking_clip_count": 0,
+    "episode": "第2集",
+    "final_voice_manifest_present": false,
+    "final_voice_required_clip_count": 0,
+    "mouth_visible_clip_count": 0,
+    "narration_count": 0,
+    "native_speech_clip_count": 0,
+    "placeholder_timing": false,
+    "post_lipsync_clip_count": 0,
+    "sample": [
+      "[镜头1·姜月初·惊惧警觉·快] 裴长青死了。|| 是我亲手杀的。可虎爪，已经落下。  ⚡钩子",
+      "[镜头2·虎妖·讥诮轻蔑·慢] 人族最爱讲同袍之义。到头来，也不过如此。",
+      "[镜头3·百妖谱·中性冷硬·慢] 击杀闻弦境生物，获得其道行二十年。  ⚡钩子",
+      "[镜头4·姜月初·压抑决绝·快] 对错、良知……活下来以后，才有资格谈。|| 我想活。这二十年，是我唯一的生机，也是杀人的代价。",
+      "[镜头5·虎妖·暴虐不屑·快] 小丫头，你也敢向我挥刀？"
+    ],
+    "speaking_clip_count": 0,
+    "spoken_line_count": 18,
+    "storyboard_clip_count": 0,
+    "timing_estimate_present": true,
+    "timing_manifest_present": false,
+    "voice_casting_status": "locked",
+    "voiceover_present": true
+  },
+  "status": "aligned",
+  "summary": {
+    "audio_strategy_counts": {},
+    "base_video_only_count": 0,
+    "clip_count": 0,
+    "final_voice_required": false,
+    "post_lipsync_required": false
+  },
+  "version": 2
+}

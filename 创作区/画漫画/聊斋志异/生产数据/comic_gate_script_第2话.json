@@ -1,0 +1,83 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第2话",
+  "stage": "script",
+  "created_at": "2026-07-22T10:29:43",
+  "verdict": "pass",
+  "summary": {
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "findings": [],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=2 block=0 warn=0"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288",
+        "size": 1446
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "331c9b1ee26eaf22dee18305863215b6e6b9c34ba23552ba7fc9517693ee2a80",
+        "size": 2543
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "b6109d6bb704df394369755b3f2b7fa54cfd285e9c6a9b4aaa7164298e944a16",
+        "size": 542
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "5eb596d94da6cc98e0dde9f68fa983b889913b496b5200a23679d5bb99ea0aa6",
+        "size": 5713
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "c5ded06cc999d9f3abf5819f493eadad19a84d3e438c1440a4f3c0bc1ad6737c",
+        "size": 1297
+      },
+      {
+        "path": "源本/画皮_源文选段.txt",
+        "exists": true,
+        "sha256": "dfff48165ccf160c52b56fd5b99126a92568349b20ac6f1e0ce4d95c9a6138d3",
+        "size": 3503
+      },
+      {
+        "path": "源本/贾儿_源文选段.txt",
+        "exists": true,
+        "sha256": "3e838ea1b70d572cb2cdc992c785ae8f653efe8b4b15068efc7e4b2d73114b36",
+        "size": 4978
+      },
+      {
+        "path": "脚本/第2话/panel_script.json",
+        "exists": true,
+        "sha256": "485746d7c94ee02961bd3593e4ed9a1b7e00e42803fd607c6f18235334de401e",
+        "size": 45326
+      },
+      {
+        "path": "脚本/第2话/source_semantics.json",
+        "exists": true,
+        "sha256": "9a8a1af28ecbdbfc49bb7ca54d4f29a946f7f133b398d3c0dc26f2c63a8e9c13",
+        "size": 12284
+      }
+    ],
+    "sha256": "cd72255d7d8e9e33b868d6ce78d5c964cfd7e759c3f4341758470f2465cc50f3"
+  },
+  "receipt_id": "a3117e6b606803ff53a26d2149cbd626492ed23025dada1ad1fdf8fc5cd36de9"
+}

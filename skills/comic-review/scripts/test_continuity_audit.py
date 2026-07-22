@@ -102,3 +102,85 @@ def test_next_entry_cannot_silently_drop_previous_exit_fact() -> None:
         "第2话",
     )
     assert "chapter_entry_state_missing_previous_fact" in {item["code"] for item in findings}
+
+
+# --- state-contract <-> per-panel binding bridge (C-HIGH-1) -----------------
+
+def write_chapter_with_panels(root: Path, chapter: str, contract: dict, panels: list[dict]) -> None:
+    path = root / "脚本" / chapter / "panel_script.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps({"chapter_contract": contract, "panels": panels}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
+def outfit_change_contract() -> dict:
+    return {
+        "entry_state": {"entities": {"CHAR_A": {"outfit": "OUTFIT_INTACT"}}},
+        "continuity_delta": [{
+            "entity_id": "CHAR_A", "field": "outfit",
+            "from": "OUTFIT_INTACT", "to": "OUTFIT_TORN",
+            "panel_id": "P010", "reason": "打斗中衣衫撕裂",
+        }],
+        "exit_state": {"entities": {"CHAR_A": {"outfit": "OUTFIT_TORN"}}},
+    }
+
+
+def binding(outfit: str) -> dict:
+    return {"character_id": "CHAR_A", "form_id": "FORM_BASE", "outfit_id": outfit,
+            "expression_id": "EXPR_NEUTRAL", "state_id": "STATE_BASE"}
+
+
+def test_binding_still_old_outfit_after_declared_change_blocks(tmp_path: Path) -> None:
+    panels = [
+        {"panel_id": "P010", "character_bindings": [binding("OUTFIT_TORN")]},
+        {"panel_id": "P011", "character_bindings": [binding("OUTFIT_INTACT")]},  # stale after change
+    ]
+    write_chapter_with_panels(tmp_path, "第1话", outfit_change_contract(), panels)
+    report = continuity_audit.audit(tmp_path)
+    codes = {item["code"] for item in report["findings"]}
+    assert "panel_binding_contradicts_state" in codes
+    assert report["verdict"] == "block"
+
+
+def test_binding_applies_declared_change_passes(tmp_path: Path) -> None:
+    panels = [
+        {"panel_id": "P010", "character_bindings": [binding("OUTFIT_TORN")]},
+        {"panel_id": "P011", "character_bindings": [binding("OUTFIT_TORN")]},
+    ]
+    write_chapter_with_panels(tmp_path, "第1话", outfit_change_contract(), panels)
+    report = continuity_audit.audit(tmp_path)
+    codes = {item["code"] for item in report["findings"]}
+    assert "panel_binding_contradicts_state" not in codes
+
+
+def test_transition_panel_may_show_pre_change_side(tmp_path: Path) -> None:
+    # the transition panel itself may render either side of the change
+    panels = [{"panel_id": "P010", "character_bindings": [binding("OUTFIT_INTACT")]}]
+    write_chapter_with_panels(tmp_path, "第1话", outfit_change_contract(), panels)
+    report = continuity_audit.audit(tmp_path)
+    assert "panel_binding_contradicts_state" not in {item["code"] for item in report["findings"]}
+
+
+def test_declared_change_never_drawn_warns(tmp_path: Path) -> None:
+    panels = [{"panel_id": "P010", "character_bindings": [binding("OUTFIT_INTACT")]}]
+    write_chapter_with_panels(tmp_path, "第1话", outfit_change_contract(), panels)
+    report = continuity_audit.audit(tmp_path)
+    assert "continuity_transition_never_drawn" in {item["code"] for item in report["findings"]}
+
+
+def test_transition_entity_display_name_warns(tmp_path: Path) -> None:
+    contract = {
+        "entry_state": {"entities": {"林冲": {"outfit": "OUTFIT_INTACT"}}},
+        "continuity_delta": [{
+            "entity_id": "林冲", "field": "outfit",
+            "from": "OUTFIT_INTACT", "to": "OUTFIT_TORN",
+            "panel_id": "P010", "reason": "撕裂",
+        }],
+        "exit_state": {"entities": {"林冲": {"outfit": "OUTFIT_TORN"}}},
+    }
+    panels = [{"panel_id": "P010", "character_bindings": [binding("OUTFIT_TORN")]}]
+    write_chapter_with_panels(tmp_path, "第1话", contract, panels)
+    report = continuity_audit.audit(tmp_path)
+    assert "continuity_transition_entity_not_bindable" in {item["code"] for item in report["findings"]}

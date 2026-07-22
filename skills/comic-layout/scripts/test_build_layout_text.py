@@ -324,3 +324,27 @@ def test_layout_cli_only_marks_complete_after_validation_and_approval(tmp_path: 
     )
     assert build_layout.main() == 0
     assert "✅" in (root / "_进度.md").read_text(encoding="utf-8")
+
+
+def test_layout_geometry_hash_ignores_generation_settings(tmp_path: Path) -> None:
+    root = tmp_path
+    (root / "_设置.md").write_text(
+        "- 漫画形态：条漫\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n- 原稿规格：数字条漫\n"
+        "- 单话分段高度：0\n- 生图模型：A\n", encoding="utf-8")
+    before = build_layout.settings_geometry_sha256(root)
+    # generation-only edit → geometry hash unchanged
+    (root / "_设置.md").write_text(
+        "- 漫画形态：条漫\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n- 原稿规格：数字条漫\n"
+        "- 单话分段高度：0\n- 生图模型：B\n", encoding="utf-8")
+    assert build_layout.settings_geometry_sha256(root) == before
+    # geometry edit → hash changes
+    (root / "_设置.md").write_text(
+        "- 漫画形态：页漫\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n- 原稿规格：数字条漫\n"
+        "- 单话分段高度：0\n- 生图模型：B\n", encoding="utf-8")
+    assert build_layout.settings_geometry_sha256(root) != before
+
+
+def test_layout_name_geometry_keys_mirror_name_skill() -> None:
+    # If comic-name changes its geometry key set, this must be updated in lock-step
+    # (layout recomputes the name board's own hash for independence).
+    assert build_layout.NAME_GEOMETRY_SETTING_KEYS == ("漫画形态", "阅读方向", "页面尺寸", "原稿规格")

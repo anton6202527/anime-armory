@@ -1,0 +1,26 @@
+{
+  "submit_id": "44b72c7c-5550-4cf1-9599-4c0494f38d15",
+  "prompt": "动作连续性硬锁：画面全程只有一柄横刀，沿既有刀身轴线完成一次短促前送。起点刀尖与裴长青左上胸衣料之间保留2至3厘米空气，随后姜月初双手同向发力，刀尖首次触衣，衣料向内凹陷并裂开一个单一入点，末段刀身前送6至8厘米后被衣料遮挡，刀尖不再可见，立即受阻停住且不拔刀。不得出现第二柄刀、残影刀、刀尖贴面滑动或横放胸口。裴长青因刺入收紧身体并疼痛闭眼，不主动迎刀；虎妖后景继续逼近。固定85mm机位，身份服装稳定，小量暗红渗血，无喷溅、无文字水印。",
+  "gen_status": "success",
+  "result_json": {
+    "images": [],
+    "videos": [
+      {
+        "path": "tmp/n2d_ep01_clip08_fix/segB/44b72c7c-5550-4cf1-9599-4c0494f38d15_video_1.mp4",
+        "fps": 24,
+        "width": 720,
+        "height": 1280,
+        "format": "mp4",
+        "duration": 4.042
+      }
+    ]
+  },
+  "credit_count": 56,
+  "queue_info": {
+    "queue_idx": 0,
+    "priority": 1,
+    "queue_status": "Finish",
+    "queue_length": 0,
+    "debug_info": "{\"have_no_dreamina_queue_name\":false,\"dreamina_matrix_queue_name\":\"dreamina_fusion_video40_pro_vision\",\"dreamina_matrix_req_key\":\"DreaminaFusion:Video40_Pro_Vision_end_frame_720p\",\"dreamina_matrix_second_req_key\":\"\",\"have_no_queue_name\":true,\"queue_name\":\"\",\"matrix_req_key\":\"\",\"matrix_second_req_key\":\"\"}"
+  }
+}

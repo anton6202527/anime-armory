@@ -1,0 +1,36 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [],
+    "mode": "混合自动路由  # source=explicit_user",
+    "native_av_policy": {
+      "lipsync_policy": "逐镜 route 决定；项目级对口型=关闭。",
+      "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+      "voice_identity_policy": "native_av 仍须声音授权；其它 route 的 final voice 由 voice_casting 锁定。"
+    },
+    "policy": "time_basis_first_per_shot_sound_routing",
+    "post_dub": {
+      "fit_strategy": "先锁无 WAV 时间槽或画面节奏；音色定妆后生成 final voice，按偏差刷新 OTIO、拟合或局部重切。",
+      "overflow_policy": "final voice 超出估时范围时回 n2d-script/video 调整节奏；不得用重度压速或静音占位伪装通过。"
+    },
+    "production_route_status": "aligned"
+  },
+  "episode": "第2集",
+  "episode_promise": {
+    "cliffhanger": "",
+    "obstacle": "",
+    "opening_hook": "",
+    "payoff_or_progress": "",
+    "promise": "",
+    "source_trace_ids": []
+  },
+  "interaction_physics": [],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [],
+    "characters": [],
+    "scenes": []
+  },
+  "shots": [],
+  "status": "draft",
+  "version": 1
+}

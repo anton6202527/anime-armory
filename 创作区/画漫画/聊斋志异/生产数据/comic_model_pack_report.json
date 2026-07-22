@@ -1,7 +1,7 @@
 {
   "kind": "comic_model_pack_report",
   "version": 1,
-  "created_at": "2026-07-21T13:49:59+00:00",
+  "created_at": "2026-07-22T03:45:14+00:00",
   "characters": [
     {
       "kind": "comic_character_model_pack",
@@ -66,6 +66,253 @@
     {
       "kind": "comic_character_model_pack",
       "version": 1,
+      "character_id": "CHAR_JIA_CHILD",
+      "asset_type": "character",
+      "tier": "core_full",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "side",
+        "back",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+          "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+          "sha256": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "side",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+          "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "back",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "9423fdf82dffa54284ab21e96263e94419c19a4645fd419bcad493cc3290e6e8",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIA_CHILD.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔side 低分辨率色彩代理差异较大 (0.596)；请并排人审，不能据此自动判定换人",
+          "metric": 0.596354
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_JIA_FATHER",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+          "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+          "width": 1254,
+          "height": 1254,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+          "sha256": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0",
+          "width": 1254,
+          "height": 1254,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+          "sha256": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
+          "width": 1254,
+          "height": 1254,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "2a3c0fc86fec3c86476ab45da771dbba2116ca6768856e2b0e5ffab2695d1553",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIA_FATHER.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_JIA_MOTHER",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+          "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+          "sha256": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+          "sha256": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
+          "width": 1536,
+          "height": 1024,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "75fb57ca9d3e9a4e36c1498eeba3755c6dccdd77830e912fed54c55420035d9a",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIA_MOTHER.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔three_quarter 低分辨率色彩代理差异较大 (0.553)；请并排人审，不能据此自动判定换人",
+          "metric": 0.553385
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
       "character_id": "CHAR_WANG",
       "asset_type": "character",
       "tier": "restricted_partial",
@@ -85,10 +332,10 @@
     }
   ],
   "summary": {
-    "assets": 4,
-    "characters": 4,
+    "assets": 7,
+    "characters": 7,
     "monsters": 0,
-    "ready": 4,
+    "ready": 7,
     "needs_approval": 0,
     "needs_fix": 0
   }

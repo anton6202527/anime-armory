@@ -51,6 +51,11 @@ description: Shared writing-primitives and deterministic production helpers for 
 | 对白工艺（潜台词/归属/一人一腔/信息差） | `references/dialogue.md` | 对白多的章、`relationship/confrontation/reveal-scenes` 落地、`novel-review` 查"对白无戏/角色一个腔/talking heads"时 |
 | 女频情感（颗粒度/心理戏/CP张力/糖度） | `references/女频情感.md` | 言情/甜宠/先婚后爱/大女主等女频向章节；`draft_packets.py` 按项目题材/平台命中女频时**自动注入**清单；`novel-review` 查"情感悬浮/发糖发腻/工业糖精"时 |
 | 描写与文白（白描vs工笔/密度即节奏/古今register） | `references/描写.md` | 写景物/心理/古言历史向；`novel-review` 查"描写堆砌/节奏拖沓/文白串味/开篇慢热"时 |
+| 文笔精修（叙事距离/滤镜词/自由间接引语/词汇意外度/专业质感） | `references/文笔精修.md` | 写章精修、`novel-edit` line packet、`novel-review` 查 `prose/文学质感`；是 `novel-review/scripts/prose_craft_audit.py`（滤镜词/副词标签/说教结尾/情绪生理化）的写作侧对手盘 |
+| 转场与衔接（因果链但/因此·断章勾-开章拉·转场类型·多线交叉） | `references/转场与衔接.md` | 编章纲、写章、`novel-review` 查"剧情散/章节割裂/开篇复述/多线断线"；对应机检 `chapter_transition.py`（章首承接）+ `plot_variety_audit.py`（开篇同型） |
+| 世界观构建（新奇感/会生场景的核心设定/冰山铺陈/自洽） | `references/世界观构建.md` | 立世设、玄幻/科幻/脑洞/规则怪谈、`novel-review` 查"世界观悬浮/炫设定无戏/规则打架"；与 `setting-bible.md`（存储）、`力量体系设计.md`（数值）分工 |
+| 喜剧与轻松感（笑点五源/吐槽流/反差萌/喜剧节奏） | `references/喜剧与轻松感.md` | 轻松向章节/系统吐槽/日常番外、`novel-review` 查"该好笑却冷场/强行搞笑尬"时 |
+| 名场面/高光场景（set-piece 五型·四放大器·布局） | `references/名场面.md` | 规划高光章/写卷末大高潮/终局、`novel-review` 查"该封神却平淡"、`novel-score` ⑧"可一句话转述传播"；一本书压 1-3 个 |
 | 群像与角色弧光（配角辨识度/弧光逐章推进） | `references/群像与角色弧光.md` | 群像多/配角脸盲/主角原地踏步时；`draft_packets.py` 按可选 `设定/角色弧光.json` 注入在场角色弧光阶段、≥3人同台注入群像提醒；`novel-review` 查"配角雷同/弧光停滞"时 |
 | 平台雷点 + 反套路（市场避雷） | `references/平台雷点.md` | 选平台/题材、`novel-review` 平台合规预检、`novel-score` 市场匹配；各平台毒点差异 + 精品化迁移 |
 | 动作场景专项 | `references/action-scenes.md` | 章纲命中打斗、追逐、逃亡、突破、升级、渡劫时；`draft_packets.py` 会自动把对应清单注入章节任务包 |

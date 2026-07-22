@@ -31,7 +31,7 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-07-21T12:07:29+00:00",
+  "generated_at": "2026-07-22T06:18:52+00:00",
   "kind": "n2d_development_pack_check",
   "next_when_blocked": "补齐开发包五件套并把内容 status 改为 confirmed；再用 signoff.py 让创意与制片角色分别签收当前文件哈希。之后重跑 check，再进入首批粗切/阶段1写词。",
   "root": "创作区/制漫剧/那妖魔是姜大人",

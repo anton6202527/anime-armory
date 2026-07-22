@@ -28,6 +28,8 @@ def test_normalize_panel_outputs_exact_size(tmp_path: Path) -> None:
     assert Image.open(target).size == (1296, 1040)
     assert result["source_size"] == {"width": 1600, "height": 1200}
     assert result["target_size"] == {"width": 1296, "height": 1040}
+    assert result["upscaled"] is False
+    assert result["normalization_scale"] < 1.0
 
 
 def test_extra_required_view_can_be_omitted_when_subject_is_represented() -> None:

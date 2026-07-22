@@ -4,15 +4,15 @@
   "episode": "第1集",
   "scope": "video_prompt",
   "accepted": true,
-  "reviewer": "automation:codex",
-  "generated_by": "skills/n2d-video/scripts/prompt_pack.py + approved contract-preserving prompt correction",
-  "generated_at": "2026-07-21T20:44:43+00:00",
+  "reviewer": "Codex n2d-video prompt pack",
+  "generated_by": "skills/n2d-video/scripts/prompt_pack.py",
+  "generated_at": "2026-07-22T02:56:32+00:00",
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
-      "sha256": "a4b5ed2ee988f7405cb4f29c25721fb60eb53c45a359a627709fbfe9552b687d"
+      "sha256": "b17bbcb58c48fd3a299d3ae6cf4a89c7f42e206784e44ecd263a8c63b3f295d3"
     },
     {
       "name": "continuity_chain",
@@ -49,12 +49,12 @@
     {
       "path": "出视频/第1集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "f17902c2d70eb5a8c1887705c0fc7dd0d78d28ec4a1fff472c9065a3b053881a"
+      "sha256": "42c6be952e3cdb10d3234fee8c90b8ba66a1b37faa63a968762af058ddb48947"
     },
     {
       "path": "出视频/第1集/prompt/01_clips.md",
       "exists": true,
-      "sha256": "43ae545f68d416fb43ac9a2edb1052d2282770434453e7db2d1bf26e2d6791b6"
+      "sha256": "648ff8e06e342f121e8cd747ef29f53cb02c48eb37626c9ab2d93cc07fc4e5ba"
     }
   ]
 }

@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, comic name board, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, 缩略分镜, name board, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1528 | 目录文本总行数 46908
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1535 | 目录文本总行数 48105
 
 # comic — 画漫画生产线总调度
 
@@ -20,7 +20,8 @@ comic 负责定位作品根、先读 `_进度.md` / `_设置.md`、解释当前�
 
 ```bash
 python3 skills/comic/doctor.py "创作区/画漫画/作品名" --write
-python3 skills/comic-settings/scripts/settings_cli.py set "创作区/画漫画/作品名" 生产档位 连载标准
+# 生产档位按项目定，从 短篇验证 / 连载标准 / 连载高一致性 里选一个（别照抄；连载类长线角一致性优先选 连载高一致性）
+python3 skills/comic-settings/scripts/settings_cli.py set "创作区/画漫画/作品名" 生产档位 <生产档位>
 python3 skills/comic-settings/scripts/settings_cli.py audit "创作区/画漫画/作品名"
 ```
 
@@ -126,6 +127,7 @@ python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作�
 - `finishing_plan.json` 必须消费已签收 name/layout，并同序覆盖全部 panel/page；传统原稿流程开启时，空计划或上游 SHA 过期会阻断。
 - reference plan 先公平保留每个具名角色身份锚，再保留 LOC 和常驻 PROP；缺绑定、未知状态、关键真实参考缺失或超过后端附件上限时必须返工或拆格，不能静默删约束。
 - `panel_jobs.json` 必须记录 reference plan、选中图片 SHA、`execution_input_sha256` 和 `consumed_contracts`；`--check` 证明落盘 job 与当前合同一致。
+- 漫画出图默认执行 `_设置.md` 的 `生图分辨率策略=后端最高可达`：每格独立请求当前后端最高原生档并保留 master，排版只可向下采样。整页/整话低宽图裁格后放大、丢失原始 master、或用放大后的像素尺寸冒充高清，均不得通过 image QC。
 
 ### 7. 阶段 gate、出图、合成和审查
 

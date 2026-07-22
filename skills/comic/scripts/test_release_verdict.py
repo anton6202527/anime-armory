@@ -134,6 +134,21 @@ def test_review_report_must_bind_same_current_fingerprint(tmp_path: Path) -> Non
     assert "review_gate_report_invalid" in {item["code"] for item in verdict["issues"]}
 
 
+def test_review_verdict_cannot_be_downgraded_below_its_findings(tmp_path: Path) -> None:
+    # forge: leave verdict "pass" but a block-severity finding is present.
+    prepare_project(tmp_path)
+    report_path = tmp_path / "生产数据" / "comic_gate_review_第1话.json"
+    gate_report = json.loads(report_path.read_text(encoding="utf-8"))
+    gate_report["findings"] = [{"severity": "block", "code": "hidden", "reason": "r", "artifact": "a"}]
+    write_json(report_path, gate_report)
+    receipt_path = tmp_path / "生产数据" / "gate_receipts" / "review_第1话.json"
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["report_sha256"] = release_verdict.sha256_file(report_path)
+    write_json(receipt_path, receipt)
+    verdict = release_verdict.build(tmp_path, "第1话", "internal")
+    assert "review_gate_report_verdict_tampered" in {item["code"] for item in verdict["issues"]}
+
+
 def test_accept_command_helper_binds_artifacts_and_review_receipt(tmp_path: Path) -> None:
     prepare_project(tmp_path)
     path = release_verdict.create_acceptance(

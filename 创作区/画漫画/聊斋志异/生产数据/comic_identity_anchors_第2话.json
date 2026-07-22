@@ -1,0 +1,118 @@
+{
+  "schema_version": 2,
+  "kind": "comic_reference_anchor_generation",
+  "chapter": "第2话",
+  "created_at": "2026-07-22T11:20:10",
+  "refs": [
+    "LOC_JIA_HOME",
+    "LOC_HE_GARDEN",
+    "LOC_MARKET_STREET",
+    "PROP_FAKE_FOX_TAIL",
+    "PROP_POISON_WINE"
+  ],
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "backend_version": "codex-cli 0.144.6",
+  "requested_ratio": "4:5",
+  "submitted_ratio": "4:5",
+  "execution_mode": "isolated_ephemeral_workdir",
+  "max_attempts_total": 1,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第2话.json",
+  "previous_manifest_archive": "",
+  "previous_manifest_sha256": "",
+  "generated": 0,
+  "skipped": 5,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-22T11:20:09",
+      "status": "reference_anchor_reused",
+      "ref_id": "LOC_JIA_HOME",
+      "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+      "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "requested_ratio": "4:5",
+      "canvas_normalization": {
+        "method": "contain_and_pad_no_crop",
+        "ratio": "4:5",
+        "source_width": 1536,
+        "source_height": 1024,
+        "target_width": 1536,
+        "target_height": 1920
+      }
+    },
+    {
+      "ts": "2026-07-22T11:20:09",
+      "status": "reference_anchor_reused",
+      "ref_id": "LOC_HE_GARDEN",
+      "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+      "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "requested_ratio": "4:5",
+      "canvas_normalization": {
+        "method": "contain_and_pad_no_crop",
+        "ratio": "4:5",
+        "source_width": 1536,
+        "source_height": 1024,
+        "target_width": 1536,
+        "target_height": 1920
+      }
+    },
+    {
+      "ts": "2026-07-22T11:20:09",
+      "status": "reference_anchor_reused",
+      "ref_id": "LOC_MARKET_STREET",
+      "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+      "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "requested_ratio": "4:5",
+      "canvas_normalization": {
+        "method": "contain_and_pad_no_crop",
+        "ratio": "4:5",
+        "source_width": 1536,
+        "source_height": 1024,
+        "target_width": 1536,
+        "target_height": 1920
+      }
+    },
+    {
+      "ts": "2026-07-22T11:20:10",
+      "status": "reference_anchor_reused",
+      "ref_id": "PROP_FAKE_FOX_TAIL",
+      "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+      "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "requested_ratio": "4:5",
+      "canvas_normalization": {
+        "method": "contain_and_pad_no_crop",
+        "ratio": "4:5",
+        "source_width": 1536,
+        "source_height": 1024,
+        "target_width": 1536,
+        "target_height": 1920
+      }
+    },
+    {
+      "ts": "2026-07-22T11:20:10",
+      "status": "reference_anchor_reused",
+      "ref_id": "PROP_POISON_WINE",
+      "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+      "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "requested_ratio": "4:5",
+      "canvas_normalization": {
+        "method": "contain_and_pad_no_crop",
+        "ratio": "4:5",
+        "source_width": 1536,
+        "source_height": 1024,
+        "target_width": 1536,
+        "target_height": 1920
+      }
+    }
+  ]
+}

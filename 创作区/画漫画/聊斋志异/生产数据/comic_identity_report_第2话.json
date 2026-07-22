@@ -1,0 +1,1184 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_report",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/聊斋志异",
+  "chapter": "第2话",
+  "created_at": "2026-07-22T11:47:03",
+  "write_back": true,
+  "job_reference_paths_updated": 0,
+  "summary": {
+    "reference_count": 11,
+    "panel_count": 16,
+    "missing_ref_count": 0,
+    "rerun_target_count": 0,
+    "outfit_gap_count": 0
+  },
+  "outfit_gaps": {},
+  "registry_validation": {
+    "kind": "comic_identity_registry_validation",
+    "schema_version": 2,
+    "valid": true,
+    "summary": {
+      "assets": 18,
+      "identity_assets": 10,
+      "characters": 7,
+      "monsters": 3,
+      "block": 0,
+      "warn": 0
+    },
+    "issues": []
+  },
+  "model_pack_reports": {
+    "CHAR_BEGGAR": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_BEGGAR",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "ead8f8c12081797c22afe1a7b55d42452600b95a9e3bce78d58fd20b7b25d3f7",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_BEGGAR.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_CHEN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_CHEN",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "6009def619d7b7a838855fc030208a5e00994de21407c8160d647f327ea7663e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_CHEN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_DAOIST": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_DAOIST",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "83e7f7e35c843f225c6c97c31d54ef6d59ab520c19a5613521558d488a64b58a",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DAOIST.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_JIA_CHILD": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_JIA_CHILD",
+      "asset_type": "character",
+      "tier": "core_full",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "side",
+        "back",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+          "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+          "sha256": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "side",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+          "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "back",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "9423fdf82dffa54284ab21e96263e94419c19a4645fd419bcad493cc3290e6e8",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIA_CHILD.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔side 低分辨率色彩代理差异较大 (0.596)；请并排人审，不能据此自动判定换人",
+          "metric": 0.596354
+        }
+      ]
+    },
+    "CHAR_JIA_FATHER": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_JIA_FATHER",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+          "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+          "width": 1254,
+          "height": 1254,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+          "sha256": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0",
+          "width": 1254,
+          "height": 1254,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+          "sha256": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
+          "width": 1254,
+          "height": 1254,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "2a3c0fc86fec3c86476ab45da771dbba2116ca6768856e2b0e5ffab2695d1553",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIA_FATHER.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_JIA_MOTHER": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_JIA_MOTHER",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+          "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+          "sha256": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "three_quarter",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+          "sha256": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
+          "width": 1536,
+          "height": 1024,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "75fb57ca9d3e9a4e36c1498eeba3755c6dccdd77830e912fed54c55420035d9a",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_JIA_MOTHER.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": [
+        {
+          "severity": "warn",
+          "confidence": "heuristic",
+          "code": "turnaround_pixel_proxy_drift",
+          "message": "front↔three_quarter 低分辨率色彩代理差异较大 (0.553)；请并排人审，不能据此自动判定换人",
+          "metric": 0.553385
+        }
+      ]
+    },
+    "CHAR_WANG": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WANG",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "544ba6712a1733984d5f5a21273bc7208b4ccea426db3e4b6a2cf638dbb9f230",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "MON_FOX_BROTHERS": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_FOX_BROTHERS",
+      "asset_type": "monster",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+          "width": 1536,
+          "height": 1024,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+          "sha256": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+          "width": 1536,
+          "height": 1024,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "eb65b6b0defa9ffe92bd95a36998a2d55e1330ffa800343c09e944ed0b1c3ad8",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_FOX_BROTHERS.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:32+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "MON_FOX_SERVANT": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_FOX_SERVANT",
+      "asset_type": "monster",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "front",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+            "crop_box": []
+          }
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+          "sha256": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+          "width": 1024,
+          "height": 1536,
+          "source_view": "face",
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+            "crop_box": []
+          }
+        }
+      ],
+      "model_pack_fingerprint": "73b3169cb60d1f972353d73a9dadf7b5061fc5dac4aa1d02740bd87463662532",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_FOX_SERVANT.json",
+        "status": "current",
+        "approved_at": "2026-07-22T03:07:31+00:00",
+        "reviewer": "Codex制作代理"
+      },
+      "signoff_required": true,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "MON_PAINTED_SKIN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_PAINTED_SKIN",
+      "asset_type": "monster",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "fb68b3cc6c0c42361ed1cfaacc76cb1152d13d186a461002bfd3a800f552edcb",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_PAINTED_SKIN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    }
+  },
+  "model_pack_gaps": {},
+  "missing_refs": {},
+  "required_character_views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "tier_required_views": {
+    "core_full": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ],
+    "recurring_standard": [
+      "front",
+      "three_quarter",
+      "face"
+    ],
+    "named_minimal": [
+      "front",
+      "face"
+    ],
+    "restricted_partial": []
+  },
+  "character_views": {
+    "CHAR_BEGGAR": {
+      "front": "出图/共享/图片/CHAR_BEGGAR__front.png",
+      "anchor": "出图/共享/图片/CHAR_BEGGAR__anchor.png"
+    },
+    "CHAR_CHEN": {
+      "front": "出图/共享/图片/CHAR_CHEN__front.png",
+      "anchor": "出图/共享/图片/CHAR_CHEN__anchor.png"
+    },
+    "CHAR_DAOIST": {
+      "front": "出图/共享/图片/CHAR_DAOIST__front.png",
+      "anchor": "出图/共享/图片/CHAR_DAOIST__anchor.png"
+    },
+    "CHAR_JIA_CHILD": {
+      "front": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+      "back": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+      "face": "出图/共享/图片/CHAR_JIA_CHILD__face.png"
+    },
+    "CHAR_JIA_FATHER": {
+      "front": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+      "face": "出图/共享/图片/CHAR_JIA_FATHER__face.png"
+    },
+    "CHAR_JIA_MOTHER": {
+      "front": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+      "face": "出图/共享/图片/CHAR_JIA_MOTHER__face.png"
+    },
+    "CHAR_WANG": {
+      "front": "出图/共享/图片/CHAR_WANG__front.png",
+      "anchor": "出图/共享/图片/CHAR_WANG__anchor.png"
+    },
+    "MON_FOX_BROTHERS": {
+      "front": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+      "face": "出图/共享/图片/MON_FOX_BROTHERS__face.png"
+    },
+    "MON_FOX_SERVANT": {
+      "front": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+      "face": "出图/共享/图片/MON_FOX_SERVANT__face.png"
+    },
+    "MON_PAINTED_SKIN": {}
+  },
+  "missing_character_views": {},
+  "rerun_targets": [],
+  "panels": [
+    {
+      "panel_id": "P001",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_FAKE_FOX_TAIL",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P002",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "CHAR_JIA_MOTHER",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+          "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664"
+        },
+        {
+          "id": "MON_FOX_BROTHERS",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_JIA_HOME",
+          "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+          "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P003",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+          "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d"
+        },
+        {
+          "id": "CHAR_JIA_MOTHER",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+          "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_JIA_HOME",
+          "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+          "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P004",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+          "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32"
+        },
+        {
+          "id": "MON_FOX_BROTHERS",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_JIA_HOME",
+          "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+          "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P005",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_HE_GARDEN",
+          "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+          "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+          "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P006",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "CHAR_JIA_FATHER",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+          "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_JIA_HOME",
+          "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+          "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P007",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_BROTHERS",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_HE_GARDEN",
+          "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+          "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P008",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_HE_GARDEN",
+          "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+          "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+        },
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P009",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_FAKE_FOX_TAIL",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+        },
+        {
+          "id": "PROP_POISON_WINE",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P010",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_FAKE_FOX_TAIL",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+        },
+        {
+          "id": "PROP_POISON_WINE",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P011",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_FAKE_FOX_TAIL",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P012",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_FAKE_FOX_TAIL",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+        },
+        {
+          "id": "PROP_POISON_WINE",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P013",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_POISON_WINE",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P014",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_STREET",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+        },
+        {
+          "id": "PROP_POISON_WINE",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P015",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "MON_FOX_BROTHERS",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+        },
+        {
+          "id": "MON_FOX_SERVANT",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+        },
+        {
+          "id": "LOC_HE_GARDEN",
+          "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+          "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+        },
+        {
+          "id": "PROP_POISON_WINE",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P016",
+      "status": "planned",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_JIA_CHILD",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+        },
+        {
+          "id": "CHAR_JIA_FATHER",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+          "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_HE_GARDEN",
+          "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+          "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+        },
+        {
+          "id": "PROP_FAKE_FOX_TAIL",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 0,
+      "reference_manifest": "",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    }
+  ]
+}

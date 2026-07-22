@@ -2,14 +2,18 @@
   "kind": "n2d_pilot_arc_contract",
   "version": 1,
   "episode_window": [
-    "第1集"
+    "第1集",
+    "第2集",
+    "第3集",
+    "第4集",
+    "第5集"
   ],
-  "series_promise": "",
-  "protagonist_desire": "",
-  "repeatable_pleasure_loop": "",
-  "long_question": "",
-  "first_payoff_ep": "",
-  "first_complication_ep": "",
-  "first_reversal_ep": "",
-  "notes": "前3-5集追剧契约；空字段表示还没锁，不影响时长，只影响剧情承诺清晰度。"
+  "series_promise": "姜月初把每一次必死妖局转化为可对账的道行、妖物摹影和身份跃迁，同时偿还杀人、冒名与借妖之力留下的因果债。",
+  "protagonist_desire": "先活下去并摆脱贱籍与逃犯身份，再获得一个不必任人宰割的合法位置。",
+  "repeatable_pleasure_loop": "识别死局规则漏洞→作出带代价的灰度选择→斩妖结算道行→摹影获得能力→新力量引出更大的身份与人性风险。",
+  "long_question": "百妖谱为何选择姜月初，持续摹影会让她成为镇魔司敬畏的姜大人，还是世人眼中的另一只妖魔？",
+  "first_payoff_ep": "第2集：兑现二十年道行斩虎、百年结算与虎山神摹影。",
+  "first_complication_ep": "第3集：杀裴留下尸体、官服与身份追查，她被误认作镇魔司。",
+  "first_reversal_ep": "第1集：唯一可能救她的人反而成为她必须亲手杀死的对象。",
+  "notes": "前5集为开篇黄金集群：第1集灰度选择，第2集系统兑现，第3集身份错位，第4集责任选择，第5集狼妖战斗小弧。"
 }

@@ -240,6 +240,8 @@ def normalize_panel(source: Path, target: Path, size: dict[str, int]) -> dict[st
         "mode": "center_crop_after_safe_margin_prompt",
         "source_size": {"width": raw_size[0], "height": raw_size[1]},
         "target_size": {"width": width, "height": height},
+        "normalization_scale": round(max(width / max(raw_size[0], 1), height / max(raw_size[1], 1)), 6),
+        "upscaled": max(width / max(raw_size[0], 1), height / max(raw_size[1], 1)) > 1.0,
     }
 
 
@@ -398,7 +400,12 @@ def main() -> int:
     parser.add_argument("--timeout-sec", type=int, default=600)
     parser.add_argument("--poll-sec", type=int, default=120)
     parser.add_argument("--model-version", default="5.0")
-    parser.add_argument("--resolution-type", choices=("2k", "4k"), default="2k")
+    parser.add_argument(
+        "--resolution-type",
+        choices=("2k", "4k"),
+        default="4k",
+        help="服务端原生分辨率档；comic 默认请求当前 CLI 已暴露的最高档 4k，CLI 能力变化时须先核验 --help",
+    )
     parser.add_argument(
         "--correction",
         default="",
@@ -654,6 +661,18 @@ def main() -> int:
                     final, candidate_root / panel_id, "previous_backend_or_take"
                 )
             normalization = normalize_panel(raw_path, final, job.get("size") or {})
+            raw_size = normalization.get("source_size") or {}
+            job["master_path"] = shared.rel_to_root(root, raw_path)
+            job["resolution_provenance"] = {
+                "requested_resolution_tier": args.resolution_type,
+                "maximum_verified": args.resolution_type == "4k",
+                "native_size": raw_size,
+                "native_sha256": shared.file_sha256(raw_path),
+                "master_path": shared.rel_to_root(root, raw_path),
+                "derivative_size": normalization.get("target_size") or {},
+                "normalization_scale": normalization.get("normalization_scale"),
+                "upscaled": bool(normalization.get("upscaled")),
+            }
             post_qc = (
                 {}
                 if args.no_post_qc

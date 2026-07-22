@@ -64,6 +64,34 @@ SKILL_FOR_STAGE = {
 }
 PLACEHOLDER_RE = re.compile(r"待补|待填|TODO|TBD|<[^>]*>|__待", re.IGNORECASE)
 
+# Copy-pasteable "run this next" command per stage.  Purely descriptive — it
+# names the next stage's own script (which itself only produces a draft / runs a
+# --check), never an approval or a paid generation, so surfacing it bypasses no
+# gate.  Kept local to this skill (not imported from comic-update) to preserve
+# cross-line independence.
+STAGE_NEXT_COMMAND = {
+    "source": 'python3 skills/comic-script/scripts/development_pack.py "{root}" check --strict --json',
+    "script": 'python3 skills/comic-script/scripts/source_semantics_gate.py "{root}" --chapter {ch}',
+    "name": 'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch}',
+    "layout": 'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch}',
+    "finishing": 'python3 skills/comic-finishing/scripts/build_finishing_plan.py "{root}" --chapter {ch}',
+    "image_jobs": 'python3 skills/comic-image/scripts/build_panel_jobs.py "{root}" --chapter {ch}',
+    "image": 'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage image_preflight',
+    "compose": 'python3 skills/comic-compose/scripts/export_longstrip.py "{root}" --chapter {ch} --render --qc-slots',
+    "review": 'python3 skills/comic-review/scripts/review.py "{root}" --chapter {ch}',
+}
+# Fallback for blocker/special fronts whose stage label is not in STAGE_KEYS.
+SKILL_NEXT_COMMAND = {
+    "comic-script": 'python3 skills/comic-script/scripts/development_pack.py "{root}" check --strict --json',
+    "comic-identity": 'python3 skills/comic-identity/scripts/model_pack.py "{root}" check --write --json',
+    "comic-name": 'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch} --check',
+    "comic-layout": 'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch} --check',
+    "comic-finishing": 'python3 skills/comic-finishing/scripts/build_finishing_plan.py "{root}" --chapter {ch}',
+    "comic-image": 'python3 skills/comic-image/scripts/build_panel_jobs.py "{root}" --chapter {ch} --check',
+    "comic-compose": 'python3 skills/comic-compose/scripts/export_longstrip.py "{root}" --chapter {ch} --render --qc-slots',
+    "comic-review": 'python3 skills/comic-review/scripts/review.py "{root}" --chapter {ch}',
+}
+
 
 def load_json(path: Path) -> dict[str, Any] | None:
     try:
@@ -895,11 +923,61 @@ def has_source_semantics_blocker(root: Path, chapter: str) -> tuple[bool, str]:
     return False, ""
 
 
+def next_command_for(root: Path, chapter: str, front: Mapping[str, Any]) -> str:
+    stage_key = STAGE_KEYS.get(str(front.get("next_stage") or ""), "")
+    template = STAGE_NEXT_COMMAND.get(stage_key) or SKILL_NEXT_COMMAND.get(str(front.get("next_skill") or ""), "")
+    if not template:
+        return ""
+    return template.format(root=root, ch=chapter)
+
+
+# Primary artifact whose presence proves a stage produced real output.  Used to
+# detect a table that *under-claims* (frontier left early while later artifacts
+# already exist) — the mirror of the over-claim re-verification already done.
+def downstream_artifacts_present(root: Path, chapter: str, after_stage_key: str) -> list[tuple[str, Path]]:
+    threshold = stage_index(after_stage_key)
+    candidates = [
+        ("script", root / "脚本" / chapter / "panel_script.json"),
+        ("name", root / "排版" / chapter / "name_board.json"),
+        ("layout", root / "排版" / chapter / "layout.json"),
+        ("finishing", root / "出图" / chapter / "finishing" / "finishing_plan.json"),
+        ("image_jobs", root / "出图" / chapter / "prompt" / "panel_jobs.json"),
+        ("compose", root / "排版" / chapter / "export_manifest.json"),
+    ]
+    present = [(key, path) for key, path in candidates if stage_index(key) > threshold and path.is_file()]
+    panels = root / "出图" / chapter / "panels"
+    if stage_index("image") > threshold and panels.is_dir() and any(panels.glob("*.png")):
+        present.append(("image", panels))
+    return present
+
+
+def under_claim_disclosure(root: Path, chapter: str, claimed_stage: str | None) -> dict[str, Any] | None:
+    """Surface (never auto-fix) a table whose frontier reads earlier than the
+    artifacts on disk, so the user isn't silently sent back to square one."""
+    claimed_key = STAGE_KEYS.get(claimed_stage or "", "")
+    if claimed_key not in ("source", "script"):
+        return None
+    present = downstream_artifacts_present(root, chapter, claimed_key)
+    if not present:
+        return None
+    labels = "、".join(f"{STAGE_LABELS.get(key, key)}({rel(root, path)})" for key, path in present)
+    return {
+        "chapter": chapter,
+        "claimed_stage": claimed_stage,
+        "present": [{"stage": key, "artifact": rel(root, path)} for key, path in present],
+        "hint": (
+            f"{chapter}: 表声明前沿仍在「{claimed_stage}」，但已存在下游产物：{labels}。"
+            "请核对后把 _进度.md 推进到真实前沿（用对应 comic-* 阶段 --check 复核），否则这些产物可能是未登记的孤儿。"
+        ),
+    }
+
+
 def summarize_project(root: Path) -> dict:
     progress = root / "_进度.md"
     parsed = parse_progress(progress)
     traditional_off = read_setting(root, "传统原稿流程", "启用").strip() in TRADITIONAL_OFF_VALUES
     fronts = []
+    under_claim: list[dict[str, Any]] = []
     for row in parsed["rows"]:
         chapter = row.get("话", "未命名")
         next_stage = None
@@ -914,6 +992,9 @@ def summarize_project(root: Path) -> dict:
                 next_stage = stage
                 next_skill = ROUTE[stage]
                 break
+        disclosure = under_claim_disclosure(root, chapter, next_stage)
+        if disclosure:
+            under_claim.append(disclosure)
         blockers = contract_gaps(
             root,
             chapter,
@@ -998,10 +1079,14 @@ def summarize_project(root: Path) -> dict:
                 "blockers": [],
             }
         )
+    for front in fronts:
+        if not front.get("complete"):
+            front["next_command"] = next_command_for(root, front.get("chapter", ""), front)
     return {
         "project": root.name,
         "root": str(root),
         "fronts": fronts,
+        "under_claim_disclosures": under_claim,
         "review_verdict_disclosures": review_verdict_disclosures(root, parsed["rows"]),
     }
 
@@ -1085,6 +1170,10 @@ def main() -> int:
             else:
                 suffix = f"（{front['reason']}）" if front.get("reason") else ""
                 print(f"  {front['chapter']}: 下一步 {front['next_stage']} → {front['next_skill']}{suffix}")
+                if front.get("next_command"):
+                    print(f"      运行: {front['next_command']}")
+        for item in summary.get("under_claim_disclosures") or []:
+            print(f"  [进度对账] {item['hint']}")
         for item in summary.get("review_verdict_disclosures") or []:
             print(f"  [叙事对账] {item['hint']}")
     return 0

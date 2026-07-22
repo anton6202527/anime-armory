@@ -11,21 +11,18 @@
       "fps": 24.149,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2c1232b700c5_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2828aff6937f_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2c1232b700c5_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2828aff6937f_02_mid.jpg",
           "time_sec": 2.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2c1232b700c5_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2828aff6937f_03_end.jpg",
           "time_sec": 3.817
         }
       ],
@@ -46,21 +43,18 @@
       "fps": 24.149,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_deee8b82064c_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_7d26958a100f_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_deee8b82064c_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_7d26958a100f_02_mid.jpg",
           "time_sec": 2.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_deee8b82064c_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_7d26958a100f_03_end.jpg",
           "time_sec": 3.817
         }
       ],
@@ -81,21 +75,18 @@
       "fps": 24.1,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_1a6fc02630f9_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_09527084d691_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_1a6fc02630f9_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_09527084d691_02_mid.jpg",
           "time_sec": 3.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_1a6fc02630f9_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_09527084d691_03_end.jpg",
           "time_sec": 5.817
         }
       ],
@@ -116,21 +107,18 @@
       "fps": 24.1,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_ade34cb5c864_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_3b1f5878dea9_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_ade34cb5c864_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_3b1f5878dea9_02_mid.jpg",
           "time_sec": 3.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_ade34cb5c864_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_3b1f5878dea9_03_end.jpg",
           "time_sec": 5.817
         }
       ],
@@ -151,21 +139,18 @@
       "fps": 24.149,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_cfd4a2340cc6_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_cfd4a2340cc6_02_mid.jpg",
           "time_sec": 2.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_cfd4a2340cc6_03_end.jpg",
           "time_sec": 3.816
         }
       ],
@@ -186,21 +171,18 @@
       "fps": 24.1,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_2bcede524c59_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_799ca4bc0e67_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_2bcede524c59_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_799ca4bc0e67_02_mid.jpg",
           "time_sec": 3.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_2bcede524c59_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_799ca4bc0e67_03_end.jpg",
           "time_sec": 5.817
         }
       ],
@@ -221,21 +203,18 @@
       "fps": 24.149,
       "frames": [
         {
-          "cache_hit": true,
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_0c530a194221_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_c1a6ff0af5a8_01_start.jpg",
           "time_sec": 0.0
         },
         {
-          "cache_hit": true,
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_0c530a194221_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_c1a6ff0af5a8_02_mid.jpg",
           "time_sec": 2.008
         },
         {
-          "cache_hit": true,
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_0c530a194221_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_c1a6ff0af5a8_03_end.jpg",
           "time_sec": 3.817
         }
       ],
@@ -257,23 +236,55 @@
       "frames": [
         {
           "label": "start",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_b4ba3d7c7588_01_start.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_4348d6147159_01_start.jpg",
           "time_sec": 0.0
         },
         {
           "label": "mid",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_b4ba3d7c7588_02_mid.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_4348d6147159_02_mid.jpg",
           "time_sec": 2.008
         },
         {
           "label": "end",
-          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_b4ba3d7c7588_03_end.jpg",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_4348d6147159_03_end.jpg",
           "time_sec": 3.817
         }
       ],
       "has_audio": false,
       "height": 1280,
       "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_04_part1",
+      "clip_index": 4,
+      "duration_sec": 5.016667,
+      "file": "Clip_04_先活着再算账_part1.mp4",
+      "file_clip": "Clip_04",
+      "fps": 24.12,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_04_part1_004bc192_77db315b662e_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_04_part1_004bc192_77db315b662e_02_mid.jpg",
+          "time_sec": 2.508
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_04_part1_004bc192_77db315b662e_03_end.jpg",
+          "time_sec": 4.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4",
       "probe_error": null,
       "video_codec": "h264",
       "width": 720
@@ -299,9 +310,9 @@
   "machine_summary": {
     "delivery_mismatch_warns": 0,
     "seam_blocks": 0,
-    "seam_info": 1,
+    "seam_info": 2,
     "seam_warns": 1,
-    "seams_checked": 2
+    "seams_checked": 3
   },
   "root": ".",
   "seams": [
@@ -331,6 +342,19 @@
       "transition": "视线切裴长青。",
       "verdict": "info",
       "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.0253,
+      "color_verdict": "ok",
+      "dist": 24,
+      "from_clip": "Clip_03",
+      "seam_mode": "l_cut",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_04",
+      "transition": "裴长青声尾延续。",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
     }
   ],
   "version": 1

@@ -1,0 +1,85 @@
+{
+  "batch": "04_04",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_04_part2",
+      "clip_index": 4,
+      "duration_sec": 6.016667,
+      "file": "Clip_04_先活着再算账_part2.mp4",
+      "file_clip": "Clip_04",
+      "fps": 24.1,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_04_part2_0a5cd2ad_861dac76dc1b_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_04_part2_0a5cd2ad_861dac76dc1b_02_mid.jpg",
+          "time_sec": 3.008
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_04_part2_0a5cd2ad_861dac76dc1b_03_end.jpg",
+          "time_sec": 5.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第1集/04_04/contact_sheet_04_04.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第1集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第1集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第1集/_frames",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 0,
+    "seam_warns": 1,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.1644,
+      "color_verdict": "warn",
+      "dist": 26,
+      "from_clip": "Clip_03",
+      "same_scene_color_jump": true,
+      "seam_mode": "l_cut",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_04",
+      "transition": "裴长青声尾延续。",
+      "verdict": "warn",
+      "verdict_if_relay": "warn"
+    }
+  ],
+  "version": 1
+}

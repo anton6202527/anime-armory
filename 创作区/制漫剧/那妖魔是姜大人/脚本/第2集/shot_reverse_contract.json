@@ -1,0 +1,49 @@
+{
+  "kind": "n2d_shot_reverse_contract",
+  "version": 1,
+  "episode": "第2集",
+  "status": "pass",
+  "generated_at": "2026-07-22T06:37:41+00:00",
+  "generated_by": "skills/n2d-script/scripts/shot_reverse_contract.py",
+  "sources": [
+    {
+      "name": "storyboard",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+      "exists": false,
+      "sha256": ""
+    },
+    {
+      "name": "axis_blocking_map",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/axis_blocking_map.json",
+      "exists": true,
+      "sha256": "40dfb899aa1b4e51bf4bc0cc24134d6c99ed61574c4e6deb3e17f12d9658d58a"
+    },
+    {
+      "name": "continuity_bible",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/continuity_bible.json",
+      "exists": false,
+      "sha256": ""
+    },
+    {
+      "name": "cinematic_coverage_grammar",
+      "path": "/Users/wesley/learn/anime-armory/skills/n2d-script/references/cinematic_coverage_grammar.json",
+      "exists": true,
+      "sha256": "1ed90ee789b7cc755324be108394358c17a060eb5ed83a52c0f8a799ae79213b"
+    }
+  ],
+  "summary": {
+    "patterns": 0,
+    "block": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "patterns": [],
+  "audit_issues": [],
+  "cinematic_technique_usage": [],
+  "cinematic_grammar_library": "skills/n2d-script/references/cinematic_coverage_grammar.json",
+  "vertical_9x16_global_rules": {
+    "avoid": "不要频繁横向多人并排；清晰近景不要同时塞多张脸。",
+    "prefer": "前景肩部 + 背景脸、纵深站位、道具插入、反应近景、建立/重建空间镜。",
+    "reason": "竖屏脸部可读面积有限，横向多人并排会让脸小、关系乱、视线难对。"
+  }
+}

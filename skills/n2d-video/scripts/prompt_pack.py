@@ -456,8 +456,13 @@ def seam_summary_line(seam: Optional[Mapping[str, Any]], fallback: str) -> str:
 
 
 def form_for_char(forms: Sequence[Mapping[str, Any]], char_id: str) -> Optional[Mapping[str, Any]]:
+    # Storyboard character bindings commonly carry a requested performance form
+    # (`CHAR_01/囚途残损态`), while the adapter matrix is keyed by the stable base
+    # character id (`CHAR_01`).  Match on that stable id so a ready registry
+    # reference_group is not silently downgraded to a textual fallback.
+    base_char_id = str(char_id or "").split("/", 1)[0].strip()
     for form in forms:
-        if str(form.get("character_id") or "") == char_id:
+        if str(form.get("character_id") or "").strip() == base_char_id:
             return form
     return None
 
@@ -471,7 +476,7 @@ def identity_line(forms: Sequence[Mapping[str, Any]], chars: Sequence[str]) -> s
         if form:
             ref_ready = "ready" if (form.get("reference_group") or {}) else "missing"
             lines.append(
-                f"{char}/{form.get('form') or '默认形态'}：reference_group={ref_ready}；"
+                f"{char}：reference_group={ref_ready}；registry_form={form.get('form') or '默认形态'}；"
                 f"锚点句={one_line(form.get('anchor_phrase'), '按 identity_registry')}"
             )
         else:

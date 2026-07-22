@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "MON_FOX_BROTHERS",
+  "tier": "named_minimal",
+  "model_pack_fingerprint": "eb65b6b0defa9ffe92bd95a36998a2d55e1330ffa800343c09e944ed0b1c3ad8",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+      "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+      "width": 1536,
+      "height": 1024,
+      "source_view": "front",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+        "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+      "sha256": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+      "width": 1536,
+      "height": 1024,
+      "source_view": "face",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+        "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "并排复核通过：人物身份、年龄骨相、服装结构、视角标签及妖狐标志一致。",
+  "approved_at": "2026-07-22T03:07:32+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

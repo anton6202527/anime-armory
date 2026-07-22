@@ -14,8 +14,8 @@
 
 ## Check
 
-- 状态：pass
-- 通过：9/9
+- 状态：block
+- 通过：7/9
 
 | 文件 | 状态 | 问题 |
 |---|---|---|
@@ -25,6 +25,6 @@
 | `脚本/第1集/continuity_bible.json` | pass | - |
 | `脚本/第1集/ai_shooting_schedule.json` | pass | - |
 | `脚本/第1集/ai_call_sheet.md` | pass | - |
-| `脚本/第1集/production_handoff_pack.json` | pass | - |
+| `脚本/第1集/production_handoff_pack.json` | block | inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff |
 | `生产数据/ai_shooting_schedule_batch_seed_第1集.json` | pass | - |
-| `脚本/第1集/production_handoff_signoff.json` | pass | - |
+| `脚本/第1集/production_handoff_signoff.json` | block | input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[user:wesley:producer] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor |

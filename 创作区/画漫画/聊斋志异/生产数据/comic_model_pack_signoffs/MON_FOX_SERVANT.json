@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "MON_FOX_SERVANT",
+  "tier": "named_minimal",
+  "model_pack_fingerprint": "73b3169cb60d1f972353d73a9dadf7b5061fc5dac4aa1d02740bd87463662532",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+      "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+      "width": 1024,
+      "height": 1536,
+      "source_view": "front",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+        "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+      "sha256": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+      "width": 1024,
+      "height": 1536,
+      "source_view": "face",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+        "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "并排复核通过：人物身份、年龄骨相、服装结构、视角标签及妖狐标志一致。",
+  "approved_at": "2026-07-22T03:07:31+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

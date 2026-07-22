@@ -762,6 +762,1034 @@
       "anchor_path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
       "primary_path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
       "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+    },
+    "CHAR_JIA_CHILD": {
+      "id": "CHAR_JIA_CHILD",
+      "type": "character",
+      "display_name": "贾儿",
+      "description": "十岁商人之子，靛灰短褐，警觉清瘦，靠观察与伪装讨狐",
+      "character_dna": "十岁儿童比例；清瘦圆脸、黑亮眼、额前碎发与小髻；靛灰短褐、米白内衫、窄腿裤、布鞋",
+      "variant_policy": "成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化",
+      "forbidden_inheritance": "不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "成年形态继承眼型、眉形、发际线与清瘦骨架；童年场景不得成人化",
+          "forbidden": "不得从狐尾道具继承真实尾巴；不得继承仙侠法术、成人身高或武侠服饰",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_JIA_CHILD"
+              },
+              "updated_at": "2026-07-22T11:07:15"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+          "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:15"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+          "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+          "sha256": "07595935aaef98f939b541f26f6c46ea46d8daa29d4d9b0491abc341fb64d47b",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+          "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+          "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "source_sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:07:16",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "9423fdf82dffa54284ab21e96263e94419c19a4645fd419bcad493cc3290e6e8",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-22T03:07:31+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+        "back": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+        "face": "出图/共享/图片/CHAR_JIA_CHILD__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_JIA_MOTHER": {
+      "id": "CHAR_JIA_MOTHER",
+      "type": "character",
+      "display_name": "贾母",
+      "description": "三十岁左右，灰米交领上衣、暗青长裙；狐祟中失序，解祟后恢复",
+      "character_dna": "长椭圆脸、温和眉眼、低髻；灰米上衣暗青长裙；三十岁左右",
+      "variant_policy": "STATE_POSSESSED 只改变眼下青黑、发髻松散和神态；STATE_RECOVERING 保留同一脸型与衣色",
+      "forbidden_inheritance": "不色情化、不喜剧疯癫、不换年龄骨相",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "STATE_POSSESSED 只改变眼下青黑、发髻松散和神态；STATE_RECOVERING 保留同一脸型与衣色",
+          "forbidden": "不色情化、不喜剧疯癫、不换年龄骨相",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+              "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_JIA_MOTHER"
+              },
+              "updated_at": "2026-07-22T11:07:16"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+          "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+          "sha256": "d1ca771f6fb739b374664327c6458b0916d361bd7432b158dc9b3d9e0bd34dca",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+          "sha256": "ba553cb08dfcead930ebde80c4352e7da9dd91b47470ac505bca63767f7900f9",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "source_sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1536,
+            "height": 1024
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:07:16",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "75fb57ca9d3e9a4e36c1498eeba3755c6dccdd77830e912fed54c55420035d9a",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-22T03:07:31+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_JIA_MOTHER__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_JIA_FATHER": {
+      "id": "CHAR_JIA_FATHER",
+      "type": "character",
+      "display_name": "贾父",
+      "description": "三十八岁外出经商者，深褐长衫旧青腰带",
+      "character_dna": "方脸短须、眉骨略重、黑布巾；深褐长衫、旧青腰带、布靴",
+      "variant_policy": "全话保持普通商人朴素造型与父子身高比例",
+      "forbidden_inheritance": "不得官员化、富商员外化或清宫化",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "全话保持普通商人朴素造型与父子身高比例",
+          "forbidden": "不得官员化、富商员外化或清宫化",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+              "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_JIA_FATHER"
+              },
+              "updated_at": "2026-07-22T11:07:16"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+          "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1254,
+            "height": 1254
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+          "sha256": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1254,
+            "height": 1254
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+          "sha256": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1254,
+            "height": 1254
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:07:16",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "2a3c0fc86fec3c86476ab45da771dbba2116ca6768856e2b0e5ffab2695d1553",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-22T03:07:31+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_JIA_FATHER__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "MON_FOX_SERVANT": {
+      "id": "MON_FOX_SERVANT",
+      "type": "monster",
+      "display_name": "长鬣狐仆",
+      "description": "瘦长脸长络腮胡、老棕短衣，真实暗棕狐尾；死后为秃尾赤狐",
+      "character_dna": "四十岁人形、瘦长脸、长络腮胡、老棕短衣；仅一条暗棕狐尾",
+      "variant_policy": "人形与赤狐形共享暗棕毛色和断尾特征",
+      "forbidden_inheritance": "不兽人化、不狼人化、不多肢、不发光",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "人形与赤狐形共享暗棕毛色和断尾特征",
+          "forbidden": "不兽人化、不狼人化、不多肢、不发光",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+          "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+          "sha256": "db2ba7ac6bb159efa7fc506dc30e1ab30adfa1e6f889234e0c85a0c6ec8833a9",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "source_sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:07:16",
+      "views": {
+        "front": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+        "face": "出图/共享/图片/MON_FOX_SERVANT__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "73b3169cb60d1f972353d73a9dadf7b5061fc5dac4aa1d02740bd87463662532",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-22T03:07:32+00:00"
+      }
+    },
+    "MON_FOX_BROTHERS": {
+      "id": "MON_FOX_BROTHERS",
+      "type": "monster",
+      "display_name": "狐兄弟",
+      "description": "两名清俊青年狐妖，一暗赭一墨青；死后为两只完整尾赤狐",
+      "character_dna": "二十余岁清瘦男子两名，五官相近但不复制；暗赭衣与墨青衣区分；细瞳、影子偶显狐耳",
+      "variant_policy": "人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分",
+      "forbidden_inheritance": "不直接兽头、不仙侠华服、不发光、不合并成一人",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "人形与赤狐形共享衣色映射和毛色差异；两兄弟始终可区分",
+          "forbidden": "不直接兽头、不仙侠华服、不发光、不合并成一人",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+          "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1536,
+            "height": 1024
+          },
+          "updated_at": "2026-07-22T11:07:16"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+          "sha256": "c7b1a2c373e0b45d081f5a6445bdd15f11c38c2ab18b1fe37391c9e98f0ea61f",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第2话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "source_sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1536,
+            "height": 1024
+          },
+          "updated_at": "2026-07-22T11:07:17"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:07:17",
+      "views": {
+        "front": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+        "face": "出图/共享/图片/MON_FOX_BROTHERS__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "face"
+        ],
+        "tier": "named_minimal",
+        "ready": [
+          "front",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "eb65b6b0defa9ffe92bd95a36998a2d55e1330ffa800343c09e944ed0b1c3ad8",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-22T03:07:32+00:00"
+      }
+    },
+    "LOC_JIA_HOME": {
+      "id": "LOC_JIA_HOME",
+      "type": "location",
+      "display_name": "贾家青砖小院",
+      "description": "普通商户小院，北正房、东卧房、木格窗、青砖地与油灯",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+          "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221",
+          "source": {
+            "kind": "existing_text_anchor",
+            "chapter": "第2话",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "requested_ratio": "4:5",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1536,
+              "source_height": 1024,
+              "target_width": 1536,
+              "target_height": 1920
+            },
+            "raw_canvas_path": "出图/共享/candidates/LOC_JIA_HOME/anchor/20260722T112009743184__99187ba81898.png",
+            "raw_canvas_sha256": "99187ba81898902cfbe795ba549488497fca03e4df3b4fd7ad546c8f238cb2bb"
+          },
+          "updated_at": "2026-07-22T11:20:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:20:09",
+      "anchor_path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+      "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+    },
+    "LOC_HE_GARDEN": {
+      "id": "LOC_HE_GARDEN",
+      "type": "location",
+      "display_name": "何氏园",
+      "description": "荒废私园，竹丛、矮亭、庭石与半塌月门",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+          "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6",
+          "source": {
+            "kind": "existing_text_anchor",
+            "chapter": "第2话",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "requested_ratio": "4:5",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1536,
+              "source_height": 1024,
+              "target_width": 1536,
+              "target_height": 1920
+            },
+            "raw_canvas_path": "出图/共享/candidates/LOC_HE_GARDEN/anchor/20260722T112009835638__5027c8185b3e.png",
+            "raw_canvas_sha256": "5027c8185b3e7354b080d67f9170e7395ccb33fdb1726dc556ff921e20074961"
+          },
+          "updated_at": "2026-07-22T11:20:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:20:09",
+      "anchor_path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+      "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+    },
+    "LOC_MARKET_STREET": {
+      "id": "LOC_MARKET_STREET",
+      "type": "location",
+      "display_name": "县城市街",
+      "description": "帽肆与酒肆相邻的清代县城市街，无现代招牌",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+          "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76",
+          "source": {
+            "kind": "existing_text_anchor",
+            "chapter": "第2话",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "requested_ratio": "4:5",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1536,
+              "source_height": 1024,
+              "target_width": 1536,
+              "target_height": 1920
+            },
+            "raw_canvas_path": "出图/共享/candidates/LOC_MARKET_STREET/anchor/20260722T112009935768__a2859884206a.png",
+            "raw_canvas_sha256": "a2859884206aa1859dd649094557b54256aebcb51e862b06c46b1f59a654ec02"
+          },
+          "updated_at": "2026-07-22T11:20:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:20:09",
+      "anchor_path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+      "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+    },
+    "PROP_FAKE_FOX_TAIL": {
+      "id": "PROP_FAKE_FOX_TAIL",
+      "type": "prop",
+      "display_name": "假狐尾",
+      "description": "帽肆售卖的棕红狐尾装饰，以细带系腰，可拆卸",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+          "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676",
+          "source": {
+            "kind": "existing_text_anchor",
+            "chapter": "第2话",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "requested_ratio": "4:5",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1536,
+              "source_height": 1024,
+              "target_width": 1536,
+              "target_height": 1920
+            },
+            "raw_canvas_path": "出图/共享/candidates/PROP_FAKE_FOX_TAIL/anchor/20260722T112010092260__7c501d4530b4.png",
+            "raw_canvas_sha256": "7c501d4530b4033b3121fc06d6aefbb4dde373251f85aca346a88a7621ff42de"
+          },
+          "updated_at": "2026-07-22T11:20:10"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:20:10",
+      "anchor_path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+      "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+    },
+    "PROP_POISON_WINE": {
+      "id": "PROP_POISON_WINE",
+      "type": "prop",
+      "display_name": "药酒壶",
+      "description": "粗陶白酒壶、麻绳封口，内含猎药，仅作剧情道具",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+          "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c",
+          "source": {
+            "kind": "existing_text_anchor",
+            "chapter": "第2话",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "requested_ratio": "4:5",
+            "canvas_normalization": {
+              "method": "contain_and_pad_no_crop",
+              "ratio": "4:5",
+              "source_width": 1536,
+              "source_height": 1024,
+              "target_width": 1536,
+              "target_height": 1920
+            },
+            "raw_canvas_path": "出图/共享/candidates/PROP_POISON_WINE/anchor/20260722T112010182778__7074c611b10f.png",
+            "raw_canvas_sha256": "7074c611b10ff38c5298a91dfd6ab8a7739155da02e2feda1c339b1de0f8c11b"
+          },
+          "updated_at": "2026-07-22T11:20:10"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-22T11:20:10",
+      "anchor_path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+      "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
     }
   },
   "schema_meta": {

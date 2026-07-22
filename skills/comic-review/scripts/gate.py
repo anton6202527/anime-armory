@@ -732,7 +732,13 @@ def check_panel_visual_contract(root: Path, chapter: str, panel_script: dict[str
                     "script",
                     "补 visual_contract.scene_anchors 或逐格 scene_anchor_id/spatial_layout/lighting_anchor/axis_eyeline 后重建出图包。",
                 )
-            if panel_character_count(panel) >= 2 and not contract_value(panel, scene_contract, "spatial_relationships", "blocking", "staging"):
+        # Multi-character staging is required for ANY 2+ character panel, scene
+        # or not: a scene-less two-shot / floating-BG emotional beat can still
+        # flip who is 画左/画右 or lose the occlusion order between panels.  This
+        # used to sit inside `if panel_has_scene`, so those panels escaped it.
+        if panel_character_count(panel) >= 2:
+            scene_contract_for_staging = scene_contract_from(visual_contract, panel_scene_anchor_id(panel)) if panel_has_scene(panel) else {}
+            if not contract_value(panel, scene_contract_for_staging, "spatial_relationships", "blocking", "staging"):
                 add(
                     findings,
                     "block",
@@ -1170,6 +1176,20 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
                 "重跑 build_panel_jobs.py 后 force 重抽该格；不要手工把旧图改回 ready。",
             )
             continue
+        generated_exec = str(job.get("generated_from_execution_input_sha256") or "")
+        current_exec = str(job.get("execution_input_sha256") or "")
+        if status == "ready" and generated_exec and current_exec and generated_exec != current_exec:
+            add(
+                findings,
+                "block",
+                "panel_generated_under_stale_reference_contract",
+                str(job.get("result_path") or f"出图/{chapter}/panels/{pid}.png"),
+                f"{pid} 的成图执行输入契约已过期（generated_from_execution_input_sha256 != 当前 execution_input_sha256）："
+                "提交 prompt 文本没变，但参考图内容/结构化绑定/尺寸/panel_plan 变了却没重抽该格。",
+                "image",
+                "重跑 build_panel_jobs.py 后 force 重抽该格；submit_prompt 文本不含参考图 SHA，只靠它判过期会漏掉换参考图的改动。",
+            )
+            continue
         post_qc = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
         post_verdict = str(post_qc.get("verdict") or "")
         if status == "qc_block" or post_verdict == "block":
@@ -1503,7 +1523,19 @@ def run_continuity_contract_audit(
         report = continuity_audit.audit(root, through_chapter=chapter)
         continuity_audit.write_report(root, report)
     except Exception as exc:
-        notes.append(f"continuity_audit 运行失败（{exc}）")
+        # A crash here must not silently drop the cross-chapter state contract.
+        # It is a deterministic auditor whose contradictions are BLOCK-level, so
+        # a failure to run is at least a WARN the human sees — never a swallowed
+        # note that lets an unaudited chapter sail through the script gate.
+        add(
+            findings,
+            "warn",
+            "continuity_audit_unavailable",
+            f"脚本/{chapter}/panel_script.json",
+            f"跨话状态合同审计运行失败，无法确认 entry/continuity_delta/exit 一致性（{exc}）。",
+            "script",
+            "修复 continuity_audit 输入（chapter_contract/panel_script 结构）后重跑 comic-review gate --stage script。",
+        )
         return
     for item in report.get("findings") or []:
         severity = str(item.get("severity") or "warn")

@@ -1623,3 +1623,54 @@ def test_decide_payment_confirm_quiet_without_alerts_file():
     na = run.decide(root, _route("image"), "image", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert "active_alerts" not in na["action_card"]
+
+
+# ── prework 缓存指纹：设定库 语义真值输入必须参与失效（G 类一致性回归）──────────
+def test_stage_cache_inputs_include_settei_authored_truth() -> None:
+    """image_prompt 前沿的缓存审计（antecedent/setup_payoff/story_integrity/source_adaptation）
+    读 设定库/ 角色场景卡与源理解合同；`_stage_cache_inputs` 必须声明它们，否则改这些
+    真值不失效缓存 → 陈旧审计结果。"""
+    globs = run._stage_cache_inputs("/proj", "第1集")
+    joined = "\n".join(globs)
+    assert any("设定库" in g and "characters" in g for g in globs)
+    assert any("设定库" in g and "locations" in g for g in globs)
+    assert "设定库/global_style.md".replace("/", os.sep) in joined
+    assert any("source_comprehension" in g for g in globs)
+
+
+def test_prework_fingerprint_flips_when_character_card_edited(tmp_path: Path) -> None:
+    """端到端：编辑一张角色卡后，用 `_stage_cache_inputs` 喂进指纹，指纹必须变
+    （缓存自动失效，读该卡的审计会重跑，不再吐旧结果）。"""
+    import prework_cache as pc
+
+    root = str(tmp_path)
+    ep = "第1集"
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    open(os.path.join(root, "脚本", ep, "voiceover.txt"), "w", encoding="utf-8").write("台词")
+    card = os.path.join(root, "设定库", "characters", "主角.md")
+    os.makedirs(os.path.dirname(card), exist_ok=True)
+    open(card, "w", encoding="utf-8").write("# 主角\n黑发，冷峻。\n")
+
+    extra = run._stage_cache_inputs(root, ep)
+    fp1 = pc.episode_input_fingerprint(root, ep, extra_paths=extra)
+    open(card, "w", encoding="utf-8").write("# 主角\n白发，暴烈。\n")  # 形象变更
+    fp2 = pc.episode_input_fingerprint(root, ep, extra_paths=extra)
+    assert fp1 != fp2
+
+
+def test_prework_fingerprint_flips_when_source_comprehension_edited(tmp_path: Path) -> None:
+    import prework_cache as pc
+
+    root = str(tmp_path)
+    ep = "第1集"
+    os.makedirs(os.path.join(root, "脚本", ep), exist_ok=True)
+    open(os.path.join(root, "脚本", ep, "voiceover.txt"), "w", encoding="utf-8").write("台词")
+    sc = os.path.join(root, "设定库", "source_comprehension.json")
+    os.makedirs(os.path.dirname(sc), exist_ok=True)
+    open(sc, "w", encoding="utf-8").write('{"status":"confirmed","understanding_contract":{"v":1}}')
+
+    extra = run._stage_cache_inputs(root, ep)
+    fp1 = pc.episode_input_fingerprint(root, ep, extra_paths=extra)
+    open(sc, "w", encoding="utf-8").write('{"status":"confirmed","understanding_contract":{"v":2}}')
+    fp2 = pc.episode_input_fingerprint(root, ep, extra_paths=extra)
+    assert fp1 != fp2

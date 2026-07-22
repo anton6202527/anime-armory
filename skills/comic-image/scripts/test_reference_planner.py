@@ -193,6 +193,44 @@ def test_attachment_allocation_is_fair_and_keeps_location_and_prop(tmp_path):
     assert selected_ids.index("CHAR_A") != selected_ids.index("CHAR_B")
 
 
+def test_panel_critical_outfit_ref_forces_split_not_silent_drop(tmp_path):
+    # change panel: CHAR_A carries an identity anchor + a panel-critical outfit ref.
+    for name in ("a-front", "a-outfit", "b-front", "loc"):
+        (tmp_path / f"{name}.png").write_bytes(name.encode())
+    char_plans = [
+        {"char_id": "CHAR_A", "recommended_references": [
+            {"role": "front", "path": "a-front.png"},
+            {"role": "outfit", "path": "a-outfit.png", "panel_critical": True},
+        ]},
+        {"char_id": "CHAR_B", "recommended_references": [{"role": "front", "path": "b-front.png"}]},
+    ]
+    registry = {"assets": {"LOC_ROOM": {"anchor_path": "loc.png"}}}
+    caps = {"executable_attachment_limit": 3, "reference_image_limit": 16}
+    result = rp.allocate_panel_attachments(tmp_path, {"references": ["LOC_ROOM"]}, char_plans, registry, caps)
+    # 2 anchors + LOC + critical outfit = 4 mandatory > limit 3 → must flag, never silently drop the garment ref.
+    assert result["required_count"] == 4
+    assert result["over_capacity"] is True
+    assert result["split_suggestion"]
+
+
+def test_panel_critical_outfit_ref_selected_when_budget_allows(tmp_path):
+    for name in ("a-front", "a-outfit", "b-front", "loc"):
+        (tmp_path / f"{name}.png").write_bytes(name.encode())
+    char_plans = [
+        {"char_id": "CHAR_A", "recommended_references": [
+            {"role": "front", "path": "a-front.png"},
+            {"role": "outfit", "path": "a-outfit.png", "panel_critical": True},
+        ]},
+        {"char_id": "CHAR_B", "recommended_references": [{"role": "front", "path": "b-front.png"}]},
+    ]
+    registry = {"assets": {"LOC_ROOM": {"anchor_path": "loc.png"}}}
+    caps = {"executable_attachment_limit": 5, "reference_image_limit": 16}
+    result = rp.allocate_panel_attachments(tmp_path, {"references": ["LOC_ROOM"]}, char_plans, registry, caps)
+    assert result["over_capacity"] is False
+    selected_paths = {item["path"] for item in result["selected"]}
+    assert "a-outfit.png" in selected_paths  # garment ref survives, not demoted to a dropped extra
+
+
 def test_critical_reference_budget_overflow_requests_split(tmp_path):
     char_plans = []
     for index in range(4):

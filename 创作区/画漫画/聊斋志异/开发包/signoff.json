@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
   "kind": "comic_development_pack_signoff",
-  "decision": "第1话《画皮》开发包与整话改编边界通过制作代理复核",
+  "decision": "《聊斋志异》第1—2话开发包与整话改编边界通过制作代理复核",
   "reviewer": "Codex制作代理",
   "role": "用户授权制作代理",
-  "time": "2026-07-21T21:00:00+08:00",
-  "reason": "已核对公版《画皮》源文选段、读者承诺、因果主干、克制惊悚边界、整话闭环与 entry→delta→exit 状态链；依设定库/approval_delegation.json 的常规可逆审阅授权签收。",
+  "time": "2026-07-22T10:28:00+08:00",
+  "reason": "已复核第2话《贾儿》原文选段、儿童智斗读者承诺、狐祟克制呈现、完整因果闭环和跨话状态携带；依设定库/approval_delegation.json 的整话制作授权重新签收三件套当前 SHA。",
   "authorization_path": "设定库/approval_delegation.json",
   "file_sha256": {
     "adaptation_strategy": "331c9b1ee26eaf22dee18305863215b6e6b9c34ba23552ba7fc9517693ee2a80",
     "season_arc": "b6109d6bb704df394369755b3f2b7fa54cfd285e9c6a9b4aaa7164298e944a16",
-    "split_blueprint": "9bce2d9d18c10263f05d209b395a040593710b01de230af3a3c114961c87d97a"
+    "split_blueprint": "5eb596d94da6cc98e0dde9f68fa983b889913b496b5200a23679d5bb99ea0aa6"
   },
   "status": "approved",
   "files": [
     {"path": "开发包/adaptation_strategy.json", "sha256": "331c9b1ee26eaf22dee18305863215b6e6b9c34ba23552ba7fc9517693ee2a80"},
     {"path": "开发包/season_arc.json", "sha256": "b6109d6bb704df394369755b3f2b7fa54cfd285e9c6a9b4aaa7164298e944a16"},
-    {"path": "脚本/split_blueprint.json", "sha256": "9bce2d9d18c10263f05d209b395a040593710b01de230af3a3c114961c87d97a"}
+    {"path": "脚本/split_blueprint.json", "sha256": "5eb596d94da6cc98e0dde9f68fa983b889913b496b5200a23679d5bb99ea0aa6"}
   ]
 }

@@ -4,9 +4,9 @@
   "metadata": {
     "n2d": {
       "episode": "第1集",
-      "generated_at": "2026-07-22T01:53:18+00:00",
+      "generated_at": "2026-07-22T05:54:22+00:00",
       "kind": "n2d_editorial_timeline",
-      "phase": "assembly",
+      "phase": "rough_cut",
       "planned_audio_slots": 0,
       "seams": [
         {
@@ -387,7 +387,7 @@
                   "duration": {
                     "OTIO_SCHEMA": "RationalTime.1",
                     "rate": 30.0,
-                    "value": 180.50001
+                    "value": 173.75001
                   },
                   "start_time": {
                     "OTIO_SCHEMA": "RationalTime.1",
@@ -398,7 +398,7 @@
                 "metadata": {
                   "n2d": {
                     "relative_path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
-                    "sha256": "b4d5c3c4a8bf5e5ff2d4a1556b41e97c6c2d3abc5dbe0d90a516b35cb8004892"
+                    "sha256": "c4255ac85dfd90a5e75b2ba5d31dc2de005c0f367f4e3f2840bd0341b7086b14"
                   }
                 },
                 "name": "Clip_02_一炷香前的荒野死局_part1.mp4",
@@ -729,7 +729,7 @@
                   "duration": {
                     "OTIO_SCHEMA": "RationalTime.1",
                     "rate": 30.0,
-                    "value": 282.0
+                    "value": 150.50001
                   },
                   "start_time": {
                     "OTIO_SCHEMA": "RationalTime.1",
@@ -739,28 +739,30 @@
                 },
                 "metadata": {
                   "n2d": {
-                    "relative_path": "出图/第1集/图片/Clip04_first.png",
-                    "sha256": "5e511875d56ba813cef79e8f2ccbfb10c1416c76a30e666e5e8673b115f75774"
+                    "relative_path": "出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4",
+                    "sha256": "495ce3f384eb555cd1e79cf5e98a4f77a25b34c9ad16ccb66e9b3a90b5cd51fa"
                   }
                 },
-                "name": "Clip04_first.png",
-                "target_url": "出图/第1集/图片/Clip04_first.png"
+                "name": "Clip_04_先活着再算账_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_04_先活着再算账_part1.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": false,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_04"
               }
             },
-            "name": "Clip_04",
+            "name": "Clip_04_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 282.0
+                "value": 126.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -784,7 +786,7 @@
                   "duration": {
                     "OTIO_SCHEMA": "RationalTime.1",
                     "rate": 30.0,
-                    "value": 236.4
+                    "value": 180.50001
                   },
                   "start_time": {
                     "OTIO_SCHEMA": "RationalTime.1",
@@ -794,28 +796,87 @@
                 },
                 "metadata": {
                   "n2d": {
-                    "relative_path": "出图/第1集/图片/Clip05_first.png",
-                    "sha256": "72413fc47afe1e2983f9fc936f477beac7473ab78b7e07015525ab1cef7a0a8b"
+                    "relative_path": "出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4",
+                    "sha256": "fda221ee75f73b5317525f8b252f5cf9559650f89e6df074fbcf86290e0ace05"
                   }
                 },
-                "name": "Clip05_first.png",
-                "target_url": "出图/第1集/图片/Clip05_first.png"
+                "name": "Clip_04_先活着再算账_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_04_先活着再算账_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": false,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_04"
+              }
+            },
+            "name": "Clip_04_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 156.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4",
+                    "sha256": "b6d21f92e9d9902afac767de537784ec22fdc8be0a913c8088140d242def6d1e"
+                  }
+                },
+                "name": "Clip_05_死妖咳嗽站起_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_05"
               }
             },
-            "name": "Clip_05",
+            "name": "Clip_05_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 236.4
+                "value": 116.1
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -839,7 +900,7 @@
                   "duration": {
                     "OTIO_SCHEMA": "RationalTime.1",
                     "rate": 30.0,
-                    "value": 264.0
+                    "value": 120.50001
                   },
                   "start_time": {
                     "OTIO_SCHEMA": "RationalTime.1",
@@ -849,28 +910,144 @@
                 },
                 "metadata": {
                   "n2d": {
-                    "relative_path": "出图/第1集/图片/Clip06_first.png",
-                    "sha256": "2c8d2d006a9e7ac722ffe7682f1a5c67dc4fa58b29add20c81a9179aa654cd4e"
+                    "relative_path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4",
+                    "sha256": "47f84dcb2bde8d1d44fec71faf5a842d304406e4817ea9ef4501e9b06de7a044"
                   }
                 },
-                "name": "Clip06_first.png",
-                "target_url": "出图/第1集/图片/Clip06_first.png"
+                "name": "Clip_05_死妖咳嗽站起_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": false,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_05"
+              }
+            },
+            "name": "Clip_05_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 116.1
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4",
+                    "sha256": "0f74f71644e808b0d95f0a070e240794d4ec2b7ab74f4d38cf2445f0ad5319d1"
+                  }
+                },
+                "name": "Clip_05_死妖咳嗽站起_part3.mp4",
+                "target_url": "出视频/第1集/视频/Clip_05_死妖咳嗽站起_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_05"
+              }
+            },
+            "name": "Clip_05_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 4.2
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4",
+                    "sha256": "390eb6c3a59d08aecc7bf31861350762f86026cd38d86c81d982459930b03da6"
+                  }
+                },
+                "name": "Clip_06_虎口最后威胁_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_06_虎口最后威胁_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_06"
               }
             },
-            "name": "Clip_06",
+            "name": "Clip_06_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 264.0
+                "value": 90.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -894,7 +1071,7 @@
                   "duration": {
                     "OTIO_SCHEMA": "RationalTime.1",
                     "rate": 30.0,
-                    "value": 211.8
+                    "value": 120.50001
                   },
                   "start_time": {
                     "OTIO_SCHEMA": "RationalTime.1",
@@ -904,28 +1081,201 @@
                 },
                 "metadata": {
                   "n2d": {
-                    "relative_path": "出图/第1集/图片/Clip07_first.png",
-                    "sha256": "d626a750d548b216e7765792cbc0674d65cb6ff9adea10677f9e9e3f9114d865"
+                    "relative_path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4",
+                    "sha256": "3cf27fd09bf9c56eb199e7a55a29b38dbf4900136a67967f7463b1492d859b3a"
                   }
                 },
-                "name": "Clip07_first.png",
-                "target_url": "出图/第1集/图片/Clip07_first.png"
+                "name": "Clip_06_虎口最后威胁_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_06_虎口最后威胁_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": false,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_06"
+              }
+            },
+            "name": "Clip_06_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 54.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4",
+                    "sha256": "a7b749c9f56ad71fe7d2dcdd082cf45199edde295a6587830d6107129fa753a2"
+                  }
+                },
+                "name": "Clip_06_虎口最后威胁_part3.mp4",
+                "target_url": "出视频/第1集/视频/Clip_06_虎口最后威胁_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_06"
+              }
+            },
+            "name": "Clip_06_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 54.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4",
+                    "sha256": "6bf80054dad1e364ed2ae8c0239e3d011c465bad500f8b0d54577b401623d1d8"
+                  }
+                },
+                "name": "Clip_06_虎口最后威胁_part4.mp4",
+                "target_url": "出视频/第1集/视频/Clip_06_虎口最后威胁_part4.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_06"
+              }
+            },
+            "name": "Clip_06_part4",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 66.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4",
+                    "sha256": "57f8d08e923778e300c6ab872b4f02770d5f534dce9c7cb494ea329844bd55c7"
+                  }
+                },
+                "name": "Clip_07_百妖谱给出残酷选择_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_07"
               }
             },
-            "name": "Clip_07",
+            "name": "Clip_07_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 211.8
+                "value": 108.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -949,7 +1299,7 @@
                   "duration": {
                     "OTIO_SCHEMA": "RationalTime.1",
                     "rate": 30.0,
-                    "value": 386.4
+                    "value": 120.50001
                   },
                   "start_time": {
                     "OTIO_SCHEMA": "RationalTime.1",
@@ -959,28 +1309,258 @@
                 },
                 "metadata": {
                   "n2d": {
-                    "relative_path": "出图/第1集/图片/Clip08_first.png",
-                    "sha256": "9fe6b917cf3bcabb862900fc5768201a38e3667b520613fb6aa0e89fcd7da86b"
+                    "relative_path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4",
+                    "sha256": "c74a5eb35e0404e60d63953f27d071c475477ebacfad5800f33597b5220dcfcb"
                   }
                 },
-                "name": "Clip08_first.png",
-                "target_url": "出图/第1集/图片/Clip08_first.png"
+                "name": "Clip_07_百妖谱给出残酷选择_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": false,
-                "story_clip": "Clip_08"
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_07"
               }
             },
-            "name": "Clip_08",
+            "name": "Clip_07_part2",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 386.4
+                "value": 78.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4",
+                    "sha256": "fd6b1982b7a14ab005228ab590ccbf618619279837bb0b4e1a66773a8a7b0fc3"
+                  }
+                },
+                "name": "Clip_07_百妖谱给出残酷选择_part3.mp4",
+                "target_url": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_07"
+              }
+            },
+            "name": "Clip_07_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 25.8
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.48048
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4",
+                    "sha256": "3f5db709f5e5df1a258b520c34f4c818c83fdd752b778b93936000d7e63a931a"
+                  }
+                },
+                "name": "Clip_08_对不住了，刀落人身_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_08"
+              }
+            },
+            "name": "Clip_08_part1",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 108.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4",
+                    "sha256": "a28aaed5a7bef194772209657bc4ff48e2bf452f7e05e46c0e34be8b616790de"
+                  }
+                },
+                "name": "Clip_08_对不住了，刀落人身_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part2.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_08"
+              }
+            },
+            "name": "Clip_08_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 102.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 176.25
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+                    "sha256": "9206fa165b3429adf9125836e1f40a14f310b7090649a85768a4285b0da538e5"
+                  }
+                },
+                "name": "Clip_08_对不住了，刀落人身_part3.mp4",
+                "target_url": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_08"
+              }
+            },
+            "name": "Clip_08_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 176.25
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",

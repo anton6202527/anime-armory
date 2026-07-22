@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="16616" viewBox="0 0 1440 16616">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="6320" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_001</tspan></text>
+<rect x="72" y="28" width="1296" height="960" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  opening_hook</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">阴天市街窄巷，十岁贾儿侧身掀开短褐下摆，腰带上系着一条棕红假狐尾；画右长须男人低头审视尾根，眼神狐疑，后景酒肆人流虚化。</tspan></text>
+<text x="100" y="828" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贾儿：我胡氏之子，世居山洞。</tspan></text>
+<rect x="120" y="76" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="110" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B001D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="1044" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="1092" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P002  setup</tspan></text>
+<text x="100" y="1142" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">深夜东卧房外，贾儿抱膝坐在画左门槛边不敢睡；紧闭的薄门内映出母亲坐在床边、对着一个不自然矮小影子低语的剪影。</tspan></text>
+<text x="100" y="2004" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：父亲离家经商后，母亲每到夜里就像变了一个人。 | SFX：窸窣</tspan></text>
+<rect x="120" y="1092" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="1126" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B002N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="1966" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2000" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B002S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="2192" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="2240" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P003  threat_escalation</tspan></text>
+<text x="154" y="2290" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">白日却昏暗的卧房，母亲背对画面把最后一块砖压进木格窗；矮桌边厨刀横在磨石上。贾儿站在门口，手扶门框，盯住刀而不是母亲的脸。</tspan></text>
+<text x="154" y="2952" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">贾儿：娘，你为什么把光都堵住？ | SFX：嚓、嚓</tspan></text>
+<rect x="174" y="2240" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="2274" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B003D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="2914" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2948" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B003S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="3128" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3176" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P004  first_counterattack</tspan></text>
+<text x="100" y="3226" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜里门隙前，一只赤狐正低身窜逃；贾儿从画左掀开覆灯的葫芦瓢，另一手持短厨刀向狐尾后端横斩，刀锋只触及尾毛，母亲在床边画外不入格。</tspan></text>
+<text x="100" y="4008" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贾儿：出来！ | SFX：嚓！</tspan></text>
+<rect x="120" y="3176" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="3210" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B004D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="3970" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="4004" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B004S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="4196" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="4244" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P005  clue</tspan></text>
+<text x="154" y="4294" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">黎明冷光里，贾儿蹲在青砖墙根，左手捏着一截湿血狐尾，右手指向跨过矮墙、延伸至荒园月门的稀疏血点。</tspan></text>
+<text x="154" y="4956" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：只差一点……但它会流血。</tspan></text>
+<rect x="174" y="4244" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="4278" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B005N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="72" y="5172" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="5220" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P006  false_relief</tspan></text>
+<text x="100" y="5270" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜间贾家院内，父亲用双手死死拉住东卧房门闩，木门却向画左自行裂开一道黑缝；贾儿在父亲身后举灯，母亲的衣角正从缝中掠过。</tspan></text>
+<text x="100" y="6132" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：医药与驱禳，都只能换来几日安稳。 | 贾父：门明明锁着。 |</tspan><tspan x="100" dy="32">SFX：吱呀——</tspan></text>
+<rect x="120" y="5220" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="5254" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B006N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="598" y="5220" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="5254" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B006D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="540" y="6094" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6128" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B006S3</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="0" y="6400" width="1440" height="5792" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="6444" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_002</tspan></text>
+<rect x="72" y="6428" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6476" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  investigation</tspan></text>
+<text x="100" y="6526" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">月初升，贾儿伏在画左竹丛下，只露一只眼与压住竹叶的小手；中景矮亭前，两名清俊狐兄弟对坐，长须狐仆从右侧月门捧空壶走来。</tspan></text>
+<text x="100" y="7388" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：何氏园。 | SFX：沙……</tspan></text>
+<rect x="120" y="6476" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="6510" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B007N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="7350" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="7384" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="7576" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="7624" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P008  information_gain</tspan></text>
+<text x="154" y="7674" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">何氏园庭石上，长须狐仆侧卧假寐，老棕短衣掀开少许，腰后垂下一条真实暗棕狐尾；远处亭内只见狐兄弟模糊背影，贾儿的眼睛藏在前景叶缝。</tspan></text>
+<text x="154" y="8256" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">狐主（画外）：明日，取一壶白酒来。</tspan></text>
+<rect x="172" y="7622" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="7656" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B008D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="126" y="8444" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="8492" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P009  preparation</tspan></text>
+<text x="154" y="8542" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">县城市街帽肆前，贾儿踮脚把铜钱推上木柜，另一手抓住一条棕红狐尾装饰；腰侧布袋露出粗陶白酒壶颈与折起的无字药纸包。</tspan></text>
+<text x="154" y="9204" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">贾儿：这条尾巴，我要了。 | SFX：叮</tspan></text>
+<rect x="174" y="8492" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="8526" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B009D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="540" y="9166" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="9200" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B009S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="180" y="9392" width="1080" height="780" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="208" y="9440" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">P010  preparation_risk</tspan></text>
+<text x="208" y="9490" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">无人暗巷石阶上，贾儿半跪，用折起的纸槽把少量猎药粉准确倒入粗陶白酒壶；假狐尾铺在一旁，麻绳塞与壶口分离可见。</tspan></text>
+<text x="208" y="10012" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="208" dy="0">旁白：一滴都不能洒。 | SFX：沙……</tspan></text>
+<rect x="223" y="9435" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="239" y="9469" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="239" dy="0">B010N1</tspan><tspan x="239" dy="27">narration</tspan></text>
+<rect x="540" y="9979" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="10013" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B010S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="10228" width="1188" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="10276" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P011  target_acquired</tspan></text>
+<text x="154" y="10326" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">拥挤市街中，长须狐仆穿老棕短衣从画右走向酒肆；贾儿系好假尾，借一名挑担行人遮挡身体，只从画左后探出半张脸跟随。</tspan></text>
+<text x="154" y="10988" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">旁白：找到你了。</tspan></text>
+<rect x="174" y="10276" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="10310" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B011N1</tspan><tspan x="190" dy="27">narration</tspan></text>
+<rect x="72" y="11176" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11224" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  turning_point</tspan></text>
+<text x="100" y="11274" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">市街侧巷，贾儿压低声音，左手提起衣摆露出腰带假尾，右手把粗陶酒壶藏在身后；狐仆俯身靠近，视线锁在尾根，警惕开始松动。</tspan></text>
+<text x="100" y="11976" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贾儿：我辈混在人间，只恨这尾巴藏不住。</tspan></text>
+<rect x="120" y="11224" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="11258" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B012D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="0" y="12272" width="1440" height="4344" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="12316" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_003</tspan></text>
+<rect x="126" y="12300" width="1188" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="12348" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P013  confession</tspan></text>
+<text x="154" y="12398" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">狐仆靠墙低声指向巷外两个方向，贾儿仰头听着，藏在背后的手攥紧酒壶麻绳；墙上两人的影子中，狐仆影子隐约带尖耳。</tspan></text>
+<text x="154" y="12980" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">狐仆：两位主人，一个去北郭，一个就在你家。</tspan></text>
+<rect x="172" y="12346" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="12380" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B013D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="72" y="13168" width="1296" height="1088" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13216" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  payoff_setup</tspan></text>
+<text x="100" y="13266" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贾儿双手把封好的粗陶酒壶递向狐仆；狐仆笑着伸双手接壶，酒壶悬在两人之间，后景市街人流从缝隙穿过。</tspan></text>
+<text x="100" y="14096" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贾儿：酒，我请你。</tspan></text>
+<rect x="120" y="13216" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="13250" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B014D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="72" y="14284" width="1296" height="1088" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="14332" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P015  payoff</tspan></text>
+<text x="100" y="14382" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">长竖格上半，贾家床上母亲侧卧安睡，眉眼恢复平静，贾儿在床边轻触被角；下半以撕裂式黑场转到何氏园，父子提灯看见亭边两只赤狐和草中一只秃尾赤狐静止倒卧，旁有未尽酒壶。</tspan></text>
+<text x="100" y="15212" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贾儿：娘终于睡着了。 | SFX：呼……</tspan></text>
+<rect x="120" y="14332" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="14366" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B015D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="15174" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="15208" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="15428" width="1296" height="1160" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="15476" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P016  closure</tspan></text>
+<text x="100" y="15526" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">清晨何氏园月门外，父亲蹲下与贾儿平视，一手按在孩子肩上；贾儿已摘下假尾卷在手里。远处留白中以淡墨叠出成年后的骑射剪影，不画具体官服纹章。</tspan></text>
+<text x="100" y="16428" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：后来，他果然成了将军。 | 贾儿：此物最灵，一泄便知。 |</tspan><tspan x="100" dy="32">贾父：我儿，真是讨狐的小陈平。</tspan></text>
+<rect x="120" y="15476" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="15510" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B016N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="598" y="15476" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="15510" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B016D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="120" y="15680" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="15714" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B016D3</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+</svg>

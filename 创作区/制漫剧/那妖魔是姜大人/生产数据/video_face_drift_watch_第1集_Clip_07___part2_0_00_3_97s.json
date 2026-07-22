@@ -1,0 +1,85 @@
+{
+  "kind": "n2d_video_face_drift_watch",
+  "version": 1,
+  "generated_at": "2026-07-22T04:27:19.012152+00:00",
+  "episode": "第1集",
+  "status": "ready_for_human_frame_identity_review",
+  "master": "出视频/第1集/视频/Clip_07_百妖谱给出残酷选择_part2.mp4",
+  "source_kind": "single_video",
+  "source_clip": "Clip_07_part2",
+  "packet_id": "Clip_07___part2_0.00_3.97s",
+  "master_duration_sec": 4.017,
+  "start_sec": 0.0,
+  "end_sec": 3.967,
+  "interval_sec": 0.5,
+  "segments_source": "single_video",
+  "segments": [
+    {
+      "clip": "Clip_07_part2",
+      "start_sec": 0.0,
+      "end_sec": 4.017,
+      "duration_sec": 4.017,
+      "source": "single_video"
+    }
+  ],
+  "frames": [
+    {
+      "time_sec": 0.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/001_Clip_07_part2_000.000s.jpg",
+      "bytes": 229867
+    },
+    {
+      "time_sec": 0.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/002_Clip_07_part2_000.500s.jpg",
+      "bytes": 210262
+    },
+    {
+      "time_sec": 1.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/003_Clip_07_part2_001.000s.jpg",
+      "bytes": 202248
+    },
+    {
+      "time_sec": 1.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/004_Clip_07_part2_001.500s.jpg",
+      "bytes": 199769
+    },
+    {
+      "time_sec": 2.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/005_Clip_07_part2_002.000s.jpg",
+      "bytes": 189263
+    },
+    {
+      "time_sec": 2.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/006_Clip_07_part2_002.500s.jpg",
+      "bytes": 199794
+    },
+    {
+      "time_sec": 3.0,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/007_Clip_07_part2_003.000s.jpg",
+      "bytes": 183359
+    },
+    {
+      "time_sec": 3.5,
+      "clip": "Clip_07_part2",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s/008_Clip_07_part2_003.500s.jpg",
+      "bytes": 179225
+    }
+  ],
+  "frames_dir": "生产数据/video_face_drift_watch/第1集/Clip_07___part2_0.00_3.97s",
+  "contact_sheet": "生产数据/video_face_drift_watch_第1集_Clip_07___part2_0.00_3.97s.jpg",
+  "policy": {
+    "clear_wrong_closeup_face": "block",
+    "missing_identity_backend": "use_human_dense_frame_review_or_full_temporal_consistency",
+    "return_to_stage": "video_or_image_then_compose"
+  },
+  "warnings": [],
+  "json_path": "生产数据/video_face_drift_watch_第1集_Clip_07___part2_0_00_3_97s.json",
+  "markdown_path": "生产数据/video_face_drift_watch_第1集_Clip_07___part2_0_00_3_97s.md"
+}

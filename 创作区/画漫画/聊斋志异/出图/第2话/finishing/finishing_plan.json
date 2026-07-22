@@ -1,0 +1,1553 @@
+{
+  "schema_version": 2,
+  "kind": "comic_finishing_plan",
+  "workflow_status": "validated",
+  "chapter": "第2话",
+  "render_stage": "完成稿",
+  "style": "自定义(清代市井志怪工笔彩漫；纤细墨线；低饱和石青赭石；纸纹；强黑影；克制惊悚；非影视复刻)",
+  "delivery_mode": "monochrome_print",
+  "layer_contract": {
+    "delivery_mode": "monochrome_print",
+    "ordered_layers": [
+      {
+        "layer_id": "ROUGH",
+        "role": "rough",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "PENCIL",
+        "role": "pencil",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "LINEART",
+        "role": "lineart",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "INK_BLACKS",
+        "role": "ink_blacks",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "TONE_OR_COLOR",
+        "role": "tone_or_color",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "EFFECTS",
+        "role": "effects",
+        "required": true,
+        "blend": "normal"
+      },
+      {
+        "layer_id": "LETTERING_SFX",
+        "role": "lettering_sfx",
+        "required": true,
+        "blend": "normal"
+      }
+    ],
+    "text_separation": "dialogue/narration stay in post-lettering layers; only contracted drawn SFX may enter art layers",
+    "flatten_policy": "keep logical layer manifest even when a backend returns one flattened raster"
+  },
+  "tone_strategy": "风格驱动",
+  "effects_strategy": "剧情驱动",
+  "page_value_plans": [
+    {
+      "page_or_segment_id": "SCROLL_001",
+      "panel_ids": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "focal_panel_ids": [
+        "P001",
+        "P002",
+        "P004",
+        "P006"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    },
+    {
+      "page_or_segment_id": "SCROLL_002",
+      "panel_ids": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "focal_panel_ids": [
+        "P007",
+        "P012"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    },
+    {
+      "page_or_segment_id": "SCROLL_003",
+      "panel_ids": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "focal_panel_ids": [
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "value_rhythm": "alternate focal contrast and recovery beats; preserve a readable three-value hierarchy",
+      "check": "thumbnail test at page/segment scale before export"
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第2话/panel_script.json",
+    "panel_script_sha256": "68abd0946fa0285151029a05758994c73c5b0f682f0465272979c7ffc4d8f065",
+    "name_board": "排版/第2话/name_board.json",
+    "name_board_sha256": "88e2c91fda826b70a944413135fe8c00a66832bdfa12825efccae5d2f9135ce5",
+    "layout": "排版/第2话/layout.json",
+    "layout_sha256": "7c7a86621b0a8ec3eb47c2336a4a4d1751df80a164b9b3dd0d831cc461477bee",
+    "settings": "_设置.md",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288",
+    "name_approval_subject_sha256": "d1c65f91bdcccc99ef0c697cc7ff4559ee5487207da319a5ec76c1ba281efb63",
+    "layout_approval_subject_sha256": "2567d095b03cee6a020561691ca437de47d7a165b5a7e08be241086d3d8af490"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P001_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P001_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "细线锁脸与尾带。",
+      "black_fill_plan": "巷口与狐仆衣内压黑。",
+      "tone_plan": "冷灰市街、靛灰童衣、棕红尾巴。",
+      "tone_items": [
+        {
+          "item_id": "P001_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷灰市街、靛灰童衣、棕红尾巴。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "孩子脸和尾巴最亮。",
+      "effects_plan": "无发光特效。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P002",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P002_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P002_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "门影平黑，孩子细线。",
+      "black_fill_plan": "门内压黑。",
+      "tone_plan": "冷青夜与旧黄灯。",
+      "tone_items": [
+        {
+          "item_id": "P002_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷青夜与旧黄灯。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "孩子脸为唯一暖亮点。",
+      "effects_plan": "仅门影，无妖气光。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "窸窣",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P002_SFX_01",
+          "content_ref": "panel:P002.sfx:1",
+          "text_hint": "窸窣",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P003",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P003_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P003_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "砖缝和刀刃细线。",
+      "black_fill_plan": "封窗后墙面压黑。",
+      "tone_plan": "土灰、暗青、冷白刀线。",
+      "tone_items": [
+        {
+          "item_id": "P003_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "土灰、暗青、冷白刀线。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "刀刃和砖缝最亮。",
+      "effects_plan": "刀声字后期嵌入。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嚓、嚓",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P003_SFX_01",
+          "content_ref": "panel:P003.sfx:1",
+          "text_hint": "嚓、嚓",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P004",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P004_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P004_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "刀路与狐毛清线。",
+      "black_fill_plan": "门外压黑。",
+      "tone_plan": "旧黄灯、赤狐、蓝黑夜。",
+      "tone_items": [
+        {
+          "item_id": "P004_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "旧黄灯、赤狐、蓝黑夜。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "刀刃、眼睛和断尾为亮点。",
+      "effects_plan": "短促速度线沿刀路。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嚓！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P004_SFX_01",
+          "content_ref": "panel:P004.sfx:1",
+          "text_hint": "嚓！",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P005",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P005_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P005_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "砖纹、尾毛、血点细线。",
+      "black_fill_plan": "月门洞压暗。",
+      "tone_plan": "冷灰黎明、暗红血点。",
+      "tone_items": [
+        {
+          "item_id": "P005_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷灰黎明、暗红血点。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "断尾与指尖最清楚。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P006",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P006_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P006_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "门闩和手部清线。",
+      "black_fill_plan": "门缝纯黑。",
+      "tone_plan": "深棕木门、冷青院落、旧黄灯。",
+      "tone_items": [
+        {
+          "item_id": "P006_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "深棕木门、冷青院落、旧黄灯。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "门缝与灯形成明暗对冲。",
+      "effects_plan": "门边轻微运动线。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "吱呀——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P006_SFX_01",
+          "content_ref": "panel:P006.sfx:1",
+          "text_hint": "吱呀——",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P007",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P007_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P007_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "竹叶前景重线，人物细线。",
+      "black_fill_plan": "竹下与亭顶压黑。",
+      "tone_plan": "冷月石青、暗赭与墨青衣。",
+      "tone_items": [
+        {
+          "item_id": "P007_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷月石青、暗赭与墨青衣。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "空酒壶和孩子眼白为亮点。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P007_SFX_01",
+          "content_ref": "panel:P007.sfx:1",
+          "text_hint": "沙……",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P008",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P008_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P008_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "尾毛细线。",
+      "black_fill_plan": "亭内人物压成中黑剪影。",
+      "tone_plan": "冷月青、老棕衣、暗棕尾。",
+      "tone_items": [
+        {
+          "item_id": "P008_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷月青、老棕衣、暗棕尾。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "月光尾边最亮。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P009",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P009_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P009_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "道具轮廓精确。",
+      "black_fill_plan": "柜下压黑。",
+      "tone_plan": "石青灰、棕红尾、土白陶壶。",
+      "tone_items": [
+        {
+          "item_id": "P009_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "石青灰、棕红尾、土白陶壶。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "铜钱与陶壶口为亮点。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "叮",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P009_SFX_01",
+          "content_ref": "panel:P009.sfx:1",
+          "text_hint": "叮",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P010",
+      "layout_weight": "compact",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P010_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P010_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "手、纸槽、壶口细线。",
+      "black_fill_plan": "巷深处压黑。",
+      "tone_plan": "灰石、土白陶、棕红尾。",
+      "tone_items": [
+        {
+          "item_id": "P010_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "灰石、土白陶、棕红尾。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "药粉和壶口最亮。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "sfx_items": [
+        {
+          "item_id": "P010_SFX_01",
+          "content_ref": "panel:P010.sfx:1",
+          "text_hint": "沙……",
+          "delivery": "drawn_sfx",
+          "layer": "lettering_sfx",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        }
+      ],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P011",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P011_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P011_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "主角重线、人群淡线。",
+      "black_fill_plan": "人群衣褶局部压黑。",
+      "tone_plan": "灰街与棕衣。",
+      "tone_items": [
+        {
+          "item_id": "P011_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "灰街与棕衣。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "孩子眼睛为焦点。",
+      "effects_plan": "轻微纵向行进线。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P012",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P012_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P012_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "锁定脸、手、尾带。",
+      "black_fill_plan": "狐仆背后墙角压黑。",
+      "tone_plan": "冷灰墙、靛灰童衣、棕红假尾。",
+      "tone_items": [
+        {
+          "item_id": "P012_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷灰墙、靛灰童衣、棕红假尾。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "假尾与孩子眼睛最亮。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P013",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P013_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P013_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "指向与攥绳手清线。",
+      "black_fill_plan": "墙影压黑。",
+      "tone_plan": "冷灰与墨黑。",
+      "tone_items": [
+        {
+          "item_id": "P013_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷灰与墨黑。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "孩子握绳手为次焦点。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P014",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P014_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P014_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "四手与壶口清线。",
+      "black_fill_plan": "两人身后压暗，壶留亮。",
+      "tone_plan": "土白陶壶、棕衣、靛灰童衣。",
+      "tone_items": [
+        {
+          "item_id": "P014_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "土白陶壶、棕衣、靛灰童衣。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "酒壶为最高亮值。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P015",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P015_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P015_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "人物与证据清线，园景压暗。",
+      "black_fill_plan": "亭内与草丛压黑，尸身轮廓留冷灰边光。",
+      "tone_plan": "冷青园景与旧黄提灯。",
+      "tone_items": [
+        {
+          "item_id": "P015_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "冷青园景与旧黄提灯。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "酒壶与秃尾旧刀痕形成两个证据亮点。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P016",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "layer_items": [
+        {
+          "item_id": "P016_ROUGH",
+          "layer": "rough",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_PENCIL",
+          "layer": "pencil",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_LINEART",
+          "layer": "lineart",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_INK_BLACKS",
+          "layer": "ink_blacks",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_TONE_OR_COLOR",
+          "layer": "tone_or_color",
+          "role": "art",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_EFFECTS",
+          "layer": "effects",
+          "role": "effects",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        },
+        {
+          "item_id": "P016_LETTERING_SFX",
+          "layer": "lettering_sfx",
+          "role": "lettering_sfx",
+          "mask_scope": "panel",
+          "no_bake_dialogue_or_narration": true
+        }
+      ],
+      "ink_plan": "前景清线，未来剪影淡墨。",
+      "black_fill_plan": "月门留中黑，人物脸保持亮。",
+      "tone_plan": "晨灰青渐入浅赭。",
+      "tone_items": [
+        {
+          "item_id": "P016_TONE_01",
+          "role": "material_and_depth",
+          "strategy": "晨灰青渐入浅赭。",
+          "scope": "subject/background separation"
+        }
+      ],
+      "value_plan": "父子脸最高亮，剪影淡。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "sfx_items": [],
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    }
+  ],
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

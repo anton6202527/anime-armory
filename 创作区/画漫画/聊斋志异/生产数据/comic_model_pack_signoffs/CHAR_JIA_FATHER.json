@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "comic_model_pack_signoff",
+  "decision": "approved",
+  "character_id": "CHAR_JIA_FATHER",
+  "tier": "recurring_standard",
+  "model_pack_fingerprint": "2a3c0fc86fec3c86476ab45da771dbba2116ca6768856e2b0e5ffab2695d1553",
+  "view_evidence": [
+    {
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+      "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+      "width": 1254,
+      "height": 1254,
+      "source_view": "front",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+        "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+      "sha256": "4eb143d2d0596809d6e61f1ccb1d6695f40d6b2d326a1c3102b11d5d38f2c1e0",
+      "width": 1254,
+      "height": 1254,
+      "source_view": "three_quarter",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+        "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+        "crop_box": []
+      }
+    },
+    {
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+      "sha256": "a7e41fea6e88eb9662937d69112a5c07bb416a25e7463d649ca4269a74d92618",
+      "width": 1254,
+      "height": 1254,
+      "source_view": "face",
+      "derivation": {
+        "method": "adopted_existing_view",
+        "source_path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+        "source_sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2",
+        "crop_box": []
+      }
+    }
+  ],
+  "confirmations": {
+    "same_character": true,
+    "correct_view_labels": true,
+    "proportions_aligned": true,
+    "baseline_aligned": true,
+    "outfit_and_markers_consistent": true,
+    "neutral_pose_usable": true
+  },
+  "reviewer": "Codex制作代理",
+  "reason": "并排复核通过：人物身份、年龄骨相、服装结构、视角标签及妖狐标志一致。",
+  "approved_at": "2026-07-22T03:07:31+00:00",
+  "policy": "human visual approval; deterministic technical defects cannot be waived; pixel proxy is warn-only"
+}

@@ -1,0 +1,8 @@
+{
+  "kind":"n2d_transition_map","version":1,"episode":"第2集","status":"confirmed","generated_at":"2026-07-22T06:30:00+00:00",
+  "seams":[
+    {"seam_id":"Seam_01","from_beat":"Beat_01","to_beat":"Beat_02","transition_type":"action_cut","seam_mode":"match_on_action","seam_mode_source":"director_confirmed","out_point":"姜月初横刀抬至胸前，虎爪进入上沿","in_point":"虎妖右上向左下扑击，姜月初沿既定刀路起势","need_endframe":false,"seam_evidence":{"action_phase":"guard_raised_to_tiger_downswing","screen_direction":"虎妖右上→左下；姜月初左下→右上"},"sound_bridge":"虎妖台词尾音被爪风切断，战鼓提前一拍进入","continuity_guard":"横刀、虎妖旧伤、裴尸体与双方左右关系不跳"},
+    {"seam_id":"Seam_02","from_beat":"Beat_02","to_beat":"Beat_03","transition_type":"insert_cutaway","seam_mode":"insert_cutaway","seam_mode_source":"director_confirmed","out_point":"虎首落地，妖血滴入枯草","in_point":"同一滴妖血在百妖谱主观层化成第一笔墨线","need_endframe":false,"seam_evidence":{"insert_object":"虎妖血滴","continuity_match":"暗红血滴→墨黑笔触，形态与落点匹配"},"sound_bridge":"虎首闷响后留白，古卷展开声从静默中进入","continuity_guard":"现实虎尸位置固定；系统层不烤文字"},
+    {"seam_id":"Seam_03","from_beat":"Beat_03","to_beat":"Beat_04","transition_type":"graphic_match","seam_mode":"graphic_match","seam_mode_source":"director_confirmed","out_point":"姜月初重新握紧横刀，虎纹能量收进掌心","in_point":"同一只手松开刀柄，覆上裴长青双眼","need_endframe":false,"seam_evidence":{"matched_graphic":"右手五指由握刀到合眼，手位与画面中心一致","emotional_turn":"力量获得→代价承认"},"sound_bridge":"金属泛音收束为埙残气，环境风声持续","continuity_guard":"手部归属、血污、横刀落点和裴伤势不变"}
+  ]
+}

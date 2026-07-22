@@ -1,0 +1,77 @@
+{
+  "kind": "comic_setup_payoff_audit",
+  "version": 1,
+  "chapter": "第2话",
+  "generated_at": "2026-07-22T03:47:03+00:00",
+  "provenance": "SP1·显式标记进 gate/弱信号只提示·development_pack 种子并入·2026-07",
+  "summary": {
+    "detected_setups": 0,
+    "ledger_pairs": 4,
+    "must": 0,
+    "warn": 3,
+    "info": 0
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "payoff_overdue",
+      "desc": "首屏异鬼铺皮执笔，读者先知危险而王生不知。",
+      "message": "伏笔「首屏异鬼铺皮执笔，读者先知危险而王生不知。」兑现话 第1话 已早于本话 第2话 但仍 open——坑该收没收=长线断供/忘坑；补收并标 done，或改 payoff_chapter/标 ongoing。"
+    },
+    {
+      "severity": "warn",
+      "code": "payoff_overdue",
+      "desc": "道士见王生邪气萦绕，王生仍以为求财魔法。",
+      "message": "伏笔「道士见王生邪气萦绕，王生仍以为求财魔法。」兑现话 第1话 已早于本话 第2话 但仍 open——坑该收没收=长线断供/忘坑；补收并标 done，或改 payoff_chapter/标 ongoing。"
+    },
+    {
+      "severity": "warn",
+      "code": "payoff_overdue",
+      "desc": "疯乞让陈氏吞下的浓痰停在胸间。",
+      "message": "伏笔「疯乞让陈氏吞下的浓痰停在胸间。」兑现话 第1话 已早于本话 第2话 但仍 open——坑该收没收=长线断供/忘坑；补收并标 done，或改 payoff_chapter/标 ongoing。"
+    }
+  ],
+  "ledger": {
+    "kind": "comic_setup_payoff_ledger",
+    "version": 1,
+    "generated_at": "2026-07-22T03:47:03+00:00",
+    "pairs": [
+      {
+        "id": "FSH_001",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "第1话",
+        "desc": "首屏异鬼铺皮执笔，读者先知危险而王生不知。",
+        "panel": "",
+        "status": "paid",
+        "from_development_pack": true
+      },
+      {
+        "id": "FSH_002",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "第1话",
+        "desc": "道士见王生邪气萦绕，王生仍以为求财魔法。",
+        "panel": "",
+        "status": "paid",
+        "from_development_pack": true
+      },
+      {
+        "id": "FSH_003",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "第1话",
+        "desc": "疯乞让陈氏吞下的浓痰停在胸间。",
+        "panel": "",
+        "status": "paid",
+        "from_development_pack": true
+      },
+      {
+        "id": "第1话-候选1",
+        "setup_chapter": "第1话",
+        "payoff_chapter": "",
+        "desc": "她来历不明，请你遣走她",
+        "panel": "P003",
+        "status": "candidate",
+        "auto": true
+      }
+    ]
+  }
+}

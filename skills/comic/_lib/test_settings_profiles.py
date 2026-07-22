@@ -46,6 +46,7 @@ def test_default_profile_is_serial_and_consistency_gate_is_on(tmp_path: Path) ->
     assert get_setting(str(root), "生产档位") == "连载标准"
     assert get_setting(str(root), "年龄形态继承") == "开启"
     assert get_setting(str(root), "角色一致性硬闸") == "开启"
+    assert get_setting(str(root), "生图分辨率策略") == "后端最高可达"
 
 
 def test_builtin_imagegen_channel_is_a_valid_explicit_choice() -> None:

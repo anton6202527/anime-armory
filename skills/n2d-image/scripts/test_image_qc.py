@@ -4332,3 +4332,12 @@ def test_run_pixel_checks_passes_root_to_face_analyze(tmp_path: Path, monkeypatc
     assert seen["analyze_args"] == (str(tmp_path), "第1集")
     assert seen["anchors_root"] == str(tmp_path)
     assert checks["face"]["available"] is False
+
+
+def test_qc_inputs_fingerprint_anchors_storyboard_declared_lens(tmp_path: Path) -> None:
+    """storyboard 是 shot_scale_contract 读的上游真值（声明景别）；QC 指纹必须锚它，
+    否则改声明景别后旧 QC 报告仍判 fresh，下游当新鲜信。"""
+    payload = {"checks": {}, "lint": {"findings": []}}
+    fingerprint = image_qc._qc_inputs_fingerprint(tmp_path, "第1集", payload)
+    assert fingerprint is not None
+    assert "脚本/第1集/storyboard.json" in fingerprint["files"]

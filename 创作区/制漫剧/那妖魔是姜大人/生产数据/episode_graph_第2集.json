@@ -1,0 +1,29 @@
+{
+  "authority": "derived index only; _进度.md and existing gates remain authoritative",
+  "edges": [],
+  "episode": "第2集",
+  "generated_at": "2026-07-22T14:37:42+0800",
+  "graph_hash": "bc3455e83f3bdd7ec281b3342546aa8c4f0dd9494a17a61d0f674c10eaec20c9",
+  "kind": "n2d_episode_graph",
+  "lineage_gaps": [],
+  "nodes": [
+    {
+      "episode": "第2集",
+      "id": "episode:第2集",
+      "type": "episode"
+    }
+  ],
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "source_files": [],
+  "status": "pass",
+  "summary": {
+    "edges": 0,
+    "lineage_gaps": 0,
+    "masters": 0,
+    "nodes": 1,
+    "routes": 0,
+    "story_clips": 0,
+    "video_media": 0
+  },
+  "version": 1
+}

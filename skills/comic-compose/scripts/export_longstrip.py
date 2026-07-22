@@ -585,7 +585,15 @@ def render_layout_pages(
             item = panel_items.get(pid)
             if not item:
                 continue
-            image = Image.open(root / item["path"]).convert("RGB")
+            try:
+                image = Image.open(root / item["path"]).convert("RGB")
+            except (OSError, ValueError):
+                # Present but truncated/corrupt panel: surface it through the same
+                # missing-panels channel that already blocks completion, instead
+                # of aborting the whole deliverable render with a traceback.
+                if pid not in manifest["missing_panels"]:
+                    manifest["missing_panels"].append(pid)
+                continue
             item["source_size"] = {"width": image.width, "height": image.height}
             target_w = int(panel.get("w") or image.width)
             target_h = int(panel.get("h") or image.height)
@@ -730,7 +738,10 @@ def build_page_map(manifest: dict, root: Path) -> dict[str, Any]:
         segment_id = str(page.get("segment_id") or "")
         page_path = page.get("path")
         if segment_id and page_path:
-            pages[segment_id] = Image.open(root / page_path).convert("RGB")
+            try:
+                pages[segment_id] = Image.open(root / page_path).convert("RGB")
+            except (OSError, ValueError):
+                continue
     return pages
 
 

@@ -1,7 +1,7 @@
 {
   "artifact_namespace": {
     "available": true,
-    "declared_targets": 31,
+    "declared_targets": 32,
     "notes": [],
     "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md",
     "stale": []
@@ -12,6 +12,16 @@
     "notes": []
   },
   "asset_human_review": [
+    {
+      "asset": "尸骸荒野",
+      "kind": "scene",
+      "png": "图片/Clip05_first.png",
+      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip05_first.png",
+      "ref": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+      "shot": "Clip_05",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/asset_review/scene_Clip_05_compare.png",
+      "stitched": true
+    },
     {
       "asset": "尸骸荒野",
       "kind": "scene",
@@ -73,8 +83,8 @@
           "intra_pairs": 0
         },
         "CHAR_01__囚途残损态": {
-          "ep_mean_score": 0.3451,
-          "ep_n_shots": 31,
+          "ep_mean_score": 0.3531,
+          "ep_n_shots": 32,
           "floor": 0.032,
           "floor_calibrated": true,
           "has_main": true,
@@ -321,6 +331,18 @@
           "png": "图片/EP01_CLIP02_a1.png",
           "score": 0.368,
           "score_vs_main": 0.1448,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__囚途残损态",
+          "face_change_expected": "囚途残损、无明显血污→扶裴后衣袖沾血→刀落时手与袖口增加暗红血迹；不提前妖化。",
+          "face_idx": 0,
+          "floor": 0.032,
+          "floor_calibrated": true,
+          "png": "图片/EP01_CLIP02_face_reveal.png",
+          "score": 0.6149,
+          "score_vs_main": 0.5996,
           "verdict": "ok"
         },
         {
@@ -644,6 +666,14 @@
           "floor": 0.9817,
           "png": "图片/EP01_CLIP02_a1.png",
           "score": 0.117,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "floor": 0.9817,
+          "png": "图片/EP01_CLIP02_face_reveal.png",
+          "score": 0.1354,
           "verdict": "ok"
         },
         {
@@ -1050,6 +1080,15 @@
           "char": "CHAR_01__囚途残损态",
           "costume_change_expected": "囚途残损、无明显血污→扶裴后衣袖沾血→刀落时手与袖口增加暗红血迹；不提前妖化。",
           "floor": 0.9839,
+          "png": "图片/EP01_CLIP02_face_reveal.png",
+          "score": 0.4203,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚途残损态",
+          "costume_change_expected": "囚途残损、无明显血污→扶裴后衣袖沾血→刀落时手与袖口增加暗红血迹；不提前妖化。",
+          "floor": 0.9839,
           "png": "图片/EP01_CLIP03_a1.png",
           "score": 0.3169,
           "verdict": "ok"
@@ -1189,7 +1228,7 @@
           },
           "median_dist": 29.7,
           "registered_id": "LOC_01",
-          "shots": 31
+          "shots": 32
         }
       },
       "impact_physics": [],
@@ -1203,8 +1242,16 @@
       ],
       "shots": [
         {
-          "avg_dist": 0.366,
-          "group_median": 0.16,
+          "avg_dist": 0.352,
+          "group_median": 0.158,
+          "kind": "光色",
+          "png": "图片/Clip05_first.png",
+          "scene": "尸骸荒野",
+          "verdict": "warn"
+        },
+        {
+          "avg_dist": 0.368,
+          "group_median": 0.158,
           "kind": "光色",
           "png": "图片/EP01_CLIP05_a2.png",
           "scene": "尸骸荒野",
@@ -1356,6 +1403,18 @@
     "checked": 6,
     "findings": [
       {
+        "asset": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+        "code": "expression_sheet_face_count",
+        "level": "block",
+        "msg": "表情板人脸数量不符 CHAR_01/“囚途残损态”「六联表」（出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png）：声明 6 格，机器检出 4 张脸；需确认是否缺格、重复拼接、遮脸或检测漏脸后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_01/“囚途残损态”「六联表」（出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png）：单格短边 341px（最低 384px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
         "asset": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
         "code": "weak_face_anchor",
         "level": "warn",
@@ -1405,13 +1464,13 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 31,
+    "covered": 32,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [],
     "precision_level": "full",
-    "required": 31,
+    "required": 32,
     "skipped": [],
     "unclassified": [],
     "verdict": "ok"
@@ -1434,7 +1493,7 @@
       "出图/共享/图片/定妆_道具_翻覆囚车.png": "7114a7750be84e7b624edeefc95980c6dbadbb220a358c97e4c68f3170b19798",
       "出图/共享/图片/风格锚_冷灰写实3D国风.png": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
       "出图/第1集/prompt/00_总览.md": "4be8bd12650dca9a055a7c7bb88f9288581fced98650a24e67f818bee81406ac",
-      "出图/第1集/prompt/01_分镜出图.md": "77b9ad2c0154bfedddcfae65df1929dd73d011bc7d0228f4a7c1b9d5e3b23704",
+      "出图/第1集/prompt/01_分镜出图.md": "1294c116e03f62f773c05344eeca19378cbb682e635932c22f17b93b76154b3d",
       "出图/第1集/图片/Clip01_end.png": "cb419a043c92870dcf2e39d77009c20389706f80f19f1fea52f6ec3f52a96420",
       "出图/第1集/图片/Clip01_first.png": "68732c23cf4828964bdf8c4c91fce62ec98f2648d0b7e1f98bedee2a4765396a",
       "出图/第1集/图片/Clip02_end.png": "3ea27efc8bf79dbfb2f29068d2cf3e7300a1ae3bc1177bf2112c631f60e2d55f",
@@ -1453,6 +1512,7 @@
       "出图/第1集/图片/Clip08_first.png": "9fe6b917cf3bcabb862900fc5768201a38e3667b520613fb6aa0e89fcd7da86b",
       "出图/第1集/图片/EP01_CLIP01_a1.png": "1f68de878cc5557f9bdf03f0293400511c56fac5f79a36eeeea975a1c7d993a9",
       "出图/第1集/图片/EP01_CLIP02_a1.png": "e8d0aa8092fff1bdb8bf4b599564936156f0b4b6019ad039df1b6ee583234fbb",
+      "出图/第1集/图片/EP01_CLIP02_face_reveal.png": "17a2f33874d8f0e91b4bed5798814be0b5fcd9f572fe3c15ae3e1ccb665a3e03",
       "出图/第1集/图片/EP01_CLIP03_a1.png": "f7b7e3359571846691f8ad65367d5df8d01a14844ab479e62f24748781b565e6",
       "出图/第1集/图片/EP01_CLIP04_a1.png": "575b4fa28764808264cef2a3016134a5ac7e17afefc45f3549c0af9442655fe6",
       "出图/第1集/图片/EP01_CLIP05_a1.png": "b8fe931a539ad340d9030a54a1da10d6ed1c6036c75a0a735f8cfec5bbe901b1",
@@ -1470,7 +1530,7 @@
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "d613bce861f82aa8414e315696f9d1548dc104de5c53fef500357d8c78c57a4d"
     },
-    "sha": "deb6e027ab9c16858a9cb921125f142b3741fc239eb8899d5de1bd5db59e7583"
+    "sha": "bf6014aaf75c646474980b46b52274c3c3d16fdb015179da34d28fedf5cc0931"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1511,6 +1571,16 @@
         ],
         "label": "镜头 2（`EP01_CLIP02` · 一炷香前的荒野死局 · dialogue_shot_reverse）",
         "png": "出图/第1集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/“囚途残损态”",
+          "CHAR_01/囚途残损态"
+        ],
+        "label": "镜头 2（`EP01_CLIP02` · 一炷香前的荒野死局 · dialogue_shot_reverse）",
+        "png": "出图/第1集/图片/EP01_CLIP02_face_reveal.png",
         "shot": "Clip_02"
       },
       {
@@ -1781,6 +1851,16 @@
       }
     ],
     "findings": [
+      {
+        "code": "expression_sheet_face_count",
+        "level": "block",
+        "msg": "表情板人脸数量不符 CHAR_01/“囚途残损态”「六联表」（出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png）：声明 6 格，机器检出 4 张脸；需确认是否缺格、重复拼接、遮脸或检测漏脸后再放行。"
+      },
+      {
+        "code": "weak_face_anchor_core",
+        "level": "block",
+        "msg": "脸部锚弱信噪比 CHAR_01/“囚途残损态”「六联表」（出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png）：单格短边 341px（最低 384px）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
       {
         "code": "weak_face_anchor",
         "level": "warn",
@@ -4503,18 +4583,18 @@
   },
   "qc_environment": {
     "face_mode": "insightface",
-    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
-    "jump_to_stage": "video",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
     "missing_or_degraded": [],
     "precision_level": "full",
     "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video"
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 32,
+    "compared": 34,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -4585,6 +4665,11 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP01_CLIP02_a1.png DINO/CLIP cosine=0.12 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚途残损态」↔ 本镜 图片/EP01_CLIP02_face_reveal.png DINO/CLIP cosine=0.13 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -4696,11 +4781,11 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 31,
+    "checked": 32,
     "distance": 0.182,
     "episode_fingerprint": {
-      "contrast": 112.0,
-      "edge": 25.5,
+      "contrast": 112.5,
+      "edge": 25.0,
       "sat": 27.0
     },
     "findings": [],
@@ -4724,7 +4809,7 @@
     }
   },
   "summary": {
-    "advisory": 42,
+    "advisory": 45,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -4735,13 +4820,13 @@
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 31,
+        "ok": 32,
         "warn": 0
       },
       "hair": {
         "block": 3,
         "noface": 0,
-        "ok": 28,
+        "ok": 29,
         "warn": 0
       },
       "human_anatomy": {
@@ -4751,7 +4836,7 @@
         "warn": 0
       },
       "lint": {
-        "block": 0,
+        "block": 2,
         "noface": 0,
         "ok": 0,
         "warn": 7
@@ -4765,7 +4850,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 25,
+        "ok": 26,
         "warn": 6
       },
       "prohibited_face_patch": {
@@ -4778,7 +4863,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 1
+        "warn": 2
       },
       "seam": {
         "block": 0,
@@ -4790,24 +4875,24 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 25
+        "warn": 26
       }
     },
     "degraded": false,
-    "hard_blocks": 0,
+    "hard_blocks": 1,
     "unavailable_visual_checks": [],
-    "verdict": "review"
+    "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 31,
+    "checked": 32,
     "findings": [],
     "intent": {
       "brightness": "dark",
       "evidence": "冷灰、土褐、墨黑；人血暗红、妖血黑红；百妖谱仅用克制古金。",
       "warmth": "cool"
     },
-    "luma_median": 61.2,
+    "luma_median": 61.3,
     "warmth_median": -0.0
   },
   "turnaround_alignment": {

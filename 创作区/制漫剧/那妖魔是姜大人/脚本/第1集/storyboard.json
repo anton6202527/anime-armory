@@ -446,11 +446,31 @@
         "entry_exit": "姜月初退路被封。；入画/现身：PROP_断刀、PROP_翻覆囚车；出画/画外保留：BEAST_01、PROP_翻覆囚车",
         "shot_size": "WS→CU→MS",
         "eyeline": "左看右/右看左",
-        "expression_span": "中",
-        "previous_start_state_note": "姜月初刚在尸场醒来，未持刀。",
-        "anchors": [
-          {
-            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+    "expression_span": "中",
+    "previous_start_state_note": "姜月初刚在尸场醒来，未持刀。",
+    "face_reveal_requirements": [
+      {
+        "id": "EP01_CLIP02_FR1",
+        "character_id": "CHAR_01",
+        "transition": "profile_to_three_quarter",
+        "at_sec": 1.0,
+        "reason": "姜月初由严格侧脸转为可辨前3/4脸；用同源身份锚阻止视频模型在中间帧补新脸"
+      }
+    ],
+    "anchors": [
+      {
+        "anchor_png": "出图/第1集/图片/EP01_CLIP02_face_reveal.png",
+        "at_sec": 1.0,
+        "use": "identity_reveal",
+        "face_reveal_requirement_id": "EP01_CLIP02_FR1",
+        "face_angle": "three_quarter",
+        "same_source_identity": true,
+        "self_check": "pass",
+        "self_check_note": "已核对动作位于侧脸首帧与a1之间：姜月初保持原跪姿、尸场机位和看向裴长青的视线，仅转到可辨前3/4脸；定妆脸嵌入比对与角色覆盖通过。",
+        "reason": "同源前3/4显脸锚；保持姜月初跪姿、景别、视线和尸场构图"
+      },
+      {
+        "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
             "at_sec": 5.76,
             "use": "split",
             "reason": "auto: R2 普通长镜（11.52s/4拍）",
@@ -1566,7 +1586,7 @@
     {
       "id": "EP01_CLIP08",
       "firstframe_png": "出图/第1集/图片/Clip08_first.png",
-      "endframe_png": "出图/第1集/图片/Clip08_end.png",
+      "endframe_png": "出图/第1集/图片/EP01_CLIP08_penetration_end.png",
       "beat_id": "Beat_05",
       "label": "对不住了，刀落人身",
       "duration": 12.88,
@@ -1650,6 +1670,7 @@
         "holder_state": {
           "PROP_横刀": "CHAR_02/right_hand -> shared_handoff -> CHAR_01/both_hands"
         },
+        "release_frame": "none；交接完成后 CHAR_01 双手持续持有唯一一柄 PROP_横刀，刺入后不松手、不拔刀",
         "occlusion_order": [
           "CHAR_01画左前景",
           "PROP_横刀中轴",
@@ -1819,6 +1840,18 @@
             "use": "edit_cut",
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
             "source_duration": 9.316
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_precontact.png",
+            "at_sec": 8.8,
+            "use": "impact_precontact",
+            "reason": "唯一一柄横刀已完成下落，刀尖距裴长青左胸衣料 2–3cm；此帧之前胸口严禁出现第二柄刀或新增刺入伤口"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_penetration_end.png",
+            "at_sec": 9.316,
+            "use": "impact_penetration",
+            "reason": "唯一一柄横刀继续前送 6–8cm，刀尖和末段刀身被胸前衣料遮挡，衣料内陷并出现单一入点；立即黑场、不拔刀"
           }
         ]
       },

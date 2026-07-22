@@ -1,0 +1,84 @@
+{
+  "batch": "08_08",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_08_part3",
+      "clip_index": 8,
+      "duration_sec": 5.875,
+      "file": "Clip_08_对不住了，刀落人身_part3.mp4",
+      "file_clip": "Clip_08",
+      "fps": 24.0,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_08_part3_22af5142_c6dc6ac704e7_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_08_part3_22af5142_c6dc6ac704e7_02_mid.jpg",
+          "time_sec": 2.938
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_08_part3_22af5142_c6dc6ac704e7_03_end.jpg",
+          "time_sec": 5.675
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_08_对不住了，刀落人身_part3.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第1集/08_08/contact_sheet_08_08.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第1集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第1集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第1集/_frames",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.1088,
+      "color_verdict": "ok",
+      "dist": 32,
+      "from_clip": "Clip_07",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_08",
+      "transition": "视线切递刀手。",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}

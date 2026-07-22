@@ -399,3 +399,17 @@ def test_action_choreography_line_merges_template_contract_fields() -> None:
         assert key in line
     assert "勒缰停马" in line
     assert "马、人、缰绳" in line
+
+
+def test_identity_line_resolves_storyboard_form_binding_by_base_character_id() -> None:
+    forms = [{
+        "character_id": "CHAR_01",
+        "form": "囚途残损态",
+        "reference_group": {"front": {"path": "front.png", "status": "ready"}},
+        "anchor_phrase": "窄椭圆脸、低束长发",
+    }]
+
+    line = prompt_pack.identity_line(forms, ["CHAR_01/囚途残损态"])
+
+    assert "CHAR_01/囚途残损态：reference_group=ready" in line
+    assert "registry form 未在 adapter matrix 摘要中命中" not in line

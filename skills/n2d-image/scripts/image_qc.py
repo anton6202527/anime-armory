@@ -5976,6 +5976,10 @@ def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Opti
         os.path.join("出图", "共享", "identity_registry.json"),
         os.path.join("出图", "共享", "asset_registry.json"),
         os.path.join("出图", "共享", "style_anchor_registry.json"),
+        # storyboard 是 QC 读的上游真值：shot_scale_contract 用其声明景别 vs 实测脸占比判定。
+        # 漏锚会让「改了声明景别（如 CU→LS）」后旧 QC 报告仍判 fresh，下游（release check_image_qc /
+        # inherit_contract）当新鲜信。QC 时 storyboard 必已存在，正常流程不会误 stale。
+        os.path.join("脚本", ep, "storyboard.json"),
         os.path.join("生产数据", "image_qc", ep, "face_confirmations.json"),
         os.path.join("生产数据", "image_qc", ep, "prop_shape_confirmations.json"),
         os.path.join("生产数据", "image_qc", ep, "human_image_review.json"),

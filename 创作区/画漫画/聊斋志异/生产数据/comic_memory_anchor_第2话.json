@@ -1,0 +1,45 @@
+{
+  "kind": "comic_memory_anchor_plan",
+  "version": 2,
+  "chapter": "第2话",
+  "generated_at": "2026-07-22T03:20:10+00:00",
+  "inputs": {
+    "target_chapter": "第2话",
+    "panel_scripts": [
+      {
+        "path": "脚本/第1话/panel_script.json",
+        "sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70"
+      },
+      {
+        "path": "脚本/第2话/panel_script.json",
+        "sha256": "485746d7c94ee02961bd3593e4ed9a1b7e00e42803fd607c6f18235334de401e"
+      }
+    ],
+    "appearance_history_sha256": "97c738f0f10f38e91f87e63eb06157e8b1f8698d93a8e268bc73fcbb701ee9dc",
+    "identity_registry_sha256": "1460073e5772fbca039820716412f99c1accfcda8ee7c44f9f413dcefb7e5fa3",
+    "policy": {
+      "gap_chapters": 2,
+      "late_gap": 5,
+      "pin_views": [
+        "front",
+        "face"
+      ]
+    }
+  },
+  "inputs_fingerprint": "ece9c7e602e5f9b95bb7b58ad27f6f405cc8771a1a71b8fac6587b1b9e3e8b75",
+  "policy": {
+    "gap_chapters": 2,
+    "late_gap": 5,
+    "pin_views": [
+      "front",
+      "face"
+    ],
+    "consumer": "comic-image/build_panel_jobs 出图前把 pinned_refs 置于该角色参考组最前"
+  },
+  "summary": {
+    "characters": 0,
+    "ready": 0,
+    "missing_views": 0
+  },
+  "characters": []
+}

@@ -1,0 +1,41 @@
+{
+  "contract_path": "脚本/第2集/preventive_contracts.json",
+  "episode": "第2集",
+  "findings": [
+    {
+      "gate": "episode_promise_gate",
+      "loc": "脚本/第2集/preventive_contracts.json",
+      "message": "preventive_contracts.status 不是 confirmed；承诺合同未签收。",
+      "minimal_rerun_scope": "回 n2d-script 阶段1 修每集承诺/兑现/阻碍/集尾钩",
+      "owner": "编剧/故事编辑",
+      "return_to_stage": "script_stage1",
+      "root_cause_layer": "script",
+      "severity": "block"
+    },
+    {
+      "gate": "episode_promise_gate",
+      "loc": "脚本/第2集/preventive_contracts.json",
+      "message": "每集承诺合同缺字段：opening_hook、promise、obstacle、payoff_or_progress、cliffhanger",
+      "minimal_rerun_scope": "回 n2d-script 阶段1 修每集承诺/兑现/阻碍/集尾钩",
+      "owner": "编剧/故事编辑",
+      "return_to_stage": "script_stage1",
+      "root_cause_layer": "script",
+      "severity": "block"
+    }
+  ],
+  "gates": [
+    "episode_promise_gate"
+  ],
+  "generated_at": "2026-07-22T06:38:32+00:00",
+  "kind": "n2d_preventive_contract_report",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "scaffolded": false,
+  "stage": "script_stage2",
+  "status": "blocked",
+  "summary": {
+    "block": 2,
+    "info": 0,
+    "warn": 0
+  },
+  "version": 1
+}

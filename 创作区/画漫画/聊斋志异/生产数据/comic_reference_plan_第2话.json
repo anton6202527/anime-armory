@@ -1,0 +1,3198 @@
+{
+  "kind": "comic_reference_plan",
+  "version": 2,
+  "chapter": "第2话",
+  "generated_at": "2026-07-22T03:47:02+00:00",
+  "inputs": {
+    "files": [
+      {
+        "path": "脚本/第2话/panel_script.json",
+        "exists": true,
+        "sha256": "68abd0946fa0285151029a05758994c73c5b0f682f0465272979c7ffc4d8f065"
+      },
+      {
+        "path": "出图/共享/identity_registry.json",
+        "exists": true,
+        "sha256": "1460073e5772fbca039820716412f99c1accfcda8ee7c44f9f413dcefb7e5fa3"
+      },
+      {
+        "path": "生产数据/comic_memory_anchor_第2话.json",
+        "exists": true,
+        "sha256": "61293d6dd911e7d22b219d767d64a4989cf6caa7b4e8cf42d560f65ab8536134"
+      },
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+      }
+    ],
+    "backend": {
+      "adapter_id": "openai_gpt_image_project_memory",
+      "model": "GPT Image 2",
+      "channel": "内置 imagegen",
+      "supports_image_inputs": true,
+      "persistent_subject": false,
+      "reference_image_limit": 16,
+      "single_character_reference_limit": 5,
+      "multi_character_reference_limit": 3,
+      "non_character_reference_limit": 2,
+      "style_reference_limit": 2,
+      "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
+      "executable_attachment_limit": 5
+    },
+    "memory_anchor_status": {
+      "status": "stale",
+      "path": "生产数据/comic_memory_anchor_第2话.json",
+      "sha256": "61293d6dd911e7d22b219d767d64a4989cf6caa7b4e8cf42d560f65ab8536134",
+      "inputs_fingerprint": "ece9c7e602e5f9b95bb7b58ad27f6f405cc8771a1a71b8fac6587b1b9e3e8b75"
+    }
+  },
+  "inputs_fingerprint": "6d3995dd4a759707feecf3f3e68e81a2c34c21ef30a1ed8674b3cca69900edb5",
+  "backend": {
+    "adapter_id": "openai_gpt_image_project_memory",
+    "model": "GPT Image 2",
+    "channel": "内置 imagegen",
+    "supports_image_inputs": true,
+    "persistent_subject": false,
+    "reference_image_limit": 16,
+    "single_character_reference_limit": 5,
+    "multi_character_reference_limit": 3,
+    "non_character_reference_limit": 2,
+    "style_reference_limit": 2,
+    "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
+    "executable_attachment_limit": 5
+  },
+  "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
+  "summary": {
+    "panels_with_characters": 16,
+    "panels_needing_action": 13,
+    "panels_blocked": 0,
+    "block": 0,
+    "warn": 3,
+    "info": 0
+  },
+  "panel_plans": [
+    {
+      "panel_id": "P001",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_FAKE_FOX_TAIL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+            "required": true,
+            "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "6f8ec6bc5b7ad7d3ffad1a1575f75564514c100ec1883a5de2a1ab63f0c0b519"
+    },
+    {
+      "panel_id": "P002",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIA_MOTHER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_BROTHERS",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_JIA_MOTHER",
+          "name": "贾母",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_BROTHERS",
+          "name": "狐兄弟",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_JIA_MOTHER",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_JIA_MOTHER 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "前景槽位",
+            "char_id": "MON_FOX_BROTHERS",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_BROTHERS 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_MOTHER",
+            "character_id": "CHAR_JIA_MOTHER",
+            "required": true,
+            "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_BROTHERS",
+            "character_id": "MON_FOX_BROTHERS",
+            "required": true,
+            "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_JIA_HOME",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+            "required": true,
+            "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "76ef9a46567c2d2a07493d0bdd40e1ac812b1563cc805a2dab68be251d51c41f"
+    },
+    {
+      "panel_id": "P003",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIA_MOTHER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "back_or_over_shoulder",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "back",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+              "strength_hint": 0.5,
+              "panel_critical": true
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 5,
+            "selected": 3,
+            "dropped": 2
+          },
+          "dropped_references": [
+            {
+              "role": "side",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__side.png",
+              "strength_hint": 0.55,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_JIA_MOTHER",
+          "name": "贾母",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "back_or_over_shoulder",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_MOTHER__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "背身参考（背影/过肩格）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_JIA_MOTHER",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_JIA_MOTHER 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "back",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__back.png",
+            "strength_hint": 0.5,
+            "panel_critical": true,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "2d7e1181f160905a7c0898658466b7eadb034abf648922146c334fdd0645e21d"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_MOTHER__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_MOTHER",
+            "character_id": "CHAR_JIA_MOTHER",
+            "required": true,
+            "sha256": "2b202ebd2037d82e6b12398d11c5576b5fb61a8650baafba3ec4871b1f4ab664"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_JIA_HOME",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+            "required": true,
+            "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "2e578ec3caf728b39d11a4c3e4aa044b419a39d9eac1a85ebe72859e7e6c0d34"
+    },
+    {
+      "panel_id": "P004",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_BROTHERS",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "action_eyeline_lock",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.78,
+              "panel_critical": true
+            },
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.55,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
+          "prompt_required": [
+            "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
+          ],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_BROTHERS",
+          "name": "狐兄弟",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "action_eyeline_lock",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+              "strength_hint": 0.55,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
+          "prompt_required": [
+            "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
+          ],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_BROTHERS",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_BROTHERS 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "strength_hint": 0.78,
+            "panel_critical": true,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "strength_hint": 0.55,
+            "panel_critical": false,
+            "id": "MON_FOX_BROTHERS",
+            "character_id": "MON_FOX_BROTHERS",
+            "required": true,
+            "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_JIA_HOME",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+            "required": true,
+            "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.55,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": false,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "a2266d779757ffa85db7b35745820a4a612d0e9dc866f9a55dcb8b4ce26a0314"
+    },
+    {
+      "panel_id": "P005",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 5,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": null,
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 3,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_HE_GARDEN",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+            "required": true,
+            "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "strength_hint": 0.72,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": false,
+            "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+          },
+          {
+            "role": "three_quarter",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+            "strength_hint": 0.65,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": false,
+            "sha256": "ee7744b422096b8ba7b1e19a0f982cbf49884e70c89ed66538a9a07e16f34a32"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "270fa24e0bebb44e5b5fcd4cf9168a2573ae220e8146a2a3599a9364517ce567"
+    },
+    {
+      "panel_id": "P006",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIA_FATHER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_JIA_FATHER",
+          "name": "贾父",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_JIA_FATHER",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_JIA_FATHER 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_FATHER",
+            "character_id": "CHAR_JIA_FATHER",
+            "required": true,
+            "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_JIA_HOME",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_JIA_HOME__anchor.png",
+            "required": true,
+            "sha256": "d979edb77af1937b3d4e526ffcc1aeb7966cdc9f73c49e1283a708e771024221"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "strength_hint": 0.72,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": false,
+            "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "0fc5e52e85e931db8f195f74d4b3ddade431e11f1bd65e932e90233f3db9779a"
+    },
+    {
+      "panel_id": "P007",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_BROTHERS",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_BROTHERS",
+          "name": "狐兄弟",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_BROTHERS",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_BROTHERS 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "前景槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_BROTHERS",
+            "character_id": "MON_FOX_BROTHERS",
+            "required": true,
+            "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_HE_GARDEN",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+            "required": true,
+            "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "02fb9afac4b4caa6d6d1a60978a8e4e152111373fc409c36246ff112df633cb8"
+    },
+    {
+      "panel_id": "P008",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_HE_GARDEN",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+            "required": true,
+            "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+          },
+          {
+            "role": "face",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+            "strength_hint": 0.72,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": false,
+            "sha256": "739f697f8d5e371eef71a4058aa185f1f5d825bc0a99b10309d6dcbccd2ba8ac"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "861a9db0accfa0dcd85f9482dcc6f02300bdb9157d198ccdb62a071b60b89e1a"
+    },
+    {
+      "panel_id": "P009",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 5,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": null,
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_FAKE_FOX_TAIL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+            "required": true,
+            "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+          },
+          {
+            "id": "PROP_POISON_WINE",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+            "required": true,
+            "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "e5a0c168c873c26417b77d4950fc68934b6488ef5be0fa0b7c0c2cec8e035550"
+    },
+    {
+      "panel_id": "P010",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 5,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": null,
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_FAKE_FOX_TAIL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+            "required": true,
+            "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+          },
+          {
+            "id": "PROP_POISON_WINE",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+            "required": true,
+            "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "c7052f2edc3cba8c7418e028e9aedc1d88d68bf88d211feb79b94414e81d7faf"
+    },
+    {
+      "panel_id": "P011",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_FAKE_FOX_TAIL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+            "required": true,
+            "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "1b7cf055b23042d841367b844b70e6a58c4f45bbdc647648fe73f485c719ddc8"
+    },
+    {
+      "panel_id": "P012",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_FAKE_FOX_TAIL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+            "required": true,
+            "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+          },
+          {
+            "id": "PROP_POISON_WINE",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+            "required": true,
+            "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "e7b90192654dda72aac0a35eb97cd5f995562a9365e6b4a608ca53fced84dd27"
+    },
+    {
+      "panel_id": "P013",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_POISON_WINE",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+            "required": true,
+            "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "bd035bcb0415750295cbaf35277a43b988603f617bd5cbfc7ad1d955642c6bdb"
+    },
+    {
+      "panel_id": "P014",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_STREET",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_STREET__anchor.png",
+            "required": true,
+            "sha256": "f7420285fb10e713d7a9c4206cbdfe4df4cf2fd092ef9fa0a329da834baddc76"
+          },
+          {
+            "id": "PROP_POISON_WINE",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+            "required": true,
+            "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "433f45bbc005dac8132b77d868e385c2d42c936716f3a9ce5b45aabd0d4d43a8"
+    },
+    {
+      "panel_id": "P015",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_BROTHERS",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_FOX_SERVANT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_BROTHERS",
+          "name": "狐兄弟",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_BROTHERS__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_FOX_SERVANT",
+          "name": "长鬣狐仆",
+          "tier": "named_minimal",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/MON_FOX_SERVANT__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_FOX_BROTHERS",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_BROTHERS 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "前景槽位",
+            "char_id": "MON_FOX_SERVANT",
+            "face_priority": "secondary",
+            "required_binding": "MON_FOX_SERVANT 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_BROTHERS__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_BROTHERS",
+            "character_id": "MON_FOX_BROTHERS",
+            "required": true,
+            "sha256": "ba815b4ec72ca04f45d2d40c124257d5c77f8dcd1a54b6d9ae7bf3aa3e07af5a"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/MON_FOX_SERVANT__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "MON_FOX_SERVANT",
+            "character_id": "MON_FOX_SERVANT",
+            "required": true,
+            "sha256": "ac07876752beca8b7dd1b0415b29808f29491a136cec84e3349866b5add05dcc"
+          },
+          {
+            "id": "LOC_HE_GARDEN",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+            "required": true,
+            "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+          },
+          {
+            "id": "PROP_POISON_WINE",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_POISON_WINE__anchor.png",
+            "required": true,
+            "sha256": "f96b938e3d54f6c7019f345251409f2711f13459e14ec742c07dc0bdf0ee9a6c"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "39068cc77bfb1b648dd484a046dd2e84a214a7a56c04c234a3d2f1f10e808a7e"
+    },
+    {
+      "panel_id": "P016",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_JIA_CHILD",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_JIA_FATHER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_JIA_CHILD",
+          "name": "贾儿",
+          "tier": "core_full",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_CHILD__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_JIA_FATHER",
+          "name": "贾父",
+          "tier": "recurring_standard",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "front",
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+              "strength_hint": 0.8,
+              "panel_critical": false
+            },
+            {
+              "role": "face",
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__face.png",
+              "strength_hint": 0.72,
+              "panel_critical": false
+            },
+            {
+              "role": "three_quarter",
+              "path": "出图/共享/图片/CHAR_JIA_FATHER__three_quarter.png",
+              "strength_hint": 0.65,
+              "panel_critical": false
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 3,
+            "selected": 3,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_JIA_CHILD",
+            "face_priority": "primary",
+            "required_binding": "CHAR_JIA_CHILD 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_JIA_FATHER",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_JIA_FATHER 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_CHILD__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_CHILD",
+            "character_id": "CHAR_JIA_CHILD",
+            "required": true,
+            "sha256": "66ea994fdeca8adc3d04afeaa8a51b2e94c4d59fe63dbbf48a63f6f4e6d5e3a8"
+          },
+          {
+            "role": "front",
+            "path": "出图/共享/图片/CHAR_JIA_FATHER__front.png",
+            "strength_hint": 0.8,
+            "panel_critical": false,
+            "id": "CHAR_JIA_FATHER",
+            "character_id": "CHAR_JIA_FATHER",
+            "required": true,
+            "sha256": "03690d239cf07e3634123381afe13cfa6d2bf8180582d19a9c6a80f3eeaaaab2"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_HE_GARDEN",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_HE_GARDEN__anchor.png",
+            "required": true,
+            "sha256": "da8f5f84b57f60e21cbb814d591287db78578720e630f2329b19ca2b739cf7e6"
+          },
+          {
+            "id": "PROP_FAKE_FOX_TAIL",
+            "role": "prop",
+            "path": "出图/共享/图片/PROP_FAKE_FOX_TAIL__anchor.png",
+            "required": true,
+            "sha256": "73d0e9f2ab26bb6975475ad6776e292d92bbb08414410025ff686af81d687676"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "3b04df06bc390b7a2225533a03a787b05e73b43b2d12e243ef4fa5d01da33c16"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P003",
+      "character_id": "CHAR_JIA_MOTHER",
+      "message": "P003·贾母：缺 背身参考（背影/过肩格）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P004",
+      "character_id": "MON_FOX_BROTHERS",
+      "message": "P004·狐兄弟：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P004",
+      "character_id": "MON_FOX_BROTHERS",
+      "message": "P004·狐兄弟：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+    }
+  ],
+  "notes": [],
+  "plan_sha256": "0f3651a8256ccfb44b16d66265842b3e11fc035b132b0a7744b013fb243f7610"
+}

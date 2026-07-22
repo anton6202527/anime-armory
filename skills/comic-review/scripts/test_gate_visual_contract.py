@@ -68,6 +68,56 @@ def test_visual_contract_allows_scene_anchor_inheritance(tmp_path: Path) -> None
     assert findings == []
 
 
+def test_sceneless_two_shot_still_requires_staging(tmp_path: Path) -> None:
+    # A location-less two-shot (close-up two-shot / floating-BG beat) must still
+    # declare who is 画左/画右 and the occlusion order — it used to escape the
+    # staging block because that lived inside the scene branch.
+    panel_script = {
+        "visual_contract": {
+            "character_integrity_policy": "锁脸型、眼型、发际线、服装主色和完整手脚。",
+        },
+        "panels": [
+            {
+                "panel_id": "P001",
+                "description": "两人近景对视。",
+                "characters": ["CHAR_A", "CHAR_B"],
+                "gaze_target": "对方的眼睛",
+                "eyeline_direction": "画右",
+                "character_integrity": "两人脸、发型、衣领、手完整可读。",
+            }
+        ],
+    }
+    findings: list[dict] = []
+
+    gate.check_panel_visual_contract(tmp_path, "第1话", panel_script, findings)
+
+    assert "panel_multi_character_staging_missing" in codes(findings)
+
+
+def test_sceneless_two_shot_with_staging_passes(tmp_path: Path) -> None:
+    panel_script = {
+        "visual_contract": {
+            "character_integrity_policy": "锁脸型、眼型、发际线、服装主色和完整手脚。",
+        },
+        "panels": [
+            {
+                "panel_id": "P001",
+                "description": "两人近景对视。",
+                "characters": ["CHAR_A", "CHAR_B"],
+                "gaze_target": "对方的眼睛",
+                "eyeline_direction": "画右",
+                "character_integrity": "两人脸、发型、衣领、手完整可读。",
+                "spatial_relationships": "CHAR_A 画左前景，CHAR_B 画右后景，肩线交叠遮挡。",
+            }
+        ],
+    }
+    findings: list[dict] = []
+
+    gate.check_panel_visual_contract(tmp_path, "第1话", panel_script, findings)
+
+    assert "panel_multi_character_staging_missing" not in codes(findings)
+
+
 def test_visual_contract_blocks_camera_gaze_and_unregistered_scene(tmp_path: Path) -> None:
     panel_script = {
         "visual_contract": {
@@ -191,6 +241,35 @@ def test_ready_panel_generated_under_stale_contract_blocks(tmp_path: Path) -> No
     gate.check_panel_jobs_ready(root, chapter, jobs, findings)
 
     assert "panel_generated_under_stale_contract" in codes(findings)
+    assert all(item["severity"] == "block" for item in findings)
+
+
+def test_ready_panel_generated_under_stale_reference_contract_blocks(tmp_path: Path) -> None:
+    # submit_prompt text unchanged, but a reference/binding change moved
+    # execution_input_sha256 — the panel must not stay ready (GAP-3).
+    root = tmp_path
+    chapter = "第1话"
+    panel_dir = root / "出图" / chapter / "panels"
+    panel_dir.mkdir(parents=True)
+    (panel_dir / "P001.png").write_bytes(b"placeholder")
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P001",
+                "status": "ready",
+                "result_path": f"出图/{chapter}/panels/P001.png",
+                "submit_prompt_sha256": "a" * 64,
+                "generated_from_submit_prompt_sha256": "a" * 64,
+                "execution_input_sha256": "c" * 64,
+                "generated_from_execution_input_sha256": "d" * 64,
+            }
+        ]
+    }
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(root, chapter, jobs, findings)
+
+    assert "panel_generated_under_stale_reference_contract" in codes(findings)
     assert all(item["severity"] == "block" for item in findings)
 
 

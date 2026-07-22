@@ -1,0 +1,1390 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第2话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 false_relief",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:身份悬念后长停顿；P002:夜声延长；P003:刀声快切；P004:冲击后黑间隔；P005:线索停顿；P006:门开后落黑",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "身份悬念后长停顿",
+          "camera_hint": "阴天市街窄巷，十岁贾儿侧身掀开短褐下摆，腰带上系着一条棕红假狐尾；画右长须男人低头审视尾根，眼神狐疑，后景酒肆人流虚化。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "贾儿",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 129,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 86,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无发光特效。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 384,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "夜声延长",
+          "camera_hint": "深夜东卧房外，贾儿抱膝坐在画左门槛边不敢睡；紧闭的薄门内映出母亲坐在床边、对着一个不自然矮小影子低语的剪影。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P002_S1",
+              "type": "sfx",
+              "content_ref": "panel:P002.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 441,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 136,
+                "y": 398,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 398,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "仅门影，无妖气光。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 696,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "刀声快切",
+          "camera_hint": "白日却昏暗的卧房，母亲背对画面把最后一块砖压进木格窗；矮桌边厨刀横在磨石上。贾儿站在门口，手扶门框，盯住刀而不是母亲的脸。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "贾儿",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            },
+            {
+              "balloon_id": "P003_S1",
+              "type": "sfx",
+              "content_ref": "panel:P003.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 734,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 705,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 705,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "刀声字后期嵌入。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 913,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "broken",
+          "gutter_intent": "冲击后黑间隔",
+          "camera_hint": "夜里门隙前，一只赤狐正低身窜逃；贾儿从画左掀开覆灯的葫芦瓢，另一手持短厨刀向狐尾后端横斩，刀锋只触及尾毛，母亲在床边画外不入格。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "贾儿",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            },
+            {
+              "balloon_id": "P004_S1",
+              "type": "sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 970,
+                "w": 777,
+                "h": 199
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 927,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 927,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "短促速度线沿刀路。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1225,
+            "w": 1188,
+            "h": 190
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "线索停顿",
+          "camera_hint": "黎明冷光里，贾儿蹲在青砖墙根，左手捏着一截湿血狐尾，右手指向跨过矮墙、延伸至荒园月门的稀疏血点。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1263,
+                "w": 712,
+                "h": 133
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 1234,
+                "w": 475,
+                "h": 63
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1442,
+            "w": 1296,
+            "h": 286
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "门开后落黑",
+          "camera_hint": "夜间贾家院内，父亲用双手死死拉住东卧房门闩，木门却向画左自行裂开一道黑缝；贾儿在父亲身后举灯，母亲的衣角正从缝中掠过。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P006_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "贾父",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾父"
+              }
+            },
+            {
+              "balloon_id": "P006_S1",
+              "type": "sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "speaker": "",
+              "order": 3,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1499,
+                "w": 777,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1456,
+                "w": 518,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "门边轻微运动线。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "false_relief"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 turning_point",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:潜伏慢读；P008:线索确认；P009:准备蒙太奇；P010:屏息停顿；P011:跟踪推进；P012:谎言落地停顿",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "潜伏慢读",
+          "camera_hint": "月初升，贾儿伏在画左竹丛下，只露一只眼与压住竹叶的小手；中景矮亭前，两名清俊狐兄弟对坐，长须狐仆从右侧月门捧空壶走来。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P007_N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P007_S1",
+              "type": "sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 142,
+                "w": 777,
+                "h": 245
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 136,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 89,
+                "w": 518,
+                "h": 117
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 450,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "线索确认",
+          "camera_hint": "何氏园庭石上，长须狐仆侧卧假寐，老棕短衣掀开少许，腰后垂下一条真实暗棕狐尾；远处亭内只有两道模糊人影，贾儿的眼睛藏在前景叶缝。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P008.dialogue:1",
+              "speaker": "狐主（画外）",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "狐主（画外）"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 496,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 461,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "准备蒙太奇",
+          "camera_hint": "县城市街帽肆前，贾儿踮脚把铜钱推上木柜，另一手抓住一条棕红狐尾装饰；腰侧布袋露出粗陶白酒壶颈与折起的无字药纸包。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "贾儿",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            },
+            {
+              "balloon_id": "P009_S1",
+              "type": "sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 757,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 722,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 722,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 972,
+            "w": 1080,
+            "h": 120
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "屏息停顿",
+          "camera_hint": "无人暗巷石阶上，贾儿半跪，用折起的纸槽把少量猎药粉准确倒入粗陶白酒壶；假狐尾铺在一旁，麻绳塞与壶口分离可见。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P010_N1",
+              "type": "narration",
+              "content_ref": "panel:P010.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P010_S1",
+              "type": "sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 996,
+                "w": 648,
+                "h": 84
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.narration",
+              "rect": {
+                "x": 234,
+                "y": 978,
+                "w": 432,
+                "h": 40
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.sfx:1",
+              "rect": {
+                "x": 774,
+                "y": 978,
+                "w": 432,
+                "h": 40
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1119,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "跟踪推进",
+          "camera_hint": "拥挤市街中，长须狐仆穿老棕短衣从画右走向酒肆；贾儿系好假尾，借一名挑担行人遮挡身体，只从画左后探出半张脸跟随。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P011_N1",
+              "type": "narration",
+              "content_ref": "panel:P011.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1165,
+                "w": 712,
+                "h": 163
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.narration",
+              "rect": {
+                "x": 185,
+                "y": 1130,
+                "w": 475,
+                "h": 78
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "轻微纵向行进线。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1380,
+            "w": 1296,
+            "h": 348
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "谎言落地停顿",
+          "camera_hint": "市街侧巷，贾儿压低声音，左手提起衣摆露出腰带假尾，右手把粗陶酒壶藏在身后；狐仆俯身靠近，视线锁在尾根，警惕开始松动。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "贾儿",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1449,
+                "w": 777,
+                "h": 243
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1397,
+                "w": 518,
+                "h": 116
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "turning_point"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P016 closure",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P016",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016"
+        ]
+      },
+      "gutter_intent": "P013:真相确认；P014:机关闭合后长空白；P015:因果兑现后长停顿；P016:温暖收束",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 286
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "真相确认",
+          "camera_hint": "狐仆靠墙低声指向巷外两个方向，贾儿仰头听着，藏在背后的手攥紧酒壶麻绳；墙上两人的影子中，狐仆影子隐约带尖耳。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P013_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "狐仆",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "狐仆"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 129,
+                "w": 712,
+                "h": 200
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 86,
+                "w": 475,
+                "h": 95
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 385,
+            "w": 1296,
+            "h": 429
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "机关闭合后长空白",
+          "camera_hint": "贾儿双手把封好的粗陶酒壶递向狐仆；狐仆笑着伸双手接壶，酒壶悬在两人之间，后景市街人流从缝隙穿过。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "贾儿",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 470,
+                "w": 777,
+                "h": 300
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 406,
+                "w": 518,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 841,
+            "w": 1296,
+            "h": 429
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "因果兑现后长停顿",
+          "camera_hint": "何氏园清晨，贾儿独自提灯站在画右前景，亭边两只赤狐与草中一只秃尾赤狐静止倒卧，未尽酒壶滚在月门石阶旁；父亲只作为画外跟随者，不显实体。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 926,
+                "w": 777,
+                "h": 300
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 136,
+                "y": 862,
+                "w": 518,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1297,
+            "w": 1296,
+            "h": 431
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "温暖收束",
+          "camera_hint": "清晨何氏园月门外，父亲蹲下与贾儿平视，一手按在孩子肩上；贾儿已摘下假尾卷在手里。远处留白中以淡墨叠出成年后的骑射剪影，不画具体官服纹章。",
+          "text_load": 3,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P016_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "贾儿",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾儿"
+              }
+            },
+            {
+              "balloon_id": "P016_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:2",
+              "speaker": "贾父",
+              "order": 3,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "贾父"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1383,
+                "w": 777,
+                "h": 301
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 1318,
+                "w": 518,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 1318,
+                "w": 518,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:2",
+              "rect": {
+                "x": 136,
+                "y": 1318,
+                "w": 518,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P016",
+          "story_function": "closure"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第2话/panel_script.json",
+    "panel_script_sha256": "68abd0946fa0285151029a05758994c73c5b0f682f0465272979c7ffc4d8f065",
+    "settings": "_设置.md",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-22T03:47:01.742612+00:00",
+    "note": "",
+    "subject_sha256": "d1c65f91bdcccc99ef0c697cc7ff4559ee5487207da319a5ec76c1ba281efb63",
+    "panel_script_sha256": "68abd0946fa0285151029a05758994c73c5b0f682f0465272979c7ffc4d8f065",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

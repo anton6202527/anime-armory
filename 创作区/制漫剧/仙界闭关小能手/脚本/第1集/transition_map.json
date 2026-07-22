@@ -1,7 +1,0 @@
-{
-  "kind": "n2d_transition_map", "version": 1, "episode": "第1集", "status": "confirmed",
-  "seams": [
-    {"seam_id": "Seam_01", "from_beat": "Beat_01", "to_beat": "Beat_02", "transition_type": "match_cut", "out_point": "张老大横臂命令落下", "in_point": "横向扁担与巨缸", "sound_bridge": "低频木击切扁担吱呀", "continuity_guard": "灰褐短打和出门方向保持", "seam_mode": "graphic_match", "seam_mode_source": "explicit", "seam_evidence": {"match_element_out": "张老大横臂", "match_element_in": "贺平生横向扁担", "composition_relation": "两条横线均从画左指向画右，占画面中上部"}, "need_endframe": false},
-    {"seam_id": "Seam_02", "from_beat": "Beat_02", "to_beat": "Beat_03", "transition_type": "action_cut", "out_point": "第五趟水桶落向碎石", "in_point": "月夜潭边水桶触地", "sound_bridge": "擦石声跨切后只留夜虫瀑布", "continuity_guard": "桶、扁担、衣装和画右入场方向保持", "seam_mode": "match_on_action", "seam_mode_source": "explicit", "seam_evidence": {"action_phase_out": "水桶从肩侧下降到距地一掌", "action_phase_in": "月夜潭边继续下降并触地", "screen_direction": "画右向画左"}, "need_endframe": false}
-  ]
-}

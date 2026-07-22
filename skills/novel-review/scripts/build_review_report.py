@@ -160,6 +160,14 @@ CONSISTENCY_SECTION_MAP = {
         "problem": "配角连续性（生死/特征/在场）冲突候选",
         "fix_hint": "回动态百科与对应章节核对配角状态，确认后修正文或更新 state_ledger。",
     },
+    "knowledge_state": {
+        "dimension": "knowledge_state",
+        "recommended_skill": "novel-wiki",
+        "return_to_stage": "wiki",
+        "count_key": "alerts",
+        "problem": "角色知情账矛盾候选（不知情者说破/公开后仍装瞒/揭示超期/读者早知的底牌二次揭示泄气）",
+        "fix_hint": "回 `设定/knowledge_ledger.json` 与对应章节核对角色此刻已知信息；确认后修正对白/行为或更新知情账（谁知道什么秘密·掉马时序）。",
+    },
     "foreshadow": {
         "dimension": "foreshadow",
         "recommended_skill": "novel-wiki",
