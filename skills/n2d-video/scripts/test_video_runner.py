@@ -1584,3 +1584,98 @@ def test_submit_clip_skip_preflight_records_waiver(monkeypatch, tmp_path: Path) 
 
     assert preflight_calls == []                                  # preflight 确实被跳过
     assert waiver_calls == [("第1集", "video_preflight", "skip-preflight")]  # 但留了痕
+
+
+def test_prepare_single_take_multishot_keeps_one_take(tmp_path: Path) -> None:
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    prompt_dir.joinpath("01_clips.md").write_text(
+        """## Clip 01（时长 10.000s · 小院对话）
+
+**首帧**：`出图/第1集/图片/Clip01_first.png`
+
+### 视频 prompt（中文，目标=Seedance）
+```
+人物运动：镜头1（MS）：少年推门进院；镜头2（MCU）：老人抬头；镜头3（CU）：递出木牌。
+```
+""",
+        encoding="utf-8",
+    )
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip01_first.png").write_bytes(b"png")
+    sb_dir = tmp_path / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    sb_dir.joinpath("storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "duration": 10.0,
+            "take_policy": "single_take_multishot",
+            "shots": [
+                {"t": [0, 4], "lens": "MS", "desc": "少年推门进院"},
+                {"t": [4, 7], "lens": "MCU", "desc": "老人抬头"},
+                {"t": [7, 10], "lens": "CU", "desc": "递出木牌"},
+            ],
+            "continuity": {"end_state": "老人接过木牌"},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path, "第1集", 1, 1, backend="seedance",
+        resolution="auto", model_version="auto", force=True,
+    )
+
+    assert [item["clip"] for item in manifest["items"]] == ["Clip_01"]
+    item = manifest["items"][0]
+    assert item["frame_strategy"] == "single_take_multishot"
+    assert item["single_take_multishot"]["internal_shot_count"] == 3
+    assert item["video_shot_split_plan"]["waived_by"] == "single_take_multishot"
+    assert not item.get("frame_strategy_issue")
+    assert not item.get("duration_segment_issue")
+
+
+def test_prepare_single_take_multishot_fails_closed_on_incapable_backend(tmp_path: Path) -> None:
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    prompt_dir.joinpath("01_clips.md").write_text(
+        """## Clip 01（时长 10.000s · 小院对话）
+
+**首帧**：`出图/第1集/图片/Clip01_first.png`
+
+**帧策略 / Frame Strategy**：strategy=single_take_multishot
+
+### 视频 prompt（中文，目标=即梦）
+```
+frame_strategy: single_take_multishot
+人物运动：镜头1：少年推门；镜头2：老人抬头。
+```
+""",
+        encoding="utf-8",
+    )
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip01_first.png").write_bytes(b"png")
+    sb_dir = tmp_path / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    sb_dir.joinpath("storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "duration": 10.0,
+            "take_policy": "single_take_multishot",
+            "shots": [
+                {"t": [0, 5], "lens": "MS", "desc": "推门"},
+                {"t": [5, 10], "lens": "CU", "desc": "递木牌"},
+            ],
+            "continuity": {},
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path, "第1集", 1, 1, backend="dreamina",
+        resolution="auto", model_version="auto", force=True,
+    )
+
+    item = manifest["items"][0]
+    if str(item.get("frame_strategy") or "") == "single_take_multishot":
+        # dreamina 非 multishot_native：必须 fail-closed，不得静默按单镜直提
+        assert "single_take_multishot requested" in str(item.get("frame_strategy_issue") or "")

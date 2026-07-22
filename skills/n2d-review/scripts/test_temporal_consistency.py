@@ -242,6 +242,7 @@ def test_load_seam_intents_prefers_p3_chain(tmp_path):
     (d / "continuity_chain.json").write_text(json.dumps({"seams": [{
         "scope": "intra_episode", "from_episode": "第1集", "from_clip": "Clip_01",
         "to_clip": "Clip_02", "transition": "视线切", "seam_mode": "eyeline_cut",
+        "next_firstframe": "出图/第1集/图片/EP01_CLIP02_start.png",
         "seam_evidence": {"eyeline_source": "A", "eyeline_target": "门", "axis": "A-B"},
     }]}), encoding="utf-8")
 
@@ -250,6 +251,36 @@ def test_load_seam_intents_prefers_p3_chain(tmp_path):
     assert intents[1]["source"] == "continuity_chain"
     assert intents[1]["seam_mode"] == "eyeline_cut"
     assert intents[1]["relay"] is False
+    assert intents[1]["next_firstframe"] == "出图/第1集/图片/EP01_CLIP02_start.png"
+
+
+def test_seam_analyze_uses_declared_shared_boundary_frame(tmp_path):
+    """复用前镜尾帧作后镜首帧时，不得按文件名数字跳配到再下一镜。"""
+    import json
+    import pytest
+    Image = pytest.importorskip("PIL.Image")
+
+    pics = tmp_path / "出图" / "第1集" / "图片"
+    pics.mkdir(parents=True)
+    shared = pics / "EP01_CLIP04_end.png"
+    Image.new("RGB", (64, 64), (200, 30, 30)).save(shared)
+    Image.new("RGB", (64, 64), (30, 30, 200)).save(pics / "EP01_CLIP06_start.png")
+
+    scripts = tmp_path / "脚本" / "第1集"
+    scripts.mkdir(parents=True)
+    (scripts / "continuity_chain.json").write_text(json.dumps({"seams": [{
+        "scope": "intra_episode",
+        "from_episode": "第1集",
+        "from_clip": "Clip_04",
+        "to_clip": "Clip_05",
+        "transition": "墨线继续生长",
+        "seam_mode": "continuous_take_relay",
+        "next_firstframe": "出图/第1集/图片/EP01_CLIP04_end.png",
+        "required_boundary_frame": "出图/第1集/图片/EP01_CLIP04_end.png",
+    }]}), encoding="utf-8")
+
+    res = tc.seam_analyze(str(tmp_path), "第1集")
+    assert not any(s.get("tail") == shared.name for s in res["seams"])
 
 
 def test_adaptive_frame_count_floor_and_density():

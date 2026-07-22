@@ -312,6 +312,14 @@ profile 支持独立负向字段时可追加：
 
 ---
 
+## 单拍多镜 Clip（`take_policy=single_take_multishot`·2026-07-22）
+
+> 治「简单叙事拆成太多付费 clip」：2026 多镜叙事后端单次生成可承载多个镜位（Seedance 2.0 单次 4-15s 一次 3-5 镜、Kling 3.0 multi-shot 单次 15s；采集 2026-07-22 会过期，执行前按 C2 刷新）。storyboard Clip 声明 `take_policy=single_take_multishot` 后，多个 `shots[]` 镜位**不再拆独立物理 take**，帧策略编成 `single_take_multishot`，一次生成完成整个多镜位小情节。
+
+- **生效条件（机检·三处同口径）**：叙事跨度 ≤15s（`VIDEO_SHOT_HARD_MAX_SEC`）；primary 后端 multishot-native（能力档 `single_take_multishot_supported`）；非大表情跨度/奇观/高生成风险镜、未命中 R1 高运动/R3 漂移实证（R2 普通长镜不否决——多镜后端在内部镜位切换处自带再锚定）。不满足时 `shot_split_decision` 落 `take_policy_ignored_reason`、`anchor_planner` 照常产锚、`prompt_pack` 回落 edit_cut，`video_runner prepare` 付费前再复核一次，失败 fail-closed 落 `frame_strategy_issue`。
+- **prompt 写法**：主动作编成「镜头1（景别）：动作；镜头2（景别）：动作；…」阶梯（Seedance Shot 标号口径），Clip 块加 `**单拍多镜合同 / Single-Take Multishot**` 行；不产 edit_cut 边界图、不把锚帧塞入时间轴，首帧（+可选尾帧）照常喂。
+- **与相邻机制的边界**：`multiframe2video` 是单镜多关键帧（连续动作插值）；`multishot_groups`/`原生多镜生成` 是**跨 Clip** co-generate 后按 `edit_target_sec` 拆回；本策略是**单 Clip 内部**镜位一次生成、从源头不拆。合并多个相邻小 Clip 成一个单拍多镜 Clip 的候选由 `clip_economy_planner.py` 在阶段2后提案（report-only），编剧确认后改 storyboard。
+
 ## 时长合同（v2）
 
 每个 compiled block 必须同时携带 `story_span_sec / edit_target_sec / backend_request_sec`。`prompt_pack.py` 写动作窗口与尾端保持区；`video_runner.py` 按实际 backend/model 重新量化请求档位；`compose.sh` 默认按 `edit_target_sec` 裁尾。后端最短档位不是剪辑最低时长，默认禁止用整段 `setpts` 把多余尾巴压回目标。`speed_mode=warp` 只用于导演明确要求的慢动作/加速。

@@ -168,3 +168,54 @@ def test_write_outputs():
 if __name__ == "__main__":
     import pytest
     raise SystemExit(pytest.main([__file__, "-q"]))
+
+
+def test_take_policy_single_take_multishot_honored_for_normal_dialogue():
+    root = _mk_storyboard([{
+        "id": "Clip_01", "duration": 10.0, "take_policy": "single_take_multishot",
+        "label": "小院对话", "scene": "山村小院",
+        "shots": [
+            {"t": [0, 4], "lens": "MS", "desc": "少年推门进院"},
+            {"t": [4, 7], "lens": "MCU", "desc": "老人抬头"},
+            {"t": [7, 10], "lens": "CU", "desc": "少年递出木牌"},
+        ],
+        "continuity": {"seam_mode": "hard_cut"},
+    }])
+    plan = SSD.build_plan(root, "第1集")
+    d = plan["decisions"][0]
+    assert d["single_take_multishot"] is True
+    assert "single_take_multishot" in d["actions"]
+    assert "split_video_shots" not in d["actions"]
+    assert d["video_shot_policy"]["direct_submit_allowed"] is True
+    assert all(seg["reason"] == "single_take_multishot_internal_shot" and seg["physical_take"] is False
+               for seg in d["video_shot_segments"])
+    assert plan["summary"]["single_take_multishot"] == 1
+
+
+def test_take_policy_ignored_over_hard_max():
+    root = _mk_storyboard([{
+        "id": "Clip_01", "duration": 18.0, "take_policy": "single_take_multishot",
+        "label": "超长镜", "continuity": {},
+    }])
+    plan = SSD.build_plan(root, "第1集")
+    d = plan["decisions"][0]
+    assert d["single_take_multishot"] is False
+    assert "超过单次生成硬上限" in d["take_policy_ignored_reason"]
+    assert "split_video_shots" in d["actions"]
+
+
+def test_take_policy_ignored_for_spectacle_or_high_risk():
+    root = _mk_storyboard([{
+        "id": "Clip_01", "duration": 10.0, "take_policy": "single_take_multishot",
+        "label": "妖狼扑杀打斗", "template": "fight_exchange",
+        "shots": [
+            {"t": [0, 5], "lens": "MS", "desc": "妖狼扑杀"},
+            {"t": [5, 10], "lens": "CU", "desc": "格挡命中"},
+        ],
+        "continuity": {},
+    }])
+    plan = SSD.build_plan(root, "第1集")
+    d = plan["decisions"][0]
+    assert d["single_take_multishot"] is False
+    assert "安全拆分与锚帧链优先" in d["take_policy_ignored_reason"]
+    assert plan["summary"]["take_policy_ignored"] == 1

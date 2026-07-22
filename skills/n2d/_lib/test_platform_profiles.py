@@ -152,3 +152,47 @@ def test_pixverse_c1_is_verified_manual_reference_to_video_candidate():
     assert profiles.video_backend_supports_multishot("PixVerse C1") is True
     assert profiles.video_backend_supports_reference_to_video("PixVerse C1") is True
     assert profiles.video_backend_auto_routable("PixVerse C1") is False
+
+
+def test_single_take_multishot_capability_gate():
+    assert profiles.single_take_multishot_supported("seedance", 12) is True
+    assert profiles.single_take_multishot_supported("seedance", 20) is False
+    assert profiles.single_take_multishot_supported("kling", 10) is True
+    assert profiles.single_take_multishot_supported("luma", 4) is False
+    assert profiles.single_take_multishot_supported("seedance", None) is True
+
+
+def test_select_strategy_honors_take_policy_on_multishot_backend():
+    plan = profiles.select_video_frame_strategy(
+        "seedance", "", shot_count=3, anchor_count=2, need_end=True,
+        take_policy="single_take_multishot", duration_sec=12,
+    )
+    assert plan["strategy"] == "single_take_multishot"
+    assert plan["take_policy"] == "single_take_multishot"
+
+
+def test_select_strategy_falls_back_to_edit_cut_when_unsupported():
+    plan = profiles.select_video_frame_strategy(
+        "luma", "", shot_count=3, anchor_count=2, need_end=True,
+        take_policy="single_take_multishot", duration_sec=12,
+    )
+    assert plan["strategy"] in {"edit_cut", "edit_cut_pending_assets"}
+    assert "fallback" in plan["reason"]
+    over = profiles.select_video_frame_strategy(
+        "seedance", "", shot_count=3, anchor_count=2, need_end=True,
+        take_policy="single_take_multishot", duration_sec=22,
+    )
+    assert over["strategy"] in {"edit_cut", "edit_cut_pending_assets"}
+
+
+def test_anchor_consumption_plan_single_take_mode():
+    plan = profiles.anchor_consumption_plan(
+        "seedance", "", anchor_count=2, need_end=False,
+        frame_strategy="single_take_multishot",
+    )
+    assert plan["consumption_mode"] == "single_take_multishot"
+    unsupported = profiles.anchor_consumption_plan(
+        "luma", "", anchor_count=0, need_end=False,
+        frame_strategy="single_take_multishot",
+    )
+    assert unsupported["consumption_mode"] == "unsupported_multishot_take"

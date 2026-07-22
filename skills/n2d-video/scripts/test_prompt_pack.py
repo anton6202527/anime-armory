@@ -450,3 +450,116 @@ def test_identity_line_resolves_storyboard_form_binding_by_base_character_id() -
 
     assert "CHAR_01/囚途残损态：reference_group=ready" in line
     assert "registry form 未在 adapter matrix 摘要中命中" not in line
+
+
+def test_prompt_pack_compiles_single_take_multishot_contract(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    (root / "_设置.md").write_text("制作模式：先出视频后配音\n生视频渠道：Dreamina\n", encoding="utf-8")
+    (root / "出图" / ep / "prompt").mkdir(parents=True)
+    (root / "出图" / ep / "prompt" / "00_总览.md").write_text(
+        """# 第1集 出图总览
+
+## 本集视觉一致性契约
+- 色调基线：冷青灰。
+
+## 本集基础视觉风格契约
+- 风格名：冷灰写实3D国风漫剧
+- style_anchor：`出图/共享/图片/风格锚.png`
+""",
+        encoding="utf-8",
+    )
+    _write_json(root / "脚本" / ep / "storyboard.json", {
+        "style_contract": {"style_anchor": ["出图/共享/图片/风格锚.png"]},
+        "clips": [{
+            "id": "EP01_CLIP01",
+            "label": "小院对话",
+            "duration": 10.0,
+            "take_policy": "single_take_multishot",
+            "scene": "山村小院",
+            "rhythm": "承接",
+            "dramatic_function": "老人认出木牌。",
+            "audience_effect": "观众想知道木牌来历。",
+            "character_ids": ["CHAR_01"],
+            "location_id": "LOC_yard",
+            "firstframe_png": "出图/第1集/图片/Clip01_first.png",
+            "continuity": {
+                "start_state": "少年推门。",
+                "end_state": "老人接过木牌。",
+                "transition": "hard_cut",
+                "expression_span": "微",
+            },
+            "entity_schedule": {"required_presence": ["CHAR_01"]},
+            "shots": [
+                {"t": [0, 4], "lens": "MS", "desc": "少年推门进院", "video_prompt": "少年推门进院站定"},
+                {"t": [4, 7], "lens": "MCU", "desc": "老人抬头", "video_prompt": "老人放下木工活抬头"},
+                {"t": [7, 10], "lens": "CU", "desc": "递出木牌", "video_prompt": "少年双手递出木牌"},
+            ],
+        }]
+    })
+    _write_json(root / "出视频" / ep / "prompt" / "video_model_routes.json", {
+        "kind": "n2d_video_model_routes",
+        "routes": [{
+            "clip_id": "Clip_01",
+            "shot_type": "dialogue_reaction",
+            "primary_backend": "seedance",
+            "fallback_backends": ["dreamina"],
+            "mode": "image2video",
+            "native_audio_policy": "none",
+            "identity_requirement": "reference_group",
+            "motion_control": {"level": "none", "required_inputs": [], "failure_modes": []},
+            "degrade_plan": "回落 edit_cut 拆 take。",
+        }],
+    })
+    _write_json(root / "生产数据" / "identity_adapter_matrix.json", {
+        "forms": [{"character_id": "CHAR_01", "form": "常态", "anchor_phrase": "黑发少年", "reference_group": {"front": {"path": "a.png"}}}]
+    })
+    _write_json(root / "生产数据" / f"mouth_visible_audit_{ep}.json", {"rows": [{"clip_id": "Clip_01", "suggested": False}]})
+
+    overview, clips = prompt_pack.build(root, ep)
+
+    assert "strategy=single_take_multishot" in clips
+    assert "单拍多镜合同 / Single-Take Multishot" in clips
+    assert "内部镜位 3 个" in clips
+    submitted = re.search(r"### 后端编译提交 prompt.*?```text\s*(.*?)```", clips, re.S)
+    assert submitted is not None
+    submit_text = submitted.group(1)
+    # 主动作编成镜头阶梯（多镜叙事口径）
+    assert "镜头1" in submit_text and "镜头3" in submit_text
+
+
+def test_prompt_pack_take_policy_falls_back_on_non_multishot_backend(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    (root / "_设置.md").write_text("生视频渠道：Dreamina\n", encoding="utf-8")
+    (root / "出图" / ep / "prompt").mkdir(parents=True)
+    (root / "出图" / ep / "prompt" / "00_总览.md").write_text("# 第1集 出图总览\n", encoding="utf-8")
+    _write_json(root / "脚本" / ep / "storyboard.json", {
+        "clips": [{
+            "id": "EP01_CLIP01",
+            "label": "小院对话",
+            "duration": 10.0,
+            "take_policy": "single_take_multishot",
+            "scene": "山村小院",
+            "firstframe_png": "出图/第1集/图片/Clip01_first.png",
+            "continuity": {"start_state": "少年推门。", "end_state": "老人接木牌。"},
+            "shots": [
+                {"t": [0, 5], "lens": "MS", "desc": "推门"},
+                {"t": [5, 10], "lens": "CU", "desc": "递木牌"},
+            ],
+        }]
+    })
+    _write_json(root / "出视频" / ep / "prompt" / "video_model_routes.json", {
+        "kind": "n2d_video_model_routes",
+        "routes": [{
+            "clip_id": "Clip_01",
+            "primary_backend": "luma",
+            "mode": "image2video",
+            "native_audio_policy": "none",
+        }],
+    })
+
+    overview, clips = prompt_pack.build(root, ep)
+
+    assert "strategy=single_take_multishot" not in clips
+    assert "单拍多镜合同" not in clips

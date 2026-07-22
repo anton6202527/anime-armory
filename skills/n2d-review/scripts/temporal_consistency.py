@@ -538,6 +538,8 @@ def load_seam_intents(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
                 "transition": seam.get("transition"),
                 "seam_mode": mode,
                 "seam_evidence": seam.get("seam_evidence") or {},
+                "next_firstframe": seam.get("next_firstframe") or "",
+                "required_boundary_frame": seam.get("required_boundary_frame") or "",
                 "relay": requires_boundary_frame(mode),
                 "source": "continuity_chain",
             }
@@ -565,6 +567,8 @@ def load_seam_intents(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
             "transition": transition,
             "seam_mode": mode,
             "seam_evidence": cont.get("seam_evidence") or {},
+            "next_firstframe": cont.get("next_firstframe") or "",
+            "required_boundary_frame": cont.get("required_boundary_frame") or "",
             "relay": requires_boundary_frame(mode),
             "source": "storyboard" if mode_info.get("source") == "explicit" else "storyboard_legacy",
         }
@@ -653,29 +657,41 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
         elif not _is_anchor_png_name(nm):
             firsts.setdefault(n, p)
     fnums = sorted(firsts)
+    intents = load_seam_intents(root, ep)
     app = fc._load_embedder()  # 人脸身份比对用；None=缺 insightface（静默退化为纯构图/色彩，交人判）
     if app is None:
         res["notes"].append("未装 insightface——接缝仅测构图/色彩，尾帧脸身份漂移交人判。")
     # 两遍制：先收集全部接缝距离 → 用本集分布算离群上界（只收紧不放松）→ 再定级。
     pairs = []
     for n, tail in sorted(tails.items()):
-        nxt = next((m for m in fnums if m > n), None)
-        if nxt is None:
-            continue
-        chk = seam_pair_check(tail, firsts[nxt], warn=warn, block=block)
+        intent = intents.get(n)
+        declared_first = str((intent or {}).get("next_firstframe") or "").strip()
+        first = ""
+        if declared_first:
+            declared_path = declared_first if os.path.isabs(declared_first) else os.path.join(root, declared_first)
+            if not os.path.isfile(declared_path):
+                # P-3 已声明精确下一首帧时，缺图就等待该帧生成；不能回退到更后面的
+                # 数字镜号，否则共享边界帧/渐进出图会被误配成跨两镜跳切。
+                continue
+            first = declared_path
+        else:
+            nxt = next((m for m in fnums if m > n), None)
+            if nxt is None:
+                continue
+            first = firsts[nxt]
+        chk = seam_pair_check(tail, first, warn=warn, block=block)
         if chk is None:
             continue
         intra_cos = _face_cos(app, tail, firsts.get(n))   # 尾帧 vs 本镜首帧（最直接的"尾帧脸漂"）
-        cross_cos = _face_cos(app, tail, firsts[nxt])      # 尾帧 vs 接力的下一镜首帧
-        action_shift = seam_action_shift(tail, firsts[nxt])  # 主体动作接力位移（match-on-action）
-        pairs.append((n, tail, firsts[nxt], chk, intra_cos, cross_cos, action_shift))
+        cross_cos = _face_cos(app, tail, first)      # 尾帧 vs 接力的下一镜首帧
+        action_shift = seam_action_shift(tail, first)  # 主体动作接力位移（match-on-action）
+        pairs.append((n, tail, first, chk, intra_cos, cross_cos, action_shift))
     rel_floor = seam_relative_floor([p[3]["dist"] for p in pairs])
     if rel_floor is not None:
         res["relative_floor"] = round(rel_floor, 1)
     # 人脸距(=1-cos)的本集相对离群上界（face 距数值小，min_margin 调小）；只把 ok 收紧到 warn。
     rel_face_floor = seam_relative_floor([1.0 - p[5] for p in pairs if p[5] is not None],
                                          min_margin=0.08)
-    intents = load_seam_intents(root, ep)
     if not intents and pairs:
         res["notes"].append("continuity_chain/storyboard 接缝分类不可用——_end.png 对保守按 relay 严格判；先回 P-2/P-3 补 seam_mode。")
     res["contradictions"] = []

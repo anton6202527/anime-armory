@@ -166,9 +166,11 @@ def _context(text: str, match: re.Match[str], pad: int = 28) -> str:
     # an unknown asset.  Expanding only across ASCII identifier characters
     # keeps Chinese prose windows compact while preserving machine tokens.
     ident = re.compile(r"[A-Za-z0-9_-]")
-    while start > 0 and start < len(text) and ident.match(text[start - 1]) and ident.match(text[start]):
+    # 切点落在标识符内部或恰好落在标识符边界时都整 token 收入窗口：
+    # 只判「两侧同为 ident」会在切点正好停在 token 起点/终点时把整个机器 token 丢掉。
+    while start > 0 and start < len(text) and ident.match(text[start - 1]):
         start -= 1
-    while end > 0 and end < len(text) and ident.match(text[end - 1]) and ident.match(text[end]):
+    while end < len(text) and ident.match(text[end]):
         end += 1
     return re.sub(r"\s+", " ", text[start:end]).strip()
 

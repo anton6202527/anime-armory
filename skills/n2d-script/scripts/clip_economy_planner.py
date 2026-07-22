@@ -122,16 +122,30 @@ def _seam_mode(clip: Mapping[str, Any]) -> str:
     return str(cont.get("seam_mode") or "").strip().lower()
 
 
-def _has_anchor_chain(clip: Mapping[str, Any]) -> bool:
+def _risk_anchor_chain(clip: Mapping[str, Any]) -> bool:
+    """锚帧是否代表真风险（R1 高运动/R3 漂移实证/apex 命中帧）。
+
+    锚是**派生物**：E1 edit_cut 边界、R2 普通长镜、D0 显式中锚都会在 anchor_planner
+    重跑时按合并后的新 Clip 重新规划，不应把「曾经规划过锚」一刀切当成不可合并。"""
     cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
-    return bool(cont.get("anchors") or cont.get("midframe"))
+    anchors = cont.get("anchors") if isinstance(cont.get("anchors"), list) else []
+    for a in anchors:
+        if not isinstance(a, Mapping):
+            continue
+        use = str(a.get("use") or "").strip().lower()
+        reason = str(a.get("reason") or "")
+        if use == "keyframe" or "apex" in reason:
+            return True
+        if reason.startswith("auto: R1") or reason.startswith("auto: R3"):
+            return True
+    return False
 
 
 def _high_risk(clip: Mapping[str, Any]) -> bool:
     template = str(clip.get("template") or "")
     if HIGH_RISK_TEMPLATE_RE.search(template):
         return True
-    if _has_anchor_chain(clip):
+    if _risk_anchor_chain(clip):
         return True
     if clip.get("spectacle_story_function"):
         return True
@@ -287,8 +301,8 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
     merge_groups = find_merge_groups(clips, max_take_sec)
     fold_candidates = find_fold_candidates(clips, economy_rows)
 
-    member_ids = set()
     by_id = {row["clip"]: row for row in per_clip}
+    member_ids = set()
     for g in merge_groups:
         group_takes = 0
         for m in g["members"]:
@@ -296,11 +310,39 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
             group_takes += int((by_id.get(m) or {}).get("estimated_takes") or 1)
         g["current_takes"] = group_takes
     folded_ids = {c["clip"] for c in fold_candidates} - member_ids
+
+    # 单 Clip 补 take_policy 候选：编辑镜位强拆成多 take、但 ≤单次窗口且非高风险的镜，
+    # 声明 take_policy=single_take_multishot 后一次生成即可。真实项目主浪费点常在这里：
+    # 相邻 clip 往往已够长合不动，省次数靠不拆内部镜位。
+    single_take_candidates: List[Dict[str, Any]] = []
+    for i, clip in enumerate(clips, 1):
+        cid = clip_id(clip, i)
+        if cid in member_ids or cid in folded_ids:
+            continue  # 已被合并/并入候选覆盖，不重复计
+        duration = duration_of(clip)
+        takes = int((by_id.get(cid) or {}).get("estimated_takes") or 1)
+        if takes <= 1 or clip_take_policy(clip) == "single_take_multishot":
+            continue
+        if duration is None or duration > max_take_sec:
+            continue
+        ok, _why = mergeable(clip)
+        if not ok:
+            continue
+        single_take_candidates.append({
+            "clip": cid,
+            "duration_sec": duration,
+            "current_takes": takes,
+            "suggestion": "add_take_policy_single_take_multishot",
+            "saving_takes": takes - 1,
+            "proposal": "storyboard 该 Clip 写 take_policy=single_take_multishot：内部镜位交 multishot-native 后端一次生成，不再拆独立付费 take。",
+        })
+
     projected_takes = (
         current_takes
         - sum(int((by_id.get(m) or {}).get("estimated_takes") or 1) for m in member_ids)
         + len(merge_groups)
         - len(folded_ids)
+        - sum(int(c.get("saving_takes") or 0) for c in single_take_candidates)
     )
     projected_takes = max(len(merge_groups) if clips else 0, projected_takes)
 
@@ -320,14 +362,15 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
                 f"按下方 merge/fold 候选合并后约 {projected_per_min}/min。简单叙事优先合并，不必逐节拍独立成付费 clip。"
             ),
         })
-    if merge_groups:
+    if merge_groups or single_take_candidates:
         findings.append({
             "severity": "warn",
             "code": "merge_candidates_available",
             "confidence": "heuristic",
             "message": (
-                f"发现 {len(merge_groups)} 组相邻同场景合并候选，合并后本集预计生成次数 "
-                f"{current_takes} → {projected_takes}。合并属阶段2精修的签收变更，由编剧确认后改 storyboard，本脚本不自动改写。"
+                f"发现 {len(merge_groups)} 组相邻合并候选 + {len(single_take_candidates)} 个单 Clip 补 "
+                f"take_policy 候选，采纳后本集预计生成次数 {current_takes} → {projected_takes}。"
+                "均属阶段2精修的签收变更，由编剧确认后改 storyboard，本脚本不自动改写。"
             ),
         })
 
@@ -340,6 +383,7 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "projected_takes_per_minute": projected_per_min,
         "merge_groups": len(merge_groups),
         "fold_candidates": len(fold_candidates),
+        "single_take_candidates": len(single_take_candidates),
         "max_take_sec": max_take_sec,
         "capability_snapshot_date": CAPABILITY_SNAPSHOT_DATE,
     }
@@ -353,6 +397,7 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
         "clips": per_clip,
         "merge_groups": merge_groups,
         "fold_candidates": fold_candidates,
+        "single_take_candidates": single_take_candidates,
         "findings": findings,
         "rules": [
             "生成次数预算按集看，不只按单 Clip 时长看：简单叙事优先「更少更长的多镜单拍」而不是逐节拍独立 clip。",
@@ -360,6 +405,74 @@ def build_plan(root: Path, ep: str, max_take_sec: float = DEFAULT_MAX_TAKE_SEC) 
             "高动作模板/锚链/奇观镜不进合并候选：安全拆分与锚帧链优先于省次数（与 shot_split_decision 同口径）。",
             "本报告全部启发式、report-only（宪法 B10）；密度口径带能力快照日期，会过期，执行前按 C2 刷新。",
         ],
+    }
+
+
+def build_merge_draft(
+    clips: Sequence[Mapping[str, Any]],
+    merge_groups: Sequence[Mapping[str, Any]],
+    ep: str,
+) -> Dict[str, Any]:
+    """合并候选组 → 可审阅的 storyboard 草案片段（status=draft·绝不改写 storyboard.json）。
+
+    每组产一个草案 Clip：各源 Clip 降级为内部 shots[] 镜位行（时间轴按源时长累加），
+    写 take_policy=single_take_multishot。voiceover 索引/entity_schedule/continuity 等
+    签收字段由编剧手工归并——脚本只搭骨架，不代签。"""
+    by_id = {clip_id(c, i): c for i, c in enumerate(clips, 1)}
+    draft_clips: List[Dict[str, Any]] = []
+    for g in merge_groups:
+        members = [m for m in g.get("members") or [] if m in by_id]
+        if len(members) < 2:
+            continue
+        sources = [by_id[m] for m in members]
+        cursor = 0.0
+        shots: List[Dict[str, Any]] = []
+        for m, src in zip(members, sources):
+            dur = float(duration_of(src) or 0.0)
+            src_shots = [s for s in src.get("shots") or [] if isinstance(s, Mapping)]
+            lens = ""
+            if src_shots:
+                lens = str(src_shots[0].get("lens") or src_shots[0].get("shot_size") or "")
+            if not lens:
+                cont = src.get("continuity") if isinstance(src.get("continuity"), Mapping) else {}
+                lens = str(cont.get("shot_size") or "")
+            shots.append({
+                "t": [round(cursor, 3), round(cursor + dur, 3)],
+                "lens": lens or "承接",
+                "desc": str(src.get("label") or src.get("dramatic_function") or m),
+                "source_clip": m,
+            })
+            cursor += dur
+        chars: List[str] = []
+        for src in sources:
+            for c in src.get("character_ids") or []:
+                if str(c) not in chars:
+                    chars.append(str(c))
+        first = sources[0]
+        draft_clips.append({
+            "draft_id": f"MERGED_{g.get('group_id')}",
+            "source_clips": members,
+            "duration": round(cursor, 3),
+            "take_policy": "single_take_multishot",
+            "scene": first.get("scene"),
+            "location_id": first.get("location_id"),
+            "character_ids": chars,
+            "shots": shots,
+            "manual_merge_required": [
+                "voiceover/dialogue/narration 三轨索引按互斥规则归并",
+                "entity_schedule 与 continuity.entry_exit/start_state/end_state 重写为合并后真值",
+                "dramatic_function/pacing_role/runtime_priority 重签",
+                "合并落 storyboard 后重跑 anchor_planner / validate_timings / 相关 gate",
+            ],
+        })
+    return {
+        "kind": "n2d_clip_economy_merge_draft",
+        "version": VERSION,
+        "episode": ep,
+        "generated_at": now_iso(),
+        "status": "draft",
+        "policy": "review-then-apply：编剧审阅后手工并入 storyboard.json；本文件不是执行真值，不参与 gate。",
+        "draft_clips": draft_clips,
     }
 
 
@@ -371,7 +484,7 @@ def render_md(plan: Mapping[str, Any]) -> str:
         f"- episode: {plan.get('episode')}",
         f"- 当前预计生成次数: {s.get('current_estimated_takes')}（{s.get('takes_per_minute')}/min）",
         f"- 合并后预计: {s.get('projected_takes_after_merge')}（{s.get('projected_takes_per_minute')}/min）",
-        f"- 合并候选组: {s.get('merge_groups')} · 并入相邻强戏候选: {s.get('fold_candidates')}",
+        f"- 合并候选组: {s.get('merge_groups')} · 并入相邻强戏候选: {s.get('fold_candidates')} · 单Clip补take_policy候选: {s.get('single_take_candidates')}",
         f"- 能力快照: {s.get('capability_snapshot_date')}（单次多镜上限口径 {s.get('max_take_sec')}s·会过期）",
         "",
         "## 合并候选组",
@@ -390,6 +503,13 @@ def render_md(plan: Mapping[str, Any]) -> str:
             f"- {c.get('clip')}（{c.get('duration_sec')}s·{c.get('economy_class')}）→ 并入 {c.get('neighbor')}：{c.get('proposal')}"
         )
     if not plan.get("fold_candidates"):
+        lines.append("- 无")
+    lines += ["", "## 单 Clip 补 take_policy 候选（内部镜位一次生成）", ""]
+    for c in plan.get("single_take_candidates") or []:
+        lines.append(
+            f"- {c.get('clip')}（{c.get('duration_sec')}s·当前 {c.get('current_takes')} take → 1）：{c.get('proposal')}"
+        )
+    if not plan.get("single_take_candidates"):
         lines.append("- 无")
     findings = plan.get("findings") or []
     if findings:
@@ -420,6 +540,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--max-take-sec", type=float, default=DEFAULT_MAX_TAKE_SEC,
                     help="单次多镜生成的合计时长口径（默认 15s；按所选后端能力档调整）")
+    ap.add_argument("--emit-merge-draft", action="store_true",
+                    help="把合并候选组落成可审阅的 storyboard 草案片段（status=draft，不改写 storyboard.json）")
     ns = ap.parse_args(argv)
     root = Path(ns.root.rstrip("/"))
     ep = ep_label(ns.episode)
@@ -427,6 +549,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if ns.write:
         jp, mp = write_outputs(root, ep, plan)
         plan = {**plan, "outputs": {"json": str(jp), "markdown": str(mp)}}
+    if ns.emit_merge_draft and plan.get("merge_groups"):
+        clips, _err = load_storyboard(root, ep)
+        draft = build_merge_draft(clips, plan["merge_groups"], ep)
+        draft_path = root / "生产数据" / f"clip_economy_merge_draft_{ep}.json"
+        write_atomic(draft_path, json.dumps(draft, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+        plan = {**plan, "merge_draft": str(draft_path)}
     if ns.json:
         print(json.dumps(plan, ensure_ascii=False, indent=2))
     else:

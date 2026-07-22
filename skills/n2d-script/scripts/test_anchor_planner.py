@@ -406,3 +406,29 @@ def test_plan_episode_places_apex_keyframe(tmp_path):
     anchors = res["planned"][0]["anchors"]
     apex = [a for a in anchors if a.get("use") == "keyframe"]
     assert apex and any(abs(a["at_sec"] - 4.0) <= 0.4 for a in apex)   # 命中帧落成 keyframe
+
+
+def test_single_take_policy_skips_editorial_cut_anchors(tmp_path):
+    clip = _clip(1, 10.0, shots=[
+        {"t": "0-4s", "lens": "MS", "description": "推门"},
+        {"t": "4-7s", "lens": "MCU", "description": "抬头"},
+        {"t": "7-10s", "lens": "CU", "description": "递木牌"},
+    ])
+    clip["take_policy"] = "single_take_multishot"
+    root = _write_project(tmp_path, [clip])
+    plan = ap.plan_episode(root, "第1集", default_midframe=False)
+    assert plan["summary"]["clips_planned"] == 0
+    assert any("single_take_multishot" in s["why"] for s in plan["skipped"])
+
+
+def test_single_take_policy_yields_to_r1_fight(tmp_path):
+    clip = _clip(1, 10, template="fight_exchange", beats=["起手", "命中", "收势"], shots=[
+        {"t": "0-3s", "lens": "MS", "description": "妖狼扑杀"},
+        {"t": "3-6.5s", "lens": "CU", "description": "格挡命中"},
+        {"t": "6.5-10s", "lens": "MCU", "description": "收势"},
+    ])
+    clip["take_policy"] = "single_take_multishot"
+    root = _write_project(tmp_path, [clip])
+    plan = ap.plan_episode(root, "第1集", default_midframe=False)
+    # R1 高运动仍安全优先：保留锚帧链，不因 take_policy 跳过
+    assert plan["summary"]["clips_planned"] == 1

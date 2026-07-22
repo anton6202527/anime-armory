@@ -81,3 +81,23 @@ if __name__ == "__main__":
             except TypeError:
                 fn(tempfile.mkdtemp())
             print("ok", name)
+
+
+def test_primary_is_multishot_reads_capability_table_without_groups():
+    # 修复前 import 不存在的 is_multishot_native_backend 会静默 fallback 到「有没有 groups」
+    assert mp._primary_is_multishot({"routes": [{"primary_backend": "seedance"}]}) is True
+    assert mp._primary_is_multishot({"routes": [{"primary_backend": "即梦"}]}) is False  # dreamina 非 multishot_native
+    assert mp._primary_is_multishot({"routes": [{"primary_backend": "luma"}]}) is False
+
+
+def test_build_inactive_recommends_savings_when_backend_supports(tmp_path):
+    import json as _json
+    root = tmp_path / "作品"
+    prompt_dir = root / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "video_model_routes.json").write_text(
+        _json.dumps(ROUTES, ensure_ascii=False), encoding="utf-8")
+    plan = mp.build(str(root), "第1集")
+    assert plan["active"] is False
+    # 3+2 成员的两组 → 省 (3-1)+(2-1)=3 次
+    assert any("省额度推荐" in n and "3 次" in n for n in plan["notes"])
