@@ -3,45 +3,1185 @@
   "kind": "comic_panel_script",
   "title": "聊斋志异",
   "chapter": "第1话",
-  "status": "draft",
+  "working_title": "画皮",
+  "status": "confirmed",
   "chapter_contract": {
     "path": "脚本/split_blueprint.json",
-    "chapter_contract_sha256": "",
-    "status": "draft"
+    "chapter_contract_sha256": "5ff57bc1b0e221b16b5715685a4eb8922b5b380952cc22cee024b342cf25fa27",
+    "status": "confirmed"
   },
   "source_semantics": {
     "path": "脚本/第1话/source_semantics.json",
-    "requires_normalization": false,
-    "source_language": "",
-    "target_text_language": "",
-    "target_text_metadata": {},
+    "requires_normalization": true,
+    "source_language": "文言/古汉语",
+    "target_text_language": "中文",
+    "target_text_metadata": {
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk"
+    },
     "status": "pass"
+  },
+  "visual_contract": {
+    "style_anchor_id": "STYLE_LIAOZHAI_QING_GONGXI",
+    "style_baseline": "清代市井志怪工笔彩漫；细墨线，低饱和石青、赭石和墨灰，室内烛黄与鬼物病绿对置；纸纹、强黑影、克制惊悚；禁止演员肖像、影视剧照构图、3D游戏CG和宫廷龙纹服饰。",
+    "character_integrity_policy": "所有具名人物和鬼物继承 registry 中的脸型、五官、发际线、发型、体态与服装标志；手脚、四肢、身体和道具归属完整，不多肢、不融合；非 POV 不看镜头。",
+    "scene_anchors": {
+      "LOC_WANG_COURTYARD": {
+        "spatial_layout": "青砖两进小宅：南门进狭长天井，正房在北，东侧书斋带纸窗和内寝；王生床榻始终在书斋北壁。",
+        "lighting_anchor": "白天冷光从天井上方和纸窗进入，夜晚只有画左下油灯暖光；鬼体不自发光。",
+        "axis_eyeline": "书斋门在画右，窗在画左；王生与室内人物正反打不翻转。",
+        "resident_assets": [
+          "深木门",
+          "纸窗",
+          "床榻",
+          "素帐",
+          "油灯",
+          "方桌"
+        ],
+        "forbidden_drift": [
+          "禁止变成宫廷宅院",
+          "禁止门窗方向翻转",
+          "禁止出现现代家具或玻璃灯"
+        ]
+      },
+      "LOC_MARKET_TEMPLE": {
+        "spatial_layout": "泥路市井沿竖画面伸向青帝庙灰墙木檐，左侧旧布棚、右侧矮墙，庙门在后景不绘可读牌匾。",
+        "lighting_anchor": "阴天冷光从右上方落下，泥路有暗反光，不用金色仙光。",
+        "axis_eyeline": "人群沿道路两侧围观；陈氏面向画右的疯乞，人群不看读者。",
+        "resident_assets": [
+          "泥路",
+          "灰墙",
+          "木檐",
+          "旧布棚",
+          "庙门"
+        ],
+        "forbidden_drift": [
+          "禁止现代商铺和招牌",
+          "禁止佛寺金像喧宾夺主",
+          "禁止将羞辱场面拍成喜剧"
+        ]
+      }
+    },
+    "character_state_timeline": {
+      "CHAR_WANG": [
+        {
+          "from_panel": "P002",
+          "state": "STATE_BASE：素青长衫整洁"
+        },
+        {
+          "from_panel": "P008",
+          "state": "STATE_DEAD：心被取走，衣被血污但伤口不猎奇特写"
+        },
+        {
+          "from_panel": "P015",
+          "state": "STATE_REVIVED：面色苍白，腹部绷带，后留钱形疤痕"
+        }
+      ],
+      "CHAR_CHEN": [
+        {
+          "from_panel": "P003",
+          "state": "STATE_BASE：米白上衣与赭裙整洁"
+        },
+        {
+          "from_panel": "P011",
+          "state": "STATE_HUMILIATED：衣下摆沾泥，额角被竹杖打红"
+        },
+        {
+          "from_panel": "P012",
+          "state": "STATE_MOURNING：袖口与前襟沾少量血污，持续至复活"
+        }
+      ],
+      "MON_PAINTED_SKIN": [
+        {
+          "from_panel": "P001",
+          "state": "STATE_TRUE_FORM：青面鬼体、脱下人皮"
+        },
+        {
+          "from_panel": "P002",
+          "state": "STATE_DISGUISED：少女人皮"
+        },
+        {
+          "from_panel": "P009",
+          "state": "STATE_DESTROYED：真身化烟入葫芦"
+        }
+      ]
+    }
   },
   "panels": [
     {
       "panel_id": "P001",
       "story_function": "opening_hook",
-      "source_excerpt": "",
-      "meaning_zh": "",
-      "text_target": "",
-      "adaptation_note": "",
-      "description": "待补：首格画面",
-      "characters": [],
-      "character_bindings": [],
-      "source_segment_refs": [],
-      "location": "",
+      "source_excerpt": "S001/S003：青面鬼铺人皮执彩笔而画。",
+      "meaning_zh": "先给读者真相，制造读者知而王生不知的紧张。",
+      "text_target": "画皮",
+      "adaptation_note": "冷开场，不在原始面板烘焙标题。",
+      "source_segment_refs": [
+        "S001",
+        "S003"
+      ],
+      "description": "夜深的书斋内，青面锯齿的枯瘦鬼体侧坐榻边，将一张完整但无血的女子人皮平铺如工笔画，细笔正掠过皮囊的眼眉；案角油灯把鬼影投在纸窗上。",
+      "characters": [
+        "MON_PAINTED_SKIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "继承书斋北壁床榻，桌在前景左下，门在画右。",
+      "lighting_anchor": "画左下油灯暖光，鬼体背面和床帐压入深黑。",
+      "axis_eyeline": "鬼体视线落在人皮眼眉，不看镜头。",
+      "gaze_target": "床榻上人皮的眼眉",
+      "eyeline_direction": "画左下",
+      "character_integrity": "青面鬼体一头、两臂、两手各五指；执笔右手与人皮分离；人皮是无生命皮囊，不再出现第二个活人。",
+      "spatial_relationships": "鬼体侧坐床边，人皮平铺在其右前方，细笔仅接触皮囊眉部。",
+      "blocking": "单一主体与皮囊，不遮挡手和笔的接触点。",
+      "staging": "侧后方中近景，前景灯、中景鬼、后景纸窗影子。",
       "dialogue": [],
       "narration": "",
       "sfx": [],
-      "art_notes": "",
+      "art_notes": "克制而非血腥；人皮像鲜活工笔肖像，不像剥皮现场。上方留低细节标题区。",
       "layout_weight": "heavy",
-      "panel_shape": "full_width",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "异象后长停顿",
+      "ink_plan": "细线勾人皮与鬼手，床帐和窗影用大黑。",
+      "black_fill_plan": "鬼体背后与四角压黑，脸、手、笔、人皮保持可读。",
+      "tone_plan": "病绿鬼皮、冷白人皮、暖黄灯火。",
+      "value_plan": "人皮最亮，鬼脸中值，背景深黑。",
+      "effects_plan": "无粒子特效，只用灯影和纸纹。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "MON_PAINTED_SKIN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "setup",
+      "source_excerpt": "S002：王生早行遇女，邀入敝庐。",
+      "meaning_zh": "王生主动把危险带回家。",
+      "text_target": "我无处可去。——敝庐不远。",
+      "adaptation_note": "相遇与同归合成一个竖向路径画面。",
+      "source_segment_refs": [
+        "S002"
+      ],
+      "description": "阴晨长路上，王生接过少女手中布包，少女低头跟他向远处青砖宅院走去；两人影子在潮湿路面上一长一短。",
+      "characters": [
+        "CHAR_WANG",
+        "MON_PAINTED_SKIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家外的晨路",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "宅门位于竖画面后景，道路自前景通向宅门。",
+      "lighting_anchor": "阴天冷光从右上方落下。",
+      "axis_eyeline": "两人向画面上方宅门移动。",
+      "gaze_target": "王生看少女脸；少女看王生接过的布包",
+      "eyeline_direction": "王生向画左下，少女向画右上",
+      "character_integrity": "两人的头、发型、服装与两腿可读；布包只由王生一双手接住。",
+      "spatial_relationships": "王生在画右前半步，少女在画左后半步，手与布包的交接点在两人之间。",
+      "blocking": "两人不重叠脸部和手部。",
+      "staging": "全身跟随镜头，道路透视引向宅门。",
+      "dialogue": [
+        {
+          "speaker": "少女",
+          "text_target": "我无处可去。"
+        },
+        {
+          "speaker": "王生",
+          "text_target": "敝庐不远。"
+        }
+      ],
+      "narration": "太原王生，早行遇一女郎。",
+      "sfx": [],
+      "art_notes": "少女美而冷，不要狐妖媚态；上方雾天留旁白区。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
       "border_style": "standard",
-      "gutter_intent": "opening pause",
-      "ink_plan": "clean outer contour, readable face/hands/props, solid black only where it supports focal contrast",
-      "tone_plan": "style-driven tones or grayscale; keep text-safe areas low detail",
-      "effects_plan": "use action/focus/speed lines only when they clarify motion or impact",
-      "references": []
+      "gutter_intent": "诱惑缓慢入门",
+      "ink_plan": "人物细线，路面与远宅淡墨。",
+      "black_fill_plan": "不大面积压黑，只加深发色与门洞。",
+      "tone_plan": "冷灰青为主，少女胭脂粉为唯一暖色。",
+      "value_plan": "阴天中值，人物脸稍亮。",
+      "effects_plan": "潮气薄雾，无仙侠粒子。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "MON_PAINTED_SKIN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "warning",
+      "source_excerpt": "S002：陈氏劝遣，王生不听。",
+      "meaning_zh": "第一次明确忠言被忽视。",
+      "text_target": "她来历不明，请你遣走她。——你多心了。",
+      "adaptation_note": "妻子与王生在前景对话，少女在纸窗后的影子暗示偷听。",
+      "source_segment_refs": [
+        "S002"
+      ],
+      "description": "王家正房内，陈氏一手按住桌角、直视王生，王生侧身避开她的目光；后景东斋纸窗后只有少女静止的人形剪影。",
+      "characters": [
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "MON_PAINTED_SKIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家正房与东斋对景",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "正房桌在前景，东斋纸窗在后景画左。",
+      "lighting_anchor": "日间冷天光从天井进入，屋内木色偏暗。",
+      "axis_eyeline": "陈氏在画左看王生，王生在画右避向东斋；不翻转。",
+      "gaze_target": "陈氏看王生；王生看东斋门；少女剪影面向两人声源",
+      "eyeline_direction": "陈氏向画右，王生向画左后，少女向画右",
+      "character_integrity": "前景两人脸、发式、上半身和按桌手可读；后景只是少女单一剪影，不显出鬼体多肢。",
+      "spatial_relationships": "陈氏画左，王生画右，东斋剪影在两人之后画左远景。",
+      "blocking": "两人不并肩平铺；陈氏手掌不被文字区遮挡。",
+      "staging": "前景对话、后景偷听的三角构图。",
+      "dialogue": [
+        {
+          "speaker": "陈氏",
+          "text_target": "她来历不明，请你遣走她。"
+        },
+        {
+          "speaker": "王生",
+          "text_target": "你多心了。"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "气泡位于中上部低细节墙面，不遮挡陈氏手与少女剪影。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "忠言被轻推开",
+      "ink_plan": "前景人物细线，剪影用平黑。",
+      "black_fill_plan": "纸窗剪影和房梁压黑。",
+      "tone_plan": "米白、素青和旧木棕，剪影寒黑。",
+      "value_plan": "陈氏脸最亮，王生脸半暗，剪影最黑。",
+      "effects_plan": "无特效。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "MON_PAINTED_SKIN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "warning_escalation",
+      "source_excerpt": "S003：道士见王生邪气萦绕，言死将临而不悟。",
+      "meaning_zh": "第二次忠言更直接，王生仍以自己所见的美貌否认危险。",
+      "text_target": "君身邪气萦绕。 / 惑哉！死将临而不悟。",
+      "adaptation_note": "市上偶遇压缩为对视与擦肩离开。",
+      "source_segment_refs": [
+        "S003"
+      ],
+      "description": "市井路口，道士停步扣住王生袖口，目光落在王生肩后一缕几不可见的冷灰气息上；王生的手掌向外作无事辩解。",
+      "characters": [
+        "CHAR_WANG",
+        "CHAR_DAOIST"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "市井路口",
+      "scene_anchor_id": "LOC_MARKET_TEMPLE",
+      "spatial_layout": "市路前景对话，青帝庙墙在后景。",
+      "lighting_anchor": "阴天右上冷光，不使道士发光。",
+      "axis_eyeline": "王生画左向画右看道士，道士画右看王生肩后。",
+      "gaze_target": "王生看道士脸；道士看王生肩后冷灰邪气",
+      "eyeline_direction": "王生向画右，道士向画左后",
+      "character_integrity": "两人脸、发式、上半身和握袖接触点完整；道士一手握袖、一手自然下垂，不多手。",
+      "spatial_relationships": "两人相距一臂，道士左手只接触王生右袖外缘。",
+      "blocking": "袖口接触点在画面中部，不与人群重叠。",
+      "staging": "中近景正反张力，后景行人虚化。",
+      "dialogue": [
+        {
+          "speaker": "道士",
+          "text_target": "君身邪气萦绕。"
+        },
+        {
+          "speaker": "道士",
+          "text_target": "惑哉！死将临而不悟。"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "冷灰气息只是弱视觉暗示，不画游戏特效光环。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "警句后空一拍",
+      "ink_plan": "人物细线，后景行人减线。",
+      "black_fill_plan": "道士发髻与袖内压黑。",
+      "tone_plan": "青灰市路，王生素青，道士灰蓝。",
+      "value_plan": "两人脸为中亮值，肩后冷灰气息略暗。",
+      "effects_plan": "冷灰气息不超过肩部一小片。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_DAOIST",
+        "LOC_MARKET_TEMPLE"
+      ]
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "turning_point",
+      "source_excerpt": "S003：王生窗窥，见狞鬼画人皮而披之成女。",
+      "meaning_zh": "王生终于亲眼看到了他拒绝承认的真相。",
+      "text_target": "那张脸——是画上去的。",
+      "adaptation_note": "用窗格前景把王生与鬼隔开，与 P001 冷开场构图呼应但视角改为窥视。",
+      "source_segment_refs": [
+        "S003"
+      ],
+      "description": "从书斋窗外窥视，前景王生一只眼和扶住窗棂的手指被木格切成狭缝；室内青面鬼体已将完整人皮举至肩高，准备像穿衣一样披上。",
+      "characters": [
+        "CHAR_WANG",
+        "MON_PAINTED_SKIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋窗外与室内",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "窗在画左前景，床榻在室内北壁，门仍在画右。",
+      "lighting_anchor": "室内左下油灯暖光，窗外蓝黑夜色。",
+      "axis_eyeline": "王生从画左窗缝看画右内的鬼，鬼看自己手中人皮。",
+      "gaze_target": "王生看鬼手中人皮；鬼看人皮领口",
+      "eyeline_direction": "王生向画右，鬼向画左下",
+      "character_integrity": "王生仅露一眼与一只扶窗手，裁切是构图有意为之；鬼体两手各五指，同时举一张无生命人皮，不出现第二个活女人。",
+      "spatial_relationships": "王生在窗外前景，鬼体在室内中景，人皮介于鬼脸与王生视线之间。",
+      "blocking": "窗格只遮挡边缘，人皮与鬼手连接清楚。",
+      "staging": "前景窥视者、中景人皮、后景鬼体的三层构图。",
+      "dialogue": [],
+      "narration": "那张脸——是画上去的。",
+      "sfx": [],
+      "art_notes": "不复制 P001 的同一镜位；本格必须让窗外王生视线清楚。上方暗夜留旁白区。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "broken",
+      "gutter_intent": "翻面后大段黑间隔",
+      "ink_plan": "窗格与人皮细线，室内黑场加重。",
+      "black_fill_plan": "窗外四周和室内床帐压黑，人皮留亮。",
+      "tone_plan": "蓝黑夜色、暖黄灯、病绿鬼、冷白人皮。",
+      "value_plan": "人皮和王生眼白为亮点。",
+      "effects_plan": "无发光特效，只用目光路径和黑场。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "MON_PAINTED_SKIN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "desperate_action",
+      "source_excerpt": "S004：王生长跪乞救，道士授拂尘挂寝门。",
+      "meaning_zh": "王生终于求救，道士先给鬼物一条退路。",
+      "text_target": "挂在寝门。她若肯退，我便不伤她。",
+      "adaptation_note": "野外长跪与授拂合为一个对视格。",
+      "source_segment_refs": [
+        "S004"
+      ],
+      "description": "青帝庙边泥路，王生双膝着地、两手举过胸口接住道士递来的旧拂尘；道士站在画右，另一手收在袖中。",
+      "characters": [
+        "CHAR_WANG",
+        "CHAR_DAOIST"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "青帝庙边泥路",
+      "scene_anchor_id": "LOC_MARKET_TEMPLE",
+      "spatial_layout": "庙墙后景，泥路前景，两人位于道路中心。",
+      "lighting_anchor": "阴天右上冷光。",
+      "axis_eyeline": "王生画左下仰视道士，道士画右下视王生。",
+      "gaze_target": "王生看道士脸；道士看王生接拂尘的双手",
+      "eyeline_direction": "王生向画右上，道士向画左下",
+      "character_integrity": "王生双膝与双脚向后收拢完整；两人各有两手，拂尘只被王生双手和道士右手在同一柄上交接。",
+      "spatial_relationships": "王生跪在道士前一臂，拂尘横向连接两人。",
+      "blocking": "拂尘交接点清楚，不被袖子和台词遮挡。",
+      "staging": "略高机位使王生居下，道士站立稳定。",
+      "dialogue": [
+        {
+          "speaker": "道士",
+          "text_target": "挂在寝门。她若肯退，我便不伤她。"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "拂尘是旧竹木柄与灰白马尾，不发光，不加符咒。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "给退路的安静一拍",
+      "ink_plan": "人物与拂尘细线，泥路淡墨。",
+      "black_fill_plan": "庙檐与道士袖内压黑。",
+      "tone_plan": "冷灰、灰蓝、素青。",
+      "value_plan": "拂尘灰白次亮，人脸保持可读。",
+      "effects_plan": "无特效。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_DAOIST",
+        "LOC_MARKET_TEMPLE"
+      ]
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "attack",
+      "source_excerpt": "S004：女子破拂毁门，径登生床。",
+      "meaning_zh": "鬼拒绝退路，主动跨过最后的防护。",
+      "text_target": "道士吓我？你的心，我取定了。",
+      "adaptation_note": "破拂、破门和逼近床榻合为斜线动作大格。",
+      "source_segment_refs": [
+        "S004"
+      ],
+      "description": "夜中寝门被猛然撞开，旧拂尘在画面中线断成两截，少女外皮裂开脸侧一道缝，露出青绿鬼面和锯齿；她一手推开门、一手抓向床上缩退的王生。",
+      "characters": [
+        "CHAR_WANG",
+        "MON_PAINTED_SKIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋寝门",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "门从画右向内开，床榻在后景北壁，油灯在画左下。",
+      "lighting_anchor": "画左下油灯暖光，门外是冷蓝夜色。",
+      "axis_eyeline": "鬼从画右门口攻向画左后床榻，王生看她抓来的手。",
+      "gaze_target": "鬼看王生胸口；王生看鬼伸来的右手",
+      "eyeline_direction": "鬼向画左后，王生向画右前",
+      "character_integrity": "鬼一手推门、一手伸向王生，两腿跨门槛；王生双手支床后退，不多手多脚；外皮裂缝只露一张鬼脸。",
+      "spatial_relationships": "鬼在门口前景，王生在床榻后景，断拂尘位于两人之间。",
+      "blocking": "鬼抓手与王生胸口尚未接触，距离清楚。",
+      "staging": "低机位斜切构图，门框和断拂尘形成攻击线。",
+      "dialogue": [
+        {
+          "speaker": "画皮鬼",
+          "text_target": "道士吓我？你的心，我取定了。"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "喀嚇！"
+      ],
+      "art_notes": "动作需清楚但不血腥；台词区放在门外冷蓝暗部，不挡脸和手。",
+      "layout_weight": "heavy",
+      "panel_shape": "diagonal",
+      "border_style": "broken",
+      "gutter_intent": "破门冲击",
+      "ink_plan": "门板、断拂尘与人物用快慢线对比。",
+      "black_fill_plan": "门外与床帐压黑，攻击路径留亮。",
+      "tone_plan": "冷蓝夜色、暖灯、病绿鬼面。",
+      "value_plan": "裂开的鬼面与断拂尘为亮点。",
+      "effects_plan": "门板碎屑与短集中线指向断拂尘。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "MON_PAINTED_SKIN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "consequence",
+      "source_excerpt": "S004：鬼裂生腹，掬生心而去。",
+      "meaning_zh": "自欺的不可逆后果发生。",
+      "text_target": "天亮时，王生已没了心。",
+      "adaptation_note": "不直拍裂腹，用鬼手握心的门帘剪影与次日陈氏反应合成后果格。",
+      "source_segment_refs": [
+        "S004"
+      ],
+      "description": "清晨书斋，陈氏跪在床边，两手悬在王生身上方却不敢触碰；王生被素被覆至胸口，仅在腹部绷带上有少量暗红渗痕，画面上缘以淡墨叠化前夜鬼手握着一颗心的剪影。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_WANG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋床边",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "床榻北壁不变，陈氏跪在床南侧，门在画右背景。",
+      "lighting_anchor": "清晨冷光从纸窗左侧进入，油灯已灭。",
+      "axis_eyeline": "陈氏看王生腹部绷带，不看镜头。",
+      "gaze_target": "王生腹部绷带上暗红渗痕",
+      "eyeline_direction": "陈氏向画右下",
+      "character_integrity": "陈氏双膝着地、双手悬空不接触伤口；王生身体在被下连续，不显示开放腹腔。",
+      "spatial_relationships": "陈氏与王生相距一手，双手悬在绷带上方。",
+      "blocking": "旁白位于纸窗亮区，不遮挡陈氏手和王生腹部。",
+      "staging": "高机位静止后果格，叠化剪影在上方边缘。",
+      "dialogue": [],
+      "narration": "天亮时，王生已没了心。",
+      "sfx": [],
+      "art_notes": "血色克制，不绘开放伤口、内脏或断裂肢体。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "反扑后死寂",
+      "ink_plan": "陈氏细线，被子和床帐用稳定线。",
+      "black_fill_plan": "床帐后景深灰而非全黑。",
+      "tone_plan": "冷灰晨光、米白床品、少量暗红。",
+      "value_plan": "纸窗最亮，陈氏脸与手次亮，王生脸较暗。",
+      "effects_plan": "只有淡墨剪影叠化，无影视闪回边框。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "action_payoff",
+      "source_excerpt": "S005：道士木剑斩鬼，鬼化浓烟，葫芦收尽。",
+      "meaning_zh": "道士之前的怜悯被鬼害命打破，行动兑现。",
+      "text_target": "孽魅！偿我拂子来！",
+      "adaptation_note": "把老媪伪装脱落、木剑斩首和葫芦收烟组成一个自上而下的长动作格。",
+      "source_segment_refs": [
+        "S005"
+      ],
+      "description": "南院庭中，道士双脚一前一后站稳，右手素木剑横向掠过鬼体颈部，左手举开塞的深棕葫芦；老媪外皮正向下脱落，青面鬼体化成浓墨烟带被葫芦口吸入，不飞溅血肉。",
+      "characters": [
+        "CHAR_DAOIST",
+        "MON_PAINTED_SKIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家南院庭中",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "青砖院墙与天井不变，道士在画左，鬼在画右，葫芦口位于两者之间下方。",
+      "lighting_anchor": "白天冷光自上方天井落下，浓烟不自发光。",
+      "axis_eyeline": "道士画左看鬼颈部，鬼画右看木剑轨迹。",
+      "gaze_target": "道士看木剑命中点；鬼看掀来的剑锋",
+      "eyeline_direction": "道士向画右，鬼向画左",
+      "character_integrity": "道士右手一柄木剑、左手一只葫芦，两脚着地；鬼体一头两臂两腿，老媪外皮是正在脱落的单层皮囊，不增加第三人。",
+      "spatial_relationships": "道士与鬼相距一剑，剑锋接触颈部，烟带由鬼身卷向葫芦口。",
+      "blocking": "剑锋命中、葫芦口和烟带入口三个接触点同时可读。",
+      "staging": "低机位长竖动作，剑线横切，烟带纵向下卷。",
+      "dialogue": [
+        {
+          "speaker": "道士",
+          "text_target": "孽魅！偿我拂子来！"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "呼——"
+      ],
+      "art_notes": "木剑无金光，葫芦无法阵；烟像浓墨入水逆向回收。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "broken",
+      "gutter_intent": "动作兑现",
+      "ink_plan": "木剑快线、外皮细线、浓烟湿墨块面。",
+      "black_fill_plan": "浓烟为主黑场，道士脸和双手留亮。",
+      "tone_plan": "灰蓝道袍、病绿鬼、浓墨烟、深棕葫芦。",
+      "value_plan": "烟最黑，木剑和人皮次亮。",
+      "effects_plan": "短集中线指向剑锋，烟带旋转线指向葫芦口。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_DAOIST",
+        "MON_PAINTED_SKIN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "new_goal",
+      "source_excerpt": "S006：陈氏求回生，道士指市上疯者。",
+      "meaning_zh": "妖鬼已灭却不等于丈夫复生，陈氏获得一条伴随屈辱的新路径。",
+      "text_target": "我救不活他。去求市上那个疯子。他若辱你，勿怒。",
+      "adaptation_note": "道士将卷起的人皮收袋，陈氏在门口跪求，使‘斩鬼’与‘不能起死’形成落差。",
+      "source_segment_refs": [
+        "S006"
+      ],
+      "description": "王家宅门内，道士站着将卷如画轴的完整人皮收入素布袋，陈氏在画左前景双膝着地、双手作揖求他；道士目光沉下，另一手指向市井方向。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_DAOIST"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家宅门内",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "宅门在画右通往市井，天井在后景，两人在门内。",
+      "lighting_anchor": "阴天冷光从宅门右侧进入。",
+      "axis_eyeline": "陈氏画左仰视道士，道士画右低头看陈氏后指向门外。",
+      "gaze_target": "陈氏看道士脸；道士看陈氏作揖的双手",
+      "eyeline_direction": "陈氏向画右上，道士向画左下",
+      "character_integrity": "陈氏双膝、双手完整；道士一手收人皮画轴、一手指向门外，不多手；人皮卷起无活人脸。",
+      "spatial_relationships": "陈氏距道士一步，道士指向门外道路。",
+      "blocking": "作揖双手、人皮画轴和指路手三处可读。",
+      "staging": "陈氏低位、道士站立，宅门形成下一阶段出口。",
+      "dialogue": [
+        {
+          "speaker": "道士",
+          "text_target": "我救不活他。去求市上那个疯子。"
+        },
+        {
+          "speaker": "道士",
+          "text_target": "他若辱你，勿怒。"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "人皮如一张没有文字的工笔画轴，不出现可读题款。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "斩鬼后仍有代价",
+      "ink_plan": "人物细线，宅门稳定直线。",
+      "black_fill_plan": "道士背后袍子与门内压深灰。",
+      "tone_plan": "冷灰、素青、米白。",
+      "value_plan": "陈氏脸与作揖双手为亮点。",
+      "effects_plan": "无特效。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_CHEN",
+        "CHAR_DAOIST",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "ordeal",
+      "source_excerpt": "S006：陈氏受杖击、当众吞痰。",
+      "meaning_zh": "陈氏为救人承受极端羞辱，却是清醒的主动选择。",
+      "text_target": "人尽夫也，活之何为？ / 食之！",
+      "adaptation_note": "保留原作反感感受，但以陈氏的手与选择为视觉主体，不把围观人群当喜剧背景。",
+      "source_segment_refs": [
+        "S006"
+      ],
+      "description": "青帝庙边泥路中心，陈氏双膝着地，额角有一道被竹杖打红的痕迹；疯乞蹲在她面前，一手捧着浓痰伸到她唇边，另一手扶竹杖。陈氏一手握紧裙料，另一手托住乞人手腕，闭眼强咽；围观人群在两侧沉默避让。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_BEGGAR"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_BEGGAR",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "青帝庙边市路",
+      "scene_anchor_id": "LOC_MARKET_TEMPLE",
+      "spatial_layout": "陈氏在道路中心画左，疯乞画右，人群分列道路两侧，庙门后景。",
+      "lighting_anchor": "阴天右上冷光，泥路微反光。",
+      "axis_eyeline": "陈氏画左面向画右疯乞，疯乞看她唇边；人群看两人的手腕接触点。",
+      "gaze_target": "陈氏闭眼；疯乞看陈氏唇边；围观者看陈氏托住疯乞手腕的手",
+      "eyeline_direction": "陈氏面向画右，疯乞向画左下",
+      "character_integrity": "陈氏双膝、双手、双脚完整；疯乞一手捧痰、一手扶竹杖，两脚蹲地；不多手，不把痰画成内脏或蛇。",
+      "spatial_relationships": "两人距离半臂，陈氏手掌托住疯乞手腕，疯乞手掌停在她唇前。",
+      "blocking": "唇边、手腕接触点、握裙手和竹杖底端全部可读。",
+      "staging": "略俯拍中近景，人群形成封闭环形，中心两人不被遮挡。",
+      "dialogue": [
+        {
+          "speaker": "疯乞",
+          "text_target": "人尽夫也，活之何为？"
+        },
+        {
+          "speaker": "疯乞",
+          "text_target": "食之！"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "强调陈氏主动托住手腕和强咽的意志；不渲染浓痰细节，不搞笑。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "羞辱后留白",
+      "ink_plan": "面部与手部细线，围观者减线。",
+      "black_fill_plan": "人群背影压黑，中心陈氏保持亮度。",
+      "tone_plan": "冷灰泥路、米白上衣、赭裙、破褐衣。",
+      "value_plan": "陈氏脸与手最亮，人群深灰。",
+      "effects_plan": "无特效，用人群环形压迫。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_CHEN",
+        "CHAR_BEGGAR",
+        "LOC_MARKET_TEMPLE"
+      ]
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "lowest_point",
+      "source_excerpt": "S007：陈抱尸收肠，且理且哭。",
+      "meaning_zh": "屈辱没有立即显出意义，陈氏回到死亡与孤立面前。",
+      "text_target": "我带回来的，只有这一身羞。",
+      "adaptation_note": "将收肠改为具有尊严的尸身整理，保留她前襟与袖口的少量血污。",
+      "source_segment_refs": [
+        "S007"
+      ],
+      "description": "夜幕重回书斋，陈氏坐在地上，背倚床沿，双臂抱住覆着素被的王生上半身，额头轻抵他的肩；她的袖口和前襟沾少量血污，案上油灯灯芯已小到将灭。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_WANG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋床边",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "床榻北壁不变，陈氏坐在床南侧地面，油灯在画左下案上。",
+      "lighting_anchor": "画左下将灭油灯暖光，其余深蓝黑。",
+      "axis_eyeline": "陈氏闭眼面向王生肩，王生无意识。",
+      "gaze_target": "陈氏闭眼，额头抵住王生肩部",
+      "eyeline_direction": "向画右下",
+      "character_integrity": "陈氏双臂环抱王生肩背，双手分别落在他背与上臂；王生身体在素被下连续，不显示开放伤口。",
+      "spatial_relationships": "陈氏从地面托住王生上半身，他的重量由她双臂与床沿共同承担。",
+      "blocking": "抱持接触面、双手和绷带区域可读。",
+      "staging": "高位长竖静止镜头，两人构成下沉弧线。",
+      "dialogue": [],
+      "narration": "我带回来的，只有这一身羞。",
+      "sfx": [],
+      "art_notes": "不显示内脏；以将灭灯芯与人物体温对应。台词放在画右上黑场。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "最低点长留白",
+      "ink_plan": "人物细线，被子与地面纹理减线。",
+      "black_fill_plan": "背景大面积黑场，人物脸、手和灯火留亮。",
+      "tone_plan": "深蓝黑、米白、暗赭与少量血褪色。",
+      "value_plan": "灯火最亮，陈氏脸与手次亮，王生脸灰白。",
+      "effects_plan": "无特效。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "miracle_reveal",
+      "source_excerpt": "S007：陈氏哭极欲呕，结物落腔中，乃人心也，突突犹跃。",
+      "meaning_zh": "被吞下的污秽变成救命的心，羞辱的意义突然翻转。",
+      "text_target": "一颗心——在跳。",
+      "adaptation_note": "人心落入腹部绷带上的画面作为克制奇观，不出现大量体液。",
+      "source_segment_refs": [
+        "S007"
+      ],
+      "description": "近景从陈氏肩后看向床面：她一手掩口，另一手已伸向王生腹部；一颗完整、暖红但不血腥的人心刚落在绷带中心，表面带微弱热气，与冰冷的床榻形成对比。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_WANG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋床面",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "床榻北壁不变，此格是床南侧近景，绷带区位于画面中心。",
+      "lighting_anchor": "左下油灯暖光和窗外极弱蓝黑夜色。",
+      "axis_eyeline": "陈氏看绷带上的人心，王生无意识。",
+      "gaze_target": "绷带中心跳动的人心",
+      "eyeline_direction": "向画右下",
+      "character_integrity": "陈氏一手掩口、一手伸向人心，不多手；人心只有一颗；王生身体被素被和绷带遮住，不显示开放伤口。",
+      "spatial_relationships": "人心位于王生腹部绷带上，陈氏伸手距它一掌尚未接触。",
+      "blocking": "人心、伸手、掩口手和热气全部分离可读。",
+      "staging": "肩后近景，人心居中但不做猎奇特写。",
+      "dialogue": [],
+      "narration": "一颗心——在跳。",
+      "sfx": [
+        "咚、咚"
+      ],
+      "art_notes": "人心简化为工笔志怪符号，保留解剖识别度但不强调血管和体液。上方床帐暗区留旁白。",
+      "layout_weight": "heavy",
+      "panel_shape": "closeup",
+      "border_style": "standard",
+      "gutter_intent": "奇迹现身后停一拍",
+      "ink_plan": "手和心用精细线，床品减线。",
+      "black_fill_plan": "四周深黑，人心与手留亮。",
+      "tone_plan": "暖红人心、米白绷带、深蓝黑背景。",
+      "value_plan": "人心最亮，陈氏手次亮。",
+      "effects_plan": "只有几缕透明热气，无神光。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "climax",
+      "source_excerpt": "S007：陈氏以两手合腔，极力抱挤，裂缯帛急束之。",
+      "meaning_zh": "陈氏不再等待任何人，亲手把心按回死局中。",
+      "text_target": "回去。你给我回去！",
+      "adaptation_note": "以两手按压、布带紧缚和热气被封住为动作高潮，不显露腹腔细节。",
+      "source_segment_refs": [
+        "S007"
+      ],
+      "description": "陈氏跪伏在床边，双手叠压在王生腹部绷带上，手臂与肩背显出真实用力；一条裂开的素布从她牙间和一手边绕过王生腹部，几缕暖白热气正被她的掌心和布带压回。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_WANG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋床边",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "床榻北壁不变，陈氏从南侧跪伏，绷带区位于画面中下部。",
+      "lighting_anchor": "左下油灯暖光，热气只是受光而非自发光。",
+      "axis_eyeline": "陈氏看自己双手按压点，王生无意识。",
+      "gaze_target": "双手掌下的绷带中心",
+      "eyeline_direction": "向画右下",
+      "character_integrity": "陈氏双手层叠在同一按压点，双肘、双膝和肩背受力连续；布带方向清楚；王生身体在被下完整，不显示开放伤口。",
+      "spatial_relationships": "陈氏身体重心通过双臂传到王生腹部，布带沿他腰部横向绕过。",
+      "blocking": "双手按压点、布带绕行与热气全部可读，文字不遮挡。",
+      "staging": "侧俯拍中近景，陈氏肩背形成向下压迫斜线。",
+      "dialogue": [
+        {
+          "speaker": "陈氏",
+          "text_target": "回去。你给我回去！"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "呜——"
+      ],
+      "art_notes": "本格的主体是陈氏的行动和力量，不是尸体猎奇。气泡放于右上床帐暗区。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "broken",
+      "gutter_intent": "奇迹动作高潮",
+      "ink_plan": "手臂受力细线，布带使用连续长线。",
+      "black_fill_plan": "背景压黑，双手、布带和脸留亮。",
+      "tone_plan": "深蓝黑、米白布带、暖肤色和微暖白热气。",
+      "value_plan": "双手与布带最亮，陈氏背部深中值。",
+      "effects_plan": "少量短集中线指向按压点，热气向内收束。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "payoff",
+      "source_excerpt": "S007：中夜有鼻息，天明竟活，痂结如钱。",
+      "meaning_zh": "陈氏的行动兑现，但王生的后果留在身上。",
+      "text_target": "活了。",
+      "adaptation_note": "以窗纸由暗到亮的时间推移与手指感知鼻息完成复活，钱形疤痕在下一格回扣。",
+      "source_segment_refs": [
+        "S007"
+      ],
+      "description": "拂晓书斋，纸窗由深蓝转为灰白，陈氏伏在床边熟睡，一只手仍覆在王生腹部绷带上；她另一只手的食指停在王生鼻下，感到一缕微弱呼气，王生胸口稍微起伏。",
+      "characters": [
+        "CHAR_CHEN",
+        "CHAR_WANG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋床边",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "床榻北壁、纸窗画左、门画右不变，陈氏伏在床南侧。",
+      "lighting_anchor": "拂晓冷灰光从纸窗左侧进入，灯火已灭，没有神光。",
+      "axis_eyeline": "陈氏闭眼熟睡，王生刚恢复呼吸但眼尚未睁开。",
+      "gaze_target": "陈氏闭眼；王生闭眼",
+      "eyeline_direction": "无目光交互",
+      "character_integrity": "陈氏一手覆绷带、一手食指测鼻息，双臂归属清楚；王生身体连续，胸口仅微弱起伏。",
+      "spatial_relationships": "陈氏的食指距王生鼻孔一指，另一手与绷带平贴接触。",
+      "blocking": "鼻息接触、绷带与胸口起伏可读，气泡不挡。",
+      "staging": "侧面静止中景，纸窗从左向右推入清晨。",
+      "dialogue": [
+        {
+          "speaker": "陈氏",
+          "text_target": "活了。"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "呼——"
+      ],
+      "art_notes": "不用起死回生金光；奇迹只是鼻息、胸口起伏和天色变亮。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "细小生命信号后长停顿",
+      "ink_plan": "手指、鼻息与绷带精细线，窗纸减线。",
+      "black_fill_plan": "只在床帐深处留黑，画面总体比前格更亮。",
+      "tone_plan": "灰白拂晓、米白床品、赭色裙料。",
+      "value_plan": "纸窗最亮，两人脸和手为中亮。",
+      "effects_plan": "一缕极淡呼气，无其他特效。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "LOC_WANG_COURTYARD"
+      ]
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "epilogue",
+      "source_excerpt": "S008：明明妖也而以为美，明明忠也而以为妄。",
+      "meaning_zh": "以永久疤痕将奇谈与人心讽刺收在同一个物证上。",
+      "text_target": "明明妖也，而以为美。明明忠也，而以为妄。",
+      "adaptation_note": "末格不让异史氏出场，只用王生腹部钱形疤痕、陈氏在纸窗后的背影与旁白收束。",
+      "source_segment_refs": [
+        "S008"
+      ],
+      "description": "数日后的书斋近景，王生坐在床沿接开素青长衫，腹部只露出一枚如古钱大小的圆形疤痕；他的手指停在疤痕边缘却不敢按下。后景纸窗后，陈氏的背影正把洗净的血污布带挂起，两人之间被窗格分开。",
+      "characters": [
+        "CHAR_WANG",
+        "CHAR_CHEN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "王家书斋与纸窗后天井",
+      "scene_anchor_id": "LOC_WANG_COURTYARD",
+      "spatial_layout": "王生在书斋床沿前景，纸窗画左后景，陈氏在窗后天井。",
+      "lighting_anchor": "白天冷光从纸窗后进入，室内无油灯。",
+      "axis_eyeline": "王生低头看自己疤痕，陈氏背向书斋看挂起的布带。",
+      "gaze_target": "王生看自己腹部钱形疤痕；陈氏看手中洗净的布带",
+      "eyeline_direction": "王生向画右下，陈氏背向镜头向画左上",
+      "character_integrity": "王生一手揭衣、一手指停在疤痕边，只有一枚疤痕；陈氏背影两手各持布带一端，不多手。",
+      "spatial_relationships": "王生与陈氏分居纸窗内外，彼此没有目光交互。",
+      "blocking": "疤痕、王生双手和陈氏挂布动作可读，旁白位于上方低细节窗纸区。",
+      "staging": "前景身体物证、后景劳作背影，窗格作道德分界。",
+      "dialogue": [],
+      "narration": "明明妖也，而以为美。明明忠也，而以为妄。",
+      "sfx": [],
+      "art_notes": "疤痕是小而真实的钱形结痂，不做魔法纹身或发光符号。上方窗纸留足旁白空间。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "讽刺余音",
+      "ink_plan": "疤痕、手与窗格精细线，后景陈氏减线。",
+      "black_fill_plan": "王生衣襟内侧深灰，不大面积压黑。",
+      "tone_plan": "灰白日光、素青长衫、赭色裙背影、暗红褐色疤痕。",
+      "value_plan": "窗纸最亮，疤痕用小面积深色吸引视线。",
+      "effects_plan": "无特效，靠窗格和静止完成余韵。",
+      "references": [
+        "STYLE_LIAOZHAI_QING_GONGXI",
+        "CHAR_WANG",
+        "CHAR_CHEN",
+        "LOC_WANG_COURTYARD"
+      ]
     }
   ]
 }

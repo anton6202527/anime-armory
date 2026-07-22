@@ -1,0 +1,22 @@
+{
+  "available": true,
+  "episode": "第1集",
+  "kind": "n2d_memory_anchor_plan",
+  "notes": [
+    "尚无早期集 PNG；本集按空历史建立基线，不要求不存在的跨集漂移量测。",
+    "本集无需重注入记忆锚（无长间隔再登场 / 晚集 / 已测漂移角色）。"
+  ],
+  "rows": [],
+  "source_fingerprint": {
+    "identity_drift_report_sha256": "afa49029b1d4ac05ae9896a29af73efd03b27f15032cde0bd80ffe7ebd2d3369",
+    "identity_registry_sha256": "c83625b8aa78139ec5e7af97b91c29de91a4076afb86e80918d0fdc6c73fbff7",
+    "storyboard_sha256": "d8bbe3516aa4b481daa5042a5798c3085de13b29d82cc957ed434c0450f23177"
+  },
+  "status": "ready",
+  "target_appearances": [
+    "CHAR_01/“囚途残损态”",
+    "CHAR_02/“濒死重伤态”",
+    "BEAST_01/“穿心复生态”"
+  ],
+  "version": 3
+}

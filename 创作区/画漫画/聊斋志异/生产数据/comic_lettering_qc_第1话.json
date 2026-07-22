@@ -1,0 +1,12 @@
+{
+  "kind": "comic_lettering_qc",
+  "schema_version": 1,
+  "chapter": "第1话",
+  "summary": {
+    "checked_slots": 26,
+    "block": 0,
+    "warn": 0
+  },
+  "findings": [],
+  "notes": []
+}

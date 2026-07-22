@@ -1,0 +1,106 @@
+{
+  "kind": "comic_identity_drift_report",
+  "version": 1,
+  "generated_at": "2026-07-21T14:13:41+00:00",
+  "provenance": "跨话汇总各话 character_consistency 报告·标 first_bad_chapter·report-only·2026-07",
+  "summary": {
+    "chapters_scanned": 1,
+    "characters_tracked": 5,
+    "characters_with_drift": 4,
+    "characters_block": 0
+  },
+  "chapters": [
+    "第1话"
+  ],
+  "characters": [
+    {
+      "char_id": "CHAR_BEGGAR",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "ok"
+      },
+      "first_bad_chapter": null,
+      "warn_or_block_chapters": [],
+      "block_chapters": [],
+      "codes": [],
+      "recommendation": null
+    },
+    {
+      "char_id": "CHAR_CHEN",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "warn"
+      },
+      "first_bad_chapter": "第1话",
+      "warn_or_block_chapters": [
+        "第1话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_CHEN：仅 第1话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+    },
+    {
+      "char_id": "CHAR_DAOIST",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "warn"
+      },
+      "first_bad_chapter": "第1话",
+      "warn_or_block_chapters": [
+        "第1话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "CHAR_DAOIST：仅 第1话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+    },
+    {
+      "char_id": "CHAR_WANG",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "warn"
+      },
+      "first_bad_chapter": "第1话",
+      "warn_or_block_chapters": [
+        "第1话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "face_fingerprint_low",
+        "hair_fingerprint_low",
+        "outfit_fingerprint_low"
+      ],
+      "recommendation": "CHAR_WANG：第1话 服装漂移——在 registry.assets 的 outfits 子注册登记该换装（描述+参考图+绝不清单），重抽换装格；锁脸锁不住领型/纽扣/花纹。"
+    },
+    {
+      "char_id": "MON_PAINTED_SKIN",
+      "appeared_chapters": [
+        "第1话"
+      ],
+      "chapter_status": {
+        "第1话": "warn"
+      },
+      "first_bad_chapter": "第1话",
+      "warn_or_block_chapters": [
+        "第1话"
+      ],
+      "block_chapters": [],
+      "codes": [
+        "hair_fingerprint_low"
+      ],
+      "recommendation": "MON_PAINTED_SKIN：仅 第1话 单话漂移——按该话 identity report 的 rerun_targets 重抽受影响格即可，先不升重资产。"
+    }
+  ],
+  "notes": []
+}

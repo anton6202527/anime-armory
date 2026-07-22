@@ -5,7 +5,7 @@
   "title": "刀下不是妖",
   "status": "stage2_draft",
   "timing_basis": "text_estimate_no_audio",
-  "total_duration": 74.798,
+  "total_duration": 77.5,
   "core_attraction": {
     "category": "穿越死局 + 妖魔复生 + 杀人求生反转",
     "why_watch": "刚穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。",
@@ -140,9 +140,11 @@
   "clips": [
     {
       "id": "EP01_CLIP01",
+      "firstframe_png": "出图/第1集/图片/Clip01_first.png",
+      "endframe_png": "出图/第1集/图片/Clip01_end.png",
       "beat_id": "Beat_01",
       "label": "刀口为何对准人",
-      "duration": 3.884,
+      "duration": 5.6,
       "voiceover_indices": [
         1
       ],
@@ -269,13 +271,15 @@
         ]
       },
       "start_sec": 0.0,
-      "end_sec": 3.884
+      "end_sec": 5.6
     },
     {
       "id": "EP01_CLIP02",
+      "firstframe_png": "出图/第1集/图片/Clip02_first.png",
+      "endframe_png": "出图/第1集/图片/Clip02_end.png",
       "beat_id": "Beat_01",
       "label": "一炷香前的荒野死局",
-      "duration": 11.52,
+      "duration": 14.92,
       "voiceover_indices": [
         2,
         3,
@@ -451,17 +455,25 @@
             "use": "split",
             "reason": "auto: R2 普通长镜（11.52s/4拍）",
             "source_duration": 11.52
+          },
+          {
+            "anchor_png": "出图/第1集/图片/Clip02_end.png",
+            "at_sec": 11.2,
+            "use": "edit_cut",
+            "reason": "断刀封路反打边界；同时作为末镜落幅"
           }
         ]
       },
-      "start_sec": 3.884,
-      "end_sec": 15.404
+      "start_sec": 5.6,
+      "end_sec": 20.52
     },
     {
       "id": "EP01_CLIP03",
+      "firstframe_png": "出图/第1集/图片/Clip03_first.png",
+      "endframe_png": "出图/第1集/图片/Clip03_end.png",
       "beat_id": "Beat_02",
       "label": "以脱籍换搀扶",
-      "duration": 11.989,
+      "duration": 10.96,
       "voiceover_indices": [
         5,
         6,
@@ -512,6 +524,31 @@
         "PROP_断刀",
         "PROP_横刀"
       ],
+      "interaction_graph": {
+        "participants": [
+          "CHAR_01",
+          "CHAR_02",
+          "PROP_断刀",
+          "PROP_横刀"
+        ],
+        "contact_points": [
+          "CHAR_02右手握住PROP_断刀刀柄",
+          "CHAR_01与CHAR_02尚无身体接触"
+        ],
+        "body_part_ownership": {
+          "CHAR_01": "双手自由，停在一臂半距离外",
+          "CHAR_02": "右手持断刀封路，受伤左臂贴身保护"
+        },
+        "holder_state": {
+          "PROP_断刀": "CHAR_02/right_hand",
+          "PROP_横刀": "ground/unheld"
+        },
+        "occlusion_order": [
+          "CHAR_01画左前景",
+          "PROP_断刀中景横向封路",
+          "CHAR_02画右中景"
+        ]
+      },
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
@@ -626,17 +663,25 @@
             "use": "split",
             "reason": "auto: R2 普通长镜（11.989s/4拍）",
             "source_duration": 11.989
+          },
+          {
+            "anchor_png": "出图/第1集/图片/Clip03_end.png",
+            "at_sec": 8.4,
+            "use": "edit_cut",
+            "reason": "主角盘算后缩短距离的反应边界；同时作为末镜落幅"
           }
         ]
       },
-      "start_sec": 15.404,
-      "end_sec": 27.393
+      "start_sec": 20.52,
+      "end_sec": 31.48
     },
     {
       "id": "EP01_CLIP04",
+      "firstframe_png": "出图/第1集/图片/Clip04_first.png",
+      "endframe_png": "出图/第1集/图片/Clip04_end.png",
       "beat_id": "Beat_02",
       "label": "先活着再算账",
-      "duration": 7.419,
+      "duration": 9.4,
       "voiceover_indices": [
         8,
         9
@@ -689,6 +734,30 @@
       "object_ids": [
         "PROP_横刀"
       ],
+      "interaction_graph": {
+        "participants": [
+          "CHAR_01",
+          "CHAR_02",
+          "BEAST_01"
+        ],
+        "contact_points": [
+          "CHAR_01右前臂与右手托住CHAR_02未伤右上臂",
+          "CHAR_02右前臂搭在CHAR_01肩背形成搀扶"
+        ],
+        "body_part_ownership": {
+          "CHAR_01": "双腿承重并向画面下方移动，右臂承担搀扶",
+          "CHAR_02": "右侧借力，受伤左臂始终贴身不承重"
+        },
+        "holder_state": {
+          "PROP_横刀": "ground/unheld"
+        },
+        "occlusion_order": [
+          "CHAR_01画左近景",
+          "CHAR_02画右中景",
+          "BEAST_01后景巨岩旁伪死"
+        ],
+        "transfer_event": "support_contact_begins: no contact -> 姜月初开始搀扶裴长青"
+      },
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
@@ -799,14 +868,16 @@
         ],
         "previous_start_state_note": "尚未身体接触。"
       },
-      "start_sec": 27.393,
-      "end_sec": 34.812
+      "start_sec": 31.48,
+      "end_sec": 40.88
     },
     {
       "id": "EP01_CLIP05",
+      "firstframe_png": "出图/第1集/图片/Clip05_first.png",
+      "endframe_png": "出图/第1集/图片/Clip05_end.png",
       "beat_id": "Beat_03",
       "label": "死妖咳嗽站起",
-      "duration": 11.608,
+      "duration": 7.88,
       "voiceover_indices": [
         10,
         11,
@@ -865,6 +936,33 @@
       "object_ids": [
         "PROP_横刀"
       ],
+      "interaction_graph": {
+        "participants": [
+          "CHAR_01",
+          "CHAR_02",
+          "BEAST_01",
+          "PROP_横刀"
+        ],
+        "contact_points": [
+          "起始时CHAR_01右臂仍托住CHAR_02右侧",
+          "CHAR_02右手在末拍握住PROP_横刀刀柄",
+          "BEAST_01双足踩地起立，不与人物接触"
+        ],
+        "body_part_ownership": {
+          "CHAR_01": "先搀扶后因虎妖复生松开支撑",
+          "CHAR_02": "受伤左臂贴身，只有右手伸向横刀",
+          "BEAST_01": "胸口黑血洞保持原位，四肢归虎妖"
+        },
+        "holder_state": {
+          "PROP_横刀": "ground/unheld -> CHAR_02/right_hand"
+        },
+        "occlusion_order": [
+          "CHAR_01与CHAR_02前景",
+          "PROP_横刀右下地面",
+          "BEAST_01上后景起立"
+        ],
+        "transfer_event": "support_contact_releases; PROP_横刀 transfers ground -> CHAR_02/right_hand at final beat"
+      },
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
@@ -990,14 +1088,16 @@
           }
         ]
       },
-      "start_sec": 34.812,
-      "end_sec": 46.42
+      "start_sec": 40.88,
+      "end_sec": 48.76
     },
     {
       "id": "EP01_CLIP06",
+      "firstframe_png": "出图/第1集/图片/Clip06_first.png",
+      "endframe_png": "出图/第1集/图片/Clip06_end.png",
       "beat_id": "Beat_04",
       "label": "虎口最后威胁",
-      "duration": 8.251,
+      "duration": 8.8,
       "voiceover_indices": [
         14,
         15,
@@ -1018,10 +1118,10 @@
       "rhythm": "加速·危机逼近",
       "pacing_role": "系统前压力峰值",
       "runtime_priority": "highlight",
-      "economy_intent": "selective_detail",
+      "economy_intent": "premium_detail",
       "target_story_clip_sec": {
         "min": 5,
-        "max": 7
+        "max": 9
       },
       "dramatic_function": "让系统在马上被吃的压力下出现。",
       "spectacle_story_function": "用裴长青搏命仍被一脚击溃的单次交锋，直观标定虎妖战力并把横刀送到姜月初脚边，直接触发后续杀人选择。",
@@ -1046,6 +1146,7 @@
         }
       ],
       "multi_subject_strategy": "split_composite_required：虎妖压迫层与人物反应层分take，不做三张清晰脸横排",
+      "pose_image_path": "生产数据/pose_guides/EP01_CLIP06_tiger_kick_pose.png",
       "template": "fight_exchange",
       "template_contract": {
         "template_id": "fight_exchange",
@@ -1057,6 +1158,7 @@
         ],
         "blocking": "姜月初固定画左中景；裴长青从画右下拾刀冲向上方后景虎妖，受击后沿同一力线跌回姜月初脚边；虎妖不换位，只抬腿击退后继续逼近。",
         "pose_reference_required": true,
+        "pose_image_path": "生产数据/pose_guides/EP01_CLIP06_tiger_kick_pose.png",
         "regional_construct_required": true,
         "impact_frame_sync": true,
         "attack_path": "裴长青自画面右下持刀向左上冲锋；虎妖由左上向右下正蹬，双方力线正面对冲。",
@@ -1126,6 +1228,36 @@
       "object_ids": [
         "PROP_横刀"
       ],
+      "interaction_graph": {
+        "participants": [
+          "CHAR_01",
+          "CHAR_02",
+          "BEAST_01",
+          "PROP_横刀"
+        ],
+        "contact_points": [
+          "CHAR_02右手握PROP_横刀刀柄冲锋",
+          "BEAST_01右足正面命中CHAR_02躯干",
+          "命中后CHAR_02与横刀分别落回CHAR_01脚边地面"
+        ],
+        "body_part_ownership": {
+          "CHAR_01": "留在画面右下，双手不参与攻击",
+          "CHAR_02": "右手持刀、左臂骨折贴身，躯干承受踢击",
+          "BEAST_01": "右腿完成单次正面踢击"
+        },
+        "holder_state": {
+          "PROP_横刀": "CHAR_02/right_hand -> released -> ground/unheld"
+        },
+        "occlusion_order": [
+          "BEAST_01左上中景",
+          "接触点画面中央",
+          "CHAR_02回落右下",
+          "CHAR_01右下后层"
+        ],
+        "force_direction": "BEAST_01右足由左上向右下施力，CHAR_02沿同轴回落，不越轴",
+        "release_frame": "踢击命中后、CHAR_02开始回落时横刀脱离右手",
+        "transfer_event": "PROP_横刀 holder CHAR_02/right_hand -> ground/unheld"
+      },
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
@@ -1201,29 +1333,43 @@
           "screen_direction": "现实动作由左上回落右下，视线继续向右下，不反向越轴"
         },
         "need_endframe": false,
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+            "at_sec": 3.0,
+            "use": "mid_impact",
+            "reason": "锁定虎足命中裴长青躯干的接触帧、力线和衣料压缩"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 4.8,
+            "use": "action_recovery",
+            "reason": "锁定裴长青与横刀沿原轴回落姜月初脚边的人刀空间关系"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a3.png",
+            "at_sec": 6.6,
+            "use": "edit_cut",
+            "reason": "虎妖威胁后切姜月初绝望近景，补足四镜位第三个边界"
+          }
+        ],
         "entry_exit": "裴持刀冲锋后被踢回，横刀落在姜月初脚边；虎妖继续向下逼近。",
         "shot_size": "MS→CU→MS→CU",
         "eyeline": "上看虎妖再右下看裴",
         "expression_span": "大",
         "end_anchor_required": true,
-        "anchors": [
-          {
-            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
-            "at_sec": 1.6,
-            "use": "edit_cut",
-            "reason": "姜月初反应CU切虎妖低机位压迫镜"
-          }
-        ],
         "previous_start_state_note": "虎妖逼近，裴长青拾横刀准备搏命。"
       },
-      "start_sec": 46.42,
-      "end_sec": 54.671
+      "start_sec": 48.76,
+      "end_sec": 57.56
     },
     {
       "id": "EP01_CLIP07",
+      "firstframe_png": "出图/第1集/图片/Clip07_first.png",
+      "endframe_png": "出图/第1集/图片/Clip07_end.png",
       "beat_id": "Beat_04",
       "label": "百妖谱给出残酷选择",
-      "duration": 10.811,
+      "duration": 7.06,
       "voiceover_indices": [
         17,
         18
@@ -1255,7 +1401,8 @@
         "max": 15
       },
       "dramatic_function": "只解释改变当下决定的规则，把斩杀指向唯一活人。",
-      "editing_intent": "规则只按决定所需拆成三拍，卷轴/虎爪交替后用主角视线切到裴长青与递刀手。",
+      "editing_intent": "裴被一脚击溃、姜月初强烈求生的绝境触发百妖谱；规则只按决定所需拆成三拍，卷轴/虎妖逼近交替后用主角视线切到裴长青与递刀手。",
+      "activation_cause": "裴长青搏命落败、虎妖继续逼近，姜月初产生明确的求生决断时百妖谱响应。",
       "audience_effect": "先兴奋再意识到伦理代价。",
       "spectacle_story_function": "建立百妖谱视觉母题。",
       "description": "旧纸卷轴、黑墨边缘，文字区空白供overlay；主角视线由虎妖落到裴长青。",
@@ -1337,7 +1484,7 @@
         "blocking": "LOC_01/主观系统层；可见主体=CHAR_01/囚途残损态、CHAR_02/濒死态、BEAST_01/复生态、PROP_横刀、VFX_百妖谱、VFX_系统面板、CHAR_01、CHAR_02、BEAST_01；现实位置不重置。",
         "camera_rule": "固定；85mm；慢推",
         "continuity_must": [
-          "起：虎妖将接触，主角无武力。",
+          "起：裴长青濒死落在姜月初脚边、横刀脱手，虎妖继续逼近，主角无武力。",
           "止：主角理解规则，视线落在裴与横刀。",
           "视线：上后景→右下",
           "入出画：现实位置不重置。"
@@ -1380,7 +1527,7 @@
         }
       ],
       "continuity": {
-        "start_state": "虎爪入前景，姜月初未持刀。",
+        "start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
         "end_state": "主角理解规则，视线落在裴与横刀。",
         "transition": "视线切递刀手。",
         "seam_mode": "eyeline_cut",
@@ -1395,7 +1542,7 @@
         "eyeline": "上后景→右下",
         "expression_span": "大",
         "end_anchor_required": true,
-        "previous_start_state_note": "虎妖将接触，主角无武力。",
+        "previous_start_state_note": "裴长青搏命落败，横刀落脚边，虎妖继续逼近。",
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
@@ -1406,21 +1553,23 @@
           },
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
-            "at_sec": 7.21,
+          "at_sec": 6.2,
             "use": "split",
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.811s）",
             "source_duration": 10.811
           }
         ]
       },
-      "start_sec": 54.671,
-      "end_sec": 65.482
+      "start_sec": 57.56,
+      "end_sec": 64.62
     },
     {
       "id": "EP01_CLIP08",
+      "firstframe_png": "出图/第1集/图片/Clip08_first.png",
+      "endframe_png": "出图/第1集/图片/Clip08_end.png",
       "beat_id": "Beat_05",
       "label": "对不住了，刀落人身",
-      "duration": 9.316,
+      "duration": 12.88,
       "voiceover_indices": [
         19,
         20,
@@ -1481,9 +1630,35 @@
         "BEAST_01/焦外"
       ],
       "object_ids": [
-        "PROP_横刀",
-        "VFX_百妖谱"
+        "PROP_横刀"
       ],
+      "interaction_graph": {
+        "participants": [
+          "CHAR_01",
+          "CHAR_02",
+          "PROP_横刀"
+        ],
+        "contact_points": [
+          "递刀时CHAR_02右手与CHAR_01双手只在同一刀柄处短暂交叠",
+          "交接后CHAR_01双手独立握柄，刀刃不接触任何手",
+          "最终仅PROP_横刀刀尖首次触及并微入CHAR_02胸前衣料"
+        ],
+        "body_part_ownership": {
+          "CHAR_01": "双手接刀后两手持柄，由左肩上方完成一次落刀",
+          "CHAR_02": "右手递出刀柄后松手，胸口承受最终触衣点"
+        },
+        "holder_state": {
+          "PROP_横刀": "CHAR_02/right_hand -> shared_handoff -> CHAR_01/both_hands"
+        },
+        "occlusion_order": [
+          "CHAR_01画左前景",
+          "PROP_横刀中轴",
+          "CHAR_02画右中景",
+          "BEAST_01焦外后景"
+        ],
+        "force_direction": "最终落刀由CHAR_01左上向CHAR_02右下胸前，单次运动，不贯穿",
+        "transfer_event": "at 2.6s PROP_横刀 transfers CHAR_02/right_hand -> CHAR_01/both_hands; thereafter no release"
+      },
       "location_id": "LOC_01",
       "entity_schedule": {
         "characters": [
@@ -1492,8 +1667,7 @@
           "BEAST_01/焦外"
         ],
         "objects": [
-          "PROP_横刀",
-          "VFX_百妖谱"
+          "PROP_横刀"
         ],
         "locations": [
           "LOC_01"
@@ -1648,8 +1822,8 @@
           }
         ]
       },
-      "start_sec": 65.482,
-      "end_sec": 74.798
+      "start_sec": 64.62,
+      "end_sec": 77.5
     }
   ]
 }

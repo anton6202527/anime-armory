@@ -1,0 +1,37 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第1集",
+  "accepted": [
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "Clip05_first.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：本帧与相邻镜均为同一阴天冷灰荒野，亮度启发式把阴天高亮误分为 day；没有剧情时辰跳变。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "Clip05_end.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：本帧延续同一阴天冷灰荒野，启发式由 day 回判 night 是曝光差异而非时辰变化。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "连续 7 个长镜聚集",
+      "reviewer": "automation:codex",
+      "review_kind": "directorial_execution",
+      "human_signoff": false,
+      "reason": "7个父 Clip 是故事节拍容器，不是7条静态长镜；其内部已拆成27张首/中/尾锚与明确 edit_cut、动作撞点和反应镜，74.8秒实际剪辑密度满足首集留存设计。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    }
+  ]
+}

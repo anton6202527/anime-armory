@@ -10,17 +10,15 @@
 
 | file | exists | bytes | sha256 |
 |---|---:|---:|---|
-| _设置.md | True | 2376 | `9545440599d1` |
-| _进度.md | True | 1619 | `d82c9d577bd8` |
-| 脚本/第1集/storyboard.json | True | 60564 | `0fd9b5eb2f7a` |
+| _设置.md | True | 2581 | `3f89b8665c8d` |
+| _进度.md | True | 1621 | `2f1f01b88d43` |
+| 脚本/第1集/storyboard.json | True | 66327 | `3c651df469f8` |
 | 脚本/第1集/素材清单.md | True | 2638 | `2ea9a17349b4` |
-| 出图/共享/identity_registry.json | False | 0 | `` |
-| 出图/共享/asset_registry.json | False | 0 | `` |
-| 生产数据/spectacle_plan_第1集.json | False | 0 | `` |
-| 生产数据/episode_graph_第1集.json | True | 3017 | `a5a645496193` |
+| 出图/共享/identity_registry.json | True | 88643 | `4277e20e264a` |
+| 出图/共享/asset_registry.json | True | 35198 | `257ccf3adfb3` |
+| 生产数据/spectacle_plan_第1集.json | True | 10207 | `cc46d7e9f8a6` |
+| 生产数据/episode_graph_第1集.json | True | 3017 | `5537e6af5db7` |
 
 ## Missing
 
-- 出图/共享/identity_registry.json
-- 出图/共享/asset_registry.json
-- 生产数据/spectacle_plan_第1集.json
+无

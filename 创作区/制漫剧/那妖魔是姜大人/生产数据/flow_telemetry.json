@@ -1,19 +1,27 @@
 {
-  "event_count": 13,
+  "event_count": 135,
   "kind": "n2d_flow_telemetry",
-  "last_event_at": "2026-07-21T20:32:53+0800",
-  "milestone_count": 0,
-  "milestones": {},
-  "next_action_count": 13,
+  "last_event_at": "2026-07-22T09:57:40+0800",
+  "milestone_count": 117,
+  "milestones": {
+    "actual_rough_cut_planned": 8,
+    "video_accepted": 8,
+    "video_downloaded": 8,
+    "video_qc_blocked": 4,
+    "video_queried": 79,
+    "video_submit_failed": 1,
+    "video_submitted": 9
+  },
+  "next_action_count": 18,
   "orchestrator_latency_ms": {
     "max": 3275.01,
-    "p50": 872.598,
-    "p95": 3052.043
+    "p50": 1268.552,
+    "p95": 2959.14
   },
   "prework": {
     "cache_hit_rate": 0.0,
     "cache_hits": 0,
-    "total": 147
+    "total": 348
   },
   "stage_transitions": {
     "script_stage1->voice": 1,
@@ -21,16 +29,19 @@
     "voice->script_stage2": 1
   },
   "stages": {
-    "image_prompt": 1,
+    "compose_proxy": 8,
+    "image_prompt": 6,
     "script_stage1": 3,
     "script_stage2": 7,
+    "video": 109,
     "voice": 2
   },
   "stop_reasons": {
+    "blocked_by_gate": 1,
     "needs_agent_gen": 5,
     "needs_stage_execution": 1,
-    "prework_failed": 7
+    "prework_failed": 11
   },
-  "updated_at": "2026-07-21T20:32:53+0800",
+  "updated_at": "2026-07-22T09:57:40+0800",
   "version": 1
 }

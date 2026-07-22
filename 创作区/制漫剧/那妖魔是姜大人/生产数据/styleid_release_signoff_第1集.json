@@ -1,0 +1,7 @@
+{
+  "kind": "n2d_styleid_release_signoff",
+  "accepted": true,
+  "reviewer": "automation:codex",
+  "reason": "本集为 internal_only 内部母版；已启用逐张机器 QC、执行者实际像素目视、主角五角 identity_eval_pack，并以多参考锁脸补偿当前无 StyleID 模型。公开投放前重新评估并补正式人审。",
+  "expires_at": "2026-08-21"
+}

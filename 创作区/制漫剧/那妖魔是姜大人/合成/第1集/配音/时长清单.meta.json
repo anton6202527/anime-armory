@@ -1,0 +1,13 @@
+{
+  "kind": "n2d.voice_manifest_meta",
+  "voiceover_fingerprint": "8847aabd36e78a837805e12cf2fb930d504c7c1c9fb866e2c329a324c874f641",
+  "lines": 22,
+  "placeholder_lines": 0,
+  "provider": "CosyVoice",
+  "lang": "zh",
+  "purpose": "final",
+  "duration_sec": 77.5,
+  "expected_duration_sec": 74.371,
+  "duration_anomaly_lines": [],
+  "generated_at": "2026-07-21T20:07:28Z"
+}

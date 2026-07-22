@@ -4,9 +4,9 @@
     "findings": [],
     "payoff_contexts": [
       "穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。 audience_payoff",
-      "流的镇魔卫，也配杀我？ 快逃！ rhythm 反转·压迫升级 dramatic_function 推翻逃生路径，升级",
-      "升级 dramatic_function 推翻逃生路径，升级为绝对死局。 scene LOC_01 audience_effect",
-      "rhythm 反转·留静音 dramatic_function 兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不"
+      "月初架起裴长青，面向画面下方。 rhythm 反转·压迫升级 scene LOC_01 dramatic_function",
+      "LOC_01 dramatic_function 推翻逃生路径，升级为绝对死局。 subtitle_lines 别逃啊。这荒",
+      "集的生存反击前提。 dramatic_function 兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不"
     ],
     "questions": [
       {
@@ -67,28 +67,28 @@
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "payoff_status open status open label 刀口为何对准人 subtitle_lines 活下去，得先杀一个",
+        "question_context": "——不是妖。 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 label 刀口为何对准人 continuity_story",
         "question_id": "Q09",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "LOC_01/未来片段 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 continuity_story",
+        "question_context": "audience_effect 立刻追问她为何不杀后景虎妖而杀人。 label 刀口为何对准人 continuity_story start_state",
         "question_id": "Q10",
         "signal": "为何",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "加速·危机逼近 dramatic_function 让系统在马上被吃的压力下出现。 spectacle_story_function",
+        "question_context": "发后续杀人选择。 dramatic_function 让系统在马上被吃的压力下出现。 subtitle_lines",
         "question_id": "Q11",
         "signal": "系统",
         "status": "paid_or_progressed"
       },
       {
         "expected_next_handling": "本集兑现/推进",
-        "question_context": "spectacle_story_function 建立百妖谱视觉母题。 scene LOC_01/主观系统层 audience_effect 先兴奋再意识到伦理代",
+        "question_context": "rhythm 规则揭示 scene LOC_01/主观系统层 spectacle_story_function 建",
         "question_id": "Q12",
         "signal": "系统",
         "status": "paid_or_progressed"
@@ -105,7 +105,7 @@
   "notes": [
     "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
   ],
-  "pack_hash": "c399619b5bef94ef",
+  "pack_hash": "30e9ee0b4c8389bc",
   "performance_prompt_cues": [],
   "summary": {
     "boundary_status": "n/a",

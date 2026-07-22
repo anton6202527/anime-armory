@@ -1,0 +1,1604 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第1话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 6144,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "异象后长停顿",
+          "bubble_first": "none",
+          "effects_hint": "无粒子特效，只用灯影和纸纹。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 desperate_action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "desperate_action"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 217,
+                "w": 777,
+                "h": 669
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P002",
+          "x": 72,
+          "y": 1044,
+          "w": 1296,
+          "h": 1160,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "诱惑缓慢入门",
+          "bubble_first": "top",
+          "effects_hint": "潮气薄雾，无仙侠粒子。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 desperate_action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "desperate_action"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1272,
+                "w": 777,
+                "h": 808
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 136,
+                "y": 1101,
+                "w": 518,
+                "h": 385
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 1101,
+                "w": 518,
+                "h": 385
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:2",
+              "rect": {
+                "x": 136,
+                "y": 1101,
+                "w": 518,
+                "h": 385
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1092,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B002D2",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "少女",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "少女"
+              },
+              "x": 598,
+              "y": 1092,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B002D3",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:2",
+              "speaker": "王生",
+              "order": 3,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王生"
+              },
+              "x": 120,
+              "y": 1296,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 2232,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "忠言被轻推开",
+          "bubble_first": "top",
+          "effects_hint": "无特效。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 desperate_action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "desperate_action"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2422,
+                "w": 712,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2279,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 2279,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B003D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "陈氏",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "陈氏"
+              },
+              "x": 174,
+              "y": 2280,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B003D2",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:2",
+              "speaker": "王生",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王生"
+              },
+              "x": 652,
+              "y": 2280,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 126,
+          "y": 3220,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "警句后空一拍",
+          "bubble_first": "top",
+          "effects_hint": "冷灰气息不超过肩部一小片。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 desperate_action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "desperate_action"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3410,
+                "w": 712,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3267,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 3267,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              },
+              "x": 174,
+              "y": 3268,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B004D2",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:2",
+              "speaker": "道士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              },
+              "x": 652,
+              "y": 3268,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P005",
+          "x": 72,
+          "y": 4208,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "翻面后大段黑间隔",
+          "bubble_first": "top",
+          "effects_hint": "无发光特效，只用目光路径和黑场。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 desperate_action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "desperate_action"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4413,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 136,
+                "y": 4259,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 4256,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 5276,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "给退路的安静一拍",
+          "bubble_first": "top",
+          "effects_hint": "无特效。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 desperate_action",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "desperate_action"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5444,
+                "w": 712,
+                "h": 585
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 5316,
+                "w": 475,
+                "h": 278
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              },
+              "x": 172,
+              "y": 5322,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 6452,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "diagonal",
+          "border_style": "broken",
+          "gutter_intent": "破门冲击",
+          "bubble_first": "top",
+          "effects_hint": "门板碎屑与短集中线指向断拂尘。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 lowest_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "lowest_point"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 233,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 78,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 78,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B007D1",
+              "type": "dialogue",
+              "content_ref": "panel:P007.dialogue:1",
+              "speaker": "画皮鬼",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "画皮鬼"
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B007S2",
+              "type": "sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P008",
+          "x": 72,
+          "y": 1096,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "反扑后死寂",
+          "bubble_first": "top",
+          "effects_hint": "只有淡墨剪影叠化，无影视闪回边框。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 lowest_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "lowest_point"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1301,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 136,
+                "y": 1146,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B008N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1144,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 72,
+          "y": 2164,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "动作兑现",
+          "bubble_first": "top",
+          "effects_hint": "短集中线指向剑锋，烟带旋转线指向葫芦口。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 lowest_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "lowest_point"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2369,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2214,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 2214,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              },
+              "x": 120,
+              "y": 2212,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B009S2",
+              "type": "sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3006,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 126,
+          "y": 3232,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "斩鬼后仍有代价",
+          "bubble_first": "top",
+          "effects_hint": "无特效。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 lowest_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "lowest_point"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3420,
+                "w": 712,
+                "h": 668
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3275,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 3275,
+                "w": 475,
+                "h": 318
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B010D1",
+              "type": "dialogue",
+              "content_ref": "panel:P010.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              },
+              "x": 174,
+              "y": 3280,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B010D2",
+              "type": "dialogue",
+              "content_ref": "panel:P010.dialogue:2",
+              "speaker": "道士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              },
+              "x": 652,
+              "y": 3280,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 72,
+          "y": 4220,
+          "w": 1296,
+          "h": 1080,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "羞辱后留白",
+          "bubble_first": "top",
+          "effects_hint": "无特效，用人群环形压迫。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 lowest_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "lowest_point"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 4433,
+                "w": 777,
+                "h": 753
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 4272,
+                "w": 518,
+                "h": 358
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:2",
+              "rect": {
+                "x": 784,
+                "y": 4272,
+                "w": 518,
+                "h": 358
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "疯乞",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "疯乞"
+              },
+              "x": 120,
+              "y": 4268,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B011D2",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:2",
+              "speaker": "疯乞",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "疯乞"
+              },
+              "x": 598,
+              "y": 4268,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P012",
+          "x": 72,
+          "y": 5356,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "最低点长留白",
+          "bubble_first": "top",
+          "effects_hint": "无特效。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 lowest_point",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "lowest_point"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5563,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.narration",
+              "rect": {
+                "x": 136,
+                "y": 5405,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012N1",
+              "type": "narration",
+              "content_ref": "panel:P012.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 5404,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 56
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 4408,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "closeup",
+          "border_style": "standard",
+          "gutter_intent": "奇迹现身后停一拍",
+          "bubble_first": "top",
+          "effects_hint": "只有几缕透明热气，无神光。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 epilogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "epilogue"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 250,
+                "w": 777,
+                "h": 783
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.narration",
+              "rect": {
+                "x": 136,
+                "y": 82,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 82,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013N1",
+              "type": "narration",
+              "content_ref": "panel:P013.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B013S2",
+              "type": "sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 950,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P014",
+          "x": 72,
+          "y": 1176,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "奇迹动作高潮",
+          "bubble_first": "top",
+          "effects_hint": "少量短集中线指向按压点，热气向内收束。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 epilogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "epilogue"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1382,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1226,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1226,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "陈氏",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "陈氏"
+              },
+              "x": 120,
+              "y": 1224,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B014S2",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2018,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 72,
+          "y": 2244,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "细小生命信号后长停顿",
+          "bubble_first": "top",
+          "effects_hint": "一缕极淡呼气，无其他特效。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 epilogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "epilogue"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2450,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 2294,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 2294,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015D1",
+              "type": "dialogue",
+              "content_ref": "panel:P015.dialogue:1",
+              "speaker": "陈氏",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "陈氏"
+              },
+              "x": 120,
+              "y": 2292,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B015S2",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3086,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 3340,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "讽刺余音",
+          "bubble_first": "top",
+          "effects_hint": "无特效，靠窗格和静止完成余韵。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P016 epilogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P016",
+              "story_function": "epilogue"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3547,
+                "w": 777,
+                "h": 727
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 3389,
+                "w": 518,
+                "h": 346
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 3388,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "panel_script_sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70",
+    "name_board": "排版/第1话/name_board.json",
+    "name_board_sha256": "0871326a067da500dd2c93a3047ff0eaf85901409f4f97de7aa7c8dbab3aba82",
+    "name_approval_subject_sha256": "ea4ed842214084c01839bb3dedd17bccbb700b389589a2a7356f60110662c1ea",
+    "settings": "_设置.md",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-21T13:04:17.633194+00:00",
+    "note": "",
+    "subject_sha256": "4c431a200d9475b955a65a73f0ed3b77ab8b161e1a33f8a4cd5682401e922035",
+    "panel_script_sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70",
+    "name_board_sha256": "0871326a067da500dd2c93a3047ff0eaf85901409f4f97de7aa7c8dbab3aba82",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "BEAST_01",
+  "name": "虎妖",
+  "scope": "袭击发配队伍的强大妖魔；第1集主要威胁",
+  "library_tier": "recurring_standard",
+  "planned_episode_count": 3,
+  "directories": {
+    "reference": "角色库/BEAST_01__虎妖/reference",
+    "prompts": "角色库/BEAST_01__虎妖/prompts",
+    "lora": "角色库/BEAST_01__虎妖/lora",
+    "voice": "角色库/BEAST_01__虎妖/voice",
+    "adapters": "角色库/BEAST_01__虎妖/adapters",
+    "qc": "角色库/BEAST_01__虎妖/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/虎妖.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-21T20:40:26+00:00"
+}

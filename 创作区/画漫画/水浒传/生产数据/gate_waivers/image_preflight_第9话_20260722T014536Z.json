@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_waiver",
+  "stage": "image_preflight",
+  "chapter": "第9话",
+  "decision": "waive_for_this_runner_invocation",
+  "reason": "第9话 P008/P021/P022/P038 为史进/李吉 drift 重抽（已补 core_full 定妆 side/back 并签收）；preflight 的 2 个 block(model_pack_not_signed_off/missing_character_views) 均指向鲁智深弧未来角色金翠莲/金老/李忠/郑屠，四者不在第9话任何格，与本次 drift 格无关",
+  "created_at": "2026-07-22T01:45:36+00:00",
+  "panel_jobs_path": "出图/第9话/prompt/panel_jobs.json",
+  "panel_jobs_sha256": "54128764a66259e7689e514a33cbd805628c82e66d3dae239b653f1de45715de",
+  "targets": [
+    "P008",
+    "P021",
+    "P022",
+    "P038"
+  ],
+  "prior_gate_receipt": {
+    "status": "stale_or_not_passed",
+    "path": "生产数据/gate_receipts/image_preflight_第9话.json",
+    "receipt_sha256": "2a6e308039df8cc30db536151ceab5153a729d48ca58fe9dd4c456ed2c32f81c",
+    "panel_jobs_sha256": "54128764a66259e7689e514a33cbd805628c82e66d3dae239b653f1de45715de",
+    "recorded_panel_jobs_sha256": "54128764a66259e7689e514a33cbd805628c82e66d3dae239b653f1de45715de",
+    "inputs_fingerprint_sha256": "39c4e2eda8c63501f0a0a7a9e1a8d9777ace7f640febad99d77c9c7ae84c2e56",
+    "recorded_inputs_fingerprint_sha256": "39c4e2eda8c63501f0a0a7a9e1a8d9777ace7f640febad99d77c9c7ae84c2e56",
+    "report_path": "生产数据/comic_gate_image_preflight_第9话.json",
+    "verdict": "block",
+    "reason": "receipt/report must be authentic, have no block, explicitly authorize execution, and bind the current full preflight fingerprint plus panel_jobs SHA"
+  },
+  "scope": "current panel_jobs SHA only; any rebuild invalidates this waiver"
+}

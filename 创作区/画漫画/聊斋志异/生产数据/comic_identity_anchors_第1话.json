@@ -1,0 +1,34 @@
+{
+  "schema_version": 2,
+  "kind": "comic_reference_anchor_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-21T20:54:32",
+  "refs": [
+    "STYLE_LIAOZHAI_QING_GONGXI"
+  ],
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "backend_version": "codex-cli 0.144.6",
+  "requested_ratio": "4:5",
+  "submitted_ratio": "4:5",
+  "execution_mode": "isolated_ephemeral_workdir",
+  "max_attempts_total": 2,
+  "attempt_ledger": "生产数据/comic_identity_attempt_ledger_第1话.json",
+  "previous_manifest_archive": "",
+  "previous_manifest_sha256": "",
+  "generated": 0,
+  "skipped": 0,
+  "failed": 1,
+  "items": [
+    {
+      "ts": "2026-07-21T20:54:32",
+      "status": "reference_anchor_failed",
+      "ref_id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempts_used": 2,
+      "attempts_authorized": 2,
+      "error": "累计尝试次数已达授权上限 2/2；未发起新的生图请求"
+    }
+  ]
+}

@@ -1009,7 +1009,8 @@ def render_markdown(payload: Dict[str, Any]) -> str:
 
 
 def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str,
-           out_dir: Optional[Path] = None, clip_keys: Optional[Sequence[Optional[str]]] = None) -> Dict[str, Any]:
+           out_dir: Optional[Path] = None, clip_keys: Optional[Sequence[Optional[str]]] = None,
+           force_intra_all: bool = False) -> Dict[str, Any]:
     custom_out = out_dir is not None
     if out_dir is None:
         out_dir = production_dir(root) / "video_qc" / episode / batch
@@ -1041,7 +1042,7 @@ def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str,
     machine_check(payload, neighbor_context_frames(root, episode, payload, frames_dir),
                   load_seam_intents(root, episode) or None,
                   load_clip_scenes(root, episode) or None)
-    intra_clip_check(payload, load_shot_types(root, episode) or None)
+    intra_clip_check(payload, None if force_intra_all else (load_shot_types(root, episode) or None))
     anchor_adherence_check(payload, root, load_anchor_intents(root, episode) or None)
     delivery_consistency_check(payload)
     json_path = out_dir / f"video_qc_{episode}_{batch}.json"

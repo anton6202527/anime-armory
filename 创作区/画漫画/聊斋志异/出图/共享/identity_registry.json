@@ -1,7 +1,769 @@
 {
   "schema_version": 2,
   "kind": "comic_identity_registry",
-  "assets": {},
+  "assets": {
+    "STYLE_LIAOZHAI_QING_GONGXI": {
+      "id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "type": "style",
+      "display_name": "聊斋清代工笔志怪",
+      "notes": "见设定库/visual_research.json；只继承线条、明暗、色域、纸纹和材质，不继承校准画中的人物、服饰、道具或构图",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/STYLE_LIAOZHAI_QING_GONGXI/anchor/STYLE_LIAOZHAI_QING_GONGXI__anchor__codex_board_v1.png",
+            "candidate_sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "内置Codex生成，风格、人物与场景气质统一，足以作为第1话生产基线",
+            "reviewed_at": "2026-07-21T21:01:54",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-21T21:01:54"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:01:54",
+      "anchor_path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+      "primary_path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+      "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+    },
+    "CHAR_WANG": {
+      "id": "CHAR_WANG",
+      "type": "character",
+      "display_name": "王生",
+      "character_dna": "二十八岁左右；偏长瘦脸；细长眼；直鼻梁；清瘦下颌；黑发束素黑方巾；中等偏瘦；素青长衫、灰白内衣、布履",
+      "forbidden_inheritance": "不得变圆脸、满脸胡须、官服马褂、现代服装或永久手持道具",
+      "library_tier": "restricted_partial",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "继承基础脸型、发际线、眼型、体型与标志物",
+          "forbidden": "不得变圆脸、满脸胡须、官服马褂、现代服装或永久手持道具",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_WANG"
+              },
+              "updated_at": "2026-07-21T21:01:55"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_WANG/front/CHAR_WANG__front__codex_board_v1.png",
+            "candidate_sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "正面全身清晰，清代士子形象稳定",
+            "reviewed_at": "2026-07-21T21:01:55",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_WANG__front.png",
+            "source_sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 290,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:01:55"
+        },
+        {
+          "view": "anchor",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+          "source": {
+            "kind": "approved_reference_board_crop",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理"
+          },
+          "derivation": {
+            "method": "approved_front_promoted_as_restricted_identity_anchor",
+            "source_path": "出图/共享/图片/CHAR_WANG__front.png",
+            "source_sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 290,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:01:55",
+      "views": {
+        "front": "出图/共享/图片/CHAR_WANG__front.png",
+        "anchor": "出图/共享/图片/CHAR_WANG__anchor.png"
+      },
+      "view_readiness": {
+        "required": [],
+        "tier": "restricted_partial",
+        "ready": [],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "544ba6712a1733984d5f5a21273bc7208b4ccea426db3e4b6a2cf638dbb9f230",
+        "readiness": "ready",
+        "signoff_status": "missing",
+        "required_views": [],
+        "updated_at": "2026-07-21T13:01:55+00:00"
+      },
+      "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
+    },
+    "CHAR_CHEN": {
+      "id": "CHAR_CHEN",
+      "type": "character",
+      "display_name": "陈氏",
+      "character_dna": "二十六岁左右；鹅蛋脸；柔和下颌；卧蚕眼；眉尾微垂；黑发低挽圆髻配木簪；米白交领上衣、暗赭素裙、深棕布鞋",
+      "forbidden_inheritance": "不得宫廷旗头、华丽等级纹章、现代妆容或软弱工具人表演",
+      "library_tier": "restricted_partial",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "继承基础脸型、发际线、眼型、体型与标志物",
+          "forbidden": "不得宫廷旗头、华丽等级纹章、现代妆容或软弱工具人表演",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_CHEN"
+              },
+              "updated_at": "2026-07-21T21:01:55"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_CHEN/front/CHAR_CHEN__front__codex_board_v1.png",
+            "candidate_sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "正面全身清晰，朴素坚韧的陈氏形象稳定",
+            "reviewed_at": "2026-07-21T21:01:55",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "source_sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 255,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:01:55"
+        },
+        {
+          "view": "anchor",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+          "source": {
+            "kind": "approved_reference_board_crop",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理"
+          },
+          "derivation": {
+            "method": "approved_front_promoted_as_restricted_identity_anchor",
+            "source_path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "source_sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 255,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:01:55",
+      "views": {
+        "front": "出图/共享/图片/CHAR_CHEN__front.png",
+        "anchor": "出图/共享/图片/CHAR_CHEN__anchor.png"
+      },
+      "view_readiness": {
+        "required": [],
+        "tier": "restricted_partial",
+        "ready": [],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "6009def619d7b7a838855fc030208a5e00994de21407c8160d647f327ea7663e",
+        "readiness": "ready",
+        "signoff_status": "missing",
+        "required_views": [],
+        "updated_at": "2026-07-21T13:01:55+00:00"
+      },
+      "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
+    },
+    "MON_PAINTED_SKIN": {
+      "id": "MON_PAINTED_SKIN",
+      "type": "monster",
+      "display_name": "画皮鬼",
+      "character_dna": "同一实体两形态：鬼体为枯瘦人形、长额、凹眼、青绿皮肤、锯状窄齿、修长五指；外皮少女为冷白鹅蛋脸、柳叶眼、黑发半挽、胭脂粉上衣与青灰长裙",
+      "forbidden_inheritance": "不得西方恶魔、僵尸、狐狸、白衣漂浮女鬼、角尾翼或多肢",
+      "library_tier": "restricted_partial",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "继承基础脸型、发际线、眼型、体型与标志物",
+          "forbidden": "不得西方恶魔、僵尸、狐狸、白衣漂浮女鬼、角尾翼或多肢",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+              "view": "anchor",
+              "source": {
+                "kind": "approved_reference_board_crop",
+                "reviewer": "Codex制作代理"
+              },
+              "updated_at": "2026-07-21T21:52:00"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/MON_PAINTED_SKIN/anchor/MON_PAINTED_SKIN__anchor__codex_board_v1.png",
+            "candidate_sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "同一锚内包含美人伪装与恶鬼真身，形态转换关系明确",
+            "reviewed_at": "2026-07-21T21:02:10",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-21T21:02:10"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:02:10",
+      "anchor_path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+      "primary_path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+      "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "fb68b3cc6c0c42361ed1cfaacc76cb1152d13d186a461002bfd3a800f552edcb",
+        "readiness": "ready",
+        "signoff_status": "missing",
+        "required_views": [],
+        "updated_at": "2026-07-21T13:49:59+00:00"
+      }
+    },
+    "CHAR_DAOIST": {
+      "id": "CHAR_DAOIST",
+      "type": "character",
+      "display_name": "道士",
+      "character_dna": "五十岁左右；长方脸；深眼窝；短灰须；黑发顶结道髻配木簪；灰蓝素道袍、黑布带、布履",
+      "forbidden_inheritance": "不得金光神将、黄黑电影法衣、现代符纸光效或仙侠盔甲",
+      "library_tier": "restricted_partial",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "继承基础脸型、发际线、眼型、体型与标志物",
+          "forbidden": "不得金光神将、黄黑电影法衣、现代符纸光效或仙侠盔甲",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+              "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_DAOIST"
+              },
+              "updated_at": "2026-07-21T21:02:10"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_DAOIST/front/CHAR_DAOIST__front__codex_board_v1.png",
+            "candidate_sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "正面全身清晰，道士威严克制",
+            "reviewed_at": "2026-07-21T21:02:10",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "source_sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 305,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:02:10"
+        },
+        {
+          "view": "anchor",
+          "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+          "source": {
+            "kind": "approved_reference_board_crop",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理"
+          },
+          "derivation": {
+            "method": "approved_front_promoted_as_restricted_identity_anchor",
+            "source_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "source_sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 305,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:02:10",
+      "views": {
+        "front": "出图/共享/图片/CHAR_DAOIST__front.png",
+        "anchor": "出图/共享/图片/CHAR_DAOIST__anchor.png"
+      },
+      "view_readiness": {
+        "required": [],
+        "tier": "restricted_partial",
+        "ready": [],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "83e7f7e35c843f225c6c97c31d54ef6d59ab520c19a5613521558d488a64b58a",
+        "readiness": "ready",
+        "signoff_status": "missing",
+        "required_views": [],
+        "updated_at": "2026-07-21T13:02:10+00:00"
+      },
+      "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
+    },
+    "CHAR_BEGGAR": {
+      "id": "CHAR_BEGGAR",
+      "type": "character",
+      "display_name": "疯乞",
+      "character_dna": "六十岁左右；瘦骨嶙峋；蓬乱灰发；右眉断尾；鼻头红；破褐色短衫与缠腿布；竹杖",
+      "forbidden_inheritance": "不得仙风道骨、佛光、现代乞丐道具或喜剧化表演",
+      "library_tier": "restricted_partial",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "继承基础脸型、发际线、眼型、体型与标志物",
+          "forbidden": "不得仙风道骨、佛光、现代乞丐道具或喜剧化表演",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+              "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+              "view": "front",
+              "source": {
+                "kind": "default_outfit_from_character_front",
+                "character_id": "CHAR_BEGGAR"
+              },
+              "updated_at": "2026-07-21T21:02:10"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+          "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+          "source": {
+            "kind": "human_selected_character_front",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/CHAR_BEGGAR/front/CHAR_BEGGAR__front__codex_board_v1.png",
+            "candidate_sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "正面全身清晰，异人乞者辨识度高",
+            "reviewed_at": "2026-07-21T21:02:10",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+            "source_sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 346,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:02:10"
+        },
+        {
+          "view": "anchor",
+          "path": "出图/共享/图片/CHAR_BEGGAR__anchor.png",
+          "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+          "source": {
+            "kind": "approved_reference_board_crop",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理"
+          },
+          "derivation": {
+            "method": "approved_front_promoted_as_restricted_identity_anchor",
+            "source_path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+            "source_sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 346,
+            "height": 665
+          },
+          "updated_at": "2026-07-21T21:08:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:02:10",
+      "views": {
+        "front": "出图/共享/图片/CHAR_BEGGAR__front.png",
+        "anchor": "出图/共享/图片/CHAR_BEGGAR__anchor.png"
+      },
+      "view_readiness": {
+        "required": [],
+        "tier": "restricted_partial",
+        "ready": [],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "ead8f8c12081797c22afe1a7b55d42452600b95a9e3bce78d58fd20b7b25d3f7",
+        "readiness": "ready",
+        "signoff_status": "missing",
+        "required_views": [],
+        "updated_at": "2026-07-21T13:02:10+00:00"
+      },
+      "variant_policy": "成年基础形态锁定同一脸型、眼型与眼距、发际线、发量、体型和标志配饰；受伤、衰弱、污损或换装只改变状态与服装层，不换脸、不改年龄骨相。"
+    },
+    "LOC_WANG_COURTYARD": {
+      "id": "LOC_WANG_COURTYARD",
+      "type": "location",
+      "display_name": "王家青砖小宅",
+      "description": "两进小宅，南门、狭长天井、北正房、东侧书斋，纸窗、深木门、床榻、素帐、油灯；非宫廷",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/LOC_WANG_COURTYARD/anchor/LOC_WANG_COURTYARD__anchor__codex_board_v1.png",
+            "candidate_sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "灰砖深院、月窗和门槛关系清晰，适合作为连续场景锚",
+            "reviewed_at": "2026-07-21T21:02:10",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-21T21:02:10"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:02:10",
+      "anchor_path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+      "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+    },
+    "LOC_MARKET_TEMPLE": {
+      "id": "LOC_MARKET_TEMPLE",
+      "type": "location",
+      "display_name": "青帝庙边市路",
+      "description": "泥路市井通向灰墙木檐的青帝庙，左旧布棚、右矮墙，阴天冷光，无现代招牌",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+          "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/LOC_MARKET_TEMPLE/anchor/LOC_MARKET_TEMPLE__anchor__codex_board_v1.png",
+            "candidate_sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22",
+            "reviewer": "Codex制作代理",
+            "reviewer_role": "用户授权制作代理",
+            "decision": "approved",
+            "reason": "市井土路、棚摊与庙门空间关系清晰",
+            "reviewed_at": "2026-07-21T21:02:10",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-21T21:02:10"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-21T21:02:10",
+      "anchor_path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+      "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+    }
+  },
   "schema_meta": {
     "initialized_at": "2026-07-21",
     "initialized_by": "comic init_project bootstrap"

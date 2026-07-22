@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="17164" viewBox="0 0 1440 17164">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="6144" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_001</tspan></text>
+<rect x="72" y="28" width="1296" height="960" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  opening_hook</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜深的书斋内，青面锯齿的枯瘦鬼体侧坐榻边，将一张完整但无血的女子人皮平铺如工笔画，细笔正掠过皮囊的眼眉；案角油灯把鬼影投在纸窗上。</tspan></text>
+
+<rect x="72" y="1044" width="1296" height="1160" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="1092" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P002  setup</tspan></text>
+<text x="100" y="1142" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">阴晨长路上，王生接过少女手中布包，少女低头跟他向远处青砖宅院走去；两人影子在潮湿路面上一长一短。</tspan></text>
+<text x="100" y="2044" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：太原王生，早行遇一女郎。 | 少女： | 王生：</tspan></text>
+<rect x="120" y="1092" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="1126" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B002N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="598" y="1092" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="1126" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B002D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="120" y="1296" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="1330" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B002D3</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="126" y="2232" width="1188" height="960" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="2280" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P003  warning</tspan></text>
+<text x="154" y="2330" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">王家正房内，陈氏一手按住桌角、直视王生，王生侧身避开她的目光；后景东斋纸窗后只有少女静止的人形剪影。</tspan></text>
+<text x="154" y="3032" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">陈氏： | 王生：</tspan></text>
+<rect x="174" y="2280" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="2314" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B003D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="652" y="2280" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="668" y="2314" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="668" dy="0">B003D2</tspan><tspan x="668" dy="27">dialogue</tspan></text>
+<rect x="126" y="3220" width="1188" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="3268" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P004  warning_escalation</tspan></text>
+<text x="154" y="3318" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">市井路口，道士停步扣住王生袖口，目光落在王生肩后一缕几不可见的冷灰气息上；王生的手掌向外作无事辩解。</tspan></text>
+<text x="154" y="4020" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">道士： | 道士：</tspan></text>
+<rect x="174" y="3268" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="3302" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B004D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="652" y="3268" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="668" y="3302" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="668" dy="0">B004D2</tspan><tspan x="668" dy="27">dialogue</tspan></text>
+<rect x="72" y="4208" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="4256" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P005  turning_point</tspan></text>
+<text x="100" y="4306" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">从书斋窗外窥视，前景王生一只眼和扶住窗棂的手指被木格切成狭缝；室内青面鬼体已将完整人皮举至肩高，准备像穿衣一样披上。</tspan></text>
+<text x="100" y="5088" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：那张脸——是画上去的。</tspan></text>
+<rect x="120" y="4256" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="4290" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B005N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="126" y="5276" width="1188" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="5324" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P006  desperate_action</tspan></text>
+<text x="154" y="5374" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">青帝庙边泥路，王生双膝着地、两手举过胸口接住道士递来的旧拂尘；道士站在画右，另一手收在袖中。</tspan></text>
+<text x="154" y="5956" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">道士：</tspan></text>
+<rect x="172" y="5322" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="188" y="5356" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="188" dy="0">B006D1</tspan><tspan x="188" dy="27">dialogue</tspan></text>
+<rect x="0" y="6224" width="1440" height="6452" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="6268" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_002</tspan></text>
+<rect x="72" y="6252" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6300" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  attack</tspan></text>
+<text x="100" y="6350" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜中寝门被猛然撞开，旧拂尘在画面中线断成两截，少女外皮裂开脸侧一道缝，露出青绿鬼面和锯齿；她一手推开门、一手抓向床上缩退的王生。</tspan></text>
+<text x="100" y="7132" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">画皮鬼： | SFX：喀嚇！</tspan></text>
+<rect x="120" y="6300" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="6334" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B007D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="7094" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="7128" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="7320" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="7368" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P008  consequence</tspan></text>
+<text x="100" y="7418" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">清晨书斋，陈氏跪在床边，两手悬在王生身上方却不敢触碰；王生被素被覆至胸口，仅在腹部绷带上有少量暗红渗痕，画面上缘以淡墨叠化前夜鬼手握着一颗心的剪影。</tspan></text>
+<text x="100" y="8200" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：天亮时，王生已没了心。</tspan></text>
+<rect x="120" y="7368" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="7402" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B008N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="8388" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="8436" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P009  action_payoff</tspan></text>
+<text x="100" y="8486" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">南院庭中，道士双脚一前一后站稳，右手素木剑横向掠过鬼体颈部，左手举开塞的深棕葫芦；老媪外皮正向下脱落，青面鬼体化成浓墨烟带被葫芦口吸入，不飞溅血肉。</tspan></text>
+<text x="100" y="9268" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">道士： | SFX：呼——</tspan></text>
+<rect x="120" y="8436" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="8470" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B009D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="9230" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="9264" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B009S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="126" y="9456" width="1188" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="154" y="9504" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">P010  new_goal</tspan></text>
+<text x="154" y="9554" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">王家宅门内，道士站着将卷如画轴的完整人皮收入素布袋，陈氏在画左前景双膝着地、双手作揖求他；道士目光沉下，另一手指向市井方向。</tspan></text>
+<text x="154" y="10256" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="154" dy="0">道士： | 道士：</tspan></text>
+<rect x="174" y="9504" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="190" y="9538" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="190" dy="0">B010D1</tspan><tspan x="190" dy="27">dialogue</tspan></text>
+<rect x="652" y="9504" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="668" y="9538" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="668" dy="0">B010D2</tspan><tspan x="668" dy="27">dialogue</tspan></text>
+<rect x="72" y="10444" width="1296" height="1080" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10492" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  ordeal</tspan></text>
+<text x="100" y="10542" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">青帝庙边泥路中心，陈氏双膝着地，额角有一道被竹杖打红的痕迹；疯乞蹲在她面前，一手捧着浓痰伸到她唇边，另一手扶竹杖。陈氏一手握紧裙料，另一手托住乞人手腕，闭眼强咽；围观人群在两侧沉默避让。</tspan></text>
+<text x="100" y="11364" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">疯乞： | 疯乞：</tspan></text>
+<rect x="120" y="10492" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="10526" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B011D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="598" y="10492" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="614" y="10526" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="614" dy="0">B011D2</tspan><tspan x="614" dy="27">dialogue</tspan></text>
+<rect x="72" y="11580" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11628" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  lowest_point</tspan></text>
+<text x="100" y="11678" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜幕重回书斋，陈氏坐在地上，背倚床沿，双臂抱住覆着素被的王生上半身，额头轻抵他的肩；她的袖口和前襟沾少量血污，案上油灯灯芯已小到将灭。</tspan></text>
+<text x="100" y="12460" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：我带回来的，只有这一身羞。</tspan></text>
+<rect x="120" y="11628" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="11662" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B012N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="0" y="12756" width="1440" height="4408" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="12800" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">SCROLL_003</tspan></text>
+<rect x="72" y="12784" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="12832" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P013  miracle_reveal</tspan></text>
+<text x="100" y="12882" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">近景从陈氏肩后看向床面：她一手掩口，另一手已伸向王生腹部；一颗完整、暖红但不血腥的人心刚落在绷带中心，表面带微弱热气，与冰冷的床榻形成对比。</tspan></text>
+<text x="100" y="13744" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：一颗心——在跳。 | SFX：咚、咚</tspan></text>
+<rect x="120" y="12832" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="12866" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B013N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="13706" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="13740" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B013S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="13932" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13980" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  climax</tspan></text>
+<text x="100" y="14030" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">陈氏跪伏在床边，双手叠压在王生腹部绷带上，手臂与肩背显出真实用力；一条裂开的素布从她牙间和一手边绕过王生腹部，几缕暖白热气正被她的掌心和布带压回。</tspan></text>
+<text x="100" y="14812" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">陈氏： | SFX：呜——</tspan></text>
+<rect x="120" y="13980" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="14014" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B014D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="14774" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="14808" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B014S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="15000" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="15048" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P015  payoff</tspan></text>
+<text x="100" y="15098" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">拂晓书斋，纸窗由深蓝转为灰白，陈氏伏在床边熟睡，一只手仍覆在王生腹部绷带上；她另一只手的食指停在王生鼻下，感到一缕微弱呼气，王生胸口稍微起伏。</tspan></text>
+<text x="100" y="15880" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">陈氏： | SFX：呼——</tspan></text>
+<rect x="120" y="15048" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="15082" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B015D1</tspan><tspan x="136" dy="27">dialogue</tspan></text>
+<rect x="540" y="15842" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="15876" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S2</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="16096" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="16144" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P016  epilogue</tspan></text>
+<text x="100" y="16194" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">数日后的书斋近景，王生坐在床沿接开素青长衫，腹部只露出一枚如古钱大小的圆形疤痕；他的手指停在疤痕边缘却不敢按下。后景纸窗后，陈氏的背影正把洗净的血污布带挂起，两人之间被窗格分开。</tspan></text>
+<text x="100" y="16976" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：明明妖也，而以为美。明明忠也，而以为妄。</tspan></text>
+<rect x="120" y="16144" width="430" height="88" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="16178" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B016N1</tspan><tspan x="136" dy="27">narration</tspan></text>
+</svg>

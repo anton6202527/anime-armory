@@ -4,8 +4,8 @@
   "chapter": "第9话",
   "panel_id": "P022",
   "reference_input_mode": "dreamina_image2image_images",
-  "reference_attachment_limit": 4,
-  "cli_image_input_count": 4,
+  "reference_attachment_limit": 10,
+  "cli_image_input_count": 8,
   "references": [
     {
       "id": "CHAR_SHI_JIN",
@@ -22,6 +22,13 @@
       "required": true
     },
     {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "role": "style",
+      "required": false
+    },
+    {
       "id": "LOC_SHI_MANOR",
       "path": "出图/共享/图片/LOC_SHI_MANOR__anchor.png",
       "sha256": "d7a6241aeda8578aeebb5e6c41e3c19185ea73bca3ffa0fa3b10aab3cbf3596b",
@@ -34,30 +41,30 @@
       "sha256": "d91e8c7a5378987f4d1b5add73d79cc64d4780764ec0d51487f8fc8fded98d98",
       "role": "front",
       "required": false
-    }
-  ],
-  "omitted_attachment_count": 4,
-  "omitted_attachments": [
-    {
-      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
-      "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
-      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
     },
     {
       "id": "CHAR_LI_JI",
       "path": "出图/共享/图片/CHAR_LI_JI__front.png",
-      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+      "sha256": "b37da85aa1b9d11ff60b443342315e9781a3b7f4afcbd9dd96f5d99f184e748e",
+      "role": "front",
+      "required": false
     },
     {
       "id": "CHAR_SHI_JIN",
       "path": "出图/共享/图片/CHAR_SHI_JIN__face.png",
-      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+      "sha256": "38613bc4b06f48ba456ce1e7d7c3ef0c33857b53a65dfb88b45e929c0a4b02e5",
+      "role": "face",
+      "required": false
     },
     {
       "id": "CHAR_LI_JI",
       "path": "出图/共享/图片/CHAR_LI_JI__face.png",
-      "reason": "dreamina_image2image_reference_limit; textual_contract_retained"
+      "sha256": "cc83826f38cccbfb27cb199c11374f60f12a3e1c3cbcc5e091d319fd0686be7f",
+      "role": "face",
+      "required": false
     }
   ],
-  "created_at": "2026-07-20T17:58:03"
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-21T18:48:37"
 }

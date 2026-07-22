@@ -1,0 +1,10 @@
+{
+  "counts": {
+    "block": 0,
+    "warn": 0
+  },
+  "findings": [],
+  "kind": "n2d_audio_space_consistency",
+  "status": "pass",
+  "version": 1
+}

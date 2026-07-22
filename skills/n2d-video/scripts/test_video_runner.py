@@ -127,6 +127,38 @@ def test_prepare_manifest_rejects_compiled_prompt_for_different_backend(tmp_path
         )
 
 
+def test_prepare_manifest_keeps_model_backend_and_uses_configured_execution_channel(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("生视频渠道：即梦/Dreamina\n", encoding="utf-8")
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    seedance_pack = COMPILED_PROMPT_PACK.replace("backend=dreamina", "backend=seedance")
+    (prompt_dir / "01_clips.md").write_text(seedance_pack, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_01.png").write_bytes(b"png")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path,
+        "第1集",
+        1,
+        1,
+        backend="seedance",
+        resolution="720p",
+        model_version="auto",
+    )
+
+    assert manifest["backend"] == "seedance"
+    assert manifest["channel"] == "即梦/Dreamina"
+    assert manifest["execution_adapter"]["execution_backend"] == "dreamina"
+    assert manifest["execution_adapter"]["route_executable"] is True
+
+    manifest["_root"] = str(tmp_path)
+    key, adapter = video_runner.resolve_video_backend(manifest)
+    assert key == "dreamina"
+    assert callable(adapter["submit_args"])
+    assert callable(adapter["query_args"])
+
+
 def test_prepare_manifest_uses_stable_prompt_files(tmp_path: Path) -> None:
     prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)
@@ -730,7 +762,7 @@ def test_dreamina_args_normalizes_legacy_model_for_two_frame_multimodal(tmp_path
             "image": str(first),
             "end_image": str(last),
             "prompt_file": str(prompt),
-            "submit_duration": 4,
+            "submit_duration": 4.0,
         },
         {
             "episode": "第1集",
@@ -742,6 +774,7 @@ def test_dreamina_args_normalizes_legacy_model_for_two_frame_multimodal(tmp_path
 
     assert args[1] == "multimodal2video"
     assert args[args.index("--model_version") + 1] == "seedance2.0_vip"
+    assert args[args.index("--duration") + 1] == "4"
 
 
 def test_prepare_manifest_marks_native_speech_for_multimodal(tmp_path: Path) -> None:
@@ -1107,6 +1140,26 @@ def test_count_accepted_clips_ignores_downloaded_manifest_items(tmp_path: Path) 
     assert video_runner.count_accepted_clips(tmp_path, "第1集") == 1
 
 
+def test_count_accepted_clips_requires_every_split_part(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    manifest = prod / "video_batch_第1集_01_02.json"
+    manifest.write_text(json.dumps({
+        "items": [
+            {"clip": "Clip_01_part1", "story_clip": "Clip_01", "status": "accepted"},
+            {"clip": "Clip_01_part2", "story_clip": "Clip_01", "status": "prepared"},
+            {"clip": "Clip_02", "status": "accepted"},
+        ],
+    }), encoding="utf-8")
+
+    assert video_runner.count_accepted_clips(tmp_path, "第1集") == 1
+
+    payload = json.loads(manifest.read_text(encoding="utf-8"))
+    payload["items"][1]["status"] = "accepted"
+    manifest.write_text(json.dumps(payload), encoding="utf-8")
+    assert video_runner.count_accepted_clips(tmp_path, "第1集") == 2
+
+
 def test_silent_video_policy_strips_audio_to_formal_asset(monkeypatch, tmp_path: Path) -> None:
     target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_07_part1.mp4"
     target.parent.mkdir(parents=True)
@@ -1214,7 +1267,10 @@ def test_accept_clip_blocks_dense_identity_without_intra_qc(monkeypatch, tmp_pat
         },
     )
 
-    def fake_run_qc(root, episode, clips, qc_range, **_kwargs):
+    qc_kwargs = {}
+
+    def fake_run_qc(root, episode, clips, qc_range, **kwargs):
+        qc_kwargs.update(kwargs)
         return {
             "clips": [{"has_audio": False}],
             "machine_summary": {"seam_blocks": 0, "intra_blocks": 0, "intra_checked": 0, "anchor_blocks": 0},
@@ -1223,6 +1279,7 @@ def test_accept_clip_blocks_dense_identity_without_intra_qc(monkeypatch, tmp_pat
         }
 
     monkeypatch.setattr(video_runner.video_qc, "run_qc", fake_run_qc)
+    monkeypatch.setattr(video_runner, "_ensure_dense_face_watch_packet", lambda *args: None)
 
     with pytest.raises(RuntimeError, match="dense_face_watch"):
         video_runner.accept_clip(
@@ -1238,6 +1295,7 @@ def test_accept_clip_blocks_dense_identity_without_intra_qc(monkeypatch, tmp_pat
 
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["status"] == "qc_blocked"
+    assert qc_kwargs["force_intra_all"] is True
 
 
 def test_accept_clip_requires_actual_visual_review_receipt(tmp_path: Path) -> None:

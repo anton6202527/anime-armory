@@ -36,22 +36,22 @@
   "episode": "第1集",
   "files": [
     {
-      "bytes": 2376,
+      "bytes": 2581,
       "exists": true,
-      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 启用  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n\nraw audit history omitted: records_seen=20, corrections_included=0/3",
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=explicit_user\n- 基础视觉风格: 冷灰写实3D国风漫剧  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 生成粒度: 整集  # source=explicit_user\n- 图片验收模式: 逐张机器QC+实际目视  # source=explicit_user\n- 执行者实际像素目视: 授权  # source=explicit_user\n- 生成优先序: 关键镜优先  # source=explicit_user\n- 合成阶段: 启用  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 目标平台: 红果  # source=explicit_user\n- 发行地区: 中国大陆  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 首切范围: 部分先切  # source=explicit_user\n- 脚本批次: 逐集  # source=explicit_user\n- 题材: 系统流  # source=explicit_user\n- 母题增强: 开启  # source=explicit_user\n\nraw audit history omitted: records_seen=21, corrections_included=0/3",
       "preview_policy": "settings_region_plus_bounded_corrections",
       "relpath": "_设置.md",
-      "sha256": "9545440599d16cbe9e14992669dbd539d2a57c88c92f9e1772a8310b41f3e58d"
+      "sha256": "3f89b8665c8df87077723424fc51cce4ba7a08cae6370be143b7c079c67c3d64"
     },
     {
-      "bytes": 1619,
+      "bytes": 1621,
       "exists": true,
-      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ⬜ | 66/67 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
       "relpath": "_进度.md",
-      "sha256": "d82c9d577bd8ad852882f20742f9ac71ab6735fd9b6352499614c4d374d2836b"
+      "sha256": "2f1f01b88d43311a78ef805902a5905cb4bd90d4c7e4ed610596f14fc76d66c0"
     },
     {
-      "bytes": 60564,
+      "bytes": 66327,
       "exists": true,
       "preview": {
         "clips": [
@@ -461,6 +461,31 @@
               ]
             },
             "id": "EP01_CLIP03",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "CHAR_01": "双手自由，停在一臂半距离外",
+                "CHAR_02": "右手持断刀封路，受伤左臂贴身保护"
+              },
+              "contact_points": [
+                "CHAR_02右手握住PROP_断刀刀柄",
+                "CHAR_01与CHAR_02尚无身体接触"
+              ],
+              "holder_state": {
+                "PROP_断刀": "CHAR_02/right_hand",
+                "PROP_横刀": "ground/unheld"
+              },
+              "occlusion_order": [
+                "CHAR_01画左前景",
+                "PROP_断刀中景横向封路",
+                "CHAR_02画右中景"
+              ],
+              "participants": [
+                "CHAR_01",
+                "CHAR_02",
+                "PROP_断刀",
+                "PROP_横刀"
+              ]
+            },
             "label": "以脱籍换搀扶",
             "location_id": "LOC_01",
             "multi_subject_strategy": "shot_reverse_shot：建立镜后用成对clean single/OTS，不生成双清晰脸横排",
@@ -641,6 +666,30 @@
               ]
             },
             "id": "EP01_CLIP04",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "CHAR_01": "双腿承重并向画面下方移动，右臂承担搀扶",
+                "CHAR_02": "右侧借力，受伤左臂始终贴身不承重"
+              },
+              "contact_points": [
+                "CHAR_01右前臂与右手托住CHAR_02未伤右上臂",
+                "CHAR_02右前臂搭在CHAR_01肩背形成搀扶"
+              ],
+              "holder_state": {
+                "PROP_横刀": "ground/unheld"
+              },
+              "occlusion_order": [
+                "CHAR_01画左近景",
+                "CHAR_02画右中景",
+                "BEAST_01后景巨岩旁伪死"
+              ],
+              "participants": [
+                "CHAR_01",
+                "CHAR_02",
+                "BEAST_01"
+              ],
+              "transfer_event": "support_contact_begins: no contact -> 姜月初开始搀扶裴长青"
+            },
             "label": "先活着再算账",
             "location_id": "LOC_01",
             "multi_subject_strategy": "regional_construct_required：双人关系镜与后景虎妖分层；对白用shot_reverse_shot",
@@ -820,6 +869,33 @@
               ]
             },
             "id": "EP01_CLIP05",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "BEAST_01": "胸口黑血洞保持原位，四肢归虎妖",
+                "CHAR_01": "先搀扶后因虎妖复生松开支撑",
+                "CHAR_02": "受伤左臂贴身，只有右手伸向横刀"
+              },
+              "contact_points": [
+                "起始时CHAR_01右臂仍托住CHAR_02右侧",
+                "CHAR_02右手在末拍握住PROP_横刀刀柄",
+                "BEAST_01双足踩地起立，不与人物接触"
+              ],
+              "holder_state": {
+                "PROP_横刀": "ground/unheld -> CHAR_02/right_hand"
+              },
+              "occlusion_order": [
+                "CHAR_01与CHAR_02前景",
+                "PROP_横刀右下地面",
+                "BEAST_01上后景起立"
+              ],
+              "participants": [
+                "CHAR_01",
+                "CHAR_02",
+                "BEAST_01",
+                "PROP_横刀"
+              ],
+              "transfer_event": "support_contact_releases; PROP_横刀 transfers ground -> CHAR_02/right_hand at final beat"
+            },
             "label": "死妖咳嗽站起",
             "location_id": "LOC_01",
             "multi_subject_strategy": "split_composite_required：虎妖建立镜、裴长青反应镜、双人低位镜分take生成",
@@ -939,9 +1015,15 @@
               "anchors": [
                 {
                   "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
-                  "at_sec": 1.6,
-                  "reason": "姜月初反应CU切虎妖低机位压迫镜",
-                  "use": "edit_cut"
+                  "at_sec": 3.0,
+                  "reason": "锁定虎足命中裴长青躯干的接触帧、力线和衣料压缩",
+                  "use": "mid_impact"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+                  "at_sec": 4.8,
+                  "reason": "锁定裴长青与横刀沿原轴回落姜月初脚边的人刀空间关系",
+                  "use": "action_recovery"
                 }
               ],
               "end_anchor_required": true,
@@ -969,7 +1051,7 @@
             ],
             "dramatic_function": "让系统在马上被吃的压力下出现。",
             "duration": 8.251,
-            "economy_intent": "selective_detail",
+            "economy_intent": "premium_detail",
             "editing_intent": "以虎爪逼近作为外压起点，硬切主观规则层；现实站位不重置，系统出现不稀释迫近节奏。",
             "end_sec": 54.671,
             "entity_schedule": {
@@ -1006,6 +1088,36 @@
               ]
             },
             "id": "EP01_CLIP06",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "BEAST_01": "右腿完成单次正面踢击",
+                "CHAR_01": "留在画面右下，双手不参与攻击",
+                "CHAR_02": "右手持刀、左臂骨折贴身，躯干承受踢击"
+              },
+              "contact_points": [
+                "CHAR_02右手握PROP_横刀刀柄冲锋",
+                "BEAST_01右足正面命中CHAR_02躯干",
+                "命中后CHAR_02与横刀分别落回CHAR_01脚边地面"
+              ],
+              "force_direction": "BEAST_01右足由左上向右下施力，CHAR_02沿同轴回落，不越轴",
+              "holder_state": {
+                "PROP_横刀": "CHAR_02/right_hand -> released -> ground/unheld"
+              },
+              "occlusion_order": [
+                "BEAST_01左上中景",
+                "接触点画面中央",
+                "CHAR_02回落右下",
+                "CHAR_01右下后层"
+              ],
+              "participants": [
+                "CHAR_01",
+                "CHAR_02",
+                "BEAST_01",
+                "PROP_横刀"
+              ],
+              "release_frame": "踢击命中后、CHAR_02开始回落时横刀脱离右手",
+              "transfer_event": "PROP_横刀 holder CHAR_02/right_hand -> ground/unheld"
+            },
             "label": "虎口最后威胁",
             "location_id": "LOC_01",
             "multi_subject_strategy": "split_composite_required：虎妖压迫层与人物反应层分take，不做三张清晰脸横排",
@@ -1014,6 +1126,7 @@
               "PROP_横刀"
             ],
             "pacing_role": "系统前压力峰值",
+            "pose_image_path": "生产数据/pose_guides/EP01_CLIP06_tiger_kick_pose.png",
             "rhythm": "加速·危机逼近",
             "runtime_priority": "highlight",
             "scene": "LOC_01",
@@ -1055,12 +1168,13 @@
               "我才活过来，凭什么又让我去死？"
             ],
             "target_story_clip_sec": {
-              "max": 7,
+              "max": 9,
               "min": 5
             },
             "template": "fight_exchange",
             "template_contract": {
               "action_scope": "一次冲锋、一次正蹬、一次落地；不追加连击。",
+              "apex_light": "命中帧沿用左上冷侧逆光，以衣料压缩和窄冷高光强调接触，不闪白、不加系统金光。",
               "attack_path": "裴长青自画面右下持刀向左上冲锋；虎妖由左上向右下正蹬，双方力线正面对冲。",
               "beats": [
                 "裴长青单臂拾起横刀，沿右下至左上轴线搏命冲锋",
@@ -1071,6 +1185,7 @@
               "blocking": "姜月初固定画左中景；裴长青从画右下拾刀冲向上方后景虎妖，受击后沿同一力线跌回姜月初脚边；虎妖不换位，只抬腿击退后继续逼近。",
               "camera_path": "50mm短跟冲锋→85mm接触特写→50mm落地关系镜→低机位虎妖威胁与姜月初反应硬切。",
               "camera_rule": "沿冲锋力线短跟与硬切，不环绕、不越轴；接触帧优先动作可读性。",
+              "combat_micro_expression": "裴长青冲锋时咬紧后槽牙、瞳孔锁敌，命中瞬间由决绝转为失神；虎妖眼皮微压、嘴角带轻蔑；姜月初在落地反应镜中瞳孔骤缩、下颌松开。",
               "contact_points": [
                 "虎妖足底与裴长青躯干衣料",
                 "裴长青落地时肩背与泥地",
@@ -1101,6 +1216,7 @@
                 "不要让系统面板在现实压迫镜中提前清晰出现"
               ],
               "physics_guard": "裴的飞退方向、身体折线、衣摆与横刀惯性必须统一；虎妖支撑腿落地稳定，不悬浮。",
+              "pose_image_path": "生产数据/pose_guides/EP01_CLIP06_tiger_kick_pose.png",
               "pose_reference_required": true,
               "post_cue_points": [
                 "踢击接触加低频闷响",
@@ -1123,6 +1239,7 @@
                 "CHAR_01": "画左中景，S06A反应焦点",
                 "CHAR_02": "画右下倒地，侧背或局部承接"
               },
+              "secondary_motion": "裴长青衣摆与发束随冲锋向后，受击后沿飞退方向甩回；横刀脱手旋转不超过半周；虎妖鬃毛只有短促惯性。",
               "spatial_path": "裴从右下到左上，再沿同轴回落至姜月初脚边；虎妖保持左上高位。",
               "speed_curve": "拾刀短停→裴快速冲锋→虎妖极短爆发正蹬→裴失重飞退→落地后半拍静止。",
               "template_id": "fight_exchange"
@@ -1134,6 +1251,7 @@
             ]
           },
           {
+            "activation_cause": "裴长青搏命落败、虎妖继续逼近，姜月初产生明确的求生决断时百妖谱响应。",
             "audience_effect": "先兴奋再意识到伦理代价。",
             "beat_id": "Beat_04",
             "character_ids": [
@@ -1181,7 +1299,7 @@
               "expression_span": "大",
               "eyeline": "上后景→右下",
               "need_endframe": false,
-              "previous_start_state_note": "虎妖将接触，主角无武力。",
+              "previous_start_state_note": "裴长青搏命落败，横刀落脚边，虎妖继续逼近。",
               "seam_evidence": {
                 "axis": "系统层不建新轴",
                 "eyeline_source": "由上方虎妖转右下",
@@ -1189,7 +1307,7 @@
               },
               "seam_mode": "eyeline_cut",
               "shot_size": "CU→插入→CU",
-              "start_state": "虎爪入前景，姜月初未持刀。",
+              "start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
               "transition": "视线切递刀手。"
             },
             "description": "旧纸卷轴、黑墨边缘，文字区空白供overlay；主角视线由虎妖落到裴长青。",
@@ -1200,7 +1318,7 @@
             "dramatic_function": "只解释改变当下决定的规则，把斩杀指向唯一活人。",
             "duration": 10.811,
             "economy_intent": "premium_detail",
-            "editing_intent": "规则只按决定所需拆成三拍，卷轴/虎爪交替后用主角视线切到裴长青与递刀手。",
+            "editing_intent": "裴被一脚击溃、姜月初强烈求生的绝境触发百妖谱；规则只按决定所需拆成三拍，卷轴/虎妖逼近交替后用主角视线切到裴长青与递刀手。",
             "end_sec": 65.482,
             "entity_schedule": {
               "characters": [
@@ -1305,7 +1423,7 @@
               "blocking": "LOC_01/主观系统层；可见主体=CHAR_01/囚途残损态、CHAR_02/濒死态、BEAST_01/复生态、PROP_横刀、VFX_百妖谱、VFX_系统面板、CHAR_01、CHAR_02、BEAST_01；现实位置不重置。",
               "camera_rule": "固定；85mm；慢推",
               "continuity_must": [
-                "起：虎妖将接触，主角无武力。",
+                "起：裴长青濒死落在姜月初脚边、横刀脱手，虎妖继续逼近，主角无武力。",
                 "止：主角理解规则，视线落在裴与横刀。",
                 "视线：上后景→右下",
                 "入出画：现实位置不重置。"
@@ -1431,8 +1549,7 @@
                 "LOC_01"
               ],
               "objects": [
-                "PROP_横刀",
-                "VFX_百妖谱"
+                "PROP_横刀"
               ],
               "offscreen_presence": [
                 "VFX_百妖谱"
@@ -1444,14 +1561,40 @@
               ]
             },
             "id": "EP01_CLIP08",
+            "interaction_graph": {
+              "body_part_ownership": {
+                "CHAR_01": "双手接刀后两手持柄，由左肩上方完成一次落刀",
+                "CHAR_02": "右手递出刀柄后松手，胸口承受最终触衣点"
+              },
+              "contact_points": [
+                "递刀时CHAR_02右手与CHAR_01双手只在同一刀柄处短暂交叠",
+                "交接后CHAR_01双手独立握柄，刀刃不接触任何手",
+                "最终仅PROP_横刀刀尖首次触及并微入CHAR_02胸前衣料"
+              ],
+              "force_direction": "最终落刀由CHAR_01左上向CHAR_02右下胸前，单次运动，不贯穿",
+              "holder_state": {
+                "PROP_横刀": "CHAR_02/right_hand -> shared_handoff -> CHAR_01/both_hands"
+              },
+              "occlusion_order": [
+                "CHAR_01画左前景",
+                "PROP_横刀中轴",
+                "CHAR_02画右中景",
+                "BEAST_01焦外后景"
+              ],
+              "participants": [
+                "CHAR_01",
+                "CHAR_02",
+                "PROP_横刀"
+              ],
+              "transfer_event": "at 2.6s PROP_横刀 transfers CHAR_02/right_hand -> CHAR_01/both_hands; thereafter no release"
+            },
             "label": "对不住了，刀落人身",
             "location_id": "LOC_01",
             "motif_id": "MOTIF_系统面板",
             "multi_subject_strategy": "shot_reverse_shot：递刀手部、主角反应、裴长青错愕分take；虎妖只作焦外层",
             "narration_indices": [],
             "object_ids": [
-              "PROP_横刀",
-              "VFX_百妖谱"
+              "PROP_横刀"
             ],
             "pacing_role": "冷开兑现与不可逆选择",
             "rhythm": "反转·留静音",
@@ -1590,7 +1733,7 @@
         "version": 2
       },
       "relpath": "脚本/第1集/storyboard.json",
-      "sha256": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7"
+      "sha256": "3c651df469f8c608f5ccf7e71037094367eb0e1f9610e0e6901a2af620ae335c"
     },
     {
       "bytes": 2638,
@@ -1600,23 +1743,357 @@
       "sha256": "2ea9a17349b49ebce402ce35acdafccae82378596a955eebc4fdbdf2efa13640"
     },
     {
-      "exists": false,
-      "relpath": "出图/共享/identity_registry.json"
+      "bytes": 88643,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "4277e20e264a3b747abe3b5810d9f64257d95e6a81088eec70081e922434d911"
     },
     {
-      "exists": false,
-      "relpath": "出图/共享/asset_registry.json"
+      "bytes": 35198,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "257ccf3adfb3d024789553c0f12632413b952f985f071e5f776f5f0c8674166f"
     },
     {
-      "exists": false,
-      "relpath": "生产数据/spectacle_plan_第1集.json"
+      "bytes": 10207,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "clip_id": "Clip_06",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "拆成拾刀、冲锋、接触、落地、威胁、反应六个短镜；接触帧用定格关键帧，不做端到端三人同框生成。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "约3.0秒，虎足命中裴长青躯干，衣料压缩与身体折线同帧，不展示猎奇伤口。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_06/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP06",
+            "spectacle_type": "fight_exchange"
+          },
+          {
+            "clip_id": "Clip_08",
+            "control_inputs_required": [
+              "pose_sequence",
+              "depth_sequence",
+              "instance_masks",
+              "contact_map",
+              "camera_path"
+            ],
+            "degrade_plan": "手部、闭眼反应、错愕、血点落衣拆镜替代。",
+            "edit_cue_profile": "fight_exchange",
+            "edit_cues": [
+              {
+                "cue": "pre_impact_whoosh",
+                "layer": "weapon/cloth/air",
+                "when": "attack_path wind-up"
+              },
+              {
+                "cue": "speed_ramp",
+                "curve": "fast_in_slow_on_hit",
+                "when": "attack_path before impact"
+              },
+              {
+                "cue": "hit_stop",
+                "duration_frames": 2,
+                "purpose": "make impact readable",
+                "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。"
+              },
+              {
+                "cue": "screen_shake",
+                "purpose": "sell force without hiding contact",
+                "strength": "low",
+                "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。"
+              },
+              {
+                "cue": "impact_sfx",
+                "layer": "weapon_or_body_hit",
+                "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。"
+              },
+              {
+                "cue": "micro_silence_drop",
+                "duration_frames": 2,
+                "purpose": "make the hit feel expensive",
+                "when": "约9.0s：刀口刚没入胸前衣料，受力与裴长青错愕同帧，不展示伤口。"
+              },
+              {
+                "cue": "aftershock_sweetener",
+                "layer": "debris/cloth/breath",
+                "when": "recovery_beat"
+              }
+            ],
+            "keyframes_required": {
+              "end_frame": true,
+              "mid_anchors": true,
+              "premium_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "start_frame": true
+            },
+            "missing_contract_fields": [],
+            "motion_control_manifest_path": "出视频/第1集/control/Clip_08/motion_control_manifest.json",
+            "premium_passes": {
+              "keyframe_policy": {
+                "required": [
+                  "start",
+                  "intent_mid",
+                  "impact_frame",
+                  "result_or_recovery",
+                  "end"
+                ],
+                "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+              },
+              "level": "premium_action_spectacle",
+              "physics_guard_policy": {
+                "required": [
+                  "subject_identity",
+                  "axis_or_path",
+                  "contact_or_vfx_shape",
+                  "no_extra_motion"
+                ],
+                "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+              },
+              "post_cue_policy": {
+                "required": [
+                  "pre_peak",
+                  "peak",
+                  "aftershock_or_hold"
+                ],
+                "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+              },
+              "qc_dimensions": [
+                "keyframe_coverage",
+                "impact_apex_readability",
+                "edit_sfx_sync",
+                "optical_flow_direction",
+                "motion_smoothness",
+                "subject_identity"
+              ],
+              "required_contract_fields": [
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard"
+              ]
+            },
+            "recommendations": [
+              "每个 Clip 只保留一次攻击意图：setup -> attack -> impact -> reaction -> recovery。",
+              "必须写 impact_frame/contact_points/force_direction，命中帧可读性优先于花哨运镜。",
+              "必须写 keyframe_plan/post_cue_points/physics_guard：把命中帧、hit-stop、受力方向、肢体/武器归属写成可检查契约。",
+              "准备 pose/depth/instance/contact_map；缺控制资产时不要进付费视频，先拆镜或 degrade_only。"
+            ],
+            "required_contract_fields": [
+              "template_id",
+              "beats",
+              "blocking",
+              "camera_rule",
+              "continuity_must",
+              "negative",
+              "attack_path",
+              "impact_frame",
+              "action_scope",
+              "contact_points",
+              "force_direction",
+              "screen_direction",
+              "speed_curve",
+              "spatial_path",
+              "camera_path",
+              "readability_beats",
+              "recovery_beat",
+              "degrade_plan",
+              "keyframe_plan",
+              "post_cue_points",
+              "physics_guard"
+            ],
+            "source_id": "EP01_CLIP08",
+            "spectacle_type": "fight_exchange"
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_spectacle_plan",
+        "summary": {
+          "contract_missing_clips": 0,
+          "motion_control_required_clips": 2,
+          "spectacle_clips": 2
+        },
+        "top_level_keys": [
+          "kind",
+          "version",
+          "root",
+          "episode",
+          "clips",
+          "summary"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/spectacle_plan_第1集.json",
+      "sha256": "cc46d7e9f8a6e61702fc6f0080d94da4a4632baeef3738e0dc42b239ef927e5a"
     },
     {
       "bytes": 3017,
       "exists": true,
       "preview": {
         "episode": "第1集",
-        "graph_hash": "4fd1177b3764fe81d6874f0e1e2a990859d4f1184764987c25696088c3f1c6ab",
+        "graph_hash": "48b3dafbcc314d4541b605859eece9acdb800efeeaf39e01d268eadd3f3e2d9e",
         "kind": "n2d_episode_graph",
         "status": "pass",
         "summary": {
@@ -1646,7 +2123,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "a5a6454961934b9ec25186af7a68e16766a27e6ed88c1e9137cf88a8c008cf13"
+      "sha256": "5537e6af5db71c6a4121e58b76b48376fce96461099ebee37fb4e85823aba84b"
     }
   ],
   "genre_pack_context": {
@@ -1749,7 +2226,7 @@
       }
     ],
     "episode": "第1集",
-    "generated_at": "2026-07-21T12:32:51+00:00",
+    "generated_at": "2026-07-21T19:59:29+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -1902,11 +2379,7 @@
     "version": 1
   },
   "kind": "n2d_context_pack",
-  "missing_required_files": [
-    "出图/共享/identity_registry.json",
-    "出图/共享/asset_registry.json",
-    "生产数据/spectacle_plan_第1集.json"
-  ],
+  "missing_required_files": [],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "settings_context": {
     "authority": {
@@ -1942,6 +2415,10 @@
       "字幕语言": {
         "source": "explicit_user",
         "value": "中文"
+      },
+      "执行者实际像素目视": {
+        "source": "explicit_user",
+        "value": "授权"
       },
       "母题增强": {
         "source": "explicit_user",
@@ -2000,10 +2477,10 @@
       "format": "record_section",
       "full_history_omitted": true,
       "limit": 3,
-      "records_seen": 20
+      "records_seen": 21
     },
     "source_path": "_设置.md",
-    "source_sha256": "9545440599d16cbe9e14992669dbd539d2a57c88c92f9e1772a8310b41f3e58d",
+    "source_sha256": "3f89b8665c8df87077723424fc51cce4ba7a08cae6370be143b7c079c67c3d64",
     "status": "ok",
     "version": 1
   },
@@ -2014,6 +2491,9 @@
       "_进度.md",
       "脚本/第1集/storyboard.json",
       "脚本/第1集/素材清单.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json",
+      "生产数据/spectacle_plan_第1集.json",
       "生产数据/episode_graph_第1集.json"
     ],
     "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."

@@ -1,0 +1,451 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-21T13:42:32+00:00",
+  "kind": "n2d_production_locks",
+  "last_confirmed_at": "2026-07-21T20:42:32+00:00",
+  "last_confirmed_by": "user:wesley",
+  "last_confirmed_lock_ids": [
+    "voice_timing_lock"
+  ],
+  "locks": [
+    {
+      "affected_departments": [
+        "writer",
+        "producer",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "2026-07-21T20:08:33+00:00",
+      "approver": "user:wesley",
+      "artifact_count": 2,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-21T11:59:24+00:00",
+          "path": "设定库/source_comprehension.json",
+          "sha256": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T11:52:38+00:00",
+          "path": "小说/_源指纹.json",
+          "sha256": "7b94a385df8d9d0ace44d30c52006c39873112348930ad213f1901919c39ca5a"
+        }
+      ],
+      "episode": "第1集",
+      "label": "源理解锁",
+      "lock_id": "source_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "writer",
+        "producer"
+      ],
+      "status": "confirmed",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "writer",
+        "director",
+        "producer",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "2026-07-21T20:08:33+00:00",
+      "approver": "user:wesley",
+      "artifact_count": 3,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-21T12:29:42+00:00",
+          "path": "脚本/第1集/voiceover.txt",
+          "sha256": "da6a46d46befd5dec7aa65db73b42f63a70f77516defa36fc6f9dd3a4e834812"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T12:11:16+00:00",
+          "path": "脚本/第1集/bgm.txt",
+          "sha256": "d879b964452413bce240b96e942be75c3f62ee642fbec406082c8cd09b9ff465"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T19:59:30+00:00",
+          "path": "生产数据/script_quality_contract_第1集.json",
+          "sha256": "d3673d26a7f0fc843bfe1ae9a29d502a461c2ab378e929981a9adbfdd72323fe"
+        }
+      ],
+      "episode": "第1集",
+      "label": "剧本锁",
+      "lock_id": "script_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "writer",
+        "director",
+        "producer"
+      ],
+      "status": "confirmed",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "script_supervisor",
+        "producer",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "2026-07-21T20:42:32+00:00",
+      "approver": "user:wesley",
+      "artifact_count": 3,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-21T20:39:51+00:00",
+          "path": "脚本/第1集/storyboard.json",
+          "sha256": "a4b5ed2ee988f7405cb4f29c25721fb60eb53c45a359a627709fbfe9552b687d"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T20:07:53+00:00",
+          "path": "脚本/第1集/镜头时长.json",
+          "sha256": "75dd9dc4739595de5e584ad738398ddd16ba441cb2541cf70ab653b197165699"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T12:32:41+00:00",
+          "path": "脚本/第1集/director_blocking_pack.json",
+          "sha256": "7cea8d35dc71cb4ba8b2c7e389f522ba4e71b0afa87a7fa3fa104f51ed16229a"
+        }
+      ],
+      "episode": "第1集",
+      "label": "分镜锁",
+      "lock_id": "storyboard_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "director",
+        "script_supervisor",
+        "producer"
+      ],
+      "status": "confirmed",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "art_director",
+        "identity_supervisor",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "2026-07-21T20:42:32+00:00",
+      "approver": "user:wesley",
+      "artifact_count": 4,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-21T20:17:29+00:00",
+          "path": "_设置.md",
+          "sha256": "6fff3d258e49d1de4d1d3ce793ac9a74eabb6f821ab003227bcb7e61cc18bbe1"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T11:59:24+00:00",
+          "path": "设定库/global_style.md",
+          "sha256": "7e9509efbf86acc8047dc2914e287dd89d0c8c1e297cd3def0859860ad67acfd"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T20:40:26+00:00",
+          "path": "出图/共享/identity_registry.json",
+          "sha256": "4277e20e264a3b747abe3b5810d9f64257d95e6a81088eec70081e922434d911"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T19:59:30+00:00",
+          "path": "生产数据/identity_adapter_matrix.json",
+          "sha256": "116f8fa79f8adcb935b545b3864e85d2bdca6065542b14d15a40065267d81611"
+        }
+      ],
+      "episode": "第1集",
+      "label": "风格身份锁",
+      "lock_id": "style_identity_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "director",
+        "art_director",
+        "identity_supervisor"
+      ],
+      "status": "confirmed",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "voice_director",
+        "editor",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "2026-07-21T20:42:32+00:00",
+      "approver": "user:wesley",
+      "artifact_count": 2,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-21T20:07:28+00:00",
+          "path": "合成/第1集/配音/时长清单.json",
+          "sha256": "3f6a3ea39e92afb915cd7f310843de710332a0e6092f0543b84aa4e090bb7d4f"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T20:07:28+00:00",
+          "path": "合成/第1集/配音/voice_zh.wav",
+          "sha256": "43012bafe9efa0a3db73d446ca21ca2bb3ca21afe3ae673fd346351188e9f8d5"
+        }
+      ],
+      "episode": "第1集",
+      "label": "声音时长锁",
+      "lock_id": "voice_timing_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "voice_director",
+        "editor"
+      ],
+      "status": "confirmed",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "editor",
+        "qc",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": null,
+      "approver": "",
+      "artifact_count": 1,
+      "artifacts": [
+        {
+          "exists": false,
+          "path": "出视频/第1集/视频",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "出视频/第1集/prompt/video_model_routes.json",
+          "sha256": ""
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-21T19:46:28+00:00",
+          "path": "生产数据/image_qc/第1集/image_qc_第1集.json",
+          "sha256": "2041924c32bc6295bfefd273636e5113586ab1ee3895bb15aca97eecc025406c"
+        },
+        {
+          "exists": false,
+          "path": "生产数据/video_qc_第1集.json",
+          "sha256": ""
+        }
+      ],
+      "episode": "第1集",
+      "label": "视频素材锁",
+      "lock_id": "video_material_lock",
+      "missing_artifacts": [
+        "出视频/第1集/视频",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "生产数据/video_qc_第1集.json"
+      ],
+      "required_approver_roles": [
+        "director",
+        "editor",
+        "qc"
+      ],
+      "status": "pending",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "editor",
+        "post_supervisor",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": null,
+      "approver": "",
+      "artifact_count": 0,
+      "artifacts": [
+        {
+          "exists": false,
+          "path": "生产数据/timelines/第1集/timeline.json",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/views/rough_cut_preview_第1集.html",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/final_timeline_probe_第1集.json",
+          "sha256": ""
+        }
+      ],
+      "episode": "第1集",
+      "label": "粗剪时间线锁",
+      "lock_id": "rough_cut_lock",
+      "missing_artifacts": [
+        "生产数据/timelines/第1集/timeline.json",
+        "生产数据/views/rough_cut_preview_第1集.html",
+        "生产数据/final_timeline_probe_第1集.json"
+      ],
+      "required_approver_roles": [
+        "director",
+        "editor",
+        "post_supervisor"
+      ],
+      "status": "pending",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "editor",
+        "qc",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": null,
+      "approver": "",
+      "artifact_count": 0,
+      "artifacts": [
+        {
+          "exists": false,
+          "path": "合成/第1集/成片*.mp4",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/final_timeline_probe_第1集.json",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/script_supervisor_log_第1集.jsonl",
+          "sha256": ""
+        }
+      ],
+      "episode": "第1集",
+      "label": "最终画面锁",
+      "lock_id": "picture_lock",
+      "missing_artifacts": [
+        "合成/第1集/成片*.mp4",
+        "生产数据/final_timeline_probe_第1集.json",
+        "生产数据/script_supervisor_log_第1集.jsonl"
+      ],
+      "required_approver_roles": [
+        "director",
+        "editor",
+        "qc"
+      ],
+      "status": "pending",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "producer",
+        "post_supervisor",
+        "compliance",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": null,
+      "approver": "",
+      "artifact_count": 1,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-21T12:31:00+00:00",
+          "path": "合成/第1集/配音/timing_estimate.json",
+          "sha256": "77bbcca360014dc6549e46c8e72f7b90983e0cee14d57cf7ee0c86a006b1576b"
+        },
+        {
+          "exists": false,
+          "path": "合规/release_manifest_第1集.json",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/release_verdict_第1集.json",
+          "sha256": ""
+        }
+      ],
+      "episode": "第1集",
+      "label": "交付母版锁",
+      "lock_id": "delivery_lock",
+      "missing_artifacts": [
+        "合规/release_manifest_第1集.json",
+        "生产数据/release_verdict_第1集.json"
+      ],
+      "required_approver_roles": [
+        "producer",
+        "post_supervisor",
+        "compliance"
+      ],
+      "status": "pending",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    }
+  ],
+  "notes": [
+    "confirmed 表示锁定的是当前 hash；后续文件变化会由 check 标 stale。",
+    "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
+  ],
+  "status": "draft",
+  "updated_at": "2026-07-21T20:42:32+00:00",
+  "version": 1
+}

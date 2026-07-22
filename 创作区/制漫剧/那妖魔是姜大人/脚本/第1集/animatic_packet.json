@@ -8,7 +8,7 @@
     "signoff_manifest": "脚本/第1集/animatic_signoff.json"
   },
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:33:52+00:00",
+  "generated_at": "2026-07-21T12:39:31+00:00",
   "inputs": {
     "rough_audio": "合成/第1集/配音/voice_zh.wav",
     "shot_durations": "脚本/第1集/镜头时长.json",
@@ -20,11 +20,11 @@
   "inputs_fingerprint": {
     "files": {
       "合成/第1集/配音/voice_zh.wav": null,
-      "脚本/第1集/storyboard.json": "6b006f63bede687e15dff88cfb942c349588182eca2337a859c2bdd5f3a14a6a",
+      "脚本/第1集/storyboard.json": "5a3bec48742da756a00986788397a0ddecdc95a9b777194cdad3954af4dea304",
       "脚本/第1集/字幕_中文.srt": "63297ee8cfa5143aebb3ff97367222636b68de1880f3714f0d54897c999ae3d9",
       "脚本/第1集/镜头时长.json": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb"
     },
-    "sha": "33cfbb51cd05242539052d54897d195d53a7a898e1a6e4da4df186f4d0c3ca4a"
+    "sha": "279e56bd8290fb064cbae12cbc9fe37e0444627d944113b2c195eb02c4612c43"
   },
   "kind": "n2d_animatic_packet",
   "machine_reference": {
@@ -38,10 +38,8 @@
     "story_economy": {
       "block": 0,
       "narration_heavy_clips": 0,
-      "over_budget_codes": [
-        "story_clip_over_economy_target"
-      ],
-      "warn": 1
+      "over_budget_codes": [],
+      "warn": 0
     },
     "timing_estimate": {
       "duration_sec": 74.798,

@@ -1,0 +1,3181 @@
+{
+  "kind": "comic_reference_plan",
+  "version": 2,
+  "chapter": "第1话",
+  "generated_at": "2026-07-21T14:10:31+00:00",
+  "inputs": {
+    "files": [
+      {
+        "path": "脚本/第1话/panel_script.json",
+        "exists": true,
+        "sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70"
+      },
+      {
+        "path": "出图/共享/identity_registry.json",
+        "exists": true,
+        "sha256": "e95e5f2e0d009f7e3260e80f211e49437fc9cadaebca31f791fe0bb22536c6e7"
+      },
+      {
+        "path": "生产数据/comic_memory_anchor_第1话.json",
+        "exists": false,
+        "sha256": ""
+      },
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+      }
+    ],
+    "backend": {
+      "adapter_id": "openai_gpt_image_project_memory",
+      "model": "GPT Image 2",
+      "channel": "内置 imagegen",
+      "supports_image_inputs": true,
+      "persistent_subject": false,
+      "reference_image_limit": 16,
+      "single_character_reference_limit": 5,
+      "multi_character_reference_limit": 3,
+      "non_character_reference_limit": 2,
+      "style_reference_limit": 2,
+      "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
+      "executable_attachment_limit": 5
+    },
+    "memory_anchor_status": {
+      "status": "missing",
+      "path": "生产数据/comic_memory_anchor_第1话.json",
+      "sha256": "",
+      "inputs_fingerprint": null
+    }
+  },
+  "inputs_fingerprint": "2178ac67ee484d00331ea4cce1d342fe9b9df13a7df2763cfa1ccc424c18b08a",
+  "backend": {
+    "adapter_id": "openai_gpt_image_project_memory",
+    "model": "GPT Image 2",
+    "channel": "内置 imagegen",
+    "supports_image_inputs": true,
+    "persistent_subject": false,
+    "reference_image_limit": 16,
+    "single_character_reference_limit": 5,
+    "multi_character_reference_limit": 3,
+    "non_character_reference_limit": 2,
+    "style_reference_limit": 2,
+    "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed. Executable ceiling is 5 image flags per codex exec invocation (observed runner limit), below the 16-image capability ceiling.",
+    "executable_attachment_limit": 5
+  },
+  "provenance": "事前处方·结构化角色绑定×能力路由×真实附件分配·SHA 输入指纹·2026-07",
+  "summary": {
+    "panels_with_characters": 16,
+    "panels_needing_action": 15,
+    "panels_blocked": 0,
+    "block": 0,
+    "warn": 26,
+    "info": 0
+  },
+  "panel_plans": [
+    {
+      "panel_id": "P001",
+      "character_bindings": [
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "MON_PAINTED_SKIN",
+          "name": "画皮鬼",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": 5,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": null,
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 3,
+        "selected_count": 3,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "MON_PAINTED_SKIN",
+            "character_id": "MON_PAINTED_SKIN",
+            "required": true,
+            "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": false,
+      "panel_plan_sha256": "9c6046b0d5386cdedaff2c72d4e429434a9e0fcdc660a5358f4871c7205e148c"
+    },
+    {
+      "panel_id": "P002",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_PAINTED_SKIN",
+          "name": "画皮鬼",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_PAINTED_SKIN",
+            "face_priority": "secondary",
+            "required_binding": "MON_PAINTED_SKIN 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "MON_PAINTED_SKIN",
+            "character_id": "MON_PAINTED_SKIN",
+            "required": true,
+            "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_WANG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": false,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "64d92150c76cfe5bca2cb6ea5e33d0563cc2f77a41757a8f7953bf203528840d"
+    },
+    {
+      "panel_id": "P003",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_PAINTED_SKIN",
+          "name": "画皮鬼",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "前景槽位",
+            "char_id": "MON_PAINTED_SKIN",
+            "face_priority": "secondary",
+            "required_binding": "MON_PAINTED_SKIN 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_WANG↔CHAR_CHEN（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 5,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "MON_PAINTED_SKIN",
+            "character_id": "MON_PAINTED_SKIN",
+            "required": true,
+            "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "e41157799877a180dfadee942cb2e062f41b684cca6e999ac8d60d362f307037"
+    },
+    {
+      "panel_id": "P004",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_DAOIST",
+          "name": "道士",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_DAOIST",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_DAOIST 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_WANG↔CHAR_DAOIST（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_DAOIST",
+            "character_id": "CHAR_DAOIST",
+            "required": true,
+            "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_TEMPLE",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+            "required": true,
+            "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_WANG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": false,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "1d5104edb34b33753b1d68b0d4f489f9242fb97898b64f1da35d5853385c5468"
+    },
+    {
+      "panel_id": "P005",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "MON_PAINTED_SKIN",
+          "name": "画皮鬼",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_PAINTED_SKIN",
+            "face_priority": "secondary",
+            "required_binding": "MON_PAINTED_SKIN 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "MON_PAINTED_SKIN",
+            "character_id": "MON_PAINTED_SKIN",
+            "required": true,
+            "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_WANG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": false,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "9afb02e5f90dc30eaef44ec10ca1352e84e2630f914016e578a79e7b24e39696"
+    },
+    {
+      "panel_id": "P006",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_DAOIST",
+          "name": "道士",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_DAOIST",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_DAOIST 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_WANG↔CHAR_DAOIST（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_DAOIST",
+            "character_id": "CHAR_DAOIST",
+            "required": true,
+            "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_TEMPLE",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+            "required": true,
+            "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_WANG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": false,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "58861d0373a3183ef9a75debd7b07fda6a5fd77b57866d067d5374cafec4001f"
+    },
+    {
+      "panel_id": "P007",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "action_eyeline_lock",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
+          "prompt_required": [
+            "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
+          ],
+          "needs_action": true
+        },
+        {
+          "char_id": "MON_PAINTED_SKIN",
+          "name": "画皮鬼",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "action_eyeline_lock",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
+          "prompt_required": [
+            "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
+          ],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_PAINTED_SKIN",
+            "face_priority": "secondary",
+            "required_binding": "MON_PAINTED_SKIN 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "MON_PAINTED_SKIN",
+            "character_id": "MON_PAINTED_SKIN",
+            "required": true,
+            "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_WANG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": false,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "33cee09ab990e53d5c43610488499b07e2c86d99b48ac81dfc7f3c640919f346"
+    },
+    {
+      "panel_id": "P008",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_CHEN↔CHAR_WANG（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "d1273a1b249ef6f72ab3109716d72c78302d6469cc2640969cc59f0c7f860ccc"
+    },
+    {
+      "panel_id": "P009",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "MON_PAINTED_SKIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_DAOIST",
+          "name": "道士",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "action_eyeline_lock",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
+          "prompt_required": [
+            "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
+          ],
+          "needs_action": true
+        },
+        {
+          "char_id": "MON_PAINTED_SKIN",
+          "name": "画皮鬼",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "action_eyeline_lock",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+              "strength_hint": 0.5
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 1,
+            "selected": 1,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": "动作格：脸可辨但不直视读者/镜头——¾/侧轮廓，视线锁戏内目标（对手/武器来路/命中点），负面词注入「看镜头、looking at viewer、正对镜头摆拍」。除非本格显式标 POV/破第四墙。",
+          "prompt_required": [
+            "动作格视线锁定指令（不看镜头/¾侧脸/视线锁对手或命中点）"
+          ],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_DAOIST",
+            "face_priority": "primary",
+            "required_binding": "CHAR_DAOIST 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "MON_PAINTED_SKIN",
+            "face_priority": "secondary",
+            "required_binding": "MON_PAINTED_SKIN 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_DAOIST",
+            "character_id": "CHAR_DAOIST",
+            "required": true,
+            "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "MON_PAINTED_SKIN",
+            "character_id": "MON_PAINTED_SKIN",
+            "required": true,
+            "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_DAOIST",
+            "character_id": "CHAR_DAOIST",
+            "required": false,
+            "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "57b4995257174f6c7de53b6b3e4c3af9e7c713dd8d6f453bf8d11cc08400d6e1"
+    },
+    {
+      "panel_id": "P010",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_DAOIST",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_DAOIST",
+          "name": "道士",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_DAOIST",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_DAOIST 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_CHEN↔CHAR_DAOIST（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_DAOIST",
+            "character_id": "CHAR_DAOIST",
+            "required": true,
+            "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "e5fe8c30e31060b3a1e838618b35b28b42e76d78cc4ed0bc341881a550954bb7"
+    },
+    {
+      "panel_id": "P011",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_BEGGAR",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_BEGGAR",
+          "name": "疯乞",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_BEGGAR__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_BEGGAR",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_BEGGAR 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_BEGGAR__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_BEGGAR",
+            "character_id": "CHAR_BEGGAR",
+            "required": true,
+            "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_MARKET_TEMPLE",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+            "required": true,
+            "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "7e16c0679488c45ffb52e63ec3adad3b92c8df3572160932d9107720bab63ad2"
+    },
+    {
+      "panel_id": "P012",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_CHEN↔CHAR_WANG（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "4324d021adab778570542a14d02b40341ebeb895903b684c2d0e1d12db13383f"
+    },
+    {
+      "panel_id": "P013",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "closeup",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": true
+        },
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "closeup",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_CHEN↔CHAR_WANG（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "4ef09030cb42aca7b6ce4b4441966da7852fd2ca2e07cf4cb6bcd9d3198ea9dd"
+    },
+    {
+      "panel_id": "P014",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_CHEN↔CHAR_WANG（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "c42a549baebfd970dc3c7d9c220a2da437081c044587d229c6943d57a3952e21"
+    },
+    {
+      "panel_id": "P015",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        },
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": false
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "primary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_CHEN↔CHAR_WANG（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "2-3 人中景/全景可行，仍须按身份槽位+区分锚点出图",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_CHEN__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": false,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "f8bb6cc37289e8f7d7b7991479d6d41255ccd39f21dabbe2d72360ecf74ce17e"
+    },
+    {
+      "panel_id": "P016",
+      "character_bindings": [
+        {
+          "character_id": "CHAR_WANG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_CHEN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "characters": [
+        {
+          "char_id": "CHAR_WANG",
+          "name": "王生",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "closeup",
+            "back_or_over_shoulder",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_WANG__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "背身参考（背影/过肩格）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": true
+        },
+        {
+          "char_id": "CHAR_CHEN",
+          "name": "陈氏",
+          "tier": "restricted_partial",
+          "binding": {
+            "form_id": "FORM_BASE",
+            "outfit_id": "OUTFIT_BASE",
+            "expression_id": "EXPR_NEUTRAL",
+            "state_id": "STATE_BASE"
+          },
+          "variation_delta": [
+            "closeup",
+            "back_or_over_shoulder",
+            "multi_character"
+          ],
+          "recommended_references": [
+            {
+              "role": "anchor",
+              "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+              "strength_hint": 0.5
+            },
+            {
+              "role": "outfit",
+              "path": "出图/共享/图片/CHAR_CHEN__front.png",
+              "strength_hint": 0.55
+            }
+          ],
+          "reference_budget": {
+            "limit": 3,
+            "requested": 2,
+            "selected": 2,
+            "dropped": 0
+          },
+          "dropped_references": [],
+          "missing_references": [
+            "45°/three_quarter 参考（档位或本格变化量需要）",
+            "背身参考（背影/过肩格）"
+          ],
+          "memory_anchor_reinjected": false,
+          "escalation": null,
+          "pose_gaze_directive": null,
+          "prompt_required": [],
+          "needs_action": true
+        }
+      ],
+      "multi_subject": {
+        "applies": true,
+        "mode": "per_character_reference_slots",
+        "backend": "openai_gpt_image_project_memory",
+        "persistent_subject": false,
+        "slots": [
+          {
+            "slot": "画左槽位",
+            "char_id": "CHAR_WANG",
+            "face_priority": "primary",
+            "required_binding": "CHAR_WANG 自己的 front/face/¾ 参考"
+          },
+          {
+            "slot": "画右槽位",
+            "char_id": "CHAR_CHEN",
+            "face_priority": "secondary",
+            "required_binding": "CHAR_CHEN 自己的 front/face/¾ 参考"
+          }
+        ],
+        "color_collisions": [
+          "CHAR_WANG↔CHAR_CHEN（同主色「白」）"
+        ],
+        "required_prompt_fields": [
+          "多人同框身份槽位",
+          "画左/画右/前后景 blocking",
+          "逐主体参考绑定",
+          "区分锚点（互斥发色/服装主色/配饰）"
+        ],
+        "shot_scheduling": "近景多人=串脸最高发档：优先拆「单人CU+反打」或降中景/全景，坚持同框近景须登记分区/分别出图+合成",
+        "execution": "无持久主体后端：每个槽位只喂该角色自己的参考，逐区域构图；近景多人易串脸时优先拆单人特写+反打，或分别出图后合成，不为迁就后端删角色。",
+        "needs_action": true
+      },
+      "attachment_plan": {
+        "limit": 5,
+        "required_count": 4,
+        "selected_count": 5,
+        "selected": [
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": true,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          },
+          {
+            "role": "anchor",
+            "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+            "strength_hint": 0.5,
+            "id": "CHAR_CHEN",
+            "character_id": "CHAR_CHEN",
+            "required": true,
+            "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+          },
+          {
+            "id": "STYLE_LIAOZHAI_QING_GONGXI",
+            "role": "style",
+            "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+            "required": false,
+            "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+          },
+          {
+            "id": "LOC_WANG_COURTYARD",
+            "role": "location",
+            "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+            "required": true,
+            "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+          },
+          {
+            "role": "outfit",
+            "path": "出图/共享/图片/CHAR_WANG__front.png",
+            "strength_hint": 0.55,
+            "id": "CHAR_WANG",
+            "character_id": "CHAR_WANG",
+            "required": false,
+            "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+          }
+        ],
+        "missing_required": [],
+        "over_capacity": false,
+        "split_suggestion": ""
+      },
+      "blocked": false,
+      "blocking_codes": [],
+      "needs_action": true,
+      "panel_plan_sha256": "75ca4f72ee2744a7ad2f20d494cd120446d4f02f5e270543a0771b1b95e22b23"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P003",
+      "message": "P003 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_CHEN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P004",
+      "message": "P004 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P006",
+      "message": "P006 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P007",
+      "character_id": "CHAR_WANG",
+      "message": "P007·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P007",
+      "character_id": "CHAR_WANG",
+      "message": "P007·王生：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P007",
+      "character_id": "MON_PAINTED_SKIN",
+      "message": "P007·画皮鬼：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P007",
+      "character_id": "MON_PAINTED_SKIN",
+      "message": "P007·画皮鬼：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P008",
+      "message": "P008 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P009",
+      "character_id": "CHAR_DAOIST",
+      "message": "P009·道士：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P009",
+      "character_id": "CHAR_DAOIST",
+      "message": "P009·道士：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P009",
+      "character_id": "MON_PAINTED_SKIN",
+      "message": "P009·画皮鬼：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P009",
+      "character_id": "MON_PAINTED_SKIN",
+      "message": "P009·画皮鬼：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P010",
+      "message": "P010 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P012",
+      "message": "P012 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P013",
+      "character_id": "CHAR_CHEN",
+      "message": "P013·陈氏：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P013",
+      "character_id": "CHAR_WANG",
+      "message": "P013·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P013",
+      "message": "P013 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "multi_character_closeup",
+      "panel": "P013",
+      "message": "P013 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P014",
+      "message": "P014 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P015",
+      "message": "P015 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P016",
+      "character_id": "CHAR_WANG",
+      "message": "P016·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P016",
+      "character_id": "CHAR_WANG",
+      "message": "P016·王生：缺 背身参考（背影/过肩格）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P016",
+      "character_id": "CHAR_CHEN",
+      "message": "P016·陈氏：缺 45°/three_quarter 参考（档位或本格变化量需要）"
+    },
+    {
+      "severity": "warn",
+      "code": "missing_reference",
+      "panel": "P016",
+      "character_id": "CHAR_CHEN",
+      "message": "P016·陈氏：缺 背身参考（背影/过肩格）"
+    },
+    {
+      "severity": "warn",
+      "code": "same_frame_color_collision",
+      "panel": "P016",
+      "message": "P016 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_CHEN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。"
+    },
+    {
+      "severity": "warn",
+      "code": "multi_character_closeup",
+      "panel": "P016",
+      "message": "P016 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。"
+    }
+  ],
+  "notes": [],
+  "plan_sha256": "807b74c543c3446d519b76d661d505c43518edbf404bf18bfbaed8c5e1f7c25c"
+}

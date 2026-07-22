@@ -1,0 +1,95 @@
+{
+  "kind": "comic_model_pack_report",
+  "version": 1,
+  "created_at": "2026-07-21T13:49:59+00:00",
+  "characters": [
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_BEGGAR",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "ead8f8c12081797c22afe1a7b55d42452600b95a9e3bce78d58fd20b7b25d3f7",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_BEGGAR.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_CHEN",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "6009def619d7b7a838855fc030208a5e00994de21407c8160d647f327ea7663e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_CHEN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_DAOIST",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "83e7f7e35c843f225c6c97c31d54ef6d59ab520c19a5613521558d488a64b58a",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DAOIST.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WANG",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "544ba6712a1733984d5f5a21273bc7208b4ccea426db3e4b6a2cf638dbb9f230",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    }
+  ],
+  "summary": {
+    "assets": 4,
+    "characters": 4,
+    "monsters": 0,
+    "ready": 4,
+    "needs_approval": 0,
+    "needs_fix": 0
+  }
+}

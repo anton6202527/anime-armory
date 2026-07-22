@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P014",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_CHEN",
+      "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+      "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+      "role": "anchor",
+      "required": true
+    },
+    {
+      "id": "CHAR_WANG",
+      "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+      "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+      "role": "anchor",
+      "required": true
+    },
+    {
+      "id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+      "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+      "role": "style",
+      "required": false
+    },
+    {
+      "id": "LOC_WANG_COURTYARD",
+      "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+      "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668",
+      "role": "location",
+      "required": true
+    },
+    {
+      "id": "CHAR_CHEN",
+      "path": "出图/共享/图片/CHAR_CHEN__front.png",
+      "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+      "role": "outfit",
+      "required": false
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-21T22:10:32"
+}

@@ -1,27 +1,94 @@
 {
-  "approvals": [],
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "cea7d8b23e7bb12abbaab8f015502ead5fe81ebb217f73a985ec757ea48a501c"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "86066855759b41c86c1c851bb781e1d4c627e754a520f850c54d759a0fd8692a"
+        },
+        {
+          "path": "生产数据/timelines/第1集/animatic_timeline.otio",
+          "sha256": "7a7e339f9c09b9792996283cb99687d293f4f79e765418e49349211bba119812"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "a557d774b0b361cd2fa307d11d1b2832fb16cc93f269bf0491e479bbf6698f82"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "01a88faf0fc0a908eafd01709121c9f04f7bb167622f0364fd320d3cd06e1057"
+        }
+      ],
+      "note": "第1集31张唯一像素、33个时间轴引用（含尾帧兼边界）与77.50秒Animatic确认。",
+      "reviewed_at": "2026-07-21T20:42:31+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "b941b6842f6ec15fb1c9046b1b57c73660d6d1cd4d5d3ca51f9b57aa1fd394db",
+      "signed_input_fingerprint_sha": "c283795457141ff482608443b5cc06f1ef106663cef26407263903507d6a58a2",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "cea7d8b23e7bb12abbaab8f015502ead5fe81ebb217f73a985ec757ea48a501c"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "86066855759b41c86c1c851bb781e1d4c627e754a520f850c54d759a0fd8692a"
+        },
+        {
+          "path": "生产数据/timelines/第1集/animatic_timeline.otio",
+          "sha256": "7a7e339f9c09b9792996283cb99687d293f4f79e765418e49349211bba119812"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "a557d774b0b361cd2fa307d11d1b2832fb16cc93f269bf0491e479bbf6698f82"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "01a88faf0fc0a908eafd01709121c9f04f7bb167622f0364fd320d3cd06e1057"
+        }
+      ],
+      "note": "第1集Animatic剪辑边界与时长确认进入视频执行。",
+      "reviewed_at": "2026-07-21T20:42:31+00:00",
+      "reviewer_id": "user:wesley",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "b941b6842f6ec15fb1c9046b1b57c73660d6d1cd4d5d3ca51f9b57aa1fd394db",
+      "signed_input_fingerprint_sha": "c283795457141ff482608443b5cc06f1ef106663cef26407263903507d6a58a2",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
   "artifact_scope": "stage2_animatic",
-  "authored_by": "automation:n2d",
-  "created_at": "2026-07-21T12:32:52+00:00",
+  "authored_by": "automation:codex",
+  "created_at": "2026-07-21T20:42:31+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
-      "生产数据/animatic_第1集.html": null,
-      "生产数据/animatic_第1集.json": null,
-      "生产数据/timelines/第1集/animatic_timeline.otio": null,
-      "脚本/第1集/animatic_packet.json": "355ddf395afda30f52a0f65ccdb3f6e881c80a826e851a6fe54e74d466eed784",
-      "脚本/第1集/animatic_packet.md": "4218c5ccd2ef1560e26fbd2a4ae284f1dd2209b8b1387c3f5549b3ee87e33bbd"
+      "生产数据/animatic_第1集.html": "cea7d8b23e7bb12abbaab8f015502ead5fe81ebb217f73a985ec757ea48a501c",
+      "生产数据/animatic_第1集.json": "86066855759b41c86c1c851bb781e1d4c627e754a520f850c54d759a0fd8692a",
+      "生产数据/timelines/第1集/animatic_timeline.otio": "7a7e339f9c09b9792996283cb99687d293f4f79e765418e49349211bba119812",
+      "脚本/第1集/animatic_packet.json": "a557d774b0b361cd2fa307d11d1b2832fb16cc93f269bf0491e479bbf6698f82",
+      "脚本/第1集/animatic_packet.md": "01a88faf0fc0a908eafd01709121c9f04f7bb167622f0364fd320d3cd06e1057"
     },
-    "sha": "802e1b7fbb6ebd63026c0ec46a72b9b6a90bc2a131ae65cb56abe69e4dcd1193"
+    "sha": "b941b6842f6ec15fb1c9046b1b57c73660d6d1cd4d5d3ca51f9b57aa1fd394db"
   },
   "input_fingerprint": {
     "files": {
-      "合成/第1集/配音/voice_zh.wav": null,
-      "脚本/第1集/storyboard.json": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7",
-      "脚本/第1集/字幕_中文.srt": "63297ee8cfa5143aebb3ff97367222636b68de1880f3714f0d54897c999ae3d9",
-      "脚本/第1集/镜头时长.json": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb"
+      "合成/第1集/配音/voice_zh.wav": "43012bafe9efa0a3db73d446ca21ca2bb3ca21afe3ae673fd346351188e9f8d5",
+      "脚本/第1集/storyboard.json": "a4b5ed2ee988f7405cb4f29c25721fb60eb53c45a359a627709fbfe9552b687d",
+      "脚本/第1集/字幕_中文.srt": "34da4fa7b0d15ea4d8cca106bbd26848f119598f61e0601e8cb472dc11795cab",
+      "脚本/第1集/镜头时长.json": "75dd9dc4739595de5e584ad738398ddd16ba441cb2541cf70ab653b197165699"
     },
-    "sha": "74e2143658b81754b466d870373946e5e3a0252f793b3cbc85130fc94dd040e5"
+    "sha": "c283795457141ff482608443b5cc06f1ef106663cef26407263903507d6a58a2"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -39,6 +106,7 @@
       ]
     }
   ],
-  "status": "pending",
+  "status": "approved",
+  "updated_at": "2026-07-21T20:42:31+00:00",
   "version": 1
 }

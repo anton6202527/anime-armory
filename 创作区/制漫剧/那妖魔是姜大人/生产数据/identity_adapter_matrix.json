@@ -2,18 +2,1150 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-21T12:32:52+00:00",
+  "generated_at": "2026-07-21T19:59:30+00:00",
   "summary": {
-    "forms": 0,
-    "forms_with_reference_group_ready": 0,
+    "forms": 3,
+    "forms_with_reference_group_ready": 3,
     "forms_with_native_image_ready": 0,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
     "forms_with_gaps": 0,
-    "anchor_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-    "forms_with_anchor_pinned": 0,
+    "anchor_fingerprint": "f4bb3f44a5afc0d9406dfaaa6c72650a06374c24d532af278516d223d76afe55",
+    "forms_with_anchor_pinned": 3,
     "characters_needing_lora_upgrade": []
   },
-  "forms": [],
+  "forms": [
+    {
+      "character_id": "CHAR_01",
+      "character_name": "姜月初",
+      "scope": "核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角",
+      "library_tier": "core_full",
+      "form": "“囚途残损态”",
+      "asset_key": "CHAR_01__囚途残损态",
+      "anchor_phrase": "窄椭圆脸利落下颌·细长杏眼锐利目光·乌黑松散长发·高挑纤细·灰褐窄袖囚服",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+          "status": "ready",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+          "status": "ready",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+          "status": "ready",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+          "status": "ready",
+          "exists": true
+        },
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "face_anchor_refs": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "expressions": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "rear_three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T19:35:25+00:00",
+                  "png_sha256": "c796839b9a9192f3e74de6feb8da597500a38ede8dd33c2de72c4499f1af77d6",
+                  "registry_binding_fingerprint": "e0d5d9b4370a926fc7226737bf716171c6e2c6ee844cf70ae86add53c65853ff",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：紧裁切后面部结构与主母版一致，发型、眼距、鼻唇与囚服领口稳定；无文字水印。"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T19:45:32+00:00",
+                  "png_sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+                  "registry_binding_fingerprint": "2302f786d03052edad886c560e7ddbf5261c33b5c5cc25e9cc3ac017b6fb2a1a",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前最终六联表：恰好六格六脸，身份、发型与囚服领口一致；六情绪克制可读，无跨格重影或文字水印。"
+                },
+                "layout": "two_by_three_expression_sheet_v1"
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "png_sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+                "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：前45度身份、服装结构与母版一致，手脚完整。"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "png_sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+                "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：后45度发束与囚服后片连续，未露错误正脸。"
+              }
+            }
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "front",
+        "three_quarter",
+        "side",
+        "rear_three_quarter",
+        "back",
+        "turnaround"
+      ],
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "rear_three_quarter",
+          "back",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把姜月初换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句",
+        "原创母版确认后，脸型、眼距、眼型、鼻唇比例、下颌线、体态比例不得无账变化",
+        "不要把姜月初换成普通俊美人类",
+        "不要丢失姜月初 scope里的非人/妖物视觉特征"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "CHAR_02",
+      "character_name": "裴长青",
+      "scope": "陇右镇魔都司队正；押送队伍幸存者",
+      "library_tier": "recurring_standard",
+      "form": "“濒死重伤态”",
+      "asset_key": "CHAR_02__濒死重伤态",
+      "anchor_phrase": "年轻硬朗长方脸·浓直眉克制目光·黑发高束·墨黑暗赤镇魔司劲装·左臂骨折",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+          "status": "ready",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png",
+          "status": "ready",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png",
+          "status": "ready",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "face_anchor_refs": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "expressions": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "rear_three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214372+00:00"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214381+00:00"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214390+00:00"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214399+00:00"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared rear_three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214414+00:00"
+              }
+            }
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "front",
+        "three_quarter"
+      ],
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "rear_three_quarter",
+          "back",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把裴长青换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    },
+    {
+      "character_id": "BEAST_01",
+      "character_name": "虎妖",
+      "scope": "袭击发配队伍的强大妖魔；第1集主要威胁",
+      "library_tier": "recurring_standard",
+      "form": "“穿心复生态”",
+      "asset_key": "BEAST_01__穿心复生态",
+      "anchor_phrase": "真实虎首人形巨躯·琥珀竖瞳·右眉骨旧裂·胸前黑血洞·深褐破围腰",
+      "reference_group": {
+        "front": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+          "status": "ready",
+          "exists": true
+        },
+        "side": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png",
+          "status": "ready",
+          "exists": true
+        },
+        "back": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png",
+          "status": "ready",
+          "exists": true
+        },
+        "outfit": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "turnaround": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "half_body": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+          "status": "ready",
+          "exists": true
+        },
+        "face_anchor_refs": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "expressions": {
+          "path": "",
+          "status": "legacy",
+          "exists": false
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "rear_three_quarter": {
+          "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+          "status": "ready",
+          "exists": true
+        },
+        "_extra": {
+          "value": {
+            "half_body": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315191+00:00"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315208+00:00"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315223+00:00"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315239+00:00"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared rear_three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315264+00:00"
+              }
+            }
+          },
+          "exists": true
+        }
+      },
+      "required_reference_fields": [
+        "front",
+        "three_quarter"
+      ],
+      "reference_group_ready": true,
+      "image_bindings": {
+        "codex": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "dreamina": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "video_bindings": {
+        "dreamina": {
+          "mode": "first_last_frame",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedance": {
+          "mode": "face_lock",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "sora": {
+          "mode": "character_cameo",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        }
+      },
+      "lora_binding": {
+        "status": "not_needed",
+        "ready": false,
+        "base_model": "",
+        "model_path": "",
+        "trigger": "",
+        "dataset": "",
+        "model_hash": "",
+        "validation_report": "",
+        "train_job": "",
+        "card": "",
+        "gaps": []
+      },
+      "angle_policy": {
+        "allowed": [
+          "front",
+          "three_quarter",
+          "side",
+          "rear_three_quarter",
+          "back",
+          "MCU",
+          "CU",
+          "MS",
+          "shot_reverse"
+        ],
+        "risky": [
+          "deep_shadow",
+          "face_too_small",
+          "extreme_top",
+          "extreme_low",
+          "strong_vfx_over_face"
+        ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ]
+      },
+      "drift_forbidden": [
+        "不要把虎妖换成其他脸",
+        "不要现代服饰",
+        "不要高饱和页游光效",
+        "不要丢失本角色锚点句"
+      ],
+      "gaps": [],
+      "recommendations": [
+        "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
+        "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
+      ]
+    }
+  ],
   "notes": []
 }

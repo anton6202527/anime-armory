@@ -1,0 +1,12 @@
+{
+  "kind": "n2d_video_face_drift_watch",
+  "version": 1,
+  "episode": "第1集",
+  "status": "missing_video_source",
+  "master": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+  "warnings": [
+    "video source not found: /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4"
+  ],
+  "json_path": "生产数据/video_face_drift_watch_第1集_None_Nones.json",
+  "markdown_path": "生产数据/video_face_drift_watch_第1集_None_Nones.md"
+}

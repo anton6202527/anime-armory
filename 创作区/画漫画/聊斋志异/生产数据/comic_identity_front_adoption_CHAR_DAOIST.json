@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-21T21:02:10",
+  "ref_id": "CHAR_DAOIST",
+  "candidate_path": "出图/共享/candidates/CHAR_DAOIST/front/CHAR_DAOIST__front__codex_board_v1.png",
+  "candidate_sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+  "adopted_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+  "adopted_sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "正面全身清晰，道士威严克制",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

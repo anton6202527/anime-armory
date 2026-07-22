@@ -2,13 +2,13 @@
   "episodes_scanned": [
     "第1集"
   ],
-  "generated_at": "2026-07-21T12:31:00+00:00",
+  "generated_at": "2026-07-21T20:03:17+00:00",
   "kind": "n2d_voice_casting",
   "policy": "casting_first_final_render_later",
   "roles": [
     {
-      "approved_at": "",
-      "approved_by": "",
+      "approved_at": "2026-07-21T20:03:17+00:00",
+      "approved_by": "automation:codex",
       "audition_lines": [
         {
           "cue": "短促决绝·快",
@@ -29,20 +29,20 @@
           "text": "穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。"
         }
       ],
-      "authorization": "not_applicable_synthetic_or_pending",
-      "backend": "",
-      "canonical_sample": "",
+      "authorization": "synthetic",
+      "backend": "CosyVoice",
+      "canonical_sample": "设定库/voicebank/姜月初.wav",
       "episodes": [
         "第1集"
       ],
       "line_count": 11,
-      "lock_hash": "",
-      "model": "",
+      "lock_hash": "2a70ad112bc56c696f659dc26fc629cc2f15387239c9fe46d3d7a3a311756f8a",
+      "model": "CosyVoice2-0.5B",
       "reference_audio": "",
       "required": true,
       "role": "姜月初",
-      "status": "unselected",
-      "voice_id": "",
+      "status": "locked",
+      "voice_id": "synthetic_jiang_cool_resilient_v1",
       "voice_spec": {
         "accent": "",
         "age_impression": "",
@@ -52,8 +52,8 @@
       }
     },
     {
-      "approved_at": "",
-      "approved_by": "",
+      "approved_at": "2026-07-21T20:03:17+00:00",
+      "approved_by": "automation:codex",
       "audition_lines": [
         {
           "cue": "中性冷硬·慢",
@@ -62,20 +62,20 @@
           "text": "百妖谱开启。斩杀生物，可获得道行。"
         }
       ],
-      "authorization": "not_applicable_synthetic_or_pending",
-      "backend": "",
-      "canonical_sample": "",
+      "authorization": "synthetic",
+      "backend": "CosyVoice",
+      "canonical_sample": "设定库/voicebank/百妖谱.wav",
       "episodes": [
         "第1集"
       ],
       "line_count": 2,
-      "lock_hash": "",
-      "model": "",
+      "lock_hash": "e77b6874e3bcab781e9cc8f1c100ff9319d2334f18a265f85d767171ee34b47c",
+      "model": "CosyVoice2-0.5B",
       "reference_audio": "",
       "required": true,
       "role": "百妖谱",
-      "status": "unselected",
-      "voice_id": "",
+      "status": "locked",
+      "voice_id": "synthetic_system_cold_neutral_v1",
       "voice_spec": {
         "accent": "",
         "age_impression": "",
@@ -85,8 +85,8 @@
       }
     },
     {
-      "approved_at": "",
-      "approved_by": "",
+      "approved_at": "2026-07-21T20:03:17+00:00",
+      "approved_by": "automation:codex",
       "audition_lines": [
         {
           "cue": "沙哑戏谑·慢",
@@ -107,20 +107,20 @@
           "text": "莫再挣扎。等吃干净了，我替你们立碑。"
         }
       ],
-      "authorization": "not_applicable_synthetic_or_pending",
-      "backend": "",
-      "canonical_sample": "",
+      "authorization": "synthetic",
+      "backend": "CosyVoice",
+      "canonical_sample": "设定库/voicebank/虎妖.wav",
       "episodes": [
         "第1集"
       ],
       "line_count": 3,
-      "lock_hash": "",
-      "model": "",
+      "lock_hash": "9693344d39ebb95c2f322301f00cffe03d29af91c71e93f039048d11ac22dbf5",
+      "model": "CosyVoice2-0.5B",
       "reference_audio": "",
       "required": true,
       "role": "虎妖",
-      "status": "unselected",
-      "voice_id": "",
+      "status": "locked",
+      "voice_id": "synthetic_tiger_demon_bass_v1",
       "voice_spec": {
         "accent": "",
         "age_impression": "",
@@ -130,8 +130,8 @@
       }
     },
     {
-      "approved_at": "",
-      "approved_by": "",
+      "approved_at": "2026-07-21T20:03:17+00:00",
+      "approved_by": "automation:codex",
       "audition_lines": [
         {
           "cue": "虚弱威严·慢",
@@ -152,20 +152,20 @@
           "text": "裴长青，陇右镇魔都司队正。扶我往南，我保你脱籍，还你自由。"
         }
       ],
-      "authorization": "not_applicable_synthetic_or_pending",
-      "backend": "",
-      "canonical_sample": "",
+      "authorization": "synthetic",
+      "backend": "CosyVoice",
+      "canonical_sample": "设定库/voicebank/裴长青.wav",
       "episodes": [
         "第1集"
       ],
       "line_count": 6,
-      "lock_hash": "",
-      "model": "",
+      "lock_hash": "9839b1c4500e285140e97483d5661678f038f77c8ba067e95f59f951046663f8",
+      "model": "CosyVoice2-0.5B",
       "reference_audio": "",
       "required": true,
       "role": "裴长青",
-      "status": "unselected",
-      "voice_id": "",
+      "status": "locked",
+      "voice_id": "synthetic_pei_low_restrained_v1",
       "voice_spec": {
         "accent": "",
         "age_impression": "",
@@ -180,10 +180,10 @@
     "A text timing estimate is not a voice asset and creates no WAV files.",
     "Guide audio must be explicitly guide_approved or locked; never treat an arbitrary filler voice as performance truth."
   ],
-  "status": "casting",
+  "status": "locked",
   "summary": {
-    "locked_count": 0,
-    "pending_count": 4,
+    "locked_count": 4,
+    "pending_count": 0,
     "required_count": 4,
     "role_count": 4
   },

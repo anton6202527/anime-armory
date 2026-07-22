@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:33:23+00:00",
+  "generated_at": "2026-07-21T12:44:07+00:00",
   "inputs": {
     "batch_queue": "生产数据/batch_queue.json",
     "continuity_bible": "脚本/第1集/continuity_bible.json",
@@ -266,9 +266,15 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
-            "at_sec": 1.6,
-            "reason": "姜月初反应CU切虎妖低机位压迫镜",
-            "use": "edit_cut"
+            "at_sec": 3.0,
+            "reason": "锁定虎足命中裴长青躯干的接触帧、力线和衣料压缩",
+            "use": "mid_impact"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 4.8,
+            "reason": "锁定裴长青与横刀沿原轴回落姜月初脚边的人刀空间关系",
+            "use": "action_recovery"
           }
         ],
         "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP06",
@@ -293,7 +299,7 @@
         "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
       },
       "risk": {
-        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "review_required": true,
         "template": "fight_exchange",
         "tier": "high"

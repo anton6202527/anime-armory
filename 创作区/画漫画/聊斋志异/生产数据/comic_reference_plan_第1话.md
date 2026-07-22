@@ -1,0 +1,31 @@
+# 逐格参考规划（事前处方）· 第1话
+
+- 后端 openai_gpt_image_project_memory（持久主体 False·单角色参考上限 5）
+- 含角色格 16 · 需处理 15 · warn 26 · info 0
+
+- ⚠️ `same_frame_color_collision` P003 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_CHEN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P004 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P006 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P007·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P007·王生：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `missing_reference` P007·画皮鬼：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P007·画皮鬼：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P008 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P009·道士：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P009·道士：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `missing_reference` P009·画皮鬼：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P009·画皮鬼：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）
+- ⚠️ `same_frame_color_collision` P010 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P012 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P013·陈氏：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P013·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `same_frame_color_collision` P013 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `multi_character_closeup` P013 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。
+- ⚠️ `same_frame_color_collision` P014 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `same_frame_color_collision` P015 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `missing_reference` P016·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P016·王生：缺 背身参考（背影/过肩格）
+- ⚠️ `missing_reference` P016·陈氏：缺 45°/three_quarter 参考（档位或本格变化量需要）
+- ⚠️ `missing_reference` P016·陈氏：缺 背身参考（背影/过肩格）
+- ⚠️ `same_frame_color_collision` P016 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_CHEN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。
+- ⚠️ `multi_character_closeup` P016 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。

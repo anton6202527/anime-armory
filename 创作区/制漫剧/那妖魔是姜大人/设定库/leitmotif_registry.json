@@ -1,8 +1,29 @@
 {
   "version": 1,
   "motifs": [
-    {"id": "LM_JIANG_SURVIVAL", "subject": "姜月初·求生选择", "desc": "三音下行的低音弦乐动机，末音悬而不决；只在她主动跨越代价作出生存选择时出现，禁配成英雄凯旋。"},
-    {"id": "LM_BAIYAO_SCROLL", "subject": "百妖谱·规则显现", "desc": "古卷摩擦质感、单颗清冷金属泛音与反向呼吸声；每次规则揭示沿用同一音色，不使用游戏升级提示音。"},
-    {"id": "LM_DEMON_PRESSURE", "subject": "妖魔威压", "desc": "接近听感下限的低频持续音叠加不规则骨响；妖物进入猎杀状态才增强，不与姜月初主题混用。"}
+    {
+      "id": "LM_JIANG_SURVIVAL",
+      "subject": "姜月初·求生选择",
+      "desc": "三音下行的低音弦乐动机，末音悬而不决；只在她主动跨越代价作出生存选择时出现，禁配成英雄凯旋。",
+      "file": "素材/motif/LM_JIANG_SURVIVAL.wav",
+      "audio_sha256": "1806d8c4cc59217d1dc5de231e0535f41e6e5af17d0cbb118dfe9ea6b3b18d43",
+      "cue": "survival_choice"
+    },
+    {
+      "id": "LM_BAIYAO_SCROLL",
+      "subject": "百妖谱·规则显现",
+      "desc": "古卷摩擦质感、单颗清冷金属泛音与反向呼吸声；每次规则揭示沿用同一音色，不使用游戏升级提示音。",
+      "file": "素材/motif/LM_BAIYAO_SCROLL.wav",
+      "audio_sha256": "bc19cba920c2fb87776686385c2777a99ff4f8a13ceb0f9aa9eaaaaee4e702c5",
+      "cue": "rule_reveal"
+    },
+    {
+      "id": "LM_DEMON_PRESSURE",
+      "subject": "妖魔威压",
+      "desc": "接近听感下限的低频持续音叠加不规则骨响；妖物进入猎杀状态才增强，不与姜月初主题混用。",
+      "file": "素材/motif/LM_DEMON_PRESSURE.wav",
+      "audio_sha256": "082260124086ba15df9c3ad620f251ece2f1042d9bf90b8b96cd01b31b739fb3",
+      "cue": "demon_hunt_pressure"
+    }
   ]
 }

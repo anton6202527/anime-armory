@@ -7,7 +7,7 @@
     {
       "chapter": "第1话",
       "working_title": "画皮",
-      "chapter_type": "standalone",
+      "chapter_type": "one_shot",
       "format_profile": "vertical_serial",
       "source_mode": "adapted",
       "source_spans": [{"span_id": "SPAN_PAINTED_SKIN", "source_path": "源本/画皮_源文选段.txt", "whole_file": true}],
@@ -16,15 +16,15 @@
       "turning_point": "王生翻墙窥见青面锯齿的鬼正用彩笔画人皮，之前的美人叙事彻底翻面。",
       "payoff": "道士斩鬼收烟，陈氏忍辱吞痰、吐出人心并将其纳回夫尸；王生复活却永留钱形疤痕。",
       "ending_mode": "complete_closure",
-      "budget": {"unit": "panels", "target": 24, "soft_range": [22, 28]},
-      "entry_state": {"entities": {"CHAR_WANG": {"story_state": "已婚书生，早行遇到陌生女子前尚无邪祸。"}, "CHAR_CHEN": {"story_state": "王生之妻，尚不知丈夫将妖鬼带入家中。"}, "MON_PAINTED_SKIN": {"disguise_state": "以绘制人皮伪装成年轻女子，寻找替死者。"}}},
+      "budget": {"unit": "panels", "target": 16, "soft_range": [14, 18]},
+      "entry_state": {"entities": {"CHAR_WANG": {"life_state": "alive"}, "CHAR_CHEN": {"agency_state": "warning_ignored"}, "MON_PAINTED_SKIN": {"existence_state": "disguised_and_hunting"}}},
       "continuity_delta": [
         {"entity_id": "CHAR_WANG", "field": "life_state", "from": "alive", "to": "dead_without_heart", "panel_id": "P014", "reason": "鬼毁拂破门、裂腹掬心。"},
-        {"entity_id": "MON_PAINTED_SKIN", "field": "existence_state", "from": "disguised_and_hunting", "to": "beheaded_and_sealed_as_smoke", "panel_id": "P017", "reason": "道士木剑斩首并以葫芦收尽鬼烟。"},
-        {"entity_id": "CHAR_CHEN", "field": "agency_state", "from": "warning_ignored", "to": "humiliated_but_active_savior", "panel_id": "P022", "reason": "她吞下疯乞之痰后吐出人心，亲手纳回夫尸。"},
-        {"entity_id": "CHAR_WANG", "field": "life_state", "from": "dead_without_heart", "to": "revived_with_permanent_scar", "panel_id": "P023", "reason": "陈氏合腹紧缚，夜半鼻息复现。"}
+        {"entity_id": "MON_PAINTED_SKIN", "field": "existence_state", "from": "disguised_and_hunting", "to": "beheaded_and_sealed_as_smoke", "panel_id": "P009", "reason": "道士木剑斩首并以葫芦收尽鬼烟。"},
+        {"entity_id": "CHAR_CHEN", "field": "agency_state", "from": "warning_ignored", "to": "humiliated_but_active_savior", "panel_id": "P011", "reason": "她为求回生忍受杖击并吞下痰液，随后亲手完成纳心。"},
+        {"entity_id": "CHAR_WANG", "field": "life_state", "from": "dead_without_heart", "to": "revived_with_permanent_scar", "panel_id": "P015", "reason": "陈氏合腹紧缚，夜半鼻息复现。"}
       ],
-      "exit_state": {"entities": {"CHAR_WANG": {"story_state": "复活，腹部留下如钱疤痕。"}, "CHAR_CHEN": {"story_state": "承受丈夫的恶果并完成救赎。"}, "MON_PAINTED_SKIN": {"existence_state": "已被斩除并封入葫芦。"}}},
+      "exit_state": {"entities": {"CHAR_WANG": {"life_state": "revived_with_permanent_scar"}, "CHAR_CHEN": {"agency_state": "humiliated_but_active_savior"}, "MON_PAINTED_SKIN": {"existence_state": "beheaded_and_sealed_as_smoke"}}},
       "status": "confirmed"
     }
   ]

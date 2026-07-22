@@ -483,6 +483,7 @@ python3 skills/n2d-video/scripts/multishot_runner.py accept <作品根> <multish
 | 没跑 `gate.py --stage video_preflight` 就调生视频模型/渠道 | 先跑确定性 preflight gate；有 block 先修 prompt/故事板/尾帧，视频贵，不靠生成后碰运气 |
 | 同一角色首/中/尾锚图来自不同定妆或不同 `reference_group` | 违反首/中/尾身份同源铁律。回 `identity_registry/reference_group` 统一同一角色形态，补 `CHAR_xx/形态`、可执行 `reference_group=<同源组>`、脸/发髻/配饰/服装不变量；大表情近景用同源 `expressions` 首尾双帧并写 `锁脸不锁情`，否则 `video_preflight` 和 runner 付费前 guard 阻断 |
 | 锚帧里人物脸很小，视频尾段却推成主角近脸 | 违反近景升格守卫。视频模型会凭小脸补新脸，极易换人；先回 `n2d-image` 补该角色同源 CU/MCU 锚帧或表情参考并 full `image_qc`，或把视频落幅改 MCU/OTS/侧脸/手部/物件反应镜 |
+| 侧脸/背脸转向镜头后突然换脸 | 不能只传普通首尾关键帧。为每个显脸节点写 `continuity.face_reveal_requirements[]`，并在 `continuity.anchors[]` 放一张同源正脸或前 3/4 锚：`use=identity_reveal`、绑定 `face_reveal_requirement_id`、`face_angle`、`same_source_identity=true`。原生多帧走时间轴锚；首尾帧后端按锚拆段。runner 对已声明但缺锚的合同在付费提交前硬阻断。 |
 | 含角色 Clip 没读 `identity_adapter_matrix.json` / `identity_registry.json` | 违反资产身份注册层继承铁律——先从 matrix/registry 取角色/形态 ID、Face Lock/Character ID/reference controls/LoRA 或 fallback reference_group，再写平台参数和身份锁定约束 |
 | 原生音画策略缺失或随手开启 | 每个 Clip 必填 `原生音画策略`；只有路由表标 `native_speech` 的原生音画说话镜可生成台词并保留原片音轨；其它正面说话/旁白/角色台词默认禁止，低风险无口型无台词镜头也必须显式 `视频生成音频策略=低风险环境声` 才可 opt-in 环境声/音效 |
 | 不告知规格就闷头调生视频模型/渠道 | 违反 `出视频规格` 选择点——调用前先念三档话术告知当前规格档（分辨率/帧率/跑几条/质量档），用户可改 |

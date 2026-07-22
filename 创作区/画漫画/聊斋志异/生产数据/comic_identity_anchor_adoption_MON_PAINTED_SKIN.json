@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-21T21:02:10",
+  "ref_id": "MON_PAINTED_SKIN",
+  "candidate_path": "出图/共享/candidates/MON_PAINTED_SKIN/anchor/MON_PAINTED_SKIN__anchor__codex_board_v1.png",
+  "candidate_sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+  "adopted_path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+  "adopted_sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "同一锚内包含美人伪装与恶鬼真身，形态转换关系明确",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

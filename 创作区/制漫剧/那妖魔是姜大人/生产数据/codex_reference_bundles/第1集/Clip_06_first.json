@@ -1,0 +1,239 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 5,
+  "cli_image_input_limit": 5,
+  "cli_image_input_truncated": true,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+      "bytes": 1003092,
+      "owner": "CHAR_01/“囚途残损态”",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "6813e322ba6346286d057f7a2efe788f10313ad67c5f43e3d6bce23a19224577",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+      "bytes": 1081712,
+      "owner": "CHAR_02/“濒死重伤态”",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 12,
+      "sha256": "6a57ae90df9da067a26c832a9131a7030bb22f123c944c956d69e1f27458a513",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+      "bytes": 1421316,
+      "owner": "BEAST_01/“穿心复生态”",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1024,
+        "original_long_edge": 1024,
+        "original_short_edge": 1024,
+        "original_width": 1024,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 20,
+      "sha256": "72e27a955b7e764d746cd1a167b5c88466ac33ddd82c130e563ce5226cff3911",
+      "source": "reference_bundle"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_尸骸荒野.png",
+      "bytes": 2731547,
+      "owner": "LOC_01",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第1集/定妆_场景_尸骸荒野__c6841d7b5a66_941x1672_to_1024x1819.png",
+      "prepared_bytes": 3550889,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_场景_尸骸荒野__c6841d7b5a66_941x1672_to_1024x1819.png",
+      "prepared_sha256": "537f26d38ac266ff45c6ed1afa56f956b23c4dce8142f32cab9a47000e04b2d4",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
+      "role": "asset",
+      "sequence": 26,
+      "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_场景_尸骸荒野.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png",
+      "bytes": 1827758,
+      "owner": "WEAPON_01",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/reference_enhanced/第1集/定妆_武器_横刀__03eb48c39aa7_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2083211,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_武器_横刀__03eb48c39aa7_941x1672_to_1024x1819.png",
+      "prepared_sha256": "7e86b3e0fa4679d4b0e2701cb5f5e77a0319551da5717328ad4557622c93e3e9",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_武器_横刀.png",
+      "role": "asset",
+      "sequence": 29,
+      "sha256": "03eb48c39aa748f043815a381bdfbb553be0f08358e6ba40425cb9ddb25e7cc6",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/图片/定妆_武器_横刀.png"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "“囚途残损态”",
+      "id": "CHAR_01",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+        "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png"
+      ]
+    },
+    {
+      "form": "“濒死重伤态”",
+      "id": "CHAR_02",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png"
+      ]
+    },
+    {
+      "form": "“穿心复生态”",
+      "id": "BEAST_01",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+        "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png"
+      ]
+    },
+    {
+      "id": "LOC_01",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_场景_尸骸荒野.png",
+        "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
+        "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png"
+      ],
+      "type": "scene"
+    },
+    {
+      "id": "WEAPON_01",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_武器_横刀.png",
+        "出图/共享/图片/定妆_武器_横刀_比例.png",
+        "出图/共享/图片/定妆_武器_横刀_手持.png"
+      ],
+      "type": "weapon"
+    },
+    {
+      "id": "PROP_横刀",
+      "kind": "asset",
+      "paths": [
+        "出图/共享/图片/定妆_武器_横刀.png",
+        "出图/共享/图片/定妆_武器_横刀_比例.png",
+        "出图/共享/图片/定妆_武器_横刀_手持.png"
+      ],
+      "type": "prop"
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "Clip_06_first",
+  "target": "出图/第1集/图片/Clip06_first.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

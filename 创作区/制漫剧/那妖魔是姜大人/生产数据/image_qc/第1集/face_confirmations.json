@@ -1,0 +1,61 @@
+{
+  "confirmations": [
+    {
+      "char": "CHAR_02__濒死重伤态",
+      "confirmed_at": "2026-07-21T20:34:43+00:00",
+      "floor": 0.6624,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/Clip03_end.png",
+      "png_sha256": "148277ca1d99b5eebf9e85a78bebb9b4c3a4e800665f2a86448cfb25d602a664",
+      "reason": "已实际目视当前像素并与Clip03_first、EP01_CLIP03_a1及CHAR_02定妆对照：发髻、眉眼、鼻梁、下颌、黑红制服一致；低分来自侧脸/俯身角度。",
+      "review_kind": "executor_visual",
+      "reviewer": "automation:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.5304,
+      "score_vs_main": 0.421,
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_02__濒死重伤态",
+      "confirmed_at": "2026-07-21T15:16:30+00:00",
+      "floor": 0.6624,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/Clip03_first.png",
+      "png_sha256": "13d0ca2c379b6170e6eebc9ee29ba0193289f0ead3ff176d91aa95a37f77dbdc",
+      "reason": "已查看当前像素：裴长青侧脸受85mm三分侧和低位透视影响；长方脸、浓直眉、高束发、暗赤黑制服与左臂伤带仍与定妆一致，无换脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "automation:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.5795,
+      "score_vs_main": 0.4953,
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    },
+    {
+      "char": "CHAR_02__濒死重伤态",
+      "confirmed_at": "2026-07-21T15:24:29+00:00",
+      "floor": 0.6624,
+      "human_signoff": false,
+      "original_verdict": "block",
+      "png": "图片/EP01_CLIP03_a1.png",
+      "png_sha256": "f7b7e3359571846691f8ad65367d5df8d01a14844ab479e62f24748781b565e6",
+      "reason": "已查看该动作锚当前像素：裴长青低位三分侧脸受小尺寸与角度影响；脸型、眉眼、发髻、制服、伤臂和首帧身份连续，无换脸。",
+      "review_kind": "executor_visual",
+      "reviewer": "automation:codex",
+      "reviewer_role": "ai_visual_executor",
+      "score": 0.516,
+      "score_vs_main": 0.4109,
+      "shot": "Clip_03",
+      "source": "image_qc:executor_visual_face_confirm",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_face_confirmations",
+  "updated_at": "2026-07-21T20:34:43+00:00",
+  "version": 1
+}

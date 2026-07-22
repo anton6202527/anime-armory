@@ -156,24 +156,23 @@
     },
     {
       "clip": "EP01_CLIP06",
-      "detail_allowed": false,
-      "detail_reason": "storyboard 明确 economy_intent=selective_detail；仍按对应时长预算审查。",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
       "duration_sec": 8.251,
-      "economy_class": "selective_detail",
+      "economy_class": "premium_detail",
       "finding": {
-        "code": "story_clip_over_economy_target",
-        "severity": "warn"
+        "severity": "pass"
       },
-      "hard_max_story_clip_sec": 15.0,
+      "hard_max_story_clip_sec": 20.0,
       "label": "虎口最后威胁",
       "narration_weight": 0.0,
-      "over_budget_sec": 1.251,
-      "recommended_action": "trim_to_selective_detail",
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
       "recommended_video_shot_sec": {
         "max": 8.0,
         "min": 4.0
       },
-      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
       "signals": [
         "combat_or_action",
         "selective_reveal_or_hook",
@@ -182,7 +181,7 @@
         "manual_target_story_clip_sec"
       ],
       "target_story_clip_sec": {
-        "max": 7.0,
+        "max": 9.0,
         "min": 5.0
       },
       "template": "fight_exchange"
@@ -252,15 +251,8 @@
     }
   ],
   "episode": "第1集",
-  "findings": [
-    {
-      "clip": "EP01_CLIP06",
-      "code": "story_clip_over_economy_target",
-      "message": "EP01_CLIP06 当前 8.251s，分类=selective_detail，建议 5-7s；trim_to_selective_detail。改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
-      "severity": "warn"
-    }
-  ],
-  "generated_at": "2026-07-21T12:34:10+00:00",
+  "findings": [],
+  "generated_at": "2026-07-21T19:59:30+00:00",
   "kind": "n2d_story_economy_audit",
   "ok": true,
   "rules": [
@@ -272,13 +264,13 @@
     "blocks": 0,
     "clips": 8,
     "compact_or_montage": 0,
-    "potential_savings_sec": 1.251,
-    "premium_detail": 5,
-    "rewrite_required": 1,
-    "target_total_max_sec": 83.0,
+    "potential_savings_sec": 0.0,
+    "premium_detail": 6,
+    "rewrite_required": 0,
+    "target_total_max_sec": 85.0,
     "target_total_min_sec": 59.0,
     "total_duration_sec": 74.798,
-    "warnings": 1
+    "warnings": 0
   },
   "version": 1
 }

@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_report",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/聊斋志异",
+  "chapter": "第1话",
+  "created_at": "2026-07-21T22:12:46",
+  "write_back": true,
+  "job_reference_paths_updated": 0,
+  "summary": {
+    "reference_count": 8,
+    "panel_count": 16,
+    "missing_ref_count": 0,
+    "rerun_target_count": 0,
+    "outfit_gap_count": 0
+  },
+  "outfit_gaps": {},
+  "registry_validation": {
+    "kind": "comic_identity_registry_validation",
+    "schema_version": 2,
+    "valid": true,
+    "summary": {
+      "assets": 8,
+      "identity_assets": 5,
+      "characters": 4,
+      "monsters": 1,
+      "block": 0,
+      "warn": 0
+    },
+    "issues": []
+  },
+  "model_pack_reports": {
+    "CHAR_BEGGAR": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_BEGGAR",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "ead8f8c12081797c22afe1a7b55d42452600b95a9e3bce78d58fd20b7b25d3f7",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_BEGGAR.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_CHEN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_CHEN",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "6009def619d7b7a838855fc030208a5e00994de21407c8160d647f327ea7663e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_CHEN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_DAOIST": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_DAOIST",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "83e7f7e35c843f225c6c97c31d54ef6d59ab520c19a5613521558d488a64b58a",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DAOIST.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "CHAR_WANG": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WANG",
+      "asset_type": "character",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "544ba6712a1733984d5f5a21273bc7208b4ccea426db3e4b6a2cf638dbb9f230",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    },
+    "MON_PAINTED_SKIN": {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_PAINTED_SKIN",
+      "asset_type": "monster",
+      "tier": "restricted_partial",
+      "required_views": [],
+      "view_evidence": [],
+      "model_pack_fingerprint": "fb68b3cc6c0c42361ed1cfaacc76cb1152d13d186a461002bfd3a800f552edcb",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_PAINTED_SKIN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": false,
+      "readiness": "ready",
+      "technical_block": false,
+      "findings": []
+    }
+  },
+  "model_pack_gaps": {},
+  "missing_refs": {},
+  "required_character_views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "tier_required_views": {
+    "core_full": [
+      "front",
+      "three_quarter",
+      "side",
+      "back",
+      "face"
+    ],
+    "recurring_standard": [
+      "front",
+      "three_quarter",
+      "face"
+    ],
+    "named_minimal": [
+      "front",
+      "face"
+    ],
+    "restricted_partial": []
+  },
+  "character_views": {
+    "CHAR_BEGGAR": {
+      "front": "出图/共享/图片/CHAR_BEGGAR__front.png",
+      "anchor": "出图/共享/图片/CHAR_BEGGAR__anchor.png"
+    },
+    "CHAR_CHEN": {
+      "front": "出图/共享/图片/CHAR_CHEN__front.png",
+      "anchor": "出图/共享/图片/CHAR_CHEN__anchor.png"
+    },
+    "CHAR_DAOIST": {
+      "front": "出图/共享/图片/CHAR_DAOIST__front.png",
+      "anchor": "出图/共享/图片/CHAR_DAOIST__anchor.png"
+    },
+    "CHAR_WANG": {
+      "front": "出图/共享/图片/CHAR_WANG__front.png",
+      "anchor": "出图/共享/图片/CHAR_WANG__anchor.png"
+    },
+    "MON_PAINTED_SKIN": {}
+  },
+  "missing_character_views": {},
+  "rerun_targets": [],
+  "panels": [
+    {
+      "panel_id": "P001",
+      "status": "ready",
+      "valid_reference_count": 3,
+      "valid_references": [
+        {
+          "id": "MON_PAINTED_SKIN",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P002",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "MON_PAINTED_SKIN",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P003",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "MON_PAINTED_SKIN",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P004",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "CHAR_DAOIST",
+          "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_TEMPLE",
+          "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+          "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P005",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "MON_PAINTED_SKIN",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P006",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "CHAR_DAOIST",
+          "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_TEMPLE",
+          "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+          "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P007",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "MON_PAINTED_SKIN",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P008",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P009",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_DAOIST",
+          "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+        },
+        {
+          "id": "MON_PAINTED_SKIN",
+          "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+          "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_DAOIST",
+          "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P010",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_DAOIST",
+          "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+          "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P011",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_BEGGAR",
+          "path": "出图/共享/图片/CHAR_BEGGAR__anchor.png",
+          "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_MARKET_TEMPLE",
+          "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+          "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P012",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P013",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P014",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P015",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__front.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    },
+    {
+      "panel_id": "P016",
+      "status": "ready",
+      "valid_reference_count": 5,
+      "valid_references": [
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        },
+        {
+          "id": "CHAR_CHEN",
+          "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+          "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd"
+        },
+        {
+          "id": "STYLE_LIAOZHAI_QING_GONGXI",
+          "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+          "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f"
+        },
+        {
+          "id": "LOC_WANG_COURTYARD",
+          "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+          "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668"
+        },
+        {
+          "id": "CHAR_WANG",
+          "path": "出图/共享/图片/CHAR_WANG__front.png",
+          "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381"
+        }
+      ],
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
+      "stale_generated_refs": [],
+      "needs_rerun": false,
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
+    }
+  ]
+}

@@ -1,6 +1,103 @@
 {
-  "assets": [],
-  "characters": [],
+  "assets": [
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "LOC_01",
+      "name": "尸骸荒野",
+      "type": "scene"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "WEAPON_01",
+      "name": "横刀",
+      "type": "weapon"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_横刀",
+      "name": "横刀",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_断刀",
+      "name": "断刀",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "PROP_翻覆囚车",
+      "name": "翻覆囚车",
+      "type": "prop"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_系统面板",
+      "name": "百妖谱金色古卷面板",
+      "type": "vfx"
+    },
+    {
+      "has_drift_forbidden": true,
+      "has_reference_group": true,
+      "id": "VFX_百妖谱",
+      "name": "百妖谱",
+      "type": "vfx"
+    }
+  ],
+  "characters": [
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_01__囚途残损态",
+          "form": "“囚途残损态”",
+          "has_performance_signature": true,
+          "signature_equipment": [
+            "WEAPON_01",
+            "VFX_系统面板"
+          ]
+        }
+      ],
+      "id": "CHAR_01",
+      "name": "姜月初",
+      "scope": "核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "CHAR_02__濒死重伤态",
+          "form": "“濒死重伤态”",
+          "has_performance_signature": true,
+          "signature_equipment": [
+            "WEAPON_01"
+          ]
+        }
+      ],
+      "id": "CHAR_02",
+      "name": "裴长青",
+      "scope": "陇右镇魔都司队正；押送队伍幸存者"
+    },
+    {
+      "forms": [
+        {
+          "asset_key": "BEAST_01__穿心复生态",
+          "form": "“穿心复生态”",
+          "has_performance_signature": true,
+          "signature_equipment": [
+            "WEAPON_01"
+          ]
+        }
+      ],
+      "id": "BEAST_01",
+      "name": "虎妖",
+      "scope": "袭击发配队伍的强大妖魔；第1集主要威胁"
+    }
+  ],
   "episodes": [
     "第1集",
     "第2集",
@@ -15,27 +112,17 @@
   ],
   "findings": [
     {
-      "code": "missing_identity_registry",
-      "message": "缺 identity_registry.json，series_bible 只能建立叙事层，无法汇总角色 DNA。",
-      "severity": "warn"
-    },
-    {
-      "code": "missing_asset_registry",
-      "message": "缺 asset_registry.json；若尚未进入出图阶段可接受，出图前需补。",
-      "severity": "info"
-    },
-    {
       "code": "episode_missing_storyboard",
       "message": "部分集缺 storyboard.json：第2集、第3集、第4集、第5集、第6集、第7集、第8集、第9集",
       "severity": "info"
     },
     {
       "code": "series_layers_not_registered",
-      "message": "以下剧级层尚未登记：setup_payoff_ledger、narrative_state_ledger、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
+      "message": "以下剧级层尚未登记：narrative_state_ledger、ambient_map、ui_asset_registry、translation_glossary、series_packaging、location_spatial_memory、scene_floorplan",
       "severity": "info"
     }
   ],
-  "generated_at": "2026-07-21T12:32:52+00:00",
+  "generated_at": "2026-07-21T19:59:30+00:00",
   "kind": "n2d_series_bible",
   "narrative_graph": {
     "episode_nodes": [
@@ -45,9 +132,12 @@
           "PROP_横刀",
           "PROP_断刀",
           "PROP_翻覆囚车",
+          "PROP_断刀中景横向封路",
+          "PROP_横刀右下地面",
           "LOC_01光位",
           "VFX_百妖谱",
-          "VFX_系统面板"
+          "VFX_系统面板",
+          "PROP_横刀中轴"
         ],
         "characters": [
           "CHAR_01/囚途残损态",
@@ -99,6 +189,7 @@
               "LOC_01",
               "PROP_断刀",
               "PROP_横刀",
+              "PROP_断刀中景横向封路",
               "PROP_翻覆囚车"
             ],
             "characters": [
@@ -125,7 +216,8 @@
           {
             "assets": [
               "LOC_01",
-              "PROP_横刀"
+              "PROP_横刀",
+              "PROP_横刀右下地面"
             ],
             "characters": [
               "CHAR_01/囚途残损态",
@@ -170,6 +262,7 @@
             "assets": [
               "LOC_01",
               "PROP_横刀",
+              "PROP_横刀中轴",
               "VFX_百妖谱"
             ],
             "characters": [
@@ -327,12 +420,12 @@
     "narrative_state_ledger": null,
     "scene_floorplan": null,
     "series_packaging": null,
-    "setup_payoff_ledger": null,
+    "setup_payoff_ledger": "设定库/setup_payoff_ledger.json",
     "story_integrity_ledger": "设定库/story_integrity_ledger.json",
     "thread_scheduler": "设定库/thread_scheduler.json",
     "translation_glossary": null,
     "ui_asset_registry": null,
-    "角色圣经": null
+    "角色圣经": "设定库/角色圣经.md"
   },
   "version": 1
 }

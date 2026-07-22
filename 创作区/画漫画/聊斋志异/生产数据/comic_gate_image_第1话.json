@@ -1,0 +1,1272 @@
+{
+  "schema_version": 2,
+  "kind": "comic_gate",
+  "project_root": ".",
+  "chapter": "第1话",
+  "stage": "image",
+  "created_at": "2026-07-21T21:51:33",
+  "verdict": "warn",
+  "summary": {
+    "finding_count": 73,
+    "block_count": 0,
+    "warn_count": 69,
+    "info_count": 4
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P001",
+      "reason": "P001 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P006",
+      "reason": "P006 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P008",
+      "reason": "P008 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P009",
+      "reason": "P009 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P011",
+      "reason": "P011 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P012",
+      "reason": "P012 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P013",
+      "reason": "P013 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P014",
+      "reason": "P014 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P015",
+      "reason": "P015 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_character_integrity_weak",
+      "artifact": "脚本/第1话/panel_script.json#P016",
+      "reason": "P016 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+      "return_to_stage": "script",
+      "suggested_fix": "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "ending_mode_mismatch",
+      "artifact": "生产数据/comic_chapter_beat_audit_第1话.json",
+      "reason": "合同 ending_mode=complete_closure，末格 story_function=epilogue；期望候选为 ['closure', 'complete_closure', 'payoff', 'resolution']。这是编辑复核提示，不是硬闸。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "climax_at_tail",
+      "artifact": "生产数据/comic_chapter_beat_audit_第1话.json",
+      "reason": "高潮候选在 93%；确认中段是否有足够支撑。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "payoff_due_here",
+      "artifact": "生产数据/comic_setup_payoff_audit_第1话.json",
+      "reason": "伏笔「首屏异鬼铺皮执笔，读者先知危险而王生不知。」计划本话（第1话）兑现——确认本话已把它收掉并标 status=done。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "payoff_due_here",
+      "artifact": "生产数据/comic_setup_payoff_audit_第1话.json",
+      "reason": "伏笔「道士见王生邪气萦绕，王生仍以为求财魔法。」计划本话（第1话）兑现——确认本话已把它收掉并标 status=done。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "payoff_due_here",
+      "artifact": "生产数据/comic_setup_payoff_audit_第1话.json",
+      "reason": "伏笔「疯乞让陈氏吞下的浓痰停在胸间。」计划本话（第1话）兑现——确认本话已把它收掉并标 status=done。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "repeated_composition_plan",
+      "artifact": "生产数据/comic_redundancy_audit_第1话.json",
+      "reason": "P013、P016 计划了相同的 (场景=LOC_WANG_COURTYARD, 角色=CHAR_CHEN/CHAR_WANG, 景别=近景)——一屏多格时重复构图立刻穿帮；换景别/机位/前景遮挡或合并格。",
+      "return_to_stage": "comic-script",
+      "suggested_fix": "按机检建议回 comic-script 修分话/分格后重跑。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P003 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_CHEN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P004 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P006 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P007·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P007·王生：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P007·画皮鬼：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P007·画皮鬼：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P008 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P009·道士：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P009·道士：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P009·画皮鬼：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P009·画皮鬼：缺 45°/¾ 侧脸参考（动作格主身份锚·避免 frontal 摆拍偏置）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P010 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_DAOIST（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P012 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P013·陈氏：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P013·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P013 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "multi_character_closeup",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P013 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P014 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P015 多人同框主色撞色（易串脸）：CHAR_CHEN↔CHAR_WANG（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P016·王生：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P016·王生：缺 背身参考（背影/过肩格）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P016·陈氏：缺 45°/three_quarter 参考（档位或本格变化量需要）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "missing_reference",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P016·陈氏：缺 背身参考（背影/过肩格）",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "same_frame_color_collision",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P016 多人同框主色撞色（易串脸）：CHAR_WANG↔CHAR_CHEN（同主色「白」）——用互斥发色/服装主色/配饰强分，必要时拆反打。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "multi_character_closeup",
+      "artifact": "生产数据/comic_reference_plan_第1话.json",
+      "reason": "P016 多人近景=串脸最高发档：优先拆单人CU+反打或降景别，坚持同框须登记分区/分别出图+合成。",
+      "return_to_stage": "identity",
+      "suggested_fix": "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+      "evidence_family": "deterministic",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P005.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P006.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P007.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P008.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P010.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P011.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outer_panel_frame",
+      "artifact": "出图/第1话/panels/P012.png",
+      "reason": "检测到疑似模型画出的外框/截图边，正式面板不能自带边框。",
+      "return_to_stage": "image",
+      "suggested_fix": "补强无外框/无截图边/画面铺满画布约束并 force 重抽该格。",
+      "evidence_family": "layout_geometry",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_style_outlier",
+      "artifact": "出图/第1话/panels/P001.png",
+      "reason": "风格指纹内聚度 0.6632 明显低于本话中位 0.8262，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_style_outlier",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "风格指纹内聚度 0.7505 明显低于本话中位 0.8262，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_style_outlier",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "风格指纹内聚度 0.7810 明显低于本话中位 0.8262，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "panel_style_outlier",
+      "artifact": "出图/第1话/panels/P008.png",
+      "reason": "风格指纹内聚度 0.7617 明显低于本话中位 0.8262，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "image",
+      "suggested_fix": "与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。",
+      "evidence_family": "appearance_embedding",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "tone_value_outlier",
+      "artifact": "出图/第1话/panels/P001.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.5191（中位 0.124），线宽代理 edge_density=0.0763（中位 0.098）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "tone_value_outlier",
+      "artifact": "出图/第1话/panels/P005.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.3501（中位 0.124），线宽代理 edge_density=0.0864（中位 0.098）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "tone_value_outlier",
+      "artifact": "出图/第1话/panels/P012.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.5788（中位 0.124），线宽代理 edge_density=0.0694（中位 0.098）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "tone_value_outlier",
+      "artifact": "出图/第1话/panels/P013.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.3061（中位 0.124），线宽代理 edge_density=0.1072（中位 0.098）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "tone_value_outlier",
+      "artifact": "出图/第1话/panels/P016.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.0441（中位 0.124），线宽代理 edge_density=0.1643（中位 0.098）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "image",
+      "suggested_fix": "对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+      "evidence_family": "tone_value",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P011.png",
+      "reason": "CHAR_CHEN hair 指纹与参考图相似度偏低：score=0.437。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P012.png",
+      "reason": "CHAR_CHEN hair 指纹与参考图相似度偏低：score=0.410。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P014.png",
+      "reason": "CHAR_CHEN hair 指纹与参考图相似度偏低：score=0.448。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P006.png",
+      "reason": "CHAR_DAOIST hair 指纹与参考图相似度偏低：score=0.319。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "ccip_identity_low",
+      "artifact": "出图/第1话/panels/P009.png",
+      "reason": "CHAR_DAOIST CCIP 身份距离 0.1902 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "face_fingerprint_low",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "CHAR_WANG face 指纹与参考图相似度偏低：score=0.452。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "CHAR_WANG hair 指纹与参考图相似度偏低：score=0.430。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "outfit_fingerprint_low",
+      "artifact": "出图/第1话/panels/P005.png",
+      "reason": "CHAR_WANG outfit 指纹与参考图相似度偏低：score=0.382。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "face_fingerprint_low",
+      "artifact": "出图/第1话/panels/P006.png",
+      "reason": "CHAR_WANG face 指纹与参考图相似度偏低：score=0.450。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P006.png",
+      "reason": "CHAR_WANG hair 指纹与参考图相似度偏低：score=0.275。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "face_fingerprint_low",
+      "artifact": "出图/第1话/panels/P007.png",
+      "reason": "CHAR_WANG face 指纹与参考图相似度偏低：score=0.427。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P007.png",
+      "reason": "CHAR_WANG hair 指纹与参考图相似度偏低：score=0.424。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "ccip_identity_low",
+      "artifact": "出图/第1话/panels/P015.png",
+      "reason": "CHAR_WANG CCIP 身份距离 0.184 超过同角色阈值 0.178（多人同格，全图对比结果需并排人审确认）",
+      "return_to_stage": "image",
+      "suggested_fix": "并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "hair_fingerprint_low",
+      "artifact": "出图/第1话/panels/P001.png",
+      "reason": "MON_PAINTED_SKIN hair 指纹与参考图相似度偏低：score=0.429。这是色彩分布代理，需并排人审。",
+      "return_to_stage": "image",
+      "suggested_fix": "查看 character consistency contact sheet；如确实换脸/换发型/换服装，回 comic-image 用同一参考组重抽该格。",
+      "evidence_family": "character_consistency",
+      "confidence": "heuristic"
+    },
+    {
+      "severity": "warn",
+      "dimension": "comic_gate",
+      "code": "vlm_judge_unadjudicated",
+      "artifact": "生产数据/comic_vlm_judge_tasks_第1话.json",
+      "reason": "VLM 并排判定任务包已生成 46 条但 0 条裁决——角色/生物身份、背景、道具三轴机检空转，画错生物形态这类漂移不会被拦。",
+      "return_to_stage": "review",
+      "suggested_fix": "用 vlm_adjudicate.py queue 出队、由多模态 agent 看图打分后 submit 回写 生产数据/comic_vlm_judge_verdicts_第1话.json；或恢复 CCIP（comicqc env）后重跑 gate。",
+      "evidence_family": "deterministic",
+      "confidence": "deterministic"
+    }
+  ],
+  "notes": [
+    "开发包严格合同: pass",
+    "源范围/SHA/逐格 coverage 合同: pass",
+    "continuity_audit: chapters=1 block=0 warn=0",
+    "缩略分镜/name board 审批合同: pass",
+    "排版审批合同: pass",
+    "原稿收尾合同: pass",
+    "backend adapter: openai_gpt_image_project_memory; reference_image_limit=16; persistent_subject=False",
+    "角色注册表 v2: pass",
+    "角色多视图技术齐套与人审签收: pass",
+    "chapter_beat_audit: must=0 warn=1（advisory·不阻断）",
+    "setup_payoff_ledger: must=0 warn=0（advisory·不阻断）",
+    "reentry_context_audit: must=0 warn=0（advisory·不阻断）",
+    "entity_presence_audit: must=0 warn=0（advisory·不阻断）",
+    "redundancy_audit: must=0 warn=1（advisory·不阻断）",
+    "subtext_audit: must=0 warn=0（advisory·不阻断）",
+    "reference_planner: 含角色格 16 需处理 15；处方 SHA 已校验",
+    "panel_variety: panels=16 近重复对=0（advisory·不阻断）",
+    "style consistency refreshed: 生产数据/comic_style_consistency_第1话.md",
+    "character consistency refreshed: 生产数据/comic_character_consistency_第1话.md",
+    "scene/prop consistency refreshed: 生产数据/comic_scene_prop_consistency_第1话.md"
+  ],
+  "inputs_fingerprint": {
+    "kind": "comic_inputs_fingerprint",
+    "version": 2,
+    "files": [
+      {
+        "path": "_设置.md",
+        "exists": true,
+        "sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288",
+        "size": 1446
+      },
+      {
+        "path": "开发包/adaptation_strategy.json",
+        "exists": true,
+        "sha256": "331c9b1ee26eaf22dee18305863215b6e6b9c34ba23552ba7fc9517693ee2a80",
+        "size": 2543
+      },
+      {
+        "path": "开发包/season_arc.json",
+        "exists": true,
+        "sha256": "b6109d6bb704df394369755b3f2b7fa54cfd285e9c6a9b4aaa7164298e944a16",
+        "size": 542
+      },
+      {
+        "path": "脚本/split_blueprint.json",
+        "exists": true,
+        "sha256": "9bce2d9d18c10263f05d209b395a040593710b01de230af3a3c114961c87d97a",
+        "size": 2540
+      },
+      {
+        "path": "开发包/signoff.json",
+        "exists": true,
+        "sha256": "498eaff9c8c253fdfa1e76245d31e5b981dee9a8a86922c8f74746830f5f3101",
+        "size": 1277
+      },
+      {
+        "path": "源本/画皮_源文选段.txt",
+        "exists": true,
+        "sha256": "dfff48165ccf160c52b56fd5b99126a92568349b20ac6f1e0ce4d95c9a6138d3",
+        "size": 3503
+      },
+      {
+        "path": "脚本/第1话/panel_script.json",
+        "exists": true,
+        "sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70",
+        "size": 52871
+      },
+      {
+        "path": "脚本/第1话/source_semantics.json",
+        "exists": true,
+        "sha256": "e1ab79be92c48af044f4489a5592e9dc0106bdd8677b02265bac68eff3f69822",
+        "size": 6747
+      },
+      {
+        "path": "排版/第1话/name_board.json",
+        "exists": true,
+        "sha256": "0871326a067da500dd2c93a3047ff0eaf85901409f4f97de7aa7c8dbab3aba82",
+        "size": 43492
+      },
+      {
+        "path": "排版/第1话/layout.json",
+        "exists": true,
+        "sha256": "b69dbf4f8f369f3a2b62ac6b73434012a6574409c7c0cb3e8c487747f3eed987",
+        "size": 46625
+      },
+      {
+        "path": "出图/第1话/finishing/finishing_plan.json",
+        "exists": true,
+        "sha256": "073302010e27a1afdeb532e2afde0a3e9f2f88574684df77890f8d7d38ca3048",
+        "size": 48920
+      },
+      {
+        "path": "出图/共享/identity_registry.json",
+        "exists": true,
+        "sha256": "c8d852a814755fe81aa2dd27d69a463ec5b07dc8cfd0a21809cdc2572cc2af42",
+        "size": 30409
+      },
+      {
+        "path": "生产数据/comic_model_pack_report.json",
+        "exists": true,
+        "sha256": "3abea79ac6e2c2edeb3d56241276537f58d691ba4f630ea91a4eaac51be335de",
+        "size": 2788
+      },
+      {
+        "path": "生产数据/comic_memory_anchor_第1话.json",
+        "exists": false
+      },
+      {
+        "path": "生产数据/comic_reference_plan_第1话.json",
+        "exists": true,
+        "sha256": "74d8f00f07265a3bd5f8651b05b94c90c6dc02174f7914041989cb8c955bf47e",
+        "size": 109879
+      },
+      {
+        "path": "出图/第1话/prompt/panel_jobs.json",
+        "exists": true,
+        "sha256": "8280c07f09821f71c514f0086e8f8d9a24add094fb419be870ec63c38a85114b",
+        "size": 368763
+      },
+      {
+        "path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+        "exists": true,
+        "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+        "size": 2780708
+      },
+      {
+        "path": "出图/共享/candidates/STYLE_LIAOZHAI_QING_GONGXI/anchor/STYLE_LIAOZHAI_QING_GONGXI__anchor__codex_board_v1.png",
+        "exists": true,
+        "sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+        "size": 2780708
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG__front.png",
+        "exists": true,
+        "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "size": 309319
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_WANG/front/CHAR_WANG__front__codex_board_v1.png",
+        "exists": true,
+        "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "size": 309319
+      },
+      {
+        "path": "出图/共享/图片/CHAR_WANG__anchor.png",
+        "exists": true,
+        "sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+        "size": 309319
+      },
+      {
+        "path": "出图/共享/图片/CHAR_CHEN__front.png",
+        "exists": true,
+        "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "size": 275433
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_CHEN/front/CHAR_CHEN__front__codex_board_v1.png",
+        "exists": true,
+        "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "size": 275433
+      },
+      {
+        "path": "出图/共享/图片/CHAR_CHEN__anchor.png",
+        "exists": true,
+        "sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+        "size": 275433
+      },
+      {
+        "path": "出图/共享/图片/MON_PAINTED_SKIN__anchor.png",
+        "exists": true,
+        "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+        "size": 475942
+      },
+      {
+        "path": "出图/共享/candidates/MON_PAINTED_SKIN/anchor/MON_PAINTED_SKIN__anchor__codex_board_v1.png",
+        "exists": true,
+        "sha256": "b76dcc3cbf50c8efe410c7973677d525ad3ce83db50ac19f76bf5793be810a8f",
+        "size": 475942
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+        "exists": true,
+        "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "size": 337377
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_DAOIST/front/CHAR_DAOIST__front__codex_board_v1.png",
+        "exists": true,
+        "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "size": 337377
+      },
+      {
+        "path": "出图/共享/图片/CHAR_DAOIST__anchor.png",
+        "exists": true,
+        "sha256": "66b6fce2f924e89ec57bde7df5258add75377486368b8efd9704fa1447eb9ad8",
+        "size": 337377
+      },
+      {
+        "path": "出图/共享/图片/CHAR_BEGGAR__front.png",
+        "exists": true,
+        "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+        "size": 399624
+      },
+      {
+        "path": "出图/共享/candidates/CHAR_BEGGAR/front/CHAR_BEGGAR__front__codex_board_v1.png",
+        "exists": true,
+        "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+        "size": 399624
+      },
+      {
+        "path": "出图/共享/图片/CHAR_BEGGAR__anchor.png",
+        "exists": true,
+        "sha256": "920b8f36c1c40734b3c6f2417c97fa473bbf20fec6deb2814b6bed5ab7f0eea7",
+        "size": 399624
+      },
+      {
+        "path": "出图/共享/图片/LOC_WANG_COURTYARD__anchor.png",
+        "exists": true,
+        "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668",
+        "size": 496600
+      },
+      {
+        "path": "出图/共享/candidates/LOC_WANG_COURTYARD/anchor/LOC_WANG_COURTYARD__anchor__codex_board_v1.png",
+        "exists": true,
+        "sha256": "571f8a6db8ccd2be5d562f7d79277f7e153fe5845058108ae702befe85f45668",
+        "size": 496600
+      },
+      {
+        "path": "出图/共享/图片/LOC_MARKET_TEMPLE__anchor.png",
+        "exists": true,
+        "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22",
+        "size": 504456
+      },
+      {
+        "path": "出图/共享/candidates/LOC_MARKET_TEMPLE/anchor/LOC_MARKET_TEMPLE__anchor__codex_board_v1.png",
+        "exists": true,
+        "sha256": "5626a117aabee41f1cc1fd970b0aabe4534a626fbf5b3b82590ba74220de6e22",
+        "size": 504456
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_BEGGAR.json",
+        "exists": false
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_CHEN.json",
+        "exists": false
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_DAOIST.json",
+        "exists": false
+      },
+      {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WANG.json",
+        "exists": false
+      },
+      {
+        "path": "出图/第1话/panels/P001.png",
+        "exists": true,
+        "sha256": "25a49acc75860fe1a3b0cff1c7d473f12bac432921bbd227e9c6de7f13c5d0f1",
+        "size": 2785196
+      },
+      {
+        "path": "出图/第1话/panels/P002.png",
+        "exists": true,
+        "sha256": "8b4cdb7a20a30e7250c5868eb6ccfe5c190e5da541d83c440e3ecaa2218348e8",
+        "size": 2685768
+      },
+      {
+        "path": "出图/第1话/panels/P003.png",
+        "exists": true,
+        "sha256": "1baabfbb83f75d8ca95ab35cb54e7d4b085246a0682c1c40fae6728df962e3da",
+        "size": 3072367
+      },
+      {
+        "path": "出图/第1话/panels/P004.png",
+        "exists": true,
+        "sha256": "9078cd18311cf01e37efa2529fa1648471fdb871d68dba39ce923a3a06c88008",
+        "size": 3272384
+      },
+      {
+        "path": "出图/第1话/panels/P005.png",
+        "exists": true,
+        "sha256": "495cc8a105b422f81934f8e4c67fb932c5c5e2e945144f69f0c728168e1df885",
+        "size": 632913
+      },
+      {
+        "path": "出图/第1话/panels/P006.png",
+        "exists": true,
+        "sha256": "8bb6d8381a7b4e58d374c3fc149787aee966abbbc070b9f39c33a2029c4dbb52",
+        "size": 675060
+      },
+      {
+        "path": "出图/第1话/panels/P007.png",
+        "exists": true,
+        "sha256": "567800beb2fb5304faa63669ada5cefd8b821dac0b671556944b8db6caadf3fe",
+        "size": 661977
+      },
+      {
+        "path": "出图/第1话/panels/P008.png",
+        "exists": true,
+        "sha256": "a2698c91692071685c887107ab5eb6415000d72a6721702df99f2c76e50588b7",
+        "size": 722535
+      },
+      {
+        "path": "出图/第1话/panels/P009.png",
+        "exists": true,
+        "sha256": "59706bf3d9c2de1b0900c817ea7132723a5b0e6caa78c5b9f93c818a313a7be4",
+        "size": 762163
+      },
+      {
+        "path": "出图/第1话/panels/P010.png",
+        "exists": true,
+        "sha256": "1aafecfc1fd5b1365ce37d8915f70c87ba70e028313a0ab7a47c2c78d0b4766b",
+        "size": 646430
+      },
+      {
+        "path": "出图/第1话/panels/P011.png",
+        "exists": true,
+        "sha256": "67cea1a792cd14ac828582626333e34ae0c94a22e112d66cfc82bc69ab644e53",
+        "size": 726121
+      },
+      {
+        "path": "出图/第1话/panels/P012.png",
+        "exists": true,
+        "sha256": "9e8aae9d7acacca469049c1690345f40915eca161a7b0d975b592d71171499a8",
+        "size": 632984
+      },
+      {
+        "path": "出图/第1话/panels/P013.png",
+        "exists": true,
+        "sha256": "07362b7afc4cd0ef5ed702fb4adaaa81d646e8a9ebb845fdaeabf1734adbf2bb",
+        "size": 659014
+      },
+      {
+        "path": "出图/第1话/panels/P014.png",
+        "exists": true,
+        "sha256": "06598e02c2e5883d1ccbf0ce7b8ac12dc1d74360b7f77f7bbed25276aecd259a",
+        "size": 641778
+      },
+      {
+        "path": "出图/第1话/panels/P015.png",
+        "exists": true,
+        "sha256": "06bb1e1c1fdabc05f1c90ca5f5e37131276d7a0516b2d84bb1ec9e3865f3459e",
+        "size": 583101
+      },
+      {
+        "path": "出图/第1话/panels/P016.png",
+        "exists": true,
+        "sha256": "1bd647a25f4dd954ab46ff4c7c9324f986cbc1bc3426b53fe3c3b6e52c2bac3a",
+        "size": 768922
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P001.json",
+        "exists": true,
+        "sha256": "a0a1485a7f9dcfaf723aff517dc977cbc58927453e4ca11d22027c7126bff8a9",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P002.json",
+        "exists": true,
+        "sha256": "1ddfbbfd817413d83ab53160dea6a6dcfcf140855ffd04bf33cc0628f42f3a83",
+        "size": 1210
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P003.json",
+        "exists": true,
+        "sha256": "97e1398882e282e0a0deb4864dbb66b119943efa67b1e61b4fd6a6e4c39be956",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P004.json",
+        "exists": true,
+        "sha256": "24073ab91a1f430fa3c6ed58b2b3cc2ea09eed4a1e6db68a36e1b36e0c9a5293",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P005.json",
+        "exists": true,
+        "sha256": "6ac66a7fcc5dd76a26e312395f327cdb5987bee1591b6151602c832d3ce695ba",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P006.json",
+        "exists": true,
+        "sha256": "6e4aa1ba01a3515f9d1995f7882f28c98c929cc396eee6704fac508ca2595a77",
+        "size": 1206
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P007.json",
+        "exists": true,
+        "sha256": "77baedcaac2202b485e9cd0f7f8a002b859304046bcede5a9f095f96933e005d",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P008.json",
+        "exists": true,
+        "sha256": "aa8de2ea372557ec8690da789a5eee80141043b4b8e8aabf9fdd6a2e5ec9cf9e",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P009.json",
+        "exists": true,
+        "sha256": "4cdcf08a7820dfc6fb96ca40832e1573220ea6d280fba776170cb55ca346d56f",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P010.json",
+        "exists": true,
+        "sha256": "959abae2a0823b5d121238d7aad62ba28c7acf638e8983550f65b18c501f873e",
+        "size": 1206
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P011.json",
+        "exists": true,
+        "sha256": "09e4344e6ce3b178fc9f390e4f2514f9f2ed73c088b9e0ddf6ad5e5ecf883017",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P012.json",
+        "exists": true,
+        "sha256": "fc5361065e44586a2a34dc9afd7ac5c418696af6b69cd7d2c8d56e33a6905960",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P013.json",
+        "exists": true,
+        "sha256": "df8a4c0eaca442da92d2bb391ba81752bbbec6e1488833f6de59f4fc2d2d4e6b",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P014.json",
+        "exists": true,
+        "sha256": "e872fb4da3a3241e8ab487bd19f2cb71d2511e110dd3db3f79c539069c9d5e4d",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P015.json",
+        "exists": true,
+        "sha256": "f3ccd0b189de820234f5b3b943edc69ddf1e389b9fa6bb89373cbc68bd8ac230",
+        "size": 1208
+      },
+      {
+        "path": "生产数据/panel_qc/第1话/P016.json",
+        "exists": true,
+        "sha256": "75ca620966ad947d12bc4e8c8fb097ca2ff611b54c18c07953c22e450de8515a",
+        "size": 1208
+      }
+    ],
+    "sha256": "a6e4dffa5bf3f66511891b843004b2a5e1c83d22d8e368d839681f197bb68773"
+  },
+  "receipt_id": "3d3ba738073d48591a2e0fc55d944925215d96ef42f5b0e905cbd31d7d30b5c6"
+}

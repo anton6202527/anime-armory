@@ -1,0 +1,1388 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 desperate_action",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:异象后长停顿；P002:诱惑缓慢入门；P003:忠言被轻推开；P004:警句后空一拍；P005:翻面后大段黑间隔；P006:给退路的安静一拍",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "异象后长停顿",
+          "camera_hint": "夜深的书斋内，青面锯齿的枯瘦鬼体侧坐榻边，将一张完整但无血的女子人皮平铺如工笔画，细笔正掠过皮囊的眼眉；案角油灯把鬼影投在纸窗上。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无粒子特效，只用灯影和纸纹。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 403,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "诱惑缓慢入门",
+          "camera_hint": "阴晨长路上，王生接过少女手中布包，少女低头跟他向远处青砖宅院走去；两人影子在潮湿路面上一长一短。",
+          "text_load": 3,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P002_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:1",
+              "speaker": "少女",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "少女"
+              }
+            },
+            {
+              "balloon_id": "P002_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P002.dialogue:2",
+              "speaker": "王生",
+              "order": 3,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王生"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 463,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 136,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.dialogue:2",
+              "rect": {
+                "x": 136,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "潮气薄雾，无仙侠粒子。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 734,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "忠言被轻推开",
+          "camera_hint": "王家正房内，陈氏一手按住桌角、直视王生，王生侧身避开她的目光；后景东斋纸窗后只有少女静止的人形剪影。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:1",
+              "speaker": "陈氏",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "陈氏"
+              }
+            },
+            {
+              "balloon_id": "P003_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P003.dialogue:2",
+              "speaker": "王生",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "王生"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 774,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 744,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 744,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无特效。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 963,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "警句后空一拍",
+          "camera_hint": "市井路口，道士停步扣住王生袖口，目光落在王生肩后一缕几不可见的冷灰气息上；王生的手掌向外作无事辩解。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              }
+            },
+            {
+              "balloon_id": "P004_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P004.dialogue:2",
+              "speaker": "道士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1003,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 973,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 973,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "冷灰气息不超过肩部一小片。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1192,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "翻面后大段黑间隔",
+          "camera_hint": "从书斋窗外窥视，前景王生一只眼和扶住窗棂的手指被木格切成狭缝；室内青面鬼体已将完整人皮举至肩高，准备像穿衣一样披上。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1252,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 136,
+                "y": 1207,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无发光特效，只用目光路径和黑场。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "给退路的安静一拍",
+          "camera_hint": "青帝庙边泥路，王生双膝着地、两手举过胸口接住道士递来的旧拂尘；道士站在画右，另一手收在袖中。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无特效。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "desperate_action"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 lowest_point",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:破门冲击；P008:反扑后死寂；P009:动作兑现；P010:斩鬼后仍有代价；P011:羞辱后留白；P012:最低点长留白",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 268
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "diagonal",
+          "border_style": "broken",
+          "gutter_intent": "破门冲击",
+          "camera_hint": "夜中寝门被猛然撞开，旧拂尘在画面中线断成两截，少女外皮裂开脸侧一道缝，露出青绿鬼面和锯齿；她一手推开门、一手抓向床上缩退的王生。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P007_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P007.dialogue:1",
+              "speaker": "画皮鬼",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "画皮鬼"
+              }
+            },
+            {
+              "balloon_id": "P007_S1",
+              "type": "sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 125,
+                "w": 777,
+                "h": 187
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 85,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 85,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "门板碎屑与短集中线指向断拂尘。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 367,
+            "w": 1296,
+            "h": 268
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "反扑后死寂",
+          "camera_hint": "清晨书斋，陈氏跪在床边，两手悬在王生身上方却不敢触碰；王生被素被覆至胸口，仅在腹部绷带上有少量暗红渗痕，画面上缘以淡墨叠化前夜鬼手握着一颗心的剪影。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 420,
+                "w": 777,
+                "h": 187
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 136,
+                "y": 380,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只有淡墨剪影叠化，无影视闪回边框。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 662,
+            "w": 1296,
+            "h": 268
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "动作兑现",
+          "camera_hint": "南院庭中，道士双脚一前一后站稳，右手素木剑横向掠过鬼体颈部，左手举开塞的深棕葫芦；老媪外皮正向下脱落，青面鬼体化成浓墨烟带被葫芦口吸入，不飞溅血肉。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P009.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              }
+            },
+            {
+              "balloon_id": "P009_S1",
+              "type": "sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 715,
+                "w": 777,
+                "h": 187
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 675,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 675,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "短集中线指向剑锋，烟带旋转线指向葫芦口。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 957,
+            "w": 1188,
+            "h": 178
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "斩鬼后仍有代价",
+          "camera_hint": "王家宅门内，道士站着将卷如画轴的完整人皮收入素布袋，陈氏在画左前景双膝着地、双手作揖求他；道士目光沉下，另一手指向市井方向。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P010_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P010.dialogue:1",
+              "speaker": "道士",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              }
+            },
+            {
+              "balloon_id": "P010_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P010.dialogue:2",
+              "speaker": "道士",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "道士"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 992,
+                "w": 712,
+                "h": 124
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 965,
+                "w": 475,
+                "h": 59
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P010.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 965,
+                "w": 475,
+                "h": 59
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无特效。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1162,
+            "w": 1296,
+            "h": 268
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "羞辱后留白",
+          "camera_hint": "青帝庙边泥路中心，陈氏双膝着地，额角有一道被竹杖打红的痕迹；疯乞蹲在她面前，一手捧着浓痰伸到她唇边，另一手扶竹杖。陈氏一手握紧裙料，另一手托住乞人手腕，闭眼强咽；围观人群在两侧沉…",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P011_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "疯乞",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "疯乞"
+              }
+            },
+            {
+              "balloon_id": "P011_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:2",
+              "speaker": "疯乞",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "疯乞"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1215,
+                "w": 777,
+                "h": 187
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1175,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:2",
+              "rect": {
+                "x": 784,
+                "y": 1175,
+                "w": 518,
+                "h": 89
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无特效，用人群环形压迫。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1457,
+            "w": 1296,
+            "h": 271
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "最低点长留白",
+          "camera_hint": "夜幕重回书斋，陈氏坐在地上，背倚床沿，双臂抱住覆着素被的王生上半身，额头轻抵他的肩；她的袖口和前襟沾少量血污，案上油灯灯芯已小到将灭。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_N1",
+              "type": "narration",
+              "content_ref": "panel:P012.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1511,
+                "w": 777,
+                "h": 189
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.narration",
+              "rect": {
+                "x": 136,
+                "y": 1470,
+                "w": 518,
+                "h": 90
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无特效。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "lowest_point"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P016 epilogue",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P016",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016"
+        ]
+      },
+      "gutter_intent": "P013:奇迹现身后停一拍；P014:奇迹动作高潮；P015:细小生命信号后长停顿；P016:讽刺余音",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "closeup",
+          "border_style": "standard",
+          "gutter_intent": "奇迹现身后停一拍",
+          "camera_hint": "近景从陈氏肩后看向床面：她一手掩口，另一手已伸向王生腹部；一颗完整、暖红但不血腥的人心刚落在绷带中心，表面带微弱热气，与冰冷的床榻形成对比。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P013_N1",
+              "type": "narration",
+              "content_ref": "panel:P013.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P013_S1",
+              "type": "sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 150,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.narration",
+              "rect": {
+                "x": 136,
+                "y": 91,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 91,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "只有几缕透明热气，无神光。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 492,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "broken",
+          "gutter_intent": "奇迹动作高潮",
+          "camera_hint": "陈氏跪伏在床边，双手叠压在王生腹部绷带上，手臂与肩背显出真实用力；一条裂开的素布从她牙间和一手边绕过王生腹部，几缕暖白热气正被她的掌心和布带压回。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "陈氏",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "陈氏"
+              }
+            },
+            {
+              "balloon_id": "P014_S1",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 570,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 511,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 511,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "少量短集中线指向按压点，热气向内收束。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 912,
+            "w": 1296,
+            "h": 393
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "细小生命信号后长停顿",
+          "camera_hint": "拂晓书斋，纸窗由深蓝转为灰白，陈氏伏在床边熟睡，一只手仍覆在王生腹部绷带上；她另一只手的食指停在王生鼻下，感到一缕微弱呼气，王生胸口稍微起伏。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P015.dialogue:1",
+              "speaker": "陈氏",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "陈氏"
+              }
+            },
+            {
+              "balloon_id": "P015_S1",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 990,
+                "w": 777,
+                "h": 275
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 931,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 931,
+                "w": 518,
+                "h": 131
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "一缕极淡呼气，无其他特效。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1332,
+            "w": 1296,
+            "h": 396
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "讽刺余音",
+          "camera_hint": "数日后的书斋近景，王生坐在床沿接开素青长衫，腹部只露出一枚如古钱大小的圆形疤痕；他的手指停在疤痕边缘却不敢按下。后景纸窗后，陈氏的背影正把洗净的血污布带挂起，两人之间被窗格分开。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_N1",
+              "type": "narration",
+              "content_ref": "panel:P016.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1411,
+                "w": 777,
+                "h": 277
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.narration",
+              "rect": {
+                "x": 136,
+                "y": 1351,
+                "w": 518,
+                "h": 132
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "无特效，靠窗格和静止完成余韵。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P016",
+          "story_function": "epilogue"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "panel_script_sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70",
+    "settings": "_设置.md",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex制作代理",
+    "reviewed_at": "2026-07-21T13:04:17.522774+00:00",
+    "note": "",
+    "subject_sha256": "ea4ed842214084c01839bb3dedd17bccbb700b389589a2a7356f60110662c1ea",
+    "panel_script_sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70",
+    "settings_sha256": "795fc325343332ffb2523154f88fecab76fa1249599164010c00e76c5dc5f288"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

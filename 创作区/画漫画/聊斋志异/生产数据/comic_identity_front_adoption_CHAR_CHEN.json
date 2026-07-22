@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-21T21:01:55",
+  "ref_id": "CHAR_CHEN",
+  "candidate_path": "出图/共享/candidates/CHAR_CHEN/front/CHAR_CHEN__front__codex_board_v1.png",
+  "candidate_sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+  "adopted_path": "出图/共享/图片/CHAR_CHEN__front.png",
+  "adopted_sha256": "4fa603dde97dc16f9da4fc52f3e5977b2bd92621685812c577e2c08a89d40bcd",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "正面全身清晰，朴素坚韧的陈氏形象稳定",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

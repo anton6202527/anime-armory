@@ -155,6 +155,36 @@ def test_clip_anchor_index_reads_anchors(tmp_path):
     assert idx[1]["times"] == [3.0] and idx[1]["images"] == ["出图/第1集/图片/Clip_01_a1.png"]
 
 
+def test_face_reveal_contract_requires_bound_same_source_identity_anchor(tmp_path):
+    root = _make_clip_project(tmp_path, duration=6.0, anchors=[
+        {"anchor_png": "出图/第1集/图片/Clip_01_a1.png", "at_sec": 2.0,
+         "use": "identity_reveal", "face_reveal_requirement_id": "FR1",
+         "face_angle": "three_quarter", "same_source_identity": True}])
+    sb_path = root / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["clips"][0]["continuity"]["face_reveal_requirements"] = [{
+        "id": "FR1", "character_id": "CHAR_01", "transition": "profile_to_frontal"
+    }]
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    info = vr.clip_anchor_index(root, "第1集")[1]
+    assert info["face_reveal_issues"] == []
+    assert info["uses"] == ["identity_reveal"]
+
+
+def test_face_reveal_contract_missing_anchor_becomes_paid_submit_issue(tmp_path):
+    root = _make_clip_project(tmp_path, duration=6.0, anchors=[])
+    sb_path = root / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["clips"][0]["continuity"]["face_reveal_requirements"] = [{
+        "id": "FR1", "character_id": "CHAR_01", "transition": "profile_to_frontal"
+    }]
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    _write_video_prompt_pack(root)
+    payload = vr.prepare_manifest(root, "第1集", 1, 1, backend="dreamina", resolution="720p",
+                                  model_version="3.0", force=True)
+    assert "FR1 requires exactly one" in payload["items"][0]["face_reveal_anchor_issue"]
+
+
 def test_attach_multiframe_builds_three_keyframes(tmp_path):
     root = _make_clip_project(tmp_path, duration=6.0, anchors=[
         {"anchor_png": "出图/第1集/图片/Clip_01_a1.png", "at_sec": 3.0, "use": "split", "reason": "中间拍：抬眼"}])

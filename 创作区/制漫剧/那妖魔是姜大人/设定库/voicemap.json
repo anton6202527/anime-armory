@@ -1,0 +1,46 @@
+{
+  "姜月初": {
+    "key": "JIANG",
+    "backend": "CosyVoice",
+    "voice_id": "synthetic_jiang_cool_resilient_v1",
+    "speed": 1.02,
+    "pitch": 0,
+    "emo": "serious",
+    "accent": "普通话",
+    "ref": "设定库/voicebank/姜月初.wav",
+    "ref_text": "风从荒原吹过来，我只想活下去。哪怕前路没有退路，我也会亲手劈开一条生路。"
+  },
+  "裴长青": {
+    "key": "PEI",
+    "backend": "CosyVoice",
+    "voice_id": "synthetic_pei_low_restrained_v1",
+    "speed": 0.96,
+    "pitch": -2,
+    "emo": "serious",
+    "accent": "普通话",
+    "ref": "设定库/voicebank/裴长青.wav",
+    "ref_text": "我是镇魔卫裴长青。答应你的事，我不会反悔。先离开这里，再谈活命。"
+  },
+  "虎妖": {
+    "key": "TIGER",
+    "backend": "CosyVoice",
+    "voice_id": "synthetic_tiger_demon_bass_v1",
+    "speed": 0.9,
+    "pitch": -5,
+    "emo": "angry",
+    "accent": "普通话",
+    "ref": "设定库/voicebank/虎妖.wav",
+    "ref_text": "人类的血气，隔着风也闻得见。你们谁都走不了，这片荒野就是坟场。"
+  },
+  "百妖谱": {
+    "key": "SYSTEM",
+    "backend": "CosyVoice",
+    "voice_id": "synthetic_system_cold_neutral_v1",
+    "speed": 0.92,
+    "pitch": 2,
+    "emo": "neutral",
+    "accent": "普通话",
+    "ref": "设定库/voicebank/百妖谱.wav",
+    "ref_text": "百妖谱开启。斩杀生物，可获得道行。规则已确认，目标等待执行。"
+  }
+}

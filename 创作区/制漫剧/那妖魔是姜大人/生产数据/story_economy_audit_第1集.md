@@ -3,8 +3,8 @@
 - episode: 第1集
 - ok: True
 - total_duration_sec: 74.798
-- target_total_max_sec: 83.0
-- potential_savings_sec: 1.251
+- target_total_max_sec: 85.0
+- potential_savings_sec: 0.0
 
 | Clip | Dur | Class | Target | Action | Demo |
 |---|---:|---|---:|---|---|
@@ -13,13 +13,9 @@
 | EP01_CLIP03 | 11.989s | premium_detail | 9.0-12.0s | keep_detail | 保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。 |
 | EP01_CLIP04 | 7.419s | selective_detail | 5.0-8.0s | trim_to_selective_detail | 改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。 |
 | EP01_CLIP05 | 11.608s | premium_detail | 9.0-13.0s | keep_detail | 保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。 |
-| EP01_CLIP06 | 8.251s | selective_detail | 5.0-7.0s | trim_to_selective_detail | 改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。 |
+| EP01_CLIP06 | 8.251s | premium_detail | 5.0-9.0s | keep_detail | 保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。 |
 | EP01_CLIP07 | 10.811s | premium_detail | 10.0-15.0s | keep_detail | 保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。 |
 | EP01_CLIP08 | 9.316s | premium_detail | 8.0-10.0s | keep_detail | 保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。 |
-
-## Findings
-
-- WARN EP01_CLIP06 story_clip_over_economy_target: EP01_CLIP06 当前 8.251s，分类=selective_detail，建议 5-7s；trim_to_selective_detail。改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。
 
 ## Rules
 

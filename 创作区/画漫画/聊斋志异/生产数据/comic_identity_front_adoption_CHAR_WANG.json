@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_adoption",
+  "created_at": "2026-07-21T21:01:55",
+  "ref_id": "CHAR_WANG",
+  "candidate_path": "出图/共享/candidates/CHAR_WANG/front/CHAR_WANG__front__codex_board_v1.png",
+  "candidate_sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+  "adopted_path": "出图/共享/图片/CHAR_WANG__front.png",
+  "adopted_sha256": "574522ceb4ddb31d6e56887f7c4b4ecab2e09261a160ed6c024f1f2893d97381",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "正面全身清晰，清代士子形象稳定",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

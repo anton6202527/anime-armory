@@ -1,7 +1,7 @@
 {
   "continuity_owner": "script_supervisor",
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:33:23+00:00",
+  "generated_at": "2026-07-21T12:44:07+00:00",
   "kind": "n2d_continuity_breakdown",
   "rows": [
     {
@@ -238,7 +238,7 @@
       ],
       "screen_direction": "守本场左右轴线；视线接力：上后景→右下；转场方式：视线切递刀手。。",
       "shot_reverse_continuity": {},
-      "start_state": "虎爪入前景，姜月初未持刀。",
+      "start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
       "transition_guard": "视线切递刀手。",
       "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、VFX_百妖谱；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
@@ -258,7 +258,7 @@
         ]
       },
       "location_id": "LOC_01",
-      "props_continuity": "关键物件保持可追踪：PROP_横刀、VFX_百妖谱；位置变化必须由动作或转场解释。",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
         "CHAR_02",

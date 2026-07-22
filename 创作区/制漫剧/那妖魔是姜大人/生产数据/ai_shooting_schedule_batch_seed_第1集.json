@@ -401,9 +401,15 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
-            "at_sec": 1.6,
-            "reason": "姜月初反应CU切虎妖低机位压迫镜",
-            "use": "edit_cut"
+            "at_sec": 3.0,
+            "reason": "锁定虎足命中裴长青躯干的接触帧、力线和衣料压缩",
+            "use": "mid_impact"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 4.8,
+            "reason": "锁定裴长青与横刀沿原轴回落姜月初脚边的人刀空间关系",
+            "use": "action_recovery"
           }
         ],
         "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP06",
@@ -438,9 +444,15 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
-            "at_sec": 1.6,
-            "reason": "姜月初反应CU切虎妖低机位压迫镜",
-            "use": "edit_cut"
+            "at_sec": 3.0,
+            "reason": "锁定虎足命中裴长青躯干的接触帧、力线和衣料压缩",
+            "use": "mid_impact"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 4.8,
+            "reason": "锁定裴长青与横刀沿原轴回落姜月初脚边的人刀空间关系",
+            "use": "action_recovery"
           }
         ],
         "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP06",
@@ -669,7 +681,7 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:33:23+00:00",
+  "generated_at": "2026-07-21T12:44:07+00:00",
   "kind": "n2d_ai_shooting_schedule_batch_seed",
   "policy": {
     "high_risk_first": true,

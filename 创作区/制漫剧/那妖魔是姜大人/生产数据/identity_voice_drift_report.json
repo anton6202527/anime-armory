@@ -1,0 +1,40 @@
+{
+  "kind": "n2d_identity_voice_drift_report",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "generated_at": "2026-07-21T20:10:23+00:00",
+  "episodes": [
+    {
+      "episode": "第1集",
+      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/配音/时长清单.json",
+      "status": "ok",
+      "lines": 22,
+      "characters": {
+        "姜月初": [
+          "JIANG"
+        ],
+        "裴长青": [
+          "PEI"
+        ],
+        "虎妖": [
+          "TIGER"
+        ],
+        "百妖谱": [
+          "SYSTEM"
+        ]
+      }
+    }
+  ],
+  "drifts": [],
+  "voicemap_mismatches": [],
+  "placeholder_revoice": [],
+  "summary": {
+    "episodes_total": 1,
+    "episodes_checked": 1,
+    "episodes_insufficient": 0,
+    "drifts": 0,
+    "voicemap_mismatches": 0,
+    "placeholder_revoice": 0
+  },
+  "notes": []
+}

@@ -1,0 +1,85 @@
+{
+  "kind": "n2d_video_face_drift_watch",
+  "version": 1,
+  "generated_at": "2026-07-22T01:53:17.613232+00:00",
+  "episode": "第1集",
+  "status": "ready_for_human_frame_identity_review",
+  "master": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+  "source_kind": "single_video",
+  "source_clip": "Clip_03_part3",
+  "packet_id": "Clip_03___part3_0.00_3.97s",
+  "master_duration_sec": 4.017,
+  "start_sec": 0.0,
+  "end_sec": 3.967,
+  "interval_sec": 0.5,
+  "segments_source": "single_video",
+  "segments": [
+    {
+      "clip": "Clip_03_part3",
+      "start_sec": 0.0,
+      "end_sec": 4.017,
+      "duration_sec": 4.017,
+      "source": "single_video"
+    }
+  ],
+  "frames": [
+    {
+      "time_sec": 0.0,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/001_Clip_03_part3_000.000s.jpg",
+      "bytes": 219596
+    },
+    {
+      "time_sec": 0.5,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/002_Clip_03_part3_000.500s.jpg",
+      "bytes": 210784
+    },
+    {
+      "time_sec": 1.0,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/003_Clip_03_part3_001.000s.jpg",
+      "bytes": 211458
+    },
+    {
+      "time_sec": 1.5,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/004_Clip_03_part3_001.500s.jpg",
+      "bytes": 205652
+    },
+    {
+      "time_sec": 2.0,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/005_Clip_03_part3_002.000s.jpg",
+      "bytes": 202860
+    },
+    {
+      "time_sec": 2.5,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/006_Clip_03_part3_002.500s.jpg",
+      "bytes": 218805
+    },
+    {
+      "time_sec": 3.0,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/007_Clip_03_part3_003.000s.jpg",
+      "bytes": 207337
+    },
+    {
+      "time_sec": 3.5,
+      "clip": "Clip_03_part3",
+      "path": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s/008_Clip_03_part3_003.500s.jpg",
+      "bytes": 206159
+    }
+  ],
+  "frames_dir": "生产数据/video_face_drift_watch/第1集/Clip_03___part3_0.00_3.97s",
+  "contact_sheet": "生产数据/video_face_drift_watch_第1集_Clip_03___part3_0.00_3.97s.jpg",
+  "policy": {
+    "clear_wrong_closeup_face": "block",
+    "missing_identity_backend": "use_human_dense_frame_review_or_full_temporal_consistency",
+    "return_to_stage": "video_or_image_then_compose"
+  },
+  "warnings": [],
+  "json_path": "生产数据/video_face_drift_watch_第1集_Clip_03___part3_0_00_3_97s.json",
+  "markdown_path": "生产数据/video_face_drift_watch_第1集_Clip_03___part3_0_00_3_97s.md"
+}

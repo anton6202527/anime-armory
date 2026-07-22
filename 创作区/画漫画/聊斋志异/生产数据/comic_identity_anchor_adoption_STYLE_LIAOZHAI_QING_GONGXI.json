@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-21T21:01:54",
+  "ref_id": "STYLE_LIAOZHAI_QING_GONGXI",
+  "candidate_path": "出图/共享/candidates/STYLE_LIAOZHAI_QING_GONGXI/anchor/STYLE_LIAOZHAI_QING_GONGXI__anchor__codex_board_v1.png",
+  "candidate_sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+  "adopted_path": "出图/共享/图片/STYLE_LIAOZHAI_QING_GONGXI__anchor.png",
+  "adopted_sha256": "5c6e4d02454254106b03c95c4114760ad86d9a4eedd4485e5d9b8abe54f7a72f",
+  "reviewer": "Codex制作代理",
+  "reviewer_role": "用户授权制作代理",
+  "decision": "approved",
+  "reason": "内置Codex生成，风格、人物与场景气质统一，足以作为第1话生产基线",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

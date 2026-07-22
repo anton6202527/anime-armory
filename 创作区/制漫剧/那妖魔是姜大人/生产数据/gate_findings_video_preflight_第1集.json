@@ -1,0 +1,1442 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "合规前置"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "合规前置",
+          "dim_key": "合规前置",
+          "dimension": "合规前置",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "故事板"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "击中帧验证"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "击中帧验证",
+          "dim_key": "击中帧验证",
+          "dimension": "击中帧验证",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6",
+          "message": "该 fight_exchange 模板包含 impact_frame_sync，但未在 continuity 规划中段光效爆发帧 (mid_impact / midframe)。",
+          "msg": "该 fight_exchange 模板包含 impact_frame_sync，但未在 continuity 规划中段光效爆发帧 (mid_impact / midframe)。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "表情一致性",
+          "dim_key": "character_consistency",
+          "dimension": "表情一致性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1",
+          "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "表情一致性",
+          "dim_key": "character_consistency",
+          "dimension": "表情一致性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5",
+          "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "表情一致性",
+          "dim_key": "character_consistency",
+          "dimension": "表情一致性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "表情一致性",
+          "dim_key": "character_consistency",
+          "dimension": "表情一致性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#8",
+          "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "生视频后端连通性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "生视频后端连通性",
+          "dim_key": "生视频后端连通性",
+          "dimension": "生视频后端连通性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+          "msg": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 01（时长 5.600s · EP01_CLIP01 · 刀口为何对准人）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 02（时长 14.920s · EP01_CLIP02 · 一炷香前的荒野死局）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 03（时长 10.960s · EP01_CLIP03 · 以脱籍换搀扶）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:14>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:14>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 04（时长 9.400s · EP01_CLIP04 · 先活着再算账）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 05（时长 7.880s · EP01_CLIP05 · 死妖咳嗽站起）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 06（时长 8.800s · EP01_CLIP06 · 虎口最后威胁）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 07（时长 7.060s · EP01_CLIP07 · 百妖谱给出残酷选择）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "prompt compiler",
+          "dim_key": "prompt compiler",
+          "dimension": "prompt compiler",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 08（时长 12.880s · EP01_CLIP08 · 对不住了，刀落人身）",
+          "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12",
+          "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "video_prompt",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video_prompt",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "剧情经济性"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json",
+            "出图/共享/identity_registry.json",
+            "出图/共享/asset_registry.json",
+            "生产数据/identity_adapter_matrix.json",
+            "出图/第1集/图片",
+            "出视频/第1集/prompt",
+            "出视频/第1集/control"
+          ],
+          "affected_shots": [],
+          "dim": "剧情经济性",
+          "dim_key": "剧情经济性",
+          "dimension": "剧情经济性",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
+          "message": "story_economy_audit 仍有 3 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "msg": "story_economy_audit 仍有 3 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/control"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "semantic_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/prompt",
+            "出视频/第1集/prompt",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "storyboard.json",
+          "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/prompt",
+            "出视频/第1集/prompt",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "storyboard.json",
+          "message": "`爽点` 留存标记未进入 storyboard 节奏/导演意图。；缺：爽点",
+          "msg": "`爽点` 留存标记未进入 storyboard 节奏/导演意图。；缺：爽点",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/prompt",
+            "出视频/第1集/prompt",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "语义谱系(P0)",
+          "dim_key": "semantic_continuity",
+          "dimension": "语义谱系(P0)",
+          "episode": "第1集",
+          "gate_stage": "video_preflight",
+          "loc": "storyboard.json",
+          "message": "`集尾` 留存标记未进入 storyboard 节奏/导演意图。；缺：集尾",
+          "msg": "`集尾` 留存标记未进入 storyboard 节奏/导演意图。；缺：集尾",
+          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；定位产物：出图/第1集/prompt、出视频/第1集/prompt、脚本/第1集/storyboard.json"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+      "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+      "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "击中帧验证",
+      "dim_key": "击中帧验证",
+      "dimension": "击中帧验证",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6",
+      "message": "该 fight_exchange 模板包含 impact_frame_sync，但未在 continuity 规划中段光效爆发帧 (mid_impact / midframe)。",
+      "msg": "该 fight_exchange 模板包含 impact_frame_sync，但未在 continuity 规划中段光效爆发帧 (mid_impact / midframe)。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md",
+      "message": "director_camera_plan_第1集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。",
+      "msg": "director_camera_plan_第1集.json（8 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "image",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "导演运镜落实",
+      "dim_key": "导演运镜落实",
+      "dimension": "导演运镜落实",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md",
+      "message": "director_camera_plan_第1集.json（8 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "msg": "director_camera_plan_第1集.json（8 镜）的出视频运镜词汇已现身 prompt 包（命中 6/6：起幅、落幅、镜头运动、运动精修、动态细节、导演意图）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "剧本可看性合同",
+      "dim_key": "剧本可看性合同",
+      "dimension": "剧本可看性合同",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/script_quality_contract_第1集.json",
+      "message": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
+      "msg": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "表情一致性",
+      "dim_key": "character_consistency",
+      "dimension": "表情一致性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1",
+      "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "表情一致性",
+      "dim_key": "character_consistency",
+      "dimension": "表情一致性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5",
+      "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "表情一致性",
+      "dim_key": "character_consistency",
+      "dimension": "表情一致性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+      "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "表情一致性",
+      "dim_key": "character_consistency",
+      "dimension": "表情一致性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#8",
+      "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "生视频后端连通性",
+      "dim_key": "生视频后端连通性",
+      "dimension": "生视频后端连通性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+      "message": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+      "msg": "生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL 启用自动探活。。出视频前请人工确认它能出片（官方 CLI 已登录·会员有效 / API 额度可用 / 一次 dry-run），不通即停，勿静默兜底换后端。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 01（时长 5.600s · EP01_CLIP01 · 刀口为何对准人）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 02（时长 14.920s · EP01_CLIP02 · 一炷香前的荒野死局）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 03（时长 10.960s · EP01_CLIP03 · 以脱籍换搀扶）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:14>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:14>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 04（时长 9.400s · EP01_CLIP04 · 先活着再算账）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:16>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 05（时长 7.880s · EP01_CLIP05 · 死妖咳嗽站起）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 06（时长 8.800s · EP01_CLIP06 · 虎口最后威胁）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 07（时长 7.060s · EP01_CLIP07 · 百妖谱给出残酷选择）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:17>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "prompt compiler",
+      "dim_key": "prompt compiler",
+      "dimension": "prompt compiler",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md ## Clip 08（时长 12.880s · EP01_CLIP08 · 对不住了，刀落人身）",
+      "message": "提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12",
+      "msg": "提交 prompt 可进一步精简：submit_prompt_many_clauses:18>12",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "剧本可看性消费",
+      "dim_key": "剧本可看性消费",
+      "dimension": "剧本可看性消费",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md",
+      "message": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "msg": "出图 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "剧本可看性消费",
+      "dim_key": "剧本可看性消费",
+      "dimension": "剧本可看性消费",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/01_clips.md",
+      "message": "出视频 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "msg": "出视频 prompt 已签收消费 script_quality_contract（SHA fresh，字段完整）。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "video_prompt",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json",
+        "出图/共享/identity_registry.json",
+        "出图/共享/asset_registry.json",
+        "生产数据/identity_adapter_matrix.json",
+        "出图/第1集/图片",
+        "出视频/第1集/prompt",
+        "出视频/第1集/control"
+      ],
+      "affected_shots": [],
+      "dim": "剧情经济性",
+      "dim_key": "剧情经济性",
+      "dimension": "剧情经济性",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
+      "message": "story_economy_audit 仍有 3 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+      "msg": "story_economy_audit 仍有 3 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "storyboard.json",
+      "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+      "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "storyboard.json",
+      "message": "`爽点` 留存标记未进入 storyboard 节奏/导演意图。；缺：爽点",
+      "msg": "`爽点` 留存标记未进入 storyboard 节奏/导演意图。；缺：爽点",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/prompt",
+        "出视频/第1集/prompt",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "语义谱系(P0)",
+      "dim_key": "semantic_continuity",
+      "dimension": "语义谱系(P0)",
+      "episode": "第1集",
+      "gate_stage": "video_preflight",
+      "loc": "storyboard.json",
+      "message": "`集尾` 留存标记未进入 storyboard 节奏/导演意图。；缺：集尾",
+      "msg": "`集尾` 留存标记未进入 storyboard 节奏/导演意图。；缺：集尾",
+      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "video_preflight",
+  "generated_at": "2026-07-22T01:53:30+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "257ccf3adfb3d024789553c0f12632413b952f985f071e5f776f5f0c8674166f",
+      "出图/共享/identity_registry.json": "4277e20e264a3b747abe3b5810d9f64257d95e6a81088eec70081e922434d911",
+      "出图/第1集/prompt": null,
+      "出图/第1集/图片": null,
+      "出视频/第1集/control": null,
+      "出视频/第1集/prompt": null,
+      "合规/compliance_manifest.json": "674a9cc9322462ee4e11dc503fdb129fe819244f65e2495ac0917258de878452",
+      "生产数据/identity_adapter_matrix.json": "116f8fa79f8adcb935b545b3864e85d2bdca6065542b14d15a40065267d81611",
+      "脚本/第1集/storyboard.json": "a4b5ed2ee988f7405cb4f29c25721fb60eb53c45a359a627709fbfe9552b687d"
+    },
+    "sha": "e423fe98b8eaf998f9d10437cd7ef86245a485cd8b283892e0f8669aa1d20429"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "prompt compiler": {
+        "block": 0,
+        "info": 0,
+        "warn": 8
+      },
+      "击中帧验证": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "剧情经济性": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "剧本可看性合同": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "剧本可看性消费": {
+        "block": 0,
+        "info": 2,
+        "warn": 0
+      },
+      "合规前置": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "导演运镜落实": {
+        "block": 0,
+        "info": 2,
+        "warn": 0
+      },
+      "故事板": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
+      },
+      "生视频后端连通性": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "表情一致性": {
+        "block": 0,
+        "info": 0,
+        "warn": 4
+      },
+      "语义谱系(P0)": {
+        "block": 0,
+        "info": 0,
+        "warn": 3
+      }
+    },
+    "severity": {
+      "block": 0,
+      "info": 5,
+      "warn": 21
+    },
+    "total": 26
+  },
+  "version": 1
+}

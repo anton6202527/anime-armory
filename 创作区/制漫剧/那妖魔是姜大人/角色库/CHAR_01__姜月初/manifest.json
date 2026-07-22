@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_01",
+  "name": "姜月初",
+  "scope": "核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角",
+  "library_tier": "core_full",
+  "planned_episode_count": 10,
+  "directories": {
+    "reference": "角色库/CHAR_01__姜月初/reference",
+    "prompts": "角色库/CHAR_01__姜月初/prompts",
+    "lora": "角色库/CHAR_01__姜月初/lora",
+    "voice": "角色库/CHAR_01__姜月初/voice",
+    "adapters": "角色库/CHAR_01__姜月初/adapters",
+    "qc": "角色库/CHAR_01__姜月初/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/姜月初.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-21T20:40:26+00:00"
+}

@@ -1,40 +1,98 @@
 {
-  "baseline_bootstrapped": true,
-  "changed_files": [],
-  "changed_skills": [],
-  "commands": [],
-  "contract_inheritance": null,
-  "created_at": "2026-07-21T12:32:51+00:00",
-  "current_stage": "image_prompt",
+  "baseline_bootstrapped": false,
+  "changed_files": [
+    "skills/n2d-video/scripts/video_runner.py"
+  ],
+  "changed_skills": [
+    "n2d-video"
+  ],
+  "commands": [
+    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 1 --rerun-from video_prompt --scope \"skill 更新后重制到 video\" --max-concurrency 1 --max-retries 1"
+  ],
+  "contract_inheritance": {
+    "asset_blocks": 0,
+    "field_blocks": 0,
+    "field_warns": 0,
+    "freshness": "fresh",
+    "generated_at": "2026-07-21T20:45:01Z",
+    "identity_blocks": 0,
+    "inherited": true,
+    "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第1集.json",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第1集.md",
+    "samples": [],
+    "status": "ok",
+    "verdict": "pass"
+  },
+  "created_at": "2026-07-21T20:48:50+00:00",
+  "current_stage": "video",
   "current_todo": {
-    "column": "出图prompt",
-    "command": "n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集",
-    "label": "出图prompt",
+    "column": "视频",
+    "command": "n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集",
+    "label": "图生视频",
     "note": "",
-    "skill": "n2d-image",
-    "stage_key": "image_prompt",
+    "skill": "n2d-video",
+    "stage_key": "video",
     "status": "⬜"
   },
   "episode": "第1集",
-  "execution_steps": [],
+  "execution_steps": [
+    {
+      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 1 --rerun-from video_prompt --scope \"skill 更新后重制到 video\" --max-concurrency 1 --max-retries 1",
+      "role": "queue_bounded_rerun",
+      "type": "command"
+    },
+    {
+      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集`",
+      "role": "manual_alternative",
+      "type": "agent_step"
+    }
+  ],
   "gate_refresh_needed": false,
   "gate_refresh_stages": [],
-  "image_consistency": null,
-  "image_qc_environment": null,
+  "image_consistency": {
+    "advisory": 42,
+    "consistent": true,
+    "degraded": false,
+    "freshness": "fresh",
+    "hard_blocks": 0,
+    "precision_level": "full",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "samples": [
+      "发型(H1): 图片/Clip02_first.png",
+      "发型(H1): 图片/Clip05_first.png"
+    ],
+    "status": "ok",
+    "verdict": "review"
+  },
+  "image_qc_environment": {
+    "advisory": 42,
+    "degraded": false,
+    "finding_samples": [
+      "发型(H1): 图片/Clip02_first.png",
+      "发型(H1): 图片/Clip05_first.png"
+    ],
+    "freshness": "fresh",
+    "hard_blocks": 0,
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.json",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.md",
+    "status": "ok",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "verdict": "review"
+  },
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
-  "newly_relevant_skills": [
-    "n2d-image",
-    "n2d-voice"
-  ],
+  "newly_relevant_skills": [],
   "notes": [
-    "基线为 check 自动建立的临时基线（bootstrap）：从这一刻起能检测变更，但看不到此前已用过的更早 skill 版本所致的差异。确认当前产物可接受后，请 `record` 固化为正式基线（清除临时标记）。",
-    "n2d-image, n2d-voice 因阶段推进首次纳入相关范围，本次不计为变更；该阶段完成后请 record 刷新基线。",
-    "帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 13 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第1集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第1集/图片/EP01_CLIP01_a1.png, 出图/第1集/图片/EP01_CLIP02_a1.png, 出图/第1集/图片/EP01_CLIP03_a1.png, 出图/第1集/图片/EP01_CLIP04_a1.png"
+    "真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第1集.md",
-  "rebuild_needed": false,
+  "rebuild_needed": true,
   "regen_mode": "最小",
   "relevant_skills": [
     "n2d",
@@ -45,92 +103,29 @@
     "n2d-review",
     "n2d-script",
     "n2d-update",
+    "n2d-video",
     "n2d-voice"
   ],
-  "rerun_from": null,
-  "rerun_until": "image_prompt",
+  "rerun_from": "video_prompt",
+  "rerun_until": "video",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": false,
   "smart_suggestions": [],
-  "snapshot_changed_files": [],
+  "snapshot_changed_files": [
+    "skills/n2d-video/scripts/video_runner.py"
+  ],
   "source_drift": {
     "status": "clean"
   },
   "strict_image_refresh": false,
   "three_frame_compliance": {
     "backend": null,
-    "compliant": false,
+    "compliant": true,
     "enforced": true,
     "exempt_clips": 0,
     "missing_endframe_clips": [],
-    "missing_frame_files": [
-      {
-        "clip_id": "EP01_CLIP01",
-        "path": "出图/第1集/图片/EP01_CLIP01_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP02",
-        "path": "出图/第1集/图片/EP01_CLIP02_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP03",
-        "path": "出图/第1集/图片/EP01_CLIP03_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP04",
-        "path": "出图/第1集/图片/EP01_CLIP04_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP05",
-        "path": "出图/第1集/图片/EP01_CLIP05_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP05",
-        "path": "出图/第1集/图片/EP01_CLIP05_a2.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP06",
-        "path": "出图/第1集/图片/EP01_CLIP06_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP07",
-        "path": "出图/第1集/图片/EP01_CLIP07_a1.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP07",
-        "path": "出图/第1集/图片/EP01_CLIP07_a2.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP08",
-        "path": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP08",
-        "path": "出图/第1集/图片/EP01_CLIP08_anchor_cut_0360.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP08",
-        "path": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
-        "role": "midframe"
-      },
-      {
-        "clip_id": "EP01_CLIP08",
-        "path": "出图/第1集/图片/EP01_CLIP08_a2.png",
-        "role": "midframe"
-      }
-    ],
+    "missing_frame_files": [],
     "policy_mode": "risk_only",
     "required_anchor_clips": [
       "EP01_CLIP01",

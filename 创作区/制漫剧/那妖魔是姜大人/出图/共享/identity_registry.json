@@ -1,0 +1,2048 @@
+{
+  "kind": "n2d_identity_registry",
+  "version": 1,
+  "generated_at": "2026-07-21T19:45:49+00:00",
+  "characters": [
+    {
+      "id": "CHAR_01",
+      "name": "姜月初",
+      "scope": "核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角",
+      "tier": "核心长线",
+      "library_tier": "core_full",
+      "planned_episode_count": 10,
+      "forms": [
+        {
+          "form": "“囚途残损态”",
+          "asset_key": "CHAR_01__囚途残损态",
+          "anchor_phrase": "窄椭圆脸利落下颌·细长杏眼锐利目光·乌黑松散长发·高挑纤细·灰褐窄袖囚服",
+          "character_dna": {
+            "face": "姜月初 的剧情视觉真值必须入画：核心主角/全篇长线；现代穿越者；罪臣独女；发配边疆的贱籍囚犯；长线主角；约19岁；窄椭圆脸，利落但不过尖的下颌；细长杏眼，深褐近黑瞳，平直微扬眉，秀直鼻梁，自然薄唇；肤色偏冷白但有真实血色；无痣无疤",
+            "hair": "乌黑长发，低位松散束发后大半披散，碎发贴颊；无发饰",
+            "outfit": "唐代灰褐粗布交领囚服，窄袖、布腰带、无纹样，衣摆磨损沾尘；旧布鞋；无首饰",
+            "accessories": "无",
+            "texture": "冷灰写实3D国风漫剧；炭灰 #4A4B49 + 灰褐 #777167；系统反光仅用古金 #C99A3D"
+          },
+          "physical_scale": {
+            "relative_scale": "比裴长青矮约半个头；与虎妖同框时仅及其胸腹区域"
+          },
+          "wardrobe_profile": {
+            "silhouette": "唐代灰褐粗布交领囚服，窄袖、布腰带、无纹样，衣摆磨损沾尘；旧布鞋；无首饰",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把姜月初换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "原创母版确认后，脸型、眼距、眼型、鼻唇比例、下颌线、体态比例不得无账变化",
+              "不要把姜月初换成普通俊美人类",
+              "不要丢失姜月初 scope里的非人/妖物视觉特征"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+              "status": "ready",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "front",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "png_sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+                "registry_binding_fingerprint": "811666586af9e3b897c01437c9a3c3d1c3d06b677a7d910356975f3a4373efb6",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：正面脸型眼距、发束、囚服、双手、头脚完整，身份母版通过。"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T19:35:25+00:00",
+                  "png_sha256": "c796839b9a9192f3e74de6feb8da597500a38ede8dd33c2de72c4499f1af77d6",
+                  "registry_binding_fingerprint": "e0d5d9b4370a926fc7226737bf716171c6e2c6ee844cf70ae86add53c65853ff",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：紧裁切后面部结构与主母版一致，发型、眼距、鼻唇与囚服领口稳定；无文字水印。"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T19:45:32+00:00",
+                  "png_sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+                  "registry_binding_fingerprint": "2302f786d03052edad886c560e7ddbf5261c33b5c5cc25e9cc3ac017b6fb2a1a",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前最终六联表：恰好六格六脸，身份、发型与囚服领口一致；六情绪克制可读，无跨格重影或文字水印。"
+                },
+                "layout": "two_by_three_expression_sheet_v1"
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "png_sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+                "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：前45度身份、服装结构与母版一致，手脚完整。"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "side",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "png_sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+                "registry_binding_fingerprint": "cdc3ee073e03f1bc60f026cd4478b1b62f042207303f5dd828eb6bd80683820d",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：严格侧面轮廓、低束长发、服装比例一致。"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "rear_three_quarter",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:22+00:00",
+                "png_sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+                "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：后45度发束与囚服后片连续，未露错误正脸。"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "back",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:23+00:00",
+                "png_sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+                "registry_binding_fingerprint": "c2946aa298a476971c4ba099031f399ed0c4aaefab734afdb44c79fff6d93a7c",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视：背面发束、衣摆、双臂与鞋脚结构完整。"
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+              "status": "ready",
+              "layout": "five_angle_v1",
+              "visual_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": "“囚途残损态”",
+                "library_tier": "core_full",
+                "view": "turnaround",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+                "reviewer": "automation:codex",
+                "review_kind": "executor_visual",
+                "reviewer_role": "ai_visual_executor",
+                "human_signoff": false,
+                "reviewed_at": "2026-07-21T13:03:23+00:00",
+                "png_sha256": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f",
+                "registry_binding_fingerprint": "77082d7975d7a43086be29530a3e48be7ac04c8a3d03d8922217d614a5cd4290",
+                "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                "review_contract": "n2d_turnaround_view_review_v1",
+                "criteria": [
+                  "body_centerline_and_height_aligned",
+                  "full_body_head_to_foot_visible",
+                  "head_top_and_foot_line_aligned",
+                  "identity_and_costume_same_source",
+                  "neutral_background_light_pose"
+                ],
+                "confirmation": {
+                  "kind": "explicit_current_pixels_acceptance",
+                  "accepted_current_pixels": true
+                },
+                "note": "已实际目视五角总览：身份、身高、服色和中心线一致。"
+              },
+              "column_count": 5,
+              "view_order": [
+                "front",
+                "three_quarter",
+                "side",
+                "rear_three_quarter",
+                "back"
+              ]
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "core_full",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                "status": "ready",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "front",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T13:03:22+00:00",
+                  "png_sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+                  "registry_binding_fingerprint": "811666586af9e3b897c01437c9a3c3d1c3d06b677a7d910356975f3a4373efb6",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视：正面脸型眼距、发束、囚服、双手、头脚完整，身份母版通过。"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T13:03:22+00:00",
+                  "png_sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+                  "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视：前45度身份、服装结构与母版一致，手脚完整。"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "side",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T13:03:22+00:00",
+                  "png_sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+                  "registry_binding_fingerprint": "cdc3ee073e03f1bc60f026cd4478b1b62f042207303f5dd828eb6bd80683820d",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视：严格侧面轮廓、低束长发、服装比例一致。"
+                }
+              },
+              "rear_three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "rear_three_quarter",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T13:03:22+00:00",
+                  "png_sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+                  "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视：后45度发束与囚服后片连续，未露错误正脸。"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "back",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T13:03:23+00:00",
+                  "png_sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+                  "registry_binding_fingerprint": "c2946aa298a476971c4ba099031f399ed0c4aaefab734afdb44c79fff6d93a7c",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_turnaround_view_review_v1",
+                  "criteria": [
+                    "body_centerline_and_height_aligned",
+                    "full_body_head_to_foot_visible",
+                    "head_top_and_foot_line_aligned",
+                    "identity_and_costume_same_source",
+                    "neutral_background_light_pose"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视：背面发束、衣摆、双臂与鞋脚结构完整。"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_脸部特写_脸锚裁切.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T19:35:25+00:00",
+                  "png_sha256": "c796839b9a9192f3e74de6feb8da597500a38ede8dd33c2de72c4499f1af77d6",
+                  "registry_binding_fingerprint": "e0d5d9b4370a926fc7226737bf716171c6e2c6ee844cf70ae86add53c65853ff",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前像素：紧裁切后面部结构与主母版一致，发型、眼距、鼻唇与囚服领口稳定；无文字水印。"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "六联表",
+                "visual_review": {
+                  "status": "accepted",
+                  "verdict": "pass",
+                  "character_id": "CHAR_01",
+                  "form": "“囚途残损态”",
+                  "library_tier": "core_full",
+                  "view": "expression",
+                  "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+                  "reviewer": "automation:codex",
+                  "review_kind": "executor_visual",
+                  "reviewer_role": "ai_visual_executor",
+                  "human_signoff": false,
+                  "reviewed_at": "2026-07-21T19:45:32+00:00",
+                  "png_sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+                  "registry_binding_fingerprint": "2302f786d03052edad886c560e7ddbf5261c33b5c5cc25e9cc3ac017b6fb2a1a",
+                  "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+                  "review_contract": "n2d_expression_review_v1",
+                  "criteria": [
+                    "expression_readable_without_identity_drift",
+                    "hair_accessories_and_costume_continuity",
+                    "neutral_or_declared_expression_lighting",
+                    "same_identity_as_canonical_face_anchor"
+                  ],
+                  "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": true
+                  },
+                  "note": "已实际目视当前最终六联表：恰好六格六脸，身份、发型与囚服领口一致；六情绪克制可读，无跨格重影或文字水印。"
+                },
+                "layout": "two_by_three_expression_sheet_v1"
+              }
+            ],
+            "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "设定库/characters/姜月初.md",
+              "status": "ready",
+              "sha256": "8162287d3bf86250d9372fece0098dfe74a4ea7f65f65126df950c15c8424a2e"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+              "status": "ready",
+              "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              114431502,
+              114431503,
+              114431504,
+              114431505,
+              114431506,
+              114431507
+            ],
+            "usage": {
+              "turnaround": 114431502,
+              "expression": 114431503,
+              "closeup": 114431504,
+              "shot": 114431505
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "rear_three_quarter",
+              "back",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把姜月初换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "原创母版确认后，脸型、眼距、眼型、鼻唇比例、下颌线、体态比例不得无账变化",
+            "不要把姜月初换成普通俊美人类",
+            "不要丢失姜月初 scope里的非人/妖物视觉特征"
+          ],
+          "performance_signature": "先以眼神扫视出口和威胁；恐惧时下颌收紧而非夸张尖叫；做决定时目光骤然稳定，双手握刀",
+          "signature_equipment": [
+            "WEAPON_01",
+            "VFX_系统面板"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "self_check_at": "2026-07-21T19:45:32+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+          "anchor_sha": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "角色库/CHAR_01__姜月初/manifest.json",
+        "package_dir": "角色库/CHAR_01__姜月初",
+        "base_dir": "角色库/CHAR_01__姜月初",
+        "sections": {
+          "reference": "角色库/CHAR_01__姜月初/reference",
+          "prompts": "角色库/CHAR_01__姜月初/prompts",
+          "lora": "角色库/CHAR_01__姜月初/lora",
+          "voice": "角色库/CHAR_01__姜月初/voice",
+          "adapters": "角色库/CHAR_01__姜月初/adapters",
+          "qc": "角色库/CHAR_01__姜月初/qc"
+        },
+        "tier": "core_full",
+        "planned_episode_count": 10
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "“囚途残损态”",
+        "forms": [
+          "“囚途残损态”"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_02",
+      "name": "裴长青",
+      "scope": "陇右镇魔都司队正；押送队伍幸存者",
+      "tier": "单集角色",
+      "library_tier": "recurring_standard",
+      "planned_episode_count": 3,
+      "forms": [
+        {
+          "form": "“濒死重伤态”",
+          "asset_key": "CHAR_02__濒死重伤态",
+          "anchor_phrase": "年轻硬朗长方脸·浓直眉克制目光·黑发高束·墨黑暗赤镇魔司劲装·左臂骨折",
+          "character_dna": {
+            "face": "约23岁；年轻硬朗长方脸，浓直眉，深褐眼，鼻梁挺直，薄唇；束起黑发；无胡须；失血导致面色惨白、唇裂",
+            "hair": "黑发高束成实用发髻，素黑布束，无冠",
+            "outfit": "黑色唐风窄袖劲装，衣襟与袖口绣克制暗赤云纹，皮革护腕与黑色腰带；第1集衣料破损、血污集中在胸腹和左臂",
+            "accessories": "镇魔司小型铜腰牌；横刀不作为永久身体锚",
+            "texture": "冷灰写实3D国风漫剧；墨黑 #171A1C + 暗赤 #692B2B + 旧铁灰 #55595B"
+          },
+          "physical_scale": {
+            "relative_scale": "比姜月初高半个头；远小于虎妖，肩宽明显大于姜月初"
+          },
+          "wardrobe_profile": {
+            "silhouette": "黑色唐风窄袖劲装，衣襟与袖口绣克制暗赤云纹，皮革护腕与黑色腰带；第1集衣料破损、血污集中在胸腹和左臂",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把裴长青换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214346+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214362+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214372+00:00"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214381+00:00"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214390+00:00"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214399+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared side reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214407+00:00"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared rear_three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214414+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared back reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.214422+00:00"
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "recurring_standard",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214432+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214439+00:00"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared side reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214445+00:00"
+                }
+              },
+              "rear_three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_后45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared rear_three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214452+00:00"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared back reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214459+00:00"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214465+00:00"
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214473+00:00"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.214481+00:00"
+                }
+              }
+            ],
+            "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "设定库/characters/裴长青.md",
+              "status": "ready",
+              "sha256": "18748830db4152b6ec477db0ec617ed2e80b8513267d0a8a4c54baef88e6ae26"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死重伤态.png",
+              "status": "ready",
+              "sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              472774510,
+              472774511,
+              472774512,
+              472774513,
+              472774514,
+              472774515
+            ],
+            "usage": {
+              "turnaround": 472774510,
+              "expression": 472774511,
+              "closeup": 472774512,
+              "shot": 472774513
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "rear_three_quarter",
+              "back",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把裴长青换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "极少废话；先观察再发令；疼痛时咬紧后槽牙，腰背仍尽量挺直；右手始终靠近刀",
+          "signature_equipment": [
+            "WEAPON_01"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "self_check_at": "2026-07-21T14:59:58+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322",
+          "anchor_sha": "b33c4475ff0bc5291ef388b63368634bec663991712c60cdce7dfdac5a30e322"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "角色库/CHAR_02__裴长青/manifest.json",
+        "package_dir": "角色库/CHAR_02__裴长青",
+        "base_dir": "角色库/CHAR_02__裴长青",
+        "sections": {
+          "reference": "角色库/CHAR_02__裴长青/reference",
+          "prompts": "角色库/CHAR_02__裴长青/prompts",
+          "lora": "角色库/CHAR_02__裴长青/lora",
+          "voice": "角色库/CHAR_02__裴长青/voice",
+          "adapters": "角色库/CHAR_02__裴长青/adapters",
+          "qc": "角色库/CHAR_02__裴长青/qc"
+        },
+        "tier": "recurring_standard",
+        "planned_episode_count": 3
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "“濒死重伤态”",
+        "forms": [
+          "“濒死重伤态”"
+        ]
+      }
+    },
+    {
+      "id": "BEAST_01",
+      "name": "虎妖",
+      "scope": "袭击发配队伍的强大妖魔；第1集主要威胁",
+      "tier": "单集角色",
+      "library_tier": "recurring_standard",
+      "planned_episode_count": 3,
+      "forms": [
+        {
+          "form": "“穿心复生态”",
+          "asset_key": "BEAST_01__穿心复生态",
+          "anchor_phrase": "真实虎首人形巨躯·琥珀竖瞳·右眉骨旧裂·胸前黑血洞·深褐破围腰",
+          "character_dna": {
+            "face": "成年；真实雄虎头颅与人形躯干结合，黑黄短毛，琥珀竖瞳，右眉骨旧裂痕；胸前有横刀洞穿的巨大黑色血洞，周边黑妖血凝结，不展示露骨内脏",
+            "hair": "虎头人身，短密黑黄毛，琥珀竖瞳，右眉骨旧裂痕",
+            "outfit": "深褐破损围腰、旧皮束带",
+            "accessories": "无",
+            "texture": "冷灰写实3D国风漫剧；焦黑 #171514 + 虎黄褐 #A06E2F + 妖血黑红 #351416 + 琥珀 #C5852D"
+          },
+          "physical_scale": {
+            "relative_scale": "约为裴长青的一点五倍高，肩宽近两倍"
+          },
+          "wardrobe_profile": {
+            "silhouette": "深褐破损围腰、旧皮束带",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把虎妖换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315148+00:00"
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared outfit reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315175+00:00"
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+              "status": "ready",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315191+00:00"
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315208+00:00"
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315223+00:00"
+                }
+              }
+            ],
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315239+00:00"
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared side reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315252+00:00"
+              }
+            },
+            "rear_three_quarter": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared rear_three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315264+00:00"
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png",
+              "status": "ready",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              },
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared back reference passed finalized review",
+                "reviewed_at": "2026-07-21T14:59:58.315276+00:00"
+              }
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "recurring_standard",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315292+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315303+00:00"
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_侧.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared side reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315314+00:00"
+                }
+              },
+              "rear_three_quarter": {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_后45度.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared rear_three_quarter reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315325+00:00"
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_背.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared back reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315336+00:00"
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_半身.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared half_body reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315347+00:00"
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_脸部特写_脸锚裁切.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315358+00:00"
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态_表情_克制.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "克制",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-21T14:59:58.315370+00:00"
+                }
+              }
+            ],
+            "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "设定库/characters/虎妖.md",
+              "status": "ready",
+              "sha256": "9e98fa3526a47e648d0fd29b473a3af7550f27cfdac906788080dea76d6b936c"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_BEAST_01__穿心复生态.png",
+              "status": "ready",
+              "sha256": "f59bb1dabda858862bdefcd033a27d1c5548068aaa928750936c300c9fd4a9d2"
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1822270464,
+              1822270465,
+              1822270466,
+              1822270467,
+              1822270468,
+              1822270469
+            ],
+            "usage": {
+              "turnaround": 1822270464,
+              "expression": 1822270465,
+              "closeup": 1822270466,
+              "shot": 1822270467
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "rear_three_quarter",
+              "back",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把虎妖换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "说话前慢舔掌心；歪头观察猎物；笑时只抬一侧唇角；动作由静至骤",
+          "signature_equipment": [
+            "WEAPON_01"
+          ],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "self_check_at": "2026-07-21T14:59:58+00:00",
+          "self_check_by": "image_qc.mark_finalized",
+          "artifact_sha256": "f59bb1dabda858862bdefcd033a27d1c5548068aaa928750936c300c9fd4a9d2",
+          "anchor_sha": "f59bb1dabda858862bdefcd033a27d1c5548068aaa928750936c300c9fd4a9d2"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "角色库/BEAST_01__虎妖/manifest.json",
+        "package_dir": "角色库/BEAST_01__虎妖",
+        "base_dir": "角色库/BEAST_01__虎妖",
+        "sections": {
+          "reference": "角色库/BEAST_01__虎妖/reference",
+          "prompts": "角色库/BEAST_01__虎妖/prompts",
+          "lora": "角色库/BEAST_01__虎妖/lora",
+          "voice": "角色库/BEAST_01__虎妖/voice",
+          "adapters": "角色库/BEAST_01__虎妖/adapters",
+          "qc": "角色库/BEAST_01__虎妖/qc"
+        },
+        "tier": "recurring_standard",
+        "planned_episode_count": 3
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "“穿心复生态”",
+        "forms": [
+          "“穿心复生态”"
+        ]
+      }
+    }
+  ],
+  "notes": "第1集 prompt 阶段身份注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成并回填 self_check/anchor_sha。"
+}

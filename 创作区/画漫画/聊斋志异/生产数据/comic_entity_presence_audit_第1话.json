@@ -1,0 +1,97 @@
+{
+  "kind": "comic_entity_presence_audit",
+  "version": 1,
+  "generated_at": "2026-07-21T14:12:46+00:00",
+  "chapter": "第1话",
+  "summary": {
+    "panels": 16,
+    "registry_entities": 7,
+    "panels_with_schedule": 0,
+    "must": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "findings": [],
+  "derived_schedule": {
+    "P001": [
+      "LOC_WANG_COURTYARD",
+      "MON_PAINTED_SKIN"
+    ],
+    "P002": [
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD",
+      "MON_PAINTED_SKIN"
+    ],
+    "P003": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD",
+      "MON_PAINTED_SKIN"
+    ],
+    "P004": [
+      "CHAR_DAOIST",
+      "CHAR_WANG",
+      "LOC_MARKET_TEMPLE"
+    ],
+    "P005": [
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD",
+      "MON_PAINTED_SKIN"
+    ],
+    "P006": [
+      "CHAR_DAOIST",
+      "CHAR_WANG",
+      "LOC_MARKET_TEMPLE"
+    ],
+    "P007": [
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD",
+      "MON_PAINTED_SKIN"
+    ],
+    "P008": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD"
+    ],
+    "P009": [
+      "CHAR_DAOIST",
+      "LOC_WANG_COURTYARD",
+      "MON_PAINTED_SKIN"
+    ],
+    "P010": [
+      "CHAR_CHEN",
+      "CHAR_DAOIST",
+      "LOC_WANG_COURTYARD"
+    ],
+    "P011": [
+      "CHAR_BEGGAR",
+      "CHAR_CHEN",
+      "LOC_MARKET_TEMPLE"
+    ],
+    "P012": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD"
+    ],
+    "P013": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD"
+    ],
+    "P014": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD"
+    ],
+    "P015": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD"
+    ],
+    "P016": [
+      "CHAR_CHEN",
+      "CHAR_WANG",
+      "LOC_WANG_COURTYARD"
+    ]
+  }
+}

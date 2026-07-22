@@ -1,0 +1,65 @@
+{
+  "kind": "n2d_style_anchor_registry",
+  "version": 1,
+  "generated_at": "2026-07-21T13:45:44+00:00",
+  "style_name": "冷灰写实3D国风漫剧",
+  "selected_anchor": {
+    "id": "STYLE_ANCHOR",
+    "name": "冷灰写实3D国风漫剧",
+    "path": "出图/共享/图片/风格锚_冷灰写实3D国风.png",
+    "status": "ready",
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "role": "shared_rendering_language_anchor",
+    "sha256": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+    "visual_review": {
+      "status": "accepted",
+      "verdict": "pass",
+      "path": "出图/共享/图片/风格锚_冷灰写实3D国风.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "reviewer_role": "ai_visual_executor",
+      "human_signoff": false,
+      "reviewed_at": "2026-07-21T13:05:18+00:00",
+      "png_sha256": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+      "confirmation": {
+        "kind": "explicit_current_pixels_acceptance",
+        "accepted_current_pixels": true
+      },
+      "note": "已实际目视：冷灰/灰褐/旧铁/皮革/粗布/毛发材质与克制古金完整；无角色、场景、文字或水印污染。"
+    }
+  },
+  "anchors": [
+    {
+      "id": "STYLE_ANCHOR",
+      "name": "冷灰写实3D国风漫剧",
+      "path": "出图/共享/图片/风格锚_冷灰写实3D国风.png",
+      "status": "ready",
+      "use_policy": "style_only",
+      "identity_policy": "do_not_clone_face_or_costume",
+      "role": "shared_rendering_language_anchor",
+      "sha256": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+      "visual_review": {
+        "status": "accepted",
+        "verdict": "pass",
+        "path": "出图/共享/图片/风格锚_冷灰写实3D国风.png",
+        "reviewer": "automation:codex",
+        "review_kind": "executor_visual",
+        "reviewer_role": "ai_visual_executor",
+        "human_signoff": false,
+        "reviewed_at": "2026-07-21T13:05:18+00:00",
+        "png_sha256": "a14439f8ea8b33822a159f034369c6974ce483f17d06abf0ac07adcc6339aa50",
+        "confirmation": {
+          "kind": "explicit_current_pixels_acceptance",
+          "accepted_current_pixels": true
+        },
+        "note": "已实际目视：冷灰/灰褐/旧铁/皮革/粗布/毛发材质与克制古金完整；无角色、场景、文字或水印污染。"
+      }
+    }
+  ],
+  "rules": {
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。生成风格锚时不得把 `style_contract.镜头与构图` 的剧情机位、前中后景、人物调度、场景或物件描述注入风格板；角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
+  }
+}

@@ -1,178 +1,89 @@
 {
-  "accepted_story_clip_count": 0,
-  "actual_story_clip_count": 0,
+  "accepted_story_clip_count": 3,
+  "actual_story_clip_count": 3,
   "animatic_snapshot_path": "生产数据/timelines/第1集/animatic_timeline.otio",
-  "animatic_snapshot_sha256": "66188d9ed60cdc4ebc04d5214610bafcd6460babd2dac06e5dea0f6b46831842",
-  "duration_sec": 74.798,
+  "animatic_snapshot_sha256": "7a7e339f9c09b9792996283cb99687d293f4f79e765418e49349211bba119812",
+  "duration_sec": 77.5,
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:34:10+00:00",
+  "generated_at": "2026-07-22T01:53:18+00:00",
   "kind": "n2d_editorial_timeline",
   "media": [
     {
-      "available_sec": 3.884,
-      "path": "",
-      "sha256": ""
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+      "sha256": "4959812de6f36a1713c03dbc915ad15cbd07c07f76160d7c3ed55fb15ba71ad9"
     },
     {
-      "available_sec": 11.52,
-      "path": "",
-      "sha256": ""
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4",
+      "sha256": "c2f9b69cfbddb32ea73c03436427378a143b2bccc41685898da618e92769bb88"
     },
     {
-      "available_sec": 11.989,
-      "path": "",
-      "sha256": ""
+      "available_sec": 6.017,
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
+      "sha256": "b4d5c3c4a8bf5e5ff2d4a1556b41e97c6c2d3abc5dbe0d90a516b35cb8004892"
     },
     {
-      "available_sec": 7.419,
-      "path": "",
-      "sha256": ""
+      "available_sec": 6.017,
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4",
+      "sha256": "d123cc3e5a7af5cc74ebaa4708f2450f73a9574e7bb97cc0393d010dbbb71ff5"
     },
     {
-      "available_sec": 11.608,
-      "path": "",
-      "sha256": ""
+      "available_sec": 4.016,
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+      "sha256": "4d5c2a1f5d7b1b4f63eca26fcd8fea257dbf5905307f80bd2f57e2886bc12481"
     },
     {
-      "available_sec": 8.251,
-      "path": "",
-      "sha256": ""
+      "available_sec": 6.017,
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4",
+      "sha256": "051c88c0111d81cdf80155adf31d77ff1328ec4088c563174d421c6c7b07e125"
     },
     {
-      "available_sec": 10.811,
-      "path": "",
-      "sha256": ""
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4",
+      "sha256": "a759f3d004c2edc8e9b95551ab7a902c797ae7120cd4353ab679287ec2c9b1a6"
     },
     {
-      "available_sec": 9.316,
-      "path": "",
-      "sha256": ""
+      "available_sec": 4.017,
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+      "sha256": "21f1f3c6a5e9e26e28777696cac51f2c4f7b5d121f655dd7b9e0aa57dcdf9091"
     },
     {
-      "available_sec": 3.284,
-      "path": "",
-      "sha256": ""
+      "available_sec": 9.4,
+      "path": "出图/第1集/图片/Clip04_first.png",
+      "sha256": "5e511875d56ba813cef79e8f2ccbfb10c1416c76a30e666e5e8673b115f75774"
     },
     {
-      "available_sec": 5.322,
-      "path": "",
-      "sha256": ""
+      "available_sec": 7.88,
+      "path": "出图/第1集/图片/Clip05_first.png",
+      "sha256": "72413fc47afe1e2983f9fc936f477beac7473ab78b7e07015525ab1cef7a0a8b"
     },
     {
-      "available_sec": 3.998,
-      "path": "",
-      "sha256": ""
+      "available_sec": 8.8,
+      "path": "出图/第1集/图片/Clip06_first.png",
+      "sha256": "2c8d2d006a9e7ac722ffe7682f1a5c67dc4fa58b29add20c81a9179aa654cd4e"
     },
     {
-      "available_sec": 0.8,
-      "path": "",
-      "sha256": ""
+      "available_sec": 7.06,
+      "path": "出图/第1集/图片/Clip07_first.png",
+      "sha256": "d626a750d548b216e7765792cbc0674d65cb6ff9adea10677f9e9e3f9114d865"
     },
     {
-      "available_sec": 2.13,
-      "path": "",
-      "sha256": ""
+      "available_sec": 12.88,
+      "path": "出图/第1集/图片/Clip08_first.png",
+      "sha256": "9fe6b917cf3bcabb862900fc5768201a38e3667b520613fb6aa0e89fcd7da86b"
     },
     {
-      "available_sec": 2.93,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 5.729,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 4.02,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 2.399,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 3.567,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 2.417,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 3.024,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 0.8,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 0.8,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 3.567,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 2.484,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 3.351,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 6.16,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 4.364,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 1.22,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 0.8,
-      "path": "",
-      "sha256": ""
-    },
-    {
-      "available_sec": 1.732,
-      "path": "",
-      "sha256": ""
+      "available_sec": 77.5,
+      "path": "合成/第1集/配音/voice_zh.wav",
+      "sha256": "43012bafe9efa0a3db73d446ca21ca2bb3ca21afe3ae673fd346351188e9f8d5"
     }
   ],
-  "missing_picture_slots": [
-    "Clip_01",
-    "Clip_02",
-    "Clip_03",
-    "Clip_04",
-    "Clip_05",
-    "Clip_06",
-    "Clip_07",
-    "Clip_08"
-  ],
+  "missing_picture_slots": [],
   "otio_path": "生产数据/timelines/第1集/editorial_timeline.otio",
-  "otio_sha256": "66188d9ed60cdc4ebc04d5214610bafcd6460babd2dac06e5dea0f6b46831842",
-  "phase": "animatic",
-  "planned_audio_slot_count": 22,
+  "otio_sha256": "8d28e09f2dbce9c40b1c624080e2d06293c434f80e72c2c25378b0980479813b",
+  "phase": "assembly",
+  "planned_audio_slot_count": 0,
   "rate": 30.0,
   "seams": [
     {
@@ -367,7 +278,7 @@
       "strictness": "mode_specific",
       "to_clip": "Clip_07",
       "to_episode": "第1集",
-      "to_start_state": "虎爪入前景，姜月初未持刀。",
+      "to_start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
       "transition": "动作匹配后外压硬切内在规则。"
     },
     {
@@ -375,8 +286,7 @@
         "CHAR_01",
         "CHAR_01/囚途残损态",
         "CHAR_02",
-        "PROP_横刀",
-        "VFX_百妖谱"
+        "PROP_横刀"
       ],
       "entity_entry_exit": "现实位置不重置。；入画/现身：VFX_百妖谱、VFX_系统面板；出画/画外保留：VFX_百妖谱；主角靠近半步；裴不主动移动；百妖谱保持主观记忆层，不出现道行灌注或结算面板。",
       "from_clip": "Clip_07",
@@ -407,7 +317,7 @@
   "status": "ready",
   "story_clip_count": 8,
   "subtitle_marker_count": 22,
-  "timing_basis": "text_estimate_no_audio",
+  "timing_basis": "final_voice",
   "track_names": [
     "V1 Picture",
     "A1 Dialogue_Narration",
@@ -415,5 +325,5 @@
     "A3 BGM"
   ],
   "version": 1,
-  "voice_casting_status": "casting"
+  "voice_casting_status": "locked"
 }

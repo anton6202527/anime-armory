@@ -1,0 +1,12 @@
+{
+  "characters": {
+    "CHAR_01__囚途残损态": {
+      "第1集": 0.3451
+    },
+    "CHAR_02__濒死重伤态": {
+      "第1集": 0.4424
+    }
+  },
+  "kind": "n2d_face_drift_history",
+  "version": 1
+}

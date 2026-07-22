@@ -1,0 +1,3810 @@
+{
+  "kind": "n2d_video_model_routes",
+  "version": 1,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "episode": "第1集",
+  "routing_mode": "auto",
+  "production_mode": "混合自动路由",
+  "av_mode": "hybrid",
+  "video_generation_audio_policy": "无声视频流",
+  "urgency_tier": "realtime",
+  "t2v_action_channel": false,
+  "default_backend": "seedance",
+  "configured_default_backend": "seedance",
+  "backend_consistency_scope": {
+    "image_generation": "single_model_channel_per_project",
+    "video_generation": "per_clip_allowed_with_baseline",
+    "required_guards": [
+      "model_routes_baseline",
+      "identity_handoff",
+      "execution_recipe",
+      "post_video_qc"
+    ]
+  },
+  "generated_at": "2026-07-21T20:41:39+00:00",
+  "production_sound_route": {
+    "status": "aligned",
+    "kind": "n2d_production_mode_route",
+    "version": 2,
+    "summary": {
+      "clip_count": 8,
+      "audio_strategy_counts": {
+        "performance_audio_first": 8
+      },
+      "final_voice_required": true,
+      "post_lipsync_required": false,
+      "base_video_only_count": 0
+    }
+  },
+  "routes": [
+    {
+      "clip_id": "Clip_01",
+      "shot_type": "general_motion",
+      "template": "none",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "image2video",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "none",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "濒死态"
+        },
+        {
+          "raw": "BEAST_01/复生态焦外"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 5.6,
+      "risk_flags": [
+        "identity_escalated",
+        "native_multiframe"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "general motion can use the project default backend for cost and speed",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 6 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "keep character/camera/dynamic detail three-part prompt explicit"
+      ],
+      "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type.",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_01",
+        "line_indices": [
+          1
+        ],
+        "roles": [
+          "姜月初"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_00.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_00.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 1,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "image2video",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 1,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 3,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "濒死态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "none",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_00.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "If action or identity fails twice, reroute to the nearest specialized shot type."
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_01",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_02",
+      "shot_type": "dialogue_shot_reverse",
+      "template": "dialogue_shot_reverse",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "voice_conditioned_lipsync",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "半跪重伤态"
+        },
+        {
+          "raw": "BEAST_01/伪死态"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 14.92,
+      "risk_flags": [
+        "identity_escalated",
+        "mouth_visible",
+        "native_multiframe"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 4 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）"
+      ],
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_02",
+        "line_indices": [
+          2,
+          3,
+          4
+        ],
+        "roles": [
+          "姜月初",
+          "裴长青"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_01.wav",
+          "合成/第1集/配音/line_02.wav",
+          "合成/第1集/配音/line_03.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_01.wav",
+        "合成/第1集/配音/line_02.wav",
+        "合成/第1集/配音/line_03.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 2,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "voice_conditioned_lipsync",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 2,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 4,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "半跪重伤态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_01.wav",
+            "合成/第1集/配音/line_02.wav",
+            "合成/第1集/配音/line_03.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_02",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": true,
+            "effect": "anchors=2 consumption=native_multiframe"
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_03",
+      "shot_type": "dialogue_shot_reverse",
+      "template": "dialogue_shot_reverse",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "voice_conditioned_lipsync",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "半跪重伤态"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 10.96,
+      "risk_flags": [
+        "identity_escalated",
+        "mouth_visible",
+        "native_multiframe"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 4 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）"
+      ],
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_03",
+        "line_indices": [
+          5,
+          6,
+          7
+        ],
+        "roles": [
+          "姜月初",
+          "裴长青"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_04.wav",
+          "合成/第1集/配音/line_05.wav",
+          "合成/第1集/配音/line_06.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_04.wav",
+        "合成/第1集/配音/line_05.wav",
+        "合成/第1集/配音/line_06.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 2,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "voice_conditioned_lipsync",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 2,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 4,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "半跪重伤态",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_04.wav",
+            "合成/第1集/配音/line_05.wav",
+            "合成/第1集/配音/line_06.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_03",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": true,
+            "effect": "anchors=2 consumption=native_multiframe"
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_04",
+      "shot_type": "dialogue_shot_reverse",
+      "template": "dialogue_shot_reverse",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "voice_conditioned_lipsync",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "重伤态"
+        },
+        {
+          "raw": "BEAST_01/伪死态"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 9.4,
+      "risk_flags": [
+        "identity_escalated",
+        "mouth_visible",
+        "native_multiframe"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 4 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）"
+      ],
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_04",
+        "line_indices": [
+          8,
+          9
+        ],
+        "roles": [
+          "姜月初"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_07.wav",
+          "合成/第1集/配音/line_08.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_07.wav",
+        "合成/第1集/配音/line_08.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 1,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "voice_conditioned_lipsync",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 1,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 3,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "重伤态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_07.wav",
+            "合成/第1集/配音/line_08.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_04",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_05",
+      "shot_type": "reveal_reaction_chain",
+      "template": "reveal_reaction_chain",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "image2video",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "none",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "重伤搀扶态"
+        },
+        {
+          "raw": "BEAST_01/复生态"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 7.88,
+      "risk_flags": [
+        "identity_drift_risk",
+        "identity_escalated",
+        "native_multiframe"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "reveal scenes are identity- and reaction-chain-sensitive",
+        "these shots carry irreversible story state changes, so visual identity, eyeline, and reaction order outrank generic speech routing",
+        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 9 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "mark mouth_visible when faces speak; speech_policy=no_native_speech unless this clip is explicitly rerouted to a native AV backend",
+        "lock reveal_object, knowledge_order, reaction_beats, and cut_point from template_contract"
+      ],
+      "degrade_plan": "Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift.",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_05",
+        "line_indices": [
+          10,
+          11,
+          12,
+          13
+        ],
+        "roles": [
+          "虎妖",
+          "裴长青"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_09.wav",
+          "合成/第1集/配音/line_10.wav",
+          "合成/第1集/配音/line_11.wav",
+          "合成/第1集/配音/line_12.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_09.wav",
+        "合成/第1集/配音/line_10.wav",
+        "合成/第1集/配音/line_11.wav",
+        "合成/第1集/配音/line_12.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 2,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "image2video",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 2,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 4,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "重伤搀扶态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "none",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_09.wav",
+            "合成/第1集/配音/line_10.wav",
+            "合成/第1集/配音/line_11.wav",
+            "合成/第1集/配音/line_12.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "Split into evidence insert, first reaction, and follow-up reaction if faces or evidence drift."
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_05",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": true,
+            "effect": "anchors=2 consumption=native_multiframe"
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_06",
+      "shot_type": "fight_exchange",
+      "template": "fight_exchange",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "voice_conditioned_lipsync",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "搏命冲锋至倒地濒死态"
+        },
+        {
+          "raw": "BEAST_01/复生态"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 8.8,
+      "risk_flags": [
+        "action_choreography_required",
+        "contact_motion",
+        "feature_melting_risk",
+        "identity_drift_risk",
+        "identity_escalated",
+        "motion_reference_candidate",
+        "mouth_visible",
+        "multi_person",
+        "native_multiframe",
+        "physical_interaction"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "required",
+        "required": true,
+        "manifest_required": true,
+        "manifest_path": "出视频/第1集/control/Clip_06/motion_control_manifest.json",
+        "required_inputs": [
+          "pose_sequence",
+          "depth_sequence",
+          "instance_masks",
+          "contact_map",
+          "camera_path"
+        ],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [
+          "comfyui_ltx",
+          "kling_motion_control",
+          "seedance_reference_video"
+        ],
+        "failure_modes": [
+          "feature_melting",
+          "limb_fusion",
+          "weapon_contact_drift",
+          "body_interpenetration"
+        ],
+        "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest",
+        "degrade_allowed": true,
+        "notes": [
+          "impact/contact beats must be constrained by pose/depth/instance ownership or degraded into setup+impact cuts",
+          "OpenPose/DWPose alone is not enough for weapon/body contact; add depth + instance masks where possible"
+        ]
+      },
+      "action_choreography": {
+        "required": true,
+        "shot_type": "fight_exchange",
+        "beat_model": "setup_attack_impact_reaction_recovery",
+        "required_fields": [
+          "beats",
+          "speed_curve",
+          "spatial_path",
+          "camera_path",
+          "readability_beats",
+          "degrade_plan",
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard",
+          "attack_path",
+          "impact_frame",
+          "contact_points",
+          "force_direction",
+          "recovery_beat"
+        ],
+        "gate_policy": "block_prompt_without_action_choreography_contract",
+        "failure_modes": [
+          "unclear_hit",
+          "wrong_force_direction",
+          "limb_fusion",
+          "weapon_contact_drift",
+          "extra_unplanned_hits"
+        ],
+        "notes": [
+          "one attack intention per clip; write setup -> attack -> impact -> reaction -> recovery",
+          "impact/contact must have contact point, force direction, readable hit frame, and recovery beat",
+          "premium fields keyframe_plan/post_cue_points/physics_guard must map hit-stop, SFX peak, and limb/weapon ownership"
+        ]
+      },
+      "rationale": [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 8 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
+        "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
+      ],
+      "prompt_requirements": [
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）",
+        "必须在单 Clip prompt 写 Action Choreography/动作编排契约，并逐项覆盖 beats, speed_curve, spatial_path, camera_path, readability_beats, degrade_plan, keyframe_plan, post_cue_points, physics_guard, attack_path, impact_frame, contact_points, force_direction, recovery_beat；缺字段先回 n2d-script/n2d-video 补，不进入付费出视频。",
+        "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。",
+        "motion_spectacle_guidance：按本字段把风格自适应视觉盛宴落进运动描述（体积光/速度线随风格族变体·勿给赛璐璐/水墨硬塞写实 motion blur）"
+      ],
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_06",
+        "line_indices": [
+          14,
+          15,
+          16
+        ],
+        "roles": [
+          "姜月初",
+          "虎妖"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_13.wav",
+          "合成/第1集/配音/line_14.wav",
+          "合成/第1集/配音/line_15.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_13.wav",
+        "合成/第1集/配音/line_14.wav",
+        "合成/第1集/配音/line_15.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 3,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
+      },
+      "identity_preservation_plan": {
+        "required_identity_anchors": [
+          "face_shape",
+          "hairstyle",
+          "age_read",
+          "outfit_palette",
+          "named_character_screen_slot"
+        ],
+        "reference_strategy": "native_identity_lock_required",
+        "motion_readability_allowances": [
+          "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
+          "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
+          "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+        ],
+        "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
+        "applies_to": "fight_exchange"
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "voice_conditioned_lipsync",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 3,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 5,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "搏命冲锋至倒地濒死态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": true,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "use same sequence/shot_type approved reference when available"
+          },
+          "identity_preservation_plan": {
+            "required_identity_anchors": [
+              "face_shape",
+              "hairstyle",
+              "age_read",
+              "outfit_palette",
+              "named_character_screen_slot"
+            ],
+            "reference_strategy": "native_identity_lock_required",
+            "motion_readability_allowances": [
+              "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
+              "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
+              "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+            ],
+            "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
+            "applies_to": "fight_exchange"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "出视频/第1集/control/Clip_06/motion_control_manifest.json",
+          "required": true,
+          "required_inputs": [
+            "pose_sequence",
+            "depth_sequence",
+            "instance_masks",
+            "contact_map",
+            "camera_path"
+          ],
+          "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_13.wav",
+            "合成/第1集/配音/line_14.wav",
+            "合成/第1集/配音/line_15.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": true,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "motion_spectacle_guidance": "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点：① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大（拒绝平光）；命中/爆发帧给一束 motivated 强光。② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，战场可见破坏感与规模感。④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。",
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_06",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": true,
+            "effect": "motion_control=required"
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": true,
+            "effect": "anchors=3 consumption=native_multiframe"
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": true,
+            "effect": "运动参考库是增强项，缺失时降级为风险提醒。"
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_07",
+      "shot_type": "dialogue_shot_reverse",
+      "template": "system_panel",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "voice_conditioned_lipsync",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "lipsync_condition_only",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "濒死态"
+        },
+        {
+          "raw": "BEAST_01/复生态"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 7.06,
+      "risk_flags": [
+        "identity_escalated",
+        "native_multiframe"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "none",
+        "required": false,
+        "manifest_required": false,
+        "manifest_path": "",
+        "required_inputs": [],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [],
+        "failure_modes": [],
+        "gate_policy": "not_required",
+        "degrade_allowed": false,
+        "notes": []
+      },
+      "action_choreography": {
+        "required": false
+      },
+      "rationale": [
+        "voice_first + 对口型 opt-in：把克隆配音 line_NN.wav 当口型条件喂进支持音频参考的后端，同帧出对口型画面",
+        "音轨仍是 voice-first 克隆音色，模型音频仅作口型条件不接管声音——避免双人声，且省一道后期 MuseTalk/Wav2Lip pass",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 8 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
+      ],
+      "prompt_requirements": [
+        "把本镜配音 line_NN.wav 作为音频参考/口型驱动输入喂给后端；不要让后端另生成台词或环境人声",
+        "speech_policy=no_native_speech（声音由 voice-first 克隆轨提供，模型音频仅口型条件，compose 用配音轨）"
+      ],
+      "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_07",
+        "line_indices": [
+          17,
+          18
+        ],
+        "roles": [
+          "百妖谱"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_16.wav",
+          "合成/第1集/配音/line_17.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_16.wav",
+        "合成/第1集/配音/line_17.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 2,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": false
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "voice_conditioned_lipsync",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 2,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 4,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "濒死态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": false,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "not_supported_or_not_needed"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "",
+          "required": false,
+          "required_inputs": [],
+          "gate_policy": "not_required"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "lipsync_condition_only",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_16.wav",
+            "合成/第1集/配音/line_17.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "后端不支持音频参考口型 / 口型对不齐 → 回退 image2video 静音出片 + 后期 MuseTalk 对口型 pass（见 n2d-video 对口型节）；或分镜规避用侧脸/背身/OTS 配旁白。"
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": false,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_07",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": true,
+            "effect": "anchors=2 consumption=native_multiframe"
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    },
+    {
+      "clip_id": "Clip_08",
+      "shot_type": "fight_exchange",
+      "template": "fight_exchange",
+      "primary_backend": "seedance",
+      "fallback_backends": [
+        "dreamina"
+      ],
+      "mode": "frames2video",
+      "video_generation_audio_policy": "无声视频流",
+      "native_audio_policy": "none",
+      "identity_requirement": "native_identity_lock_required",
+      "clip_characters": [
+        {
+          "character_id": "CHAR_01",
+          "form": "囚途残损态"
+        },
+        {
+          "character_id": "CHAR_02",
+          "form": "濒死受刀态"
+        },
+        {
+          "raw": "BEAST_01/焦外"
+        }
+      ],
+      "loc": "LOC_01",
+      "max_clip_seconds": 15,
+      "clip_seconds": 12.88,
+      "risk_flags": [
+        "action_choreography_required",
+        "contact_motion",
+        "feature_melting_risk",
+        "identity_drift_risk",
+        "identity_escalated",
+        "motion_reference_candidate",
+        "native_multiframe",
+        "physical_interaction"
+      ],
+      "seam_relay": {
+        "is_relay": false,
+        "primary_supports_dual_keyframe": true
+      },
+      "motion_control": {
+        "level": "required",
+        "required": true,
+        "manifest_required": true,
+        "manifest_path": "出视频/第1集/control/Clip_08/motion_control_manifest.json",
+        "required_inputs": [
+          "pose_sequence",
+          "depth_sequence",
+          "instance_masks",
+          "contact_map",
+          "camera_path"
+        ],
+        "backend_control_level": "medium",
+        "backend_capabilities": [
+          "multimodal_reference",
+          "reference_video_motion",
+          "face_lock"
+        ],
+        "recommended_control_backends": [
+          "comfyui_ltx",
+          "kling_motion_control",
+          "seedance_reference_video"
+        ],
+        "failure_modes": [
+          "feature_melting",
+          "limb_fusion",
+          "weapon_contact_drift",
+          "body_interpenetration"
+        ],
+        "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest",
+        "degrade_allowed": true,
+        "notes": [
+          "impact/contact beats must be constrained by pose/depth/instance ownership or degraded into setup+impact cuts",
+          "OpenPose/DWPose alone is not enough for weapon/body contact; add depth + instance masks where possible"
+        ]
+      },
+      "action_choreography": {
+        "required": true,
+        "shot_type": "fight_exchange",
+        "beat_model": "setup_attack_impact_reaction_recovery",
+        "required_fields": [
+          "beats",
+          "speed_curve",
+          "spatial_path",
+          "camera_path",
+          "readability_beats",
+          "degrade_plan",
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard",
+          "attack_path",
+          "impact_frame",
+          "contact_points",
+          "force_direction",
+          "recovery_beat"
+        ],
+        "gate_policy": "block_prompt_without_action_choreography_contract",
+        "failure_modes": [
+          "unclear_hit",
+          "wrong_force_direction",
+          "limb_fusion",
+          "weapon_contact_drift",
+          "extra_unplanned_hits"
+        ],
+        "notes": [
+          "one attack intention per clip; write setup -> attack -> impact -> reaction -> recovery",
+          "impact/contact must have contact point, force direction, readable hit frame, and recovery beat",
+          "premium fields keyframe_plan/post_cue_points/physics_guard must map hit-stop, SFX peak, and limb/weapon ownership"
+        ]
+      },
+      "rationale": [
+        "fight/contact motion benefits from first/last frame control",
+        "impact beats need short controllable motion rather than free choreography",
+        "执行渠道「即梦/Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 12.88s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
+        "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
+        "⚠️本镜 identity 已失败 12 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
+        "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
+        "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
+      ],
+      "prompt_requirements": [
+        "write first frame and end frame as hard constraints",
+        "one contact action per clip; avoid multi-hit choreography",
+        "fill Action Choreography/动作编排契约: beats, speed_curve, spatial_path, camera_path, readability_beats, attack_path, impact_frame, contact_points, force_direction, recovery_beat",
+        "必须在单 Clip prompt 写 Action Choreography/动作编排契约，并逐项覆盖 beats, speed_curve, spatial_path, camera_path, readability_beats, degrade_plan, keyframe_plan, post_cue_points, physics_guard, attack_path, impact_frame, contact_points, force_direction, recovery_beat；缺字段先回 n2d-script/n2d-video 补，不进入付费出视频。",
+        "若有同段前序已通过 clip：把它作为视频运动/风格参考(reference_video_motion)喂给后端，锁运镜节奏；首条镜无前序参考则跳过。",
+        "motion_spectacle_guidance：按本字段把风格自适应视觉盛宴落进运动描述（体积光/速度线随风格族变体·勿给赛璐璐/水墨硬塞写实 motion blur）"
+      ],
+      "degrade_plan": "Split into setup and impact clips; keep the hit frame as the end frame.",
+      "character_backend_conflicts": [],
+      "sound_route": {
+        "clip_id": "Clip_08",
+        "line_indices": [
+          19,
+          20,
+          21,
+          22
+        ],
+        "roles": [
+          "姜月初",
+          "裴长青"
+        ],
+        "content_class": "visible_mouth_dialogue",
+        "audio_strategy": "performance_audio_first",
+        "timing_basis": "final_voice",
+        "performance_track_status": "final_ready",
+        "performance_audio_paths": [
+          "合成/第1集/配音/line_18.wav",
+          "合成/第1集/配音/line_19.wav",
+          "合成/第1集/配音/line_20.wav",
+          "合成/第1集/配音/line_21.wav"
+        ],
+        "voice_lock_status": "locked",
+        "mouth_visible": true,
+        "final_voice_required": true,
+        "requires_voice_lock_before_final_render": true,
+        "requires_performance_audio_before_final": true,
+        "post_lipsync_required": false,
+        "post_lipsync_output": "",
+        "base_video_only": false,
+        "base_video_mouth_policy": "route_default",
+        "can_generate_base_video": true,
+        "can_generate_final_performance": true,
+        "route_commitment": "uncommitted",
+        "final_voice_stage": "post_video_before_compose",
+        "timing_estimate_path": "合成/第1集/配音/timing_estimate.json"
+      },
+      "audio_strategy": "performance_audio_first",
+      "timing_basis": "final_voice",
+      "performance_track_status": "final_ready",
+      "performance_audio_paths": [
+        "合成/第1集/配音/line_18.wav",
+        "合成/第1集/配音/line_19.wav",
+        "合成/第1集/配音/line_20.wav",
+        "合成/第1集/配音/line_21.wav"
+      ],
+      "voice_lock_status": "locked",
+      "final_voice_required": true,
+      "requires_voice_lock_before_final_render": true,
+      "requires_performance_audio_before_final": true,
+      "post_lipsync_required": false,
+      "base_video_only": false,
+      "base_video_mouth_policy": "route_default",
+      "post_lipsync_output": "",
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "final_voice_stage": "post_video_before_compose",
+      "route_commitment": "uncommitted",
+      "frame_control": {
+        "mode": "multi_keyframe",
+        "max_timeline_frames": 20,
+        "supports_first_frame": true,
+        "supports_last_frame": true,
+        "supports_native_mid_anchors": true,
+        "segment_seconds_range": [
+          0.5,
+          8.0
+        ],
+        "fallback": "Use multiframe2video for first/mid/end anchors; if invalid, fall back to first+last frames2video or single first frame.",
+        "verified": "2026-06-12 local official dreamina CLI --help snapshot"
+      },
+      "anchor_consumption": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "frame_control_mode": "multi_keyframe",
+        "anchor_count": 4,
+        "need_end": true,
+        "consumption_mode": "native_multiframe",
+        "frame_strategy": "legacy_auto",
+        "consumes_mid_anchors_natively": true,
+        "consumes_endframe": true,
+        "requires_split_relay": false,
+        "reference_only": false,
+        "known_profile": true,
+        "supports_native_mid_anchors": true,
+        "supports_last_frame": true,
+        "auto_routable": true,
+        "action": "submit first/mid/end frames in one native multi-keyframe request"
+      },
+      "locked_backend": "seedance",
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
+      },
+      "identity_preservation_plan": {
+        "required_identity_anchors": [
+          "face_shape",
+          "hairstyle",
+          "age_read",
+          "outfit_palette",
+          "named_character_screen_slot"
+        ],
+        "reference_strategy": "native_identity_lock_required",
+        "motion_readability_allowances": [
+          "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
+          "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
+          "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+        ],
+        "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
+        "applies_to": "fight_exchange"
+      },
+      "execution_recipe": {
+        "backend": "seedance",
+        "execution_backend": "dreamina",
+        "mode": "frames2video",
+        "quality_tier": "high",
+        "urgency_tier": "realtime",
+        "frame_inputs": {
+          "first_frame": true,
+          "last_frame": true,
+          "mid_anchors": 4,
+          "consumption_mode": "native_multiframe",
+          "native_timeline_frames": 6,
+          "requires_split_relay": false,
+          "reference_only": false
+        },
+        "reference_inputs": {
+          "characters": [
+            {
+              "character_id": "CHAR_01",
+              "form": "囚途残损态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "CHAR_02",
+              "form": "濒死受刀态",
+              "binding": "native_identity_lock_required"
+            },
+            {
+              "character_id": "",
+              "form": "",
+              "binding": "native_identity_lock_required"
+            }
+          ],
+          "assets": [
+            "LOC_01"
+          ],
+          "max_reference_images": 0,
+          "motion_reference": {
+            "allowed": true,
+            "library_path": "生产数据/motion_reference_library.json",
+            "policy": "use same sequence/shot_type approved reference when available"
+          },
+          "identity_preservation_plan": {
+            "required_identity_anchors": [
+              "face_shape",
+              "hairstyle",
+              "age_read",
+              "outfit_palette",
+              "named_character_screen_slot"
+            ],
+            "reference_strategy": "native_identity_lock_required",
+            "motion_readability_allowances": [
+              "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
+              "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
+              "keep first/end frame and registered reference group as identity truth when motion control needs simpler movement"
+            ],
+            "fallback_plan": "If identity drifts, split into identity closeup/reaction shot plus action wide/detail shot; do not silently swap backend or drop the story beat.",
+            "applies_to": "fight_exchange"
+          }
+        },
+        "control_inputs": {
+          "manifest_path": "出视频/第1集/control/Clip_08/motion_control_manifest.json",
+          "required": true,
+          "required_inputs": [
+            "pose_sequence",
+            "depth_sequence",
+            "instance_masks",
+            "contact_map",
+            "camera_path"
+          ],
+          "gate_policy": "block_without_ready_manifest_or_degrade_only_manifest"
+        },
+        "audio_inputs": {
+          "video_generation_audio_policy": "无声视频流",
+          "native_audio_policy": "none",
+          "speech_policy": "no_native_speech",
+          "requires_voice_track": false,
+          "fallback_production_mode": "",
+          "audio_strategy": "performance_audio_first",
+          "timing_basis": "final_voice",
+          "performance_track_status": "final_ready",
+          "performance_audio_paths": [
+            "合成/第1集/配音/line_18.wav",
+            "合成/第1集/配音/line_19.wav",
+            "合成/第1集/配音/line_20.wav",
+            "合成/第1集/配音/line_21.wav"
+          ],
+          "requires_performance_audio_before_final": true,
+          "post_lipsync_required": false,
+          "base_video_only": false,
+          "base_video_mouth_policy": "route_default"
+        },
+        "fallback": {
+          "fallback_backends": [
+            "dreamina"
+          ],
+          "degrade_plan": "Split into setup and impact clips; keep the hit frame as the end frame."
+        },
+        "capability_match": {
+          "frame_contract_supported": true,
+          "motion_reference_supported": true,
+          "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
+        }
+      },
+      "motion_spectacle_guidance": "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点：① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大（拒绝平光）；命中/爆发帧给一束 motivated 强光。② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，战场可见破坏感与规模感。④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。",
+      "urgency_tier": "realtime",
+      "execution_adapter": {
+        "kind": "n2d_video_execution_status",
+        "version": 2,
+        "backend": "seedance",
+        "channel": "dreamina",
+        "execution_backend": "dreamina",
+        "state": "automated_ready",
+        "automated": true,
+        "route_executable": true,
+        "adapter_id": "dreamina_cli_v2",
+        "implementation": "embedded",
+        "command": [
+          "dreamina"
+        ],
+        "operations": [
+          "query",
+          "submit"
+        ],
+        "missing_operations": [],
+        "supports_cancel": false,
+        "supports_multishot": false,
+        "capabilities": {
+          "idempotency": "runner_guarded",
+          "async_query": true,
+          "cancel": false,
+          "multishot": false,
+          "batch_async": false
+        },
+        "message": "local automation is ready"
+      },
+      "fallback_execution_adapters": [
+        {
+          "kind": "n2d_video_execution_status",
+          "version": 2,
+          "backend": "dreamina",
+          "channel": "dreamina",
+          "execution_backend": "dreamina",
+          "state": "automated_ready",
+          "automated": true,
+          "route_executable": true,
+          "adapter_id": "dreamina_cli_v2",
+          "implementation": "embedded",
+          "command": [
+            "dreamina"
+          ],
+          "operations": [
+            "query",
+            "submit"
+          ],
+          "missing_operations": [],
+          "supports_cancel": false,
+          "supports_multishot": false,
+          "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": true,
+            "cancel": false,
+            "multishot": false,
+            "batch_async": false
+          },
+          "message": "local automation is ready"
+        }
+      ],
+      "route_executable": true,
+      "policy_resolution": {
+        "kind": "n2d_route_policy_resolution",
+        "version": 1,
+        "clip_id": "Clip_08",
+        "winner": "identity_affinity",
+        "priority_order": [
+          "fixed_mode",
+          "compliance_capability_evidence",
+          "native_voice_fallback",
+          "identity_affinity",
+          "identity_failure_escalation",
+          "motion_control_required",
+          "frame_anchor_required",
+          "cross_episode_baseline",
+          "spectacle_benchmark",
+          "spectacle_prior",
+          "cost_quality_tier",
+          "motion_reference_advisory",
+          "multishot_advisory"
+        ],
+        "decisions": [
+          {
+            "policy": "fixed_mode",
+            "priority": 0,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "compliance_capability_evidence",
+            "priority": 1,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "native_voice_fallback",
+            "priority": 2,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "identity_affinity",
+            "priority": 3,
+            "active": true,
+            "effect": "locked_backend=seedance"
+          },
+          {
+            "policy": "identity_failure_escalation",
+            "priority": 4,
+            "active": true,
+            "effect": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+          },
+          {
+            "policy": "motion_control_required",
+            "priority": 5,
+            "active": true,
+            "effect": "motion_control=required"
+          },
+          {
+            "policy": "frame_anchor_required",
+            "priority": 6,
+            "active": true,
+            "effect": "anchors=4 consumption=native_multiframe"
+          },
+          {
+            "policy": "cross_episode_baseline",
+            "priority": 7,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_benchmark",
+            "priority": 8,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "spectacle_prior",
+            "priority": 9,
+            "active": false,
+            "effect": ""
+          },
+          {
+            "policy": "cost_quality_tier",
+            "priority": 10,
+            "active": true,
+            "effect": "quality=high urgency=realtime"
+          },
+          {
+            "policy": "motion_reference_advisory",
+            "priority": 11,
+            "active": true,
+            "effect": "运动参考库是增强项，缺失时降级为风险提醒。"
+          },
+          {
+            "policy": "multishot_advisory",
+            "priority": 12,
+            "active": false,
+            "effect": ""
+          }
+        ],
+        "conflicts": [
+          {
+            "surface": "backend_choice",
+            "policies": [
+              "identity_affinity",
+              "cost_quality_tier"
+            ],
+            "winner": "identity_affinity",
+            "resolution": "priority_lattice"
+          }
+        ],
+        "signoff_required": false
+      }
+    }
+  ],
+  "motion_spectacle_guidance_applied": 2,
+  "hero_multi_version": {
+    "enabled": false,
+    "hero_clips": [],
+    "skipped_no_secondary": []
+  },
+  "multishot_groups": [],
+  "multishot_reroute_recommendations": [],
+  "execution_summary": {
+    "adapter_version": 2,
+    "states": {
+      "automated_ready": 8
+    },
+    "automated_ready": 8,
+    "manual_or_unavailable": 0,
+    "rule": "model capability does not imply local automation; use the per-route execution_adapter state"
+  },
+  "policy_lattice": {
+    "kind": "n2d_consistency_policy_lattice",
+    "version": 1,
+    "priority_order": [
+      "fixed_mode",
+      "compliance_capability_evidence",
+      "native_voice_fallback",
+      "identity_affinity",
+      "identity_failure_escalation",
+      "motion_control_required",
+      "frame_anchor_required",
+      "cross_episode_baseline",
+      "spectacle_benchmark",
+      "spectacle_prior",
+      "cost_quality_tier",
+      "motion_reference_advisory",
+      "multishot_advisory"
+    ],
+    "policies": [
+      {
+        "policy": "fixed_mode",
+        "priority": 0,
+        "description": "用户显式固定模型时，项目设置优先于自动路由、先验和 benchmark。"
+      },
+      {
+        "policy": "compliance_capability_evidence",
+        "priority": 1,
+        "description": "合规、授权和后端硬能力证据优先，缺能力不得用低优先级策略绕过。"
+      },
+      {
+        "policy": "native_voice_fallback",
+        "priority": 2,
+        "description": "原生音画的说话镜若无法保证声纹一致，先回退 voice-first 或要求补声纹证据。"
+      },
+      {
+        "policy": "identity_affinity",
+        "priority": 3,
+        "description": "一角一后端亲和/已注册主体优先于跨集 shot_type 基线。"
+      },
+      {
+        "policy": "identity_failure_escalation",
+        "priority": 4,
+        "description": "身份漂移反复失败时升级锁定强度，优先于成本和快慢档。"
+      },
+      {
+        "policy": "motion_control_required",
+        "priority": 5,
+        "description": "高风险动作镜的运动控制/拆招契约优先于普通质量档。"
+      },
+      {
+        "policy": "frame_anchor_required",
+        "priority": 6,
+        "description": "首尾/中帧锚是物理和表情保真的执行契约，不得被 ROI 直接取消。"
+      },
+      {
+        "policy": "cross_episode_baseline",
+        "priority": 7,
+        "description": "跨集后端基线稳定画风；低于身份亲和，高于 benchmark/先验。"
+      },
+      {
+        "policy": "spectacle_benchmark",
+        "priority": 8,
+        "description": "小样 probe 的奇观后端推荐可覆盖自动兜底，但不得覆盖更高优先级锁定。"
+      },
+      {
+        "policy": "spectacle_prior",
+        "priority": 9,
+        "description": "冷启动动作先验只修正通用兜底，不能覆盖已定稿策略。"
+      },
+      {
+        "policy": "cost_quality_tier",
+        "priority": 10,
+        "description": "成本/速度/质量档只在不破坏一致性契约时生效。"
+      },
+      {
+        "policy": "motion_reference_advisory",
+        "priority": 11,
+        "description": "运动参考库是增强项，缺失时降级为风险提醒。"
+      },
+      {
+        "policy": "multishot_advisory",
+        "priority": 12,
+        "description": "多镜单次生成是建议项，跨项目统一切换前不自动改主路由。"
+      }
+    ],
+    "rule": "lower priority number wins when policies compete for the same routing or consistency surface",
+    "conflict_surfaces": {
+      "backend_choice": [
+        "fixed_mode",
+        "identity_affinity",
+        "cross_episode_baseline",
+        "spectacle_benchmark",
+        "spectacle_prior",
+        "cost_quality_tier"
+      ],
+      "voice_identity": [
+        "compliance_capability_evidence",
+        "native_voice_fallback",
+        "cost_quality_tier"
+      ],
+      "frame_contract": [
+        "identity_failure_escalation",
+        "motion_control_required",
+        "frame_anchor_required",
+        "cost_quality_tier"
+      ],
+      "style_grade": [
+        "cross_episode_baseline",
+        "cost_quality_tier"
+      ]
+    }
+  }
+}

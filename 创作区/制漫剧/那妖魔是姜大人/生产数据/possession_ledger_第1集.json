@@ -1,0 +1,16 @@
+{
+  "kind": "n2d_possession_ledger",
+  "version": 1,
+  "episode": "第1集",
+  "events": [
+    {"clip": "EP01_CLIP02", "asset": "PROP_断刀", "holder": "CHAR_02", "action": "throw", "state": "掷出后插在姜月初身前泥地"},
+    {"clip": "EP01_CLIP03", "asset": "PROP_断刀", "holder": "LOC_01", "action": "release", "state": "留在泥地，裴长青不再持有"},
+    {"clip": "EP01_CLIP03", "asset": "PROP_横刀", "holder": "LOC_01", "action": "grounded", "state": "镇魔卫遗落横刀位于裴长青脚边"},
+    {"clip": "EP01_CLIP04", "asset": "PROP_横刀", "holder": "LOC_01", "action": "grounded", "state": "仍在裴长青脚边，二人短暂离开"},
+    {"clip": "EP01_CLIP05", "asset": "PROP_横刀", "holder": "CHAR_02", "action": "pickup", "state": "裴长青单臂拾刀准备搏命"},
+    {"clip": "EP01_CLIP06", "asset": "PROP_横刀", "holder": "CHAR_02", "action": "carry", "state": "冲锋时单手持刀"},
+    {"clip": "EP01_CLIP06", "asset": "PROP_横刀", "holder": "LOC_01", "action": "drop", "state": "受踢后脱手，落在姜月初脚边"},
+    {"clip": "EP01_CLIP08", "asset": "PROP_横刀", "holder": "CHAR_01", "action": "pickup", "state": "姜月初从脚边拾刀"},
+    {"clip": "EP01_CLIP08", "asset": "PROP_横刀", "holder": "CHAR_01", "action": "hold", "state": "单次刺入裴长青胸前衣料，集尾仍由姜月初持有"}
+  ]
+}

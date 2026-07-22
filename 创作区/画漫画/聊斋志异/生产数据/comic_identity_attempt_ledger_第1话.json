@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "kind": "comic_identity_generation_attempt_ledger",
+  "chapter": "第1话",
+  "updated_at": "2026-07-21T20:54:32.133329",
+  "attempts": [
+    {
+      "attempt_id": "4ac500c980de91f3d1e2",
+      "started_at": "2026-07-21T20:50:14.271809",
+      "status": "failed",
+      "generation_kind": "anchor",
+      "asset_id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "variant": "anchor",
+      "cumulative_attempt": 1,
+      "max_attempts_total": 2,
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "prompt_sha256": "137a8d0439fce7ba9ab64a62246b9bd95cffd2aeee5986abb9e387cf2e891acc",
+      "finished_at": "2026-07-21T20:52:21.321194",
+      "error": "codex completed but no image_generation_end payload was available"
+    },
+    {
+      "attempt_id": "2d0c9428884d6a18c8fb",
+      "started_at": "2026-07-21T20:52:21.321709",
+      "status": "failed",
+      "generation_kind": "anchor",
+      "asset_id": "STYLE_LIAOZHAI_QING_GONGXI",
+      "variant": "anchor",
+      "cumulative_attempt": 2,
+      "max_attempts_total": 2,
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "prompt_sha256": "137a8d0439fce7ba9ab64a62246b9bd95cffd2aeee5986abb9e387cf2e891acc",
+      "finished_at": "2026-07-21T20:54:32.133280",
+      "error": "codex completed but no image_generation_end payload was available"
+    }
+  ]
+}

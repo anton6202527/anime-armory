@@ -865,9 +865,14 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
     budget_tier = video_budget_tier(root)
     resolved_resolution = resolve_video_resolution(root, resolution, budget_tier)
     resolved_model_version = resolve_base_dreamina_model_version(root, model_version, budget_tier)
+    # Keep the concrete generation model/backend separate from its access path.
+    # A Seedance route executed through the official Dreamina CLI must use the
+    # Dreamina frame-control and adapter capabilities without rewriting the
+    # compiled prompt's backend/model identity.
+    video_channel = _project_setting(root, "生视频渠道", "")
     
     # 获取后端能力档案；不要用 mode 字符串猜命令名，统一读能力字段。
-    capability = video_backend_frame_control(backend, "")  # 渠道暂空
+    capability = video_backend_frame_control(backend, video_channel)
     supports_mf = bool(capability.get("supports_native_mid_anchors"))
     supports_last = bool(capability.get("supports_last_frame"))
 
@@ -909,6 +914,16 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
 
         num = _clip_number(item)
         anchors_info = anchors_by_clip.get(num) if num is not None else None
+        face_reveal_issues = list((anchors_info or {}).get("face_reveal_issues") or [])
+        if face_reveal_issues:
+            item["face_reveal_anchor_issue"] = "; ".join(face_reveal_issues)
+        elif (anchors_info or {}).get("face_reveal_requirements"):
+            item["face_reveal_anchor_guard"] = {
+                "version": 1,
+                "status": "ready",
+                "requirements": (anchors_info or {}).get("face_reveal_requirements"),
+                "policy": "side/back/small face becoming frontal/clear requires same-source identity-reveal timeline anchor",
+            }
         consumable_anchors = _consumable_anchor_rows(anchors_info or {})
         anchor_times = [row[0] for row in consumable_anchors]
         shots = list((anchors_info or {}).get("shots") or [])
@@ -927,7 +942,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
             item["frame_strategy"] = requested_strategy
         frame_plan = anchor_consumption_plan(
             backend,
-            "",
+            video_channel,
             anchor_count=len(anchor_times),
             need_end=bool(item.get("end_image_rel")),
             frame_strategy=requested_strategy,
@@ -1138,13 +1153,14 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         "batch": f"{start:02d}-{end:02d}",
         "batch_id": batch_id(start, end),
         "backend": backend,
+        "channel": video_channel,
         "model_version": resolved_model_version,
         "requested_model_version": str(model_version or "auto"),
         "video_budget_tier": budget_tier,
         "video_resolution": resolved_resolution,
         "requested_video_resolution": str(resolution or "auto"),
         "ratio": aspect_ratio(root),
-        "execution_adapter": execution_adapter_v2.execution_status(root, backend, ""),
+        "execution_adapter": execution_adapter_v2.execution_status(root, backend, video_channel),
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "items": items,
     }
@@ -1335,6 +1351,67 @@ def _consumable_anchor_rows(info: Mapping[str, Any]) -> List[Tuple[float, str, s
     return sorted(rows, key=lambda row: row[0])
 
 
+def _face_reveal_contract_issues(
+    continuity: Mapping[str, Any], anchors: Sequence[Mapping[str, Any]]
+) -> List[str]:
+    """Validate declared side/back/small-face -> clear-face timeline anchors.
+
+    The decision to reveal a face is a structured directing fact, not something
+    the paid runner should guess from prose. Once declared, the corresponding
+    same-source identity anchor becomes mandatory.
+    """
+    requirements = continuity.get("face_reveal_requirements")
+    if requirements is None:
+        return []
+    if not isinstance(requirements, list):
+        return ["face_reveal_requirements must be a list"]
+    issues: List[str] = []
+    for idx, requirement in enumerate(requirements, 1):
+        if not isinstance(requirement, Mapping):
+            issues.append(f"face reveal requirement #{idx} must be an object")
+            continue
+        requirement_id = str(requirement.get("id") or "").strip()
+        character_id = str(requirement.get("character_id") or "").strip()
+        transition = str(requirement.get("transition") or "").strip()
+        if not requirement_id:
+            issues.append(f"face reveal requirement #{idx} missing id")
+            continue
+        if not character_id:
+            issues.append(f"{requirement_id} missing character_id")
+        if not transition:
+            issues.append(f"{requirement_id} missing transition")
+        matched = [
+            anchor for anchor in anchors
+            if isinstance(anchor, Mapping)
+            and str(anchor.get("face_reveal_requirement_id") or "").strip() == requirement_id
+        ]
+        if len(matched) != 1:
+            issues.append(
+                f"{requirement_id} requires exactly one continuity.anchors[] identity-reveal anchor; "
+                f"found {len(matched)}"
+            )
+            continue
+        anchor = matched[0]
+        if str(anchor.get("use") or "").strip().lower() != "identity_reveal":
+            issues.append(f"{requirement_id} anchor use must be identity_reveal")
+        if not str(anchor.get("anchor_png") or "").strip():
+            issues.append(f"{requirement_id} anchor missing anchor_png")
+        try:
+            at_sec = float(anchor.get("at_sec"))
+        except (TypeError, ValueError):
+            at_sec = -1.0
+        if at_sec <= 0:
+            issues.append(f"{requirement_id} anchor missing positive at_sec")
+        face_angle = str(anchor.get("face_angle") or "").strip().lower()
+        if face_angle not in {"frontal", "three_quarter", "正脸", "前3/4", "三分侧"}:
+            issues.append(
+                f"{requirement_id} anchor face_angle must be frontal or three_quarter, got {face_angle or 'missing'}"
+            )
+        if anchor.get("same_source_identity") is not True:
+            issues.append(f"{requirement_id} anchor must declare same_source_identity=true")
+    return issues
+
+
 def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
     """{clip_number: {"times": [at_sec...], "images": [rel png...], "hints": [beat...], "duration"}}
     from storyboard.json. 读 continuity.anchors（N 锚链）或 continuity.midframe（单锚）。
@@ -1361,6 +1438,7 @@ def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
                         "use": "split"}]
         if not isinstance(anchors, list):
             anchors = []
+        face_reveal_issues = _face_reveal_contract_issues(cont, anchors)
         times, images, uses, hints = [], [], [], []
         for a in anchors:
             if not isinstance(a, dict):
@@ -1369,11 +1447,25 @@ def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
             images.append(a.get("anchor_png"))
             uses.append(a.get("use", "split"))
             # 转场 prompt 用真运动（按 at_sec 取拍），不用规划器 reason 元数据
-            hints.append(beat_hint_at(clip, a.get("at_sec")))
+            if str(a.get("use") or "").strip().lower() == "identity_reveal":
+                requirement_id = str(a.get("face_reveal_requirement_id") or "").strip()
+                requirement = next((
+                    row for row in cont.get("face_reveal_requirements") or []
+                    if isinstance(row, Mapping) and str(row.get("id") or "").strip() == requirement_id
+                ), {})
+                hints.append(
+                    f"身份显脸锚：{requirement.get('character_id') or '角色'} 从 "
+                    f"{requirement.get('transition') or '侧背/小脸'} 转到 {a.get('face_angle') or 'three_quarter'}；"
+                    "抵达同源锚帧五官，不在中间帧重绘新脸。"
+                )
+            else:
+                hints.append(beat_hint_at(clip, a.get("at_sec")))
         out[i] = {"times": times, "images": images, "uses": uses, "hints": hints,
                   "duration": clip.get("duration"),
                   "shots": _storyboard_shots(clip, clip.get("duration")),
-                  "end_state": str(cont.get("end_state") or "")}  # 末段转场 prompt 用它，比泛化句具体
+                  "end_state": str(cont.get("end_state") or ""),  # 末段转场 prompt 用它，比泛化句具体
+                  "face_reveal_requirements": cont.get("face_reveal_requirements") or [],
+                  "face_reveal_issues": face_reveal_issues}
     return out
 
 
@@ -1381,6 +1473,10 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
     prompt = Path(item["prompt_file"]).read_text(encoding="utf-8").strip()
     prompt = _append_dialogue_fact_contract(prompt, item, manifest)
     model_version = _effective_dreamina_model_version(item, manifest, prompt)
+    # Dreamina's image/multimodal commands expose duration as an integer flag.
+    # Prepared manifests store seconds as floats (for example 4.0), which Go's
+    # pflag int parser rejects even when the value is mathematically integral.
+    duration_arg = str(int(round(float(item["submit_duration"]))))
 
     # Audio/native-AV batches must not silently fall into multiframe2video: that path is
     # image-keyframe accurate, but Dreamina currently returns video-only MP4s there.
@@ -1403,7 +1499,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
             args += ["--image", str(image)]
         args += [
             "--prompt", prompt,
-            "--duration", str(item["submit_duration"]),
+            "--duration", duration_arg,
             "--ratio", manifest.get("ratio") or "9:16",
             "--video_resolution", manifest.get("video_resolution") or "720p",
             "--model_version", _multimodal_model_version(manifest, item, prompt),
@@ -1434,7 +1530,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
             "--image", item["image"],
             "--image", item["end_image"],
             "--prompt", prompt,
-            "--duration", str(item["submit_duration"]),
+            "--duration", duration_arg,
             "--ratio", manifest.get("ratio") or "9:16",
             "--video_resolution", manifest.get("video_resolution") or "720p",
             "--model_version", _multimodal_model_version(manifest, item, prompt),
@@ -1449,7 +1545,7 @@ def _dreamina_args(item: Dict[str, Any], manifest: Dict[str, Any]) -> List[str]:
         "--prompt",
         prompt,
         "--duration",
-        str(item["submit_duration"]),
+        duration_arg,
         "--video_resolution",
         manifest.get("video_resolution") or "720p",
         "--model_version",
@@ -1509,7 +1605,12 @@ def resolve_video_backend(manifest: Dict[str, Any]) -> Tuple[str, Dict[str, Any]
         project_adapter = execution_adapter_v2.adapter_for(root, raw, channel) if root else None
         if project_adapter:
             key = str(project_adapter.get("execution_backend") or key)
-            adapter = project_adapter
+            # The shared adapter registry is descriptive and intentionally
+            # contains no Python callables.  When it resolves to a runner
+            # built-in execution backend, retain the runner's submit/query
+            # builders and use the descriptive adapter only for wrappers not
+            # embedded here.
+            adapter = VIDEO_BACKEND_ADAPTERS.get(key) or project_adapter
     if not adapter:
         supported = ", ".join(sorted(VIDEO_BACKEND_ADAPTERS))
         raise RuntimeError(
@@ -1790,7 +1891,12 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     item = find_item(manifest, clip)
     if item.get("submit_id") and item.get("status") not in {"failed", "rejected"}:
         raise RuntimeError(f"{item['clip']} already has submit_id={item['submit_id']}; query or reject before resubmitting")
-    unresolved = item.get("frame_strategy_issue") or item.get("duration_segment_issue") or item.get("anchor_consumption_issue")
+    unresolved = (
+        item.get("frame_strategy_issue")
+        or item.get("duration_segment_issue")
+        or item.get("anchor_consumption_issue")
+        or item.get("face_reveal_anchor_issue")
+    )
     if unresolved:
         raise RuntimeError(f"{item['clip']} paid submission blocked by unresolved execution contract: {unresolved}")
     if str(item.get("frame_strategy") or "").lower() in {"edit_cut_pending_assets", "reroute_required"}:
@@ -2672,18 +2778,20 @@ def count_formal_clips(root: Path, episode: str) -> int:
 
 
 def count_accepted_clips(root: Path, episode: str) -> int:
-    """Count accepted logical clips; MP4 presence alone only proves download."""
-    logical_clips = set()
+    """Count fully accepted logical clips; every prepared physical part must pass."""
+    logical_parts: Dict[str, Dict[str, str]] = {}
     for path in (root / "生产数据").glob(f"video_batch_{episode}_*.json"):
         data = load_json(path)
         for item in data.get("items") or []:
-            if not isinstance(item, dict) or str(item.get("status") or "").lower() != "accepted":
+            if not isinstance(item, dict):
                 continue
             raw = str(item.get("story_clip") or item.get("relay_parent") or item.get("clip") or "")
             match = re.search(r"Clip[_-]?(\d+)", raw, re.IGNORECASE)
             if match:
-                logical_clips.add(f"Clip_{int(match.group(1)):02d}")
-    return len(logical_clips)
+                logical = f"Clip_{int(match.group(1)):02d}"
+                physical = str(item.get("clip") or logical)
+                logical_parts.setdefault(logical, {})[physical] = str(item.get("status") or "").lower()
+    return sum(1 for parts in logical_parts.values() if parts and all(status == "accepted" for status in parts.values()))
 
 
 def progress_denominator(root: Path, episode: str) -> int:
@@ -2812,14 +2920,28 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
         )
     if _enforce_silent_video_stream(root, episode, target, item, manifest):
         update_manifest(manifest_file, manifest)
-    qc_range = f"{item['clip'].split('_')[1]}_{item['clip'].split('_')[1]}"
-    qc = video_qc.run_qc(root, episode, [target], qc_range, clip_keys=[item.get("clip")])
-    qc_clip = qc["clips"][0] if qc.get("clips") else None
-    machine = qc.get("machine_summary") or {}
-    item["qc_machine"] = machine
     post_qc_policy = _post_video_qc_for_item(root, episode, item)
     if post_qc_policy:
         item["post_video_qc"] = post_qc_policy
+    dense_face_watch = post_qc_policy.get("dense_face_watch_required") is True
+    # Build the dense review packet before deciding acceptance, and force the
+    # lightweight intra-clip sampler even when storyboard lens metadata says
+    # the parent shot is wider.  Split physical takes can crop into a clear
+    # face although the logical Clip's lens label is not CU/MCU.
+    if dense_face_watch:
+        _ensure_dense_face_watch_packet(root, episode, item, target)
+    qc_range = f"{item['clip'].split('_')[1]}_{item['clip'].split('_')[1]}"
+    qc = video_qc.run_qc(
+        root,
+        episode,
+        [target],
+        qc_range,
+        clip_keys=[item.get("clip")],
+        force_intra_all=dense_face_watch,
+    )
+    qc_clip = qc["clips"][0] if qc.get("clips") else None
+    machine = qc.get("machine_summary") or {}
+    item["qc_machine"] = machine
     post_qc_reasons = _post_video_qc_block_reasons(post_qc_policy, machine)
     anchor_blocks = int(machine.get("anchor_blocks") or 0)
     native_anchor_expected = item.get("anchor_consumption_mode") == "native_multiframe"
@@ -2852,6 +2974,7 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
         raise RuntimeError(f"{item['clip']} {item['fail_reason']}（详见 {qc.get('markdown_path')}）")
     overridden = bool(qc_blocks) and allow_qc_block
     item["status"] = "accepted"
+    item.pop("fail_reason", None)
     item["qc_overridden"] = overridden
     item["target_path"] = str(target)
     item["qc_json"] = qc.get("json_path")
@@ -2880,7 +3003,6 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
         item["native_av_sidecar"] = native_av_sidecar.update_sidecars(root, episode, item, target, qc_clip)
     except Exception as exc:
         item["native_av_sidecar"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
-    _ensure_dense_face_watch_packet(root, episode, item, target)
     update_manifest(manifest_file, manifest)
     if not no_record:
         if overridden:

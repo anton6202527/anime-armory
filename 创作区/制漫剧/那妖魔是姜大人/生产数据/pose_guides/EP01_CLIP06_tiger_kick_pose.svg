@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#e8e4dc"/>
+  <path d="M110 850 L920 850" stroke="#777" stroke-width="8"/>
+  <path d="M160 790 L850 210" stroke="#b34234" stroke-width="10" stroke-dasharray="24 18" opacity="0.7"/>
+  <circle cx="695" cy="285" r="66" fill="#202326"/>
+  <path d="M695 350 L670 560 L720 730 M675 555 L575 670 M675 430 L540 475" stroke="#202326" stroke-width="54" stroke-linecap="round" fill="none"/>
+  <path d="M540 475 L425 535" stroke="#202326" stroke-width="62" stroke-linecap="round"/>
+  <circle cx="425" cy="535" r="28" fill="#b34234"/>
+  <circle cx="315" cy="495" r="52" fill="#4c5660"/>
+  <path d="M325 545 L390 650 L300 760 M385 645 L455 755 M345 590 L250 650" stroke="#4c5660" stroke-width="42" stroke-linecap="round" fill="none"/>
+  <path d="M245 650 L155 565" stroke="#32383e" stroke-width="18" stroke-linecap="round"/>
+  <path d="M140 550 L165 580" stroke="#32383e" stroke-width="10"/>
+  <path d="M425 535 L330 515" stroke="#d18b37" stroke-width="8" stroke-dasharray="12 10"/>
+  <path d="M420 585 C350 650 300 710 255 785" stroke="#2f6d8c" stroke-width="12" fill="none" marker-end="url(#arrow)"/>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2f6d8c"/></marker></defs>
+</svg>

@@ -1,0 +1,255 @@
+{
+  "generated_at": "2026-07-21T19:45:55.814173+00:00",
+  "identity_registry_path": "出图/共享/identity_registry.json",
+  "identity_registry_sha256": "4277e20e264a3b747abe3b5810d9f64257d95e6a81088eec70081e922434d911",
+  "kind": "n2d_identity_eval_pack",
+  "rows": [
+    {
+      "buckets": {
+        "back": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "852c75709da9aeb64337cb31ab008192f15f3c26aec18d7d2b3249c25b571a67",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_背.png",
+          "registry_binding_fingerprint": "c2946aa298a476971c4ba099031f399ed0c4aaefab734afdb44c79fff6d93a7c",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T13:03:23+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "55e3345d3e03e004408efbfd5eccd10c38c7f14deebf08dedd72d8b1e21ce8e5",
+          "status": "pass",
+          "view": "back"
+        },
+        "expression": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "expression_readable_without_identity_drift",
+            "hair_accessories_and_costume_continuity",
+            "neutral_or_declared_expression_lighting",
+            "same_identity_as_canonical_face_anchor"
+          ],
+          "decoded_pixel_fingerprint": "129c4956bfc752474aa6ba0f781dfa315d359ef4d33a7621b600e1fcc89d4bb4",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_表情_六联表.png",
+          "registry_binding_fingerprint": "2302f786d03052edad886c560e7ddbf5261c33b5c5cc25e9cc3ac017b6fb2a1a",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_expression_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T19:45:32+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "d0089f8b59361f5713df70c200ee6a33cb21d2f7847a86aead325f8021c58198",
+          "status": "pass",
+          "view": "expression"
+        },
+        "front": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "85240e1f417ff0d6d197e72492878becb1a10bc4d5101036280cbf03482603d8",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态.png",
+          "registry_binding_fingerprint": "811666586af9e3b897c01437c9a3c3d1c3d06b677a7d910356975f3a4373efb6",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T13:03:22+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "45de595e48c092168acf5eaf7a323edb8e3148d86ac0fb3b8792783bc1b0d14d",
+          "status": "pass",
+          "view": "front"
+        },
+        "rear_three_quarter": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "38194ca05ba6371cbcca029b0587f49dd76824bd027a83060b12b9594abc7447",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_后45度.png",
+          "registry_binding_fingerprint": "8a51617feb95284afde7f3ce53d86833e92b4ba7f08079c53a65bec3aa81b5d4",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T13:03:22+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "b129e62a06dce6f4f06dd9d79d8bdb9959bd4427501a6d7aead9639fb41d9bd6",
+          "status": "pass",
+          "view": "rear_three_quarter"
+        },
+        "side": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "35d2fade9bcf1800608613f7c8e9d5019916169975ae2da32e3d56bdf7fbabe5",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_侧.png",
+          "registry_binding_fingerprint": "cdc3ee073e03f1bc60f026cd4478b1b62f042207303f5dd828eb6bd80683820d",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T13:03:22+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "d072e300ada8e6a39bde72159ba6c859060b023dddceda2f603f2589ff83483d",
+          "status": "pass",
+          "view": "side"
+        },
+        "three_quarter": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "7d9c6568f2bd876220443a820986cabc7f46f10dfa1af7fec3141feb0b9415a6",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_45度.png",
+          "registry_binding_fingerprint": "61e3ecccb9b9b4a6bbc71aed69bb78546804af66caea0aba9abd2eec12390468",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T13:03:22+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "01dcc5da24b07c4d2c65cf018ef7daa914881a842fa6627e53630b372329d500",
+          "status": "pass",
+          "view": "three_quarter"
+        },
+        "turnaround": {
+          "character_id": "CHAR_01",
+          "confirmation": {
+            "accepted_current_pixels": true,
+            "kind": "explicit_current_pixels_acceptance"
+          },
+          "criteria": [
+            "body_centerline_and_height_aligned",
+            "full_body_head_to_foot_visible",
+            "head_top_and_foot_line_aligned",
+            "identity_and_costume_same_source",
+            "neutral_background_light_pose"
+          ],
+          "decoded_pixel_fingerprint": "1401ba06f0512adc26e80e84b9c1ef1250dc5219a08b5bce35b05dfd9bfcc4ab",
+          "decoded_pixel_fingerprint_kind": "sha256:n2d-canonical-rgba16be-v1",
+          "errors": [],
+          "evidence_kind": "structured_executor_visual_review",
+          "form": "“囚途残损态”",
+          "human_signoff": false,
+          "library_tier": "core_full",
+          "path": "出图/共享/图片/定妆_CHAR_01__囚途残损态_三视图.png",
+          "registry_binding_fingerprint": "77082d7975d7a43086be29530a3e48be7ac04c8a3d03d8922217d614a5cd4290",
+          "registry_binding_fingerprint_kind": "sha256:canonical-json(char,form,tier,view,path,png_sha256)",
+          "review_contract": "n2d_turnaround_view_review_v1",
+          "review_kind": "executor_visual",
+          "reviewed_at": "2026-07-21T13:03:23+00:00",
+          "reviewer": "automation:codex",
+          "reviewer_role": "ai_visual_executor",
+          "sha256": "d0b21fb62fd1b576c081c668580edd7820c99b1d6da8ee50ff4207252792888f",
+          "status": "pass",
+          "view": "turnaround"
+        }
+      },
+      "character_id": "CHAR_01",
+      "failed_buckets": [],
+      "form": "“囚途残损态”",
+      "library_tier": "core_full",
+      "required_buckets": [
+        "front",
+        "three_quarter",
+        "side",
+        "rear_three_quarter",
+        "back",
+        "expression",
+        "turnaround"
+      ],
+      "verdict": "pass"
+    }
+  ],
+  "summary": {
+    "core_forms": 1,
+    "failed": 0,
+    "passed": 1
+  },
+  "version": 3
+}

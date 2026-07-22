@@ -4,10 +4,10 @@
   "metadata": {
     "n2d": {
       "episode": "第1集",
-      "generated_at": "2026-07-21T12:34:10+00:00",
+      "generated_at": "2026-07-22T01:53:18+00:00",
       "kind": "n2d_editorial_timeline",
-      "phase": "animatic",
-      "planned_audio_slots": 22,
+      "phase": "assembly",
+      "planned_audio_slots": 0,
       "seams": [
         {
           "common_entities": [
@@ -201,7 +201,7 @@
           "strictness": "mode_specific",
           "to_clip": "Clip_07",
           "to_episode": "第1集",
-          "to_start_state": "虎爪入前景，姜月初未持刀。",
+          "to_start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
           "transition": "动作匹配后外压硬切内在规则。"
         },
         {
@@ -209,8 +209,7 @@
             "CHAR_01",
             "CHAR_01/囚途残损态",
             "CHAR_02",
-            "PROP_横刀",
-            "VFX_百妖谱"
+            "PROP_横刀"
           ],
           "entity_entry_exit": "现实位置不重置。；入画/现身：VFX_百妖谱、VFX_系统面板；出画/画外保留：VFX_百妖谱；主角靠近半步；裴不主动移动；百妖谱保持主观记忆层，不出现道行灌注或结算面板。",
           "from_clip": "Clip_07",
@@ -247,9 +246,9 @@
         "final_voice_required": true,
         "post_lipsync_required": true
       },
-      "timing_basis": "text_estimate_no_audio",
+      "timing_basis": "final_voice",
       "version": 1,
-      "voice_casting_status": "casting"
+      "voice_casting_status": "locked"
     }
   },
   "name": "第1集 n2d editorial",
@@ -267,31 +266,47 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+                    "sha256": "4959812de6f36a1713c03dbc915ad15cbd07c07f76160d7c3ed55fb15ba71ad9"
+                  }
+                },
+                "name": "Clip_01_刀口为何对准人_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_01"
               }
             },
-            "name": "Clip_01",
+            "name": "Clip_01_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 116.52
+                "value": 81.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -308,31 +323,104 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4",
+                    "sha256": "c2f9b69cfbddb32ea73c03436427378a143b2bccc41685898da618e92769bb88"
+                  }
+                },
+                "name": "Clip_01_刀口为何对准人_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_01"
+              }
+            },
+            "name": "Clip_01_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 87.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 180.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
+                    "sha256": "b4d5c3c4a8bf5e5ff2d4a1556b41e97c6c2d3abc5dbe0d90a516b35cb8004892"
+                  }
+                },
+                "name": "Clip_02_一炷香前的荒野死局_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_02"
               }
             },
-            "name": "Clip_02",
+            "name": "Clip_02_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 345.6
+                "value": 172.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -349,31 +437,161 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 180.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4",
+                    "sha256": "d123cc3e5a7af5cc74ebaa4708f2450f73a9574e7bb97cc0393d010dbbb71ff5"
+                  }
+                },
+                "name": "Clip_02_一炷香前的荒野死局_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_02"
+              }
+            },
+            "name": "Clip_02_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 163.2
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.48048
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+                    "sha256": "4d5c2a1f5d7b1b4f63eca26fcd8fea257dbf5905307f80bd2f57e2886bc12481"
+                  }
+                },
+                "name": "Clip_02_一炷香前的荒野死局_part3.mp4",
+                "target_url": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_02"
+              }
+            },
+            "name": "Clip_02_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 111.6
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 180.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4",
+                    "sha256": "051c88c0111d81cdf80155adf31d77ff1328ec4088c563174d421c6c7b07e125"
+                  }
+                },
+                "name": "Clip_03_以脱籍换搀扶_part1.mp4",
+                "target_url": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_03"
               }
             },
-            "name": "Clip_03",
+            "name": "Clip_03_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 359.67
+                "value": 179.7
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -390,21 +608,149 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4",
+                    "sha256": "a759f3d004c2edc8e9b95551ab7a902c797ae7120cd4353ab679287ec2c9b1a6"
+                  }
+                },
+                "name": "Clip_03_以脱籍换搀扶_part2.mp4",
+                "target_url": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_03"
+              }
+            },
+            "name": "Clip_03_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 72.3
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+                    "sha256": "21f1f3c6a5e9e26e28777696cac51f2c4f7b5d121f655dd7b9e0aa57dcdf9091"
+                  }
+                },
+                "name": "Clip_03_以脱籍换搀扶_part3.mp4",
+                "target_url": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "performance_audio_first",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_03"
+              }
+            },
+            "name": "Clip_03_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 76.8
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 282.0
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第1集/图片/Clip04_first.png",
+                    "sha256": "5e511875d56ba813cef79e8f2ccbfb10c1416c76a30e666e5e8673b115f75774"
+                  }
+                },
+                "name": "Clip04_first.png",
+                "target_url": "出图/第1集/图片/Clip04_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_04"
               }
             },
@@ -414,7 +760,7 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 222.57
+                "value": 282.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -431,21 +777,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 236.4
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第1集/图片/Clip05_first.png",
+                    "sha256": "72413fc47afe1e2983f9fc936f477beac7473ab78b7e07015525ab1cef7a0a8b"
+                  }
+                },
+                "name": "Clip05_first.png",
+                "target_url": "出图/第1集/图片/Clip05_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_05"
               }
             },
@@ -455,7 +815,7 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 348.24
+                "value": 236.4
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -472,21 +832,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 264.0
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第1集/图片/Clip06_first.png",
+                    "sha256": "2c8d2d006a9e7ac722ffe7682f1a5c67dc4fa58b29add20c81a9179aa654cd4e"
+                  }
+                },
+                "name": "Clip06_first.png",
+                "target_url": "出图/第1集/图片/Clip06_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_06"
               }
             },
@@ -496,7 +870,7 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 247.53
+                "value": 264.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -513,21 +887,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 211.8
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第1集/图片/Clip07_first.png",
+                    "sha256": "d626a750d548b216e7765792cbc0674d65cb6ff9adea10677f9e9e3f9114d865"
+                  }
+                },
+                "name": "Clip07_first.png",
+                "target_url": "出图/第1集/图片/Clip07_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_07"
               }
             },
@@ -537,7 +925,7 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 324.33
+                "value": 211.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -554,21 +942,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 386.4
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第1集/图片/Clip08_first.png",
+                    "sha256": "9fe6b917cf3bcabb862900fc5768201a38e3667b520613fb6aa0e89fcd7da86b"
+                  }
+                },
+                "name": "Clip08_first.png",
+                "target_url": "出图/第1集/图片/Clip08_first.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_08"
               }
             },
@@ -578,7 +980,7 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 279.48
+                "value": 386.4
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -600,7 +1002,7 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 98.52
+                "value": 150.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -623,12 +1025,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 159.66
+                "value": 214.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 116.52
+                "value": 168.0
               }
             },
             "metadata": {
@@ -646,12 +1048,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 119.94
+                "value": 181.2
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 288.18
+                "value": 394.8
               }
             },
             "metadata": {
@@ -669,12 +1071,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 24.0
+                "value": 9.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 426.12
+                "value": 594.0
               }
             },
             "metadata": {
@@ -692,12 +1094,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 63.9
+                "value": 98.4
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 462.12
+                "value": 615.6
               }
             },
             "metadata": {
@@ -715,12 +1117,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 87.9
+                "value": 85.2
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 538.02
+                "value": 726.0
               }
             },
             "metadata": {
@@ -738,12 +1140,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 171.87
+                "value": 109.2
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 637.92
+                "value": 823.2
               }
             },
             "metadata": {
@@ -761,12 +1163,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 120.6
+                "value": 123.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 821.79
+                "value": 944.4
               }
             },
             "metadata": {
@@ -784,12 +1186,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 71.97
+                "value": 128.4
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 960.39
+                "value": 1086.0
               }
             },
             "metadata": {
@@ -807,12 +1209,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 107.01
+                "value": 61.2
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1044.36
+                "value": 1226.4
               }
             },
             "metadata": {
@@ -830,12 +1232,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 72.51
+                "value": 54.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1169.37
+                "value": 1305.6
               }
             },
             "metadata": {
@@ -853,12 +1255,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 90.72
+                "value": 51.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1253.88
+                "value": 1371.6
               }
             },
             "metadata": {
@@ -876,12 +1278,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 24.0
+                "value": 15.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1356.6
+                "value": 1435.2
               }
             },
             "metadata": {
@@ -899,12 +1301,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 24.0
+                "value": 39.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1392.6
+                "value": 1462.8
               }
             },
             "metadata": {
@@ -922,12 +1324,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 107.01
+                "value": 58.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1428.6
+                "value": 1514.4
               }
             },
             "metadata": {
@@ -945,12 +1347,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 74.52
+                "value": 123.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1547.61
+                "value": 1585.2
               }
             },
             "metadata": {
@@ -968,12 +1370,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 100.53
+                "value": 92.4
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1640.13
+                "value": 1726.8
               }
             },
             "metadata": {
@@ -991,12 +1393,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 184.8
+                "value": 80.4
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1761.66
+                "value": 1840.2
               }
             },
             "metadata": {
@@ -1014,12 +1416,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 130.92
+                "value": 189.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 1964.46
+                "value": 1938.6
               }
             },
             "metadata": {
@@ -1037,12 +1439,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 36.6
+                "value": 40.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 2107.38
+                "value": 2140.2
               }
             },
             "metadata": {
@@ -1060,12 +1462,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 24.0
+                "value": 37.2
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 2155.98
+                "value": 2193.0
               }
             },
             "metadata": {
@@ -1083,12 +1485,12 @@
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 51.96
+                "value": 82.8
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 2191.98
+                "value": 2242.2
               }
             },
             "metadata": {
@@ -1118,1002 +1520,43 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 2325.0
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "合成/第1集/配音/voice_zh.wav",
+                    "sha256": "43012bafe9efa0a3db73d446ca21ca2bb3ca21afe3ae673fd346351188e9f8d5"
+                  }
+                },
+                "name": "voice_zh.wav",
+                "target_url": "合成/第1集/配音/voice_zh.wav"
               }
             },
             "metadata": {
               "n2d": {
-                "gap_after_sec": 0.6,
-                "line_index": 1,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "活下去，得先杀一个人。可我刀下的——不是妖。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
+                "track_role": "A1 Dialogue_Narration"
               }
             },
-            "name": "VO_PLAN_001_姜月初",
+            "name": "voice_zh",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 98.52
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 2,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "一炷香前。大唐荒野，囚犯和镇魔卫死了一地。我偏偏在死人堆里醒了。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_002_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 159.66
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.6,
-                "line_index": 3,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "穿越，罪臣之女，没入贱籍。刚来就死，我也算头一个。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_003_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 119.94
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 4,
-                "media_status": "planned_missing_reference",
-                "role": "裴长青",
-                "text": "过来。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_004_裴长青",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 24.0
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 5,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "你都快断气了，还想使唤我？",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_005_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 63.9
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 6,
-                "media_status": "planned_missing_reference",
-                "role": "裴长青",
-                "text": "你可以试试。下一刀，落的就不是地上。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_006_裴长青",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 87.9
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 7,
-                "media_status": "planned_missing_reference",
-                "role": "裴长青",
-                "text": "裴长青，陇右镇魔都司队正。扶我往南，我保你脱籍，还你自由。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_007_裴长青",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 171.87
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.6,
-                "line_index": 8,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "一个将死之人的承诺……总好过我现在就死。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_008_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 120.6
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 9,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "好。先说清楚，那头虎妖真死了？",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_009_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 71.97
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.6,
-                "line_index": 10,
-                "media_status": "planned_missing_reference",
-                "role": "虎妖",
-                "text": "别跑啊。这荒郊野岭的，你们能去哪儿？",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_010_虎妖",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 107.01
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 11,
-                "media_status": "planned_missing_reference",
-                "role": "裴长青",
-                "text": "不可能……我明明刺穿了你的心！",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_011_裴长青",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 72.51
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 12,
-                "media_status": "planned_missing_reference",
-                "role": "虎妖",
-                "text": "几个不入流的镇魔卫，也配杀我？",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_012_虎妖",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 90.72
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 13,
-                "media_status": "planned_missing_reference",
-                "role": "裴长青",
-                "text": "快走！",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_013_裴长青",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 24.0
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 14,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "裴长青！",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_014_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 24.0
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 15,
-                "media_status": "planned_missing_reference",
-                "role": "虎妖",
-                "text": "莫再挣扎。等吃干净了，我替你们立碑。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_015_虎妖",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 107.01
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.6,
-                "line_index": 16,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "我才活过来，凭什么又让我去死？",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_016_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 74.52
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.7,
-                "line_index": 17,
-                "media_status": "planned_missing_reference",
-                "role": "百妖谱",
-                "text": "百妖谱开启。斩杀生物，可获得道行。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_017_百妖谱",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 100.53
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.6,
-                "line_index": 18,
-                "media_status": "planned_missing_reference",
-                "role": "百妖谱",
-                "text": "妖血为墨，可摹其形，夺其神通；道行尽付一击，可借岁月之力杀敌。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_018_百妖谱",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 184.8
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 19,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "杀生得道行……可这里还有谁活着？除了那头杀不死的虎妖——",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_019_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 130.92
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 20,
-                "media_status": "planned_missing_reference",
-                "role": "裴长青",
-                "text": "拿刀……快逃。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_020_裴长青",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 36.6
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0.4,
-                "line_index": 21,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "我想活。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_021_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 24.0
-              },
-              "start_time": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 0.0
-              }
-            }
-          },
-          {
-            "OTIO_SCHEMA": "Clip.2",
-            "active_media_reference_key": "DEFAULT_MEDIA",
-            "effects": [],
-            "enabled": true,
-            "markers": [],
-            "media_references": {
-              "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
-                "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
-                  }
-                },
-                "name": "missing_media"
-              }
-            },
-            "metadata": {
-              "n2d": {
-                "gap_after_sec": 0,
-                "line_index": 22,
-                "media_status": "planned_missing_reference",
-                "role": "姜月初",
-                "text": "裴长青，对不住了。",
-                "timing_basis": "text_estimate_no_audio",
-                "track_role": "A1 Dialogue_Narration",
-                "voice_lock_required": true
-              }
-            },
-            "name": "VO_PLAN_022_姜月初",
-            "source_range": {
-              "OTIO_SCHEMA": "TimeRange.1",
-              "duration": {
-                "OTIO_SCHEMA": "RationalTime.1",
-                "rate": 30.0,
-                "value": 51.96
+                "value": 2325.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="486" viewBox="0 0 1012 486">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">夜深的书斋内，青面锯齿的枯瘦鬼体侧坐榻边，将一张完整但无血的女…</text>
+<rect x="46" y="135" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="150">P002</text>
+<text class="note" x="51" y="165">阴晨长路上，王生接过少女手中布包，少女低头跟他向远处青砖宅院走…</text>
+<rect x="57" y="209" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="224">P003</text>
+<text class="note" x="62" y="239">王家正房内，陈氏一手按住桌角、直视王生，王生侧身避开她的目光；…</text>
+<rect x="57" y="259" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="274">P004</text>
+<text class="note" x="62" y="289">市井路口，道士停步扣住王生袖口，目光落在王生肩后一缕几不可见的…</text>
+<rect x="46" y="310" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="325">P005</text>
+<text class="note" x="51" y="340">从书斋窗外窥视，前景王生一只眼和扶住窗棂的手指被木格切成狭缝；…</text>
+<rect x="57" y="384" width="242" height="45" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="399">P006</text>
+<text class="note" x="62" y="414">青帝庙边泥路，王生双膝着地、两手举过胸口接住道士递来的旧拂尘；…</text>
+<text class="note" x="38" y="448">hook: P006 desperate_action</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="374" y="62" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="77">P007</text>
+<text class="note" x="379" y="92">夜中寝门被猛然撞开，旧拂尘在画面中线断成两截，少女外皮裂开脸侧…</text>
+<rect x="374" y="127" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="142">P008</text>
+<text class="note" x="379" y="157">清晨书斋，陈氏跪在床边，两手悬在王生身上方却不敢触碰；王生被素…</text>
+<rect x="374" y="193" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="208">P009</text>
+<text class="note" x="379" y="223">南院庭中，道士双脚一前一后站稳，右手素木剑横向掠过鬼体颈部，左…</text>
+<rect x="385" y="258" width="242" height="39" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="273">P010</text>
+<text class="note" x="390" y="288">王家宅门内，道士站着将卷如画轴的完整人皮收入素布袋，陈氏在画左…</text>
+<rect x="374" y="304" width="264" height="59" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="319">P011</text>
+<text class="note" x="379" y="334">青帝庙边泥路中心，陈氏双膝着地，额角有一道被竹杖打红的痕迹；疯…</text>
+<rect x="374" y="369" width="264" height="60" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="384">P012</text>
+<text class="note" x="379" y="399">夜幕重回书斋，陈氏坐在地上，背倚床沿，双臂抱住覆着素被的王生上…</text>
+<text class="note" x="366" y="448">hook: P012 lowest_point</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="702" y="62" width="264" height="87" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="77">P013</text>
+<text class="note" x="707" y="92">近景从陈氏肩后看向床面：她一手掩口，另一手已伸向王生腹部；一颗…</text>
+<rect x="702" y="155" width="264" height="87" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="170">P014</text>
+<text class="note" x="707" y="185">陈氏跪伏在床边，双手叠压在王生腹部绷带上，手臂与肩背显出真实用…</text>
+<rect x="702" y="248" width="264" height="87" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="263">P015</text>
+<text class="note" x="707" y="278">拂晓书斋，纸窗由深蓝转为灰白，陈氏伏在床边熟睡，一只手仍覆在王…</text>
+<rect x="702" y="342" width="264" height="88" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="357">P016</text>
+<text class="note" x="707" y="372">数日后的书斋近景，王生坐在床沿接开素青长衫，腹部只露出一枚如古…</text>
+<text class="note" x="694" y="448">hook: P016 epilogue</text>
+</svg>

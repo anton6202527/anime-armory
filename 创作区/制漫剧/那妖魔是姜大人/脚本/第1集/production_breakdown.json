@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:33:23+00:00",
+  "generated_at": "2026-07-21T12:44:07+00:00",
   "inputs": {
     "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
     "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
@@ -290,12 +290,18 @@
         "anchors": [
           {
             "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
-            "at_sec": 1.6,
-            "reason": "姜月初反应CU切虎妖低机位压迫镜",
-            "use": "edit_cut"
+            "at_sec": 3.0,
+            "reason": "锁定虎足命中裴长青躯干的接触帧、力线和衣料压缩",
+            "use": "mid_impact"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 4.8,
+            "reason": "锁定裴长青与横刀沿原轴回落姜月初脚边的人刀空间关系",
+            "use": "action_recovery"
           }
         ],
-        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "end_anchor_required": true,
         "endframe": "",
         "firstframe": "",
@@ -400,9 +406,9 @@
       ],
       "clip_id": "EP01_CLIP08",
       "department_notes": {
-        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/濒死受刀态, BEAST_01/焦外；关键物件 PROP_横刀, VFX_百妖谱。",
+        "art": "场景 LOC_01；入画角色 CHAR_01/囚途残损态, CHAR_02/濒死受刀态, BEAST_01/焦外；关键物件 PROP_横刀。",
         "camera": "景别/机位：ECU→CU→MS；视线/轴线：左上/右下互看后失焦；模板：fight_exchange。",
-        "post": "转场 hard_cut_to_black；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
+        "post": "转场 hard_cut_to_black；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
       "image_video_requirements": {
         "anchors": [
@@ -441,8 +447,7 @@
       "label": "对不住了，刀落人身",
       "location_id": "LOC_01",
       "props_and_objects": [
-        "PROP_横刀",
-        "VFX_百妖谱"
+        "PROP_横刀"
       ],
       "scene": "LOC_01",
       "sound_needs": {
@@ -456,10 +461,10 @@
         "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；横刀出鞘、刀锋破风、金纹灌刀；冲撞、妖风、命中点、收势重音。"
       },
       "vfx_or_overlay": {
-        "compose_overlay_only": "VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。",
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
         "system_panels": [],
         "vfx_assets": [
-          "VFX_百妖谱"
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
         ]
       },
       "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"

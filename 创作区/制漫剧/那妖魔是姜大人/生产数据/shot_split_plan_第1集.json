@@ -219,8 +219,7 @@
         "template_required",
         "split_reaction",
         "defer_to_composite",
-        "split_video_shots",
-        "compress_before_video"
+        "split_video_shots"
       ],
       "clip": "EP01_CLIP06",
       "duration_sec": 8.251,
@@ -229,8 +228,8 @@
       "label": "虎口最后威胁",
       "narrative_weight": 2,
       "pilot_candidate": true,
-      "primary_action": "compress_before_video",
-      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+      "primary_action": "split_video_shots",
+      "reason": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
       "risk_score": 20,
       "risk_tags": [
         "long_clip_8s",
@@ -243,13 +242,13 @@
         "spectacle_fight_exchange"
       ],
       "story_economy": {
-        "detail_allowed": false,
-        "economy_class": "selective_detail",
-        "over_budget_sec": 1.251,
-        "recommended_action": "trim_to_selective_detail",
-        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
         "target_story_clip_sec": {
-          "max": 7.0,
+          "max": 9.0,
           "min": 5.0
         }
       },
@@ -398,12 +397,12 @@
   "summary": {
     "add_anchor": 0,
     "clips": 8,
-    "compress_before_video": 1,
+    "compress_before_video": 0,
     "defer_to_composite": 6,
     "direct_submit_blocked": 1,
     "keep_single": 0,
     "split_or_template": 8,
-    "story_economy_over_budget": 1,
+    "story_economy_over_budget": 0,
     "template_required": 7,
     "video_shot_split": 8
   }

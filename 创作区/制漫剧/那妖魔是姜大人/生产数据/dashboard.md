@@ -1,26 +1,26 @@
 # n2d 生产数据仪表盘
 
-- 生成时间：2026-07-21T12:32:53+00:00
-- 事件日志：`创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
+- 生成时间：2026-07-22T01:53:30+00:00
+- 事件日志：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl`
 - 投放数据：`未发现 platform_metrics.*`
 
 ## 总览
 
 | 集数 | 事件数 | 成本 | 耗时 | 生成次数 | 重抽 | QA阻断 | QA警告 | 生成通过率 | 可交付通过率 |
 |---:|---:|---|---:|---:|---:|---:|---:|---:|---:|
-| 10 | 16 | — | 15m00s | 1 | 0 | 5 | 6 | 100.0% | 0.0% |
+| 10 | 423 | credits 532.00 | 3h12m52s | 133 | 38 | 72 | 161 | 100.0% | 0.0% |
 
 ## ROI
 
 | 成片分钟 | 每分钟成本 | 每集耗时 | 一次通过率 | 重抽率 | 投放播放 | 投放收入 | 投放成本 | 净回收 | 回收/生产成本 |
 |---:|---|---:|---:|---:|---:|---|---|---|---:|
-| 1m15s | — | 15m00s | 100.0% | 0.0% | 0 | — | — | — | — |
+| 1m18s | credits 411.87/min | 3h12m52s | 33.1% | 28.6% | 0 | — | — | — | — |
 
 ## Gate 噪声
 
 | warn/生成 | block/生成 | 误报回收 | 误报回收率 |
 |---:|---:|---:|---:|
-| 6.0 | 5.0 | 0 | 0.0% |
+| 1.2105 | 0.5414 | 0 | 0.0% |
 
 ## 行业基准对照（只读 · 非闸门 · 采集 2026-06-25）
 
@@ -28,8 +28,8 @@
 
 | 指标 | 本作实测 | 行业基准 | 对照 |
 |---|---:|---:|:---:|
-| 一次通过率 | 100.0% | 90.0% | ✅ 达标 |
-| 重抽率 | 0.0% | 10.0% | ✅ 达标 |
+| 一次通过率 | 33.1% | 90.0% | ⚠️ 差距 |
+| 重抽率 | 28.6% | 10.0% | ⚠️ 差距 |
 | 每分钟成本（CNY） | — | CNY 6.00/min | — |
 | 跨集角色一致性 | 见 n2d-score 视觉分 | 95.0% | — |
 
@@ -47,7 +47,7 @@
 
 | 集 | 当前前沿 | 成本 | 每分钟成本 | 耗时 | 一次通过率 | 重抽率 | 重抽原因Top3 | QA阻断 | 净回收 | 回收/成本 | 3s留存 | 15s留存 | 完播率 | 追更率 |
 |---|---|---|---|---:|---:|---:|---|---:|---|---:|---:|---:|---:|---:|
-| 第1集 | 出图prompt | — | — | 15m00s | 100.0% | 0.0% | — | 5 | — | — | — | — | — | — |
+| 第1集 | 图生视频 | credits 532.00 | credits 411.87/min | 3h12m52s | 33.1% | 28.6% | 配方 schema 补全（像素未改）×11；配方 provider 补全（像素未改）×11；刀刃误指颈部，精确下移至胸骨前且未接触×1 | 72 | — | — | — | — | — | — |
 | 第2集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第3集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第4集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
@@ -58,10 +58,29 @@
 | 第9集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 | 第10集 | 阶段1·剧本改编 | — | — | 0s | — | — | — | 0 | — | — | — | — | — | — |
 
+## 重抽原因分维度
+
+| 维度 | 次数 | 占比 |
+|---|---:|---:|
+| 其他 (other) | 23 | 61% |
+| 时序/接缝 (temporal) | 7 | 18% |
+| 道具/特效 (prop_structure) | 4 | 11% |
+| 参考图裁切 (reference_crop) | 4 | 11% |
+| **一致性小计**（脸漂/服装/场景/画风） | **0** | **0%** |
+
 ## 最新阻断
 
-- 第1集 / image_prompt_preflight / 空间硬控: 创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6 — 该 fight_exchange 模板具有 pose_reference_required: true 约束，必须配置 pose_image_path。
-- 第1集 / image_prompt_preflight / 实体排程: 创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#8 — 同一实体同时被登记为可见/必须出现和 offscreen_presence：VFX_百妖谱。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。
-- 第1集 / image_prompt_preflight / 持有账本(POS): 创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json — storyboard 已出现核心道具/武器/证物/法宝的持有、交接、丢失或拾取（EP01_CLIP03:PROP_断刀/PROP_横刀/PROP_翻覆囚车、EP01_CLIP04:PROP_断刀/PROP_横刀、EP01_CLIP05:PROP_横刀、EP01_CLIP08:PROP_横刀），但缺 possession_ledger；请先在 创作区/制漫剧/那妖魔是姜大人/生产数据/possession_ledger_第1集.json 记录 clip、asset、holder、action，避免道具跨镜瞬移。
-- 第1集 / image_prompt_preflight / P-3制片交接包: 创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第1集.json — P-3 制片交接包未通过：1/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第1集/production_breakdown.json: status 不是 confirmed；脚本/第1集/continuity_breakdown.json: status 不是 confirmed；脚本/第1集/continuity_chain.json: status 不是 confirmed；脚本/第1集/continuity_bible.json: status 不是 confirmed；脚本/第1集/ai_shooting_schedule.json: status 不是 confirmed；脚本/第1集/ai_call_sheet.md: 缺 status: confirmed / 状态: confirmed。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py "创作区/制漫剧/那妖魔是姜大人" 第1集 --stage image_prompt_preflight --write-missing`。
-- 第1集 / image_prompt_preflight / 物料新鲜度: 第1集 — 前期物料可能已过期：n2d-image, n2d-voice 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check "创作区/制漫剧/那妖魔是姜大人" 第1集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py "创作区/制漫剧/那妖魔是姜大人" 第1集 --stage image_prompt --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record "创作区/制漫剧/那妖魔是姜大人" 第1集` 固化新基线。（注：当前基线为自动建立的临时 bootstrap，看不到更早 skill 版本的差异；确认现有产物可接受后请 `record` 固化）
+- 第1集 / image_prompt_preflight / P-3制片交接包: 创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第1集.json — P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第1集/production_handoff_pack.json: inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff；脚本/第1集/production_handoff_signoff.json: input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[user:wesley:producer] 未绑定当前 input_fingerprint；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor。统一修复入口：`python3 skills/n2d/scripts/repair_preflight.py "创作区/制漫剧/那妖魔是姜大人" 第1集 --stage image_prompt_preflight --write-missing`。
+- 第1集 / image / 出图落档QC: 创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.json — 输入首帧 image_qc 的 `inputs_fingerprint` 与当前文件失配（prompt、registry 或 PNG 已变）。当前结论作废；出视频前先重跑 image_qc。
+- 第1集 / image / 发型(H1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 发型(H1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 发型(H1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 发型(H1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / 发型(H1): 出图/第1集/图片 — 一致性审计发现问题
+- 第1集 / image / character_consistency: 图片/Clip01_end.png — 降级精度多人同框：图片/Clip01_end.png 在 Pillow 降级模式下无 embedding 串脸检测（无 insightface）；同框 ≥2 具名角色时次要角色脸是否串脸/画对未经核验，不放行；人审并排图：/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/face_review/Clip_01_compare.png
+
+## 验收总账
+
+| 集 | 状态 | 实体数 | block | high | medium | 重点实体 |
+|---|---|---:|---:|---:|---:|---|
+| 第1集 | blocked | 10 | 3 | 0 | 15 | 姜月初(block)；裴长青(medium)；虎妖(medium) |

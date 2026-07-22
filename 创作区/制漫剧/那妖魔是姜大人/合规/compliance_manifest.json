@@ -48,10 +48,17 @@
     ]
   },
   "voice": {
-    "status": "synthetic_voice",
-    "uses_voice_clone": false,
-    "authorization_status": "not_applicable",
-    "evidence": "全角色使用原创合成音色，不使用真人声纹克隆"
+    "status": "authorized_clone",
+    "uses_voice_clone": true,
+    "authorization_status": "approved",
+    "reference_origin": "pure_synthetic",
+    "applies_to": [
+      "姜月初",
+      "裴长青",
+      "虎妖",
+      "百妖谱"
+    ],
+    "evidence": "四条参考音均由 macOS 系统中文合成声在本机生成并经 ffmpeg 音色设计，落档于设定库/voicebank；不含真人录音、演员声纹或公众人物声音。CosyVoice2 仅对这些纯合成参考做零样本音色延展。"
   },
   "image_identity": {
     "uses_cameo": false,

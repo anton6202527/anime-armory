@@ -280,7 +280,7 @@
       },
       "seam_mode": "eyeline_cut",
       "source_id": "EP01_CLIP07",
-      "start_state": "虎爪入前景，姜月初未持刀。",
+      "start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
       "transition_to_next": "视线切递刀手。"
     },
     {
@@ -302,8 +302,7 @@
       "location_id": "LOC_01",
       "need_endframe": false,
       "objects": [
-        "PROP_横刀",
-        "VFX_百妖谱"
+        "PROP_横刀"
       ],
       "offscreen_presence": [
         "VFX_百妖谱"
@@ -324,7 +323,7 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-21T12:33:23+00:00",
+  "generated_at": "2026-07-21T12:44:07+00:00",
   "inputs": {
     "previous_storyboard": "",
     "storyboard": "脚本/第1集/storyboard.json"
@@ -530,7 +529,7 @@
       "strictness": "mode_specific",
       "to_clip": "Clip_07",
       "to_episode": "第1集",
-      "to_start_state": "虎爪入前景，姜月初未持刀。",
+      "to_start_state": "裴长青濒死落在姜月初脚边，横刀脱手，虎妖继续逼近；姜月初尚未持刀。",
       "transition": "动作匹配后外压硬切内在规则。"
     },
     {
@@ -538,8 +537,7 @@
         "CHAR_01",
         "CHAR_01/囚途残损态",
         "CHAR_02",
-        "PROP_横刀",
-        "VFX_百妖谱"
+        "PROP_横刀"
       ],
       "entity_entry_exit": "现实位置不重置。；入画/现身：VFX_百妖谱、VFX_系统面板；出画/画外保留：VFX_百妖谱；主角靠近半步；裴不主动移动；百妖谱保持主观记忆层，不出现道行灌注或结算面板。",
       "from_clip": "Clip_07",

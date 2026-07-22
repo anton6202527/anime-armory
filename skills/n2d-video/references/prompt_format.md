@@ -304,6 +304,7 @@ profile 支持独立负向字段时可追加：
 - **锁脸不锁情写进 negative**：双帧之间唯一允许变化的是面部肌肉；脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤 must hold，越大表情越要重申。
 - **运镜让位**：大表情镜尽量**固定或极缓推**，不要叠大幅运镜——运镜+大表情同时变会放大脸漂。情绪靠表情和景别给，不靠甩镜。
 - **保真实现拆段**：表情跨度过大或后端压不住时，拆成"起表情保持 clip（固定·微动）+ 表情转变 clip（首尾双帧）"两短段，或改 MCU/OTS/侧脸把脸缩小、用肩背和手部反应替代正脸大表情。
+- **转脸显脸锚（身份揭示硬合同）**：角色从侧脸/背脸/遮挡脸转成正脸或前 3/4 清晰脸，或从远处小脸进入可辨 MCU/CU 时，不得只靠起止整幅图让视频模型补五官。`continuity.face_reveal_requirements[]` 必须逐节点写 `id + character_id + transition`；对应 `continuity.anchors[]` 必须且只能有一张 `use=identity_reveal`、`face_reveal_requirement_id=<id>`、`face_angle=frontal|three_quarter`、`same_source_identity=true` 的同源分镜锚，并先过 full image_qc。原生多帧后端把该图放入时间轴；只收首尾帧的后端自动按此锚拆成 A→显脸锚→B。缺任一字段、图片或时间点时，runner 写 `face_reveal_anchor_issue` 并在付费提交前阻断。
 - **缺料回上游**：尾帧所需的止表情定妆缺失时，回 `n2d-image` 补 `reference_group.expressions`（按情绪：中性/喜/怒/悲/惊），不要在视频侧让模型现编一张哭脸当尾帧。
 
 ---

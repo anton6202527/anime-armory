@@ -94,7 +94,7 @@
       "path": "设定库/voice_casting.json",
       "exists": true,
       "kind": "file",
-      "sha256": "0dbc1f2d557f541bbb055a4be4e2d362ff1b21df72cd5909eec1acb872955d68"
+      "sha256": "d4a790998fca4da01cfc302f52148c076cc04120049d107790125a0391128b70"
     },
     {
       "stage": "voice",
@@ -106,14 +106,16 @@
     {
       "stage": "voice",
       "path": "合成/第1集/配音/voice_zh.wav",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "43012bafe9efa0a3db73d446ca21ca2bb3ca21afe3ae673fd346351188e9f8d5"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/时长清单.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "3f6a3ea39e92afb915cd7f310843de710332a0e6092f0543b84aa4e090bb7d4f"
     },
     {
       "stage": "voice",
@@ -189,7 +191,7 @@
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "0fd9b5eb2f7a254b98a25c9ddac735b3208fd954b1eb6ee1b5a8215f0f7f23a7"
+      "sha256": "a4b5ed2ee988f7405cb4f29c25721fb60eb53c45a359a627709fbfe9552b687d"
     },
     {
       "stage": "script_stage2",
@@ -203,7 +205,7 @@
       "path": "脚本/第1集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "63297ee8cfa5143aebb3ff97367222636b68de1880f3714f0d54897c999ae3d9"
+      "sha256": "34da4fa7b0d15ea4d8cca106bbd26848f119598f61e0601e8cb472dc11795cab"
     },
     {
       "stage": "script_stage2",
@@ -216,55 +218,63 @@
       "path": "脚本/第1集/镜头时长.json",
       "exists": true,
       "kind": "file",
-      "sha256": "f68ccf222a413dec89a264b9544d0c44974fd9c0072c2385dd2276832f60f7bb"
+      "sha256": "75dd9dc4739595de5e584ad738398ddd16ba441cb2541cf70ab653b197165699"
     },
     {
       "stage": "image_prompt",
       "path": "出图/共享/prompt/00_索引.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "75073f6ab6e69253fd32bcd8d9d710710d385ec4ccf2e1158ccd1273577f6bc6"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/00_总览.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "4be8bd12650dca9a055a7c7bb88f9288581fced98650a24e67f818bee81406ac"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/01_分镜出图.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "77b9ad2c0154bfedddcfae65df1929dd73d011bc7d0228f4a7c1b9d5e3b23704"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 40
     },
     {
       "stage": "image",
       "path": "出图/第1集/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 31
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第1集/prompt/00_总览.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "f17902c2d70eb5a8c1887705c0fc7dd0d78d28ec4a1fff472c9065a3b053881a"
     },
     {
       "stage": "video_prompt",
       "path": "出视频/第1集/prompt/01_clips.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "43ae545f68d416fb43ac9a2edb1052d2282770434453e7db2d1bf26e2d6791b6"
     },
     {
       "stage": "video",
       "path": "出视频/第1集/视频",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 8
     },
     {
       "stage": "compose",
@@ -287,8 +297,9 @@
     {
       "stage": "review",
       "path": "生产数据/consistency_ledger_第1集.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "b3dca7ff24ecc1314063083a85edf4d8800dd0cccda90028911194246cbf2585"
     },
     {
       "stage": "review",
@@ -315,7 +326,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "奇观连续性",
-  "last_progress_value": "✅",
-  "last_progress_state": "done"
+  "last_progress_column": "视频",
+  "last_progress_value": "3/8",
+  "last_progress_state": "partial"
 }

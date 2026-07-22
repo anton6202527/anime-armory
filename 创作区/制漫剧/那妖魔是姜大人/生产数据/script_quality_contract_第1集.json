@@ -1,9 +1,9 @@
 {
-  "content_hash": "b2c44f695ebcf928",
-  "contract_hash": "b2c44f695ebcf928",
+  "content_hash": "77b3db7fe4d7d86d",
+  "contract_hash": "77b3db7fe4d7d86d",
   "episode": "第1集",
   "findings": [],
-  "generated_at": "2026-07-21T12:33:45+00:00",
+  "generated_at": "2026-07-21T19:59:30+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -35,9 +35,9 @@
       "findings": [],
       "payoff_contexts": [
         "穿越成罪臣之女的姜月初，在杀不死的虎妖面前获得百妖谱，却发现唯一能换来道行的目标是刚承诺给她自由的濒死镇魔卫。 audience_payoff",
-        "流的镇魔卫，也配杀我？ 快逃！ rhythm 反转·压迫升级 dramatic_function 推翻逃生路径，升级",
-        "升级 dramatic_function 推翻逃生路径，升级为绝对死局。 scene LOC_01 audience_effect",
-        "rhythm 反转·留静音 dramatic_function 兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不"
+        "站起 dramatic_function 推翻逃生路径，升级为绝对死局。 subtitle_lines 别逃啊。这荒",
+        "逃！ scene LOC_01 rhythm 反转·压迫升级 continuity_story start_state",
+        "集的生存反击前提。 dramatic_function 兑现开场反差：姜月初为求生主动将刀刺向濒死的裴长青，但本集不"
       ],
       "questions": [
         {
@@ -98,28 +98,28 @@
         },
         {
           "expected_next_handling": "本集兑现/推进",
-          "question_context": "payoff_status open status open label 刀口为何对准人 subtitle_lines 活下去，得先杀一个",
+          "question_context": "status open audience_effect 立刻追问她为何不杀后景虎妖而杀人。 label 刀口为何对准人 dramatic_function",
           "question_id": "Q09",
           "signal": "为何",
           "status": "paid_or_progressed"
         },
         {
           "expected_next_handling": "本集兑现/推进",
-          "question_context": "LOC_01/未来片段 audience_effect 立刻追问她为何不杀后景虎妖而杀人。 continuity_story",
+          "question_context": "audience_effect 立刻追问她为何不杀后景虎妖而杀人。 label 刀口为何对准人 dramatic_function 先展示不可逆",
           "question_id": "Q10",
           "signal": "为何",
           "status": "paid_or_progressed"
         },
         {
           "expected_next_handling": "本集兑现/推进",
-          "question_context": "加速·危机逼近 dramatic_function 让系统在马上被吃的压力下出现。 spectacle_story_function",
+          "question_context": "发后续杀人选择。 dramatic_function 让系统在马上被吃的压力下出现。 subtitle_lines",
           "question_id": "Q11",
           "signal": "系统",
           "status": "paid_or_progressed"
         },
         {
           "expected_next_handling": "本集兑现/推进",
-          "question_context": "spectacle_story_function 建立百妖谱视觉母题。 scene LOC_01/主观系统层 audience_effect 先兴奋再意识到伦理代",
+          "question_context": "一击，可借岁月之力杀敌。 scene LOC_01/主观系统层 rhythm 规则揭示 continuity_story",
           "question_id": "Q12",
           "signal": "系统",
           "status": "paid_or_progressed"
@@ -415,8 +415,8 @@
   },
   "source_sha256": {
     "adaptation_triage": "54801ba36ac1623860b41036975541047fc4b334e3a14f3eaff7dff11489caff",
-    "story_quality_pack": "e8f32ed0d887c4b12d86ce6be2e9d2570dfda85001b3c304980c7edcd9e68c91",
-    "storyboard": "6b006f63bede687e15dff88cfb942c349588182eca2337a859c2bdd5f3a14a6a"
+    "story_quality_pack": "8ecf043ca36d2a8ca404455047fc99d50f89699fbb6a5711e35586a29f0c2fd9",
+    "storyboard": "3c651df469f8c608f5ccf7e71037094367eb0e1f9610e0e6901a2af620ae335c"
   },
   "status": "pass",
   "summary": {

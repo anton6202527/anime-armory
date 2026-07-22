@@ -14,8 +14,8 @@
 
 ## Check
 
-- 状态：block
-- 通过：8/9
+- 状态：pass
+- 通过：9/9
 
 | 文件 | 状态 | 问题 |
 |---|---|---|
@@ -27,4 +27,4 @@
 | `脚本/第1集/ai_call_sheet.md` | pass | - |
 | `脚本/第1集/production_handoff_pack.json` | pass | - |
 | `生产数据/ai_shooting_schedule_batch_seed_第1集.json` | pass | - |
-| `脚本/第1集/production_handoff_signoff.json` | block | input_fingerprint 缺失或过期；上游输入变化后必须重新签收；evidence_fingerprint 缺失或过期；待签产物变化后必须重新签收；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor；signoff 尚未 approved |
+| `脚本/第1集/production_handoff_signoff.json` | pass | - |

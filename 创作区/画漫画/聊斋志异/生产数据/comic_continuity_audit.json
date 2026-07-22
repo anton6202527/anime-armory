@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "kind": "comic_continuity_audit",
+  "created_at": "2026-07-21T14:12:45+00:00",
+  "project_root": ".",
+  "through_chapter": "第1话",
+  "summary": {
+    "chapters": 1,
+    "block": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "panel_script_path": "脚本/第1话/panel_script.json",
+      "panel_script_sha256": "08514b44111492086df224f386bc217faa6f6d83824a6652df090abae51ceb70",
+      "state": {
+        "entry": {
+          "CHAR_WANG": {
+            "life_state": "alive"
+          },
+          "CHAR_CHEN": {
+            "agency_state": "warning_ignored"
+          },
+          "MON_PAINTED_SKIN": {
+            "existence_state": "disguised_and_hunting"
+          }
+        },
+        "computed_exit": {
+          "CHAR_WANG": {
+            "life_state": "revived_with_permanent_scar"
+          },
+          "CHAR_CHEN": {
+            "agency_state": "humiliated_but_active_savior"
+          },
+          "MON_PAINTED_SKIN": {
+            "existence_state": "beheaded_and_sealed_as_smoke"
+          }
+        },
+        "declared_exit": {
+          "CHAR_WANG": {
+            "life_state": "revived_with_permanent_scar"
+          },
+          "CHAR_CHEN": {
+            "agency_state": "humiliated_but_active_savior"
+          },
+          "MON_PAINTED_SKIN": {
+            "existence_state": "beheaded_and_sealed_as_smoke"
+          }
+        }
+      }
+    }
+  ],
+  "findings": [],
+  "verdict": "pass"
+}

@@ -3,9 +3,11 @@
   "files": [
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/animatic_packet.json",
-      "issues": [],
+      "issues": [
+        "inputs_fingerprint 已过期，上游输入变更后需重新签收"
+      ],
       "packet": "animatic",
-      "status": "pass"
+      "status": "block"
     },
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/animatic_packet.md",
@@ -15,9 +17,11 @@
     },
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/生产数据/animatic_第1集.json",
-      "issues": [],
+      "issues": [
+        "timed animatic preview 输入已变化，需重建"
+      ],
       "packet": "animatic_preview",
-      "status": "pass"
+      "status": "block"
     },
     {
       "file": "创作区/制漫剧/那妖魔是姜大人/生产数据/story_economy_audit_第1集.json",
@@ -30,22 +34,23 @@
       "issues": [
         "input_fingerprint 缺失或过期；上游输入变化后必须重新签收",
         "evidence_fingerprint 缺失或过期；待签产物变化后必须重新签收",
+        "approval[user:wesley:director] 未绑定当前 input_fingerprint",
+        "approval[user:wesley:producer] 未绑定当前 input_fingerprint",
         "缺 creative 审批；允许角色：director",
-        "缺 editorial 审批；允许角色：editor, producer",
-        "signoff 尚未 approved"
+        "缺 editorial 审批；允许角色：editor, producer"
       ],
       "packet": "animatic",
       "status": "block"
     }
   ],
-  "generated_at": "2026-07-21T12:34:10+00:00",
+  "generated_at": "2026-07-21T19:59:30+00:00",
   "kind": "n2d_story_acceptance_packets_check",
   "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
   "packet_kind": "animatic",
   "status": "block",
   "summary": {
-    "block": 1,
-    "pass": 4,
+    "block": 3,
+    "pass": 2,
     "required": 5
   },
   "version": 1

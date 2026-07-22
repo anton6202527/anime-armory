@@ -1,0 +1,337 @@
+{
+  "batch": "01_08",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_01_part1",
+      "clip_index": 1,
+      "duration_sec": 4.016667,
+      "file": "Clip_01_刀口为何对准人_part1.mp4",
+      "file_clip": "Clip_01",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2c1232b700c5_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2c1232b700c5_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part1_65e6c268_2c1232b700c5_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_01_part2",
+      "clip_index": 1,
+      "duration_sec": 4.016667,
+      "file": "Clip_01_刀口为何对准人_part2.mp4",
+      "file_clip": "Clip_01",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_deee8b82064c_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_deee8b82064c_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_01_part2_f413e056_deee8b82064c_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_01_刀口为何对准人_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_02_part1",
+      "clip_index": 2,
+      "duration_sec": 6.016667,
+      "file": "Clip_02_一炷香前的荒野死局_part1.mp4",
+      "file_clip": "Clip_02",
+      "fps": 24.1,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_1a6fc02630f9_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_1a6fc02630f9_02_mid.jpg",
+          "time_sec": 3.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part1_d0704e32_1a6fc02630f9_03_end.jpg",
+          "time_sec": 5.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_02_part2",
+      "clip_index": 2,
+      "duration_sec": 6.016667,
+      "file": "Clip_02_一炷香前的荒野死局_part2.mp4",
+      "file_clip": "Clip_02",
+      "fps": 24.1,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_ade34cb5c864_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_ade34cb5c864_02_mid.jpg",
+          "time_sec": 3.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part2_064a7d20_ade34cb5c864_03_end.jpg",
+          "time_sec": 5.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_02_part3",
+      "clip_index": 2,
+      "duration_sec": 4.016016,
+      "file": "Clip_02_一炷香前的荒野死局_part3.mp4",
+      "file_clip": "Clip_02",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_02_part3_e1780629_f9159eb2fc94_03_end.jpg",
+          "time_sec": 3.816
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_02_一炷香前的荒野死局_part3.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part1",
+      "clip_index": 3,
+      "duration_sec": 6.016667,
+      "file": "Clip_03_以脱籍换搀扶_part1.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.1,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_2bcede524c59_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_2bcede524c59_02_mid.jpg",
+          "time_sec": 3.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part1_481c7f8f_2bcede524c59_03_end.jpg",
+          "time_sec": 5.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part2",
+      "clip_index": 3,
+      "duration_sec": 4.016667,
+      "file": "Clip_03_以脱籍换搀扶_part2.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.149,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_0c530a194221_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_0c530a194221_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part2_27866dde_0c530a194221_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part3",
+      "clip_index": 3,
+      "duration_sec": 4.016667,
+      "file": "Clip_03_以脱籍换搀扶_part3.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.149,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_b4ba3d7c7588_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_b4ba3d7c7588_02_mid.jpg",
+          "time_sec": 2.008
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第1集/_frames/Clip_03_part3_c486eff8_b4ba3d7c7588_03_end.jpg",
+          "time_sec": 3.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1280,
+      "path": "出视频/第1集/视频/Clip_03_以脱籍换搀扶_part3.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 720
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第1集/01_08/contact_sheet_01_08.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "720x1280"
+  },
+  "episode": "第1集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第1集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第1集/_frames",
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "seam_blocks": 0,
+    "seam_info": 1,
+    "seam_warns": 1,
+    "seams_checked": 2
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.1615,
+      "color_verdict": "warn",
+      "dist": 34,
+      "from_clip": "Clip_01",
+      "same_scene_color_jump": true,
+      "seam_mode": "intentional_discontinuity",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_02",
+      "transition": "时间回切。",
+      "verdict": "warn",
+      "verdict_if_relay": "block"
+    },
+    {
+      "color_dist": 0.04,
+      "color_verdict": "ok",
+      "dist": 30,
+      "from_clip": "Clip_02",
+      "seam_mode": "eyeline_cut",
+      "strictness": "info",
+      "struct_verdict": "block",
+      "to_clip": "Clip_03",
+      "transition": "视线切裴长青。",
+      "verdict": "info",
+      "verdict_if_relay": "block"
+    }
+  ],
+  "version": 1
+}
