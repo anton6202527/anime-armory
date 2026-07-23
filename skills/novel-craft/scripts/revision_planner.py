@@ -261,6 +261,64 @@ def tasks_from_balance(root: str) -> list[dict[str, Any]]:
     return tasks
 
 
+# ── macro-before-micro 修订纪律（传统编辑共识：结构未锁前不做行文级修补，否则
+# 移场景/并章/砍支线时行文功夫全部白费）。三层：
+#   structure（结构级：方向/主线/大纲/弃稿/烂尾/时间线）
+#   scene    （场景级：节奏/钩子/桥段/人物戏——默认档）
+#   line     （行文级：文风/措辞/AI腔/对话标签/重复率）
+# 纪律落地为**排序 + 缓办标记**，不删任务：同优先级内 structure 先行；存在未决
+# 结构级 P0/P1 时，行文级任务打 deferred_until_structure 标记（干了也可能白干）。
+TIER_RANK = {"structure": 0, "scene": 1, "line": 2}
+_STRUCTURE_STAGES = {"direction_spec", "rewrite", "blueprint", "outline", "structure"}
+_STRUCTURE_KW = ("结构", "主线", "大纲", "方向", "弃稿", "大改", "烂尾", "伏笔",
+                 "时间线", "逻辑", "设定矛盾", "情节", "弧段", "支线")
+_LINE_KW = ("文风", "行文", "措辞", "病句", "错别字", "润色", "语感", "AI腔", "AI 腔",
+            "过滤词", "对话标签", "重复率", "回声", "拐杖", "用词", "句长", "文笔")
+
+
+def classify_tier(task: dict[str, Any]) -> str:
+    """把修订任务归到 structure/scene/line 三层。纯函数·可测。
+
+    判据优先级：结构级 stage > 结构级关键词 > 行文级关键词 > 默认 scene。
+    结构级判据放最前——"文风大改"这类混合措辞按结构处理（宁高勿低，先锁大再修小）。
+    """
+    blob = f"{task.get('title') or ''} {task.get('reason') or ''}"
+    if task.get("return_to_stage") in _STRUCTURE_STAGES:
+        return "structure"
+    if any(k in blob for k in _STRUCTURE_KW):
+        return "structure"
+    if any(k in blob for k in _LINE_KW):
+        return "line"
+    return "scene"
+
+
+def apply_tier_discipline(tasks: list[dict[str, Any]]) -> dict[str, Any]:
+    """给任务打 tier 标签、同优先级内按 macro→micro 重排、给行文级打缓办标记。
+
+    返回摘要 {counts, deferred_line_tasks}。原地修改 tasks 的顺序与字段。
+    """
+    for t in tasks:
+        t["tier"] = classify_tier(t)
+    rank = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+    tasks.sort(key=lambda t: (rank.get(t.get("priority"), 9), TIER_RANK.get(t.get("tier"), 9),
+                              t.get("chapter") or 9999, t.get("id") or ""))
+    structure_open = any(
+        t["tier"] == "structure" and t.get("priority") in ("P0", "P1") for t in tasks
+    )
+    deferred = 0
+    if structure_open:
+        for t in tasks:
+            if t["tier"] == "line":
+                t["deferred_until_structure"] = True
+                t["reason"] = (t.get("reason") or "") + (
+                    "；[macro-first] 存在未决结构级修订——结构未锁前行文级修补可能白费，建议后置"
+                )
+                deferred += 1
+    counts = {tier: sum(1 for t in tasks if t.get("tier") == tier) for tier in TIER_RANK}
+    return {"counts": counts, "deferred_line_tasks": deferred,
+            "structure_open": structure_open}
+
+
 def dedupe(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen = set()
     out = []
@@ -397,19 +455,26 @@ def render_markdown(plan: dict[str, Any]) -> str:
         lines.append(f"- ⚠️ 跨源冲突：{len(conflicts)} 项任务存在 review/balance 方向矛盾，已标记 `conflict: true`")
     if plan.get("conflict_summary"):
         lines.append(f"- 冲突/裁决解释：{len(plan['conflict_summary'])} 条")
+    tier = plan.get("tier_discipline") or {}
+    if tier.get("structure_open") and tier.get("deferred_line_tasks"):
+        lines.append(f"- 🧱 macro-first：存在未决结构级修订，{tier['deferred_line_tasks']} 项"
+                     f"行文级任务已标记缓办（结构未锁前行文修补可能白费）")
     lines.extend([
         "",
-        "| priority | chapter | skill | stage | title | reason |",
-        "|---|---:|---|---|---|---|",
+        "| priority | tier | chapter | skill | stage | title | reason |",
+        "|---|---|---:|---|---|---|---|",
     ])
     for task in plan["tasks"]:
         prefix = "⚠️ " if task.get("conflict") else ""
+        tier_cell = task.get("tier") or ""
+        if task.get("deferred_until_structure"):
+            tier_cell += "·缓办"
         lines.append(
-            f"| {prefix}{task['priority']} | {task.get('chapter') or ''} | {task['recommended_skill']} | "
+            f"| {prefix}{task['priority']} | {tier_cell} | {task.get('chapter') or ''} | {task['recommended_skill']} | "
             f"{task['return_to_stage']} | {task['title']} | {task.get('reason') or ''} |"
         )
     if not plan["tasks"]:
-        lines.append("| - |  | - | - | 暂无可合并修订任务 |  |")
+        lines.append("| - |  |  | - | - | 暂无可合并修订任务 |  |")
     if plan.get("conflict_summary"):
         lines.extend(["", "## 冲突与裁决解释", ""])
         for item in plan["conflict_summary"]:
@@ -445,6 +510,7 @@ def build_plan(root: str) -> dict[str, Any]:
     )
     _resolve_conflicts(tasks)
     planned_tasks = dedupe(tasks)
+    tier_discipline = apply_tier_discipline(planned_tasks)
 
     return {
         "schema_version": 1,
@@ -463,6 +529,7 @@ def build_plan(root: str) -> dict[str, Any]:
         "tasks": planned_tasks,
         "kill_verdict_demotions": demoted_count(planned_tasks) if kill_count else 0,
         "conflict_summary": conflict_summary(planned_tasks),
+        "tier_discipline": tier_discipline,
     }
 
 

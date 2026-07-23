@@ -237,3 +237,49 @@ artifact/provenance 作为可审计状态
 
 **来源**：2026-07 调研会话（多代理网搜 + 逐源验证）。**适用范围**：novel-score / novel-simulate /
 novel-supervisor critic-loop / qa_gate 演进规划。
+
+## Q11：2026-07 第三轮传统工艺调研沉淀——对白/弧线/节奏/修订纪律的机检化依据？<a id="q11"></a>
+
+**背景**：第三轮审计（前两轮见 Q10 与 novel-review SKILL 检测器清单）聚焦**传统小说创作
+流程与手法**里尚未机检化的部分。原则同前：机检只逮确定性形态、恒 advisory，工艺判断归人/LLM。
+
+### 本轮机检化的传统手艺（已接线）
+
+- **微张力（Donald Maass, Writing the Breakout Novel）**：张力三层（情节/场景/line 级），
+  line 级来自对话中的抵抗（withhold/misread/push back）与矛盾情绪并存，"tension on every
+  page"。落地：`dialogue_craft_audit.py` 的 frictionless_dialogue（整章零摩擦标记）；
+  工艺文档 `novel-craft/references/dialogue.md` 第五节。
+- **on-the-nose 对白（编剧工艺共识）**：角色把情绪与动机原样说出口=潜台词为零；判据取
+  "情绪自陈+因果连词同句"的保守共现（单独直陈情绪不算——StoryScope 实证人类反而更常直写
+  "他很害怕"）。落地：同上 on_the_nose_dialogue。
+- **弧线内构（K.M. Weiland：Ghost→Wound→Lie→Want vs Need）**：Want=情节目标、Need=主题
+  真值、Lie(misbelief) 须被付代价的选择反复挑战。scene_cards 字段早已齐（want/need/misbelief/
+  choice_cost…），缺的是**时间性对账**。落地：`character_arc_audit.py`（want==need 塌缩/
+  misbelief 无代价 run/引擎填充率衰减）。
+- **句子节奏（Gary Provost "This sentence has five words"）**：句长长短交替=行文音乐性，
+  纯数值可测（变异系数+同档 run）。落地：prose_craft_audit C 组。
+- **echo/crutch words（传统 line-edit 第一刀）**：近窗实词复读（ProWritingAid 类工具的 echo
+  检测口径：20-100 词窗）+ 作者惯用拐杖短语清单。落地：C 组 echo_words（统计侧）+
+  crutch_phrases（词表侧，`keyword_banks.CRUTCH_PHRASE_KW`）。
+- **心理距离/POV 纪律（John Gardner, The Art of Fiction 五级心理距离）**：head-hopping=
+  同场景多角色内心直读；确定性代理=内心动词归属主体 ≥2 人。落地：C 组 head_hopping。
+- **cover-the-names 测试（角色语声区分度）**：遮名读对白应能认人；Elmore Leonard 式每角色
+  专属词表/禁用词表。确定性代理=角色两两台词 2-gram Jaccard。落地：voice_drift 的
+  voice_homogeneity（补齐"纵向漂移之外的横向同质化"）。
+- **连载张弛节奏（网文工艺共识）**：每章强钩=疲劳（1 强 2 缓交替）、平路 >3 章掉追读。
+  落地：hook_endings 序列层（hook_fatigue_run / weak_ending_run）。
+- **macro-before-micro 修订顺序（编辑行业共识）**：结构未锁前不做行文级修补（否则移场景/
+  并章时行文功夫白费）；红黄绿 triage。落地：revision_planner 的 tier 三层
+  （structure/scene/line）+ 结构级未决时行文级任务缓办标记。
+
+### 有意未做（评估过、按住）
+
+- **潜台词质量正向评估**：机检只能逮"subtext 被逐字说破"（负向），"潜台词好不好"无确定性
+  信号，强行做=假阳性风暴。
+- **Promise-Progress-Payoff 全量台账**（Sanderson）：承诺追踪与 foreshadow_ledger/
+  tension_ledger（钩子过期/承诺违约）/reader_contract 已三处覆盖，再建一本账=台账过密，
+  收益边际递减。
+- **五感覆盖率统计**：SENSORY-ANCHOR-DROPPED 已管"计划意象被丢弃"；全文五感配比无公认
+  基准，且嗅觉桶已有 StoryScope 信号，重复建设。
+
+**适用范围**：novel-review / novel-craft / novel-edit；阈值全部 env 可标定（见各脚本头部）。

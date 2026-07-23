@@ -217,3 +217,36 @@ def test_conflict_detection_review_vs_pacing():
         assert pacing.get("conflict"), "pacing 任务应标记冲突"
         assert pacing["id"] in rev.get("conflict_with", []), "应交叉引用 pacing 任务 ID"
         assert pacing["conflict_resolution"]["winner"] == "manual_editor_review"
+
+
+def test_tier_classification_and_macro_first_discipline():
+    import revision_planner as rp
+    tasks = [
+        rp._task("REV-001", "review_report", "第3章主线结构崩塌需要重排", priority="P0",
+                 chapter=3, stage="rewrite"),
+        rp._task("REV-002", "review_report", "第3章过滤词密度过高需要润色", priority="P1",
+                 chapter=3, stage="review"),
+        rp._task("REV-003", "review_report", "第5章钩子偏弱", priority="P1",
+                 chapter=5, stage="review"),
+    ]
+    summary = rp.apply_tier_discipline(tasks)
+    by_id = {t["id"]: t for t in tasks}
+    assert by_id["REV-001"]["tier"] == "structure"
+    assert by_id["REV-002"]["tier"] == "line"
+    assert by_id["REV-003"]["tier"] == "scene"
+    # 存在未决结构级 P0 → 行文级任务标缓办
+    assert by_id["REV-002"].get("deferred_until_structure") is True
+    assert summary["deferred_line_tasks"] == 1 and summary["structure_open"] is True
+    # 同优先级内 structure 排在 line 前
+    ids = [t["id"] for t in tasks]
+    assert ids.index("REV-001") < ids.index("REV-002")
+
+
+def test_no_structure_open_line_not_deferred():
+    import revision_planner as rp
+    tasks = [rp._task("REV-001", "review_report", "第2章行文润色·文风统一", priority="P2",
+                      chapter=2, stage="review")]
+    summary = rp.apply_tier_discipline(tasks)
+    assert tasks[0]["tier"] == "line"
+    assert "deferred_until_structure" not in tasks[0]
+    assert summary["structure_open"] is False

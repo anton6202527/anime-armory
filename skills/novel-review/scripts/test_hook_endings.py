@@ -165,3 +165,37 @@ def test_reveal_word_alone_plus_person():
 def test_jiujing_question_not_double_counted_as_reveal():
     # "究竟是谁" 是疑问不是揭示——负向断言防误命中
     assert H.hook_score("这一切究竟是谁安排的？") == 1
+
+
+# ── 序列层：张弛节奏 ─────────────────────────────────────────────────────────
+
+def _scored(scores, start=1):
+    return [{"chapter": start + i, "score": s,
+             "band": "warn" if s < H.WARN_THRESHOLD else "ok",
+             "is_golden": False} for i, s in enumerate(scores)]
+
+
+def test_hook_fatigue_run_flagged():
+    alerts = H.sequence_alerts(_scored([5, 4, 5, 4, 5, 4]))
+    assert any(a["type"] == "hook_fatigue_run" for a in alerts)
+
+
+def test_alternating_hooks_no_fatigue():
+    alerts = H.sequence_alerts(_scored([5, 2, 5, 2, 5, 2]))
+    assert not any(a["type"] == "hook_fatigue_run" for a in alerts)
+
+
+def test_weak_ending_run_flagged():
+    alerts = H.sequence_alerts(_scored([3, 0, 1, 0, 3]))
+    assert any(a["type"] == "weak_ending_run" for a in alerts)
+
+
+def test_single_weak_chapter_no_run():
+    alerts = H.sequence_alerts(_scored([3, 0, 3, 1, 3]))
+    assert not any(a["type"] == "weak_ending_run" for a in alerts)
+
+
+def test_chapter_gap_breaks_run():
+    rows = _scored([0, 0]) + _scored([0], start=9)   # 1,2 章 + 第 9 章（断档）
+    alerts = H.sequence_alerts(rows)
+    assert not any(a["type"] == "weak_ending_run" for a in alerts)

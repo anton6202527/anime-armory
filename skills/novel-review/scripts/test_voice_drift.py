@@ -132,3 +132,32 @@ def test_band_textual_sentence_band_tolerant():
 if __name__ == "__main__":
     import pytest
     sys.exit(pytest.main([__file__, "-v"]))
+
+
+# ── 横向语声区分度（voice_homogeneity）──────────────────────────────────────
+import voice_drift
+
+
+def test_voice_similarity_identical_lines():
+    lines = ["这件事没那么简单，我们得从长计议。"] * 3
+    assert voice_drift.voice_similarity(lines, list(lines)) == 1.0
+
+
+def test_voice_similarity_distinct_voices_low():
+    a = ["哼，本座何须向尔等解释。", "放肆！退下。"]
+    b = ["俺就说嘛，这事儿整不明白。", "老铁你可别坑我。"]
+    assert voice_drift.voice_similarity(a, b) < 0.2
+
+
+def test_homogeneity_alerts_flag_similar_pair():
+    same = ["这件事没那么简单，我们得从长计议，切莫打草惊蛇。"] * 12
+    agg = {"沈砚": list(same), "裴决": list(same)}
+    alerts = voice_drift.homogeneity_alerts(agg, min_lines=10, threshold=0.3)
+    assert len(alerts) == 1 and alerts[0]["type"] == "voice_homogeneity"
+    assert alerts[0]["severity"] == "建议级"
+
+
+def test_homogeneity_skips_small_samples():
+    same = ["这件事没那么简单。"] * 3
+    agg = {"沈砚": list(same), "裴决": list(same)}
+    assert voice_drift.homogeneity_alerts(agg, min_lines=10, threshold=0.3) == []

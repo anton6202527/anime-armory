@@ -64,6 +64,12 @@ SENT_LEN_TOLERANCE = 0.5
 TEXTUAL_LEN_BAND = {"短": 8.0, "中": 16.0, "长": 28.0}
 # 角色至少说够这么多句，才对其口头禅缺席下"消失"判断（话太少不足以判，宁缺毋滥）。
 MIN_LINES_FOR_BAND = 3
+# ── 横向语声区分度（2026-07 第三轮）：voice_drift 原本只管**纵向**（同一角色 vs 自己的
+# 登记语感），不管**横向**（角色 A vs 角色 B 是否说得一模一样）。传统编辑的
+# cover-the-names 测试：遮住说话人名读十行对白，分不出谁在说=语声同质化。
+# 确定性代理：两角色台词的 char-2gram Jaccard 过高 → 建议级候选。
+MIN_LINES_FOR_HOMOGENEITY = 10   # 两边都至少说这么多句才比（样本太小 Jaccard 不可信）
+HOMOGENEITY_JACCARD = 0.30       # 2-gram Jaccard ≥ 此值报同质化（中文对白经验保守值）
 _SENT_SPLIT = re.compile(r"[。！？!?]+")
 
 
@@ -218,6 +224,48 @@ def voice_drift_band(registered_profile, observed):
     return alerts
 
 
+def _char_2grams(lines):
+    """台词列表 → char-2gram 集合（只取 CJK 二元组，滤掉标点/空白噪声）。纯函数。"""
+    text = "".join(lines or [])
+    return {text[i:i + 2] for i in range(len(text) - 1)
+            if re.fullmatch(r"[一-鿿]{2}", text[i:i + 2])}
+
+
+def voice_similarity(lines_a, lines_b):
+    """两角色台词的 char-2gram Jaccard 相似度（0..1）。纯函数·可测。"""
+    ga, gb = _char_2grams(lines_a), _char_2grams(lines_b)
+    if not ga or not gb:
+        return 0.0
+    return round(len(ga & gb) / len(ga | gb), 3)
+
+
+def homogeneity_alerts(agg, min_lines=None, threshold=None):
+    """角色两两配对查语声同质化（cover-the-names 代理）。返回建议级 alerts。纯函数·可测。
+
+    agg：{角色名: [台词,...]}。两边都说够 min_lines 句才比；Jaccard ≥ threshold 报。
+    """
+    min_lines = min_lines or MIN_LINES_FOR_HOMOGENEITY
+    threshold = threshold or HOMOGENEITY_JACCARD
+    names = sorted(n for n, lines in agg.items() if len(lines or []) >= min_lines)
+    alerts = []
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            sim = voice_similarity(agg[a], agg[b])
+            if sim >= threshold:
+                alerts.append({
+                    "type": "voice_homogeneity", "severity": "建议级",
+                    "entity": f"{a}↔{b}", "similarity": sim,
+                    "line_counts": {a: len(agg[a]), b: len(agg[b])},
+                    "auto": True,
+                    "evidence": f"{a}({len(agg[a])}句) 与 {b}({len(agg[b])}句) 台词 2-gram Jaccard {sim:g}",
+                    "note": (f"角色「{a}」与「{b}」的对白用词高度重合（相似度 {sim:g} ≥ {threshold:g}）"
+                             f"——cover-the-names 测试：遮住名字读十行分不出谁在说=语声同质化。"
+                             f"传统手艺：给每个角色专属词汇表+禁用词表（Elmore Leonard 式），"
+                             f"让不同角色关注同一场景的不同东西"),
+                })
+    return alerts
+
+
 def _catchphrases_of(profile):
     """从角色 profile 取口头禅列表：口头禅 / catchphrases 任一。"""
     if not isinstance(profile, dict):
@@ -273,6 +321,8 @@ def analyze(project, window=None):
             "registered_len_band": _registered_len_band(profile),
             "alerts": len(char_alerts),
         }
+    # 横向：登记角色两两比语声区分度（纵向漂移之外的另一半——都没漂但彼此一样也算崩）。
+    alerts.extend(homogeneity_alerts(agg))
     return {"alerts": alerts, "characters": characters}
 
 

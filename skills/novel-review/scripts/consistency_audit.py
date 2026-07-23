@@ -66,6 +66,14 @@ try:
 except Exception:  # pragma: no cover
     manuscript_map = None
 try:
+    import dialogue_craft_audit  # noqa: E401  (同目录) — 对白工艺（直给/零摩擦/播报/潜台词说破）
+except Exception:  # pragma: no cover
+    dialogue_craft_audit = None
+try:
+    import character_arc_audit  # noqa: E401  (novel-craft/scripts·已在 sys.path) — 弧线推进（Weiland 内构）
+except Exception:  # pragma: no cover
+    character_arc_audit = None
+try:
     import antagonist_scaling, timeline_check, minor_characters  # noqa: E401  (novel-wiki/scripts)
 except Exception:  # pragma: no cover
     antagonist_scaling = timeline_check = minor_characters = None
@@ -473,10 +481,12 @@ CONSTORY_TAXONOMY = {
                   "reader_contract", "hook_endings", "plot_variety", "chapter_transition",
                   "manuscript_map", "knowledge_state"],
     "人物刻画一致性": ["logic_sentry", "voice_drift", "minor_characters",
-                 "antagonist_scaling", "power_system", "knowledge_state"],
+                 "antagonist_scaling", "power_system", "knowledge_state",
+                 "character_arc", "dialogue_craft"],
     "世界观与设定": ["logic_sentry", "power_system"],
     "事实与细节一致性": ["logic_sentry", "research_fact_support", "mechanical"],
-    "叙事与文风": ["style_drift", "tone_curve", "mechanical", "plot_variety", "prose_craft"],
+    "叙事与文风": ["style_drift", "tone_curve", "mechanical", "plot_variety", "prose_craft",
+              "dialogue_craft"],
 }
 
 
@@ -554,6 +564,12 @@ def main():
             # 结构侧：McKee 价值转变 lint（缺 turn/value_shift）——此前只活在 author_workflow，
             # 中长篇容易漏跑；进 review 链降 advisory，结构缺口随修订计划回流。
             "manuscript_map": _run_detector("结构地图", manuscript_map, args.project_path, "manuscript_map_findings.json"),
+            # 对白工艺侧（2026-07 第三轮）：on-the-nose 直给/零摩擦章（Maass 微张力）/
+            # as-you-know 播报/场景卡潜台词被说破——对白戏剧质量此前完全无确定性信号。
+            "dialogue_craft": _run_detector("对白工艺", dialogue_craft_audit, args.project_path, "dialogue_craft_findings.json"),
+            # 弧线推进侧（2026-07 第三轮）：scene_cards 人物引擎字段（Weiland Lie/Want/Need）
+            # 的跨章对账——want==need 塌缩/misbelief 长期不付代价/引擎填充率前紧后松。
+            "character_arc": _run_detector("弧线推进", character_arc_audit, args.project_path, "character_arc_findings.json"),
             "_cache": {"hit": False, "path": _cache_path(args.project_path)},
         }
         if snapshot:

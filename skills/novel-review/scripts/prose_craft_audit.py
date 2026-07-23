@@ -24,6 +24,16 @@
   ⑧ setting_mirror      景物映衬内心滥用（"天色暗下来，正如他的心情"）。
   ⑨ philo_dialogue      对白服务哲学思辨（AI 59% vs 人类 34%）——商业爽文档更严。
 
+【C. 句子节奏与视角纪律】（2026-07 第三轮补，同样全 advisory）：
+  ⑩ sentence_rhythm_monotony 句长单调（Gary Provost"vary the sentence length"）——
+                        叙述句长变异系数过低或同档句长长 run=行文没有音乐性；纯数值。
+  ⑪ crutch_phrases      拐杖短语（"忍不住/皱了皱眉/眼中闪过一丝"）——传统改稿第一刀：
+                        作者无意识复读的万能短语，全书按千字密度计。
+  ⑫ echo_words          近窗回声（echo words）——同一实词短语在 ~120 字窗口内复读，
+                        打断行文节奏；统计侧兜住 crutch 词表外的个人拐杖词。
+  ⑬ head_hopping        视角跳头（John Gardner 心理距离/POV 纪律）——第三人称限知章内
+                        ≥2 个角色的内心被直读（"沈砚心想…裴决暗道…"），读者被甩出 POV。
+
 口径纪律：论文比例是英文短篇语料的**方向**不是中文网文阈值——本模块阈值全部
 internal-heuristic、env 可标定、恒 advisory；burstiness/重复率等风格侧归 mechanical_check，
 本模块只管**篇章/手艺侧**（改写后判别力 93% vs 风格侧 3%，见 keyword_banks 注释）。
@@ -52,14 +62,20 @@ except Exception:
 try:
     from keyword_banks import (MORALIZING_PATTERNS, EMOTION_LABEL_KW, PHYSIO_BODY_KW,
                                PHYSIO_REACTION_KW, SMELL_KW, SETTING_MIRROR_KW,
-                               PHILO_DIALOGUE_KW, LOGIC_KW, classify_platform,
-                               PROFILE_COMMERCIAL)
+                               PHILO_DIALOGUE_KW, LOGIC_KW, CRUTCH_PHRASE_KW,
+                               classify_platform, PROFILE_COMMERCIAL)
 except Exception:
     MORALIZING_PATTERNS = EMOTION_LABEL_KW = PHYSIO_BODY_KW = []
     PHYSIO_REACTION_KW = SMELL_KW = SETTING_MIRROR_KW = PHILO_DIALOGUE_KW = LOGIC_KW = []
+    CRUTCH_PHRASE_KW = []
     def classify_platform(p):  # type: ignore
         return "商业爽文向"
     PROFILE_COMMERCIAL = "商业爽文向"
+try:
+    from wiki_builder import parse_character_names
+except Exception:
+    def parse_character_names(project):  # type: ignore
+        return []
 
 # ── 阈值（internal-heuristic·env 可标定·全 advisory）─────────────────────────
 FILTER_PER_K = float(os.environ.get("NOVEL_PROSE_FILTER_PER_K", "6"))       # 过滤词/千字
@@ -79,6 +95,16 @@ SMELL_PER_K = float(os.environ.get("NOVEL_PROSE_SMELL_PER_K", "1.2"))
 MIRROR_PER_K = float(os.environ.get("NOVEL_PROSE_MIRROR_PER_K", "1.0"))
 PHILO_PER_K_COMMERCIAL = float(os.environ.get("NOVEL_PROSE_PHILO_PER_K", "0.8"))
 PHILO_PER_K_LITERARY = float(os.environ.get("NOVEL_PROSE_PHILO_PER_K_LIT", "2.0"))
+# C 组阈值（句节奏/拐杖短语/回声/视角跳头）
+RHYTHM_MIN_SENTS = int(os.environ.get("NOVEL_PROSE_RHYTHM_MIN_SENTS", "30"))   # 章内叙述句样本下限
+RHYTHM_CV_WARN = float(os.environ.get("NOVEL_PROSE_RHYTHM_CV", "0.30"))        # 句长变异系数下限
+RHYTHM_RUN_WARN = int(os.environ.get("NOVEL_PROSE_RHYTHM_RUN", "8"))           # 同档句长连续 run
+CRUTCH_PER_K = float(os.environ.get("NOVEL_PROSE_CRUTCH_PER_K", "1.2"))        # 拐杖短语/千字（全书）
+ECHO_WINDOW = int(os.environ.get("NOVEL_PROSE_ECHO_WINDOW", "120"))            # 回声近窗字数
+ECHO_MIN_REPEATS = int(os.environ.get("NOVEL_PROSE_ECHO_REPEATS", "3"))        # 窗口内同短语次数
+ECHO_MAX_ALERTS = int(os.environ.get("NOVEL_PROSE_ECHO_MAX_ALERTS", "5"))      # 全书回声告警上限
+HEADHOP_MIN_HITS = int(os.environ.get("NOVEL_PROSE_HEADHOP_HITS", "2"))        # 每角色内心直读次数下限
+FIRST_PERSON_PER_K = float(os.environ.get("NOVEL_PROSE_FIRSTPERSON_PER_K", "8"))  # "我"密度超此值视为第一人称章
 PROVENANCE = "internal-heuristic·confidence=low"
 
 # 过滤词（filter words）：POV 角色与感知之间的"滤镜"。只算**叙述行**（引号外），
@@ -179,6 +205,117 @@ def info_dump_paragraphs(text):
     return hits
 
 
+# ── C 组纯函数（句节奏 / 拐杖短语 / 回声 / 视角跳头）──────────────────────────
+_SENT_SPLIT_RE = re.compile(r"[。！？!?；;]+")
+# 回声候选 3-gram 的排除字符：全是虚词/代词的短语不算"实词回声"。
+_ECHO_STOP_CHARS = set("的了是在有和与就都也又还这那他她它我你们自己一个不没到把被向从")
+# 内心直读动词（psychic distance level 5 的确定性形态）：主语紧邻这些词=该角色内心被直读。
+_INTERIOR_VERBS = ("心想", "心道", "暗想", "暗道", "暗忖", "腹诽", "心里嘀咕", "心中暗", "心里暗")
+_INTERIOR_FALLBACK_RE = re.compile(r"([一-鿿]{2,3})(?:" + "|".join(_INTERIOR_VERBS) + r")")
+
+
+def sentence_lengths(narration_lines):
+    """叙述行按句切分后的句长列表（字数，丢空句）。纯函数·可测。"""
+    text = "\n".join(narration_lines or [])
+    return [len(s.strip()) for s in _SENT_SPLIT_RE.split(text) if s.strip()]
+
+
+def rhythm_stats(lengths):
+    """句长节奏统计：{cv 变异系数, max_run 同档(6字一档)最长连续}。纯函数·可测。
+
+    Gary Provost 手艺（"This sentence has five words…"）：句长必须有长短交替的音乐性。
+    cv 过低=全书一个节拍；同档长 run=连续 N 句几乎等长（哪怕全书 cv 尚可）。
+    """
+    n = len(lengths or [])
+    if not n:
+        return {"cv": 0.0, "max_run": 0}
+    mean = sum(lengths) / n
+    if mean <= 0:
+        return {"cv": 0.0, "max_run": 0}
+    var = sum((x - mean) ** 2 for x in lengths) / n
+    cv = (var ** 0.5) / mean
+    max_run = run = 1
+    for prev, cur in zip(lengths, lengths[1:]):
+        if cur // 6 == prev // 6:
+            run += 1
+            max_run = max(max_run, run)
+        else:
+            run = 1
+    return {"cv": round(cv, 3), "max_run": max_run}
+
+
+def crutch_phrase_counts(text):
+    """{拐杖短语: 次数}（只留 >0 项）。纯函数。词表单一真值源 keyword_banks.CRUTCH_PHRASE_KW。"""
+    t = text or ""
+    out = {}
+    for ph in CRUTCH_PHRASE_KW:
+        c = t.count(ph)
+        if c:
+            out[ph] = c
+    return out
+
+
+def echo_hits(text, exclude=(), window=None, min_repeats=None):
+    """近窗回声：实词 3-gram 在 window 字内复读 ≥ min_repeats 次。纯函数·可测。
+
+    返回 [{"phrase", "count", "span"}]，按次数降序、贪心去重（与已取回声共享 2 字重叠的
+    候选丢弃，避免"深吸一/吸一口"重复报）。exclude：角色名/已计入拐杖词表的短语不报
+    （名字复读是正常指代；词表命中归 crutch_phrases 信号）。
+    """
+    window = window or ECHO_WINDOW
+    min_repeats = min_repeats or ECHO_MIN_REPEATS
+    t = re.sub(r"\s+", "", text or "")
+    positions = {}
+    for i in range(len(t) - 2):
+        g = t[i:i + 3]
+        if not re.fullmatch(r"[一-鿿]{3}", g):
+            continue
+        if sum(1 for ch in g if ch in _ECHO_STOP_CHARS) >= 2:
+            continue
+        positions.setdefault(g, []).append(i)
+    cands = []
+    for g, pos in positions.items():
+        if len(pos) < min_repeats:
+            continue
+        if any(g in ex or ex in g for ex in exclude if ex):
+            continue
+        for k in range(len(pos) - min_repeats + 1):
+            span = pos[k + min_repeats - 1] - pos[k]
+            if span <= window:
+                cands.append({"phrase": g, "count": len(pos), "span": span})
+                break
+    cands.sort(key=lambda c: (-c["count"], c["span"]))
+    picked = []
+    for c in cands:
+        if any(len(set(c["phrase"]) & set(p["phrase"])) >= 2 for p in picked):
+            continue
+        picked.append(c)
+    return picked
+
+
+def interiority_subjects(text, roster=()):
+    """{角色名: 内心直读次数}。纯函数·可测。
+
+    名册优先（wiki 角色卡单一来源）：名字后 ≤2 字内跟内心动词才计；名册空时退化用
+    正则捕获主语（会糙，仅兜底）。POV 纪律（John Gardner）：第三人称限知视角下，
+    一章内被直读内心的角色应只有一个——两个及以上=head-hopping 候选。
+    """
+    t = text or ""
+    out = {}
+    verbs = "|".join(_INTERIOR_VERBS)
+    if roster:
+        for name in roster:
+            if not name:
+                continue
+            c = len(re.findall(re.escape(name) + r".{0,2}?(?:" + verbs + r")", t))
+            if c:
+                out[name] = c
+    else:
+        for m in _INTERIOR_FALLBACK_RE.finditer(t):
+            out[m.group(1)] = out.get(m.group(1), 0) + 1
+    return out
+
+
 def _load_settings(project):
     try:
         from project_io import load_project_settings
@@ -199,8 +336,14 @@ def analyze(project):
     smell_exempt = bool(_SMELL_EXEMPT_RE.search(genre_blob))
     philo_limit = PHILO_PER_K_COMMERCIAL if profile == PROFILE_COMMERCIAL else PHILO_PER_K_LITERARY
 
+    try:
+        roster = tuple(parse_character_names(project) or [])
+    except Exception:
+        roster = ()
     alerts, rows = [], []
     tot_chars = tot_label = tot_physio = tot_smell = tot_mirror = tot_moralize = 0
+    crutch_totals = {}
+    echo_alerts_left = ECHO_MAX_ALERTS
     for cid, _path, text in chapters:
         text = text or ""
         chars = len(text)
@@ -242,6 +385,39 @@ def analyze(project):
                                         f"密集）——开篇倒设定是劝退高发；传统手艺：设定拆进冲突现场按需露出，"
                                         f"『读者需要时才给，给时藏在事件里』（{PROVENANCE}）")})
 
+        # ── C 组：句节奏 / 回声 / 视角跳头（逐章）＋ 拐杖短语（累计）────────────
+        lengths = sentence_lengths(narration)
+        if len(lengths) >= RHYTHM_MIN_SENTS:
+            rs = rhythm_stats(lengths)
+            if rs["cv"] < RHYTHM_CV_WARN or rs["max_run"] >= RHYTHM_RUN_WARN:
+                detail = (f"变异系数 {rs['cv']:g}（阈 {RHYTHM_CV_WARN:g}）" if rs["cv"] < RHYTHM_CV_WARN
+                          else f"连续 {rs['max_run']} 句同档句长（阈 {RHYTHM_RUN_WARN}）")
+                alerts.append({"type": "sentence_rhythm_monotony", "severity": "建议级", "auto": True,
+                               "chapter": cid,
+                               "note": (f"第{cid}章叙述句长单调：{detail}——Provost 手艺：句长要有"
+                                        f"长短交替的音乐性，短句提速、长句蓄势；连排等长句读起来是"
+                                        f"节拍器不是文章（{PROVENANCE}）")})
+        narr_text = "\n".join(narration)
+        if echo_alerts_left > 0:
+            echoes = echo_hits(narr_text, exclude=roster + tuple(CRUTCH_PHRASE_KW))
+            for e in echoes[:echo_alerts_left]:
+                alerts.append({"type": "echo_words", "severity": "info", "auto": True, "chapter": cid,
+                               "phrase": e["phrase"],
+                               "note": (f"第{cid}章「{e['phrase']}」在 {e['span']} 字内复读（全章 {e['count']} 次）"
+                                        f"——近窗回声（echo）打断行文节奏；换说法或删并（{PROVENANCE}）")})
+            echo_alerts_left -= len(echoes[:echo_alerts_left])
+        if chars and _per_k(narr_text.count("我"), len(narr_text) or 1) < FIRST_PERSON_PER_K:
+            subjects = interiority_subjects(text, roster)
+            hoppers = sorted(n for n, c in subjects.items() if c >= HEADHOP_MIN_HITS)
+            if len(hoppers) >= 2:
+                alerts.append({"type": "head_hopping", "severity": "建议级", "auto": True, "chapter": cid,
+                               "entities": hoppers,
+                               "note": (f"第{cid}章 {len(hoppers)} 个角色的内心被直读（{'、'.join(hoppers[:4])}）"
+                                        f"——第三人称限知的 POV 纪律：一章一双眼睛，跳头（head-hopping）"
+                                        f"把读者甩出视角；他人内心改由言行外显（{PROVENANCE}）")})
+        for ph, c in crutch_phrase_counts(text).items():
+            crutch_totals[ph] = crutch_totals.get(ph, 0) + c
+
         tot_chars += chars
         tot_label += emotion_label_count(text)
         tot_physio += physio_cooccur_count(text)
@@ -277,6 +453,14 @@ def analyze(project):
                        "note": (f"全书景物映衬内心 {_per_k(tot_mirror, tot_chars):.1f}/千字（阈 {MIRROR_PER_K:g}）——"
                                 f"『天色暗下来，正如他的心情』用多即腻；让景物偶尔与情绪**相反**更高级"
                                 f"（{PROVENANCE}）")})
+    crutch_n = sum(crutch_totals.values())
+    if tot_chars and _per_k(crutch_n, tot_chars) > CRUTCH_PER_K:
+        top = sorted(crutch_totals.items(), key=lambda kv: -kv[1])[:5]
+        alerts.append({"type": "crutch_phrases", "severity": "建议级", "auto": True,
+                       "top": [{"phrase": p, "count": c} for p, c in top],
+                       "note": (f"全书拐杖短语 {_per_k(crutch_n, tot_chars):.1f}/千字（阈 {CRUTCH_PER_K:g}）——"
+                                f"高频：{'、'.join(f'{p}×{c}' for p, c in top)}。单次无罪，全书复读="
+                                f"行文肌理单一；传统改稿第一刀就是列出自己的拐杖词清单逐个替换（{PROVENANCE}）")})
 
     return {
         "ran": True,
@@ -286,6 +470,9 @@ def analyze(project):
                        "moralize_per_chapter": MORALIZE_PER_CHAPTER,
                        "physio_ratio_warn": PHYSIO_RATIO_WARN, "smell_per_k": SMELL_PER_K,
                        "mirror_per_k": MIRROR_PER_K, "philo_per_k": philo_limit,
+                       "rhythm_cv": RHYTHM_CV_WARN, "rhythm_run": RHYTHM_RUN_WARN,
+                       "crutch_per_k": CRUTCH_PER_K, "echo_window": ECHO_WINDOW,
+                       "headhop_min_hits": HEADHOP_MIN_HITS,
                        "smell_exempt": smell_exempt, "provenance": PROVENANCE,
                        "note": "advisory：StoryScope 比例是英文短篇的方向非中文阈值；恒不阻断。"},
         "chapters": rows,

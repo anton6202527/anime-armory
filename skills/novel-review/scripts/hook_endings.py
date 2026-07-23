@@ -36,6 +36,13 @@ TAIL_CHARS = 120          # 断章区取结尾多少字（约最后两三句，�
 WARN_THRESHOLD = 2        # 普通章：ending hook_score < 此值 → 建议级「平淡收尾」
 GOLDEN_THRESHOLD = 3      # 黄金三章（前 3 章）更严：必须更强的钩子才算过
 GOLDEN_MAX_CHAPTER = 3    # 前几章算「黄金三章」
+# ── 序列层（张弛节奏）：单章打分之上看**连续形态**。网文连载工艺共识：
+#   · 每章都上强钩=读者疲劳（"狼来了"，钩子边际递减）——张弛要交替（1 强 2 缓）；
+#   · 连续弱钩=「平路」，平路超过 ~3 章追读开始掉。
+# 单章 weak_chapter_ending 逮的是点，序列层逮的是**连续形态**，两者互补。
+STRONG_SCORE = 4          # 达到此分算"强钩"章
+FATIGUE_RUN = 5           # 连续 ≥N 章强钩 → 钩子疲劳（张弛失度）
+WEAK_RUN = 3              # 连续 ≥N 章弱钩（band=warn）→ 平路预警（run 级聚合）
 
 # ── 信号词表（每类都是「断章常见钩子手法」，命中各 +1，可叠加）──────────────
 # 1) 悬念/反转词：突然把情节扭转或抛出意外，最经典的断章钩。
@@ -129,6 +136,50 @@ def ending_band(score, is_golden_three):
     return "ok" if score >= threshold else "warn"
 
 
+def sequence_alerts(scored):
+    """序列层张弛检查：连续强钩=疲劳 / 连续弱钩=平路。纯函数·可测。
+
+    scored：analyze 逐章产出的 [{chapter, score, band, ...}]（按章序）。
+    返回 alerts 列表（建议级）。只看**连续**形态，中断即清零——章号不连续也算中断
+    （缺章处节奏无从判断，宁缺毋滥）。
+    """
+    alerts = []
+
+    def _runs(pred):
+        run = []
+        for row in scored:
+            if pred(row) and (not run or row["chapter"] == run[-1]["chapter"] + 1):
+                run.append(row)
+            else:
+                if len(run) >= 1:
+                    yield run
+                run = [row] if pred(row) else []
+        if run:
+            yield run
+
+    for run in _runs(lambda r: r["score"] >= STRONG_SCORE):
+        if len(run) >= FATIGUE_RUN:
+            lo, hi = run[0]["chapter"], run[-1]["chapter"]
+            alerts.append({
+                "type": "hook_fatigue_run", "severity": "建议级", "auto": True,
+                "chapter": lo, "chapters": [r["chapter"] for r in run],
+                "note": (f"第{lo}–{hi}章连续 {len(run)} 章强钩（分≥{STRONG_SCORE}）——每章都上"
+                         f"强钩读者会疲劳（钩子边际递减，『狼来了』效应）；连载工艺：张弛交替，"
+                         f"强钩后给 1-2 章缓钩/情绪落地拍，让下一个强钩重新有效"),
+            })
+    for run in _runs(lambda r: r["band"] == "warn"):
+        if len(run) >= WEAK_RUN:
+            lo, hi = run[0]["chapter"], run[-1]["chapter"]
+            alerts.append({
+                "type": "weak_ending_run", "severity": "建议级", "auto": True,
+                "chapter": lo, "chapters": [r["chapter"] for r in run],
+                "note": (f"第{lo}–{hi}章连续 {len(run)} 章弱钩——单章平淡收尾是点，连续弱钩是"
+                         f"『平路』：连载工艺共识是平路超 ~3 章追读开始掉；这段里至少给一处"
+                         f"强断章（悬念/反转/危机未决）"),
+            })
+    return alerts
+
+
 def analyze(project):
     """逐章取结尾打分，平淡收尾出 weak_chapter_ending 建议级 alert。返回汇总 dict。
 
@@ -160,6 +211,8 @@ def analyze(project):
                          f"{GOLDEN_THRESHOLD if is_golden else WARN_THRESHOLD}）偏低，疑平淡收尾"
                          f"{golden_note}——网文留存命门是断章，建议结尾留悬念/反转/危机未决/抛问题"),
             })
+
+    alerts.extend(sequence_alerts(scored))
 
     return {
         "ran": True,
@@ -194,7 +247,8 @@ def main(argv=None):
     icon = "⚠️" if res["total"] else "✅"
     print(f"{icon} 章末断章自检：{len(res['scored'])} 章，{res['total']} 章疑平淡收尾 → {out}")
     for a in res["alerts"]:
-        print(f"  ⚠️ [{a['type']}] {a['entity']}（{a['note'].split('——')[0]}）")
+        label = a.get("entity") or f"第{a.get('chapter')}章起"
+        print(f"  ⚠️ [{a['type']}] {label}（{a['note'].split('——')[0]}）")
     # 断章=软留存信号，确定性机检逮不到「形式对但钩假」，硬挡会误杀正常章——所以永远 exit 0。
     # 真正该不该改交 novel-score / 人判；这里只把候选写进报告供人/LLM 取舍。
     return 0

@@ -216,6 +216,22 @@ CONSISTENCY_SECTION_MAP = {
         "problem": "结构地图缺口（章缺 turn/value_shift 价值转折、缺章纲与场景卡来源）",
         "fix_hint": "回 `设定/scene_cards.json` 补 turn/value_shift；传统手艺：无价值转折的场景删掉或合并进相邻场景。",
     },
+    "dialogue_craft": {
+        "dimension": "style",
+        "recommended_skill": "novel-review",
+        "return_to_stage": "review",
+        "count_key": "alerts",
+        "problem": "对白工艺候选（直给 on-the-nose/整章零摩擦/播报式信息倾倒/潜台词被说破）",
+        "fix_hint": "直给改走动作与岔开；零摩擦章给至少一处抵抗（隐瞒/误读/顶回）；播报改由不知情者问出；说破的潜台词沉回水下或改场景卡为摊牌戏。",
+    },
+    "character_arc": {
+        "dimension": "character",
+        "recommended_skill": "novel-craft",
+        "return_to_stage": "outline",
+        "count_key": "alerts",
+        "problem": "人物弧线推进停摆候选（want/need 塌缩、misbelief 长期不付代价、人物引擎字段前紧后松）",
+        "fix_hint": "回 `设定/scene_cards.json`：把 Need 挖到 Want 水面下；给 misbelief 安排付代价的选择场；补齐中后期人物引擎字段或让 review 加密人物抽查。",
+    },
 }
 
 

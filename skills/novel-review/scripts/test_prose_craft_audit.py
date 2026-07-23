@@ -94,3 +94,57 @@ def test_analyze_moralizing_ending_bookwide(tmp_path):
 def test_analyze_empty_skips(tmp_path):
     res = pca.analyze(str(tmp_path))
     assert res["ran"] is False
+
+
+# ── C 组：句节奏 / 拐杖短语 / 回声 / 视角跳头 ────────────────────────────────
+
+def test_sentence_lengths_splits():
+    lens = pca.sentence_lengths(["他走了。她也走了！天黑了？"])
+    assert lens == [3, 4, 3]
+
+
+def test_rhythm_stats_monotone_low_cv():
+    rs = pca.rhythm_stats([10] * 40)
+    assert rs["cv"] == 0.0 and rs["max_run"] == 40
+
+
+def test_rhythm_stats_varied_high_cv():
+    rs = pca.rhythm_stats([3, 25, 8, 40, 5, 18, 2, 33] * 5)
+    assert rs["cv"] > 0.3
+
+
+def test_crutch_phrase_counts():
+    text = "他忍不住皱了皱眉，又忍不住叹气。"
+    counts = pca.crutch_phrase_counts(text)
+    assert counts.get("忍不住") == 2 and counts.get("皱了皱眉") == 1
+
+
+def test_echo_hits_proximity():
+    # "青铜灯" 在近窗内复读 3 次 → 回声
+    text = "他举起青铜灯。青铜灯的光很暗。她盯着青铜灯看了很久。"
+    hits = pca.echo_hits(text, window=60, min_repeats=3)
+    assert any(h["phrase"] == "青铜灯" for h in hits)
+
+
+def test_echo_hits_far_apart_ok():
+    text = "他举起青铜灯。" + "无关内容。" * 60 + "青铜灯又亮了。" + "填充。" * 60 + "青铜灯灭了。"
+    hits = pca.echo_hits(text, window=60, min_repeats=3)
+    assert not any(h["phrase"] == "青铜灯" for h in hits)
+
+
+def test_echo_excludes_roster_names():
+    text = "沈砚之走了。沈砚之回来了。沈砚之又走了。"
+    hits = pca.echo_hits(text, exclude=("沈砚之",), window=60, min_repeats=3)
+    assert hits == []
+
+
+def test_interiority_subjects_roster():
+    text = "沈砚心想，此人必有蹊跷。裴决暗道不好。沈砚心道：稳住。"
+    subs = pca.interiority_subjects(text, roster=("沈砚", "裴决"))
+    assert subs == {"沈砚": 2, "裴决": 1}
+
+
+def test_interiority_fallback_without_roster():
+    text = "沈砚心想，此人必有蹊跷。"
+    subs = pca.interiority_subjects(text)
+    assert "沈砚" in subs
