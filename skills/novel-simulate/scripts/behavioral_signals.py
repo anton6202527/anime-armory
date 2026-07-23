@@ -20,6 +20,16 @@
 口径纪律：相似度是字面 2-gram 近似（confidence=heuristic）——换词同义预测会高估意外度，
 所以**只报低分候选**（明显猜中/明显同向），不认证"高分=真悬念"；advisory 恒不阻断。
 
+2026-07 增补：beta reader 标准问卷聚合（业界六问，Jane Friedman/FoxPrint 口径）。
+面板按 SKILL 协议落盘 `评分/reader_survey_第NN章.json`（bored/confused/disbelief/
+favorite/annoying/recall），本脚本做确定性聚合：
+  reader_bored_run        连续 ≥N 章过半读者报 bored → 弃书风险段（带 span 供修订工单定位）
+  reader_confusion_spike  单章过半读者报 confused → 信息管理事故（该露的没露/时序乱）
+  reader_disbelief        任一读者报 disbelief 且点名人物 → OOC 候选（与一致性审计互补）
+  recall_failure          recall 复述对上一章正文的 2-gram 包含度过半读者低于阈值 →
+                          该章信息未留存（写了但没进读者脑子）。recall 是读者自己的话，
+                          换词会压低包含度——阈值放宽、只报过半共识，单人低分不报。
+
 用法：
     python3 behavioral_signals.py <作品根> [--json]
 测试：cd skills/novel-simulate/scripts && python3 -m pytest test_behavioral_signals.py
@@ -42,10 +52,15 @@ except Exception:
         return []
 
 PREDICTIONS_GLOB = os.path.join("评分", "reader_predictions_第*章.json")
+SURVEY_GLOB = os.path.join("评分", "reader_survey_第*章.json")
 MIN_PREDICTIONS = int(os.environ.get("NOVEL_BEHAV_MIN_PREDICTIONS", "5"))
 SURPRISE_WARN = float(os.environ.get("NOVEL_BEHAV_SURPRISE_WARN", "0.35"))
 DIVERSITY_WARN = float(os.environ.get("NOVEL_BEHAV_DIVERSITY_WARN", "0.55"))  # 短中文预测 2-gram 相异度天然偏高，换措辞同向约 0.4-0.55
 ACTUAL_HEAD_CHARS = int(os.environ.get("NOVEL_BEHAV_ACTUAL_HEAD", "1200"))
+BORED_RUN = int(os.environ.get("NOVEL_BEHAV_BORED_RUN", "2"))          # 连续多少章过半 bored 才报
+MAJORITY = float(os.environ.get("NOVEL_BEHAV_MAJORITY", "0.5"))        # "过半"口径（含端点）
+RECALL_MIN = float(os.environ.get("NOVEL_BEHAV_RECALL_MIN", "0.25"))   # recall 对上一章 2-gram 包含度下限
+MIN_SURVEY_RESPONSES = int(os.environ.get("NOVEL_BEHAV_MIN_SURVEY", "2"))  # 过半类信号最少答卷数
 NGRAM = 2
 PROVENANCE = "internal-heuristic·confidence=low"
 
@@ -114,13 +129,142 @@ def _pred_texts(payload):
     return out
 
 
+def recall_containment(recall_text, prev_text):
+    """recall 复述对上一章正文的 2-gram 包含度 ∈ [0,1]；任一侧为空返回 None。纯函数。
+
+    与 surprise_score 同理用包含度而非对称 Jaccard：复述远短于整章正文，问的是
+    "复述里有多少内容真出现在上一章"——专名与关键动作会命中，纯编造/张冠李戴命不中。"""
+    rs = shingles(recall_text)
+    prev = shingles(str(prev_text or ""))
+    if not rs or not prev:
+        return None
+    return round(len(rs & prev) / len(rs), 3)
+
+
+def _field_span(value):
+    """问卷答案归一：dict 取 span/note、字符串原样、空值→None。返回定位用短文本或 None。"""
+    if isinstance(value, dict):
+        t = str(value.get("span") or value.get("note") or "").strip()
+        return t or None
+    t = str(value or "").strip()
+    return t or None
+
+
+def _survey_responses(payload):
+    """归一 responses：[{persona, bored, confused, disbelief, disbelief_characters, recall}]。"""
+    out = []
+    for r in payload.get("responses") or []:
+        if not isinstance(r, dict):
+            continue
+        dis = r.get("disbelief")
+        chars = []
+        if isinstance(dis, dict):
+            chars = [str(c).strip() for c in (dis.get("characters") or []) if str(c).strip()]
+        out.append({
+            "persona": str(r.get("persona") or "").strip() or "unknown",
+            "bored": _field_span(r.get("bored")),
+            "confused": _field_span(r.get("confused")),
+            "disbelief": _field_span(dis),
+            "disbelief_characters": chars,
+            "recall": str(r.get("recall") or "").strip(),
+        })
+    return out
+
+
+def _majority(count, total):
+    return total >= MIN_SURVEY_RESPONSES and count / total >= MAJORITY
+
+
+def _analyze_surveys(project, chapters):
+    """聚合问卷文件 → (survey_rows, alerts)。文件缺失/坏 JSON/旧 schema 一律跳过。"""
+    alerts, rows = [], []
+    bored_by_ch = {}   # ch -> {"spans": […], "flagged": bool}
+    for path in sorted(glob.glob(os.path.join(project, SURVEY_GLOB))):
+        try:
+            with open(path, encoding="utf-8") as f:
+                payload = json.load(f)
+        except (OSError, ValueError):
+            continue
+        try:
+            ch = int(payload.get("chapter"))
+        except (TypeError, ValueError):
+            continue
+        resp = _survey_responses(payload)
+        if not resp:
+            continue
+        n = len(resp)
+        bored = [r for r in resp if r["bored"]]
+        confused = [r for r in resp if r["confused"]]
+        disbelief = [r for r in resp if r["disbelief"] and r["disbelief_characters"]]
+        recalls = [(r["persona"], recall_containment(r["recall"], chapters.get(ch - 1)))
+                   for r in resp if r["recall"]]
+        recalls = [(p, c) for p, c in recalls if c is not None]
+        low_recall = [(p, c) for p, c in recalls if c < RECALL_MIN]
+        row = {"chapter": ch, "responses": n, "bored": len(bored), "confused": len(confused),
+               "disbelief": len(disbelief),
+               "recall_containment": {p: c for p, c in recalls} or None}
+        rows.append(row)
+        bored_by_ch[ch] = {"spans": [r["bored"] for r in bored][:3],
+                           "flagged": _majority(len(bored), n)}
+        if _majority(len(confused), n):
+            spans = "；".join(f"{r['persona']}「{r['confused']}」" for r in confused[:3])
+            alerts.append({
+                "type": "reader_confusion_spike", "severity": "建议级", "auto": True, "chapter": ch,
+                "note": (f"第{ch}章 {len(confused)}/{n} 名模拟读者困惑到需要回读（{spans}）——"
+                         f"信息管理事故候选：该露的没露/时序乱/指代不清，对照知情面与章间承接检查"
+                         f"（{PROVENANCE}）"),
+            })
+        for r in disbelief:
+            alerts.append({
+                "type": "reader_disbelief", "severity": "建议级", "auto": True, "chapter": ch,
+                "characters": r["disbelief_characters"],
+                "note": (f"第{ch}章读者({r['persona']})对 {'、'.join(r['disbelief_characters'])} "
+                         f"不再相信：「{r['disbelief']}」——OOC/强行剧情候选，与一致性审计互补"
+                         f"（{PROVENANCE}）"),
+            })
+        if recalls and _majority(len(low_recall), len(recalls)) and (ch - 1) in chapters:
+            detail = "、".join(f"{p}={c:.0%}" for p, c in low_recall[:4])
+            alerts.append({
+                "type": "recall_failure", "severity": "建议级", "auto": True, "chapter": ch - 1,
+                "note": (f"第{ch - 1}章信息未留存：过半读者凭记忆复述该章时与正文包含度低于 "
+                         f"{RECALL_MIN:.0%}（{detail}）——事件密度过高或全程平铺都会让读者"
+                         f"『读了但没记住』，考虑压缩支线信息或给关键事件加落点"
+                         f"（{PROVENANCE}·复述是读者自己的话，换词会压低分数，只报过半共识）"),
+            })
+    # bored 连续段：章号断档清零（同 hook_endings 序列口径）
+    run = []
+    for ch in sorted(bored_by_ch):
+        if bored_by_ch[ch]["flagged"] and (not run or ch == run[-1] + 1):
+            run.append(ch)
+            continue
+        if len(run) >= BORED_RUN:
+            _emit_bored_run(alerts, run, bored_by_ch)
+        run = [ch] if bored_by_ch[ch]["flagged"] else []
+    if len(run) >= BORED_RUN:
+        _emit_bored_run(alerts, run, bored_by_ch)
+    return rows, alerts
+
+
+def _emit_bored_run(alerts, run, bored_by_ch):
+    spans = "；".join(s for ch in run for s in bored_by_ch[ch]["spans"][:1])
+    alerts.append({
+        "type": "reader_bored_run", "severity": "建议级", "auto": True,
+        "chapters": list(run),
+        "note": (f"第{run[0]}-{run[-1]}章连续 {len(run)} 章过半模拟读者报『想放下』"
+                 f"（走神点：{spans or '未定位'}）——弃书风险段，按 span 定位到场景级修订工单"
+                 f"（{PROVENANCE}）"),
+    })
+
+
 def analyze(project):
-    """扫全部预测文件，算悬念/意外度并出 advisory。{ran, alerts, chapters, blocking(=0)}。"""
+    """扫预测+问卷文件，算悬念/意外度并聚合六问 advisory。{ran, alerts, chapters, blocking(=0)}。"""
     paths = sorted(glob.glob(os.path.join(project, PREDICTIONS_GLOB)))
-    if not paths:
+    has_survey = bool(glob.glob(os.path.join(project, SURVEY_GLOB)))
+    if not paths and not has_survey:
         return {"ran": False,
-                "skipped": ("无 评分/reader_predictions_第NN章.json——行为式协议：AI 读者面板在"
-                            "章末各写一条『下一章会发生什么』短预测（≥5 条）落盘后再跑本度量")}
+                "skipped": ("无 评分/reader_predictions_第NN章.json 或 reader_survey_第NN章.json——"
+                            "行为式协议：AI 读者面板在章末写『下一章会发生什么』短预测（≥5 条）"
+                            "与六问问卷落盘后再跑本度量")}
     chapters = {cid: text for cid, _p, text in list_chapters(project)}
     alerts, rows = [], []
     for path in paths:
@@ -159,12 +303,17 @@ def analyze(project):
                          f"剧情太顺=套路化预警；老读者能预测的展开考虑做一次预期颠覆"
                          f"（{PROVENANCE}·字面近似，换词猜中会漏）"),
             })
+    survey_rows, survey_alerts = _analyze_surveys(project, chapters)
+    alerts.extend(survey_alerts)
     return {
         "ran": True,
         "thresholds": {"min_predictions": MIN_PREDICTIONS, "surprise_warn": SURPRISE_WARN,
-                       "diversity_warn": DIVERSITY_WARN, "ngram": NGRAM, "provenance": PROVENANCE,
+                       "diversity_warn": DIVERSITY_WARN, "ngram": NGRAM,
+                       "bored_run": BORED_RUN, "majority": MAJORITY, "recall_min": RECALL_MIN,
+                       "min_survey_responses": MIN_SURVEY_RESPONSES, "provenance": PROVENANCE,
                        "note": "advisory：只报低分候选，不认证高分=真悬念；恒不阻断。"},
         "chapters": rows,
+        "survey_chapters": survey_rows,
         "alerts": alerts,
         "total": len(alerts),
         "blocking": 0,
@@ -189,7 +338,8 @@ def main(argv=None):
         print("ℹ️ " + res.get("skipped", "skipped"))
         return 0
     icon = "⚠️" if res["total"] else "✅"
-    print(f"{icon} 行为式读者度量：{len(res['chapters'])} 个章末预测点，{res['total']} 条提示")
+    print(f"{icon} 行为式读者度量：{len(res['chapters'])} 个章末预测点，"
+          f"{len(res.get('survey_chapters') or [])} 个问卷点，{res['total']} 条提示")
     for a in res["alerts"]:
         print(f"  - [{a['severity']}] {a['type']}: {a['note']}")
     return 0

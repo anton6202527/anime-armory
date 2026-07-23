@@ -14,7 +14,12 @@ from datetime import date
 
 
 REQUIRED_FIELDS = ("pov", "desire", "obstacle", "conflict", "turn", "value_shift")
-OPTIONAL_FIELDS = ("location", "time", "reveal_or_payoff", "subtext", "sensory_anchor")
+OPTIONAL_FIELDS = ("location", "time", "reveal_or_payoff", "subtext", "sensory_anchor",
+                   "outcome", "plotline")
+# 场景结局极性（Swain/Sanderson try-fail 循环）：yes=达成、yes-but=达成但付代价、
+# no-and=失败且恶化、no-but=失败但有转机。中段应以 yes-but / no-and 为主——
+# 连胜无代价 = 张力自由落体（manuscript_map 的 OUTCOME-* 检测消费此字段）。
+OUTCOME_VALUES = ("yes", "yes-but", "no-and", "no-but")
 CHARACTER_ENGINE_FIELDS = (
     "want",
     "need",
@@ -97,6 +102,11 @@ def empty_card(chapter, scene_no, outline_item):
         # 不必每场都填——衔接下一场即高压续压时留空即合法，连续多章全空才会被
         # manuscript_map 的 sequel gap 检测提示。
         "aftermath": "",
+        # 场景结局极性（try-fail 循环）：yes / yes-but（达成但付代价）/ no-and（失败且
+        # 恶化）/ no-but（失败但有转机）；中段应以 yes-but、no-and 为主，留空=不判定。
+        "outcome": "",
+        # 本场所属情节线自由标签（主线/某支线名）；连续同线过长会被"横云断山"检测提示。
+        "plotline": "",
         "reveal_or_payoff": "",
         "subtext": "",
         "sensory_anchor": "",
@@ -186,6 +196,16 @@ def check(root, chapter=None):
                 "chapter": scene.get("chapter"),
                 "scene_id": scene.get("id"),
                 "reason": "建议补字段：" + "、".join(weak),
+            })
+        outcome = str(scene.get("outcome") or "").strip()
+        if outcome and outcome not in OUTCOME_VALUES:
+            findings.append({
+                "id": "SCENE-CARD-OUTCOME-INVALID",
+                "severity": "warning",
+                "chapter": scene.get("chapter"),
+                "scene_id": scene.get("id"),
+                "reason": f"outcome=「{outcome}」不在枚举 {'/'.join(OUTCOME_VALUES)} 内；"
+                          "留空=不判定，填了就要可机读（try-fail 检测靠它）。",
             })
         character_missing = [field for field in CHARACTER_ENGINE_FIELDS if not str(scene.get(field) or "").strip()]
         if character_missing:

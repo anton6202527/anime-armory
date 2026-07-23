@@ -217,6 +217,16 @@ def _cell(value: Any) -> str:
 
 SEQUEL_GAP_RUN = 3  # 连续几章"有 turn 无 aftermath"算高压不落地
 
+# —— try-fail / 情节线 / 獭尾 检测阈值（env 可标定）——
+OUTCOME_FILL_MIN = float(os.environ.get("NOVEL_MM_OUTCOME_FILL_MIN", "0.5"))    # outcome 填充率低于此整组跳过
+OUTCOME_YES_RUN = int(os.environ.get("NOVEL_MM_YES_RUN", "3"))                  # 连续 yes 场景数
+OUTCOME_RATIO_MIN_N = int(os.environ.get("NOVEL_MM_YES_RATIO_MIN_N", "10"))     # yes 占比判定最少已填样本
+OUTCOME_YES_RATIO = float(os.environ.get("NOVEL_MM_YES_RATIO", "0.6"))          # yes 占比上限
+PLOTLINE_FILL_MIN = float(os.environ.get("NOVEL_MM_PLOTLINE_FILL_MIN", "0.5"))  # plotline 填充率下限
+PLOTLINE_RUN = int(os.environ.get("NOVEL_MM_PLOTLINE_RUN", "6"))                # 同线连续场景数
+CLIMAX_TOPK = int(os.environ.get("NOVEL_MM_CLIMAX_TOPK", "2"))                  # 取张力峰值章数
+CLIMAX_MIN_CURVE = int(os.environ.get("NOVEL_MM_CLIMAX_MIN_CURVE", "6"))        # 张力曲线最少章数
+
 
 def detect_sequel_gaps(rows: list[dict[str, Any]], run_len: int = SEQUEL_GAP_RUN) -> list[dict[str, Any]]:
     """Scene-Sequel 落地拍检测（Swain 工艺）：连续 ≥run_len 章场景卡有 turn 却全无
@@ -270,6 +280,10 @@ def analyze(root: str) -> dict[str, Any]:
                                f"传统手艺是『无转折的场景删掉或合并』）"})
     alerts.extend(detect_sequel_gaps(report.get("chapters") or []))
     alerts.extend(detect_dropped_anchors(root, report.get("chapters") or []))
+    scenes = _ordered_scenes(root)
+    alerts.extend(detect_outcome_signals(scenes))
+    alerts.extend(detect_plotline_long_runs(scenes))
+    alerts.extend(detect_climax_no_afterwave(root, scenes))
     return {"ran": True, "alerts": alerts, "total": len(alerts), "blocking": 0}
 
 
@@ -309,6 +323,182 @@ def detect_dropped_anchors(root: str, rows: list[dict[str, Any]], limit: int = 8
                 })
                 if len(alerts) >= limit:
                     return alerts
+    return alerts
+
+
+def _ordered_scenes(root: str) -> list[dict[str, Any]]:
+    """读 scene_cards.json 并按 (章, 场景号) 排成全书场景序列。纯读·可测。"""
+    payload = load_json(os.path.join(root, "设定", "scene_cards.json"), {}) or {}
+    if payload.get("kind") != "novel_scene_cards":
+        return []
+    scenes = [s for s in payload.get("scenes") or [] if isinstance(s, dict)]
+
+    def _key(s: dict[str, Any]):
+        try:
+            ch = int(s.get("chapter") or 0)
+        except (TypeError, ValueError):
+            ch = 0
+        try:
+            no = int(s.get("scene_no") or 0)
+        except (TypeError, ValueError):
+            no = 0
+        return (ch, no, str(s.get("id") or ""))
+
+    return sorted(scenes, key=_key)
+
+
+def _outcome(scene: dict[str, Any]) -> str:
+    return str(scene.get("outcome") or "").strip().lower()
+
+
+def detect_outcome_signals(scenes: list[dict[str, Any]], run_len: int = OUTCOME_YES_RUN,
+                           fill_min: float = OUTCOME_FILL_MIN,
+                           ratio_min_n: int = OUTCOME_RATIO_MIN_N,
+                           yes_ratio: float = OUTCOME_YES_RATIO) -> list[dict[str, Any]]:
+    """try-fail 循环检测（Swain/Sanderson：中段场景结局应以 yes-but / no-and 为主）。
+
+    a) OUTCOME-YES-RUN：连续 ≥run_len 个场景 outcome=yes（干净达成、无代价）——无阻力
+       连胜=张力自由落体；中间夹未填 outcome 的场景视为断开（宁漏勿误）。
+    b) OUTCOME-NO-COST-CLIMB：全书已填 outcome 中 yes 占比 >yes_ratio（已填样本
+       ≥ratio_min_n 才算）——整体无对抗感。
+    outcome 是可选引擎字段：填充率 <fill_min 说明本书未启用该纪律，整组优雅跳过
+    （对齐 character_arc_audit 的引擎空跳过惯例）。纯函数·可测。"""
+    if not scenes:
+        return []
+    filled = [s for s in scenes if _outcome(s)]
+    if len(filled) / len(scenes) < fill_min:
+        return []
+    alerts: list[dict[str, Any]] = []
+    run: list[dict[str, Any]] = []
+
+    def _flush():
+        if len(run) >= run_len:
+            chapters = sorted({int(s.get("chapter") or 0) for s in run})
+            alerts.append({
+                "type": "OUTCOME-YES-RUN", "severity": "建议级", "auto": True,
+                "chapter": chapters[0],
+                "scenes": [str(s.get("id") or "") for s in run],
+                "note": (f"第{chapters[0]}–{chapters[-1]}章连续 {len(run)} 个场景 outcome=yes"
+                         f"（干净达成、零代价）——try-fail 工艺：中段应以 yes-but（达成但付代价）"
+                         f"/ no-and（失败且恶化）为主，无阻力连胜会让张力自由落体；"
+                         f"给其中一场加代价或让一场失败"),
+            })
+        run.clear()
+
+    for scene in scenes:
+        if _outcome(scene) == "yes":
+            run.append(scene)
+        else:
+            _flush()
+    _flush()
+    yes_count = sum(1 for s in filled if _outcome(s) == "yes")
+    if len(filled) >= ratio_min_n and yes_count / len(filled) > yes_ratio:
+        alerts.append({
+            "type": "OUTCOME-NO-COST-CLIMB", "severity": "建议级", "auto": True,
+            "chapter": None,
+            "note": (f"全书已填 outcome 的 {len(filled)} 个场景中 yes 占比 "
+                     f"{yes_count / len(filled):.0%}（>{yes_ratio:.0%}）——主角一路白赢、"
+                     f"从不付代价=整体无对抗感；把部分场景改成 yes-but/no-and，"
+                     f"胜利要有账单"),
+        })
+    return alerts
+
+
+def detect_plotline_long_runs(scenes: list[dict[str, Any]], run_len: int = PLOTLINE_RUN,
+                              fill_min: float = PLOTLINE_FILL_MIN) -> list[dict[str, Any]]:
+    """横云断山检测（金圣叹：两打祝家庄间插解珍解宝，"恐文字太长便累坠"）。
+
+    同一 plotline 连续 ≥run_len 个场景、无他线插入 → "文长无断"，建议插间笔
+    （切支线一场或换视角，回来再续）。plotline 是可选标签：填充率 <fill_min 说明
+    本书未启用多线标注，优雅跳过；未填场景视为断开（宁漏勿误）。纯函数·可测。"""
+    if not scenes:
+        return []
+    labels = [str(s.get("plotline") or "").strip() for s in scenes]
+    if sum(1 for x in labels if x) / len(scenes) < fill_min:
+        return []
+    alerts: list[dict[str, Any]] = []
+    run: list[dict[str, Any]] = []
+    current = ""
+
+    def _flush():
+        if current and len(run) >= run_len:
+            chapters = sorted({int(s.get("chapter") or 0) for s in run})
+            alerts.append({
+                "type": "PLOTLINE-LONG-RUN", "severity": "建议级", "auto": True,
+                "chapter": chapters[0],
+                "scenes": [str(s.get("id") or "") for s in run],
+                "note": (f"情节线「{current}」自第{chapters[0]}章起连续 {len(run)} 个场景"
+                         f"无他线插入——横云断山工艺：文长无断则累坠，单线连打读者疲劳；"
+                         f"插一场支线/换视角间笔再续（高潮连击段可豁免，人工判断）"),
+            })
+        run.clear()
+
+    for scene, label in zip(scenes, labels):
+        if label and label == current:
+            run.append(scene)
+        else:
+            _flush()
+            current = label
+            if label:
+                run.append(scene)
+    _flush()
+    return alerts
+
+
+def detect_climax_no_afterwave(root: str, scenes: list[dict[str, Any]],
+                               topk: int = CLIMAX_TOPK,
+                               min_curve: int = CLIMAX_MIN_CURVE) -> list[dict[str, Any]]:
+    """獭尾法检测（金圣叹："一段大文字后，不好寂然便住，须作余波演漾"）——弧线级，
+    区别于场景级 SEQUEL-GAP-RUN（那管连续高压不落地，这管**大高潮**后的整章缓冲）。
+
+    读 设定/emotional_progression.json（tone_check --write-progression 回填）取全书
+    tension_score top-k 峰值章（峰值须 ≥ 均值+1σ 才算大高潮）；若峰值章最后一个场景无
+    aftermath 且下一章第一个场景 conflict 非空（开场即新冲突）→ 高潮无余波。
+    曲线不足 min_curve 章 / 无场景卡数据 / 曲线无显著峰 → 优雅跳过。"""
+    rows = (load_json(os.path.join(root, "设定", "emotional_progression.json"), {}) or {}).get("chapters") or []
+    curve: list[tuple[int, float]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        score = row.get("tension_score")
+        if isinstance(score, (int, float)):
+            try:
+                curve.append((int(row.get("chapter") or 0), float(score)))
+            except (TypeError, ValueError):
+                continue
+    if len(curve) < min_curve or not scenes:
+        return []
+    values = [v for _, v in curve]
+    mean = sum(values) / len(values)
+    std = (sum((v - mean) ** 2 for v in values) / len(values)) ** 0.5
+    if std <= 0:
+        return []
+    peaks = [ch for ch, v in sorted(curve, key=lambda x: -x[1])[:topk] if v >= mean + std]
+    by_chapter: dict[int, list[dict[str, Any]]] = {}
+    for scene in scenes:
+        try:
+            ch = int(scene.get("chapter") or 0)
+        except (TypeError, ValueError):
+            continue
+        by_chapter.setdefault(ch, []).append(scene)
+    alerts: list[dict[str, Any]] = []
+    for peak in sorted(peaks):
+        peak_scenes = by_chapter.get(peak)
+        next_scenes = by_chapter.get(peak + 1)
+        if not peak_scenes or not next_scenes:
+            continue
+        last = peak_scenes[-1]
+        first_next = next_scenes[0]
+        if not str(last.get("aftermath") or "").strip() \
+                and str(first_next.get("conflict") or "").strip():
+            alerts.append({
+                "type": "CLIMAX-NO-AFTERWAVE", "severity": "建议级", "auto": True,
+                "chapter": peak,
+                "note": (f"第{peak}章是全书张力峰值（大高潮），末场景无 aftermath、"
+                         f"第{peak + 1}章开场即新冲突——獭尾法：一段大文字后不好寂然便住，"
+                         f"须作余波演漾；给峰值章补一段余波（反应/代价/回望），"
+                         f"或让下一章缓开场"),
+            })
     return alerts
 
 

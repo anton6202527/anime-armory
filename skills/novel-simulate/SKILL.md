@@ -51,6 +51,38 @@ python3 skills/novel-simulate/scripts/simulate_panel.py "<作品根>" [--scope o
    输出 `评分/behavioral_signals.json`；advisory 恒不阻断，字面近似只报低分候选（换词猜中会漏，
    高分不认证为"真悬念"）。
 
+### 4. 标准问卷协议（beta reader 六问·2026-07）
+
+传统 beta reader 实务有一组固定问题（Jane Friedman/FoxPrint 等业界口径），比"自由发感想"
+更能定位问题。每个人格读完第 NN 章后**逐人格**作答六问，落盘
+`评分/reader_survey_第NN章.json`（schema 稳定，`behavioral_signals.py` 依赖它做确定性聚合）：
+
+```json
+{"schema_version": 1, "kind": "novel_reader_survey", "chapter": 7,
+ "responses": [
+   {"persona": "rookie",
+    "bored":      {"span": "中段比武排位流水账", "note": "想跳过"},
+    "confused":   null,
+    "disbelief":  {"span": "林昭突然原谅仇人", "characters": ["林昭"], "note": "前文恨意没消解"},
+    "favorite_character":  {"name": "苏九", "reason": "毒舌但护短"},
+    "annoying_character":  {"name": "王管家", "reason": "工具人感重"},
+    "recall": "上一章主角擂台反杀镇北王，师妹身份暴露。"}
+ ]}
+```
+
+- **六问**：bored（哪里想放下/走神）、confused（哪里困惑到回读）、disbelief（哪里不再相信，
+  须点名人物）、favorite/annoying 角色+一句话原因、prediction（走第 3 节现有
+  `reader_predictions_第NN章.json`，**不建重复字段**）、recall（复述上一章）。
+- 无该项感受填 `null`；span 摘录正文短语（供修订工单定位），不超过 30 字。
+- **recall 铁律**：凭记忆复述**上一章**发生了什么（一两句），**禁止回看上一章原文再作答**
+  （污染记忆留存度量，同预测协议的禁看铁律）。
+- 聚合（跑同一条 `behavioral_signals.py` 命令）产四个确定性信号（全建议级）：
+  `reader_bored_run`（连续 ≥2 章过半读者 bored → 弃书风险段）、`reader_confusion_spike`
+  （单章过半 confused → 信息管理事故）、`reader_disbelief`（点名人物的不信 → OOC 候选）、
+  `recall_failure`（过半读者复述对上一章 2-gram 包含度 < 阈值 → 该章信息未留存）。
+  阈值 env：`NOVEL_BEHAV_BORED_RUN`/`NOVEL_BEHAV_MAJORITY`/`NOVEL_BEHAV_RECALL_MIN`/
+  `NOVEL_BEHAV_MIN_SURVEY`。
+
 ## 何时使用
 
 - **Demo Gate 之后**：在投入大量精力写全本前，先看看这组 Demo 章是否能抓住预期受众。

@@ -13,10 +13,22 @@ minor_characters.py — 配角连续性盲区报告（建议级·纯标准库）
   过滤：去掉 角色卡 已有名、停用词（他/她/众人/有人…）；只留**出现在 ≥min_chapters 个不同章**的，
   靠"跨章复现"压掉一次性误报（随机噪声不会在 3+ 章里同名复现）。
 
-软冲突——纯启发式 NER（无模型），只报建议级建卡候选，绝不阻断。
-依赖 wiki_builder（list_chapters/parse_character_names/_CJK）。纯函数（抽取/聚合/定档）带 pytest。
+第二类信号 `major_character_absent`（配角失踪，braided-stories 编辑实务）：反复出场的具名角色
+（角色卡名+别名归一，或高频配角候选）从最后出场章起连续缺席超阈值 → 提醒。多线长篇的高发病是
+支线角色一挂就是几十章，读者回来时已忘光；持有未闭合线索（open_threads 提及）的角色失踪加重措辞。
+已按 state_ledger 结构化生命周期事件（death/exit 未被 revival 解除）或动态百科亡故记录退场者豁免；
+关键词式退场（_EXIT_RE 级）不可靠故不豁免——有意退场请忽略该条或补登结构化退场事件。
+
+软冲突——纯启发式 NER（无模型），只报建议级候选，绝不阻断。
+依赖 wiki_builder（list_chapters/parse_character_names/_CJK）与 graph_sentry（别名归一/退场账）。
+纯函数（抽取/聚合/定档/缺席判定）带 pytest。
 
   python3 minor_characters.py <作品根> [--min-chapters 3] [--json]
+
+阈值 env：NOVEL_ABSENT_MIN_APPEARANCES（累计出场≥此章数才纳入失踪监控，默认 5）
+        NOVEL_ABSENT_RUN（高频角色缺席≥此章数报警，默认 8）
+        NOVEL_ABSENT_RUN_MINOR（低频角色的放宽阈值，默认 15）
+        NOVEL_ABSENT_MAJOR_FLOOR（出场≥此章数按高频阈值，否则按放宽阈值，默认 10）
 """
 import os
 import re
@@ -26,8 +38,17 @@ import argparse
 from collections import defaultdict
 
 from wiki_builder import list_chapters, parse_character_names, _CJK
+from graph_sentry import (_iter_character_changes, resolved_alias_map, _canonical,
+                          _DEATH_EXIT_EVENTS, _REVIVAL_EVENTS, _load_json)
 
 DEFAULT_MIN_CHAPTERS = 3
+
+# 配角失踪阈值（env 可标定，见模块 docstring）
+ABSENT_MIN_APPEARANCES = int(os.environ.get("NOVEL_ABSENT_MIN_APPEARANCES", "5"))
+ABSENT_RUN = int(os.environ.get("NOVEL_ABSENT_RUN", "8"))
+ABSENT_RUN_MINOR = int(os.environ.get("NOVEL_ABSENT_RUN_MINOR", "15"))
+ABSENT_MAJOR_FLOOR = int(os.environ.get("NOVEL_ABSENT_MAJOR_FLOOR", "10"))
+ABSENT_MAX_ALERTS = 6  # 每书最多报此数条，按缺席时长降序取头部
 
 # ① 对话归属式：2-3 字名 + 说话动词。名非贪婪、动词用 lookahead（多字动词在前），
 #    避免贪婪把动词首字吃进名里（治"钱五笑道"误抽成"钱五笑"）。

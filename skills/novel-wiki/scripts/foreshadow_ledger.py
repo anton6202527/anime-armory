@@ -41,6 +41,29 @@ STORED_STATUS = {"pending", "partially_resolved", "resolved", "dropped"}
 IMPORTANCE = {"low", "medium", "high", "critical"}
 DEFAULT_GRACE = 5  # 超过 expected_payoff_chapter 多少章才算超期（与 logic_sentry 的宽容窗口一致）
 
+# ── 内容级信号阈值（rule of three / 提及过密 / 空降回收；全 advisory·恒不阻断） ──
+# 埋设→回收窗口达此章数且中段正文零提及 → 读者已忘（回收前该补 1-2 次低调复现）
+REMINDER_GAP_CHAPTERS = int(os.environ.get("NOVEL_FORESHADOW_REMINDER_GAP", "10"))
+# 中段提及章数达此值 → 提醒过密，谜底泄露风险（意外度会掉）
+OVEREXPOSED_MENTIONS = int(os.environ.get("NOVEL_FORESHADOW_OVEREXPOSED", "5"))
+# 空降检测每书最多报几条（保守 cap，防误报风暴）
+AIRDROP_MAX_ALERTS = int(os.environ.get("NOVEL_FORESHADOW_AIRDROP_MAX", "8"))
+# 空降候选词须在回收章自身出现至少几次（频次筛：只留本章真正着墨的实体）
+AIRDROP_MIN_OWN_HITS = int(os.environ.get("NOVEL_FORESHADOW_AIRDROP_MIN_OWN_HITS", "2"))
+
+_CJK_RUN_RE = re.compile(r"[一-鿿]{2,6}")
+# 提及/空降判定的保守停用表：叙事高频词与抽象名词——它们出现≠伏笔被提及/实体被铺垫。
+_MENTION_STOPWORDS = frozenset({
+    "自己", "他们", "她们", "我们", "你们", "一个", "什么", "没有", "知道", "已经",
+    "出来", "出去", "起来", "时候", "突然", "终于", "原来", "现在", "这里", "那里",
+    "这个", "那个", "一声", "一下", "只是", "但是", "可是", "因为", "所以", "如果",
+    "就是", "不是", "还是", "真相", "秘密", "身份", "力量", "出现", "发现", "回收",
+    "伏笔", "揭示", "揭露", "当年", "之前", "之后", "后来", "开始", "结束", "最终",
+    "众人", "所有", "一切", "事情", "东西", "地方", "感觉", "心里", "眼中", "脸上",
+    "声音", "目光", "身影", "手中", "消息", "计划", "决定", "选择", "离开", "回到",
+    "看到", "听到", "想到", "明白", "意识", "世界", "此刻", "瞬间", "终究", "果然",
+})
+
 
 # ── 账本读写（保持 JSON 完整性，幂等） ──────────────────────────────────────────
 def ledger_path(project):

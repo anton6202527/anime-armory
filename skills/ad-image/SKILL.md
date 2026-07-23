@@ -123,6 +123,19 @@ python3 skills/ad-image/scripts/reference_planner.py "<作品根>" --write
 **事后诊断**（图已生成）。gate 在 `--stage image` 以 **advisory** 并入（缺报告只 info、报告里的 block 降为
 warn）——创意/启发式不硬挡付费的规矩见 `gate.py` 的 `score_findings`。
 
+### 打样矩阵（事前·全量出图前跑）
+
+```bash
+python3 skills/ad-image/scripts/pilot_matrix.py "<作品根>" --write
+```
+
+传统 PPM「先看小样再开机」纪律 + n2d `episode_probe_matrix` 对位：全量批次前从分镜挑 **2-5 镜代表样**
+先出先人审，覆盖五轴——`hook`（首镜·被看最多的画面）/ `product_hero`（产品还原：品牌色 ΔE/logo/质感）/
+`risk_max`（`ad_reference_plan` delta_score 最高镜，缺报告退化为资产最多镜）/ `text_render`（文字板/endcard：
+AI 已知弱项，查错别字/字形崩坏）/ `multi_entity`（人+产品同框：比例/构图串染）。一镜可覆盖多轴（择最少镜
+覆盖最多轴），某轴无候选如实报 `absent` 不臆造。产 `生产数据/ad_pilot_matrix.{json,md}`，逐镜给中文理由 +
+审看焦点清单。纯计划零花钱、advisory（gate `--stage image` 同 advisory 接法），打不打样由人定。
+
 ## 重抽预算策略（两档）
 
 图片重抽只保留两档：`预算充足` / `预算一般`，默认 `预算充足`。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限。

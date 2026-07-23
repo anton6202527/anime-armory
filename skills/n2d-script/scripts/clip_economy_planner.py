@@ -191,6 +191,37 @@ def load_storyboard(root: Path, ep: str) -> Tuple[List[Dict[str, Any]], Optional
     return [c for c in clips if isinstance(c, dict)], None
 
 
+def generated_clip_ids(root: Path, ep: str, clips: Sequence[Mapping[str, Any]]) -> set:
+    """已有付费视频落盘的 Clip id 集合（沉没成本口径·heuristic）。
+
+    这些 Clip 不再构成「可采纳省次数」：已生成 take 是沉没成本，此刻采纳合并/单拍
+    意味着废弃已付费产物并重新生成，省不到次数；enforce 档不得据此阻断（可执行、
+    不死锁）。真要返工走 n2d-update 最小重制计划。判定两条：storyboard 回填的
+    video_out 指向存在文件；或 出视频/<ep>/视频/ 下有该 Clip 序号前缀的 MP4
+    （Clip_NN 前缀，与 video_qc 的解析同口径；_rejected 等子目录不算）。"""
+    out: set = set()
+    prefix_hits: set = set()
+    try:
+        for f in (root / "出视频" / ep / "视频").iterdir():
+            if f.is_file() and f.suffix.lower() == ".mp4":
+                m = re.match(r"(clip_\d+)", f.name, re.I)
+                if m:
+                    prefix_hits.add(m.group(1).lower())
+    except OSError:
+        pass
+    for i, clip in enumerate(clips, 1):
+        cid = clip_id(clip, i)
+        video_out = str(clip.get("video_out") or "").strip()
+        if video_out and (root / video_out).exists():
+            out.add(cid)
+            continue
+        m = re.search(r"clip[_\s]*0*(\d+)", cid, re.I)
+        ordinal = int(m.group(1)) if m else i
+        if f"clip_{ordinal:02d}" in prefix_hits:
+            out.add(cid)
+    return out
+
+
 def _location_key(clip: Mapping[str, Any]) -> str:
     loc = str(clip.get("location_id") or "").strip()
     if loc:
@@ -267,8 +298,11 @@ def mergeable(clip: Mapping[str, Any]) -> Tuple[bool, str]:
 def find_merge_groups(
     clips: Sequence[Mapping[str, Any]],
     max_take_sec: float,
+    generated: frozenset = frozenset(),
 ) -> List[Dict[str, Any]]:
-    """相邻同场景/实体重叠链 → 合并候选组（组内合计 ≤ max_take_sec）。"""
+    """相邻同场景/实体重叠链 → 合并候选组（组内合计 ≤ max_take_sec）。
+
+    已生成视频的 Clip（generated）按沉没成本处理：断链且不进任何候选组。"""
     groups: List[Dict[str, Any]] = []
     chain: List[Tuple[int, Mapping[str, Any]]] = []
 
@@ -292,7 +326,7 @@ def find_merge_groups(
 
     for i, clip in enumerate(clips, 1):
         ok, _why = mergeable(clip)
-        if not ok:
+        if not ok or clip_id(clip, i) in generated:
             flush()
             continue
         seam = _seam_mode(clip)

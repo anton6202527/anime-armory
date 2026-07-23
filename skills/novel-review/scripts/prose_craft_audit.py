@@ -34,6 +34,15 @@
   ⑬ head_hopping        视角跳头（John Gardner 心理距离/POV 纪律）——第三人称限知章内
                         ≥2 个角色的内心被直读（"沈砚心想…裴决暗道…"），读者被甩出 POV。
 
+【D. 开场滥调与段落节奏】（2026-07 第四轮补，同样全 advisory）：
+  ⑭ slush_opening_cliche 行业滥调开场（出版 slush pile 退稿实务）——章首窗口命中
+                        梦醒起床/天气铺陈/照镜自述模式库；plot_variety 的开篇同型查
+                        **自我重复**，本信号查**行业黑名单**（用一次也是滥调）。
+                        第 1 章命中最重（agent 第一页退稿高频原因）。
+  ⑮ paragraph_opening_monotony 段首同型 run——连续 ≥4 个叙述段以同一开头起段
+                        （都是"他…"或同一人名），句长 cv 之外的**段落级**节奏盲区；
+                        传统 line-edit checklist 的 vary-paragraph-openings 项。
+
 口径纪律：论文比例是英文短篇语料的**方向**不是中文网文阈值——本模块阈值全部
 internal-heuristic、env 可标定、恒 advisory；burstiness/重复率等风格侧归 mechanical_check，
 本模块只管**篇章/手艺侧**（改写后判别力 93% vs 风格侧 3%，见 keyword_banks 注释）。
@@ -63,11 +72,13 @@ try:
     from keyword_banks import (MORALIZING_PATTERNS, EMOTION_LABEL_KW, PHYSIO_BODY_KW,
                                PHYSIO_REACTION_KW, SMELL_KW, SETTING_MIRROR_KW,
                                PHILO_DIALOGUE_KW, LOGIC_KW, CRUTCH_PHRASE_KW,
+                               SLUSH_OPENING_PATTERNS,
                                classify_platform, PROFILE_COMMERCIAL)
 except Exception:
     MORALIZING_PATTERNS = EMOTION_LABEL_KW = PHYSIO_BODY_KW = []
     PHYSIO_REACTION_KW = SMELL_KW = SETTING_MIRROR_KW = PHILO_DIALOGUE_KW = LOGIC_KW = []
     CRUTCH_PHRASE_KW = []
+    SLUSH_OPENING_PATTERNS = {}
     def classify_platform(p):  # type: ignore
         return "商业爽文向"
     PROFILE_COMMERCIAL = "商业爽文向"
@@ -105,6 +116,9 @@ ECHO_MIN_REPEATS = int(os.environ.get("NOVEL_PROSE_ECHO_REPEATS", "3"))        #
 ECHO_MAX_ALERTS = int(os.environ.get("NOVEL_PROSE_ECHO_MAX_ALERTS", "5"))      # 全书回声告警上限
 HEADHOP_MIN_HITS = int(os.environ.get("NOVEL_PROSE_HEADHOP_HITS", "2"))        # 每角色内心直读次数下限
 FIRST_PERSON_PER_K = float(os.environ.get("NOVEL_PROSE_FIRSTPERSON_PER_K", "8"))  # "我"密度超此值视为第一人称章
+# D 组阈值（开场滥调/段首同型）
+SLUSH_HEAD_CHARS = int(os.environ.get("NOVEL_PROSE_SLUSH_HEAD_CHARS", "300"))   # 开篇窗口字数
+PARA_OPEN_RUN = int(os.environ.get("NOVEL_PROSE_PARA_OPEN_RUN", "4"))           # 段首同型连续段数
 PROVENANCE = "internal-heuristic·confidence=low"
 
 # 过滤词（filter words）：POV 角色与感知之间的"滤镜"。只算**叙述行**（引号外），
@@ -316,6 +330,52 @@ def interiority_subjects(text, roster=()):
     return out
 
 
+# ── D 组纯函数（开场滥调 / 段首同型）────────────────────────────────────────
+def slush_opening_hits(text, head_chars=None):
+    """章首窗口命中的滥调开场类别 → [{"category", "pattern"}]。纯函数·可测。
+
+    只在开篇窗口匹配（"睁开眼"落在章中是正常动作，落在开篇即梦醒滥调）；
+    每类只报首个命中模式，宁漏勿滥。
+    """
+    head_chars = head_chars or SLUSH_HEAD_CHARS
+    head = (text or "").lstrip()[:head_chars]
+    hits = []
+    for category in sorted(SLUSH_OPENING_PATTERNS):
+        for pattern in SLUSH_OPENING_PATTERNS[category]:
+            if pattern in head:
+                hits.append({"category": category, "pattern": pattern})
+                break
+    return hits
+
+
+def paragraph_openers(text):
+    """叙述段的段首 opener 序列（排除对白引导段）。纯函数·可测。
+
+    opener = 段首 2 字；首字是单字代词（他/她/我/它）时取首字——
+    "他推门"与"他转身"同 opener（都是"他"起段），2 字人名/名词则整取。
+    """
+    openers = []
+    for para in (text or "").splitlines():
+        p = para.strip()
+        if not p or _DIALOGUE_LINE_RE.match(p) or p.startswith("#"):
+            continue
+        openers.append(p[0] if p[0] in "他她我它" else p[:2])
+    return openers
+
+
+def opener_max_run(openers):
+    """(最长同 opener 连续段数, 该 opener)。纯函数·可测。"""
+    best_run, best_val = 0, None
+    run = 0
+    prev = None
+    for o in openers or []:
+        run = run + 1 if o == prev else 1
+        prev = o
+        if run > best_run:
+            best_run, best_val = run, o
+    return best_run, best_val
+
+
 def _load_settings(project):
     try:
         from project_io import load_project_settings
@@ -418,6 +478,24 @@ def analyze(project):
         for ph, c in crutch_phrase_counts(text).items():
             crutch_totals[ph] = crutch_totals.get(ph, 0) + c
 
+        # ── D 组：开场滥调（章首窗口）/ 段首同型（逐章）──────────────────────
+        slush = slush_opening_hits(text)
+        if slush:
+            cats = "、".join(f"{h['category']}（「{h['pattern']}」）" for h in slush)
+            first_page = "——第 1 章开篇即滥调是 agent 第一页退稿的高频原因，务必改切入" if cid == 1 else ""
+            alerts.append({"type": "slush_opening_cliche", "severity": "建议级", "auto": True,
+                           "chapter": cid, "categories": [h["category"] for h in slush],
+                           "note": (f"第{cid}章开篇窗口命中行业滥调开场：{cats}——梦醒/天气/照镜是"
+                                    f"编辑退稿统计的头部滥调（区别于开篇自我重复：黑名单模式用一次"
+                                    f"也是滥调）；从冲突或动作切入{first_page}（{PROVENANCE}）")})
+        run_len, run_val = opener_max_run(paragraph_openers(text))
+        if run_len >= PARA_OPEN_RUN:
+            alerts.append({"type": "paragraph_opening_monotony", "severity": "建议级", "auto": True,
+                           "chapter": cid, "opener": run_val, "run": run_len,
+                           "note": (f"第{cid}章连续 {run_len} 个叙述段都以「{run_val}」起段"
+                                    f"（阈 {PARA_OPEN_RUN}）——段首同型是句长之外的段落级单调；"
+                                    f"传统 line-edit：换主语、换句式、动作或场景先行（{PROVENANCE}）")})
+
         tot_chars += chars
         tot_label += emotion_label_count(text)
         tot_physio += physio_cooccur_count(text)
@@ -473,6 +551,7 @@ def analyze(project):
                        "rhythm_cv": RHYTHM_CV_WARN, "rhythm_run": RHYTHM_RUN_WARN,
                        "crutch_per_k": CRUTCH_PER_K, "echo_window": ECHO_WINDOW,
                        "headhop_min_hits": HEADHOP_MIN_HITS,
+                       "slush_head_chars": SLUSH_HEAD_CHARS, "para_open_run": PARA_OPEN_RUN,
                        "smell_exempt": smell_exempt, "provenance": PROVENANCE,
                        "note": "advisory：StoryScope 比例是英文短篇的方向非中文阈值；恒不阻断。"},
         "chapters": rows,

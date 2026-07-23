@@ -53,6 +53,23 @@ python3 skills/ad-review/scripts/asset_drift_report.py "<作品根>" --write
 （`finding()` 在构造层强制降档），紧迫度读 `detail.priority` 而非 severity。硬闸仍是 `product_qc` 的
 prompt-lint 与 provenance。
 
+## 一致性覆盖账本（fail-closed·n2d consistency_coverage 对位）
+
+```bash
+python3 skills/ad-review/scripts/verifier_coverage.py "<作品根>" --write
+```
+
+防的不是"机检报了问题"而是**机检空转**：报告存在但 0 个真实对象被检、registry 登记了产品而
+`product_qc` 没检到任何产品图、advisory 侧车 available=false 却被当干净。逐机检算
+**适用 × 真跑 × 新鲜 × 检了真实对象** 四元组，规则"**适用 × 休眠 → 交付前阻断**"：硬机检
+（product_qc/asset_consistency/video_qc/contract_inheritance）空转/过期在适用时 block，
+`final_media_consistency` 与 advisory 编剧轴只 warn（`advisory_degraded` 空转告警）。落
+`生产数据/ad_verifier_coverage.{json,md}`；gate 在 video 阶段 warn 提醒、**compose（交付点）
+缺账本或账本有 block 一律硬挡**。降档唯一出口：`合规/degraded_qc_waiver.json`
+（approved+scope+reason+signed_by 齐全才有效）签核留痕降为 warn。**本检可产 block**——它是
+确定性覆盖闸，不适用"创意启发式只提示"的规矩（防降级宪章 `ad-craft/scripts/consistency_charter.py`
+已锁定）。
+
 ## 检查项
 
 1. 主片 `合成/成片_主片.mp4` 存在。

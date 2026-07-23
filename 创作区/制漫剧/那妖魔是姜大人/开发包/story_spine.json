@@ -1,0 +1,223 @@
+{
+  "kind": "n2d_story_spine",
+  "version": 1,
+  "status": "confirmed",
+  "generated_at": "2026-07-23T10:05:00+08:00",
+  "mainline_logline": "姜月初靠百妖谱斩妖结算道行、妖血摹影，在一次次必死妖局里翻盘升级；她冒穿镇魔司官服被误认为镇魔司大人，一边兑现书名级的姜大人身份反转，一边偿还杀裴、冒名、借妖为力欠下的因果债。",
+  "consumes": [
+    "设定库/source_comprehension.json",
+    "开发包/adaptation_strategy.json"
+  ],
+  "spine": [
+    {
+      "id": "SPINE_01",
+      "beat": "穿越落尸场：姜月初缺信息缺资源，只能按即时危险行动，陌生化视角与求生目标确立。",
+      "source_span": "第1章 / 第1集",
+      "causal_role": "起因",
+      "depends_on": ["SRC_CAUSE_001"]
+    },
+    {
+      "id": "SPINE_02",
+      "beat": "裴长青以自由为饵逼她协助斩虎：她接近武器与虎妖，也确认裴仍把她当囚犯，权力不对等与互不信任确立。",
+      "source_span": "第1章 / 第1集",
+      "causal_role": "推进",
+      "depends_on": ["SRC_CAUSE_002", "SPINE_01"]
+    },
+    {
+      "id": "SPINE_03",
+      "beat": "虎妖濒死复起且常规攻击无效，裴长青濒死：逃跑不再可行，死局收口。",
+      "source_span": "第1章 / 第1集",
+      "causal_role": "转折",
+      "depends_on": ["SRC_CAUSE_003", "SPINE_02"]
+    },
+    {
+      "id": "SPINE_04",
+      "beat": "百妖谱给出斩杀结算规则，锁定唯一有把握杀死的裴长青：姜月初主动越过底线杀裴，系统首次真正驱动人物选择。",
+      "source_span": "第1章 / 第1集集尾",
+      "causal_role": "高潮",
+      "depends_on": ["SRC_CAUSE_004", "SPINE_03"]
+    },
+    {
+      "id": "SPINE_05",
+      "beat": "斩裴得二十年道行，越境一刀断虎首；斩虎得百年，七十五年摹影虎山神，首集钩子在次集及时兑现，升级循环首次闭环。",
+      "source_span": "第2章 / 第2集",
+      "causal_role": "兑现",
+      "depends_on": ["SRC_CAUSE_005", "SPINE_04"]
+    },
+    {
+      "id": "SPINE_06",
+      "beat": "埋裴、穿走黑红官服：被飞鹰门误认作镇魔司大人，假身份启动，杀裴的身份与伦理后果开始显形。",
+      "source_span": "第3章 / 第3集",
+      "causal_role": "推进",
+      "depends_on": ["SPINE_05", "SRC_FORESHADOW_003"]
+    },
+    {
+      "id": "SPINE_07",
+      "beat": "广武县上盘村狼患首救：她第一次从只顾自己转向承担他人风险，赢得第一批真心称她姜大人的人，摹影升级循环被证明可重复。",
+      "source_span": "第4-5章 / 第4-5集",
+      "causal_role": "兑现",
+      "depends_on": ["SPINE_06", "SRC_FORESHADOW_005"]
+    }
+  ],
+  "threads": [
+    {
+      "id": "THREAD_PEI",
+      "name": "裴长青因果债与镇魔司遗物线",
+      "class": "supporting",
+      "serves_mainline": "承载杀裴选择的长线后果：官服、遗物与镇魔司追查把首集的不可逆选择变成持续的身份危机与良知压力，是主角灰度的引擎。",
+      "decision": "keep",
+      "weight": "high",
+      "source_spans": ["第1-3章 / 第1-3集起，长线延续"],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_003"],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": ["SRC_CAUSE_002", "SRC_CAUSE_003", "SRC_CAUSE_005"],
+        "payoff_reroute": "",
+        "no_orphan_proof": ""
+      }
+    },
+    {
+      "id": "THREAD_TIGER",
+      "name": "虎妖恢复力与摹影标尺线",
+      "class": "supporting",
+      "serves_mainline": "虎妖接近鸣骨的恢复力为首个力量跃迁提供可信标尺；虎山神摹影是升级循环的第一件可复用资产。",
+      "decision": "keep",
+      "weight": "high",
+      "source_spans": ["第1-2章 / 第1-2集"],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": ["SRC_FORESHADOW_004"],
+      "connectivity": {
+        "downstream_mainline_deps": ["SRC_CAUSE_003", "SRC_CAUSE_005"],
+        "payoff_reroute": "",
+        "no_orphan_proof": ""
+      }
+    },
+    {
+      "id": "THREAD_SYSTEM",
+      "name": "百妖谱来源与代价线",
+      "class": "supporting",
+      "serves_mainline": "系统是升级主线的引擎，但其来源、上限与代价属长线信息，一次性铺开会拖节奏并让系统变成无成本许愿机。",
+      "decision": "compress",
+      "weight": "mid",
+      "source_spans": ["第1章系统显现起，全书长线"],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_002"],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": ["SRC_CAUSE_004"],
+        "payoff_reroute": "来源与上限按 adaptation_strategy.triage_policy.defer 口径延后：只在当前行为需要时释放最小一块规则，每次新能力用数字入账 + 系统短句兑现（第一笔固定账：斩裴20年→斩虎100年→75年摹影→余25年）；SRC_FORESHADOW_002 的 payoff_plan（先展示可验证规则、来源延后、每次新能力增补合同）原样保留。",
+        "no_orphan_proof": "压缩只改释放节奏与篇幅，不删除任何兑现义务：SRC_FORESHADOW_002 仍由本线承载且 status=open，SRC_CAUSE_004（系统首次驱动选择）完整落在 SPINE_04 成戏拍出。"
+      }
+    },
+    {
+      "id": "THREAD_JIANG",
+      "name": "姜家旧案与囚犯来历线",
+      "class": "supporting",
+      "serves_mainline": "她为何成为囚犯并被押往边地决定身份主线与长线人物关系，但属于长线揭示信息，前期只需以身份压力的形式存在。",
+      "decision": "compress",
+      "weight": "mid",
+      "source_spans": ["第1章起零散铺垫，随镇魔司线展开"],
+      "cut_keywords": [],
+      "opens_foreshadow": ["SRC_FORESHADOW_001"],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": [],
+        "payoff_reroute": "按 SRC_FORESHADOW_001 的 payoff_plan 承接：随镇魔司调查与姜家线逐步回收；前 10 集只以囚衣、押解、旁人称呼等最小视觉块露出，不停下来解释旧案全貌。",
+        "no_orphan_proof": "SRC_FORESHADOW_001（do_not_drop：决定身份主线与长线人物关系）仍由本线承载且 status=open；压缩仅推迟揭示位置，回收路径与源理解合同一致。"
+      }
+    },
+    {
+      "id": "THREAD_ZHENMOSI",
+      "name": "镇魔司组织全貌线",
+      "class": "supporting",
+      "serves_mainline": "镇魔司是假身份主线的舞台与追查压力来源，但组织全貌、层级与规程属背景信息，一次讲全会变成设定说明书。",
+      "decision": "compress",
+      "weight": "mid",
+      "source_spans": ["第3章起，随入司剧情展开"],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": [],
+        "payoff_reroute": "按 adaptation_strategy.triage_policy.defer 口径：全貌只在当前行动需要时释放最小一块（官服规制、验传、职级称谓等随剧情道具化露出）；涉及 SRC_FORESHADOW_001/003/005 的兑现场景照常成戏。",
+        "no_orphan_proof": "本线不独立承载伏笔账条目，被压缩的只是背景说明密度；相关伏笔分别由 THREAD_JIANG、THREAD_PEI 与主线 SPINE_06/07 承载，无孤儿。"
+      }
+    },
+    {
+      "id": "THREAD_WOLF",
+      "name": "广武县上盘村狼患救援小弧",
+      "class": "supporting",
+      "serves_mainline": "第一次以姜大人身份救人：完成从只顾自己到承担他人风险的弧转折，并证明百妖谱升级循环可重复，是书名级承诺的首次兑现。",
+      "decision": "keep",
+      "weight": "high",
+      "source_spans": ["第4-5章 / 第4-5集"],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": ["SRC_FORESHADOW_005"],
+      "connectivity": {
+        "downstream_mainline_deps": [],
+        "payoff_reroute": "",
+        "no_orphan_proof": ""
+      }
+    },
+    {
+      "id": "THREAD_QINGMIAN",
+      "name": "青面郎君威胁线",
+      "class": "supporting",
+      "serves_mainline": "狼患背后的具名反派：它当众叫破她并不属于镇魔司，把假身份危机从隐忧升级为直接威胁，是前弧集尾钩的主要供给。",
+      "decision": "keep",
+      "weight": "mid",
+      "source_spans": ["第4章 / 第4集起"],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": [],
+        "payoff_reroute": "",
+        "no_orphan_proof": ""
+      }
+    },
+    {
+      "id": "THREAD_PROSE",
+      "name": "行路流水、重复惊惧与网文回顾体（散文肌理，非情节线）",
+      "class": "tangent",
+      "serves_mainline": "不服务主线：重复环境说明、重复心理惊惧、行路时间账与网文式前情回顾不改变动机、因果、伏笔、能力账或状态，属文字肌理而非剧情功能。",
+      "decision": "compress",
+      "weight": "low",
+      "source_spans": ["全书散布，无独立章节锚点"],
+      "cut_keywords": [],
+      "opens_foreshadow": [],
+      "pays_foreshadow": [],
+      "connectivity": {
+        "downstream_mainline_deps": [],
+        "payoff_reroute": "按 adaptation_strategy.triage_policy 的 merge/omit 口径逐集处理：重复观察、惊惧和同义战力解释并入一次明确视线、伤势特写或系统短句；不影响选择的历史背景用一句心声或字卡带过。逐句取舍在各集 adaptation_triage.json 落账，本线不授权任何免账整段删除（cut_keywords 留空即不开全书级免账口）。",
+        "no_orphan_proof": "本线定义即排除动机/因果/伏笔/状态承载内容（凡承载者归属其余线程或主线节点）；压缩对象仅为重复修饰与流水账，无伏笔或因果依赖挂靠，故无孤儿风险。"
+      }
+    }
+  ],
+  "continuity_fixes": [],
+  "protected_invariants": [
+    "人物动机",
+    "选择后果",
+    "伏笔兑现",
+    "状态变化",
+    "系统/力量规则"
+  ],
+  "_source_foreshadow_ids": [
+    "SRC_FORESHADOW_001",
+    "SRC_FORESHADOW_002",
+    "SRC_FORESHADOW_003",
+    "SRC_FORESHADOW_004",
+    "SRC_FORESHADOW_005"
+  ],
+  "_source_protected_foreshadow_ids": [
+    "SRC_FORESHADOW_001",
+    "SRC_FORESHADOW_002",
+    "SRC_FORESHADOW_003",
+    "SRC_FORESHADOW_004",
+    "SRC_FORESHADOW_005"
+  ],
+  "notes": "覆盖窗口=已确认源理解合同与 season_arc 的前 5 集 + 已登记长线；本合同刻意不做无源凭据的整线 cut——805+ 后续章节的支线裁剪须在扩展 source_comprehension（新增 SRC_CAUSE/SRC_FORESHADOW 条目）后按窗口增补 threads，禁止在无因果/伏笔真值时预先裁剪。"
+}

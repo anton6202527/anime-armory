@@ -44,7 +44,7 @@ description: 拍广告 第2阶段·脚本 + 第4阶段·分镜（配音后回跑
 ## 编剧轴 advisory 机检（"审"不是"门"·全部只提示不阻断）
 
 既有的两个闸门（`ad_law_check` = 纯词表零语义；`finalize_storyboard` = 时长算术 + 字段存在性）
-**都不看内容说了什么**。下面三个补的是这块，与 `ad-score` 的钩子/露出/CTA prescore 正交：
+**都不看内容说了什么**。下面这些补的是这块，与 `ad-score` 的钩子/露出/CTA prescore 正交：
 
 ```bash
 python3 skills/ad-script/scripts/idea_payoff_ledger.py "<作品根>" --write   # 创意承诺→分镜兑现
@@ -52,6 +52,8 @@ python3 skills/ad-script/scripts/copy_quality_audit.py "<作品根>" --write   #
 python3 skills/ad-script/scripts/shot_variety_audit.py "<作品根>" --write   # 分镜视觉多样性（出图前）
 python3 skills/ad-script/scripts/product_craft_audit.py "<作品根>" --write  # 产品镜工艺三轴（光位/质感/角度）
 python3 skills/ad-script/scripts/performance_cue_audit.py "<作品根>" --write # 人物镜表演三轴（情绪/视线/可演动作）
+python3 skills/ad-script/scripts/beat_structure_audit.py "<作品根>" --write # 叙事结构/节拍工艺（传统广告结构纪律）
+python3 skills/ad-script/scripts/see_say_audit.py "<作品根>" --write        # 声画对位（DRTV see-say）
 ```
 
 - **`idea_payoff_ledger`（创意承诺兑现账本）**：`创意/concept.json` 的 big idea / key message /
@@ -80,6 +82,20 @@ python3 skills/ad-script/scripts/performance_cue_audit.py "<作品根>" --write 
   光位/质感手法/角度三轴，词汇表 `../ad-image/references/传统产品镜手法.md`）+ `performance_cue_audit`
   （人物镜情绪/视线/可演动作三轴——导演行规"给可演的过程不给结果形容词"，词汇表 `references/表演指令.md`）。
   三轴全缺 warn、缺两轴 info、endcard 豁免；一镜有人拿产品则两审计各查各的轴。
+- **`beat_structure_audit`（叙事结构/节拍工艺·传统广告结构纪律机检化）**：既有审计都不看
+  **结构与时序**。本检把传统制作行规做成机检：`hook_late`（首个钩子节拍须在 3s 窗内起——黄金 3 秒）、
+  `brand_entry_late`（品牌/产品 5s 内进场——skippable 行规，5s 内露出 VTR 显著更高）、
+  `cta_missing`/`cta_not_final`（CTA 存在且收在尾部；广告重复 CTA 合法豁免）、
+  `pain_solution_inverted`（电商/转化目标时痛点须先于方案——电商四段式）、`asl_out_of_band`/
+  `pacing_back_loaded`（广告 ASL 带宽与前紧后松剪辑密度，只 info）、`supers_hold_short`
+  （字卡停留 ≥0.15s/字+2s——Clearcast supers 公式口径）、`mute_pass_gap`（有 VO 无字幕——85% 信息流
+  静音播放，成片必须哑看能懂）、`six_second_overstuffed`（6s bumper 只能装一个 idea，不是 30s 压缩）、
+  `hook_taxonomy_missing`（钩子类型标签——批量投放时才能做钩子多样性追踪）。附 Google ABCD
+  （Attention/Branding/Connection/Direction）四布尔合成分作为数据字段。落 `生产数据/ad_beat_structure_audit.json`。
+- **`see_say_audit`（声画对位·DRTV see-say 纪律）**：VO 里**可演示的具体卖点**（防水/续航/成分/
+  实测…或 brief 品牌/产品词）画面里必须看得见，否则是"配画外音的广播"（radio with pictures）。
+  收敛设计：情绪化 VO 铺在产品 beauty 镜上合法不报；endcard/slogan 豁免；只有 VO 含具体 claim 且
+  与画面零重合才 warn；过半失配才聚合报 `vo_visual_ratio`。落 `生产数据/ad_see_say_audit.json`。
 - **finalize_storyboard 附带 pack shot 行规**：endcard/收版镜实测停留 <1.5s → warn `endcard_hold_short`
   （logo/CTA 要呼吸感，读不完等于没放）。
 

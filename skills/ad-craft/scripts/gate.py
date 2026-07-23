@@ -606,6 +606,54 @@ def creative_axis_findings(root):
         "未跑人物镜表演指令机检；建议出图前跑 ad-script/scripts/performance_cue_audit.py"
         "（情绪/视线/可演动作三轴没写进人物镜，AI 只会给死脸假笑）",
         sources=[os.path.join("脚本", "storyboard.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_beat_structure_audit.json"), "ad_beat_structure",
+        "未跑叙事结构/节拍工艺机检；建议出图前跑 ad-script/scripts/beat_structure_audit.py"
+        "（3s 钩子窗/品牌 5s 内进场/CTA 收尾/痛点→方案顺序/字卡停留时长——传统广告结构纪律）",
+        sources=[os.path.join("脚本", "storyboard.json"), os.path.join("脚本", "镜头时长.json"),
+                 os.path.join("需求", "brief.json"), os.path.join("创意", "concept.json")]))
+    out.extend(_advisory_report_findings(
+        root, os.path.join("生产数据", "ad_see_say_audit.json"), "ad_see_say",
+        "未跑声画对位机检；建议出图前跑 ad-script/scripts/see_say_audit.py"
+        "（DRTV see-say 纪律：VO 里可演示的具体卖点画面里要看得见，否则是配画外音的广播）",
+        sources=[os.path.join("脚本", "storyboard.json"), os.path.join("脚本", "voiceover.txt")]))
+    return out
+
+
+def verifier_coverage_findings(root, stage):
+    """一致性覆盖账本（fail-closed·n2d consistency_coverage 对位）。
+
+    防的不是「机检报了问题」而是「机检空转」：报告存在但 0 个真实对象被检、
+    registry 登记了产品而 product_qc 没检到任何产品图、advisory 侧车 available=false
+    却被当干净——"适用 × 休眠 → 交付前阻断"。compose 是 ad 线的交付点，账本缺失
+    在 compose = block（没有账本就无法证明该跑的机检都真跑了）；video 阶段先 warn。
+    降档唯一出口在 verifier_coverage.py 内部：合规/degraded_qc_waiver.json 签核留痕。
+    """
+    path = os.path.join(root, "生产数据", "ad_verifier_coverage.json")
+    report = load_json(path)
+    if report is None:
+        sev = "block" if stage == "compose" else "warn"
+        return [finding(sev, "verifier_coverage_missing",
+                        "缺一致性覆盖账本；请先跑 ad-review/scripts/verifier_coverage.py --write"
+                        "（交付前必须证明：该跑的机检都真跑了、检了真实对象、且不过期）", path)]
+    blocks, warns = _summary_counts(report)
+    if blocks is None:
+        return [finding("block", "verifier_coverage_malformed", "覆盖账本缺 summary.block（格式异常）", path)]
+    out = []
+    if blocks:
+        out.append(finding("block", "verifier_coverage_block",
+                           f"覆盖账本仍有 block={blocks}（适用的机检休眠/空转/过期；"
+                           "要么补跑机检，要么在 合规/degraded_qc_waiver.json 签核留痕）", path))
+    if warns:
+        out.append(finding("warn", "verifier_coverage_warn", f"覆盖账本 warn={warns}，需人工确认", path))
+    out.extend(report_freshness_findings(path, [
+        os.path.join(root, "脚本", "storyboard.json"),
+        os.path.join(root, "设定库", "asset_registry.json"),
+        os.path.join(root, "出图", "分镜", "图片"),
+        os.path.join(root, "出图", "分镜", "product_qc.json"),
+        os.path.join(root, "出视频", "分镜", "视频"),
+        os.path.join(root, "出视频", "分镜", "video_qc.json"),
+    ], "verifier_coverage"))
     return out
 
 
@@ -634,6 +682,14 @@ def run_gate(root, stage, allow_placeholder=False):
         findings.extend(image_backend_findings(root))
         # 事前处方：出图前就该开好"每镜喂哪些参考"，等 product_qc 事后发现产品漂就已花钱。
         findings.extend(reference_plan_findings(root))
+        # 打样矩阵（advisory·传统 PPM「先看小样再开机」）：全量出图前先出 2-5 镜代表样
+        # （首镜/产品 hero/最高风险镜/文字板/多主体）人工过目，画风塌在打样里改是小钱。
+        findings.extend(_advisory_report_findings(
+            root, os.path.join("生产数据", "ad_pilot_matrix.json"), "ad_pilot_matrix",
+            "未生成打样矩阵；建议全量出图前跑 ad-image/scripts/pilot_matrix.py"
+            "（先出 2-5 镜代表样验画风/产品还原/文字渲染，再放量）",
+            sources=[os.path.join("脚本", "storyboard.json"),
+                     os.path.join("设定库", "asset_registry.json")]))
     if stage in ("video", "compose"):
         findings.extend(platform_pack_findings(root))
         # 图已生成：查存在性 + 产品/品牌色一致性机检（最便宜的拦截点）+ 契约继承。
@@ -656,6 +712,9 @@ def run_gate(root, stage, allow_placeholder=False):
             "（传统制前会纪律：节奏塌在预演里改是免费的，生完视频再改是重烧）",
             sources=[os.path.join("出图", "分镜", "图片"), os.path.join("脚本", "镜头时长.json"),
                      os.path.join("配音", "vo.wav")]))
+    if stage in ("video", "compose"):
+        # 覆盖账本（fail-closed）：video 提醒、compose 硬闸——交付前必须证明机检没空转。
+        findings.extend(verifier_coverage_findings(root, stage))
     if stage == "compose":
         findings.extend(video_clip_findings(root))
         findings.extend(video_qc_findings(root))
@@ -709,6 +768,7 @@ GATE_INPUT_RELS = {
         os.path.join("出视频", "分镜", "contract_inheritance.json"),
         os.path.join("出视频", "分镜", "视频"),
         os.path.join("出视频", "分镜", "video_qc.json"),
+        os.path.join("生产数据", "ad_verifier_coverage.json"),
     ],
 }
 
