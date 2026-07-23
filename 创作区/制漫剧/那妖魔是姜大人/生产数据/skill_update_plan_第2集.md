@@ -1,19 +1,28 @@
 # skill 更新重制计划 — 第2集
 
 - 作品根：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人`
-- 当前阶段：`image_prompt`
-- 建议动作：`只重跑 gate/review` · `gate/review` → `image_prompt`
+- 当前阶段：`video`
+- 建议动作：`只重跑 gate/review` · `gate/review` → `video`
 - 需要重制：否
 - 重制策略：`最小`
 
 ## 当前生产缺口
-- 当前待办：`出图prompt`（出图prompt = `⬜`）
-- 建议 skill：`n2d-image`
-- 建议命令：`n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集`
+- 当前待办：`视频prompt`（视频prompt = `⬜`）
+- 建议 skill：`n2d-video`
+- 建议命令：`n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集`
+- 说明：更新影响上界仍按最远已开始产物 `video` 计算；当前待办按进度表首个未完成阶段 `video_prompt` 计算。
+
+## 图片质检环境与阶段跳转
+- 机检能力：`full`
+- 当前解释器：`/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python`
+- 当前 image_qc：`verdict=review`，硬阻断 `0`，非阻断初筛 `44`，降级 `False`
+- block 摘要：脸(G1): 图片/Clip07_end.png | 脸(G1): 图片/EP02_CLIP07_start.png
+- 当前应停在/回退：`video` — full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video
+- 建议安装：无需补装
+- 报告：`/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md`
 
 ## 健康检测（源/三帧/图片/契约继承）
 - **源小说**：✅ 源未变动
-- **帧策略合同**：⚠️ 必需执行锚缺失 0/7 Clip；缺尾帧声明 0 Clip；缺 PNG 文件 14 个（普通镜不设默认三帧；backend=`None`）
-
-## 备注
-- 帧策略合同未达标：必需执行锚缺失 0 个 Clip，缺尾帧声明 0 个 Clip，已声明但 PNG 不存在 14 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。回 n2d-script 跑 `anchor_planner.py <作品根> 第2集 --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。；缺文件样例：出图/第2集/图片/EP02_CLIP01_start_a1.png, 出图/第2集/图片/EP02_CLIP01_start_a2.png, 出图/第2集/图片/EP02_CLIP01_start_a3.png, 出图/第2集/图片/EP02_CLIP02_start_a1.png
+- **帧策略合同**：✅ 达标（需执行锚 7 Clip；普通镜模式=risk_only）
+- **图片一致性**：✅ 无硬阻断（verdict=`review`，精度 `full`）
+- **契约继承**：✅ 已继承（verdict=`pass`）

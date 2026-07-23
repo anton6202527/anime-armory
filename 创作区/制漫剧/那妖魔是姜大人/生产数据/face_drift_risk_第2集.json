@@ -137,7 +137,7 @@
   "shared_asset_face_risk": {
     "assets": [
       {
-        "asset_id": "LOC_尸骸荒野",
+        "asset_id": "LOC_01",
         "band": "low",
         "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
         "face_policy": "faceless",

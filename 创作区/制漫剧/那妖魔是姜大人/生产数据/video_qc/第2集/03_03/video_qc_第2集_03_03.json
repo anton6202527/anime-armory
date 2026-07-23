@@ -1,0 +1,86 @@
+{
+  "batch": "03_03",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part3",
+      "clip_index": 3,
+      "duration_sec": 6.041667,
+      "file": "Clip_03_一刀断虎首_part3.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.0,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part3_c9ff1544_c728b36e3dea_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part3_c9ff1544_c728b36e3dea_02_mid.jpg",
+          "time_sec": 3.021
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part3_c9ff1544_c728b36e3dea_03_end.jpg",
+          "time_sec": 5.842
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第2集/03_03/contact_sheet_03_03.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "1080x1920"
+  },
+  "episode": "第2集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第2集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第2集/_frames",
+  "intra_clips": [],
+  "kind": "n2d_video_qc",
+  "machine_notes": [
+    "storyboard 景别不可用——片内身份采样对全部 clip 抽样（可能含非近景）。"
+  ],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 1,
+    "intra_warns": 0,
+    "seam_blocks": 1,
+    "seam_info": 0,
+    "seam_warns": 0,
+    "seams_checked": 1
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.1006,
+      "color_verdict": "ok",
+      "dist": 34,
+      "from_clip": "Clip_02",
+      "seam_mode": "continuous_take_relay",
+      "strictness": "strict",
+      "struct_verdict": "block",
+      "to_clip": "Clip_03",
+      "transition": "同动作相位接命中镜",
+      "verdict": "block"
+    }
+  ],
+  "version": 1
+}

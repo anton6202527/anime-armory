@@ -6,19 +6,19 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-22T07:32:28+00:00",
+  "generated_at": "2026-07-22T13:42:48+00:00",
   "contracts": [
     {
       "name": "storyboard",
       "path": "脚本/第2集/storyboard.json",
       "exists": true,
-      "sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+      "sha256": "83be9b6b280136d0e7a0b4d4ac30af3b2776c20be32828a219fdfa2ade9a2eb1"
     },
     {
       "name": "continuity_chain",
       "path": "脚本/第2集/continuity_chain.json",
       "exists": true,
-      "sha256": "843d19c5f2bd410f49287b4952b3f94c1213adcae1582e00e9f752eaf451d077"
+      "sha256": "8e0106878b0e4d734a762eed3e4c91b4f78f06111437b7747fca410fe092a823"
     },
     {
       "name": "shot_reverse_contract",
@@ -36,7 +36,7 @@
       "name": "director_camera_plan",
       "path": "生产数据/director_camera_plan_第2集.json",
       "exists": true,
-      "sha256": "6e404fb4c850148e29697a48f1ee7efd8a77c2ecaaaff4c62f148095fc2cedd2"
+      "sha256": "830cbdeff260544f015746cffb52a516bafa3ceb57dc2440c79b4019b1103b27"
     },
     {
       "name": "reference_plan",
@@ -49,12 +49,12 @@
     {
       "path": "出图/第2集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "63e59ac53382eb343f400b94f64820fee396401584233e13ba4d0f0be64cb0b8"
+      "sha256": "d47f1f60ad3f30f833a209971e5b06bb6ba0918a9f258c954925b55fbfc7f81b"
     },
     {
       "path": "出图/第2集/prompt/01_分镜出图.md",
       "exists": true,
-      "sha256": "ddcfe38bf85bcf8587c1514b11917e548bd50cc433fde664f0ac04bc554e435a"
+      "sha256": "18136a0741ff3f886207878e66193210ca44f35691f253570ef3b4d368b527a4"
     }
   ]
 }

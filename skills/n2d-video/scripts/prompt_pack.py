@@ -61,6 +61,17 @@ DIRECT_GAZE_INTENT_RE = re.compile(
 )
 
 
+def route_execution_channel(route: Mapping[str, Any]) -> str:
+    """Resolve the channel that actually executes a logical video backend."""
+    adapter = route.get("execution_adapter") if isinstance(route.get("execution_adapter"), Mapping) else {}
+    return str(
+        route.get("channel")
+        or route.get("backend_channel")
+        or adapter.get("channel")
+        or ""
+    ).strip()
+
+
 def _frame_strategy_requires_mid(
     clip: Mapping[str, Any], route: Mapping[str, Any], anchors: Sequence[Mapping[str, Any]],
     mid: Optional[Mapping[str, Any]],
@@ -825,6 +836,16 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
     ), sb)
     image_contract = extract_section(image_overview, "本集可看性签收合同")
     total_sec = sum(float(c.get("duration") or 0) for c in clips)
+    scene_states: List[str] = []
+    seen_scene_ids: set[str] = set()
+    for clip in clips:
+        loc_id = str(clip.get("location_id") or clip.get("loc_id") or "").strip()
+        if not loc_id or loc_id in seen_scene_ids:
+            continue
+        seen_scene_ids.add(loc_id)
+        scene_name = str(clip.get("scene") or "").strip()
+        scene_states.append(f"{loc_id}（{scene_name}）" if scene_name else loc_id)
+    scene_state_text = "、".join(scene_states) or "按 storyboard 逐镜场景登记"
 
     lines = [
         f"# {ep} 出视频总览",
@@ -839,10 +860,10 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
         "",
         "## 本集导演一致性契约",
         f"- 主色调：继承出图色调基线：{values.get('色调基线')}",
-        "- 镜头语法：冷开/欠命账用固定和极缓推；换装/身份爽点用克制推近；马队/跪求用前后景压迫与反打；尾钩用定格和近景压住选择困局。",
+        "- 镜头语法：逐镜继承 director_camera_plan 的景别、机位、运动速度与剪辑意图，不新增未登记镜头事件。",
         f"- 轴线：继承出图轴线：{values.get('轴线')}",
-        f"- 剧情状态锁：继承出图状态演进：{values.get('状态演进')}；不提前画狼妖完整形态，不提前把救村选择拍成已答应。",
-        f"- 场景状态：继承出图光位锚：{values.get('光位锚')}；LOC_01 浅坑/尸场/低雾保持，LOC_02 官道深处、火把侧光、马队画右中景保持。",
+        f"- 剧情状态锁：继承出图状态演进：{values.get('状态演进')}；不得提前或回退 storyboard 登记的角色、道具与事件状态。",
+        f"- 场景状态：继承出图光位锚：{values.get('光位锚')}；本集登记场景仅为 {scene_state_text}，保持各自空间布局与光位锚。",
         "",
         visual_block,
         "",
@@ -1056,7 +1077,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     effective_take_policy = "" if (requires_mid or risk_anchor_present) else take_policy
     strategy_plan = select_video_frame_strategy(
         route.get("primary_backend") or "generic",
-        route.get("channel") or route.get("backend_channel") or "",
+        route_execution_channel(route),
         shot_count=max(1, len(editorial_shots)),
         anchor_count=mid_count,
         need_end=bool(endframe) or needs_end_anchor(cont),
@@ -1081,7 +1102,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
             action = single_take_ladder
     frame_control = anchor_consumption_plan(
         route.get("primary_backend") or "generic",
-        route.get("channel") or route.get("backend_channel") or "",
+        route_execution_channel(route),
         anchor_count=mid_count,
         need_end=bool(endframe) or needs_end_anchor(cont),
         frame_strategy=frame_strategy,

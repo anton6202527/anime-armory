@@ -252,18 +252,25 @@ def compact_values(values: Iterable[Any], *, limit: int = 8) -> List[str]:
 
 def chars_from_clip(clip: Mapping[str, Any]) -> List[str]:
     out: List[str] = []
+
+    def canonical_char_id(value: Any) -> str:
+        """Collapse storyboard form labels such as CHAR_01/受伤态 to CHAR_01."""
+        text = str(value).strip().replace("-", "_")
+        match = re.match(r"^(CHAR_[A-Za-z0-9\u4e00-\u9fff_]+)", text)
+        return match.group(1) if match else text
+
     for key in ("character_ids", "characters", "required_characters"):
         val = clip.get(key)
         if isinstance(val, list):
-            out.extend(str(v) for v in val if str(v).strip())
+            out.extend(canonical_char_id(v) for v in val if str(v).strip())
         elif isinstance(val, str):
             out.extend(re.findall(r"\bCHAR[_A-Za-z0-9\u4e00-\u9fff-]+\b", val))
     schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
     for val in as_list(schedule.get("characters")) + as_list(schedule.get("required_presence")):
         text = str(val).strip()
         if text.startswith("CHAR_"):
-            out.append(text)
-    return sorted(set(x.replace("-", "_") for x in out))
+            out.append(canonical_char_id(text))
+    return sorted(set(canonical_char_id(x) for x in out))
 
 
 def asset_ids_from_clip(clip: Mapping[str, Any]) -> List[str]:

@@ -1,0 +1,4083 @@
+{
+  "counts": {
+    "block": 7,
+    "high": 0,
+    "medium": 10
+  },
+  "delivery_surface": {
+    "blocking_counts": {
+      "block": 7,
+      "high": 0
+    },
+    "required_domains": [
+      "剧情",
+      "角色",
+      "资产",
+      "镜头",
+      "音频",
+      "字幕",
+      "合规",
+      "生产操作"
+    ],
+    "status": "blocked"
+  },
+  "dependency_graph": {
+    "available": true,
+    "impact_plan": {},
+    "kind": "n2d_consistency_dependency_graph",
+    "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第2集.json",
+    "summary": {
+      "clips": 8,
+      "edges": 87,
+      "images": 26,
+      "nodes": 59,
+      "videos": 0
+    }
+  },
+  "domain_counts": {
+    "block": 5,
+    "high": 0,
+    "medium": 3
+  },
+  "domains": [
+    {
+      "counts": {
+        "block": 14,
+        "high": 0,
+        "medium": 39
+      },
+      "findings": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "",
+          "message": " 语义谱系(P0)   复杂镜视频 prompt 未充分继承专项模板契约。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "",
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "",
+          "message": " 节奏密度(Rhythm)   连续 3 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": "",
+          "message": " 节奏密度(Rhythm)   连续 3 个长镜聚集（EP02_CLIP05→EP02_CLIP06→EP02_CLIP07），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "story",
+      "label": "剧情",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ]
+    },
+    {
+      "counts": {
+        "block": 27,
+        "high": 0,
+        "medium": 90
+      },
+      "findings": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "",
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "",
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ],
+      "key": "character",
+      "label": "角色",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_prompt_preflight"
+      ]
+    },
+    {
+      "counts": {
+        "block": 4,
+        "high": 0,
+        "medium": 21
+      },
+      "findings": [
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": "",
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "系统面板(UI1)",
+          "loc": "",
+          "message": " 系统面板(UI1)   检出 5 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "系统面板(UI1)",
+          "loc": "",
+          "message": " 系统面板(UI1)   检出 5 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "asset",
+      "label": "资产",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ]
+    },
+    {
+      "counts": {
+        "block": 5,
+        "high": 0,
+        "medium": 82
+      },
+      "findings": [
+        {
+          "dimension": "跨集场景漂移(SCNX)",
+          "loc": "",
+          "message": " 跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集结构漂移 dHash 汉明=24（vs 前 1 集结构原型，阈 warn=18·core block=26）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "景深一致(DOF1)",
+          "loc": "",
+          "message": " 景深一致(DOF1)   图片/EP02_CLIP01_start_a2.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.038 vs 场景中位 0.69）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "景深一致(DOF1)",
+          "loc": "",
+          "message": " 景深一致(DOF1)   图片/EP02_CLIP04_end_a2.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 0.996 vs 场景中位 0.69）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP02_CLIP01_start_a2.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.147 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP02_CLIP08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.212 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/EP02_CLIP08_start_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.42 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "",
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "",
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "shot",
+      "label": "镜头",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 26
+      },
+      "findings": [
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": "",
+          "message": " 配音情绪弧(VEA)   镜头4·姜月初：台词含强情绪但配音标注「压抑决绝」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": "",
+          "message": " 生成配方(RCP)   脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": "",
+          "message": " 强配方Schema(RCP2)   脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_versi",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": "",
+          "message": " 成本路由(K1)   脚本/第2集/voiceover.txt 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "环境声(AMB)",
+          "loc": "",
+          "message": " 环境声(AMB)   本集涉 2 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ],
+      "key": "audio",
+      "label": "音频",
+      "overall": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 6
+      },
+      "findings": [
+        {
+          "dimension": "系列包装(PKG)",
+          "loc": "",
+          "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_01 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_04 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_05 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_06 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": "",
+          "message": " 文字渲染(OCR1)   Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ],
+      "key": "subtitle",
+      "label": "字幕",
+      "overall": "warn",
+      "sources": [
+        "detect"
+      ]
+    },
+    {
+      "counts": {
+        "block": 0,
+        "high": 0,
+        "medium": 6
+      },
+      "findings": [
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": "",
+          "message": " 世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        }
+      ],
+      "key": "compliance",
+      "label": "合规",
+      "overall": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight",
+        "compliance"
+      ]
+    },
+    {
+      "counts": {
+        "block": 10,
+        "high": 0,
+        "medium": 72
+      },
+      "findings": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_01__囚途残损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": "",
+          "message": "CHAR_02__濒死重伤态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": "",
+          "message": " 风格(S1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "",
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "",
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "",
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ],
+      "key": "ops",
+      "label": "生产操作",
+      "overall": "block",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "score"
+      ]
+    }
+  ],
+  "entity_counts": {
+    "block": 2,
+    "high": 0,
+    "medium": 7
+  },
+  "intentional_discontinuity": {
+    "available": true,
+    "counts": {
+      "accepted": 0,
+      "block": 0,
+      "warn": 0
+    },
+    "kind": "n2d_intentional_discontinuity_audit",
+    "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/intentional_discontinuity_audit_第2集.json",
+    "status": "pass"
+  },
+  "kind": "n2d_consistency_ledger",
+  "root_causes": [
+    {
+      "anchor": "dialogue_fact_contract_第2集.json",
+      "dimensions": [
+        "对白事实锁"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "对白事实锁",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/dialogue_fact_contract_第2集.json",
+          "message": "对白事实锁 missing_dialogue_fact_contract: native_speech/native_av is active but dialogue_fact_contract is missing; run this script with --write before paid video submit.",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#3",
+      "dimensions": [
+        "空间硬控"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "空间硬控",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#3",
+          "message": "空间硬控 该 fight_exchange 模板具有 pose_reference_required: true 约束，必须配置 pose_image_path。",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#8",
+      "dimensions": [
+        "专项镜头模板"
+      ],
+      "domain": "asset",
+      "severity": "block",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "专项镜头模板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8",
+          "message": "专项镜头模板 template=system_panel 的 template_contract 缺字段：growth_ref",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "专项镜头模板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8",
+          "message": "专项镜头模板 template=system_panel 的 template_contract 缺字段：panel_tier",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "character",
+      "dimensions": [
+        "脸(G1)",
+        "服装配色(N1)",
+        "发型(H1)",
+        "真值源(TRUTH)",
+        "台词语域(D1)",
+        "叙事状态(NS1)",
+        "image_prompt_lint"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": null,
+          "message": "CHAR_02__濒死重伤态 脸(G1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": null,
+          "message": "CHAR_01__囚途残损态 服装配色(N1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "image_qc_第2集.json",
+      "dimensions": [
+        "出图落档QC"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "出图落档QC",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "message": "出图落档QC 输入首帧 image_qc 仍有 43 项硬阻断（崩脸/人体解剖N5/接缝断/降级精度近景/非法 CHAR/缺高风险人体合约）——图生视频会忠实把这些缺陷动起来，是最贵工位上的纯浪费。先回 n2d-image 修复并重跑 image_qc 再出视频。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "production_breakdown_check_第2集.json",
+      "dimensions": [
+        "P-3制片交接包"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "P-3制片交接包",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第2集.json",
+          "message": "P-3制片交接包 P-3 制片交接包未通过：7/9 confirmed。进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；问题示例：脚本/第2集/production_handoff_pack",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#3",
+      "dimensions": [
+        "分区合成"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "分区合成",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#3",
+          "message": "分区合成 该 fight_exchange 模板具有 regional_construct_required: true 约束，检测到同框多角色，请在 execution_strategy / multi_subject_strategy / template_contract.execution_strategy 中明确保底合成策略以防串脸。",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "第2集",
+      "dimensions": [
+        "脸漂报告新鲜度"
+      ],
+      "domain": "character",
+      "severity": "block",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸漂报告新鲜度",
+          "loc": "第2集",
+          "message": "脸漂报告新鲜度 脸漂实测报告内容级陈旧：历史集 ['第1集(指纹不符)'] 的当前 PNG 像素与报告记录的指纹不一致——图在报告生成后重出过，集级覆盖看着没问题、报告其实基于旧像素，measured-drift 环会误判『全绿』。重跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --writ",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 06（时长 10.520s · EP02_CLIP06 · 结算闻弦初境与二十五年余额）",
+      "dimensions": [
+        "帧策略",
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "帧策略",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 10.520s · EP02_CLIP06 · 结算闻弦初境与二十五年余额）",
+          "message": "帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成",
+          "severity": "block",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 06（时长 10.520s · EP02_CLIP06 · 结算闻弦初境与二十五年余额）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 08（时长 4.213s · EP02_CLIP08 · 摹影进阶会变成什么）",
+      "dimensions": [
+        "帧策略",
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "帧策略",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 4.213s · EP02_CLIP08 · 摹影进阶会变成什么）",
+          "message": "帧策略 多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成",
+          "severity": "block",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 08（时长 4.213s · EP02_CLIP08 · 摹影进阶会变成什么）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:21>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "ops",
+      "dimensions": [
+        "锚点门(N3)",
+        "风格(S1)",
+        "天气时辰(W1)",
+        "物理事件图(PHY)",
+        "生成配方(RCP)",
+        "强配方Schema(RCP2)",
+        "成本路由(K1)",
+        "人审校准集(CAL)",
+        "一致性探针包(PROBE)"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_01__囚途残损态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "锚点门(N3)",
+          "loc": null,
+          "message": "CHAR_02__濒死重伤态 锚点门(N3)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "风格(S1)",
+          "loc": null,
+          "message": " 风格(S1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)    ",
+          "severity": "block",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第2集.json",
+      "dimensions": [
+        "自动审片总分"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "自动审片总分",
+          "loc": "生产数据/score_第2集.json",
+          "message": "缺 score JSON；验收总账无法闭环",
+          "severity": "block",
+          "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "第2集",
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "domain": "ops",
+      "severity": "block",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料新鲜度",
+          "loc": "第2集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d-image 自上次 skill 基线后有改动，可能影响本阶段（image_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第2集` 评估哪些物料需重制；",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#1",
+      "dimensions": [
+        "尾帧"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "尾帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#1",
+          "message": "尾帧 镜头需要尾锚但未填写 endframe_png",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#3",
+      "dimensions": [
+        "尾帧"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "尾帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#3",
+          "message": "尾帧 镜头需要尾锚但未填写 endframe_png",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#5",
+      "dimensions": [
+        "尾帧"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "尾帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#5",
+          "message": "尾帧 镜头需要尾锚但未填写 endframe_png",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#7",
+      "dimensions": [
+        "尾帧"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "尾帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#7",
+          "message": "尾帧 镜头需要尾锚但未填写 endframe_png",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "第2集",
+      "dimensions": [
+        "物料新鲜度"
+      ],
+      "domain": "shot",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料新鲜度",
+          "loc": "第2集",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video_prompt）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json",
+      "dimensions": [
+        "跨集色调",
+        "剧情经济性",
+        "语义谱系(P0)",
+        "跨集承接合同",
+        "对白事实锁"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "跨集色调",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "跨集色调 本集色调基线基调「冷灰青黑+暗红夕照」与打样集 第1集「冷灰、土褐、墨黑」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "剧情经济性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "剧情经济性 story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "storyboard.json",
+          "message": "语义谱系(P0) `钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "跨集承接合同",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "跨集承接合同 早期集必须显式写跨集承接合同，避免集与集之间像拼接短片：缺 previous_episode_pickup/opening_bridge：本集开头没有明示接住上一集问题、延迟兑现或切线理由。建议字段：series_handoff.previous_episode_pickup / opening_bridge / ending_throw / ",
+          "severity": "block",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "跨集色调",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "跨集色调 本集色调基线基调「冷灰青黑+暗红夕照」与打样集 第1集「冷灰、土褐、墨黑」不一致——色调可逐集细化但基调应跨集恒定；以打样集为准或确认有意改（防整部画风跳）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "剧情经济性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "剧情经济性 story_economy_audit 仍有 2 条压缩建议；本次不硬拦，但建议在付费生成前处理，避免解释/行进/普通反应占用视频预算。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "对白事实锁",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+          "message": "对白事实锁 duplicate_screen_text_line: screen text '虎山神（摹影）' is assigned to multiple physical clips: Clip_05, Clip_06. Screen-text track must be disjoint; repeat only by creating an exp",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#1",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#1",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP01_start_a1.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#1",
+          "message": "中段锚帧 锚帧 2 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP01_start_a2.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#1",
+          "message": "中段锚帧 锚帧 3 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP01_start_a3.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#2",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#2",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP02_start_a1.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#3",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#3",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP03_impact.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#3",
+          "message": "中段锚帧 锚帧 2 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP03_recovery.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#5",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#5",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP04_end_a1.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#5",
+          "message": "中段锚帧 锚帧 2 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP04_end_a2.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#6",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#6",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP06_start_a1.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#7",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#7",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP07_start_a1.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        },
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#7",
+          "message": "中段锚帧 锚帧 2 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP07_start_a2.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "storyboard.json clip#8",
+      "dimensions": [
+        "中段锚帧"
+      ],
+      "domain": "story",
+      "severity": "block",
+      "sources": [
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "中段锚帧",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json clip#8",
+          "message": "中段锚帧 锚帧 1 缺少通过值 self_check=pass（当前=缺失）：出图/第2集/图片/EP02_CLIP08_start_a1.png；中段锚帧必须按本镜「中段锚帧生成方式/自检」确认动作推进成立，不能只凭 PNG 存在放行。",
+          "severity": "block",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "WEAPON_01",
+      "dimensions": [
+        "物料漂移预案",
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料漂移预案",
+          "loc": "横刀（WEAPON_01）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "物料漂移预案",
+          "loc": "横刀（WEAPON_01）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "物料漂移预案",
+          "loc": "横刀（WEAPON_01）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "asset",
+      "dimensions": [
+        "结构化交互图谱(I2)",
+        "系统面板(UI1)"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "结构化交互图谱(I2)",
+          "loc": null,
+          "message": " 结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "系统面板(UI1)",
+          "loc": null,
+          "message": " 系统面板(UI1)   检出 5 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "系统面板(UI1)",
+          "loc": null,
+          "message": " 系统面板(UI1)   检出 5 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "场景定妆.md ## LOC 尸骸荒野（`LOC_尸骸荒野`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/场景定妆.md ## LOC 尸骸荒野（`LOC_尸骸荒野`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "横刀（PROP_横刀）",
+      "dimensions": [
+        "物料漂移预案"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料漂移预案",
+          "loc": "横刀（PROP_横刀）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 墨虎谱影（`VFX_墨虎谱影`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 墨虎谱影（`VFX_墨虎谱影`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 墨虎谱影（`VFX_墨虎谱影`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:25>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 百妖谱金色古卷面板（`VFX_系统面板`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:26>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/特效定妆.md ## 百妖谱（`VFX_百妖谱`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:29>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "道具定妆.md ## 横刀（`WEAPON_横刀`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "asset",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_横刀`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/道具定妆.md ## 横刀（`WEAPON_横刀`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:30>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "audio",
+      "dimensions": [
+        "配音情绪弧(VEA)",
+        "生成配方(RCP)",
+        "强配方Schema(RCP2)",
+        "成本路由(K1)",
+        "环境声(AMB)"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "配音情绪弧(VEA)",
+          "loc": null,
+          "message": " 配音情绪弧(VEA)   镜头4·姜月初：台词含强情绪但配音标注「压抑决绝」归平淡(neutral)——配音会念平、情绪跟不上画面；改标注为 怒/惊恐/悲/喜 等，或确认确为克制反差。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "生成配方(RCP)",
+          "loc": null,
+          "message": " 生成配方(RCP)   脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=88863180b1df2f34，但复跑审计证据不完整。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "强配方Schema(RCP2)",
+          "loc": null,
+          "message": " 强配方Schema(RCP2)   脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_versi",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "成本路由(K1)",
+          "loc": null,
+          "message": " 成本路由(K1)   脚本/第2集/voiceover.txt 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "环境声(AMB)",
+          "loc": null,
+          "message": " 环境声(AMB)   本集涉 2 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境底噪（雨/集市/宫廷）跨镜跨集连续性无锁；建 LOC→ambient bed 映射。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "video_model_routes.json",
+      "dimensions": [
+        "后期表演通道"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_01 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_02 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_03 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_04 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_05 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_06 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_07 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "后期表演通道",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/video_model_routes.json",
+          "message": "后期表演通道 Clip_08 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "第2集",
+      "dimensions": [
+        "时间基准"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "时间基准",
+          "loc": "第2集",
+          "message": "时间基准 当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01",
+      "dimensions": [
+        "表情连续(EXP1)",
+        "实体记忆(EMB)",
+        "image_prompt_lint",
+        "脸漂预案",
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_07：角色 CHAR_01 相邻镜情绪硬跳（惊→悲）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "实体记忆(EMB)",
+          "loc": null,
+          "message": " 实体记忆(EMB)   本集有重复/核心实体（BEAST_01/穿心复生态, CHAR_01, CHAR_01/囚途残损态, CHAR_01/闻弦初境, CHAR_01__, CHAR_01__囚途残损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 多视图对齐初筛异常 CHAR_01/“囚途残损态”：视平线不齐：three_quarter(0.14) vs back(0.43)，跨视图脸中心高度差 29%>6%；比例不一：front 脸高是 rear_three_quarter 的 2.00 倍（>1.35），不是同距离同景别的定妆板——像素几何是可复算启",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 姜月初（`CHAR_01/“囚途残损态”`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "姜月初（CHAR_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分56.0·multi_reference）：已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 姜月初（`CHAR_01/“囚途残损态”`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_01__囚途残损态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__囚途残损态",
+          "message": "character_consistency  CHAR_01__囚途残损态 跨集脸漂移趋势 medium：CHAR_01__囚途残损态 第1集→第2集 mean 0.3531→0.4065 drop=-0.0534。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__囚途残损态",
+          "message": "character_consistency  CHAR_01__囚途残损态 锚点门 N3：CHAR_01__囚途残损态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__囚途残损态",
+          "message": "character_consistency 跨集脸漂移趋势 medium：CHAR_01__囚途残损态 第1集→第2集 mean 0.3531→0.417 drop=-0.0639。high 级系统性退化必须先回 n2d-image 补主体库/参考包/重抽并重跑 identity/image_qc。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_01__囚途残损态",
+          "message": "character_consistency 锚点门 N3：CHAR_01__囚途残损态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_02",
+      "dimensions": [
+        "表情连续(EXP1)",
+        "image_prompt_lint",
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "表情连续(EXP1)",
+          "loc": null,
+          "message": " 表情连续(EXP1)   Clip_07：角色 CHAR_02 相邻镜情绪硬跳（惊/惧→悲）——确认有节拍/事件依据，否则表演 OOC（情绪没有过渡镜）。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_02/“濒死重伤态”「face_anchor」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 脸部锚弱信噪比 CHAR_02/“濒死重伤态”「克制」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": null,
+          "message": "image_prompt_lint  None 多视图对齐初筛异常 CHAR_02/“濒死重伤态”：脚底线不齐：side(0.950) vs rear_three_quarter(1.000)，差 0.050>0.035；身体中心线不齐：side(0.485) vs rear_three_quarter(0.625)，差 0.140>0.055——像素几何是",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 裴长青（`CHAR_02/“濒死重伤态”`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 裴长青（`CHAR_02/“濒死重伤态”`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:43>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_02/“濒死重伤态”「face_anchor」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_脸部特写_脸锚裁切.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image_prompt_lint",
+          "loc": "",
+          "message": "image_prompt_lint 脸部锚弱信噪比 CHAR_02/“濒死重伤态”「克制」（出图/共享/图片/定妆_CHAR_02__濒死重伤态_表情_克制.png）：脸占画面仅 3%（建议 ≥30%，最低线 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "CHAR_02__濒死重伤态",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__濒死重伤态",
+          "message": "character_consistency  CHAR_02__濒死重伤态 锚点门 N3：CHAR_02__濒死重伤态 主参考非单张清晰正脸（非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "CHAR_02__濒死重伤态",
+          "message": "character_consistency 锚点门 N3：CHAR_02__濒死重伤态 主参考非单张清晰正脸（非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip03_end.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "character_consistency  图片/Clip03_end.png 疑似漏分类角色镜：图片/Clip03_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "character_consistency  图片/Clip03_end.png 发型 H1 初筛：图片/Clip03_end.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "outfit_consistency  图片/Clip03_end.png 服装 N1 初筛：图片/Clip03_end.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "character_consistency 疑似漏分类角色镜：图片/Clip03_end.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "character_consistency 发型 H1 初筛：图片/Clip03_end.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip03_end.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/Clip03_end.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip05_end.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_end.png",
+          "message": "character_consistency  图片/Clip05_end.png 发型 H1 初筛：图片/Clip05_end.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip05_end.png",
+          "message": "outfit_consistency  图片/Clip05_end.png 服装 N1 初筛：图片/Clip05_end.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/Clip05_end.png",
+          "message": "character_consistency 发型 H1 初筛：图片/Clip05_end.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip05_end.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/Clip05_end.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "Clip07_end.png",
+      "dimensions": [
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip07_end.png",
+          "message": "outfit_consistency  图片/Clip07_end.png 服装 N1 初筛：图片/Clip07_end.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/Clip07_end.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/Clip07_end.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP02_preimpact.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP02_preimpact.png",
+          "message": "character_consistency  图片/EP02_CLIP02_preimpact.png 疑似漏分类角色镜：图片/EP02_CLIP02_preimpact.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP02_preimpact.png",
+          "message": "character_consistency  图片/EP02_CLIP02_preimpact.png 发型 H1 初筛：图片/EP02_CLIP02_preimpact.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP02_preimpact.png",
+          "message": "outfit_consistency  图片/EP02_CLIP02_preimpact.png 服装 N1 初筛：图片/EP02_CLIP02_preimpact.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP02_preimpact.png",
+          "message": "character_consistency 疑似漏分类角色镜：图片/EP02_CLIP02_preimpact.png 检出人脸但不在出图 prompt 角色镜清单（character_shots）→ 未纳入定妆覆盖比对。确认是否角色镜：是则回 n2d-image 在 prompt 标注该镜角色身份后重跑 image_qc；否（路人/群像背景脸）可忽略。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP02_preimpact.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP02_CLIP02_preimpact.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP02_preimpact.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP02_preimpact.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP02_start.png",
+      "dimensions": [
+        "character_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP02_start.png",
+          "message": "character_consistency  图片/EP02_CLIP02_start.png 发型 H1 初筛：图片/EP02_CLIP02_start.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP02_start.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP02_CLIP02_start.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP03_impact.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP03_impact.png",
+          "message": "character_consistency  图片/EP02_CLIP03_impact.png 发型 H1 初筛：图片/EP02_CLIP03_impact.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP03_impact.png",
+          "message": "outfit_consistency  图片/EP02_CLIP03_impact.png 服装 N1 初筛：图片/EP02_CLIP03_impact.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP03_impact.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP02_CLIP03_impact.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP03_impact.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP03_impact.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP03_recovery.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP03_recovery.png",
+          "message": "character_consistency  图片/EP02_CLIP03_recovery.png 发型 H1 初筛：图片/EP02_CLIP03_recovery.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP03_recovery.png",
+          "message": "outfit_consistency  图片/EP02_CLIP03_recovery.png 服装 N1 初筛：图片/EP02_CLIP03_recovery.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP03_recovery.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP02_CLIP03_recovery.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP03_recovery.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP03_recovery.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP06_end.png",
+      "dimensions": [
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP06_end.png",
+          "message": "outfit_consistency  图片/EP02_CLIP06_end.png 服装 N1 初筛：图片/EP02_CLIP06_end.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP06_start_a1.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP06_start_a1.png",
+          "message": "character_consistency  图片/EP02_CLIP06_start_a1.png 发型 H1 初筛：图片/EP02_CLIP06_start_a1.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP06_start_a1.png",
+          "message": "outfit_consistency  图片/EP02_CLIP06_start_a1.png 服装 N1 初筛：图片/EP02_CLIP06_start_a1.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP06_start_a1.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP02_CLIP06_start_a1.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP06_start_a1.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP06_start_a1.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP07_start.png",
+      "dimensions": [
+        "character_consistency",
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP07_start.png",
+          "message": "character_consistency  图片/EP02_CLIP07_start.png 发型 H1 初筛：图片/EP02_CLIP07_start.png（发色/发型轮廓离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP07_start.png",
+          "message": "outfit_consistency  图片/EP02_CLIP07_start.png 服装 N1 初筛：图片/EP02_CLIP07_start.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "character_consistency",
+          "loc": "图片/EP02_CLIP07_start.png",
+          "message": "character_consistency 发型 H1 初筛：图片/EP02_CLIP07_start.png（发色/发型轮廓离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP07_start.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP07_start.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP07_start_a1.png",
+      "dimensions": [
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP07_start_a1.png",
+          "message": "outfit_consistency  图片/EP02_CLIP07_start_a1.png 服装 N1 初筛：图片/EP02_CLIP07_start_a1.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP07_start_a1.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP07_start_a1.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP07_start_a2.png",
+      "dimensions": [
+        "outfit_consistency"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP07_start_a2.png",
+          "message": "outfit_consistency  图片/EP02_CLIP07_start_a2.png 服装 N1 初筛：图片/EP02_CLIP07_start_a2.png（调色板离群，非阻断） ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "outfit_consistency",
+          "loc": "图片/EP02_CLIP07_start_a2.png",
+          "message": "outfit_consistency 服装 N1 初筛：图片/EP02_CLIP07_start_a2.png（调色板离群，非阻断）",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生图后端适配",
+        "风格化脸机检"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生图后端适配",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "生图后端适配 统一标准已按「Codex CLI」自动加载弥补措施：加载 reference_group：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "生图后端适配",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "生图后端适配 适配层评分建议升档：当前「Codex CLI」score=30，推荐「Seedream Universal Reference (访问入口 Seedream 官方 API)」score=57。理由：推荐后端能力=persistent_subject,multi_reference,high_fidelity_reference；若确认切换，先统",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "风格化脸机检",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。 已检测到结构化 StyleID 降级签收；仍建议在投放前补 N2D_STYLEI",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "风格化脸机检",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "风格化脸机检 基础视觉风格「冷灰写实3D国风漫剧」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "“穿心复生态”`）",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 虎妖（`BEAST_01/“穿心复生态”`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/角色定妆.md ## 虎妖（`BEAST_01/“穿心复生态”`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "图片",
+      "dimensions": [
+        "脸(G1)",
+        "服装配色(N1)"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "脸(G1)",
+          "loc": "出图/第2集/图片",
+          "message": "脸(G1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第2集/图片",
+          "message": "服装配色(N1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第2集/图片",
+          "message": "服装配色(N1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第2集/图片",
+          "message": "服装配色(N1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "服装配色(N1)",
+          "loc": "出图/第2集/图片",
+          "message": "服装配色(N1) [fresh image_qc hard=0 已覆盖同类像素硬闸] 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "虎妖（BEAST_01）",
+      "dimensions": [
+        "脸漂预案"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "脸漂预案",
+          "loc": "虎妖（BEAST_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "虎妖（BEAST_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "脸漂预案",
+          "loc": "虎妖（BEAST_01）",
+          "message": "脸漂预案 本集脸漂风险 high（分66.0·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "compliance",
+      "dimensions": [
+        "世界一致性(WCS)"
+      ],
+      "domain": "compliance",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "世界一致性(WCS)",
+          "loc": null,
+          "message": " 世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "compliance_manifest.json",
+      "dimensions": [
+        "合规前置"
+      ],
+      "domain": "compliance",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image_prompt_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "合规前置",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image_prompt_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "合规前置",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 01（时长 12.606s · EP02_CLIP01 · 杀人余震与二十年到账）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 01（时长 12.606s · EP02_CLIP01 · 杀人余震与二十年到账）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:22>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 02（时长 12.076s · EP02_CLIP02 · 二十年尽付一刀）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 02（时长 12.076s · EP02_CLIP02 · 二十年尽付一刀）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:21>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 03（时长 7.390s · EP02_CLIP03 · 一刀断虎首）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 03（时长 7.390s · EP02_CLIP03 · 一刀断虎首）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:23>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 04（时长 5.270s · EP02_CLIP04 · 百年道行与收录选择）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 04（时长 5.270s · EP02_CLIP04 · 百年道行与收录选择）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 05（时长 9.207s · EP02_CLIP05 · 摹影虎山神获圆满刀法）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 05（时长 9.207s · EP02_CLIP05 · 摹影虎山神获圆满刀法）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:21>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "01_clips.md ## Clip 07（时长 10.645s · EP02_CLIP07 · 替裴合眼与还命承诺）",
+      "dimensions": [
+        "prompt compiler"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第2集/prompt/01_clips.md ## Clip 07（时长 10.645s · EP02_CLIP07 · 替裴合眼与还命承诺）",
+          "message": "prompt compiler 提交 prompt 可进一步精简：submit_prompt_many_clauses:20>12",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "EP02_CLIP02→EP02_CLIP04",
+      "dimensions": [
+        "景别阶梯"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "景别阶梯",
+          "loc": "EP02_CLIP02→EP02_CLIP04",
+          "message": "景别阶梯 连续 3 镜同景别 CU（EP02_CLIP02→EP02_CLIP04）——景别阶梯单调、缺远近或机位变化；按导演意图穿插不同景别/机位（或确认为设计内的同景别段）。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "景别阶梯",
+          "loc": "EP02_CLIP02→EP02_CLIP04",
+          "message": "景别阶梯 连续 3 镜同景别 CU（EP02_CLIP02→EP02_CLIP04）——景别阶梯单调、缺远近或机位变化；按导演意图穿插不同景别/机位（或确认为设计内的同景别段）。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "consistency_findings_第2集.json",
+      "dimensions": [
+        "一致性总审"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性总审",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第2集.json",
+          "message": "一致性总审 另有 64 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第2集.json，勿当作已全部处理。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "keyshot_candidate_plan_第2集.json",
+      "dimensions": [
+        "关键镜候选"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "关键镜候选",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第2集.json",
+          "message": "关键镜候选 检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "关键镜候选",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/keyshot_candidate_plan_第2集.json",
+          "message": "关键镜候选 检测到 7 个关键镜，但缺 keyshot_candidate_plan_第2集.json。production 关键镜不得一张不崩就过；先跑 `python3 skills/n2d-image/scripts/keyshot_candidates.py \"创作区/制漫剧/那妖魔是姜大人\" 第2集 --write` 固化 best-of-N 计划",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "vlm_canonical_第2集.json",
+      "dimensions": [
+        "fidelity-gate"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "fidelity-gate",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第2集.json",
+          "message": "fidelity-gate fidelity-gate 未激活；vlm_verify --write 可在出图后跑 canonical 通过表。image 阶段不硬拦（出图后还没建 canonical 表），但 compose/review 会 BLOCK。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "横刀（WEAPON_横刀）",
+      "dimensions": [
+        "物料漂移预案"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "物料漂移预案",
+          "loc": "横刀（WEAPON_横刀）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "物料漂移预案",
+          "loc": "横刀（WEAPON_横刀）",
+          "message": "物料漂移预案 本集物料漂移风险 high（分55）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1642>1500",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:54>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1625>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:53>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 1（`EP02_CLIP01` · 杀人余震与二十年到账 · ）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1526>1500",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1520>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 2（`EP02_CLIP02` · 二十年尽付一刀 · dialogue_shot_reverse）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1542>1500",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_verbose:1525>1500",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 3（`EP02_CLIP03` · 一刀断虎首 · fight_exchange）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 4（`EP02_CLIP04` · 百年道行与收录选择 · system_panel）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 5（`EP02_CLIP05` · 摹影虎山神获圆满刀法 · system_panel）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:47>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 6（`EP02_CLIP06` · 结算闻弦初境与二十五年余额 · ）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:49>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:48>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 7（`EP02_CLIP07` · 替裴合眼与还命承诺 · ）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+      "dimensions": [
+        "image prompt compiler",
+        "光影一致性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:44>16",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+          "message": "image prompt compiler 编译图片请求可进一步精简：submit_prompt_many_clauses:42>16",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "光影一致性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/prompt/01_分镜出图.md ## 镜头 8（`EP02_CLIP08` · 摹影进阶会变成什么 · system_panel）",
+          "message": "光影一致性 色温 3200K 偏暖，却写了冷调描述——自相矛盾，下游会按文字还是数值布光不确定；统一暖/冷口径。",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "LOC_01",
+      "dimensions": [
+        "image prompt compiler"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "image prompt compiler",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/prompt/场景定妆.md ## 尸骸荒野（`LOC_01`）",
+          "message": "image prompt compiler 共享资产编译图片请求可进一步精简：submit_prompt_many_clauses:36>16",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "_设置.md",
+      "dimensions": [
+        "生视频后端连通性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生视频后端连通性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "生视频后端连通性 生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "生视频后端连通性",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "message": "生视频后端连通性 生视频后端「即梦/Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_",
+          "severity": "warn",
+          "source": "gate:video_prompt_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "shot",
+      "dimensions": [
+        "跨集场景漂移(SCNX)",
+        "景深一致(DOF1)",
+        "色温调色(GRADE1)",
+        "天气时辰(W1)",
+        "视频证据完整性(EVID)",
+        "场景平面(FP1)",
+        "multimodal_continuity",
+        "image_prompt_lint"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "detect",
+        "gate:image"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "跨集场景漂移(SCNX)",
+          "loc": null,
+          "message": " 跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集结构漂移 dHash 汉明=24（vs 前 1 集结构原型，阈 warn=18·core block=26）——色调一致但结构疑似变样（家具挪位/构图朝向变），核对是否同一空间，否则对齐场景定妆 spatial_layout。",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "景深一致(DOF1)",
+          "loc": null,
+          "message": " 景深一致(DOF1)   图片/EP02_CLIP01_start_a2.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 1.038 vs 场景中位 0.69）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "景深一致(DOF1)",
+          "loc": null,
+          "message": " 景深一致(DOF1)   图片/EP02_CLIP04_end_a2.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比 0.996 vs 场景中位 0.69）；同场景深焦↔浅景深横跳像换相机，人核对是否有意，否则统一景深档重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP02_CLIP01_start_a2.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.147 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP02_CLIP08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.212 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/EP02_CLIP08_start_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.42 vs 场景中位 -0.037）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": null,
+          "message": " 天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光向与场景登记主光方向矛盾，人核对是否光打反/锚写错。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "story",
+      "dimensions": [
+        "语义谱系(P0)",
+        "状态百科(P1)",
+        "节奏密度(Rhythm)",
+        "状态转场视频证据(ST1)",
+        "生成配方(RCP)",
+        "强配方Schema(RCP2)",
+        "成本路由(K1)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": null,
+          "message": " 语义谱系(P0)   复杂镜视频 prompt 未充分继承专项模板契约。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": null,
+          "message": " 状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": null,
+          "message": " 节奏密度(Rhythm)   连续 3 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "节奏密度(Rhythm)",
+          "loc": null,
+          "message": " 节奏密度(Rhythm)   连续 3 个长镜聚集（EP02_CLIP05→EP02_CLIP06→EP02_CLIP07），疑节奏塌·掉留存 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    },
+    {
+      "anchor": "video Clip 8",
+      "dimensions": [
+        "语义谱系(P0)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "gate:image",
+        "gate:video_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "video Clip 8",
+          "message": "语义谱系(P0) 复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、面板位于角色视线前方、角色反应与空光幕底框分层、camera_rule、面板正对屏幕、不随镜头透视畸变、只画空底框、面板跨镜锁色锁形",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "语义谱系(P0)",
+          "loc": "video Clip 8",
+          "message": "语义谱系(P0) 复杂镜视频 prompt 未充分继承专项模板契约。；缺：template_id、面板位于角色视线前方、角色反应与空光幕底框分层、camera_rule、面板正对屏幕、不随镜头透视畸变、只画空底框、面板跨镜锁色锁形",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        }
+      ]
+    },
+    {
+      "anchor": "状态百科(P1)",
+      "dimensions": [
+        "状态百科(P1)"
+      ],
+      "domain": "story",
+      "severity": "warn",
+      "sources": [
+        "gate:image_preflight",
+        "gate:image",
+        "gate:video_preflight",
+        "gate:video_prompt_preflight"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜7 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜8 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image_preflight"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "状态百科(P1)",
+          "loc": "状态百科(P1)",
+          "message": "状态百科(P1) 虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。；缺：命中后断首死亡、命中后断首死",
+          "severity": "warn",
+          "source": "gate:image"
+        }
+      ]
+    },
+    {
+      "anchor": "subtitle",
+      "dimensions": [
+        "系列包装(PKG)",
+        "文字渲染(OCR1)"
+      ],
+      "domain": "subtitle",
+      "severity": "warn",
+      "sources": [
+        "detect"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "系列包装(PKG)",
+          "loc": null,
+          "message": " 系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_01 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_04 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_05 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_06 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "文字渲染(OCR1)",
+          "loc": null,
+          "message": " 文字渲染(OCR1)   Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。 ",
+          "severity": "warn",
+          "source": "detect"
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn] CHAR_01__囚途残损态 锚点门(N3)    ",
+        "[block] CHAR_01__囚途残损态 服装配色(N1)    ",
+        "[block] CHAR_01__囚途残损态 服装配色(N1)    "
+      ],
+      "id": "CHAR_01",
+      "kind": "character",
+      "name": "姜月初",
+      "overall": "block",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "block",
+      "hits": [
+        "[warn] CHAR_02__濒死重伤态 锚点门(N3)    ",
+        "[block] CHAR_02__濒死重伤态 脸(G1)    ",
+        "[block] CHAR_02__濒死重伤态 脸(G1)    "
+      ],
+      "id": "CHAR_02",
+      "kind": "character",
+      "name": "裴长青",
+      "overall": "block",
+      "prevent": "ok"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜4 prompt 未见状态锁。 ",
+        "[warn]  状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜5 prompt 未见状态锁。 ",
+        "[warn]  状态百科(P1)   虎妖 在镜3后应保持 `命中后断首死亡`，但镜6 prompt 未见状态锁。 "
+      ],
+      "id": "BEAST_01",
+      "kind": "character",
+      "name": "虎妖",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "warn",
+      "hits": [
+        "[warn]  跨集场景漂移(SCNX)    场景[尸骸荒野] 跨集结构漂移 dHash 汉明=24（vs 前 1 集结构原型，阈 warn=18·co",
+        "[warn]  场景平面(FP1)   场景 尸骸荒野 本集出现 6 镜但缺 scene_floorplan；反打/绕场/多镜复用时空间关系只靠文字记忆。"
+      ],
+      "id": "LOC_01",
+      "kind": "scene",
+      "name": "尸骸荒野",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "WEAPON_01",
+      "kind": "weapon",
+      "name": "横刀",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_系统面板",
+      "kind": "vfx",
+      "name": "百妖谱金色古卷面板",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "WEAPON_横刀",
+      "kind": "weapon",
+      "name": "横刀",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_百妖谱",
+      "kind": "vfx",
+      "name": "百妖谱",
+      "overall": "medium",
+      "prevent": "medium"
+    },
+    {
+      "contract": "ok",
+      "detect": "ok",
+      "hits": [],
+      "id": "VFX_墨虎谱影",
+      "kind": "vfx",
+      "name": "墨虎谱影",
+      "overall": "medium",
+      "prevent": "medium"
+    }
+  ],
+  "supplemental_reports": {
+    "audio_space_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_audio_space_consistency",
+      "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/audio_space_consistency_第2集.json",
+      "status": "pass"
+    },
+    "expression_state_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_expression_state_consistency",
+      "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/expression_state_consistency_第2集.json",
+      "status": "pass"
+    },
+    "motion_grammar_consistency": {
+      "available": true,
+      "counts": {
+        "block": 0,
+        "warn": 0
+      },
+      "kind": "n2d_motion_grammar_consistency",
+      "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/motion_grammar_consistency_第2集.json",
+      "status": "pass"
+    }
+  },
+  "unattributed": [
+    "[warn]  风格(S1)    ",
+    "[warn]  风格(S1)    ",
+    "[block]  风格(S1)    ",
+    "[warn]  景深一致(DOF1)   图片/EP02_CLIP01_start_a2.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景",
+    "[warn]  景深一致(DOF1)   图片/EP02_CLIP04_end_a2.png：景深档与同场景其它镜不一致——本镜偏深焦(背景偏清)（景深比",
+    "[warn]  色温调色(GRADE1)   图片/EP02_CLIP01_start_a2.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（",
+    "[warn]  色温调色(GRADE1)   图片/EP02_CLIP08_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.",
+    "[warn]  色温调色(GRADE1)   图片/EP02_CLIP08_start_a1.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（",
+    "[block]  天气时辰(W1)    ",
+    "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光",
+    "[block]  天气时辰(W1)    ",
+    "[block]  天气时辰(W1)    ",
+    "[block]  天气时辰(W1)    ",
+    "[block]  天气时辰(W1)    ",
+    "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」（注册 key_light_direction）——实测光",
+    "[warn]  天气时辰(W1)   主光方位 left→right 硬翻转（疑光位跳·人比对相邻镜） ",
+    "[warn]  天气时辰(W1)   光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。 ",
+    "[warn]  语义谱系(P0)   复杂镜视频 prompt 未充分继承专项模板契约。 ",
+    "[warn]  节奏密度(Rhythm)   连续 3 个长镜聚集（EP02_CLIP01→EP02_CLIP02→EP02_CLIP03），疑节奏塌·掉",
+    "[warn]  节奏密度(Rhythm)   连续 3 个长镜聚集（EP02_CLIP05→EP02_CLIP06→EP02_CLIP07），疑节奏塌·掉",
+    "[warn]  真值源(TRUTH)   项目已有 identity_registry / asset_registry / storyboard / s",
+    "[warn]  状态转场视频证据(ST1)   检测到 8 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 b",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  结构化交互图谱(I2)   接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺",
+    "[warn]  物理事件图(PHY)   本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/obj",
+    "[warn]  世界一致性(WCS)   已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系",
+    "[warn]  视频证据完整性(EVID)   本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没",
+    "[warn]  生成配方(RCP)   脚本/第2集/voiceover.txt 生成事件缺配方字段：mode, seed/seed_degrade, b",
+    "[warn]  生成配方(RCP)   脚本/第2集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade,",
+    "[warn]  生成配方(RCP)   出图/第2集/图片/EP02_CLIP06_end.png 生成事件缺配方字段：mode；已可推导 hash=3e",
+    "[warn]  生成配方(RCP)   出图/第2集/图片/EP02_CLIP08_end.png 生成事件缺配方字段：mode；已可推导 hash=33",
+    "[warn]  强配方Schema(RCP2)   脚本/第2集/voiceover.txt 强配方 schema 缺字段：prompt_sha256, ",
+    "[warn]  强配方Schema(RCP2)   脚本/第2集/storyboard.json 强配方 schema 缺字段：prompt_sha256",
+    "[warn]  强配方Schema(RCP2)   出图/第2集/图片/EP02_CLIP06_end.png 强配方 schema 缺字段：input_",
+    "[warn]  强配方Schema(RCP2)   出图/第2集/图片/EP02_CLIP08_end.png 强配方 schema 缺字段：input_",
+    "[warn]  系列包装(PKG)   缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。 ",
+    "[warn]  台词语域(D1)   缺 dialogue_register/语域表；目前只能查称谓 + 文白横跳启发式，无法约束角色正式度、句长上限和禁",
+    "[warn]  成本路由(K1)   脚本/第2集/voiceover.txt 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换",
+    "[warn]  成本路由(K1)   脚本/第2集/storyboard.json 生成事件缺 cost/provider 记账；无法计算重试性价比和模型",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start_a2.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start_a3.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip01_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP02_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP02_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP02_preimpact.png 生成事件缺 cost/provider 记账",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP03_impact.png 生成事件缺 cost/provider 记账；无法",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP03_recovery.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip03_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP04_detail.png 生成事件缺 cost/provider 记账；无法",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP04_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP04_end.png 生成事件缺 cost/provider 记账；无法计算重",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP04_end_a1.png 生成事件缺 cost/provider 记账；无法",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP04_end_a2.png 生成事件缺 cost/provider 记账；无法",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip05_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP06_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP06_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP07_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP07_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP07_start_a2.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip07_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP08_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP08_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip01_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip03_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip05_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/Clip07_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start_a2.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP01_start_a3.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP02_preimpact.png 生成事件缺 cost/provider 记账",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP02_start.png 生成事件缺 cost/provider 记账；无法计",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP02_start_a1.png 生成事件缺 cost/provider 记账；",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP03_impact.png 生成事件缺 cost/provider 记账；无法",
+    "[warn]  成本路由(K1)   出图/第2集/图片/EP02_CLIP03_recovery.png 生成事件缺 cost/provider 记账；",
+    "[warn]  人审校准集(CAL)   检测到人审签收/覆盖记录，但缺 consistency_calibration.jsonl；误报/漏报没有进入全",
+    "[warn]  一致性探针包(PROBE)   项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样",
+    "[warn]  系统面板(UI1)   检出 5 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核",
+    "[warn]  系统面板(UI1)   检出 5 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/",
+    "[warn]  环境声(AMB)   本集涉 2 个场景但缺 设定库/ambient_map.json——reverb_profile 只管每场混响，环境",
+    "[warn]  文字渲染(OCR1)   Clip_01 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_04 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_05 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_06 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  文字渲染(OCR1)   Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_",
+    "[warn]  叙事状态(NS1)   本集有知识/位置叙事但缺 设定库/narrative_state_ledger.json——跨集易出『知道得太早/",
+    "[warn] character_consistency  图片/Clip03_end.png 疑似漏分类角色镜：图片/Clip03_end.png 检出",
+    "[warn] character_consistency  图片/EP02_CLIP02_preimpact.png 疑似漏分类角色镜：图片/EP02_C",
+    "[warn] character_consistency  图片/Clip03_end.png 发型 H1 初筛：图片/Clip03_end.png（发色",
+    "[warn] character_consistency  图片/Clip05_end.png 发型 H1 初筛：图片/Clip05_end.png（发色",
+    "[warn] character_consistency  图片/EP02_CLIP02_preimpact.png 发型 H1 初筛：图片/EP02_C",
+    "[warn] character_consistency  图片/EP02_CLIP02_start.png 发型 H1 初筛：图片/EP02_CLIP0",
+    "[warn] character_consistency  图片/EP02_CLIP03_impact.png 发型 H1 初筛：图片/EP02_CLIP",
+    "[warn] character_consistency  图片/EP02_CLIP03_recovery.png 发型 H1 初筛：图片/EP02_CL",
+    "[warn] character_consistency  图片/EP02_CLIP06_start_a1.png 发型 H1 初筛：图片/EP02_CL",
+    "[warn] character_consistency  图片/EP02_CLIP07_start.png 发型 H1 初筛：图片/EP02_CLIP0",
+    "[warn] outfit_consistency  图片/Clip03_end.png 服装 N1 初筛：图片/Clip03_end.png（调色板离群",
+    "[warn] outfit_consistency  图片/Clip05_end.png 服装 N1 初筛：图片/Clip05_end.png（调色板离群",
+    "[warn] outfit_consistency  图片/Clip07_end.png 服装 N1 初筛：图片/Clip07_end.png（调色板离群",
+    "[warn] outfit_consistency  图片/EP02_CLIP02_preimpact.png 服装 N1 初筛：图片/EP02_CLIP",
+    "[warn] outfit_consistency  图片/EP02_CLIP03_impact.png 服装 N1 初筛：图片/EP02_CLIP03_",
+    "[warn] outfit_consistency  图片/EP02_CLIP03_recovery.png 服装 N1 初筛：图片/EP02_CLIP0",
+    "[warn] outfit_consistency  图片/EP02_CLIP06_end.png 服装 N1 初筛：图片/EP02_CLIP06_end",
+    "[warn] outfit_consistency  图片/EP02_CLIP06_start_a1.png 服装 N1 初筛：图片/EP02_CLIP0",
+    "[warn] outfit_consistency  图片/EP02_CLIP07_start.png 服装 N1 初筛：图片/EP02_CLIP07_s",
+    "[warn] outfit_consistency  图片/EP02_CLIP07_start_a1.png 服装 N1 初筛：图片/EP02_CLIP0",
+    "[warn] outfit_consistency  图片/EP02_CLIP07_start_a2.png 服装 N1 初筛：图片/EP02_CLIP0",
+    "[warn] image_prompt_lint  None 镜头构图重复 EP02_CLIP04 ↔ EP02_CLIP05：首帧 dHash=5/64",
+    "[warn] image_prompt_lint  None VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反"
+  ],
+  "version": 1
+}

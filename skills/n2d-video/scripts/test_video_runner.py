@@ -547,6 +547,84 @@ def test_prepare_splits_long_story_clip_into_physical_parts(tmp_path: Path, monk
     assert all(item["video_shot_segment"]["parent_story_clip"] == "Clip_01" for item in manifest["items"])
 
 
+def test_edit_cut_segment_prompt_keeps_storyboard_desc(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        video_runner,
+        "select_video_frame_strategy",
+        lambda *_a, **_k: {"strategy": "edit_cut"},
+    )
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    prompt_dir.joinpath("01_clips.md").write_text(
+        """## Clip 01（时长 8.000s · 测试）
+
+**首帧**：`出图/第1集/图片/Clip01_first.png`
+**尾帧**：`出图/第1集/图片/Clip01_end.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+人物运动：承接首尾帧。
+```
+
+### 后端编译提交 prompt
+**编译元数据**：kind=n2d_compiled_video_prompt; version=2; profile_version=test; profile=zh_motion_first; backend=dreamina; mode=image2video; language=zh; native_audio_policy=none; frame_strategy=edit_cut; story_span_sec=8.0; edit_target_sec=8.0; backend_request_sec=8.0; source_contract_sha256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```text
+以已提交首帧为视觉真值。主动作：承接首尾帧。
+```
+""",
+        encoding="utf-8",
+    )
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    for name in ("Clip01_first.png", "Clip01_a1.png", "Clip01_end.png"):
+        (image_dir / name).write_bytes(b"png")
+    sb_dir = tmp_path / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    sb_dir.joinpath("storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "duration": 8.0,
+            "firstframe_png": "出图/第1集/图片/Clip01_first.png",
+            "endframe_png": "出图/第1集/图片/Clip01_end.png",
+            "continuity": {
+                "end_state": "人物转身迎敌",
+                "anchors": [{
+                    "at_sec": 4.0,
+                    "anchor_png": "出图/第1集/图片/Clip01_a1.png",
+                    "use": "edit_cut",
+                }],
+            },
+            "shots": [
+                {"t": "0-4s", "lens": "ECU固定", "desc": "手指松开刀柄，血滴落地"},
+                {"t": "4-8s", "lens": "CU缓推", "desc": "人物抬眼并转身迎敌"},
+            ],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path, "第1集", 1, 1, backend="dreamina",
+        resolution="auto", model_version="auto", force=True,
+    )
+    texts = [Path(item["prompt_file"]).read_text(encoding="utf-8") for item in manifest["items"]]
+    assert "手指松开刀柄，血滴落地" in texts[0]
+    assert "人物抬眼并转身迎敌" in texts[1]
+
+
+def test_storyboard_shots_normalizes_episode_absolute_time() -> None:
+    clip = {
+        "start_sec": 12.0,
+        "shots": [
+            {"t": "12.0-18.04s", "lens": "CU", "desc": "蓄力"},
+            {"t": "18.04-24.076s", "lens": "LS", "desc": "扑击"},
+        ],
+    }
+    rows = video_runner._storyboard_shots(clip, 12.076)
+    assert [(row["start_sec"], row["end_sec"]) for row in rows] == [
+        (0.0, 6.04),
+        (6.04, 12.076),
+    ]
+
+
 def test_dreamina_args_appends_dialogue_fact_contract(tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：张老大追问；\n声音约束：native_speech；", encoding="utf-8")

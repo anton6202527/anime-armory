@@ -37,11 +37,12 @@
         "CHAR_01",
         "CHAR_02"
       ],
-      "loc": "LOC_尸骸荒野",
+      "loc": "LOC_01",
       "assets": [
         "BEAST_01",
         "CHAR_01",
-        "CHAR_02"
+        "CHAR_02",
+        "LOC_01"
       ],
       "screen_direction": "姜月初左→右，虎妖右→左",
       "spatial_path": "双方沿西南—东北轴相向，错身后各落原轴两侧",
@@ -124,10 +125,11 @@
         "assets": [
           "BEAST_01",
           "CHAR_01",
-          "CHAR_02"
+          "CHAR_02",
+          "LOC_01"
         ],
         "locs": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
       },

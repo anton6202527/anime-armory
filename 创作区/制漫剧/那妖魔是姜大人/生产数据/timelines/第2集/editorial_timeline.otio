@@ -4,9 +4,9 @@
   "metadata": {
     "n2d": {
       "episode": "第2集",
-      "generated_at": "2026-07-22T07:10:49+00:00",
+      "generated_at": "2026-07-23T01:38:28+00:00",
       "kind": "n2d_editorial_timeline",
-      "phase": "animatic",
+      "phase": "assembly",
       "planned_audio_slots": 18,
       "seams": [
         {
@@ -53,10 +53,10 @@
           "intentional_discontinuity_reason": "",
           "issues": [],
           "next_firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-          "next_firstframe_sha256": "",
+          "next_firstframe_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
           "policy": "relay",
           "required_boundary_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
-          "required_boundary_frame_sha256": "",
+          "required_boundary_frame_sha256": "cfb20a423a31acce98ca4bd5d6a58116fc38b39b61ce3fb4552e48c05ba9a798",
           "same_location": true,
           "scope": "intra_episode",
           "seam_evidence": {
@@ -113,10 +113,10 @@
           "intentional_discontinuity_reason": "",
           "issues": [],
           "next_firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
-          "next_firstframe_sha256": "",
+          "next_firstframe_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
           "policy": "relay",
           "required_boundary_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
-          "required_boundary_frame_sha256": "",
+          "required_boundary_frame_sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34",
           "same_location": true,
           "scope": "intra_episode",
           "seam_evidence": {
@@ -225,11 +225,13 @@
         }
       ],
       "sound_route_summary": {
-        "audio_strategy_counts": {},
-        "base_video_only_count": 0,
-        "clip_count": 0,
-        "final_voice_required": false,
-        "post_lipsync_required": false
+        "audio_strategy_counts": {
+          "base_video_then_post_lipsync": 8
+        },
+        "base_video_only_count": 8,
+        "clip_count": 8,
+        "final_voice_required": true,
+        "post_lipsync_required": true
       },
       "timing_basis": "text_estimate_no_audio",
       "version": 1,
@@ -251,31 +253,47 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 120.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4",
+                    "sha256": "69de593e3db285593aab1aedd6fae2876746696ee7f0ed1f22bc660887a05da8"
+                  }
+                },
+                "name": "Clip_01_杀人余震与二十年到账_part1.mp4",
+                "target_url": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_01"
               }
             },
-            "name": "Clip_01",
+            "name": "Clip_01_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 378.18
+                "value": 108.0
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -292,31 +310,161 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 150.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4",
+                    "sha256": "4521a5fb1634789912336860d9ea082ecd1e6a61a560182ed7a9cb1f1566c787"
+                  }
+                },
+                "name": "Clip_01_杀人余震与二十年到账_part2.mp4",
+                "target_url": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_01"
+              }
+            },
+            "name": "Clip_01_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 150.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 150.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4",
+                    "sha256": "43806703882ccfe15707d2149d094e63a654a0c23e240ccdafb6cfbc3da5d8b7"
+                  }
+                },
+                "name": "Clip_01_杀人余震与二十年到账_part3.mp4",
+                "target_url": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_01"
+              }
+            },
+            "name": "Clip_01_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 120.18
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 210.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4",
+                    "sha256": "e6ebedaeea03edd60246a67f2c02968b6397828b6d9d7cf2fe8111c7610b3e92"
+                  }
+                },
+                "name": "Clip_02_二十年尽付一刀_part1.mp4",
+                "target_url": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_02"
               }
             },
-            "name": "Clip_02",
+            "name": "Clip_02_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 362.28
+                "value": 181.2
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -333,31 +481,104 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 181.25001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4",
+                    "sha256": "85c6c6aaf69622a69c0b10ee61b33bc259ff573b2023e64d7ac02e900d2888b2"
+                  }
+                },
+                "name": "Clip_02_二十年尽付一刀_part2.mp4",
+                "target_url": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_02"
+              }
+            },
+            "name": "Clip_02_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 181.08
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 121.25001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+                    "sha256": "6ac686393cb75a1fe546f29f3abc3dbe30b481e445842bbc32dc351d0bc6a581"
+                  }
+                },
+                "name": "Clip_03_一刀断虎首_part1.mp4",
+                "target_url": "出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_03"
               }
             },
-            "name": "Clip_03",
+            "name": "Clip_03_part1",
             "source_range": {
               "OTIO_SCHEMA": "TimeRange.1",
               "duration": {
                 "OTIO_SCHEMA": "RationalTime.1",
                 "rate": 30.0,
-                "value": 221.7
+                "value": 33.6
               },
               "start_time": {
                 "OTIO_SCHEMA": "RationalTime.1",
@@ -374,21 +595,151 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 121.25001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4",
+                    "sha256": "8a0e8fc8c0340081dc98cdb4aaa8f17f335a9f2e6e728cab4fa89a55992fe485"
+                  }
+                },
+                "name": "Clip_03_一刀断虎首_part2.mp4",
+                "target_url": "出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4"
               }
             },
             "metadata": {
               "n2d": {
-                "phase": "animatic",
-                "slate": true,
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_03"
+              }
+            },
+            "name": "Clip_03_part2",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 30.0
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 181.25001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+                    "sha256": "2710ecc67ca5d31a5f6b234e709b71c0fba385f58718d6311f5e8a30d3129588"
+                  }
+                },
+                "name": "Clip_03_一刀断虎首_part3.mp4",
+                "target_url": "出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
+                "story_clip": "Clip_03"
+              }
+            },
+            "name": "Clip_03_part3",
+            "source_range": {
+              "OTIO_SCHEMA": "TimeRange.1",
+              "duration": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 158.1
+              },
+              "start_time": {
+                "OTIO_SCHEMA": "RationalTime.1",
+                "rate": 30.0,
+                "value": 0.0
+              }
+            }
+          },
+          {
+            "OTIO_SCHEMA": "Clip.2",
+            "active_media_reference_key": "DEFAULT_MEDIA",
+            "effects": [],
+            "enabled": true,
+            "markers": [],
+            "media_references": {
+              "DEFAULT_MEDIA": {
+                "OTIO_SCHEMA": "ExternalReference.1",
+                "available_image_bounds": null,
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 180.50001
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
+                  }
+                },
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+                    "sha256": "e08b17471b48eed8635aac9012bea4a5e0af764998512fd2b416eceb7ba91263"
+                  }
+                },
+                "name": "Clip_04_百年道行与收录选择.mp4",
+                "target_url": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4"
+              }
+            },
+            "metadata": {
+              "n2d": {
+                "audio_strategy": "base_video_then_post_lipsync",
+                "derived_from": "",
+                "phase": "actual_video",
+                "source_status": "accepted",
                 "story_clip": "Clip_04"
               }
             },
@@ -415,21 +766,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 276.21
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第2集/图片/EP02_CLIP04_end.png",
+                    "sha256": "1d3acbf01de6ecb954d8a6e1f18829dd1d87374f7f8274894c9c874ffa972b34"
+                  }
+                },
+                "name": "EP02_CLIP04_end.png",
+                "target_url": "出图/第2集/图片/EP02_CLIP04_end.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_05"
               }
             },
@@ -456,21 +821,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 315.6
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第2集/图片/EP02_CLIP06_start.png",
+                    "sha256": "4f7bca99d78caa490e4103e1af2eff793fae53cbf8c95de28f814b8e458ad644"
+                  }
+                },
+                "name": "EP02_CLIP06_start.png",
+                "target_url": "出图/第2集/图片/EP02_CLIP06_start.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_06"
               }
             },
@@ -497,21 +876,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 319.35
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第2集/图片/EP02_CLIP07_start.png",
+                    "sha256": "2c3b3baf3ae01af94c8318d35ee6fff8f92419ec6adc8b21163fc629978a901d"
+                  }
+                },
+                "name": "EP02_CLIP07_start.png",
+                "target_url": "出图/第2集/图片/EP02_CLIP07_start.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_07"
               }
             },
@@ -538,21 +931,35 @@
             "markers": [],
             "media_references": {
               "DEFAULT_MEDIA": {
-                "OTIO_SCHEMA": "MissingReference.1",
+                "OTIO_SCHEMA": "ExternalReference.1",
                 "available_image_bounds": null,
-                "available_range": null,
-                "metadata": {
-                  "n2d": {
-                    "missing": true
+                "available_range": {
+                  "OTIO_SCHEMA": "TimeRange.1",
+                  "duration": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 126.39
+                  },
+                  "start_time": {
+                    "OTIO_SCHEMA": "RationalTime.1",
+                    "rate": 30.0,
+                    "value": 0.0
                   }
                 },
-                "name": "missing_media"
+                "metadata": {
+                  "n2d": {
+                    "relative_path": "出图/第2集/图片/EP02_CLIP08_start.png",
+                    "sha256": "5d84407c785594f0f70bad3b4978e7b30c496952a00e0ae49bf7ac659b523cbb"
+                  }
+                },
+                "name": "EP02_CLIP08_start.png",
+                "target_url": "出图/第2集/图片/EP02_CLIP08_start.png"
               }
             },
             "metadata": {
               "n2d": {
                 "phase": "animatic",
-                "slate": true,
+                "slate": false,
                 "story_clip": "Clip_08"
               }
             },

@@ -1,0 +1,220 @@
+{
+  "batch": "03_08",
+  "clips": [
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part1",
+      "clip_index": 3,
+      "duration_sec": 4.041667,
+      "file": "Clip_03_一刀断虎首_part1.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.0,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part1_d13e0134_f1a5aa390a78_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part1_d13e0134_f1a5aa390a78_02_mid.jpg",
+          "time_sec": 2.021
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part1_d13e0134_f1a5aa390a78_03_end.jpg",
+          "time_sec": 3.842
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part2",
+      "clip_index": 3,
+      "duration_sec": 4.041667,
+      "file": "Clip_03_一刀断虎首_part2.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.0,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part2_e86648d8_23308688e0d5_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part2_e86648d8_23308688e0d5_02_mid.jpg",
+          "time_sec": 2.021
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part2_e86648d8_23308688e0d5_03_end.jpg",
+          "time_sec": 3.842
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part2.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_03_part3",
+      "clip_index": 3,
+      "duration_sec": 6.041667,
+      "file": "Clip_03_一刀断虎首_part3.mp4",
+      "file_clip": "Clip_03",
+      "fps": 24.0,
+      "frames": [
+        {
+          "cache_hit": true,
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part3_c9ff1544_c728b36e3dea_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "cache_hit": true,
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part3_c9ff1544_c728b36e3dea_02_mid.jpg",
+          "time_sec": 3.021
+        },
+        {
+          "cache_hit": true,
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_03_part3_c9ff1544_c728b36e3dea_03_end.jpg",
+          "time_sec": 5.842
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part3.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    },
+    {
+      "audio_streams": [],
+      "clip": "Clip_04",
+      "clip_index": 4,
+      "duration_sec": 6.016667,
+      "file": "Clip_04_百年道行与收录选择.mp4",
+      "file_clip": "Clip_04",
+      "fps": 24.1,
+      "frames": [
+        {
+          "label": "start",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_04_98968e02_cfa3ee7e42fe_01_start.jpg",
+          "time_sec": 0.0
+        },
+        {
+          "label": "mid",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_04_98968e02_cfa3ee7e42fe_02_mid.jpg",
+          "time_sec": 3.008
+        },
+        {
+          "label": "end",
+          "path": "生产数据/video_qc/第2集/_frames/Clip_04_98968e02_cfa3ee7e42fe_03_end.jpg",
+          "time_sec": 5.817
+        }
+      ],
+      "has_audio": false,
+      "height": 1920,
+      "path": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+      "probe_error": null,
+      "video_codec": "h264",
+      "width": 1080
+    }
+  ],
+  "contact_sheet": "生产数据/video_qc/第2集/03_08/contact_sheet_03_08.jpg",
+  "delivery_consistency": {
+    "findings": [],
+    "fps_mode": 24,
+    "resolution_mode": "1080x1920"
+  },
+  "episode": "第2集",
+  "frame_migration": {
+    "deduplicated": 0,
+    "episode": "第2集",
+    "kind": "n2d_video_qc_frame_migration",
+    "moved": 0,
+    "rewritten_reports": 0
+  },
+  "frame_store": "生产数据/video_qc/第2集/_frames",
+  "intra_clips": [
+    {
+      "clip": "Clip_03_part1",
+      "double_frame": true,
+      "file": "Clip_03_一刀断虎首_part1.mp4",
+      "file_clip": "Clip_03",
+      "lens": "CU固定+轻冲击；MS固定；CU结果镜",
+      "max_dist": 33,
+      "pairs": [
+        {
+          "color_dist": 0.0536,
+          "dist": 33
+        },
+        {
+          "color_dist": 0.0,
+          "dist": 0
+        }
+      ],
+      "verdict": "warn"
+    }
+  ],
+  "kind": "n2d_video_qc",
+  "machine_notes": [],
+  "machine_summary": {
+    "delivery_mismatch_warns": 0,
+    "intra_blocks": 0,
+    "intra_checked": 4,
+    "intra_warns": 1,
+    "seam_blocks": 1,
+    "seam_info": 0,
+    "seam_warns": 1,
+    "seams_checked": 2
+  },
+  "root": ".",
+  "seams": [
+    {
+      "color_dist": 0.1006,
+      "color_verdict": "ok",
+      "dist": 34,
+      "from_clip": "Clip_02",
+      "seam_mode": "continuous_take_relay",
+      "strictness": "strict",
+      "struct_verdict": "block",
+      "to_clip": "Clip_03",
+      "transition": "同动作相位接命中镜",
+      "verdict": "block"
+    },
+    {
+      "color_dist": 0.1584,
+      "color_verdict": "warn",
+      "dist": 22,
+      "from_clip": "Clip_03",
+      "same_scene_color_jump": true,
+      "seam_mode": "insert_cutaway",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_04",
+      "transition": "虎血滴落接谱页墨线",
+      "verdict": "warn",
+      "verdict_if_relay": "warn"
+    }
+  ],
+  "version": 1
+}

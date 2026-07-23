@@ -1,15 +1,15 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-22T07:30:50+00:00",
+  "generated_at": "2026-07-22T13:42:47+00:00",
   "assets": [
     {
-      "id": "LOC_尸骸荒野",
+      "id": "LOC_01",
       "type": "scene",
-      "name": "LOC 尸骸荒野",
+      "name": "尸骸荒野",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
@@ -19,7 +19,7 @@
           }
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
@@ -29,7 +29,7 @@
           }
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
@@ -39,7 +39,7 @@
           }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野_平面图.png",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野_平面图.png",
           "status": "ready",
           "human_review": {
             "status": "accepted",
@@ -52,13 +52,13 @@
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/场景/LOC_尸骸荒野.md",
+          "path": "设定库/locations/尸骸荒野.md",
           "status": "ready",
-          "sha256": "764bcfddb951b3e3fcf26c2028ba8f025740ae4797bb4a128f9c51275a7df953"
+          "sha256": "7817b42c5d71f16b728d739920a67f7d9f88a2196d804e081388a810f674fccb"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
+          "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
           "status": "ready",
           "sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
         }
@@ -88,15 +88,15 @@
         "不要把本场景随机改成仙宫、现代空间或无关地点"
       ],
       "scene_dna": {
-        "belonging_anchor": "LOC 尸骸荒野",
+        "belonging_anchor": "尸骸荒野",
         "landmarks": [
-          "LOC 尸骸荒野"
+          "尸骸荒野"
         ],
         "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "主景、反打与平面图。",
+        "architecture_materials": "大唐西北边荒；连片枯草、风蚀黄土、零散黑灰巨岩与翻覆木囚车；尸骸分散形成押送队伍遇袭轨迹 阴天将雨的白昼，铅灰云层，荒风持续；冷色漫射天光，偶有微弱侧逆光 冷灰、土褐、炭黑、极少暗赤；死寂、血腥、空旷、无处躲藏",
         "color_lighting_weather": "尸骸荒野 主光方向 画左后侧 色温 4300K冷中性，夕照边缘约3200K 动机光源 被乌云压暗的落日与百妖谱旧金反光",
         "resident_assets": [
-          "LOC 尸骸荒野"
+          "尸骸荒野"
         ],
         "forbidden": [
           "现代物件",
@@ -113,10 +113,10 @@
       "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
       "axis_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
       "screen_direction_rules": "尸骸荒野 站位 裴尸体西南下前景，姜月初居中，虎妖东北上后景 轴线 西南—东北斜轴 默认视线 姜月初看右上虎妖；虎妖看左下姜月初",
-      "scene_atlas": {
+  "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野.png",
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野.png",
             "status": "ready",
             "human_review": {
               "status": "accepted",
@@ -126,7 +126,7 @@
             }
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_LOC_尸骸荒野_反打.png",
+            "path": "出图/共享/图片/定妆_场景_尸骸荒野_反打.png",
             "status": "ready",
             "human_review": {
               "status": "accepted",
@@ -134,10 +134,21 @@
               "reason": "shared back reference passed finalized review",
               "reviewed_at": "2026-07-22T07:32:28.207744+00:00"
             }
-          }
-        }
-      },
-      "self_check_at": "2026-07-22T07:32:28+00:00",
+      }
+    }
+  },
+  "allowed_variations": [
+    {
+      "accepted": true,
+      "episode_scope": ["第2集"],
+      "dimension": "跨集场景漂移(SCNX)",
+      "reason": "同一尸骸荒野的合法反打与近景机位变化；地貌、冷灰光位和西南—东北行动轴保持不变。",
+      "reviewer": "user:wesley",
+      "reviewed_at": "2026-07-22T13:38:00+00:00",
+      "expires_at": "2026-08-21"
+    }
+  ],
+  "self_check_at": "2026-07-22T07:32:28+00:00",
       "self_check_by": "image_qc.mark_finalized",
       "artifact_sha256": "c6841d7b5a6671dfe661c390c66f1e90d3631e441e9c41493f866b4e4f302e84"
     },

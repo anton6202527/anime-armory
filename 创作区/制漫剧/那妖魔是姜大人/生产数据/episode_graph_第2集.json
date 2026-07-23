@@ -2,6 +2,46 @@
   "authority": "derived index only; _进度.md and existing gates remain authoritative",
   "edges": [
     {
+      "relation": "routed_by",
+      "source": "clip:Clip_01",
+      "target": "route:Clip_01"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_02",
+      "target": "route:Clip_02"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_03",
+      "target": "route:Clip_03"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_04",
+      "target": "route:Clip_04"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_05",
+      "target": "route:Clip_05"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_06",
+      "target": "route:Clip_06"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_07",
+      "target": "route:Clip_07"
+    },
+    {
+      "relation": "routed_by",
+      "source": "clip:Clip_08",
+      "target": "route:Clip_08"
+    },
+    {
       "relation": "contains",
       "source": "episode:第2集",
       "target": "clip:Clip_01"
@@ -43,8 +83,8 @@
     }
   ],
   "episode": "第2集",
-  "generated_at": "2026-07-22T14:59:50+0800",
-  "graph_hash": "2c1b41cb36e46fd839a4ecfaeff9b0115c0341033bdf58b04c04dc9fac67860f",
+  "generated_at": "2026-07-22T20:57:28+0800",
+  "graph_hash": "c81f74af5c8b0b65a91ab4607743d7b72db011533fa5ff28795d7a78df8027fd",
   "kind": "n2d_episode_graph",
   "lineage_gaps": [],
   "nodes": [
@@ -108,24 +148,102 @@
       "episode": "第2集",
       "id": "episode:第2集",
       "type": "episode"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_01",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_01",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_02",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_02",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_03",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_03",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_04",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_04",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_05",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_05",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_06",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_06",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_07",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_07",
+      "type": "video_route"
+    },
+    {
+      "backend": "seedance",
+      "channel": "",
+      "clip": "Clip_08",
+      "executable": true,
+      "execution_state": "automated_ready",
+      "id": "route:Clip_08",
+      "type": "video_route"
     }
   ],
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "source_files": [
     {
-      "bytes": 52952,
+      "bytes": 130690,
+      "path": "出视频/第2集/prompt/video_model_routes.json",
+      "role": "video_routes",
+      "sha256": "7a71c07864b00ac12cf24843378548cd73bd7e07ac928573e8e91b4ff9e4110f"
+    },
+    {
+      "bytes": 56929,
       "path": "脚本/第2集/storyboard.json",
       "role": "storyboard",
-      "sha256": "438b1e806ccb7dce194703f0b3d0d7bc01bd43efc958c86f95e0971057f9d47b"
+      "sha256": "58e5d05b4adbf2d81b198c52862e6ed3abd57fc2bcdf59c46fffcb86372efc75"
     }
   ],
   "status": "pass",
   "summary": {
-    "edges": 8,
+    "edges": 16,
     "lineage_gaps": 0,
     "masters": 0,
-    "nodes": 9,
-    "routes": 0,
+    "nodes": 17,
+    "routes": 8,
     "story_clips": 8,
     "video_media": 0
   },

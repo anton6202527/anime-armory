@@ -1,0 +1,181 @@
+{
+  "activation": {
+    "reason": "storyboard 中已有镜头命中题材高风险场景。",
+    "state": "scene_archetypes_triggered",
+    "storyboard_clip_count": 8,
+    "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+    "storyboard_state": "ready",
+    "triggered": true
+  },
+  "active_scene_archetypes": [
+    {
+      "genre_keys": [
+        "chuanyue"
+      ],
+      "label": "系统面板/HUD",
+      "matched_clips": [
+        "EP02_CLIP04",
+        "EP02_CLIP05",
+        "EP02_CLIP08"
+      ],
+      "missing_by_clip": [
+        {
+          "clip": "EP02_CLIP04",
+          "missing": [
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP02_CLIP05",
+          "missing": [
+            "degrade_plan"
+          ]
+        },
+        {
+          "clip": "EP02_CLIP08",
+          "missing": [
+            "degrade_plan"
+          ]
+        }
+      ],
+      "production_risks": [
+        "中文字乱码",
+        "数值不一致",
+        "面板风格跨集漂移"
+      ],
+      "required_contract_fields": [
+        "screen_direction",
+        "degrade_plan"
+      ],
+      "scene_id": "system_panel",
+      "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层",
+      "style_bindings": [
+        "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+      ]
+    }
+  ],
+  "episode": "第2集",
+  "generated_at": "2026-07-22T12:57:26+00:00",
+  "genre": {
+    "genre_key": "chuanyue",
+    "label": "穿越",
+    "matched": true,
+    "matched_genre_keys": [
+      "chuanyue"
+    ],
+    "matched_labels": [
+      "穿越"
+    ],
+    "matches": [
+      {
+        "genre_key": "chuanyue",
+        "label": "穿越",
+        "match_start": 0,
+        "matched_term": "系统流",
+        "priority": 1
+      }
+    ],
+    "raw": "系统流"
+  },
+  "issues": [
+    {
+      "clip": "EP02_CLIP04",
+      "genre_keys": [
+        "chuanyue"
+      ],
+      "message": "missing genre motion contract fields: degrade_plan",
+      "missing_fields": [
+        "degrade_plan"
+      ],
+      "scene_id": "system_panel",
+      "severity": "block"
+    },
+    {
+      "clip": "EP02_CLIP05",
+      "genre_keys": [
+        "chuanyue"
+      ],
+      "message": "missing genre motion contract fields: degrade_plan",
+      "missing_fields": [
+        "degrade_plan"
+      ],
+      "scene_id": "system_panel",
+      "severity": "block"
+    },
+    {
+      "clip": "EP02_CLIP08",
+      "genre_keys": [
+        "chuanyue"
+      ],
+      "message": "missing genre motion contract fields: degrade_plan",
+      "missing_fields": [
+        "degrade_plan"
+      ],
+      "scene_id": "system_panel",
+      "severity": "block"
+    }
+  ],
+  "kind": "n2d_genre_pack_context",
+  "pack": {
+    "degrade_plans": [
+      "复杂系统面板改为独立 UI 图层叠加",
+      "时空转换用环境变体前后对照，不强求长镜头变形",
+      "现代物品进入古代场景时先出道具参考，避免模型改形"
+    ],
+    "genre_keys": [
+      "chuanyue"
+    ],
+    "labels": [
+      "穿越"
+    ],
+    "matched_packs": [
+      {
+        "genre_key": "chuanyue",
+        "label": "穿越",
+        "match_start": 0,
+        "matched_term": "系统流",
+        "priority": 1
+      }
+    ],
+    "motion_contract_fields": [
+      "mount_contact",
+      "harness_lock",
+      "screen_direction",
+      "parallax_layers",
+      "degrade_plan"
+    ],
+    "qc_focus": [
+      "时代物件一致",
+      "系统面板 OCR",
+      "前后身份/服饰状态",
+      "空间转换因果"
+    ],
+    "style_binding_policy": {
+      "bind_to_visual_style": true,
+      "by_genre": [
+        {
+          "bind_to_visual_style": true,
+          "genre_key": "chuanyue",
+          "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+        }
+      ],
+      "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+    }
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "video_prompt",
+  "status": "fail",
+  "summary": {
+    "activation_state": "scene_archetypes_triggered",
+    "active_scenes": 1,
+    "issues": 3,
+    "matched_clips": 3,
+    "matched_genre_keys": [
+      "chuanyue"
+    ],
+    "matched_packs": 1,
+    "storyboard_clip_count": 8,
+    "storyboard_state": "ready"
+  },
+  "version": 1
+}

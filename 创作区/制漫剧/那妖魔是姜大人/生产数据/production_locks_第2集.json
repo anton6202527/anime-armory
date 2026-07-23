@@ -1,19 +1,15 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-22T07:13:27+00:00",
+  "generated_at": "2026-07-22T15:30:52+00:00",
   "kind": "n2d_production_locks",
-  "last_confirmed_at": "2026-07-22T07:34:41+00:00",
+  "last_confirmed_at": "2026-07-22T15:30:53+00:00",
   "last_confirmed_by": "user:wesley",
   "last_confirmed_lock_ids": [
     "source_lock",
     "script_lock",
     "storyboard_lock",
     "style_identity_lock",
-    "voice_timing_lock",
-    "video_material_lock",
-    "rough_cut_lock",
-    "picture_lock",
-    "delivery_lock"
+    "voice_timing_lock"
   ],
   "locks": [
     {
@@ -23,7 +19,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 2,
       "artifacts": [
@@ -64,7 +60,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 3,
       "artifacts": [
@@ -112,15 +108,15 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-22T07:25:30+00:00",
+          "mtime": "2026-07-22T15:07:55+00:00",
           "path": "脚本/第2集/storyboard.json",
-          "sha256": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957"
+          "sha256": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f"
         },
         {
           "exists": true,
@@ -160,7 +156,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 4,
       "artifacts": [
@@ -178,7 +174,7 @@
         },
         {
           "exists": true,
-          "mtime": "2026-07-22T07:32:27+00:00",
+          "mtime": "2026-07-22T13:42:47+00:00",
           "path": "出图/共享/identity_registry.json",
           "sha256": "e76f725caa3b7cc707e1844c7bd51963575a7bc944db66141f45910248efa1f8"
         },
@@ -213,7 +209,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 0,
       "artifacts": [
@@ -255,24 +251,87 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
-      "artifact_count": 0,
+      "artifact_count": 13,
       "artifacts": [
         {
-          "exists": false,
-          "path": "出视频/第2集/视频",
-          "sha256": ""
+          "exists": true,
+          "mtime": "2026-07-22T14:05:53+00:00",
+          "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part1.mp4",
+          "sha256": "69de593e3db285593aab1aedd6fae2876746696ee7f0ed1f22bc660887a05da8"
         },
         {
-          "exists": false,
+          "exists": true,
+          "mtime": "2026-07-22T14:11:08+00:00",
+          "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part2.mp4",
+          "sha256": "4521a5fb1634789912336860d9ea082ecd1e6a61a560182ed7a9cb1f1566c787"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T14:19:16+00:00",
+          "path": "出视频/第2集/视频/Clip_01_杀人余震与二十年到账_part3.mp4",
+          "sha256": "43806703882ccfe15707d2149d094e63a654a0c23e240ccdafb6cfbc3da5d8b7"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T14:33:01+00:00",
+          "path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part1.mp4",
+          "sha256": "e6ebedaeea03edd60246a67f2c02968b6397828b6d9d7cf2fe8111c7610b3e92"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T15:06:19+00:00",
+          "path": "出视频/第2集/视频/Clip_02_二十年尽付一刀_part2.mp4",
+          "sha256": "85c6c6aaf69622a69c0b10ee61b33bc259ff573b2023e64d7ac02e900d2888b2"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T15:20:12+00:00",
+          "path": "出视频/第2集/视频/Clip_03_一刀断虎首_part1.mp4",
+          "sha256": "6ac686393cb75a1fe546f29f3abc3dbe30b481e445842bbc32dc351d0bc6a581"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T14:39:39+00:00",
+          "path": "出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_preimpact_overlap_v1.mp4",
+          "sha256": "c48185bed683eb259b7e502e0c80f3fcd22a2fd1a8b0ace27ff40fab476e211b"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T14:47:37+00:00",
+          "path": "出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_flash_v2.mp4",
+          "sha256": "9b4f59a61b2fb2f2e67806458bc61d4bbae5853e1a8e15352d61654258c0b2ce"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T15:06:16+00:00",
+          "path": "出视频/第2集/视频/_rejected/Clip_02_二十年尽付一刀_part2_premature_contact_v3.mp4",
+          "sha256": "78d59bf6d593fece1716e00b8b85e9e1ee840fd4666715c06bd0e832476ec0fc"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T15:15:56+00:00",
+          "path": "出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part1_slow_timing_v1.mp4",
+          "sha256": "b3e866f57b3283c2e624db92c4945fe7e2d513ef570454fba2894f356d625198"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T15:23:54+00:00",
+          "path": "出视频/第2集/视频/_rejected/Clip_03_一刀断虎首_part2_head_not_separated_v1.mp4",
+          "sha256": "7d50ae9146755d3a3830c9f15ec26ad2da697993b59c7f0065acced1967a77e5"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-22T13:46:24+00:00",
           "path": "出视频/第2集/prompt/video_model_routes.json",
-          "sha256": ""
+          "sha256": "b3ba348ad57b38cfc52bf9ad94520658f710a6b313c57a643208b1e751f4f0cb"
         },
         {
-          "exists": false,
+          "exists": true,
+          "mtime": "2026-07-22T15:30:52+00:00",
           "path": "生产数据/image_qc/第2集/image_qc_第2集.json",
-          "sha256": ""
+          "sha256": "fe8a00e9d35cb3a42fdedca94d0d0b19a2ed8ad96371658fe23a736f4226b008"
         },
         {
           "exists": false,
@@ -284,9 +343,6 @@
       "label": "视频素材锁",
       "lock_id": "video_material_lock",
       "missing_artifacts": [
-        "出视频/第2集/视频",
-        "出视频/第2集/prompt/video_model_routes.json",
-        "生产数据/image_qc/第2集/image_qc_第2集.json",
         "生产数据/video_qc_第2集.json"
       ],
       "required_approver_roles": [
@@ -310,7 +366,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 0,
       "artifacts": [
@@ -359,7 +415,7 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
       "artifact_count": 0,
       "artifacts": [
@@ -408,10 +464,16 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "2026-07-22T07:34:41+00:00",
+      "approved_at": "2026-07-22T15:30:52+00:00",
       "approver": "user:wesley",
-      "artifact_count": 1,
+      "artifact_count": 2,
       "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-22T15:21:05+00:00",
+          "path": "合成/第2集/_proxy/timeline.json",
+          "sha256": "23f1abb18d0a9d83cc5d090206fd4e0630315373dfce530b33b4f3ce0521f617"
+        },
         {
           "exists": true,
           "mtime": "2026-07-22T06:50:02+00:00",
@@ -455,6 +517,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "confirmed",
-  "updated_at": "2026-07-22T07:34:41+00:00",
+  "updated_at": "2026-07-22T15:30:53+00:00",
   "version": 1
 }

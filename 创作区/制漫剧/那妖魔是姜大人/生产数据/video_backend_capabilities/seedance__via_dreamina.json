@@ -71,86 +71,65 @@
   "backend": "seedance",
   "capability_assertions": {
     "control_idiom": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": "structured_multi_prompt"
     },
     "control_idiom_supported": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
-    "credits": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
-      "source_url": "",
-      "value": 12420
-    },
-    "frame_control": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
-      "source_url": "",
-      "value": "multi_keyframe"
-    },
     "frame_control_mode": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": "multi_keyframe"
     },
     "identity_mechanism": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": "face_lock"
     },
     "lipsync_audio_ref": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
-      "source_url": "",
-      "value": true
-    },
-    "logged_in": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
     "max_clip_seconds": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": 15
     },
     "max_reference_images": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": null
     },
     "max_timeline_frames": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": 20
     },
     "motion_control_capabilities": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": [
         "multimodal_reference",
@@ -159,65 +138,51 @@
       ]
     },
     "motion_control_level": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": "medium"
     },
     "native_audio": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
     "native_av": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
     "paid_routing_allowed": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
-    "ratio": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
-      "source_url": "",
-      "value": "9:16"
-    },
-    "resolution": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
-      "source_url": "",
-      "value": "720p"
-    },
     "supports_first_frame": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
     "supports_last_frame": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     },
     "supports_native_mid_anchors": {
-      "evidence_kind": "official_cli_help",
-      "observed_text": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
-      "source": "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
+      "evidence_kind": "local_cli_help",
+      "observed_text": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
+      "source": "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
       "source_url": "",
       "value": true
     }
@@ -225,31 +190,31 @@
   "channel": "dreamina",
   "cli_snapshot_evidence": [
     {
-      "captured_at": "2026-06-22T01:11:11Z",
+      "captured_at": "2026-07-22T13:21:10Z",
       "cli": "dreamina",
       "commands": [
         {
-          "captured_at": "2026-06-22T01:11:11Z",
+          "captured_at": "2026-07-22T13:21:10Z",
           "command": "multiframe2video",
           "flag_count": 9
         },
         {
-          "captured_at": "2026-06-22T01:11:11Z",
+          "captured_at": "2026-07-22T13:21:10Z",
           "command": "frames2video",
           "flag_count": 10
         },
         {
-          "captured_at": "2026-06-22T01:11:11Z",
+          "captured_at": "2026-07-22T13:21:10Z",
           "command": "image2video",
           "flag_count": 9
         },
         {
-          "captured_at": "2026-06-22T01:11:11Z",
+          "captured_at": "2026-07-22T13:21:10Z",
           "command": "multimodal2video",
           "flag_count": 12
         },
         {
-          "captured_at": "2026-06-22T01:11:11Z",
+          "captured_at": "2026-07-22T13:21:10Z",
           "command": "text2video",
           "flag_count": 9
         }
@@ -258,14 +223,14 @@
       "path": "/Users/wesley/learn/anime-armory/skills/n2d-video/references/cli_snapshots/dreamina/_index.json"
     }
   ],
-  "evidence_kind": "official_cli_help",
+  "evidence_kind": "local_cli_help",
   "execution_backend": "dreamina",
   "kind": "n2d_video_backend_refresh_evidence",
-  "note": "本次本机官方 dreamina CLI c58a6a2 实时核验：已登录 Maestro，余额12420；Seedance 2.0 family 可执行 frames2video 4-15秒（720p，VIP可1080p）、multiframe2video 2-20图且每段0.5-8秒、multimodal2video 9:16/4-15秒；输出为异步 submit_id/query_result。",
+  "note": "官方CLI确认：Seedance 2.0 VIP 支持4-15秒、9:16、1080p；multimodal2video可混合最多9图/3视频/3音频且异步返回submit_id后用query_result下载；本项目首尾帧经Dreamina执行适配提交，视频原生音轨按项目策略剥离。",
   "source_urls": [],
   "sources": [
-    "local official dreamina CLI c58a6a2: version + frames2video/multiframe2video/multimodal2video --help + user_credit",
-    "cli_snapshot:dreamina@2026-06-22T01:11:11Z"
+    "dreamina official CLI: dreamina --help; dreamina multimodal2video --help; dreamina query_result --help; verified locally 2026-07-23",
+    "cli_snapshot:dreamina@2026-07-22T13:21:10Z"
   ],
-  "verified_at": "2026-07-22"
+  "verified_at": "2026-07-23"
 }

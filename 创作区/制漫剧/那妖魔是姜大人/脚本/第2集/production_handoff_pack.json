@@ -1,7 +1,7 @@
 {
   "episode": "第2集",
   "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
-  "generated_at": "2026-07-22T07:34:41+00:00",
+  "generated_at": "2026-07-22T15:08:57+00:00",
   "inputs": {
     "director_blocking_pack.json": "脚本/第2集/director_blocking_pack.json",
     "preventive_contracts.json": "脚本/第2集/preventive_contracts.json",
@@ -15,13 +15,13 @@
     "files": {
       "生产数据/script_quality_contract_第2集.json": "94a49f155dffc2bc1cddc57e423271592dfcba8ce6c00cee07250e8207087fb4",
       "脚本/第2集/director_blocking_pack.json": "4d8c12eb5ed3a4458805874b64b608e83789f56e9f6d1aafc943882d057dc6fe",
-      "脚本/第2集/preventive_contracts.json": "35c8f8325c01cb038d1a0ad8cf7e71b208450144cc4b94235ca2dc9d030dfd46",
-      "脚本/第2集/storyboard.json": "d7cb5b2b6d6453bcb8d7b4d2d44db9e9b08e4b3e4a4006f6c6e78bf5f6b74957",
+      "脚本/第2集/preventive_contracts.json": "6a066f30c2123c1098fb25b23bbe80275942104e907078ae8b5347cd8a8360c9",
+      "脚本/第2集/storyboard.json": "4022e8d201129ad730c2d54bb3f3622d4035f5908ccdcddf464b77842db05b6f",
       "脚本/第2集/voiceover.txt": "07a6746c59e90a4ef40c37c28ccf6a558859ecdd906c574b08a455b67fb64549",
       "脚本/第2集/镜头时长.json": "cd25eb88aa8d44769314ba149777d584057b179cd1d61bbf954a1d661ea9d720",
       "设定库/source_comprehension.json": "801816db358ff0a71145858e1b3a82618ba71db6cfe3eb4da9616e65e0d7ce2e"
     },
-    "sha": "ef2608e87e8835e2ee4b58e2d3d0ce113203b38262005827bf0e0fcc13a9a088"
+    "sha": "4ff355b8e97163cb5871ba4f0c343b7b7a085e37e62e8c9376f5947cf40fc430"
   },
   "kind": "n2d_production_handoff_pack",
   "required_files": [

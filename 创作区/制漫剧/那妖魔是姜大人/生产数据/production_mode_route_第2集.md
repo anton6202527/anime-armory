@@ -8,7 +8,7 @@
 ## 证据
 
 - 口播文本：18
-- 说话 Clip：0
+- 说话 Clip：8
 - 近景/正反打说话 Clip：0
 - native_speech Clip：0
 - 占位时长：False
@@ -18,3 +18,16 @@
 ## 理由
 
 - 本集同时包含不同声音需求，按镜头路由：可见口型对白走表演音轨/后期表演驱动，旁白与口外音只锁估算节奏，动作/空镜画面先行，native_speech 镜单独处理。
+
+## 逐镜声音路线
+
+| Clip | 内容 | 时间基准 | 声音策略 | 表演轨 | 音色锁 | 最终声音阶段 |
+|---|---|---|---|---|---|---|
+| Clip_01 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_02 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_03 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_04 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_05 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_06 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_07 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |
+| Clip_08 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | locked | post_lipsync_before_compose |

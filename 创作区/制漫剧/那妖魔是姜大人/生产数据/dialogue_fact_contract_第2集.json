@@ -1,0 +1,643 @@
+{
+  "clips": [
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 1,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:6",
+          "text": "裴长青死了。|| 是我亲手杀的。可虎爪，已经落下。  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "虎妖",
+          "source": "脚本/第2集/voiceover.txt:7",
+          "text": "人族最爱讲同袍之义。到头来，也不过如此。"
+        },
+        {
+          "index": 3,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:8",
+          "text": "击杀闻弦境生物，获得其道行二十年。  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        1,
+        2,
+        3
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 1,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:6",
+          "text": "裴长青死了。|| 是我亲手杀的。可虎爪，已经落下。  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "虎妖",
+          "source": "脚本/第2集/voiceover.txt:7",
+          "text": "人族最爱讲同袍之义。到头来，也不过如此。"
+        },
+        {
+          "index": 3,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:8",
+          "text": "击杀闻弦境生物，获得其道行二十年。  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 1,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:6",
+          "text": "裴长青死了。|| 是我亲手杀的。可虎爪，已经落下。  ⚡钩子"
+        },
+        {
+          "index": 2,
+          "role": "虎妖",
+          "source": "脚本/第2集/voiceover.txt:7",
+          "text": "人族最爱讲同袍之义。到头来，也不过如此。"
+        },
+        {
+          "index": 3,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:8",
+          "text": "击杀闻弦境生物，获得其道行二十年。  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        1,
+        2,
+        3
+      ],
+      "clip": "Clip_01",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "杀人余震与二十年到账",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP01"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 4,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:9",
+          "text": "对错、良知……活下来以后，才有资格谈。|| 我想活。这二十年，是我唯一的生机，也是杀人的代价。"
+        },
+        {
+          "index": 5,
+          "role": "虎妖",
+          "source": "脚本/第2集/voiceover.txt:10",
+          "text": "小丫头，你也敢向我挥刀？"
+        },
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:11",
+          "text": "二十年道行——|| 尽付一刀！  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        4,
+        5,
+        6
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 4,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:9",
+          "text": "对错、良知……活下来以后，才有资格谈。|| 我想活。这二十年，是我唯一的生机，也是杀人的代价。"
+        },
+        {
+          "index": 5,
+          "role": "虎妖",
+          "source": "脚本/第2集/voiceover.txt:10",
+          "text": "小丫头，你也敢向我挥刀？"
+        },
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:11",
+          "text": "二十年道行——|| 尽付一刀！  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 4,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:9",
+          "text": "对错、良知……活下来以后，才有资格谈。|| 我想活。这二十年，是我唯一的生机，也是杀人的代价。"
+        },
+        {
+          "index": 5,
+          "role": "虎妖",
+          "source": "脚本/第2集/voiceover.txt:10",
+          "text": "小丫头，你也敢向我挥刀？"
+        },
+        {
+          "index": 6,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:11",
+          "text": "二十年道行——|| 尽付一刀！  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        4,
+        5,
+        6
+      ],
+      "clip": "Clip_02",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "二十年尽付一刀",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP02"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 7,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:12",
+          "text": "给我——斩！  💥爽点"
+        },
+        {
+          "index": 8,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:13",
+          "text": "我……活下来了？"
+        },
+        {
+          "index": 9,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:14",
+          "text": "击杀闻弦境生物，获得其道行一百年。  ⚡钩子"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        7,
+        8,
+        9
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 7,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:12",
+          "text": "给我——斩！  💥爽点"
+        },
+        {
+          "index": 8,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:13",
+          "text": "我……活下来了？"
+        },
+        {
+          "index": 9,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:14",
+          "text": "击杀闻弦境生物，获得其道行一百年。  ⚡钩子"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 7,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:12",
+          "text": "给我——斩！  💥爽点"
+        },
+        {
+          "index": 8,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:13",
+          "text": "我……活下来了？"
+        },
+        {
+          "index": 9,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:14",
+          "text": "击杀闻弦境生物，获得其道行一百年。  ⚡钩子"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        7,
+        8,
+        9
+      ],
+      "clip": "Clip_03",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "一刀断虎首",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP03"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 10,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:15",
+          "text": "检测到未收录妖物，是否消耗道行收录？"
+        },
+        {
+          "index": 11,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:16",
+          "text": "收录。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        10,
+        11
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 10,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:15",
+          "text": "检测到未收录妖物，是否消耗道行收录？"
+        },
+        {
+          "index": 11,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:16",
+          "text": "收录。"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 10,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:15",
+          "text": "检测到未收录妖物，是否消耗道行收录？"
+        },
+        {
+          "index": 11,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:16",
+          "text": "收录。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        10,
+        11
+      ],
+      "clip": "Clip_04",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "百年道行与收录选择",
+      "screen_text_lines": [
+        {
+          "duration": "",
+          "id": "screen_text_lines_1",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "道行：一百年"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_2",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "检测到未收录妖物"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_3",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "是否消耗道行收录？"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP04"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 12,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:17",
+          "text": "消耗道行七十五年。摹其影，定其妖形。"
+        },
+        {
+          "index": 13,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:18",
+          "text": "虎山神，摹影成功。获得妖物馈赠——猛虎快刀，圆满。  💥爽点"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        12,
+        13
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 12,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:17",
+          "text": "消耗道行七十五年。摹其影，定其妖形。"
+        },
+        {
+          "index": 13,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:18",
+          "text": "虎山神，摹影成功。获得妖物馈赠——猛虎快刀，圆满。  💥爽点"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 12,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:17",
+          "text": "消耗道行七十五年。摹其影，定其妖形。"
+        },
+        {
+          "index": 13,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:18",
+          "text": "虎山神，摹影成功。获得妖物馈赠——猛虎快刀，圆满。  💥爽点"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        12,
+        13
+      ],
+      "clip": "Clip_05",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "摹影虎山神获圆满刀法",
+      "screen_text_lines": [
+        {
+          "duration": "",
+          "id": "screen_text_lines_1",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "消耗道行：七十五年"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_2",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "猛虎快刀（圆满）"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP05"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 14,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:19",
+          "text": "原来，道行不是拿来挥霍的。|| 收录妖物，才是真正的用法。  ⚡钩子"
+        },
+        {
+          "index": 15,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:20",
+          "text": "宿主：姜月初。境界：闻弦初境。道行：二十五年。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        14,
+        15
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 14,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:19",
+          "text": "原来，道行不是拿来挥霍的。|| 收录妖物，才是真正的用法。  ⚡钩子"
+        },
+        {
+          "index": 15,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:20",
+          "text": "宿主：姜月初。境界：闻弦初境。道行：二十五年。"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 14,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:19",
+          "text": "原来，道行不是拿来挥霍的。|| 收录妖物，才是真正的用法。  ⚡钩子"
+        },
+        {
+          "index": 15,
+          "role": "百妖谱",
+          "source": "脚本/第2集/voiceover.txt:20",
+          "text": "宿主：姜月初。境界：闻弦初境。道行：二十五年。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        14,
+        15
+      ],
+      "clip": "Clip_06",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "结算闻弦初境与二十五年余额",
+      "screen_text_lines": [
+        {
+          "duration": "",
+          "id": "screen_text_lines_1",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "宿主：姜月初"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_2",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "境界：闻弦初境"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_3",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "武学：猛虎快刀（圆满）"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_4",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "道行：二十五年"
+        },
+        {
+          "duration": "",
+          "id": "screen_text_lines_5",
+          "placement": "auto",
+          "purpose": "",
+          "render_policy": "compose_overlay_only",
+          "source_field": "screen_text_lines",
+          "text": "虎山神（摹影）"
+        }
+      ],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP06"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 16,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:21",
+          "text": "裴长青，抱歉。若有来日……我会想办法，还你一命。  ⚡钩子"
+        },
+        {
+          "index": 17,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:22",
+          "text": "不过你也别抱太大希望。|| 说不定哪天，我就下去陪你了。"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        16,
+        17
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 16,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:21",
+          "text": "裴长青，抱歉。若有来日……我会想办法，还你一命。  ⚡钩子"
+        },
+        {
+          "index": 17,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:22",
+          "text": "不过你也别抱太大希望。|| 说不定哪天，我就下去陪你了。"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 16,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:21",
+          "text": "裴长青，抱歉。若有来日……我会想办法，还你一命。  ⚡钩子"
+        },
+        {
+          "index": 17,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:22",
+          "text": "不过你也别抱太大希望。|| 说不定哪天，我就下去陪你了。"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        16,
+        17
+      ],
+      "clip": "Clip_07",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "替裴合眼与还命承诺",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP07"
+    },
+    {
+      "allowed_character_dialogue": [
+        {
+          "index": 18,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:23",
+          "text": "摹影只是第一步。|| 那下一步，会把我变成什么？  🪝集尾"
+        }
+      ],
+      "allowed_character_dialogue_indices": [
+        18
+      ],
+      "allowed_dialogue": [
+        {
+          "index": 18,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:23",
+          "text": "摹影只是第一步。|| 那下一步，会把我变成什么？  🪝集尾"
+        }
+      ],
+      "allowed_narration": [],
+      "allowed_narration_indices": [],
+      "allowed_spoken_lines": [
+        {
+          "index": 18,
+          "role": "姜月初",
+          "source": "脚本/第2集/voiceover.txt:23",
+          "text": "摹影只是第一步。|| 那下一步，会把我变成什么？  🪝集尾"
+        }
+      ],
+      "allowed_voiceover_indices": [
+        18
+      ],
+      "clip": "Clip_08",
+      "dialogue_policy": "three_track_contract; video_may_generate_only_listed_character_dialogue_no_extra_speech; narration_is_compose_stage_audio_only; screen_text_compose_overlay_only; do_not_repeat_previous_or_next_clip_dialogue_or_narration_or_screen_text; do_not_paraphrase_numeric_facts",
+      "label": "摹影进阶会变成什么",
+      "screen_text_lines": [],
+      "screen_text_policy": "compose_overlay_only; video_model_must_not_render_text; fact_locked",
+      "source_clip_id": "",
+      "split_segment": "",
+      "storyboard_clip_id": "EP02_CLIP08"
+    }
+  ],
+  "episode": "第2集",
+  "facts": [],
+  "generated_at": "2026-07-22T13:46:24+00:00",
+  "kind": "n2d_dialogue_fact_contract",
+  "sources": {
+    "character_cards": "设定库/characters",
+    "storyboard": "脚本/第2集/storyboard.json",
+    "voiceover": "脚本/第2集/voiceover.txt"
+  },
+  "version": 1
+}

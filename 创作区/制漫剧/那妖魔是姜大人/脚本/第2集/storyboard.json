@@ -166,7 +166,7 @@
       "duration": 12.606,
       "target_story_clip_sec": 12.006,
       "scene": "尸骸荒野/夕/外",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01",
         "CHAR_02",
@@ -199,8 +199,9 @@
       "economy_intent": "三项信息同一空间完成，不另起解释镜",
       "pacing_role": "冷开场主钩与上集兑现",
       "runtime_priority": "primary",
-      "rhythm": "铺垫·长镜",
+      "rhythm": "冷开场·危机钩子·长镜内多切",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP01_start.png",
+      "endframe_png": "出图/第2集/图片/Clip01_end.png",
       "multi_subject_strategy": "纵深分层；裴只用局部，虎妖后景，姜月初唯一清晰脸",
       "character_slots": {
         "PRIMARY": "CHAR_01/囚途残损态",
@@ -218,7 +219,7 @@
           "VFX_百妖谱"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -263,6 +264,7 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
+            "self_check": "pass",
             "at_sec": 3.6,
             "use": "edit_cut",
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
@@ -270,6 +272,7 @@
           },
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
+            "self_check": "pass",
             "at_sec": 8.6,
             "use": "edit_cut",
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
@@ -277,6 +280,7 @@
           },
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
+            "self_check": "pass",
             "at_sec": 12.0,
             "use": "edit_cut",
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
@@ -299,7 +303,7 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
@@ -317,7 +321,7 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
@@ -334,7 +338,7 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -349,7 +353,7 @@
       "duration": 12.076,
       "target_story_clip_sec": 12.076,
       "scene": "尸骸荒野/夕/外",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01",
         "BEAST_01"
@@ -374,6 +378,18 @@
         "二十年道行——尽付一刀！"
       ],
       "description": "姜月初视线从裴转向虎妖，双手沉刀，暖金力量只沿刀脊收束；虎妖右上压下，停在将触未触。",
+      "interaction_graph": [
+        {
+          "participants": ["CHAR_01", "BEAST_01", "WEAPON_横刀"],
+          "contact_points": ["姜月初左右手握住刀柄", "虎爪与姜月初肩颈保持可见空隙，本镜未接触"],
+          "body_part_ownership": {"CHAR_01.left_hand": "WEAPON_横刀.grip", "CHAR_01.right_hand": "WEAPON_横刀.grip", "BEAST_01.right_claw": "approach_only"},
+          "occlusion_order": ["BEAST_01.right_claw", "WEAPON_横刀.blade", "CHAR_01.upper_body"],
+          "force_direction": "BEAST_01画右上向左下压；CHAR_01横刀画左下向右上迎击",
+          "holder_state": {"WEAPON_横刀": "CHAR_01双手持有"},
+          "transfer_event": "无所有权转移；横刀始终由CHAR_01双手持有",
+          "release_frame": "本镜无释放；虎爪保持将触未触，横刀不脱手"
+        }
+      ],
       "dramatic_function": "明确求生动机、资源代价与攻击起手",
       "editing_intent": "蓄力长镜后逐镜收短，落在将触未触的动作悬点",
       "audience_effect": "理解选择→屏息",
@@ -429,7 +445,7 @@
           "WEAPON_横刀"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -471,6 +487,7 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
+            "self_check": "pass",
             "at_sec": 6.04,
             "use": "split",
             "reason": "auto: R2 普通长镜（12.076s/4拍）",
@@ -480,7 +497,7 @@
       },
       "shots": [
         {
-          "t": "12.0-19.6s",
+          "t": "12.606-18.646s",
           "lens": "CU缓推",
           "desc": "姜月初压下颤抖，双手握刀，力量沿刀脊收束",
           "entity_schedule": {
@@ -491,12 +508,12 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "19.6-24.1s",
+          "t": "18.646-24.682s",
           "lens": "LS短跟",
           "desc": "虎妖右上扑下，姜月初左下起刀，停在将触未触",
           "entity_schedule": {
@@ -508,7 +525,7 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -523,7 +540,7 @@
       "duration": 7.39,
       "target_story_clip_sec": 7.39,
       "scene": "尸骸荒野/夕/外",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01",
         "BEAST_01"
@@ -548,6 +565,18 @@
         "击杀闻弦境生物，获得其道行一百年。"
       ],
       "description": "承接将触未触帧：横刀先与虎颈发生清晰遮挡命中，双方错身；姜月初单膝落地，停一息后虎首才滚落，百年结算后置。",
+      "interaction_graph": [
+        {
+          "participants": ["CHAR_01", "BEAST_01", "WEAPON_横刀"],
+          "contact_points": ["横刀刀锋接触虎妖颈侧毛皮", "姜月初双手全程握住刀柄"],
+          "body_part_ownership": {"CHAR_01.left_hand": "WEAPON_横刀.grip", "CHAR_01.right_hand": "WEAPON_横刀.grip", "BEAST_01.neck": "impact_target"},
+          "occlusion_order": ["WEAPON_横刀.blade", "BEAST_01.neck_fur", "BEAST_01.torso"],
+          "force_direction": "刀锋画左下向右上斜切贯穿动势，虎妖动量画右上向左下",
+          "holder_state": {"WEAPON_横刀": "CHAR_01双手持有，命中后不脱手"},
+          "transfer_event": "横刀无所有权转移；仅BEAST_01虎首在因果链完成后与躯干分离",
+          "release_frame": "虎首仅在命中、错身和单膝落地后才与颈部分离"
+        }
+      ],
       "dramatic_function": "动作兑现与数值反转",
       "editing_intent": "命中CU硬切+两帧hit-stop；先反应后结果，杜绝结果提前",
       "audience_effect": "爆发→死寂→惊喜",
@@ -557,6 +586,7 @@
       "spectacle_story_function": "兑现第1集杀裴所得二十年确能转化为一次越境反杀，并证明百妖谱的第一条成长规则不是空头设定。",
       "rhythm": "爽点·CU硬切",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "endframe_png": "出图/第2集/图片/Clip03_end.png",
       "multi_subject_strategy": "命中帧双主体但焦点在刀颈接触；随后拆主角反应与虎首结果",
       "template": "fight_exchange",
       "pose_image_path": "生产数据/pose_guides/EP02_CLIP03_cross_slash_pose.png",
@@ -576,7 +606,7 @@
         "execution_strategy": "regional_construct_required：先出无人物荒野底板，再按左下 CHAR_01/囚途残损态与右上 BEAST_01/穿心复生态分区构建，统一冷灰逆光与地面接触阴影；禁止全帧自由重抽两主体。",
         "multi_subject_strategy": {
           "mode": "regional_construct_required",
-          "empty_plate": "LOC_尸骸荒野冷灰侧逆光无人物底板",
+          "empty_plate": "LOC_01冷灰侧逆光无人物底板",
           "region_masks": [
             "LEFT_LOWER: CHAR_01/囚途残损态，横刀左下向右上",
             "RIGHT_UPPER: BEAST_01/穿心复生态，扑击右上向左下"
@@ -663,7 +693,7 @@
           "WEAPON_横刀"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -703,12 +733,14 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP03_impact.png",
+            "self_check": "pass",
             "at_sec": 1.12,
             "use": "keyframe",
             "reason": "导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点"
           },
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
+            "self_check": "pass",
             "at_sec": 2.12,
             "use": "split",
             "reason": "导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前"
@@ -719,7 +751,7 @@
       },
       "shots": [
         {
-          "t": "24.1-25.6s",
+          "t": "24.682-25.802s",
           "lens": "CU固定+轻冲击",
           "desc": "刀颈接触命中，头仍连接，接触后才开始分离",
           "entity_schedule": {
@@ -731,12 +763,12 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "25.6-27.2s",
+          "t": "25.802-26.802s",
           "lens": "MS固定",
           "desc": "姜月初单膝落地喘息，横刀脱手插土",
           "entity_schedule": {
@@ -747,12 +779,12 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "27.2-31.5s",
+          "t": "26.802-32.072s",
           "lens": "CU结果镜",
           "desc": "虎首后落，百年结算overlay出现",
           "entity_schedule": {
@@ -763,7 +795,7 @@
               "VFX_百妖谱"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -778,7 +810,7 @@
       "duration": 5.27,
       "target_story_clip_sec": 5.47,
       "scene": "百妖谱主观层/荒野叠化",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01"
       ],
@@ -807,7 +839,7 @@
       "runtime_priority": "primary information",
       "rhythm": "加速·碎切",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP04_start.png",
-      "endframe_png": "",
+      "endframe_png": "出图/第2集/图片/EP02_CLIP04_end.png",
       "multi_subject_strategy": "单人+系统主观层",
       "template": "system_panel",
       "template_contract": {
@@ -856,7 +888,7 @@
           "VFX_百妖谱"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -897,7 +929,7 @@
       },
       "shots": [
         {
-          "t": "31.5-36.9s",
+          "t": "32.072-37.342s",
           "lens": "CU固定",
           "desc": "虎血滴化墨，无字谱页+后期问题文字，姜月初说收录",
           "entity_schedule": {
@@ -908,7 +940,7 @@
               "VFX_百妖谱"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -923,7 +955,7 @@
       "duration": 9.207,
       "target_story_clip_sec": 8.907,
       "scene": "百妖谱主观层/荒野叠化",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01"
       ],
@@ -954,6 +986,7 @@
       "runtime_priority": "primary highlight",
       "rhythm": "爽点·CU硬切",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP04_end.png",
+      "endframe_png": "出图/第2集/图片/Clip05_end.png",
       "multi_subject_strategy": "墨虎为非真人谱影；姜月初单人反应",
       "template": "system_panel",
       "template_contract": {
@@ -1012,7 +1045,6 @@
       "screen_text_policy": "compose_overlay_only",
       "screen_text_lines": [
         "消耗道行：七十五年",
-        "虎山神（摹影）",
         "猛虎快刀（圆满）"
       ],
       "entity_schedule": {
@@ -1025,7 +1057,7 @@
           "WEAPON_横刀"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -1065,6 +1097,7 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
+            "self_check": "pass",
             "at_sec": 3.07,
             "use": "split",
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
@@ -1072,6 +1105,7 @@
           },
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
+            "self_check": "pass",
             "at_sec": 6.14,
             "use": "split",
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
@@ -1081,7 +1115,7 @@
       },
       "shots": [
         {
-          "t": "36.9-42.0s",
+          "t": "37.342-40.412s",
           "lens": "CU缓推",
           "desc": "墨线成虎、虎眼亮，文字后期叠加",
           "entity_schedule": {
@@ -1093,12 +1127,12 @@
               "VFX_墨虎谱影"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "42.0-45.8s",
+          "t": "40.412-46.549s",
           "lens": "MCU固定",
           "desc": "力量倒灌，伤势恢复，姜月初重新握刀",
           "entity_schedule": {
@@ -1109,7 +1143,7 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -1124,7 +1158,7 @@
       "duration": 10.52,
       "target_story_clip_sec": 10.82,
       "scene": "尸骸荒野/夕/外",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01"
       ],
@@ -1154,6 +1188,7 @@
       "runtime_priority": "primary information",
       "rhythm": "铺垫·长镜",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP06_start.png",
+      "endframe_png": "出图/第2集/图片/EP02_CLIP06_end.png",
       "multi_subject_strategy": "单人主体，裴只在视线目标下一镜出现",
       "screen_text_policy": "compose_overlay_only",
       "screen_text_lines": [
@@ -1172,7 +1207,7 @@
           "WEAPON_横刀"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -1209,6 +1244,7 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+            "self_check": "pass",
             "at_sec": 5.9,
             "use": "edit_cut",
             "reason": "MCU握刀理解规则切至CU状态收起与视线下沉；以同一张脸、同一战损服装和同一冷侧光焊住切点"
@@ -1219,7 +1255,7 @@
       },
       "shots": [
         {
-          "t": "45.8-51.7s",
+          "t": "46.549-52.449s",
           "lens": "MCU固定",
           "desc": "姜月初重新握刀并理解收录规则",
           "entity_schedule": {
@@ -1230,12 +1266,12 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "51.7-56.7s",
+          "t": "52.449-57.069s",
           "lens": "CU轻拉",
           "desc": "极简状态overlay后收起，姜月初视线落向裴",
           "entity_schedule": {
@@ -1246,7 +1282,7 @@
               "VFX_百妖谱"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -1261,7 +1297,7 @@
       "duration": 10.645,
       "target_story_clip_sec": 10.445,
       "scene": "尸骸荒野/夕/外",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01",
         "CHAR_02"
@@ -1291,6 +1327,7 @@
       "runtime_priority": "primary emotional",
       "rhythm": "留白·定格",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP07_start.png",
+      "endframe_png": "出图/第2集/图片/Clip07_end.png",
       "multi_subject_strategy": "姜月初清晰前3/4脸；裴为闭眼局部，不生成第二张清晰正脸",
       "character_slots": {
         "PRIMARY": "CHAR_01/闻弦初境",
@@ -1305,7 +1342,7 @@
           "WEAPON_横刀"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -1344,6 +1381,7 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
+            "self_check": "pass",
             "at_sec": 3.55,
             "use": "split",
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
@@ -1351,6 +1389,7 @@
           },
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
+            "self_check": "pass",
             "at_sec": 7.1,
             "use": "split",
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
@@ -1360,7 +1399,7 @@
       },
       "shots": [
         {
-          "t": "56.7-61.6s",
+          "t": "57.069-60.619s",
           "lens": "MS轻跟",
           "desc": "姜月初走回裴身边蹲下，横刀放在右膝旁",
           "entity_schedule": {
@@ -1372,12 +1411,12 @@
               "WEAPON_横刀"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "61.6-67.1s",
+          "t": "60.619-67.714s",
           "lens": "CU固定",
           "desc": "右手替裴合眼，前3/4脸悔意与苦涩自嘲",
           "entity_schedule": {
@@ -1387,7 +1426,7 @@
             ],
             "objects": [],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }
@@ -1402,7 +1441,7 @@
       "duration": 4.213,
       "target_story_clip_sec": 4.613,
       "scene": "尸骸荒野/百妖谱主观层",
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "character_ids": [
         "CHAR_01"
       ],
@@ -1429,6 +1468,7 @@
       "runtime_priority": "primary cliffhanger",
       "rhythm": "留白·定格",
       "firstframe_png": "出图/第2集/图片/EP02_CLIP08_start.png",
+      "endframe_png": "出图/第2集/图片/EP02_CLIP08_end.png",
       "multi_subject_strategy": "姜月初反应与墨虎ECU分镜，不做双清晰主体",
       "screen_text_policy": "compose_overlay_only",
       "screen_text_lines": [],
@@ -1441,7 +1481,7 @@
           "VFX_墨虎谱影"
         ],
         "locations": [
-          "LOC_尸骸荒野"
+          "LOC_01"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -1475,6 +1515,7 @@
         "anchors": [
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+            "self_check": "pass",
             "at_sec": 2.5,
             "use": "edit_cut",
             "reason": "姜月初前3/4脸抬眼切至谱页墨虎ECU；切点只换主焦点，不复制第二张人物脸"
@@ -1485,7 +1526,7 @@
       },
       "shots": [
         {
-          "t": "67.1-69.6s",
+          "t": "67.714-70.214s",
           "lens": "CU缓推",
           "desc": "姜月初前3/4脸抬眼，旧金反光扫过眼睛",
           "entity_schedule": {
@@ -1496,12 +1537,12 @@
               "VFX_百妖谱"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         },
         {
-          "t": "69.6-71.7s",
+          "t": "70.214-71.927s",
           "lens": "ECU固定",
           "desc": "纸上墨虎双眼短亮，未离开谱页，硬切黑",
           "entity_schedule": {
@@ -1510,7 +1551,7 @@
               "VFX_墨虎谱影"
             ],
             "locations": [
-              "LOC_尸骸荒野"
+              "LOC_01"
             ]
           }
         }

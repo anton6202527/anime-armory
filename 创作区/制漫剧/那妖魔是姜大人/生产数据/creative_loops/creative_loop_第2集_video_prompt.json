@@ -1,0 +1,71 @@
+{
+  "action_contract": {
+    "owner": "n2d-video",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "model_router",
+      "mouth_visible_audit",
+      "spectacle_motion_plan",
+      "trajectory_controller_plan",
+      "image_qc",
+      "interaction_physics_gate",
+      "audio_timing_gate",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "video_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第2集",
+  "kind": "n2d_creative_loop_packet",
+  "loop": [
+    {
+      "instruction": "使用 context_pack 生成本阶段候选产物；不得越过花钱/合规/进度回写边界。",
+      "owner": "n2d-visual-agent",
+      "step": "generate"
+    },
+    {
+      "output": "列 block/warn/info；block 必须给 return_to_stage 和最小修复范围。",
+      "owner": "n2d-visual-agent",
+      "rubric": [
+        "是否继承 storyboard.template_contract 的专属字段",
+        "模型路由、首中尾帧、motion control/degrade plan 是否一致",
+        "身份/资产/屏幕方向/接缝是否有明确锁定句和负向约束"
+      ],
+      "step": "evaluate"
+    },
+    {
+      "instruction": "只修本阶段产物和直接依赖，不重写无关集/无关资产；保留可追溯 diff 摘要。",
+      "owner": "n2d-visual-agent",
+      "step": "optimize"
+    },
+    {
+      "instruction": "通过 gate 后再交给用户确认；进度回写仍走对应 stage skill/contract。",
+      "owner": "n2d-supervisor",
+      "step": "finalize"
+    }
+  ],
+  "max_iterations": 2,
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "video_prompt",
+  "stop_conditions": [
+    "gate/prework block",
+    "requires human approval",
+    "paid_or_irreversible action",
+    "no material improvement after 2 iterations"
+  ],
+  "version": 1
+}

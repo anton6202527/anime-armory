@@ -25,7 +25,7 @@
 - 🔴 0 · 🟡 0 · 🟢 5
 | 资产 | 脸策略 | 风险 | 主驱动 |
 |---|---|---|---|
-| `LOC_尸骸荒野`（scene） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
+| `LOC_01`（scene） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `WEAPON_01`（weapon） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `WEAPON_横刀`（weapon） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |
 | `VFX_百妖谱`（vfx） | faceless | 🟢 low | faceless·须背身/裁脸·落档像素验 0 清晰脸 |

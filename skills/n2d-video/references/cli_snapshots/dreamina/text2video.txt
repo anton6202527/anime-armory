@@ -1,5 +1,5 @@
-# captured_at: 2026-06-22T01:11:11Z
-# cli: /Users/lalala/.local/bin/dreamina
+# captured_at: 2026-07-22T13:21:10Z
+# cli: /Users/wesley/.local/bin/dreamina
 # command: text2video
 
 Usage:

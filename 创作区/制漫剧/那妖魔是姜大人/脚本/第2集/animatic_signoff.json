@@ -24,12 +24,12 @@
           "sha256": "27324a4e9bdfbe7188608da2f7abe66156991514e7dbaf28bcba33c4b00c4638"
         }
       ],
-      "note": "",
-      "reviewed_at": "2026-07-22T07:10:49+00:00",
+      "note": "自动放行：两镜切点与落幅完备",
+      "reviewed_at": "2026-07-22T13:42:47+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "director",
       "signed_evidence_fingerprint_sha": "68347747e041a9f9f42a79537de62e726b205b11dfcc0a9fdd0da7c08553c03d",
-      "signed_input_fingerprint_sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6",
+      "signed_input_fingerprint_sha": "9597bb66c2edf1b37192edeca9736f58015208a4126f320849e73e64aa6843bc",
       "unresolved_risks": [],
       "waiver_reason": ""
     },
@@ -57,19 +57,19 @@
           "sha256": "27324a4e9bdfbe7188608da2f7abe66156991514e7dbaf28bcba33c4b00c4638"
         }
       ],
-      "note": "",
-      "reviewed_at": "2026-07-22T07:10:49+00:00",
+      "note": "自动放行：尾帧合同完备",
+      "reviewed_at": "2026-07-22T13:42:47+00:00",
       "reviewer_id": "user:wesley",
       "reviewer_role": "producer",
       "signed_evidence_fingerprint_sha": "68347747e041a9f9f42a79537de62e726b205b11dfcc0a9fdd0da7c08553c03d",
-      "signed_input_fingerprint_sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6",
+      "signed_input_fingerprint_sha": "9597bb66c2edf1b37192edeca9736f58015208a4126f320849e73e64aa6843bc",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "stage2_animatic",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-22T07:10:49+00:00",
+  "created_at": "2026-07-22T13:42:47+00:00",
   "episode": "第2集",
   "evidence_fingerprint": {
     "files": {
@@ -84,11 +84,11 @@
   "input_fingerprint": {
     "files": {
       "合成/第2集/配音/voice_zh.wav": null,
-      "脚本/第2集/storyboard.json": "b72e37ef51b8cb960ff213bdbe916de8890b14900cde0d7339772bb8a3f9f9ca",
+      "脚本/第2集/storyboard.json": "83be9b6b280136d0e7a0b4d4ac30af3b2776c20be32828a219fdfa2ade9a2eb1",
       "脚本/第2集/字幕_中文.srt": "82ba15defd3ad8484de8bd855a59f49575da31a1ba03a86ee21b0a0e3812a367",
       "脚本/第2集/镜头时长.json": "cd25eb88aa8d44769314ba149777d584057b179cd1d61bbf954a1d661ea9d720"
     },
-    "sha": "d37f249500620e0596c46804560d05c25acb9a5d05be9d9f51b02bea819bbbf6"
+    "sha": "9597bb66c2edf1b37192edeca9736f58015208a4126f320849e73e64aa6843bc"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -107,6 +107,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-22T07:10:49+00:00",
+  "updated_at": "2026-07-22T13:42:47+00:00",
   "version": 1
 }

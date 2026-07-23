@@ -1,6 +1,6 @@
 {
   "kind":"n2d_axis_blocking_map","version":1,"episode":"第2集","status":"confirmed","generated_at":"2026-07-22T06:30:00+00:00",
-  "scene_axis_rules":[{"scene_id":"Scene_01","location":"LOC_尸骸荒野","main_axis":"西南—东北斜轴：裴尸体在西南前景，姜月初居中，虎妖从东北背景逼近","screen_direction":"虎妖始终由画面上方/右后向下方/左前压进；姜月初反击沿左下至右上，不在交错前交换方向","default_eyelines":"姜月初看右上，虎妖看左下；百妖谱为姜月初主观层，不改变现实轴线","blocking_floorplan":"裴尸体不移动；横刀从裴胸前拔出后始终由姜月初持有；虎妖断首后身体落在东北侧，头滚至中右前景。"}],
+  "scene_axis_rules":[{"scene_id":"Scene_01","location":"LOC_01","main_axis":"西南—东北斜轴：裴尸体在西南前景，姜月初居中，虎妖从东北背景逼近","screen_direction":"虎妖始终由画面上方/右后向下方/左前压进；姜月初反击沿左下至右上，不在交错前交换方向","default_eyelines":"姜月初看右上，虎妖看左下；百妖谱为姜月初主观层，不改变现实轴线","blocking_floorplan":"裴尸体不移动；横刀从裴胸前拔出后始终由姜月初持有；虎妖断首后身体落在东北侧，头滚至中右前景。"}],
   "beat_blocking":[
     {"beat_id":"Beat_01","characters":"姜月初、裴长青尸体、虎妖","entry_exit":"承接第1集刀已入胸；虎妖保持东北背景逼近","power_relation":"虎妖居高压迫，姜月初低位被夹在尸体与巨妖之间","z_depth":"刀与颤手前景、姜月初中景、虎妖背景","axis_exception":"无"},
     {"beat_id":"Beat_02","characters":"姜月初、虎妖","entry_exit":"姜月初拔刀前冲，虎妖由右上扑下；交错后双方各落轴线两端","power_relation":"由虎妖上压转为姜月初刀弧逆势上挑","z_depth":"虎爪前景压脸、姜月初中景、落日与尘雾背景","axis_exception":"交错瞬间用中线侧拍，不直接跳到反侧"},

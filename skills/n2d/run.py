@@ -2265,6 +2265,13 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 os.path.join(SKILLS_DIR, "n2d-video", "scripts", "video_production_pack.py"),
                 [root, ep, "--write", "--json"],
             ),
+            (
+                # 花钱前再报一次集级生成次数预算（report-only）：已过 image_prompt 的旧集也能在
+                # 出视频前看到 merge/take_policy 省次数候选；产物同 生产数据/clip_economy_plan_<集>.*
+                "clip_economy_planner",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "clip_economy_planner.py"),
+                [root, ep, "--write", "--json"],
+            ),
         ], cache=_stage_prework_cache)
         _run_preventive_contract_prework(p, root, ep, stage_key)
 

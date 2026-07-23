@@ -319,6 +319,7 @@ profile 支持独立负向字段时可追加：
 - **生效条件（机检·三处同口径）**：叙事跨度 ≤15s（`VIDEO_SHOT_HARD_MAX_SEC`）；primary 后端 multishot-native（能力档 `single_take_multishot_supported`）；非大表情跨度/奇观/高生成风险镜、未命中 R1 高运动/R3 漂移实证（R2 普通长镜不否决——多镜后端在内部镜位切换处自带再锚定）。不满足时 `shot_split_decision` 落 `take_policy_ignored_reason`、`anchor_planner` 照常产锚、`prompt_pack` 回落 edit_cut，`video_runner prepare` 付费前再复核一次，失败 fail-closed 落 `frame_strategy_issue`。
 - **prompt 写法**：主动作编成「镜头1（景别）：动作；镜头2（景别）：动作；…」阶梯（Seedance Shot 标号口径），Clip 块加 `**单拍多镜合同 / Single-Take Multishot**` 行；不产 edit_cut 边界图、不把锚帧塞入时间轴，首帧（+可选尾帧）照常喂。
 - **与相邻机制的边界**：`multiframe2video` 是单镜多关键帧（连续动作插值）；`multishot_groups`/`原生多镜生成` 是**跨 Clip** co-generate 后按 `edit_target_sec` 拆回；本策略是**单 Clip 内部**镜位一次生成、从源头不拆。合并多个相邻小 Clip 成一个单拍多镜 Clip 的候选由 `clip_economy_planner.py` 在阶段2后提案（report-only），编剧确认后改 storyboard。
+- **窗口扩展路径（Seedance 2.5·采集 2026-07-22·未核验官方 API）**：二级信源称 Seedance 2.5 单段可到 30s、支持 50 个多模态参考；官方 volcengine API 文档当时尚未全量发布，故静态能力档的 `max_clip_seconds` 与 15s 硬上限**不预先调大**。项目实际接入后走 `video_backend_adapter.py record-refresh` 落带来源的能力断言，并用 `clip_economy_planner --max-take-sec 30` 重估合并空间；单拍多镜的 `VIDEO_SHOT_HARD_MAX_SEC` 是否随之上调届时按官方证据改常量 + 回归测试。
 
 ## 时长合同（v2）
 

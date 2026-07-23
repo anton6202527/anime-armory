@@ -1,0 +1,32 @@
+{
+  "contract_path": "脚本/第2集/preventive_contracts.json",
+  "episode": "第2集",
+  "findings": [
+    {
+      "gate": "interaction_physics_gate",
+      "loc": "Clip_06",
+      "message": "交互物理合同缺字段：screen_positions/character_slots",
+      "minimal_rerun_scope": "回导演排戏包或 storyboard 拆动作、接触点、多人站位和降级方案",
+      "owner": "导演/分镜",
+      "return_to_stage": "script_stage2",
+      "root_cause_layer": "director_blocking",
+      "severity": "block"
+    }
+  ],
+  "gates": [
+    "interaction_physics_gate",
+    "audio_timing_gate"
+  ],
+  "generated_at": "2026-07-22T12:57:26+00:00",
+  "kind": "n2d_preventive_contract_report",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "scaffolded": false,
+  "stage": "video_prompt",
+  "status": "blocked",
+  "summary": {
+    "block": 1,
+    "info": 0,
+    "warn": 0
+  },
+  "version": 1
+}

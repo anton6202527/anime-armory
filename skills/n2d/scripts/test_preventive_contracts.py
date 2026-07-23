@@ -550,6 +550,37 @@ def test_single_present_character_with_offscreen_state_does_not_need_screen_posi
     assert not findings
 
 
+def test_character_form_suffix_is_same_character_for_physics_gate(tmp_path: Path) -> None:
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "clips": [{
+            "id": "Clip_01",
+            "character_ids": ["CHAR_01"],
+            "entity_schedule": {
+                "characters": ["CHAR_01/闻弦初境"],
+                "required_presence": ["CHAR_01"],
+            },
+            "description": "主角握刀检查刀锋。",
+        }],
+    })
+    clip = json.loads((tmp_path / "脚本" / "第1集" / "storyboard.json").read_text(encoding="utf-8"))["clips"][0]
+    contract = {
+        "status": "confirmed",
+        "interaction_physics": [{
+            "clip_id": "Clip_01",
+            "action_decomposition": ["握刀"],
+            "contact_points": ["右手握刀柄"],
+            "screen_positions": [],
+            "degrade_plan": "拆为手部特写。",
+        }],
+    }
+    findings = []
+
+    preventive_contracts.check_interaction_physics(tmp_path, "第1集", contract, findings)
+
+    assert preventive_contracts.chars_from_clip(clip) == ["CHAR_01"]
+    assert not findings
+
+
 def test_pilot_release_gate_blocks_first_episode_without_acceptance(tmp_path: Path) -> None:
     report = preventive_contracts.build_report(tmp_path, "第1集", stage="review")
 

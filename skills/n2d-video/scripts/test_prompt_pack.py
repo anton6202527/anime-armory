@@ -18,6 +18,14 @@ def _write_json(path: Path, payload: object) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
 
 
+def test_route_execution_channel_uses_adapter_channel() -> None:
+    route = {
+        "primary_backend": "seedance",
+        "execution_adapter": {"channel": "dreamina", "execution_backend": "dreamina"},
+    }
+    assert prompt_pack.route_execution_channel(route) == "dreamina"
+
+
 def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"

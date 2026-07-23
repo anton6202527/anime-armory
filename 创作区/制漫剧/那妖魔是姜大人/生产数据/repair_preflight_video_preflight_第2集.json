@@ -1,0 +1,288 @@
+{
+  "episode": "第2集",
+  "generated_at": "2026-07-23T01:38:58+00:00",
+  "kind": "n2d_repair_preflight",
+  "next_when_blocked": [
+    "image_qc 未放行：precision=degraded hard_blocks=47 verdict=block"
+  ],
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "stage": "video_preflight",
+  "status": "block",
+  "steps": [
+    {
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-update/scripts/update_plan.py check /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 --write-plan --json",
+      "detail": "{\n  \"baseline_bootstrapped\": false,\n  \"changed_files\": [],\n  \"changed_skills\": [],\n  \"commands\": [],\n  \"contract_inheritance\": {\n    \"asset_blocks\": 0,\n    \"field_blocks\": 0,\n    \"field_warns\": 0,\n    \"freshness\": \"fresh\",\n    \"generated_at\": \"2026-07-22T15:30:52Z\",\n    \"identity_blocks\": 0,\n    \"inherited\": true,\n    \"report_json\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第2集.json\",\n    \"report_md\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第2集.md\",\n    \"samples\": [],\n    \"status\": \"ok\",\n    \"verdict\": \"pass\"\n  },\n  \"created_at\": \"2026-07-23T01:38:45+00:00\",\n  \"current_stage\": \"video\",\n  \"current_todo\": {\n    \"column\": \"视频prompt\",\n    \"command\": \"n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集\",\n    \"label",
+      "payload": {
+        "baseline_bootstrapped": false,
+        "changed_files": [],
+        "changed_skills": [],
+        "commands": [],
+        "contract_inheritance": {
+          "asset_blocks": 0,
+          "field_blocks": 0,
+          "field_warns": 0,
+          "freshness": "fresh",
+          "generated_at": "2026-07-22T15:30:52Z",
+          "identity_blocks": 0,
+          "inherited": true,
+          "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第2集.json",
+          "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第2集.md",
+          "samples": [],
+          "status": "ok",
+          "verdict": "pass"
+        },
+        "created_at": "2026-07-23T01:38:45+00:00",
+        "current_stage": "video",
+        "current_todo": {
+          "column": "视频prompt",
+          "command": "n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集",
+          "label": "视频prompt",
+          "note": "",
+          "skill": "n2d-video",
+          "stage_key": "video_prompt",
+          "status": "⬜"
+        },
+        "episode": "第2集",
+        "execution_steps": [],
+        "gate_refresh_needed": false,
+        "gate_refresh_stages": [],
+        "image_consistency": {
+          "advisory": 44,
+          "consistent": true,
+          "degraded": false,
+          "freshness": "fresh",
+          "hard_blocks": 0,
+          "precision_level": "full",
+          "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md",
+          "samples": [
+            "脸(G1): 图片/Clip07_end.png",
+            "脸(G1): 图片/EP02_CLIP07_start.png"
+          ],
+          "status": "ok",
+          "verdict": "review"
+        },
+        "image_qc_environment": {
+          "advisory": 44,
+          "degraded": false,
+          "finding_samples": [
+            "脸(G1): 图片/Clip07_end.png",
+            "脸(G1): 图片/EP02_CLIP07_start.png"
+          ],
+          "freshness": "fresh",
+          "hard_blocks": 0,
+          "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+          "jump_to_stage": "video",
+          "precision_level": "full",
+          "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+          "recommended_install": "",
+          "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
+          "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.md",
+          "status": "ok",
+          "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+          "verdict": "review"
+        },
+        "kind": "n2d_skill_update_plan",
+        "needs_record": false,
+        "newly_relevant_skills": [],
+        "notes": [],
+        "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.json",
+        "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第2集.md",
+        "rebuild_needed": false,
+        "regen_mode": "最小",
+        "relevant_skills": [
+          "n2d",
+          "n2d-batch",
+          "n2d-dashboard",
+          "n2d-image",
+          "n2d-lora",
+          "n2d-review",
+          "n2d-script",
+          "n2d-update",
+          "n2d-video",
+          "n2d-voice"
+        ],
+        "rerun_from": null,
+        "rerun_until": "video",
+        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+        "shared_lock_changed_files": [],
+        "shared_lock_reuse": false,
+        "smart_suggestions": [],
+        "snapshot_changed_files": [],
+        "source_drift": {
+          "status": "clean"
+        },
+        "strict_image_refresh": false,
+        "three_frame_compliance": {
+          "backend": null,
+          "compliant": true,
+          "enforced": true,
+          "exempt_clips": 0,
+          "missing_endframe_clips": [],
+          "missing_frame_files": [],
+          "policy_mode": "risk_only",
+          "required_anchor_clips": [
+            "EP02_CLIP01",
+            "EP02_CLIP02",
+            "EP02_CLIP03",
+            "EP02_CLIP05",
+            "EP02_CLIP06",
+            "EP02_CLIP07",
+            "EP02_CLIP08"
+          ],
+          "total_clips": 8,
+          "violating_clips": []
+        }
+      },
+      "returncode": 0,
+      "status": "pass",
+      "step": "update_plan"
+    },
+    {
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --json --write-missing",
+      "detail": "{\n  \"kind\": \"n2d_production_handoff_pack_check\",\n  \"version\": 1,\n  \"generated_at\": \"2026-07-23T01:38:45+00:00\",\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"episode\": \"第2集\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"required\": 9,\n    \"pass\": 9,\n    \"block\": 0\n  },\n  \"files\": [\n    {\n      \"rel\": \"脚本/第2集/production_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/continuity_breakdown.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/continuity_chain.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/continuity_bible.json\",\n      \"status\": \"pass\",\n      \"issues\": []\n    },\n    {\n      \"rel\": \"脚本/第2集/ai_shooting_schedule.json\",\n      \"status\": \"pass\",\n      \"issues",
+      "payload": {
+        "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_breakdown_check_第2集.json",
+        "episode": "第2集",
+        "files": [
+          {
+            "issues": [],
+            "rel": "脚本/第2集/production_breakdown.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/continuity_breakdown.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/continuity_chain.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/continuity_bible.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/ai_shooting_schedule.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/ai_call_sheet.md",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/production_handoff_pack.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "生产数据/ai_shooting_schedule_batch_seed_第2集.json",
+            "status": "pass"
+          },
+          {
+            "issues": [],
+            "rel": "脚本/第2集/production_handoff_signoff.json",
+            "status": "pass"
+          }
+        ],
+        "generated_at": "2026-07-23T01:38:45+00:00",
+        "kind": "n2d_production_handoff_pack_check",
+        "next_when_blocked": "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
+        "overview_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_handoff_pack_第2集.md",
+        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+        "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 scaffold --write",
+        "status": "pass",
+        "summary": {
+          "block": 0,
+          "pass": 9,
+          "required": 9
+        },
+        "version": 1
+      },
+      "returncode": 0,
+      "status": "pass",
+      "step": "production_breakdown"
+    },
+    {
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/production_locks.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 check --write-missing --write-check --stage video_preflight --json",
+      "detail": "{\n  \"kind\": \"n2d_production_locks_check\",\n  \"version\": 1,\n  \"episode\": \"第2集\",\n  \"stage\": \"video_prompt\",\n  \"checked_lock_ids\": [\n    \"source_lock\",\n    \"script_lock\",\n    \"storyboard_lock\",\n    \"style_identity_lock\",\n    \"voice_timing_lock\"\n  ],\n  \"status\": \"pass\",\n  \"generated_at\": \"2026-07-23T01:38:45+00:00\",\n  \"lock_path\": \"生产数据/production_locks_第2集.json\",\n  \"summary\": {\n    \"block\": 0,\n    \"locks\": 5,\n    \"required_locks\": 5\n  },\n  \"findings\": [],\n  \"check_path\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_video_prompt_第2集.json\"\n}",
+      "payload": {
+        "check_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_locks_check_video_prompt_第2集.json",
+        "checked_lock_ids": [
+          "source_lock",
+          "script_lock",
+          "storyboard_lock",
+          "style_identity_lock",
+          "voice_timing_lock"
+        ],
+        "episode": "第2集",
+        "findings": [],
+        "generated_at": "2026-07-23T01:38:45+00:00",
+        "kind": "n2d_production_locks_check",
+        "lock_path": "生产数据/production_locks_第2集.json",
+        "stage": "video_prompt",
+        "status": "pass",
+        "summary": {
+          "block": 0,
+          "locks": 5,
+          "required_locks": 5
+        },
+        "version": 1
+      },
+      "returncode": 0,
+      "status": "pass",
+      "step": "production_locks"
+    },
+    {
+      "command": "/opt/homebrew/opt/python@3.14/bin/python3.14 /Users/wesley/learn/anime-armory/skills/n2d/scripts/preventive_contracts.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第2集 --stage video_preflight --json --write --write-missing",
+      "detail": "{\n  \"contract_path\": \"脚本/第2集/preventive_contracts.json\",\n  \"episode\": \"第2集\",\n  \"findings\": [],\n  \"gates\": [\n    \"interaction_physics_gate\",\n    \"audio_timing_gate\"\n  ],\n  \"generated_at\": \"2026-07-23T01:38:45+00:00\",\n  \"kind\": \"n2d_preventive_contract_report\",\n  \"outputs\": {\n    \"json\": \"生产数据/preventive_contracts_video_preflight_第2集.json\",\n    \"markdown\": \"生产数据/preventive_contracts_video_preflight_第2集.md\"\n  },\n  \"root\": \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\",\n  \"scaffolded\": false,\n  \"stage\": \"video_preflight\",\n  \"status\": \"pass\",\n  \"summary\": {\n    \"block\": 0,\n    \"info\": 0,\n    \"warn\": 0\n  },\n  \"version\": 1\n}",
+      "payload": {
+        "contract_path": "脚本/第2集/preventive_contracts.json",
+        "episode": "第2集",
+        "findings": [],
+        "gates": [
+          "interaction_physics_gate",
+          "audio_timing_gate"
+        ],
+        "generated_at": "2026-07-23T01:38:45+00:00",
+        "kind": "n2d_preventive_contract_report",
+        "outputs": {
+          "json": "生产数据/preventive_contracts_video_preflight_第2集.json",
+          "markdown": "生产数据/preventive_contracts_video_preflight_第2集.md"
+        },
+        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+        "scaffolded": false,
+        "stage": "video_preflight",
+        "status": "pass",
+        "summary": {
+          "block": 0,
+          "info": 0,
+          "warn": 0
+        },
+        "version": 1
+      },
+      "returncode": 0,
+      "status": "pass",
+      "step": "preventive_contracts"
+    },
+    {
+      "detail": "image_qc 未放行：precision=degraded hard_blocks=47 verdict=block",
+      "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第2集/image_qc_第2集.json",
+      "status": "block",
+      "step": "image_qc"
+    }
+  ],
+  "summary": {
+    "block": 1,
+    "pass": 4,
+    "skip": 0,
+    "steps": 5,
+    "warn": 0
+  },
+  "version": 1
+}

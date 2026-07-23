@@ -1096,7 +1096,12 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                     segment_shot_description = (
                         "；".join(filter(None, (
                             str(shots[p_idx].get("lens") or "") if p_idx < len(shots) else "",
-                            str(shots[p_idx].get("description") or "") if p_idx < len(shots) else "",
+                            str(
+                                shots[p_idx].get("description")
+                                or shots[p_idx].get("desc")
+                                or shots[p_idx].get("video_prompt")
+                                or ""
+                            ) if p_idx < len(shots) else "",
                         )))
                         if requested_strategy == "edit_cut" else ""
                     )
@@ -1359,10 +1364,33 @@ def _storyboard_shots(clip: Mapping[str, Any], duration: Any) -> List[Dict[str, 
             "index": idx,
             "start_sec": round(start, 3),
             "end_sec": round(end, 3),
-            "description": str(shot.get("description") or shot.get("visual") or shot.get("action") or ""),
+            "description": str(
+                shot.get("description")
+                or shot.get("desc")
+                or shot.get("video_prompt")
+                or shot.get("visual")
+                or shot.get("action")
+                or ""
+            ),
             "lens": str(shot.get("lens") or shot.get("shot_size") or shot.get("camera") or ""),
         })
     rows.sort(key=lambda row: float(row["start_sec"]))
+    # Storyboards may store shot ranges on the episode timeline while video
+    # generation consumes clip-local time.  Detect that form from an end time
+    # beyond the clip duration and subtract the clip's episode start.  Without
+    # this normalization, later clips request impossible edit-cut anchors such
+    # as 19.6s inside a 12.1s physical take.
+    clip_start = clip.get("start_sec")
+    if (
+        rows
+        and isinstance(duration, (int, float))
+        and isinstance(clip_start, (int, float))
+        and float(clip_start) > 0
+        and any(float(row["end_sec"]) > float(duration) + 0.05 for row in rows)
+    ):
+        for row in rows:
+            row["start_sec"] = round(float(row["start_sec"]) - float(clip_start), 3)
+            row["end_sec"] = round(float(row["end_sec"]) - float(clip_start), 3)
     if rows and isinstance(duration, (int, float)):
         rows[-1]["end_sec"] = round(float(duration), 3)
     return rows

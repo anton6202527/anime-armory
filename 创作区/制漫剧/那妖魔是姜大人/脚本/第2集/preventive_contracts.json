@@ -168,7 +168,7 @@
       ],
       "clip_id": "Clip_02",
       "contact_points": [
-        "手部与 LOC_尸骸荒野 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
       ],
       "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
       "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
@@ -274,7 +274,7 @@
       ],
       "clip_id": "Clip_06",
       "contact_points": [
-        "手部与 LOC_尸骸荒野 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
       ],
       "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
       "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
@@ -294,7 +294,7 @@
       ],
       "clip_id": "Clip_07",
       "contact_points": [
-        "手部与 LOC_尸骸荒野 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
       ],
       "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
       "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
@@ -869,7 +869,7 @@
     ],
     "scenes": [
       {
-        "id": "LOC_尸骸荒野",
+        "id": "LOC_01",
         "lock_strategy": "registry reference_group shape/scene lock",
         "reference_slots": [],
         "type": "scene"

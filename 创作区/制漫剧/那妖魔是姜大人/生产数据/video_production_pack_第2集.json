@@ -1,0 +1,247 @@
+{
+  "anchor_chains": [
+    {
+      "anchors": [
+        {
+          "at_sec": 3.6,
+          "image": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
+          "kind": "anchor",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧"
+        },
+        {
+          "at_sec": 8.6,
+          "image": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
+          "kind": "anchor",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧"
+        },
+        {
+          "at_sec": 12.0,
+          "image": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
+          "kind": "anchor",
+          "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧"
+        }
+      ],
+      "clip": "Clip_01",
+      "end_anchor_required": true,
+      "first_frame": "出图/第2集/图片/EP02_CLIP01_start.png",
+      "last_frame": "出图/第2集/图片/Clip_01_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "match_on_action",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 6.04,
+          "image": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
+          "kind": "anchor",
+          "reason": "auto: R2 普通长镜（12.076s/4拍）"
+        }
+      ],
+      "clip": "Clip_02",
+      "end_anchor_required": true,
+      "first_frame": "出图/第2集/图片/EP02_CLIP02_start.png",
+      "last_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "continuous_take_relay",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 1.12,
+          "image": "出图/第2集/图片/EP02_CLIP03_impact.png",
+          "kind": "anchor",
+          "reason": "导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点"
+        },
+        {
+          "at_sec": 2.12,
+          "image": "出图/第2集/图片/EP02_CLIP03_recovery.png",
+          "kind": "anchor",
+          "reason": "导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前"
+        }
+      ],
+      "clip": "Clip_03",
+      "end_anchor_required": true,
+      "first_frame": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
+      "last_frame": "出图/第2集/图片/Clip_03_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "insert_cutaway",
+      "status": "ready"
+    },
+    {
+      "anchors": [],
+      "clip": "Clip_04",
+      "end_anchor_required": true,
+      "first_frame": "出图/第2集/图片/EP02_CLIP04_start.png",
+      "last_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "continuous_take_relay",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 3.07,
+          "image": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）"
+        },
+        {
+          "at_sec": 6.14,
+          "image": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）"
+        }
+      ],
+      "clip": "Clip_05",
+      "end_anchor_required": true,
+      "first_frame": "出图/第2集/图片/EP02_CLIP04_end.png",
+      "last_frame": "出图/第2集/图片/Clip_05_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "graphic_match",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 5.9,
+          "image": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
+          "kind": "anchor",
+          "reason": "MCU握刀理解规则切至CU状态收起与视线下沉；以同一张脸、同一战损服装和同一冷侧光焊住切点"
+        }
+      ],
+      "clip": "Clip_06",
+      "end_anchor_required": false,
+      "first_frame": "出图/第2集/图片/EP02_CLIP06_start.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "eyeline_cut",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 3.55,
+          "image": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）"
+        },
+        {
+          "at_sec": 7.1,
+          "image": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
+          "kind": "anchor",
+          "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）"
+        }
+      ],
+      "clip": "Clip_07",
+      "end_anchor_required": true,
+      "first_frame": "出图/第2集/图片/EP02_CLIP07_start.png",
+      "last_frame": "出图/第2集/图片/Clip_07_end.png",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "eyeline_cut",
+      "status": "ready"
+    },
+    {
+      "anchors": [
+        {
+          "at_sec": 2.5,
+          "image": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
+          "kind": "anchor",
+          "reason": "姜月初前3/4脸抬眼切至谱页墨虎ECU；切点只换主焦点，不复制第二张人物脸"
+        }
+      ],
+      "clip": "Clip_08",
+      "end_anchor_required": false,
+      "first_frame": "出图/第2集/图片/EP02_CLIP08_start.png",
+      "last_frame": "",
+      "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
+      "seam_mode": "hard_cut",
+      "status": "ready"
+    }
+  ],
+  "episode": "第2集",
+  "kind": "n2d_video_production_pack",
+  "motion_sample_plan": [
+    {
+      "acceptance": [
+        "动作方向可读",
+        "主体不串换",
+        "接触点不融化",
+        "首尾帧能接回正片"
+      ],
+      "clip": "Clip_03",
+      "existing_motion_references": [],
+      "route_backend": "seedance",
+      "sample_output": "出视频/第2集/motion_samples/Clip_03_sample.mp4",
+      "sample_required": true,
+      "shot_type": "fight_exchange"
+    }
+  ],
+  "notes": [
+    "不触发视频生成；这是出视频前的锚帧/动作小样/路由实测生产侧车。"
+  ],
+  "route_empirical_scorecard": {
+    "episode": "第2集",
+    "kind": "n2d_route_empirical_scorecard",
+    "policy": "后续 router 可优先 measured/pass_rate 高的 backend+shot_type；无证据只作 pending，不臆造通过率。",
+    "rows": [
+      {
+        "attempts": 3,
+        "backend": "seedance",
+        "clips": [
+          "Clip_02",
+          "Clip_06",
+          "Clip_07"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "dialogue_shot_reverse"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_03"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "fight_exchange"
+      },
+      {
+        "attempts": 3,
+        "backend": "seedance",
+        "clips": [
+          "Clip_04",
+          "Clip_05",
+          "Clip_08"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "general_motion"
+      },
+      {
+        "attempts": 1,
+        "backend": "seedance",
+        "clips": [
+          "Clip_01"
+        ],
+        "confidence": "pending",
+        "pass_rate": 0.0,
+        "passed": 0,
+        "shot_type": "reveal_reaction_chain"
+      }
+    ]
+  },
+  "summary": {
+    "anchor_chains": 8,
+    "clips": 8,
+    "motion_samples_required": 1,
+    "route_rows": 8,
+    "route_score_rows": 4
+  },
+  "version": 1
+}

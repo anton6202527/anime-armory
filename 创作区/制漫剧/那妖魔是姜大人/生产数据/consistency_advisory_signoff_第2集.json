@@ -1,0 +1,127 @@
+{
+  "kind": "n2d_consistency_advisory_signoff",
+  "version": 1,
+  "episode": "第2集",
+  "accepted": [
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP01_start_a2.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：延续同一乌云压暗的冷灰夕时荒野，分类器把局部亮肤色误判为 day，无剧情时辰跳变。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP02_start.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：本帧与前帧同一冷灰夕时、同一乌云天光；night 标签来自整体曝光较低，不是时辰变化。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP03_impact.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：冲击帧仅因刀光与亮部反差被误分 day，背景仍是同一冷灰夕时荒野，无昼夜切换。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP04_end.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：无字谱页旧金反光改变了亮度分布，但荒野天光仍为同一冷灰夕时。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "天气时辰(W1)",
+      "loc_contains": "EP02_CLIP04_end_a1.png",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "已实际查看当前像素：谱页旧金主体造成曝光起伏，场景、云层和环境色温与相邻帧连续。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "表情连续(EXP1)",
+      "message_contains": "Clip_03：角色 CHAR_01",
+      "reviewer": "automation:codex",
+      "review_kind": "directorial_execution",
+      "human_signoff": false,
+      "reason": "Clip03 的情绪转折有明确事件因果：危机中命中虎妖、死里逃生并获得百年道行，惊喜是命中后的结果拍，不是无过渡 OOC。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "表情连续(EXP1)",
+      "message_contains": "Clip_07：角色 CHAR_01",
+      "reviewer": "automation:codex",
+      "review_kind": "directorial_execution",
+      "human_signoff": false,
+      "reason": "Clip07 在虎妖危机解除后明确切回裴长青尸体，姜月初替他合眼是惊喜后转入愧悔的可见表演节拍。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "表情连续(EXP1)",
+      "message_contains": "Clip_07：角色 CHAR_02",
+      "reviewer": "automation:codex",
+      "review_kind": "executor_visual",
+      "human_signoff": false,
+      "reason": "CHAR_02 全集是死亡态，Clip07 只是姜月初替其合上眼睑；检测器将被动合眼误归类为角色情绪从惊惧转悲，并非死者表演跳变。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "节奏/留存 advisory 总分偏低",
+      "reviewer": "user:wesley",
+      "review_kind": "director",
+      "human_signoff": true,
+      "reason": "父 Clip 是叙事容器而非单一静帧；24张首中尾锚已把71.9秒拆成动作撞点、反应拍、系统插入和情绪回落，实际剪辑密度高于父 Clip 时长估算。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "EP02_CLIP01→EP02_CLIP02→EP02_CLIP03",
+      "reviewer": "user:wesley",
+      "review_kind": "director",
+      "human_signoff": true,
+      "reason": "这三个父 Clip 内部分别有后果特写—三角建立—虎爪逼近—刀颈命中—落地—断首延迟的多锚剪辑，长度用于完成命中因果而非空镜拖沓。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "节奏密度(Rhythm)",
+      "message_contains": "EP02_CLIP05→EP02_CLIP06→EP02_CLIP07",
+      "reviewer": "user:wesley",
+      "review_kind": "director",
+      "human_signoff": true,
+      "reason": "这三个父 Clip 内部依次是墨虎成形奇观、力量倒灌、专业握刀状态回读和替裴合眼的情绪偿债，有明确的奇观—信息—情感变奏。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    },
+    {
+      "accepted": true,
+      "dimension": "跨集场景漂移(SCNX)",
+      "message_contains": "场景[尸骸荒野] 跨集结构漂移",
+      "reviewer": "user:wesley",
+      "review_kind": "director",
+      "human_signoff": true,
+      "reason": "第2集沿用同一尸骸荒野，但动作段合法使用反打、近景与不同焦段；地貌、冷灰光位、西南—东北行动轴和常驻残骸保持一致，属于已批准换机位而非场景改建。",
+      "expires_at": "2026-08-21T23:59:59+08:00"
+    }
+  ]
+}

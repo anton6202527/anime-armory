@@ -1,7 +1,7 @@
 {
   "continuity_owner": "script_supervisor",
   "episode": "第2集",
-  "generated_at": "2026-07-22T07:10:49+00:00",
+  "generated_at": "2026-07-22T15:08:57+00:00",
   "kind": "n2d_continuity_breakdown",
   "rows": [
     {
@@ -17,7 +17,7 @@
           "尚不知二十年是否足够"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：WEAPON_横刀、VFX_百妖谱；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -43,7 +43,7 @@
           "决定消耗全部二十年"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：WEAPON_横刀；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -82,7 +82,7 @@
           "获得一百年"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：WEAPON_横刀；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -104,7 +104,7 @@
           "知道可收录但未知馈赠"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：VFX_百妖谱；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -125,7 +125,7 @@
           "理解收录会换来长久能力"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：VFX_百妖谱、VFX_墨虎谱影、WEAPON_横刀；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -149,7 +149,7 @@
           "决定保留二十五年"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：VFX_百妖谱、WEAPON_横刀；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -170,7 +170,7 @@
           "承认杀裴代价并立下或许还命的愿望"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：WEAPON_横刀；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",
@@ -191,7 +191,7 @@
           "知道摹影可进阶但未知后果"
         ]
       },
-      "location_id": "LOC_尸骸荒野",
+      "location_id": "LOC_01",
       "props_continuity": "关键物件保持可追踪：VFX_百妖谱、VFX_墨虎谱影；位置变化必须由动作或转场解释。",
       "required_presence": [
         "CHAR_01",

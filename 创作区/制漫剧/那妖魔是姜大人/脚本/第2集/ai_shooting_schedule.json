@@ -1,6 +1,6 @@
 {
   "episode": "第2集",
-  "generated_at": "2026-07-22T07:10:49+00:00",
+  "generated_at": "2026-07-22T15:08:57+00:00",
   "inputs": {
     "batch_queue": "生产数据/batch_queue.json",
     "continuity_bible": "脚本/第2集/continuity_bible.json",
@@ -33,6 +33,7 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a1.png",
             "at_sec": 3.6,
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "self_check": "pass",
             "source_duration": 12.606,
             "use": "edit_cut"
           },
@@ -40,6 +41,7 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a2.png",
             "at_sec": 8.6,
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "self_check": "pass",
             "source_duration": 12.606,
             "use": "edit_cut"
           },
@@ -47,13 +49,14 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP01_start_a3.png",
             "at_sec": 12.0,
             "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+            "self_check": "pass",
             "source_duration": 12.606,
             "use": "edit_cut"
           }
         ],
         "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP01",
         "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP01",
-        "endframe": "",
+        "endframe": "出图/第2集/图片/Clip01_end.png",
         "firstframe": "出图/第2集/图片/EP02_CLIP01_start.png",
         "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP01",
         "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP01"
@@ -75,7 +78,7 @@
       "risk": {
         "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
         "review_required": true,
-        "template": "铺垫·长镜",
+        "template": "冷开场·危机钩子·长镜内多切",
         "tier": "high"
       },
       "scene": "尸骸荒野/夕/外",
@@ -93,6 +96,7 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP02_start_a1.png",
             "at_sec": 6.04,
             "reason": "auto: R2 普通长镜（12.076s/4拍）",
+            "self_check": "pass",
             "source_duration": 12.076,
             "use": "split"
           }
@@ -139,18 +143,20 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP03_impact.png",
             "at_sec": 1.12,
             "reason": "导演锁定：刀颈接触命中，虎首仍连接，hit-stop与音效撞点",
+            "self_check": "pass",
             "use": "keyframe"
           },
           {
             "anchor_png": "出图/第2集/图片/EP02_CLIP03_recovery.png",
             "at_sec": 2.12,
             "reason": "导演锁定：姜月初先单膝落势，虎首随后才落地，防结果提前",
+            "self_check": "pass",
             "use": "split"
           }
         ],
         "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP03",
         "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP03",
-        "endframe": "",
+        "endframe": "出图/第2集/图片/Clip03_end.png",
         "firstframe": "出图/第2集/图片/EP02_CLIP02_preimpact.png",
         "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP03",
         "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP03"
@@ -228,6 +234,7 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a1.png",
             "at_sec": 3.07,
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+            "self_check": "pass",
             "source_duration": 9.207,
             "use": "split"
           },
@@ -235,13 +242,14 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP04_end_a2.png",
             "at_sec": 6.14,
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.207s）",
+            "self_check": "pass",
             "source_duration": 9.207,
             "use": "split"
           }
         ],
         "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP05",
         "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP05",
-        "endframe": "",
+        "endframe": "出图/第2集/图片/Clip05_end.png",
         "firstframe": "出图/第2集/图片/EP02_CLIP04_end.png",
         "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP05",
         "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP05"
@@ -281,12 +289,13 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP06_start_a1.png",
             "at_sec": 5.9,
             "reason": "MCU握刀理解规则切至CU状态收起与视线下沉；以同一张脸、同一战损服装和同一冷侧光焊住切点",
+            "self_check": "pass",
             "use": "edit_cut"
           }
         ],
         "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP06",
         "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP06",
-        "endframe": "",
+        "endframe": "出图/第2集/图片/EP02_CLIP06_end.png",
         "firstframe": "出图/第2集/图片/EP02_CLIP06_start.png",
         "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP06",
         "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP06"
@@ -326,6 +335,7 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a1.png",
             "at_sec": 3.55,
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+            "self_check": "pass",
             "source_duration": 10.645,
             "use": "split"
           },
@@ -333,13 +343,14 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP07_start_a2.png",
             "at_sec": 7.1,
             "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.645s）",
+            "self_check": "pass",
             "source_duration": 10.645,
             "use": "split"
           }
         ],
         "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP07",
         "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP07",
-        "endframe": "",
+        "endframe": "出图/第2集/图片/Clip07_end.png",
         "firstframe": "出图/第2集/图片/EP02_CLIP07_start.png",
         "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP07",
         "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP07"
@@ -379,12 +390,13 @@
             "anchor_png": "出图/第2集/图片/EP02_CLIP08_start_a1.png",
             "at_sec": 2.5,
             "reason": "姜月初前3/4脸抬眼切至谱页墨虎ECU；切点只换主焦点，不复制第二张人物脸",
+            "self_check": "pass",
             "use": "edit_cut"
           }
         ],
         "continuity_bible": "脚本/第2集/continuity_bible.json#EP02_CLIP08",
         "continuity_chain": "脚本/第2集/continuity_chain.json#EP02_CLIP08",
-        "endframe": "",
+        "endframe": "出图/第2集/图片/EP02_CLIP08_end.png",
         "firstframe": "出图/第2集/图片/EP02_CLIP08_start.png",
         "production_breakdown": "脚本/第2集/production_breakdown.json#EP02_CLIP08",
         "storyboard": "脚本/第2集/storyboard.json#EP02_CLIP08"

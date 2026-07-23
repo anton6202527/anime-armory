@@ -1,0 +1,109 @@
+{
+  "kind": "n2d_video_face_drift_watch",
+  "version": 1,
+  "generated_at": "2026-07-23T01:38:26.727634+00:00",
+  "episode": "第2集",
+  "status": "ready_for_human_frame_identity_review",
+  "master": "出视频/第2集/视频/Clip_04_百年道行与收录选择.mp4",
+  "source_kind": "single_video",
+  "source_clip": "Clip_04",
+  "packet_id": "Clip_04_0.00_5.97s",
+  "master_duration_sec": 6.017,
+  "start_sec": 0.0,
+  "end_sec": 5.967,
+  "interval_sec": 0.5,
+  "segments_source": "single_video",
+  "segments": [
+    {
+      "clip": "Clip_04",
+      "start_sec": 0.0,
+      "end_sec": 6.017,
+      "duration_sec": 6.017,
+      "source": "single_video"
+    }
+  ],
+  "frames": [
+    {
+      "time_sec": 0.0,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/001_Clip_04_000.000s.jpg",
+      "bytes": 350408
+    },
+    {
+      "time_sec": 0.5,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/002_Clip_04_000.500s.jpg",
+      "bytes": 353562
+    },
+    {
+      "time_sec": 1.0,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/003_Clip_04_001.000s.jpg",
+      "bytes": 355118
+    },
+    {
+      "time_sec": 1.5,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/004_Clip_04_001.500s.jpg",
+      "bytes": 351872
+    },
+    {
+      "time_sec": 2.0,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/005_Clip_04_002.000s.jpg",
+      "bytes": 356223
+    },
+    {
+      "time_sec": 2.5,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/006_Clip_04_002.500s.jpg",
+      "bytes": 398797
+    },
+    {
+      "time_sec": 3.0,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/007_Clip_04_003.000s.jpg",
+      "bytes": 364804
+    },
+    {
+      "time_sec": 3.5,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/008_Clip_04_003.500s.jpg",
+      "bytes": 363546
+    },
+    {
+      "time_sec": 4.0,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/009_Clip_04_004.000s.jpg",
+      "bytes": 354450
+    },
+    {
+      "time_sec": 4.5,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/010_Clip_04_004.500s.jpg",
+      "bytes": 348553
+    },
+    {
+      "time_sec": 5.0,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/011_Clip_04_005.000s.jpg",
+      "bytes": 347317
+    },
+    {
+      "time_sec": 5.5,
+      "clip": "Clip_04",
+      "path": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s/012_Clip_04_005.500s.jpg",
+      "bytes": 348285
+    }
+  ],
+  "frames_dir": "生产数据/video_face_drift_watch/第2集/Clip_04_0.00_5.97s",
+  "contact_sheet": "生产数据/video_face_drift_watch_第2集_Clip_04_0.00_5.97s.jpg",
+  "policy": {
+    "clear_wrong_closeup_face": "block",
+    "missing_identity_backend": "use_human_dense_frame_review_or_full_temporal_consistency",
+    "return_to_stage": "video_or_image_then_compose"
+  },
+  "warnings": [],
+  "json_path": "生产数据/video_face_drift_watch_第2集_Clip_04_0_00_5_97s.json",
+  "markdown_path": "生产数据/video_face_drift_watch_第2集_Clip_04_0_00_5_97s.md"
+}

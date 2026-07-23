@@ -100,6 +100,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **每次开跑前必告知当前档**（沉默沿用 ≠ 闷头跑）：进真正调 AI 那一步，先念一行——
   > 「即将出视频，当前规格档 = **预算充足**（720p 默认·30fps·关键镜 2-3 条挑稳·高质量档；需要更清晰可另设 `视频分辨率=1080p`）。可改 **预算一般**（720p·24-30fps·全部 1 条 + QC 不过才重抽·标准档）或 **预算不够**（720p·24fps·全 1 条不挑稳·省积分档，最省）。要改说一声，否则按此档跑。」
 - **同一行补充锚帧成本**：若 `生产数据/anchor_plan_第N集.json/md` 存在，紧跟一句：`本集三帧锚帧计划：新增锚帧图 X 张；native multiframe 后端仍 1 次/Clip；split relay/frames2video-only 预计额外视频段 Y 段。` 若不存在，先跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集` dry-run 或至少说明“缺 anchor plan，当前预算只覆盖视频规格，不覆盖锚帧图片/拆段成本”，不要把默认 1 条视频误报成总成本已锁。
+- **再补一行集级生成次数（clip 经济性·2026-07-22）**：若 `生产数据/clip_economy_plan_第N集.json` 存在（`run.py` 在 image_prompt/video_prompt 前置都会刷新），报盘时念一句：`本集预计生成 X 次（Y/min）；采纳 merge/take_policy 候选可降到 Z 次。` 有未采纳候选且用户未明确拒绝过时提醒一句可回 n2d-script 精修采纳；用户说继续就按当前 storyboard 跑，不阻断。
 - **关键镜 = 故事板里 🔑 爽点/反转/钩子/封面候选 / 人脸特写**；其余为普通镜。「跑几条挑稳」就是下文「为什么大多数视频跑两遍才稳」的预算开关——本档统一决定，不再每 Clip 临时拍脑袋。
 - **单项可覆盖**：规格档只设默认，`视频分辨率` 等单项仍可在 `_设置.md` 单独覆盖（如预算充足默认仍 720p，但单独把分辨率改 1080p）。单 Clip **时长不在本档内**——由配音 `镜头时长.json` 驱动（见输入前置条件）；`画幅` 另见同名选择点。
 - **落实到调用**：选定档后，把该档的分辨率/帧率喂给 CLI 的 `--resolution`/`--fps`（或平台对应 flag，确切写法见 `references/cli_registry.md`），并按「跑几条」决定每 Clip 抽几条挑稳。Dreamina/即梦默认策略：普通镜 `seedance2.0fast`；`出视频规格=预算充足` 或关键镜/英雄镜/高光镜自动用 `seedance2.0_vip`，避免终版高价值镜误走速度档。若走 `multiframe2video`，当前 Dreamina CLI 不暴露 `model_version`/`video_resolution` 覆盖，以该命令的官方默认能力为准并在 manifest 记录。
